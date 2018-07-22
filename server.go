@@ -5,8 +5,9 @@ import (
 	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
-	"time"
 )
+
+var newEventChannel = make(chan RefBoxEvent)
 
 func wsHandler(w http.ResponseWriter, r *http.Request) {
 	upgrader := websocket.Upgrader{
@@ -25,34 +26,40 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("Client connected")
 
+	go checkForNewEvent(conn)
+
 	for {
 		b, err := json.Marshal(refBoxState)
 		if err != nil {
 			log.Println("Marshal error:", err)
 		}
+
 		err = conn.WriteMessage(websocket.TextMessage, b)
 		if err != nil {
 			log.Println("Could not write message.", err)
 			return
 		}
 
-		checkForNewEvent(conn)
-
-		time.Sleep(1 * time.Second)
+		// wait for a new event
+		<-newEventChannel
 	}
 }
 
 func checkForNewEvent(conn *websocket.Conn) {
-	messageType, b, err := conn.ReadMessage()
-	if err != nil || messageType != websocket.TextMessage {
-		return
-	}
+	for {
+		messageType, b, err := conn.ReadMessage()
+		if err != nil || messageType != websocket.TextMessage {
+			log.Println("Could not read message:", err)
+			return
+		}
 
-	event := RefBoxEvent{}
-	err = json.Unmarshal(b, &event)
-	if err != nil {
-		log.Println("Could not read event:", string(b), err)
-	} else {
-		processEvent(event)
+		event := RefBoxEvent{}
+		err = json.Unmarshal(b, &event)
+		if err != nil {
+			log.Println("Could not read event:", string(b), err)
+		} else {
+			processEvent(event)
+			newEventChannel <- event
+		}
 	}
 }
