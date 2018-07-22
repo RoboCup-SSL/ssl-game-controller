@@ -2,7 +2,10 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import App from './App.vue'
 import VueNativeSock from 'vue-native-websocket'
+import VueHotkey from 'v-hotkey'
 
+// use hotkeys for binding keyboard keys to buttons and other components
+Vue.use(VueHotkey);
 
 export class TeamState {
     yellow_cards = 0;

@@ -3,7 +3,7 @@
         <p>Team {{teamColor}}</p>
         <div>Score: {{score}}</div>
         <div>Yellow Cards: {{yellowCards}}</div>
-        <button v-on:click="clickButton">Yellow Card</button>
+        <button v-hotkey="keymap" v-on:click="clickButton">Yellow Card</button>
     </div>
 </template>
 
@@ -17,6 +17,14 @@
             },
             yellowCards() {
                 return this.$store.state.refBoxState.team_state[this.teamColor].yellow_cards
+            },
+            keymap() {
+                switch (this.teamColor) {
+                    case 'YELLOW':
+                        return {'numpad 4': this.clickButton};
+                    case 'BLUE':
+                        return {'numpad 6': this.clickButton};
+                }
             }
         },
         methods: {
