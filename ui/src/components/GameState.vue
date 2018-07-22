@@ -1,7 +1,6 @@
 <template>
     <div class="game-state">
-        <div>State: {{gameStatus}}</div>
-        <div>Time left: {{gameTimeLeft}}</div>
+        {{stage}} - {{gameTimeElapsed}} - {{gameTimeLeft}} - {{gameState}}
     </div>
 </template>
 
@@ -9,8 +8,14 @@
     export default {
         name: 'GameState',
         computed: {
-            gameStatus() {
-                return this.$store.state.refBoxState.gameStatus
+            stage() {
+                return this.$store.state.refBoxState.stage
+            },
+            gameState() {
+                return this.$store.state.refBoxState.gameState
+            },
+            gameTimeElapsed() {
+                return this.$store.state.refBoxState.gameTimeElapsed
             },
             gameTimeLeft() {
                 return this.$store.state.refBoxState.gameTimeLeft

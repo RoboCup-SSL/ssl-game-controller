@@ -3,20 +3,34 @@ import Vuex from 'vuex'
 import App from './App.vue'
 import VueNativeSock from 'vue-native-websocket'
 import VueHotkey from 'v-hotkey'
+import TimestampFormatter from "./TimestampFormatter";
 
 // use hotkeys for binding keyboard keys to buttons and other components
 Vue.use(VueHotkey);
 
 export class TeamState {
-    yellow_cards = 0;
+    name = 'someone';
     score = 0;
+    goalie = 1;
+    yellowCards = 3;
+    yellowCardTimes = [50, 60];
+    redCards = 0;
+    timeoutsLeft = 4;
+    timeoutTimeLeft = 60;
+    onPositiveHalf = true;
 }
 
 export class RefBoxState {
-    gameStatus = 'unknown';
+    stage = 'unknown';
+    gameState = 'unknown';
+    gameTimeElapsed = 0;
     gameTimeLeft = 0;
-    team_state = {'YELLOW': new TeamState(), 'BLUE': new TeamState()};
+    teamState = {'YELLOW': new TeamState(), 'BLUE': new TeamState()};
 }
+
+
+Vue.use(TimestampFormatter);
+
 
 // use Vuex for state management with the Vuex.Store
 Vue.use(Vuex);

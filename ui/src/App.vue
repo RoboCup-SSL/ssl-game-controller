@@ -1,15 +1,15 @@
 <template>
     <div id="app">
         <GameState/>
-        <TeamOverview team-color="YELLOW"/>
-        <TeamOverview team-color="BLUE"/>
+        <TeamOverview team-color="YELLOW" style="float: left"/>
+        <TeamOverview team-color="BLUE" style="float: right"/>
         <p>latest message:<br> {{ latestMessage }}</p>
     </div>
 </template>
 
 <script>
     import GameState from './components/GameState.vue'
-    import TeamOverview from "./components/TeamOverview";
+    import TeamOverview from "./components/team/TeamOverview";
 
     export default {
         name: 'app',

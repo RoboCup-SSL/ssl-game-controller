@@ -10,14 +10,23 @@ import (
 )
 
 type RefBoxTeamState struct {
-	Score       int `json:"score"`
-	YellowCards int `json:"yellow_cards"`
+	Name            string          `json:"name"`
+	Score           int             `json:"score"`
+	Goalie          int             `json:"goalie"`
+	YellowCards     int             `json:"yellowCards"`
+	YellowCardTimes []time.Duration `json:"yellowCardTimes"`
+	RedCards        int             `json:"redCards"`
+	TimeoutsLeft    int             `json:"timeoutsLeft"`
+	TimeoutTimeLeft time.Duration   `json:"timeoutTimeLeft"`
+	OnPositiveHalf  bool            `json:"onPositiveHalf"`
 }
 
 type RefBoxState struct {
-	GameStatus   string                    `json:"gameStatus"`
-	GameTimeLeft time.Duration             `json:"gameTimeLeft"`
-	TeamState    map[Team]*RefBoxTeamState `json:"team_state"`
+	Stage           string                    `json:"stage"`
+	GameState       string                    `json:"gameState"`
+	GameTimeElapsed time.Duration             `json:"gameTimeElapsed"`
+	GameTimeLeft    time.Duration             `json:"gameTimeLeft"`
+	TeamState       map[Team]*RefBoxTeamState `json:"teamState"`
 }
 
 type Team string
@@ -50,15 +59,33 @@ var upgrader = websocket.Upgrader{
 
 func main() {
 
-	refBoxState.GameStatus = "Pre-Game"
-	refBoxState.GameTimeLeft = 10 * time.Minute
+	refBoxState.Stage = "First half"
+	refBoxState.GameState = "Running"
+	refBoxState.GameTimeLeft = 2*time.Minute + 42*time.Second
+	refBoxState.GameTimeElapsed = 2*time.Minute + 18*time.Second
+
 	refBoxState.TeamState = map[Team]*RefBoxTeamState{}
 	refBoxState.TeamState[TEAM_YELLOW] = new(RefBoxTeamState)
-	refBoxState.TeamState[TEAM_YELLOW].YellowCards = 1
+	refBoxState.TeamState[TEAM_YELLOW].Name = "Team Yellow"
 	refBoxState.TeamState[TEAM_YELLOW].Score = 5
+	refBoxState.TeamState[TEAM_YELLOW].Goalie = 2
+	refBoxState.TeamState[TEAM_YELLOW].YellowCards = 1
+	refBoxState.TeamState[TEAM_YELLOW].YellowCardTimes = []time.Duration{80 * time.Second}
+	refBoxState.TeamState[TEAM_YELLOW].RedCards = 0
+	refBoxState.TeamState[TEAM_YELLOW].TimeoutsLeft = 4
+	refBoxState.TeamState[TEAM_YELLOW].TimeoutTimeLeft = 5 * time.Minute
+	refBoxState.TeamState[TEAM_YELLOW].OnPositiveHalf = true
+
 	refBoxState.TeamState[TEAM_BLUE] = new(RefBoxTeamState)
-	refBoxState.TeamState[TEAM_BLUE].YellowCards = 2
-	refBoxState.TeamState[TEAM_BLUE].Score = 7
+	refBoxState.TeamState[TEAM_BLUE].Name = "Team Blue"
+	refBoxState.TeamState[TEAM_BLUE].Score = 2
+	refBoxState.TeamState[TEAM_BLUE].Goalie = 5
+	refBoxState.TeamState[TEAM_BLUE].YellowCards = 3
+	refBoxState.TeamState[TEAM_BLUE].YellowCardTimes = []time.Duration{80 * time.Second, 10 * time.Second}
+	refBoxState.TeamState[TEAM_BLUE].RedCards = 0
+	refBoxState.TeamState[TEAM_BLUE].TimeoutsLeft = 2
+	refBoxState.TeamState[TEAM_BLUE].TimeoutTimeLeft = 2 * time.Minute
+	refBoxState.TeamState[TEAM_BLUE].OnPositiveHalf = false
 
 	http.Handle("/", http.FileServer(http.Dir(".")))
 	http.HandleFunc("/ws", wsHandler)
