@@ -8,3 +8,6 @@
 *.njsproj
 *.sln
 *.sw*
+
+# ignore binary produced by go build
+ssl-game-controller
