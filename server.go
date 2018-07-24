@@ -58,8 +58,12 @@ func checkForNewEvent(conn *websocket.Conn) {
 		if err != nil {
 			log.Println("Could not read event:", string(b), err)
 		} else {
-			processEvent(event)
-			newEventChannel <- event
+			err = processEvent(&event)
+			if err != nil {
+				log.Println("Could not process event:", string(b), err)
+			} else {
+				newEventChannel <- event
+			}
 		}
 	}
 }
