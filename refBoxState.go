@@ -1,14 +1,21 @@
 package main
 
-import "time"
-
-var refBoxState = NewRefBoxState()
+import (
+	"time"
+)
 
 type Team string
+
+type RefBoxStage string
+type RefBoxGameState string
 
 const (
 	TeamYellow Team = "YELLOW"
 	TeamBlue   Team = "BLUE"
+
+	StagePreGame     RefBoxStage     = "preGame"
+	GameStateRunning RefBoxGameState = "running"
+	GameStateStopped RefBoxGameState = "stopped"
 )
 
 type RefBoxTeamState struct {
@@ -24,14 +31,20 @@ type RefBoxTeamState struct {
 }
 
 type RefBoxState struct {
-	Stage           string                    `json:"stage"`
-	GameState       string                    `json:"gameState"`
+	Stage           RefBoxStage               `json:"stage"`
+	GameState       RefBoxGameState           `json:"gameState"`
 	GameTimeElapsed time.Duration             `json:"gameTimeElapsed"`
 	GameTimeLeft    time.Duration             `json:"gameTimeLeft"`
 	TeamState       map[Team]*RefBoxTeamState `json:"teamState"`
 }
 
-func NewRefBoxState() (refBoxState RefBoxState) {
+type RefBox struct {
+	State *RefBoxState
+	timer Timer
+}
+
+func NewRefBoxState() (refBoxState *RefBoxState) {
+	refBoxState = new(RefBoxState)
 	refBoxState.Stage = "First half"
 	refBoxState.GameState = "Running"
 	refBoxState.GameTimeLeft = 2*time.Minute + 42*time.Second
@@ -61,4 +74,40 @@ func NewRefBoxState() (refBoxState RefBoxState) {
 	refBoxState.TeamState[TeamBlue].OnPositiveHalf = false
 
 	return
+}
+
+func NewRefBox() (refBox *RefBox) {
+	refBox = new(RefBox)
+	refBox.State = NewRefBoxState()
+	refBox.timer = NewTimer()
+
+	return
+}
+
+func (r *RefBox) Run() (err error) {
+	err = r.timer.Start()
+	if err != nil {
+		return
+	}
+
+	go func() {
+		for r.timer.Running() {
+			r.timer.WaitTillNextFullSecond()
+			r.Tick()
+			newEventChannel <- RefBoxEvent{}
+		}
+	}()
+	return nil
+}
+
+func (r *RefBox) Tick() {
+	delta := r.timer.Delta()
+	r.State.GameTimeElapsed += delta
+	r.State.GameTimeLeft -= delta
+	for _, teamState := range r.State.TeamState {
+		teamState.TimeoutTimeLeft -= delta
+		for i := range teamState.YellowCardTimes {
+			teamState.YellowCardTimes[i] -= delta
+		}
+	}
 }
