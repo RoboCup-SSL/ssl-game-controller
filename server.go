@@ -7,8 +7,6 @@ import (
 	"net/http"
 )
 
-var newEventChannel = make(chan RefBoxEvent)
-
 func wsHandler(w http.ResponseWriter, r *http.Request) {
 	upgrader := websocket.Upgrader{
 		ReadBufferSize:  1024,
@@ -29,7 +27,7 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 	go checkForNewEvent(conn)
 
 	for {
-		b, err := json.Marshal(refBoxState)
+		b, err := json.Marshal(refBox.State)
 		if err != nil {
 			log.Println("Marshal error:", err)
 		}
@@ -41,7 +39,7 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// wait for a new event
-		<-newEventChannel
+		<-refBox.newEventChannel
 	}
 }
 
@@ -62,7 +60,7 @@ func checkForNewEvent(conn *websocket.Conn) {
 			if err != nil {
 				log.Println("Could not process event:", string(b), err)
 			} else {
-				newEventChannel <- event
+				refBox.newEventChannel <- event
 			}
 		}
 	}

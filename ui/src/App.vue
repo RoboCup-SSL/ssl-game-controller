@@ -1,8 +1,8 @@
 <template>
     <div id="app">
         <GameState/>
-        <TeamOverview team-color="YELLOW" style="float: left"/>
-        <TeamOverview team-color="BLUE" style="float: right"/>
+        <TeamOverview team-color="Yellow" style="float: left"/>
+        <TeamOverview team-color="Blue" style="float: right"/>
         <p>latest message:<br> {{ latestMessage }}</p>
     </div>
 </template>

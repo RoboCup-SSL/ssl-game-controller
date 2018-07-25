@@ -36,9 +36,9 @@
         computed: {
             keymap() {
                 switch (this.teamColor) {
-                    case 'YELLOW':
+                    case 'Yellow':
                         return {'numpad 4': this.addYellowCard};
-                    case 'BLUE':
+                    case 'Blue':
                         return {'numpad 6': this.addYellowCard};
                 }
             }

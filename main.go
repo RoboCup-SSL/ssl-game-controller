@@ -4,12 +4,10 @@ import (
 	"net/http"
 )
 
-var refBoxState *RefBoxState
+var refBox = NewRefBox()
 
 func main() {
 
-	refBox := NewRefBox()
-	refBoxState = refBox.State
 	refBox.Run()
 
 	// serve the static resource of UI (for production use only)

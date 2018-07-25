@@ -10,13 +10,38 @@ type RefBoxStage string
 type RefBoxGameState string
 
 const (
-	TeamYellow Team = "YELLOW"
-	TeamBlue   Team = "BLUE"
+	TeamYellow Team = "Yellow"
+	TeamBlue   Team = "Blue"
 
-	StagePreGame     RefBoxStage     = "preGame"
-	GameStateRunning RefBoxGameState = "running"
-	GameStateStopped RefBoxGameState = "stopped"
+	StagePreGame               RefBoxStage = "Pre-Game"
+	StageFirstHalf             RefBoxStage = "First Half"
+	StageHalfTime              RefBoxStage = "Half Time"
+	StageSecondHalfPre         RefBoxStage = "Pre-Second Half"
+	StageSecondHalf            RefBoxStage = "Second Half"
+	StageOvertimeBreak         RefBoxStage = "Overtime Break"
+	StageOvertimeFirstHalfPre  RefBoxStage = "Pre-Overtime First Half"
+	StageOvertimeFirstHalf     RefBoxStage = "Overtime First Half"
+	StageOvertimeHalfTime      RefBoxStage = "Overtime Half Time"
+	StageOvertimeSecondHalfPre RefBoxStage = "Pre-Overtime Second Half"
+	StageOvertimeSecondHalf    RefBoxStage = "Overtime Second Half"
+	StageShootoutBreak         RefBoxStage = "Shootout Half Time"
+	StageShootout              RefBoxStage = "Shootout"
+	StagePostGame              RefBoxStage = "End of Game"
+
+	GameStateHalted              RefBoxGameState = "Halted"
+	GameStateStopped             RefBoxGameState = "Stopped"
+	GameStateRunning             RefBoxGameState = "Running"
+	GameStatePreKickoffYellow    RefBoxGameState = "Prepare Kickoff for Yellow"
+	GameStatePreKickoffBlue      RefBoxGameState = "Prepare Kickoff for Blue"
+	GameStatePrePenaltyYellow    RefBoxGameState = "Prepare Penalty for Yellow"
+	GameStatePrePenaltyBlue      RefBoxGameState = "Prepare Penalty for Blue"
+	GameStateTimeoutYellow       RefBoxGameState = "Timeout for Yellow"
+	GameStateTimeoutBlue         RefBoxGameState = "Timeout for Blue"
+	GameStateBallPlacementYellow RefBoxGameState = "Ball Placement for Yellow"
+	GameStateBallPlacementBlue   RefBoxGameState = "Ball Placement for Blue"
 )
+
+var breakStages = map[RefBoxStage]struct{}{StageHalfTime: {}, StageOvertimeBreak: {}, StageOvertimeHalfTime: {}, StageShootoutBreak: {}}
 
 type RefBoxTeamState struct {
 	Name            string          `json:"name"`
@@ -35,20 +60,16 @@ type RefBoxState struct {
 	GameState       RefBoxGameState           `json:"gameState"`
 	GameTimeElapsed time.Duration             `json:"gameTimeElapsed"`
 	GameTimeLeft    time.Duration             `json:"gameTimeLeft"`
+	MatchDuration   time.Duration             `json:"matchDuration"`
 	TeamState       map[Team]*RefBoxTeamState `json:"teamState"`
-}
-
-type RefBox struct {
-	State *RefBoxState
-	timer Timer
 }
 
 func NewRefBoxState() (refBoxState *RefBoxState) {
 	refBoxState = new(RefBoxState)
 	refBoxState.Stage = "First half"
 	refBoxState.GameState = "Running"
-	refBoxState.GameTimeLeft = 2*time.Minute + 42*time.Second
-	refBoxState.GameTimeElapsed = 2*time.Minute + 18*time.Second
+	refBoxState.GameTimeLeft = 0
+	refBoxState.GameTimeElapsed = 0
 
 	refBoxState.TeamState = map[Team]*RefBoxTeamState{}
 	refBoxState.TeamState[TeamYellow] = new(RefBoxTeamState)
@@ -74,40 +95,4 @@ func NewRefBoxState() (refBoxState *RefBoxState) {
 	refBoxState.TeamState[TeamBlue].OnPositiveHalf = false
 
 	return
-}
-
-func NewRefBox() (refBox *RefBox) {
-	refBox = new(RefBox)
-	refBox.State = NewRefBoxState()
-	refBox.timer = NewTimer()
-
-	return
-}
-
-func (r *RefBox) Run() (err error) {
-	err = r.timer.Start()
-	if err != nil {
-		return
-	}
-
-	go func() {
-		for r.timer.Running() {
-			r.timer.WaitTillNextFullSecond()
-			r.Tick()
-			newEventChannel <- RefBoxEvent{}
-		}
-	}()
-	return nil
-}
-
-func (r *RefBox) Tick() {
-	delta := r.timer.Delta()
-	r.State.GameTimeElapsed += delta
-	r.State.GameTimeLeft -= delta
-	for _, teamState := range r.State.TeamState {
-		teamState.TimeoutTimeLeft -= delta
-		for i := range teamState.YellowCardTimes {
-			teamState.YellowCardTimes[i] -= delta
-		}
-	}
 }
