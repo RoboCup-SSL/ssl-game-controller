@@ -1,9 +1,11 @@
 <template>
     <div id="app">
         <GameState/>
-        <TeamOverview team-color="Yellow" style="float: left"/>
-        <TeamOverview team-color="Blue" style="float: right"/>
-        <p>latest message:<br> {{ latestMessage }}</p>
+        <pre style="text-align: left">{{ latestMessage }}</pre>
+        <div>
+            <TeamOverview team-color="Yellow" style="float: left"/>
+            <TeamOverview team-color="Blue" style="float: left"/>
+        </div>
     </div>
 </template>
 
@@ -19,7 +21,7 @@
         },
         computed: {
             latestMessage() {
-                return this.$store.state.latestMessage
+                return JSON.stringify(this.$store.state.latestMessage, null, 4)
             }
         }
     }
