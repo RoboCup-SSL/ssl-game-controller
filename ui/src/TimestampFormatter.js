@@ -13,16 +13,21 @@ const formatNsDuration = function (timestamp) {
     return sign + padWithZero(minutes) + ':' + padWithZero(fullSeconds);
 };
 
+const process = function (el, binding) {
+    const timestamp = binding.value || el.innerHTML;
+    if (!isNaN(timestamp)) {
+        el.innerHTML = formatNsDuration(timestamp);
+    }
+};
+
 const TimestampFormatter = {
     install(Vue) {
         Vue.directive('format-ns-duration', {
             bind(el, binding) {
-                const timestamp = binding.value || el.innerHTML || 0;
-                el.innerHTML = formatNsDuration(timestamp);
+                process(el, binding);
             },
             update(el, binding) {
-                const timestamp = binding.value || el.innerHTML || 0;
-                el.innerHTML = formatNsDuration(timestamp);
+                process(el, binding);
             }
         });
     }
