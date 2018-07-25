@@ -1,6 +1,9 @@
 <template>
     <div class="game-state">
-        {{stage}} - {{gameTimeElapsed}} - {{gameTimeLeft}} - {{gameState}}
+        {{state.stage}} |
+        <span v-format-ns-duration="state.gameTimeElapsed"></span> |
+        <span v-format-ns-duration="state.gameTimeLeft"></span> |
+        {{state.gameState}}
     </div>
 </template>
 
@@ -8,17 +11,8 @@
     export default {
         name: 'GameState',
         computed: {
-            stage() {
-                return this.$store.state.refBoxState.stage
-            },
-            gameState() {
-                return this.$store.state.refBoxState.gameState
-            },
-            gameTimeElapsed() {
-                return this.$store.state.refBoxState.gameTimeElapsed
-            },
-            gameTimeLeft() {
-                return this.$store.state.refBoxState.gameTimeLeft
+            state() {
+                return this.$store.state.refBoxState
             }
         }
     }

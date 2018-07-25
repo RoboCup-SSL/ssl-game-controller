@@ -1,7 +1,7 @@
 <template>
     <div class="team-timeouts">
         <p>Timeouts left: {{timeoutsLeft}}</p>
-        <p>Timeout time left: <span v-format-ns-duration>{{timeoutTimeLeft}}</span></p>
+        <p>Timeout time left: <span v-format-ns-duration="timeoutTimeLeft"></span></p>
     </div>
 </template>
 

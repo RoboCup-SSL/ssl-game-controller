@@ -16,8 +16,12 @@ const formatNsDuration = function (timestamp) {
 const TimestampFormatter = {
     install(Vue) {
         Vue.directive('format-ns-duration', {
-            bind(el) {
-                const timestamp = el.innerHTML || 0;
+            bind(el, binding) {
+                const timestamp = binding.value || el.innerHTML || 0;
+                el.innerHTML = formatNsDuration(timestamp);
+            },
+            update(el, binding) {
+                const timestamp = binding.value || el.innerHTML || 0;
                 el.innerHTML = formatNsDuration(timestamp);
             }
         });
