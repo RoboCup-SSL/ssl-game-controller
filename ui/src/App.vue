@@ -2,20 +2,21 @@
     <div id="app">
         <GameState/>
         <pre style="text-align: left">{{ latestMessage }}</pre>
-        <div>
-            <TeamOverview team-color="Yellow" style="float: left"/>
-            <TeamOverview team-color="Blue" style="float: left"/>
-        </div>
+        <TeamOverview team-color="Yellow" style="float: left"/>
+        <TeamOverview team-color="Blue" style="float: left"/>
+        <ControlGeneral/>
     </div>
 </template>
 
 <script>
     import GameState from './components/GameState.vue'
     import TeamOverview from "./components/team/TeamOverview";
+    import ControlGeneral from "./components/control/ControlGeneral";
 
     export default {
         name: 'app',
         components: {
+            ControlGeneral,
             TeamOverview,
             GameState
         },
