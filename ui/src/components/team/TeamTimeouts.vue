@@ -6,16 +6,20 @@
                 :callback="updateTimeoutsLeft"
                 :min="0"
                 :max="4"/>
-        <p>Timeout time left: <span v-format-ns-duration="timeoutTimeLeft"></span></p>
+        Timeout time left:
+        <EditableLabelDuration
+                :value="timeoutTimeLeft"
+                :callback="updateTimeoutTimeLeft"/>
     </div>
 </template>
 
 <script>
     import EditableLabelNumber from "../common/EditableLabelNumber";
+    import EditableLabelDuration from "../common/EditableLabelDuration";
 
     export default {
         name: "TeamTimeouts",
-        components: {EditableLabelNumber},
+        components: {EditableLabelDuration, EditableLabelNumber},
         props: {
             teamColor: String,
             timeoutsLeft: Number,
@@ -28,6 +32,15 @@
                         'forTeam': this.teamColor,
                         'modifyType': 'timeoutsLeft',
                         'valueInt': Number(v)
+                    }
+                })
+            },
+            updateTimeoutTimeLeft: function (v) {
+                this.$socket.sendObj({
+                    'modify': {
+                        'forTeam': this.teamColor,
+                        'modifyType': 'timeoutTimeLeft',
+                        'valueStr': v
                     }
                 })
             },

@@ -26,7 +26,7 @@
                 return {'numpad 5': () => this.send('forceStart')}
             },
             keymapNormalStart() {
-                return {'enter': () => this.send('normalStart')}
+                return {'numpad +': () => this.send('normalStart')}
             },
         }
     }

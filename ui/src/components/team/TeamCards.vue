@@ -19,18 +19,23 @@
         <button v-hotkey="keymap" v-on:click="revokeRedCard" style="width: 2em; margin-right: 0.5em">-</button>
         <button v-hotkey="keymap" v-on:click="addRedCard" style="width: 5em">+</button>
 
-        <p>Yellow card times:
-            <span v-bind:key="time" v-for="time in yellowCardTimes" v-format-ns-duration style="margin-right: 0.3em">{{time}}</span>
-        </p>
+        <br>
+        Yellow card times:
+        <EditableLabelDuration
+                v-bind:key="time"
+                v-for="(time, index) in yellowCardTimes"
+                :value="time"
+                :callback="(v) => updateCardTime(v, index)"/>
     </div>
 </template>
 
 <script>
     import EditableLabelNumber from "../common/EditableLabelNumber";
+    import EditableLabelDuration from "../common/EditableLabelDuration";
 
     export default {
         name: "TeamCards",
-        components: {EditableLabelNumber},
+        components: {EditableLabelDuration, EditableLabelNumber},
         props: {
             yellowCards: Number,
             redCards: Number,
@@ -65,6 +70,16 @@
                         'forTeam': this.teamColor,
                         'modifyType': 'redCards',
                         'valueInt': Number(v)
+                    }
+                })
+            },
+            updateCardTime: function (v, index) {
+                this.$socket.sendObj({
+                    'modify': {
+                        'forTeam': this.teamColor,
+                        'modifyType': 'yellowCardTime',
+                        'valueInt': index,
+                        'valueStr': v
                     }
                 })
             },

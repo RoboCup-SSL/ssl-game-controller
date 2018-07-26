@@ -36,6 +36,7 @@ const (
 	ModifyGoals           ModifyType = "goals"
 	ModifyGoalie          ModifyType = "goalie"
 	ModifyYellowCards     ModifyType = "yellowCards"
+	ModifyYellowCardTime  ModifyType = "yellowCardTime"
 	ModifyRedCards        ModifyType = "redCards"
 	ModifyTimeoutsLeft    ModifyType = "timeoutsLeft"
 	ModifyTimeoutTimeLeft ModifyType = "timeoutTimeLeft"
@@ -127,6 +128,15 @@ func processModify(m *RefBoxEventModifyValue) error {
 				teamState.TimeoutTimeLeft = duration
 			} else {
 				return err
+			}
+		}
+	case ModifyYellowCardTime:
+		if m.ValueStr != nil && m.ValueInt != nil {
+			if *m.ValueInt < 0 || *m.ValueInt >= len(teamState.YellowCardTimes) {
+				return errors.Errorf("Invalid card index: %v", *m.ValueInt)
+			}
+			if duration, err := strToDuration(*m.ValueStr); err == nil {
+				teamState.YellowCardTimes[*m.ValueInt] = duration
 			}
 		}
 	default:
