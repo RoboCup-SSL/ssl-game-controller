@@ -28,11 +28,19 @@ type Timer struct {
 	running       bool
 	TimeProvider  TimeProvider
 	SleepConsumer SleepConsumer
+	continueChan  chan struct{}
 }
 
 // Create a new stopped timer based on system time
 func NewTimer() Timer {
-	return Timer{time.Now(), 0, 0, false, SysTimeProvider, SysSleepConsumer}
+	return Timer{
+		time.Now(),
+		0,
+		0,
+		false,
+		SysTimeProvider,
+		SysSleepConsumer,
+		make(chan struct{}, 1)}
 }
 
 // Is timer currently running?
@@ -62,6 +70,7 @@ func (t *Timer) Start() error {
 	}
 	t.start = t.TimeProvider()
 	t.running = true
+	t.continueChan <- struct{}{}
 	return nil
 }
 
@@ -76,10 +85,9 @@ func (t *Timer) Stop() error {
 }
 
 // Wait until the internal timer duration is reached.
-// Must only be called while the timer is running.
 func (t *Timer) WaitTill(duration time.Duration) error {
 	if !t.running {
-		return errors.New("timer is not running")
+		<-t.continueChan
 	}
 	sleepTime := duration - t.Elapsed()
 	if sleepTime > 0 {
@@ -89,11 +97,7 @@ func (t *Timer) WaitTill(duration time.Duration) error {
 }
 
 // Wait until the internal timer has reached the next full second
-// Must only be called while the timer is running.
 func (t *Timer) WaitTillNextFullSecond() error {
-	if !t.running {
-		return errors.New("timer is not running")
-	}
 	elapsed := t.Elapsed()
 	nextDuration := elapsed.Truncate(time.Second) + time.Second
 	t.WaitTill(nextDuration)

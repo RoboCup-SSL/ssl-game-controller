@@ -26,7 +26,7 @@ func (r *RefBox) Run() (err error) {
 	r.MatchTimeStart = time.Now()
 
 	go func() {
-		for r.timer.Running() {
+		for {
 			r.timer.WaitTillNextFullSecond()
 			r.Tick()
 			r.newEventChannel <- RefBoxEvent{}
