@@ -1,14 +1,24 @@
 <template>
     <div class="team-cards">
-        <p>Yellow cards: {{yellowCards}}
-            <button v-hotkey="keymap" v-on:click="revokeYellowCard" style="width: 2em; margin-right: 0.5em">-</button>
-            <button v-hotkey="keymap" v-on:click="addYellowCard" style="width: 5em">+</button>
-        </p>
+        <EditableLabelNumber
+                label="Yellow cards: "
+                :value="yellowCards"
+                :callback="updateYellowCards"
+                :min="0"
+                :max="99"/>
+        <button v-hotkey="keymap" v-on:click="revokeYellowCard" style="width: 2em; margin-right: 0.5em">-</button>
+        <button v-hotkey="keymap" v-on:click="addYellowCard" style="width: 5em">+</button>
 
-        <p>Red cards: {{redCards}}
-            <button v-hotkey="keymap" v-on:click="revokeRedCard" style="width: 2em; margin-right: 0.5em">-</button>
-            <button v-hotkey="keymap" v-on:click="addRedCard" style="width: 5em">+</button>
-        </p>
+
+        <EditableLabelNumber
+                label="Red cards: "
+                :value="redCards"
+                :callback="updateRedCards"
+                :min="0"
+                :max="99"/>
+        <button v-hotkey="keymap" v-on:click="revokeRedCard" style="width: 2em; margin-right: 0.5em">-</button>
+        <button v-hotkey="keymap" v-on:click="addRedCard" style="width: 5em">+</button>
+
         <p>Yellow card times:
             <span v-bind:key="time" v-for="time in yellowCardTimes" v-format-ns-duration style="margin-right: 0.3em">{{time}}</span>
         </p>
@@ -16,8 +26,11 @@
 </template>
 
 <script>
+    import EditableLabelNumber from "../common/EditableLabelNumber";
+
     export default {
         name: "TeamCards",
+        components: {EditableLabelNumber},
         props: {
             yellowCards: Number,
             redCards: Number,
@@ -36,7 +49,25 @@
             },
             revokeRedCard: function () {
                 this.$socket.sendObj({'card': {'forTeam': this.teamColor, 'cardType': 'red', 'operation': 'revoke'}})
-            }
+            },
+            updateYellowCards: function (v) {
+                this.$socket.sendObj({
+                    'modify': {
+                        'forTeam': this.teamColor,
+                        'modifyType': 'yellowCards',
+                        'valueInt': Number(v)
+                    }
+                })
+            },
+            updateRedCards: function (v) {
+                this.$socket.sendObj({
+                    'modify': {
+                        'forTeam': this.teamColor,
+                        'modifyType': 'redCards',
+                        'valueInt': Number(v)
+                    }
+                })
+            },
         },
         computed: {
             keymap() {

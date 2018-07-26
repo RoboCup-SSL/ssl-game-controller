@@ -1,16 +1,25 @@
 <template>
     <div class="team-overview">
         <p>Team {{teamColor}}</p>
-        <TeamScore :team-color="teamColor"
-                   :score="team.goals"/>
-        <TeamGoalie :goalie="team.goalie"
-                    :team-color="teamColor"/>
-        <TeamTimeouts :timeouts-left="team.timeoutsLeft"
-                      :timeout-time-left="team.timeoutTimeLeft"/>
-        <TeamCards :team-color="teamColor"
-                   :yellow-cards="team.yellowCards"
-                   :red-cards="team.redCards"
-                   :yellow-card-times="team.yellowCardTimes"/>
+        <TeamScore
+                :team-color="teamColor"
+                :score="team.goals"
+        />
+        <TeamGoalie
+                :team-color="teamColor"
+                :goalie="team.goalie"
+        />
+        <TeamTimeouts
+                :team-color="teamColor"
+                :timeouts-left="team.timeoutsLeft"
+                :timeout-time-left="team.timeoutTimeLeft"
+        />
+        <TeamCards
+                :team-color="teamColor"
+                :yellow-cards="team.yellowCards"
+                :red-cards="team.redCards"
+                :yellow-card-times="team.yellowCardTimes"
+        />
     </div>
 </template>
 
@@ -35,5 +44,8 @@
 </script>
 
 <style scoped>
+    .team-overview {
+        margin: 1em;
+    }
 
 </style>

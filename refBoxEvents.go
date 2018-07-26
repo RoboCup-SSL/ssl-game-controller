@@ -35,8 +35,8 @@ const (
 
 	ModifyGoals           ModifyType = "goals"
 	ModifyGoalie          ModifyType = "goalie"
-	ModifyYellowCard      ModifyType = "yellowCard"
-	ModifyRedCard         ModifyType = "redCard"
+	ModifyYellowCards     ModifyType = "yellowCards"
+	ModifyRedCards        ModifyType = "redCards"
 	ModifyTimeoutsLeft    ModifyType = "timeoutsLeft"
 	ModifyTimeoutTimeLeft ModifyType = "timeoutTimeLeft"
 	ModifyOnPositiveHalf  ModifyType = "onPositiveHalf"
@@ -105,11 +105,11 @@ func processModify(m *RefBoxEventModifyValue) error {
 		if m.ValueBool != nil {
 			teamState.OnPositiveHalf = *m.ValueBool
 		}
-	case ModifyRedCard:
+	case ModifyRedCards:
 		if m.ValueInt != nil {
 			teamState.RedCards = *m.ValueInt
 		}
-	case ModifyYellowCard:
+	case ModifyYellowCards:
 		if m.ValueInt != nil {
 			teamState.YellowCards = *m.ValueInt
 		}
