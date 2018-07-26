@@ -1,8 +1,10 @@
 <template>
     <div class="team-overview">
         <p>Team {{teamColor}}</p>
-        <TeamScore v-bind:score="team.score"/>
-        <TeamGoalie v-bind:goalie="team.goalie"/>
+        <TeamScore v-bind:team-color="teamColor"
+                   v-bind:score="team.goals"/>
+        <TeamGoalie v-bind:goalie="team.goalie"
+                    v-bind:team-color="teamColor"/>
         <TeamTimeouts v-bind:timeouts-left="team.timeoutsLeft"
                       v-bind:timeout-time-left="team.timeoutTimeLeft"/>
         <TeamCards v-bind:team-color="teamColor"

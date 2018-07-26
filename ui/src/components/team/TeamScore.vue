@@ -1,16 +1,33 @@
 <template>
     <div class="team-score">
-        <p>Score: {{score}}
-            <button style="width: 2em; margin-right: 0.5em">-</button>
-            <button style="width: 5em">+</button>
-        </p>
+        <EditableLabelNumber
+                :label="'Goals: '"
+                :title="'Number of goals'"
+                :value="score"
+                :callback="updateGoals"
+                :min="0"
+                :max="99"/>
     </div>
 </template>
 
 <script>
+    import EditableLabelNumber from "../common/EditableLabelNumber";
+
     export default {
         name: "TeamScore",
-        props: ["score"]
+        components: {EditableLabelNumber},
+        props: {score: Number, teamColor: String},
+        methods: {
+            updateGoals: function (v) {
+                this.$socket.sendObj({
+                    'modify': {
+                        'forTeam': this.teamColor,
+                        'modifyType': 'goals',
+                        'valueInt': Number(v)
+                    }
+                })
+            }
+        }
     }
 </script>
 

@@ -1,14 +1,36 @@
 <template>
     <div class="team-goalie">
-        <label for="goalie">Goalie: </label>
-        <input id="goalie" type="number" title="Goalie" v-bind:value="goalie" min="0" max="15"/>
+        <EditableLabelNumber
+                :label="'Goalie-ID: '"
+                :title="'The goalie number'"
+                :value="goalie"
+                :callback="updateGoalie"
+                :min="0"
+                :max="15"/>
     </div>
 </template>
 
 <script>
+    import EditableLabelNumber from "../common/EditableLabelNumber";
+
     export default {
         name: "TeamGoalie",
-        props: ["goalie"]
+        components: {EditableLabelNumber},
+        props: {
+            teamColor: String,
+            goalie: Number
+        },
+        methods: {
+            updateGoalie: function (v) {
+                this.$socket.sendObj({
+                    'modify': {
+                        'forTeam': this.teamColor,
+                        'modifyType': 'goalie',
+                        'valueInt': Number(v)
+                    }
+                })
+            },
+        }
     }
 </script>
 

@@ -10,7 +10,7 @@ Vue.use(VueHotkey);
 
 export class TeamState {
     name = 'someone';
-    score = 0;
+    goals = 0;
     goalie = 1;
     yellowCards = 3;
     yellowCardTimes = [50, 60];

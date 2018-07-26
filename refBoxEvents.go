@@ -3,12 +3,15 @@ package main
 import (
 	"github.com/pkg/errors"
 	"log"
+	"strconv"
+	"strings"
 	"time"
 )
 
 type CardType string
 type CardOperation string
 type RefCommand string
+type ModifyType string
 
 const (
 	CardTypeYellow CardType = "yellow"
@@ -29,6 +32,15 @@ const (
 	CommandTimeout       RefCommand = "timeout"
 	CommandBallPlacement RefCommand = "ballPlacement"
 	CommandGoal          RefCommand = "goal"
+
+	ModifyGoals           ModifyType = "goals"
+	ModifyGoalie          ModifyType = "goalie"
+	ModifyYellowCard      ModifyType = "yellowCard"
+	ModifyRedCard         ModifyType = "redCard"
+	ModifyTimeoutsLeft    ModifyType = "timeoutsLeft"
+	ModifyTimeoutTimeLeft ModifyType = "timeoutTimeLeft"
+	ModifyOnPositiveHalf  ModifyType = "onPositiveHalf"
+	ModifyTeamName        ModifyType = "teamName"
 )
 
 type CardModification struct {
@@ -48,9 +60,18 @@ type RefBoxEventCommand struct {
 	Type    RefCommand `json:"commandType"`
 }
 
+type RefBoxEventModifyValue struct {
+	Type      ModifyType `json:"modifyType"`
+	ForTeam   Team       `json:"forTeam"`
+	ValueStr  *string    `json:"valueStr"`
+	ValueInt  *int       `json:"valueInt"`
+	ValueBool *bool      `json:"valueBool"`
+}
+
 type RefBoxEvent struct {
-	Card    *RefBoxEventCard    `json:"card"`
-	Command *RefBoxEventCommand `json:"command"`
+	Card    *RefBoxEventCard        `json:"card"`
+	Command *RefBoxEventCommand     `json:"command"`
+	Modify  *RefBoxEventModifyValue `json:"modify"`
 }
 
 func processEvent(event *RefBoxEvent) error {
@@ -58,9 +79,60 @@ func processEvent(event *RefBoxEvent) error {
 		return processCard(event.Card)
 	} else if event.Command != nil {
 		return processCommand(event.Command)
+	} else if event.Modify != nil {
+		return processModify(event.Modify)
 	} else {
 		return errors.New("Unknown event.")
 	}
+	return nil
+}
+
+func processModify(m *RefBoxEventModifyValue) error {
+	if unknownTeam(m.ForTeam) {
+		return errors.Errorf("Unknown team: %v", m.ForTeam)
+	}
+	teamState := refBox.State.TeamState[m.ForTeam]
+	switch m.Type {
+	case ModifyGoalie:
+		if m.ValueInt != nil {
+			teamState.Goalie = *m.ValueInt
+		}
+	case ModifyGoals:
+		if m.ValueInt != nil {
+			teamState.Goals = *m.ValueInt
+		}
+	case ModifyOnPositiveHalf:
+		if m.ValueBool != nil {
+			teamState.OnPositiveHalf = *m.ValueBool
+		}
+	case ModifyRedCard:
+		if m.ValueInt != nil {
+			teamState.RedCards = *m.ValueInt
+		}
+	case ModifyYellowCard:
+		if m.ValueInt != nil {
+			teamState.YellowCards = *m.ValueInt
+		}
+	case ModifyTeamName:
+		if m.ValueStr != nil {
+			teamState.Name = *m.ValueStr
+		}
+	case ModifyTimeoutsLeft:
+		if m.ValueInt != nil {
+			teamState.TimeoutsLeft = *m.ValueInt
+		}
+	case ModifyTimeoutTimeLeft:
+		if m.ValueStr != nil {
+			if duration, err := strToDuration(*m.ValueStr); err == nil {
+				teamState.TimeoutTimeLeft = duration
+			} else {
+				return err
+			}
+		}
+	default:
+		return errors.Errorf("Unknown modify: %v", m)
+	}
+	log.Printf("Processed modification %v", m)
 	return nil
 }
 
@@ -100,15 +172,18 @@ func processCommand(c *RefBoxEventCommand) error {
 		if c.ForTeam == nil {
 			return errors.New("Team required for goal")
 		}
-		refBox.State.TeamState[*c.ForTeam].Score++
+		refBox.State.TeamState[*c.ForTeam].Goals++
 	case CommandTimeout:
 		if c.ForTeam == nil {
 			return errors.New("Team required for kickoff")
 		}
 		refBox.State.GameState = GameStateTimeout
 		refBox.State.GameStateFor = c.ForTeam
+	default:
+		return errors.Errorf("Unknown command: %v", c)
 	}
 
+	log.Printf("Processed command %v", c)
 	return nil
 }
 
@@ -176,4 +251,40 @@ func revokeCard(card *RefBoxEventCard, teamState *RefBoxTeamState) error {
 		}
 	}
 	return nil
+}
+
+func unknownTeam(team Team) bool {
+	return team != "Yellow" && team != "Blue"
+}
+
+func strToDuration(s string) (duration time.Duration, err error) {
+	duration = 0
+	err = nil
+
+	parts := strings.Split(s, ":")
+	if len(parts) > 2 {
+		err = errors.Errorf("Invalid duration format: %v", s)
+		return
+	}
+
+	var secondsIndex int
+	var minutes int
+	if len(parts) == 1 {
+		secondsIndex = 0
+		minutes = 0
+	} else {
+		secondsIndex = 1
+		minutes, err = strconv.Atoi(parts[0])
+		if err != nil {
+			return
+		}
+	}
+	seconds, err := strconv.Atoi(parts[secondsIndex])
+	if err != nil {
+		return
+	}
+
+	duration += time.Minute * time.Duration(minutes)
+	duration += time.Second * time.Duration(seconds)
+	return
 }
