@@ -1,6 +1,6 @@
 <template>
     <div class="team-overview">
-        <p>Team {{teamColor}}</p>
+        <h2>Team {{teamColor}}</h2>
         <TeamScore
                 :team-color="teamColor"
                 :score="team.goals"
