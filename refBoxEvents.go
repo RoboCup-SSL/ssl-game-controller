@@ -65,15 +65,48 @@ func processEvent(event *RefBoxEvent) error {
 }
 
 func processCommand(c *RefBoxEventCommand) error {
-	if c.Type == CommandHalt {
+	switch c.Type {
+	case CommandHalt:
 		refBox.State.GameState = GameStateHalted
+		refBox.State.GameStateFor = nil
 		refBox.timer.Stop()
-	} else if c.Type == CommandStop {
+	case CommandStop:
 		refBox.State.GameState = GameStateStopped
+		refBox.State.GameStateFor = nil
 		refBox.timer.Stop()
-	} else if c.Type == CommandForceStart || c.Type == CommandNormalStart {
+	case CommandForceStart, CommandNormalStart, CommandDirect, CommandIndirect:
 		refBox.State.GameState = GameStateRunning
+		refBox.State.GameStateFor = nil
 		refBox.timer.Start()
+	case CommandKickoff:
+		if c.ForTeam == nil {
+			return errors.New("Team required for kickoff")
+		}
+		refBox.State.GameState = GameStatePreKickoff
+		refBox.State.GameStateFor = c.ForTeam
+	case CommandPenalty:
+		if c.ForTeam == nil {
+			return errors.New("Team required for penalty")
+		}
+		refBox.State.GameState = GameStatePrePenalty
+		refBox.State.GameStateFor = c.ForTeam
+	case CommandBallPlacement:
+		if c.ForTeam == nil {
+			return errors.New("Team required for ball placement")
+		}
+		refBox.State.GameState = GameStateBallPlacement
+		refBox.State.GameStateFor = c.ForTeam
+	case CommandGoal:
+		if c.ForTeam == nil {
+			return errors.New("Team required for goal")
+		}
+		refBox.State.TeamState[*c.ForTeam].Score++
+	case CommandTimeout:
+		if c.ForTeam == nil {
+			return errors.New("Team required for kickoff")
+		}
+		refBox.State.GameState = GameStateTimeout
+		refBox.State.GameStateFor = c.ForTeam
 	}
 
 	return nil

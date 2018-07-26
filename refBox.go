@@ -46,10 +46,8 @@ func updateTimes(r *RefBox, delta time.Duration) {
 	r.State.GameTimeElapsed += delta
 	r.State.GameTimeLeft -= delta
 
-	if r.State.GameState == GameStateTimeoutYellow {
-		r.State.TeamState[TeamYellow].TimeoutTimeLeft -= delta
-	} else if r.State.GameState == GameStateTimeoutBlue {
-		r.State.TeamState[TeamBlue].TimeoutTimeLeft -= delta
+	if r.State.GameState == GameStateTimeout && r.State.GameStateFor != nil {
+		r.State.TeamState[*r.State.GameStateFor].TimeoutTimeLeft -= delta
 	}
 
 	for _, teamState := range r.State.TeamState {

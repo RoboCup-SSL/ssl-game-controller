@@ -5,6 +5,8 @@
         <TeamOverview team-color="Yellow" style="float: left"/>
         <TeamOverview team-color="Blue" style="float: left"/>
         <ControlGeneral/>
+        <ControlTeam team-color="Yellow"/>
+        <ControlTeam team-color="Blue"/>
     </div>
 </template>
 
@@ -12,10 +14,12 @@
     import GameState from './components/GameState.vue'
     import TeamOverview from "./components/team/TeamOverview";
     import ControlGeneral from "./components/control/ControlGeneral";
+    import ControlTeam from "./components/control/ControlTeam";
 
     export default {
         name: 'app',
         components: {
+            ControlTeam,
             ControlGeneral,
             TeamOverview,
             GameState

@@ -28,17 +28,13 @@ const (
 	StageShootout              RefBoxStage = "Shootout"
 	StagePostGame              RefBoxStage = "End of Game"
 
-	GameStateHalted              RefBoxGameState = "Halted"
-	GameStateStopped             RefBoxGameState = "Stopped"
-	GameStateRunning             RefBoxGameState = "Running"
-	GameStatePreKickoffYellow    RefBoxGameState = "Prepare Kickoff for Yellow"
-	GameStatePreKickoffBlue      RefBoxGameState = "Prepare Kickoff for Blue"
-	GameStatePrePenaltyYellow    RefBoxGameState = "Prepare Penalty for Yellow"
-	GameStatePrePenaltyBlue      RefBoxGameState = "Prepare Penalty for Blue"
-	GameStateTimeoutYellow       RefBoxGameState = "Timeout for Yellow"
-	GameStateTimeoutBlue         RefBoxGameState = "Timeout for Blue"
-	GameStateBallPlacementYellow RefBoxGameState = "Ball Placement for Yellow"
-	GameStateBallPlacementBlue   RefBoxGameState = "Ball Placement for Blue"
+	GameStateHalted        RefBoxGameState = "Halted"
+	GameStateStopped       RefBoxGameState = "Stopped"
+	GameStateRunning       RefBoxGameState = "Running"
+	GameStatePreKickoff    RefBoxGameState = "Prepare Kickoff"
+	GameStatePrePenalty    RefBoxGameState = "Prepare Penalty"
+	GameStateTimeout       RefBoxGameState = "Timeout"
+	GameStateBallPlacement RefBoxGameState = "Ball Placement"
 )
 
 var breakStages = map[RefBoxStage]struct{}{StageHalfTime: {}, StageOvertimeBreak: {}, StageOvertimeHalfTime: {}, StageShootoutBreak: {}}
@@ -58,6 +54,7 @@ type RefBoxTeamState struct {
 type RefBoxState struct {
 	Stage           RefBoxStage               `json:"stage"`
 	GameState       RefBoxGameState           `json:"gameState"`
+	GameStateFor    *Team                     `json:"gameStateForTeam"`
 	GameTimeElapsed time.Duration             `json:"gameTimeElapsed"`
 	GameTimeLeft    time.Duration             `json:"gameTimeLeft"`
 	MatchDuration   time.Duration             `json:"matchDuration"`

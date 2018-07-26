@@ -23,6 +23,7 @@ export class TeamState {
 export class RefBoxState {
     stage = 'unknown';
     gameState = 'unknown';
+    gameStateForTeam = null;
     gameTimeElapsed = 0;
     gameTimeLeft = 0;
     teamState = {'YELLOW': new TeamState(), 'BLUE': new TeamState()};
