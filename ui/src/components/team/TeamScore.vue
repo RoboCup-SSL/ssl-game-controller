@@ -16,7 +16,10 @@
     export default {
         name: "TeamScore",
         components: {EditableLabelNumber},
-        props: {score: Number, teamColor: String},
+        props: {
+            score: Number,
+            teamColor: String
+        },
         methods: {
             updateGoals: function (v) {
                 this.$socket.sendObj({

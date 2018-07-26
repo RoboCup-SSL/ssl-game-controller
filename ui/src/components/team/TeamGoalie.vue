@@ -1,8 +1,8 @@
 <template>
     <div class="team-goalie">
         <EditableLabelNumber
-                :label="'Goalie-ID: '"
-                :title="'The goalie number'"
+                label="Goalie-ID: "
+                title="The goalie number"
                 :value="goalie"
                 :callback="updateGoalie"
                 :min="0"

@@ -11,7 +11,9 @@
 <script>
     export default {
         name: "ControlTeam",
-        props: ["teamColor"],
+        props: {
+            teamColor: String
+        },
         methods: {
             send: function (command) {
                 this.$socket.sendObj({'command': {'forTeam': this.teamColor, 'commandType': command}})

@@ -18,7 +18,12 @@
 <script>
     export default {
         name: "TeamCards",
-        props: ["yellowCards", "redCards", "yellowCardTimes", "teamColor"],
+        props: {
+            yellowCards: Number,
+            redCards: Number,
+            yellowCardTimes: Array,
+            teamColor: String
+        },
         methods: {
             addYellowCard: function () {
                 this.$socket.sendObj({'card': {'forTeam': this.teamColor, 'cardType': 'yellow', 'operation': 'add'}})

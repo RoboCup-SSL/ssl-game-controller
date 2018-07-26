@@ -8,7 +8,10 @@
 <script>
     export default {
         name: "TeamTimeouts",
-        props: ["timeoutsLeft", "timeoutTimeLeft"]
+        props: {
+            timeoutsLeft: Number,
+            timeoutTimeLeft: Number
+        }
     }
 </script>
 

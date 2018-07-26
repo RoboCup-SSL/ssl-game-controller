@@ -1,16 +1,16 @@
 <template>
     <div class="team-overview">
         <p>Team {{teamColor}}</p>
-        <TeamScore v-bind:team-color="teamColor"
-                   v-bind:score="team.goals"/>
-        <TeamGoalie v-bind:goalie="team.goalie"
-                    v-bind:team-color="teamColor"/>
-        <TeamTimeouts v-bind:timeouts-left="team.timeoutsLeft"
-                      v-bind:timeout-time-left="team.timeoutTimeLeft"/>
-        <TeamCards v-bind:team-color="teamColor"
-                   v-bind:yellow-cards="team.yellowCards"
-                   v-bind:red-cards="team.redCards"
-                   v-bind:yellow-card-times="team.yellowCardTimes"/>
+        <TeamScore :team-color="teamColor"
+                   :score="team.goals"/>
+        <TeamGoalie :goalie="team.goalie"
+                    :team-color="teamColor"/>
+        <TeamTimeouts :timeouts-left="team.timeoutsLeft"
+                      :timeout-time-left="team.timeoutTimeLeft"/>
+        <TeamCards :team-color="teamColor"
+                   :yellow-cards="team.yellowCards"
+                   :red-cards="team.redCards"
+                   :yellow-card-times="team.yellowCardTimes"/>
     </div>
 </template>
 
@@ -23,7 +23,9 @@
     export default {
         name: "TeamOverview",
         components: {TeamGoalie, TeamTimeouts, TeamScore, TeamCards},
-        props: {'teamColor': ''},
+        props: {
+            teamColor: String
+        },
         computed: {
             team() {
                 return this.$store.state.refBoxState.teamState[this.teamColor]
