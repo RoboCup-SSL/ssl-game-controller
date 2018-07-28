@@ -1,5 +1,5 @@
 <template>
-    <div class="editable-label">
+    <div>
         <label v-show="g.edit === false"
                for="edit-input"
                @dblclick="edit">
@@ -14,26 +14,20 @@
                v-on:blur="updateValue"
                @keyup.enter="updateValue"
                id="edit-input"
-               type="number"
-               :title="title"
-               :min="min"
-               :max="max"/>
+               size="10"/>
     </div>
 </template>
 
 <script>
     export default {
-        name: "EditableLabelNumber",
+        name: "EditableLabelText",
         props: {
             label: String,
-            title: String,
-            value: Number,
-            min: Number,
-            max: Number,
+            value: String,
             callback: Function
         },
         data: function () {
-            return {g: {edit: false, value: 0}}
+            return {g: {edit: false, value: ""}}
         },
         methods: {
             updateValue: function () {
