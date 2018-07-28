@@ -2,11 +2,18 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import App from './App.vue'
 import VueNativeSock from 'vue-native-websocket'
+// use hotkeys for binding keyboard keys to buttons and other components
 import VueHotkey from 'v-hotkey'
+// use Bootstrap for styling
+import BootstrapVue from 'bootstrap-vue'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 import TimestampFormatter from "./TimestampFormatter";
 
-// use hotkeys for binding keyboard keys to buttons and other components
 Vue.use(VueHotkey);
+
+Vue.use(BootstrapVue);
+
 
 export class TeamState {
     name = 'someone';
@@ -29,9 +36,7 @@ export class RefBoxState {
     teamState = {'Yellow': new TeamState(), 'Blue': new TeamState()};
 }
 
-
 Vue.use(TimestampFormatter);
-
 
 // use Vuex for state management with the Vuex.Store
 Vue.use(Vuex);

@@ -6,8 +6,8 @@
                 :callback="updateYellowCards"
                 :min="0"
                 :max="99"/>
-        <button v-hotkey="keymap" v-on:click="revokeYellowCard" style="width: 2em; margin-right: 0.5em">-</button>
-        <button v-hotkey="keymap" v-on:click="addYellowCard" style="width: 5em">+</button>
+        <b-button class="revoke-card-button" v-hotkey="keymap" v-on:click="revokeYellowCard">-</b-button>
+        <b-button class="add-card-button" v-hotkey="keymap" v-on:click="addYellowCard">+</b-button>
 
 
         <EditableLabelNumber
@@ -16,8 +16,8 @@
                 :callback="updateRedCards"
                 :min="0"
                 :max="99"/>
-        <button v-hotkey="keymap" v-on:click="revokeRedCard" style="width: 2em; margin-right: 0.5em">-</button>
-        <button v-hotkey="keymap" v-on:click="addRedCard" style="width: 5em">+</button>
+        <b-button class="revoke-card-button" v-hotkey="keymap" v-on:click="revokeRedCard">-</b-button>
+        <b-button class="add-card-button" v-hotkey="keymap" v-on:click="addRedCard">+</b-button>
 
         <br>
         Yellow card times:
@@ -98,5 +98,15 @@
 </script>
 
 <style scoped>
+    button {
+        margin: 0.5em;
+    }
 
+    .add-card-button {
+        width: 5em;
+    }
+
+    .revoke-card-button {
+        width: 2em;
+    }
 </style>

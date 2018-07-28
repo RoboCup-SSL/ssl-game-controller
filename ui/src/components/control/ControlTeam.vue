@@ -1,10 +1,10 @@
 <template>
     <div class="control-team">
         <h2>Team {{teamColor}}</h2>
-        <button v-hotkey="keymapKickoff" v-on:click="send('kickoff')">Kickoff</button>
-        <button v-on:click="send('penalty')">Penalty</button>
-        <button v-hotkey="keymapDirect" v-on:click="send('direct')">Direct</button>
-        <button v-hotkey="keymapIndirect" v-on:click="send('indirect')">Indirect</button>
+        <b-button v-hotkey="keymapKickoff" v-on:click="send('kickoff')">Kickoff</b-button>
+        <b-button v-on:click="send('penalty')">Penalty</b-button>
+        <b-button v-hotkey="keymapDirect" v-on:click="send('direct')">Direct</b-button>
+        <b-button v-hotkey="keymapIndirect" v-on:click="send('indirect')">Indirect</b-button>
     </div>
 </template>
 
@@ -46,5 +46,7 @@
 </script>
 
 <style scoped>
-
+    button {
+        margin: 0.5em;
+    }
 </style>
