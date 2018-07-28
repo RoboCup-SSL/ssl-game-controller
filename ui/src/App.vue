@@ -1,12 +1,12 @@
 <template>
     <div id="app">
         <GameState/>
-        <pre style="text-align: left">{{ latestMessage }}</pre>
         <TeamOverview team-color="Yellow" style="float: left"/>
         <TeamOverview team-color="Blue" style="float: left"/>
         <ControlGeneral/>
         <ControlTeam team-color="Yellow"/>
         <ControlTeam team-color="Blue"/>
+        <Debug/>
     </div>
 </template>
 
@@ -15,19 +15,16 @@
     import TeamOverview from "./components/team/TeamOverview";
     import ControlGeneral from "./components/control/ControlGeneral";
     import ControlTeam from "./components/control/ControlTeam";
+    import Debug from "./components/Debug";
 
     export default {
         name: 'app',
         components: {
+            Debug,
             ControlTeam,
             ControlGeneral,
             TeamOverview,
             GameState
-        },
-        computed: {
-            latestMessage() {
-                return JSON.stringify(this.$store.state.latestMessage, null, 4)
-            }
         }
     }
 </script>
