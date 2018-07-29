@@ -40,7 +40,7 @@ func NewTimer() Timer {
 		false,
 		SysTimeProvider,
 		SysSleepConsumer,
-		make(chan struct{}, 1)}
+		make(chan struct{})}
 }
 
 // Is timer currently running?
@@ -70,7 +70,12 @@ func (t *Timer) Start() error {
 	}
 	t.start = t.TimeProvider()
 	t.running = true
-	t.continueChan <- struct{}{}
+
+	select {
+	case <-t.continueChan:
+	default:
+	}
+
 	return nil
 }
 
@@ -87,7 +92,7 @@ func (t *Timer) Stop() error {
 // Wait until the internal timer duration is reached.
 func (t *Timer) WaitTill(duration time.Duration) error {
 	if !t.running {
-		<-t.continueChan
+		t.continueChan <- struct{}{}
 	}
 	sleepTime := duration - t.Elapsed()
 	if sleepTime > 0 {
