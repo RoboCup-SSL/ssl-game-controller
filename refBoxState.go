@@ -37,7 +37,38 @@ const (
 	GameStateBallPlacement RefBoxGameState = "Ball Placement"
 )
 
-var breakStages = map[RefBoxStage]struct{}{StageHalfTime: {}, StageOvertimeBreak: {}, StageOvertimeHalfTime: {}, StageShootoutBreak: {}}
+var Stages = []RefBoxStage{
+	StagePreGame,
+	StageFirstHalf,
+	StageHalfTime,
+	StageSecondHalfPre,
+	StageSecondHalf,
+	StageOvertimeBreak,
+	StageOvertimeFirstHalfPre,
+	StageOvertimeFirstHalf,
+	StageOvertimeHalfTime,
+	StageOvertimeSecondHalfPre,
+	StageOvertimeSecondHalf,
+	StageShootoutBreak,
+	StageShootout,
+	StagePostGame,
+}
+var StageTimes = map[RefBoxStage]time.Duration{
+	StagePreGame:               0 * time.Minute,
+	StageFirstHalf:             5 * time.Minute,
+	StageHalfTime:              5 * time.Minute,
+	StageSecondHalfPre:         0 * time.Minute,
+	StageSecondHalf:            5 * time.Minute,
+	StageOvertimeBreak:         5 * time.Minute,
+	StageOvertimeFirstHalfPre:  0 * time.Minute,
+	StageOvertimeFirstHalf:     2*time.Minute + 30*time.Second,
+	StageOvertimeHalfTime:      2 * time.Minute,
+	StageOvertimeSecondHalfPre: 0 * time.Minute,
+	StageOvertimeSecondHalf:    2*time.Minute + 30*time.Second,
+	StageShootoutBreak:         2 * time.Minute,
+	StageShootout:              0 * time.Minute,
+	StagePostGame:              0 * time.Minute,
+}
 
 type RefBoxTeamState struct {
 	Name            string          `json:"name"`

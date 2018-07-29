@@ -12,6 +12,7 @@ type CardType string
 type CardOperation string
 type RefCommand string
 type ModifyType string
+type StageOperation string
 
 const (
 	CardTypeYellow CardType = "yellow"
@@ -42,6 +43,9 @@ const (
 	ModifyTimeoutTimeLeft ModifyType = "timeoutTimeLeft"
 	ModifyOnPositiveHalf  ModifyType = "onPositiveHalf"
 	ModifyTeamName        ModifyType = "teamName"
+
+	StageNext     StageOperation = "next"
+	StagePrevious StageOperation = "previous"
 )
 
 type CardModification struct {
@@ -69,10 +73,15 @@ type RefBoxEventModifyValue struct {
 	ValueBool *bool      `json:"valueBool"`
 }
 
+type RefBoxEventStage struct {
+	StageOperation StageOperation `json:"stageOperation"`
+}
+
 type RefBoxEvent struct {
 	Card    *RefBoxEventCard        `json:"card"`
 	Command *RefBoxEventCommand     `json:"command"`
 	Modify  *RefBoxEventModifyValue `json:"modify"`
+	Stage   *RefBoxEventStage       `json:"stage"`
 }
 
 func processEvent(event *RefBoxEvent) error {
@@ -82,10 +91,48 @@ func processEvent(event *RefBoxEvent) error {
 		return processCommand(event.Command)
 	} else if event.Modify != nil {
 		return processModify(event.Modify)
+	} else if event.Stage != nil {
+		return processStage(event.Stage)
 	} else {
 		return errors.New("Unknown event.")
 	}
 	return nil
+}
+
+func processStage(s *RefBoxEventStage) error {
+	index, err := indexOfStage(refBox.State.Stage)
+	if err != nil {
+		return err
+	}
+	if s.StageOperation == StageNext {
+		nextIndex := index + 1
+		if nextIndex >= len(Stages) {
+			return errors.New("No next stage")
+		}
+		refBox.State.Stage = Stages[nextIndex]
+	} else if s.StageOperation == StagePrevious {
+		nextIndex := index - 1
+		if nextIndex < 0 {
+			return errors.New("No previous stage")
+		}
+		refBox.State.Stage = Stages[nextIndex]
+	} else {
+		return errors.Errorf("Unknown stage operation: %v", s.StageOperation)
+	}
+
+	refBox.State.GameTimeLeft = StageTimes[refBox.State.Stage]
+	refBox.State.GameTimeElapsed = 0
+
+	return nil
+}
+
+func indexOfStage(stage RefBoxStage) (int, error) {
+	for i, v := range Stages {
+		if v == stage {
+			return i, nil
+		}
+	}
+	return 0, errors.Errorf("unknown stage: %v", stage)
 }
 
 func processModify(m *RefBoxEventModifyValue) error {
