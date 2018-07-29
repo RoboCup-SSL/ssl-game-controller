@@ -8,3 +8,6 @@ matrix:
     - node
     before_script:
     - cd ui
+    script:
+    - npm install
+    - npm test
