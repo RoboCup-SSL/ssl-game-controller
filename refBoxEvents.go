@@ -13,6 +13,7 @@ type CardOperation string
 type RefCommand string
 type ModifyType string
 type StageOperation string
+type TriggerType string
 
 const (
 	CardTypeYellow CardType = "yellow"
@@ -44,6 +45,9 @@ const (
 	ModifyOnPositiveHalf  ModifyType = "onPositiveHalf"
 	ModifyTeamName        ModifyType = "teamName"
 
+	TriggerResetMatch  TriggerType = "resetMatch"
+	TriggerSwitchColor TriggerType = "switchColor"
+
 	StageNext     StageOperation = "next"
 	StagePrevious StageOperation = "previous"
 )
@@ -73,6 +77,10 @@ type RefBoxEventModifyValue struct {
 	ValueBool *bool      `json:"valueBool"`
 }
 
+type RefBoxEventTrigger struct {
+	Type TriggerType `json:"triggerType"`
+}
+
 type RefBoxEventStage struct {
 	StageOperation StageOperation `json:"stageOperation"`
 }
@@ -82,6 +90,7 @@ type RefBoxEvent struct {
 	Command *RefBoxEventCommand     `json:"command"`
 	Modify  *RefBoxEventModifyValue `json:"modify"`
 	Stage   *RefBoxEventStage       `json:"stage"`
+	Trigger *RefBoxEventTrigger     `json:"trigger"`
 }
 
 func processEvent(event *RefBoxEvent) error {
@@ -93,8 +102,23 @@ func processEvent(event *RefBoxEvent) error {
 		return processModify(event.Modify)
 	} else if event.Stage != nil {
 		return processStage(event.Stage)
+	} else if event.Trigger != nil {
+		return processTrigger(event.Trigger)
 	} else {
 		return errors.New("Unknown event.")
+	}
+	return nil
+}
+
+func processTrigger(t *RefBoxEventTrigger) error {
+	if t.Type == TriggerResetMatch {
+		refBox.State = NewRefBoxState()
+	} else if t.Type == TriggerSwitchColor {
+		yellow := refBox.State.TeamState[TeamYellow]
+		refBox.State.TeamState[TeamYellow] = refBox.State.TeamState[TeamBlue]
+		refBox.State.TeamState[TeamBlue] = yellow
+	} else {
+		return errors.Errorf("Unknown trigger: %v", t.Type)
 	}
 	return nil
 }
