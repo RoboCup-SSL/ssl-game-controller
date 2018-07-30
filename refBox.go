@@ -19,6 +19,8 @@ func NewRefBox() (refBox *RefBox) {
 }
 
 func (r *RefBox) Run() (err error) {
+	r.timer.Start()
+
 	go func() {
 		for {
 			r.timer.WaitTillNextFullSecond()
@@ -37,16 +39,18 @@ func (r *RefBox) Tick() {
 }
 
 func updateTimes(r *RefBox, delta time.Duration) {
-	r.State.GameTimeElapsed += delta
-	r.State.GameTimeLeft -= delta
+	if r.State.GameState == GameStateRunning {
+		r.State.GameTimeElapsed += delta
+		r.State.GameTimeLeft -= delta
+
+		for _, teamState := range r.State.TeamState {
+			reduceYellowCardTimes(teamState, delta)
+			removeElapsedYellowCards(teamState)
+		}
+	}
 
 	if r.State.GameState == GameStateTimeout && r.State.GameStateFor != nil {
 		r.State.TeamState[*r.State.GameStateFor].TimeoutTimeLeft -= delta
-	}
-
-	for _, teamState := range r.State.TeamState {
-		reduceYellowCardTimes(teamState, delta)
-		removeElapsedYellowCards(teamState)
 	}
 }
 

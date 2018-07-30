@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/pkg/errors"
 	"log"
 	"strconv"
@@ -114,7 +115,6 @@ func processTrigger(t *RefBoxEventTrigger) error {
 	if t.Type == TriggerResetMatch {
 		refBox.State = NewRefBoxState()
 		refBox.MatchTimeStart = time.Now()
-		refBox.timer.Stop()
 	} else if t.Type == TriggerSwitchColor {
 		yellow := refBox.State.TeamState[TeamYellow]
 		refBox.State.TeamState[TeamYellow] = refBox.State.TeamState[TeamBlue]
@@ -151,7 +151,6 @@ func processStage(s *RefBoxEventStage) error {
 		return errors.Errorf("Unknown stage operation: %v", s.StageOperation)
 	}
 
-	refBox.timer.Stop()
 	refBox.State.GameTimeLeft = StageTimes[refBox.State.Stage]
 	refBox.State.GameTimeElapsed = 0
 
@@ -236,15 +235,12 @@ func processCommand(c *RefBoxEventCommand) error {
 	case CommandHalt:
 		refBox.State.GameState = GameStateHalted
 		refBox.State.GameStateFor = nil
-		refBox.timer.Stop()
 	case CommandStop:
 		refBox.State.GameState = GameStateStopped
 		refBox.State.GameStateFor = nil
-		refBox.timer.Stop()
 	case CommandForceStart, CommandNormalStart, CommandDirect, CommandIndirect:
 		refBox.State.GameState = GameStateRunning
 		refBox.State.GameStateFor = nil
-		refBox.timer.Start()
 	case CommandKickoff:
 		if c.ForTeam == nil {
 			return errors.New("Team required for kickoff")
@@ -272,13 +268,14 @@ func processCommand(c *RefBoxEventCommand) error {
 		if c.ForTeam == nil {
 			return errors.New("Team required for timeout")
 		}
+		refBox.State.TeamState[*c.ForTeam].TimeoutsLeft--
 		refBox.State.GameState = GameStateTimeout
 		refBox.State.GameStateFor = c.ForTeam
 	default:
 		return errors.Errorf("Unknown command: %v", c)
 	}
 
-	log.Printf("Processed command %v", c)
+	log.Printf("Processed command %v", *c)
 	return nil
 }
 
@@ -382,4 +379,11 @@ func strToDuration(s string) (duration time.Duration, err error) {
 	duration += time.Minute * time.Duration(minutes)
 	duration += time.Second * time.Duration(seconds)
 	return
+}
+
+func (c RefBoxEventCommand) String() string {
+	if c.ForTeam == nil {
+		return string(c.Type)
+	}
+	return fmt.Sprintf("%v for %v", c.Type, *c.ForTeam)
 }
