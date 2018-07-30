@@ -98,6 +98,7 @@ func NewRefBoxState() (refBoxState *RefBoxState) {
 	refBoxState.GameState = GameStateHalted
 	refBoxState.GameTimeLeft = 0
 	refBoxState.GameTimeElapsed = 0
+	refBoxState.MatchDuration = 0
 
 	refBoxState.TeamState = map[Team]*RefBoxTeamState{}
 	refBoxState.TeamState[TeamYellow] = new(RefBoxTeamState)

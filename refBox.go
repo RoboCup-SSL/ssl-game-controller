@@ -14,6 +14,7 @@ func NewRefBox() (refBox *RefBox) {
 	refBox.State = NewRefBoxState()
 	refBox.timer = NewTimer()
 	refBox.newEventChannel = make(chan RefBoxEvent)
+	refBox.MatchTimeStart = time.Unix(0, 0)
 
 	return
 }
@@ -35,7 +36,9 @@ func (r *RefBox) Tick() {
 	delta := r.timer.Delta()
 	updateTimes(r, delta)
 
-	r.State.MatchDuration = time.Now().Sub(r.MatchTimeStart)
+	if r.MatchTimeStart.After(time.Unix(0, 0)) {
+		r.State.MatchDuration = time.Now().Sub(r.MatchTimeStart)
+	}
 }
 
 func updateTimes(r *RefBox, delta time.Duration) {
