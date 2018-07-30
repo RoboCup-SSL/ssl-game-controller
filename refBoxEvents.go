@@ -157,6 +157,12 @@ func processStage(s *RefBoxEventStage) error {
 	if refBox.State.Stage == StageFirstHalf {
 		refBox.MatchTimeStart = time.Now()
 	}
+	if refBox.State.Stage == StageOvertimeFirstHalfPre {
+		refBox.State.TeamState[TeamYellow].TimeoutsLeft = 2
+		refBox.State.TeamState[TeamYellow].TimeoutTimeLeft = 5 * time.Minute
+		refBox.State.TeamState[TeamBlue].TimeoutsLeft = 2
+		refBox.State.TeamState[TeamBlue].TimeoutTimeLeft = 5 * time.Minute
+	}
 
 	log.Printf("Processed stage %v", s.StageOperation)
 
@@ -387,4 +393,22 @@ func (c RefBoxEventCommand) String() string {
 		return string(c.Type)
 	}
 	return fmt.Sprintf("%v for %v", c.Type, *c.ForTeam)
+}
+
+func (m RefBoxEventModifyValue) String() string {
+	str := fmt.Sprintf("%v for %v", m.Type, m.ForTeam)
+	if m.ValueBool != nil {
+		if *m.ValueBool {
+			str += " bool:true"
+		} else {
+			str += " bool:false"
+		}
+	}
+	if m.ValueStr != nil {
+		str += " str:" + *m.ValueStr
+	}
+	if m.ValueInt != nil {
+		str += " int:" + string(*m.ValueInt)
+	}
+	return str
 }
