@@ -33,6 +33,7 @@ export class RefBoxState {
     gameStateForTeam = null;
     gameTimeElapsed = 0;
     gameTimeLeft = 0;
+    matchDuration = 0;
     teamState = {'Yellow': new TeamState(), 'Blue': new TeamState()};
 }
 

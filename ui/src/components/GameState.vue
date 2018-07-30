@@ -3,6 +3,7 @@
         {{state.stage}} |
         <span v-format-ns-duration="state.gameTimeElapsed"></span> |
         <span v-format-ns-duration="state.gameTimeLeft"></span> |
+        <span v-format-ns-duration="state.matchDuration"></span> |
         {{state.gameState}} <span v-if="state.gameStateForTeam != null">for {{state.gameStateForTeam}}</span>
     </div>
 </template>
