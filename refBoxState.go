@@ -96,9 +96,11 @@ func NewRefBoxState() (refBoxState *RefBoxState) {
 	refBoxState = new(RefBoxState)
 	refBoxState.Stage = StagePreGame
 	refBoxState.GameState = GameStateHalted
-	refBoxState.GameTimeLeft = 0
-	refBoxState.GameTimeElapsed = 0
-	refBoxState.MatchDuration = 0
+
+	// for some reason, the UI does not reset times correctly if duration is zero, so set it to 1ns
+	refBoxState.GameTimeLeft = 1
+	refBoxState.GameTimeElapsed = 1
+	refBoxState.MatchDuration = 1
 
 	refBoxState.TeamState = map[Team]*RefBoxTeamState{}
 	refBoxState.TeamState[TeamYellow] = new(RefBoxTeamState)
