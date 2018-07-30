@@ -270,7 +270,7 @@ func processCommand(c *RefBoxEventCommand) error {
 		refBox.State.TeamState[*c.ForTeam].Goals++
 	case CommandTimeout:
 		if c.ForTeam == nil {
-			return errors.New("Team required for kickoff")
+			return errors.New("Team required for timeout")
 		}
 		refBox.State.GameState = GameStateTimeout
 		refBox.State.GameStateFor = c.ForTeam

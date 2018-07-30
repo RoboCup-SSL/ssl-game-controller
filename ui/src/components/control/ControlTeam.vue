@@ -2,15 +2,19 @@
     <div class="control-team">
         <h2>Team {{teamColor}}</h2>
         <b-button v-hotkey="keymapKickoff" v-on:click="send('kickoff')">Kickoff</b-button>
-        <b-button v-on:click="send('penalty')">Penalty</b-button>
         <b-button v-hotkey="keymapDirect" v-on:click="send('direct')">Direct</b-button>
         <b-button v-hotkey="keymapIndirect" v-on:click="send('indirect')">Indirect</b-button>
+        <b-button v-on:click="send('penalty')">Penalty</b-button>
+        <ControlTeamTimeout :team-color="teamColor"/>
     </div>
 </template>
 
 <script>
+    import ControlTeamTimeout from "./ControlTeamTimeout";
+
     export default {
         name: "ControlTeam",
+        components: {ControlTeamTimeout},
         props: {
             teamColor: String
         },
