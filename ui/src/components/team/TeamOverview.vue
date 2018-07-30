@@ -24,6 +24,9 @@
                 :red-cards="team.redCards"
                 :yellow-card-times="team.yellowCardTimes"
         />
+        <TeamHalf
+                :team-color="teamColor"
+        />
     </div>
 </template>
 
@@ -33,17 +36,18 @@
     import TeamGoalie from "./TeamGoalie";
     import TeamCards from "./TeamCards";
     import EditableLabelText from "../common/EditableLabelText";
+    import TeamHalf from "./TeamHalf";
 
     export default {
         name: "TeamOverview",
-        components: {EditableLabelText, TeamGoalie, TeamTimeouts, TeamScore, TeamCards},
+        components: {TeamHalf, EditableLabelText, TeamGoalie, TeamTimeouts, TeamScore, TeamCards},
         props: {
             teamColor: String
         },
         computed: {
-            team() {
+            team: function () {
                 return this.$store.state.refBoxState.teamState[this.teamColor]
-            }
+            },
         },
         methods: {
             updateTeamName: function (v) {

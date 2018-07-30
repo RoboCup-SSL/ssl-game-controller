@@ -124,3 +124,12 @@ func NewRefBoxState() (refBoxState *RefBoxState) {
 
 	return
 }
+
+func (t Team) Other() Team {
+	if t == TeamYellow {
+		return TeamBlue
+	} else if t == TeamBlue {
+		return TeamYellow
+	}
+	return t
+}

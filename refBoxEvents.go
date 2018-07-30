@@ -189,6 +189,7 @@ func processModify(m *RefBoxEventModifyValue) error {
 	case ModifyOnPositiveHalf:
 		if m.ValueBool != nil {
 			teamState.OnPositiveHalf = *m.ValueBool
+			refBox.State.TeamState[m.ForTeam.Other()].OnPositiveHalf = !*m.ValueBool
 		}
 	case ModifyRedCards:
 		if m.ValueInt != nil {
