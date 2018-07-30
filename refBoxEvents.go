@@ -113,6 +113,8 @@ func processEvent(event *RefBoxEvent) error {
 func processTrigger(t *RefBoxEventTrigger) error {
 	if t.Type == TriggerResetMatch {
 		refBox.State = NewRefBoxState()
+		refBox.MatchTimeStart = time.Now()
+		refBox.timer.Stop()
 	} else if t.Type == TriggerSwitchColor {
 		yellow := refBox.State.TeamState[TeamYellow]
 		refBox.State.TeamState[TeamYellow] = refBox.State.TeamState[TeamBlue]
@@ -125,6 +127,10 @@ func processTrigger(t *RefBoxEventTrigger) error {
 }
 
 func processStage(s *RefBoxEventStage) error {
+	if refBox.State.GameState != GameStateHalted && refBox.State.GameState != GameStateStopped {
+		return errors.New("The game state must be halted or stopped to change the stage")
+	}
+
 	index, err := indexOfStage(refBox.State.Stage)
 	if err != nil {
 		return err
@@ -145,8 +151,13 @@ func processStage(s *RefBoxEventStage) error {
 		return errors.Errorf("Unknown stage operation: %v", s.StageOperation)
 	}
 
+	refBox.timer.Stop()
 	refBox.State.GameTimeLeft = StageTimes[refBox.State.Stage]
 	refBox.State.GameTimeElapsed = 0
+
+	if refBox.State.Stage == StageFirstHalf {
+		refBox.MatchTimeStart = time.Now()
+	}
 
 	log.Printf("Processed stage %v", s.StageOperation)
 

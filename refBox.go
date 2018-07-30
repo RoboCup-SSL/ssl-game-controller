@@ -19,12 +19,6 @@ func NewRefBox() (refBox *RefBox) {
 }
 
 func (r *RefBox) Run() (err error) {
-	err = r.timer.Start()
-	if err != nil {
-		return
-	}
-	r.MatchTimeStart = time.Now()
-
 	go func() {
 		for {
 			r.timer.WaitTillNextFullSecond()
