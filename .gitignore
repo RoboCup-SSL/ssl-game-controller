@@ -11,3 +11,4 @@
 
 # ignore binary produced by go build
 ssl-game-controller
+lastState.json

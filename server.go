@@ -60,6 +60,7 @@ func checkForNewEvent(conn *websocket.Conn) {
 			if err != nil {
 				log.Println("Could not process event:", string(b), err)
 			} else {
+				refBox.SaveState()
 				refBox.newEventChannel <- event
 			}
 		}
