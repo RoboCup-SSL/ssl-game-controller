@@ -1,16 +1,6 @@
 <template>
     <div class="team-cards">
         <EditableLabelNumber
-                label="Yellow cards: "
-                :value="yellowCards"
-                :callback="updateYellowCards"
-                :min="0"
-                :max="99"/>
-        <b-button class="revoke-card-button" v-hotkey="keymap" v-on:click="revokeYellowCard">-</b-button>
-        <b-button class="add-card-button" v-hotkey="keymap" v-on:click="addYellowCard">+</b-button>
-
-
-        <EditableLabelNumber
                 label="Red cards: "
                 :value="redCards"
                 :callback="updateRedCards"
@@ -18,6 +8,15 @@
                 :max="99"/>
         <b-button class="revoke-card-button" v-hotkey="keymap" v-on:click="revokeRedCard">-</b-button>
         <b-button class="add-card-button" v-hotkey="keymap" v-on:click="addRedCard">+</b-button>
+
+        <EditableLabelNumber
+                label="Yellow cards: "
+                :value="yellowCards"
+                :callback="updateYellowCards"
+                :min="0"
+                :max="99"/>
+        <b-button class="revoke-card-button" v-hotkey="keymap" v-on:click="revokeYellowCard">-</b-button>
+        <b-button class="add-card-button" v-hotkey="keymap" v-on:click="addYellowCard">+</b-button>
 
         <br>
         Yellow card times:

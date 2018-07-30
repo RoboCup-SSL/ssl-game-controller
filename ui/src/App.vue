@@ -6,6 +6,7 @@
         <ControlGeneral/>
         <ControlTeam team-color="Yellow"/>
         <ControlTeam team-color="Blue"/>
+        <ControlMatch/>
         <Debug/>
     </div>
 </template>
@@ -16,10 +17,12 @@
     import ControlGeneral from "./components/control/ControlGeneral";
     import ControlTeam from "./components/control/ControlTeam";
     import Debug from "./components/Debug";
+    import ControlMatch from "./components/control/ControlMatch";
 
     export default {
         name: 'app',
         components: {
+            ControlMatch,
             Debug,
             ControlTeam,
             ControlGeneral,

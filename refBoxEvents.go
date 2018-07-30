@@ -120,6 +120,7 @@ func processTrigger(t *RefBoxEventTrigger) error {
 	} else {
 		return errors.Errorf("Unknown trigger: %v", t.Type)
 	}
+	log.Printf("Processed trigger %v", t.Type)
 	return nil
 }
 
@@ -146,6 +147,8 @@ func processStage(s *RefBoxEventStage) error {
 
 	refBox.State.GameTimeLeft = StageTimes[refBox.State.Stage]
 	refBox.State.GameTimeElapsed = 0
+
+	log.Printf("Processed stage %v", s.StageOperation)
 
 	return nil
 }
