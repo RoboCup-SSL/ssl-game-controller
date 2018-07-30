@@ -48,6 +48,7 @@ const (
 
 	TriggerResetMatch  TriggerType = "resetMatch"
 	TriggerSwitchColor TriggerType = "switchColor"
+	TriggerUndo        TriggerType = "undo"
 
 	StageNext     StageOperation = "next"
 	StagePrevious StageOperation = "previous"
@@ -119,6 +120,8 @@ func processTrigger(t *RefBoxEventTrigger) error {
 		yellow := refBox.State.TeamState[TeamYellow]
 		refBox.State.TeamState[TeamYellow] = refBox.State.TeamState[TeamBlue]
 		refBox.State.TeamState[TeamBlue] = yellow
+	} else if t.Type == TriggerUndo {
+		refBox.UndoLastAction()
 	} else {
 		return errors.Errorf("Unknown trigger: %v", t.Type)
 	}

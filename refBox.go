@@ -15,6 +15,7 @@ type RefBox struct {
 	timer            Timer
 	MatchTimeStart   time.Time
 	newEventChannel  chan RefBoxEvent
+	StateHistory     []RefBoxState
 	stateHistoryFile *os.File
 	lastStateFile    *os.File
 }
@@ -116,6 +117,9 @@ func (r *RefBox) SaveLatestState() {
 }
 
 func (r *RefBox) SaveStateHistory() {
+
+	r.StateHistory = append(r.StateHistory, *r.State)
+
 	jsonState, err := json.Marshal(r.State)
 	if err != nil {
 		log.Print("Can not marshal state ", err)
@@ -125,6 +129,14 @@ func (r *RefBox) SaveStateHistory() {
 	r.stateHistoryFile.Write(jsonState)
 	r.stateHistoryFile.WriteString("\n")
 	r.stateHistoryFile.Sync()
+}
+
+func (r *RefBox) UndoLastAction() {
+	lastIndex := len(r.StateHistory) - 2
+	if lastIndex >= 0 {
+		*r.State = r.StateHistory[lastIndex]
+		r.StateHistory = r.StateHistory[0:lastIndex]
+	}
 }
 
 func updateTimes(r *RefBox, delta time.Duration) {

@@ -4,6 +4,7 @@
         <b-button v-on:click="switchColor">Switch colors</b-button>
         <b-button v-on:click="previousStage">Previous Stage</b-button>
         <b-button v-on:click="nextStage">Next Stage</b-button>
+        <b-button v-on:click="undo">Undo Last Action</b-button>
     </div>
 </template>
 
@@ -22,6 +23,9 @@
             },
             nextStage: function () {
                 this.$socket.sendObj({'stage': {'stageOperation': 'next'}})
+            },
+            undo: function () {
+                this.$socket.sendObj({'trigger': {'triggerType': 'undo'}})
             }
         }
     }
