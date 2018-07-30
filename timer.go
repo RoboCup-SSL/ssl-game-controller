@@ -92,7 +92,11 @@ func (t *Timer) Stop() error {
 // Wait until the internal timer duration is reached.
 func (t *Timer) WaitTill(duration time.Duration) error {
 	if !t.running {
-		t.continueChan <- struct{}{}
+		select {
+		case t.continueChan <- struct{}{}:
+		case <-time.After(1 * time.Second):
+			return nil
+		}
 	}
 	sleepTime := duration - t.Elapsed()
 	if sleepTime > 0 {
