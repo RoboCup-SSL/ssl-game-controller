@@ -5,6 +5,7 @@
         <b-button v-hotkey="keymapDirect" v-on:click="send('direct')">Direct</b-button>
         <b-button v-hotkey="keymapIndirect" v-on:click="send('indirect')">Indirect</b-button>
         <b-button v-on:click="send('penalty')">Penalty</b-button>
+        <b-button v-on:click="send('goal')">Goal</b-button>
         <ControlTeamTimeout :team-color="teamColor"/>
     </div>
 </template>
