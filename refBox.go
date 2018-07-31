@@ -8,7 +8,8 @@ import (
 	"time"
 )
 
-const lastStateFileName = "lastState.json"
+const logDir = "logs"
+const lastStateFileName = logDir + "/lastState.json"
 const configFileName = "config.yaml"
 
 type RefBox struct {
@@ -36,6 +37,7 @@ func NewRefBox() (refBox *RefBox) {
 
 func (r *RefBox) Run() (err error) {
 
+	os.MkdirAll(logDir, os.ModePerm)
 	r.openStateFiles()
 	r.readLastState()
 	r.loadStages()
@@ -58,7 +60,7 @@ func (r *RefBox) Run() (err error) {
 }
 
 func (r *RefBox) openStateFiles() {
-	stateHistoryLogFileName := "state-history_" + time.Now().Format("2006-01-02_15-04-05") + ".log"
+	stateHistoryLogFileName := logDir + "/state-history_" + time.Now().Format("2006-01-02_15-04-05") + ".log"
 	f, err := os.OpenFile(stateHistoryLogFileName, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
 	if err != nil {
 		log.Fatal("Can not open state history log file", err)
