@@ -9,6 +9,7 @@ import (
 )
 
 const lastStateFileName = "lastState.json"
+const configFileName = "config.yaml"
 
 type RefBox struct {
 	State            *RefBoxState
@@ -16,16 +17,19 @@ type RefBox struct {
 	MatchTimeStart   time.Time
 	newEventChannel  chan RefBoxEvent
 	StateHistory     []RefBoxState
+	Config           RefBoxConfig
 	stateHistoryFile *os.File
 	lastStateFile    *os.File
+	StageTimes       map[RefBoxStage]time.Duration
 }
 
 func NewRefBox() (refBox *RefBox) {
 	refBox = new(RefBox)
-	refBox.State = NewRefBoxState()
 	refBox.timer = NewTimer()
 	refBox.newEventChannel = make(chan RefBoxEvent)
 	refBox.MatchTimeStart = time.Unix(0, 0)
+	refBox.Config = LoadRefBoxConfig(configFileName)
+	refBox.State = NewRefBoxState(refBox.Config)
 
 	return
 }
@@ -34,6 +38,7 @@ func (r *RefBox) Run() (err error) {
 
 	r.openStateFiles()
 	r.readLastState()
+	r.loadStages()
 	r.timer.Start()
 
 	go func() {
@@ -137,6 +142,20 @@ func (r *RefBox) UndoLastAction() {
 		*r.State = r.StateHistory[lastIndex]
 		r.StateHistory = r.StateHistory[0:lastIndex]
 	}
+}
+func (r *RefBox) loadStages() {
+	r.StageTimes = map[RefBoxStage]time.Duration{}
+	for _, stage := range Stages {
+		r.StageTimes[stage] = 0
+	}
+	r.StageTimes[StageFirstHalf] = r.Config.Normal.HalfDuration
+	r.StageTimes[StageHalfTime] = r.Config.Normal.HalfTimeDuration
+	r.StageTimes[StageSecondHalf] = r.Config.Normal.HalfDuration
+	r.StageTimes[StageOvertimeBreak] = r.Config.Normal.BreakAfter
+	r.StageTimes[StageOvertimeFirstHalf] = r.Config.Overtime.HalfDuration
+	r.StageTimes[StageOvertimeHalfTime] = r.Config.Overtime.HalfTimeDuration
+	r.StageTimes[StageOvertimeSecondHalf] = r.Config.Overtime.HalfDuration
+	r.StageTimes[StageShootoutBreak] = r.Config.Overtime.BreakAfter
 }
 
 func updateTimes(r *RefBox, delta time.Duration) {

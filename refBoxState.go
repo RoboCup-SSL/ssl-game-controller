@@ -53,22 +53,6 @@ var Stages = []RefBoxStage{
 	StageShootout,
 	StagePostGame,
 }
-var StageTimes = map[RefBoxStage]time.Duration{
-	StagePreGame:               0 * time.Minute,
-	StageFirstHalf:             5 * time.Minute,
-	StageHalfTime:              5 * time.Minute,
-	StageSecondHalfPre:         0 * time.Minute,
-	StageSecondHalf:            5 * time.Minute,
-	StageOvertimeBreak:         5 * time.Minute,
-	StageOvertimeFirstHalfPre:  0 * time.Minute,
-	StageOvertimeFirstHalf:     2*time.Minute + 30*time.Second,
-	StageOvertimeHalfTime:      2 * time.Minute,
-	StageOvertimeSecondHalfPre: 0 * time.Minute,
-	StageOvertimeSecondHalf:    2*time.Minute + 30*time.Second,
-	StageShootoutBreak:         2 * time.Minute,
-	StageShootout:              0 * time.Minute,
-	StagePostGame:              0 * time.Minute,
-}
 
 type RefBoxTeamState struct {
 	Name            string          `json:"name"`
@@ -92,7 +76,7 @@ type RefBoxState struct {
 	TeamState       map[Team]*RefBoxTeamState `json:"teamState"`
 }
 
-func NewRefBoxState() (refBoxState *RefBoxState) {
+func NewRefBoxState(config RefBoxConfig) (refBoxState *RefBoxState) {
 	refBoxState = new(RefBoxState)
 	refBoxState.Stage = StagePreGame
 	refBoxState.GameState = GameStateHalted
@@ -110,8 +94,8 @@ func NewRefBoxState() (refBoxState *RefBoxState) {
 	refBoxState.TeamState[TeamYellow].YellowCards = 0
 	refBoxState.TeamState[TeamYellow].YellowCardTimes = []time.Duration{}
 	refBoxState.TeamState[TeamYellow].RedCards = 0
-	refBoxState.TeamState[TeamYellow].TimeoutsLeft = 4
-	refBoxState.TeamState[TeamYellow].TimeoutTimeLeft = 5 * time.Minute
+	refBoxState.TeamState[TeamYellow].TimeoutsLeft = config.Normal.Timeouts
+	refBoxState.TeamState[TeamYellow].TimeoutTimeLeft = config.Normal.TimeoutDuration
 	refBoxState.TeamState[TeamYellow].OnPositiveHalf = true
 
 	refBoxState.TeamState[TeamBlue] = new(RefBoxTeamState)
@@ -121,8 +105,8 @@ func NewRefBoxState() (refBoxState *RefBoxState) {
 	refBoxState.TeamState[TeamBlue].YellowCards = 0
 	refBoxState.TeamState[TeamBlue].YellowCardTimes = []time.Duration{}
 	refBoxState.TeamState[TeamBlue].RedCards = 0
-	refBoxState.TeamState[TeamBlue].TimeoutsLeft = 4
-	refBoxState.TeamState[TeamBlue].TimeoutTimeLeft = 5 * time.Minute
+	refBoxState.TeamState[TeamBlue].TimeoutsLeft = config.Normal.Timeouts
+	refBoxState.TeamState[TeamBlue].TimeoutTimeLeft = config.Normal.TimeoutDuration
 	refBoxState.TeamState[TeamBlue].OnPositiveHalf = false
 
 	return

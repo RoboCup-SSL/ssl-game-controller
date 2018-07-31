@@ -114,7 +114,7 @@ func processEvent(event *RefBoxEvent) error {
 
 func processTrigger(t *RefBoxEventTrigger) error {
 	if t.Type == TriggerResetMatch {
-		refBox.State = NewRefBoxState()
+		refBox.State = NewRefBoxState(refBox.Config)
 		refBox.MatchTimeStart = time.Unix(0, 0)
 	} else if t.Type == TriggerSwitchColor {
 		yellow := refBox.State.TeamState[TeamYellow]
@@ -154,17 +154,17 @@ func processStage(s *RefBoxEventStage) error {
 		return errors.Errorf("Unknown stage operation: %v", s.StageOperation)
 	}
 
-	refBox.State.GameTimeLeft = StageTimes[refBox.State.Stage]
+	refBox.State.GameTimeLeft = refBox.StageTimes[refBox.State.Stage]
 	refBox.State.GameTimeElapsed = 0
 
 	if refBox.State.Stage == StageFirstHalf {
 		refBox.MatchTimeStart = time.Now()
 	}
 	if refBox.State.Stage == StageOvertimeFirstHalfPre {
-		refBox.State.TeamState[TeamYellow].TimeoutsLeft = 2
-		refBox.State.TeamState[TeamYellow].TimeoutTimeLeft = 5 * time.Minute
-		refBox.State.TeamState[TeamBlue].TimeoutsLeft = 2
-		refBox.State.TeamState[TeamBlue].TimeoutTimeLeft = 5 * time.Minute
+		refBox.State.TeamState[TeamYellow].TimeoutsLeft = refBox.Config.Overtime.Timeouts
+		refBox.State.TeamState[TeamYellow].TimeoutTimeLeft = refBox.Config.Overtime.TimeoutDuration
+		refBox.State.TeamState[TeamBlue].TimeoutsLeft = refBox.Config.Overtime.Timeouts
+		refBox.State.TeamState[TeamBlue].TimeoutTimeLeft = refBox.Config.Overtime.TimeoutDuration
 	}
 
 	log.Printf("Processed stage %v", s.StageOperation)
@@ -323,7 +323,7 @@ func addCard(card *RefBoxEventCard, teamState *RefBoxTeamState) error {
 	if card.Type == CardTypeYellow {
 		log.Printf("Add yellow card for team %v", card.ForTeam)
 		teamState.YellowCards++
-		teamState.YellowCardTimes = append(teamState.YellowCardTimes, 2*time.Minute)
+		teamState.YellowCardTimes = append(teamState.YellowCardTimes, refBox.Config.Global.YellowCardDuration)
 	} else if card.Type == CardTypeRed {
 		log.Printf("Add red card for team %v", card.ForTeam)
 		teamState.RedCards++
