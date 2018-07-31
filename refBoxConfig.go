@@ -21,7 +21,6 @@ type RefBoxConfigGlobal struct {
 
 type RefBoxConfigPublish struct {
 	Address string `yaml:"address"`
-	Port    int    `yaml:"port"`
 }
 
 type RefBoxConfig struct {

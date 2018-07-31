@@ -13,24 +13,26 @@ const lastStateFileName = logDir + "/lastState.json"
 const configFileName = "config.yaml"
 
 type RefBox struct {
-	State            *RefBoxState
-	timer            Timer
-	MatchTimeStart   time.Time
-	newEventChannel  chan RefBoxEvent
-	StateHistory     []RefBoxState
-	Config           RefBoxConfig
-	stateHistoryFile *os.File
-	lastStateFile    *os.File
-	StageTimes       map[RefBoxStage]time.Duration
+	State             *RefBoxState
+	timer             Timer
+	MatchTimeStart    time.Time
+	notifyUpdateState chan struct{}
+	StateHistory      []RefBoxState
+	Config            RefBoxConfig
+	stateHistoryFile  *os.File
+	lastStateFile     *os.File
+	StageTimes        map[RefBoxStage]time.Duration
+	Publisher         RefBoxPublisher
 }
 
 func NewRefBox() (refBox *RefBox) {
 	refBox = new(RefBox)
 	refBox.timer = NewTimer()
-	refBox.newEventChannel = make(chan RefBoxEvent)
+	refBox.notifyUpdateState = make(chan struct{})
 	refBox.MatchTimeStart = time.Unix(0, 0)
 	refBox.Config = LoadRefBoxConfig(configFileName)
 	refBox.State = NewRefBoxState(refBox.Config)
+	refBox.Publisher = NewRefBoxPublisher(refBox.Config.Publish.Address)
 
 	return
 }
@@ -53,7 +55,7 @@ func (r *RefBox) Run() (err error) {
 		for {
 			r.timer.WaitTillNextFullSecond()
 			r.Tick()
-			r.newEventChannel <- RefBoxEvent{}
+			r.Update(nil)
 		}
 	}()
 	return nil
@@ -98,6 +100,11 @@ func (r *RefBox) Tick() {
 	if r.MatchTimeStart.After(time.Unix(0, 0)) {
 		r.State.MatchDuration = time.Now().Sub(r.MatchTimeStart)
 	}
+}
+
+func (r *RefBox) Update(command *RefBoxEventCommand) {
+	r.notifyUpdateState <- struct{}{}
+	refBox.Publisher.Publish(refBox.State, command)
 }
 
 func (r *RefBox) SaveState() {

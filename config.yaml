@@ -1,6 +1,5 @@
 publish:
-  address: :224.5.23.1
-  port: 10003
+  address: 224.5.23.1:10003
 global:
   yellow-card-duration: 2m
 normal:

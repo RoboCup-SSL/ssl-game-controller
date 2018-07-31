@@ -39,7 +39,7 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// wait for a new event
-		<-refBox.newEventChannel
+		<-refBox.notifyUpdateState
 	}
 }
 
@@ -61,7 +61,7 @@ func checkForNewEvent(conn *websocket.Conn) {
 				log.Println("Could not process event:", string(b), err)
 			} else {
 				refBox.SaveState()
-				refBox.newEventChannel <- event
+				refBox.Update(event.Command)
 			}
 		}
 	}
