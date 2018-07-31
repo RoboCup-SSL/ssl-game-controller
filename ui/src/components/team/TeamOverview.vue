@@ -1,10 +1,8 @@
 <template>
     <div class="team-overview">
         <h2> Team {{teamColor}}</h2>
-        <EditableLabelText
-                label="Name: "
-                :value="team.name"
-                :callback="updateTeamName"/>
+        <TeamName
+                :team-color="teamColor"/>
         <TeamScore
                 :team-color="teamColor"
                 :score="team.goals"
@@ -37,10 +35,11 @@
     import TeamCards from "./TeamCards";
     import EditableLabelText from "../common/EditableLabelText";
     import TeamHalf from "./TeamHalf";
+    import TeamName from "./TeamName";
 
     export default {
         name: "TeamOverview",
-        components: {TeamHalf, EditableLabelText, TeamGoalie, TeamTimeouts, TeamScore, TeamCards},
+        components: {TeamName, TeamHalf, EditableLabelText, TeamGoalie, TeamTimeouts, TeamScore, TeamCards},
         props: {
             teamColor: String
         },
@@ -48,17 +47,6 @@
             team: function () {
                 return this.$store.state.refBoxState.teamState[this.teamColor]
             },
-        },
-        methods: {
-            updateTeamName: function (v) {
-                this.$socket.sendObj({
-                    'modify': {
-                        'forTeam': this.teamColor,
-                        'modifyType': 'teamName',
-                        'valueStr': v
-                    }
-                })
-            }
         }
     }
 </script>

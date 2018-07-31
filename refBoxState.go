@@ -88,7 +88,7 @@ func NewRefBoxState(config RefBoxConfig) (refBoxState *RefBoxState) {
 
 	refBoxState.TeamState = map[Team]*RefBoxTeamState{}
 	refBoxState.TeamState[TeamYellow] = new(RefBoxTeamState)
-	refBoxState.TeamState[TeamYellow].Name = "Yellow"
+	refBoxState.TeamState[TeamYellow].Name = ""
 	refBoxState.TeamState[TeamYellow].Goals = 0
 	refBoxState.TeamState[TeamYellow].Goalie = 0
 	refBoxState.TeamState[TeamYellow].YellowCards = 0
@@ -99,7 +99,7 @@ func NewRefBoxState(config RefBoxConfig) (refBoxState *RefBoxState) {
 	refBoxState.TeamState[TeamYellow].OnPositiveHalf = true
 
 	refBoxState.TeamState[TeamBlue] = new(RefBoxTeamState)
-	refBoxState.TeamState[TeamBlue].Name = "Blue"
+	refBoxState.TeamState[TeamBlue].Name = ""
 	refBoxState.TeamState[TeamBlue].Goals = 0
 	refBoxState.TeamState[TeamBlue].Goalie = 0
 	refBoxState.TeamState[TeamBlue].YellowCards = 0
