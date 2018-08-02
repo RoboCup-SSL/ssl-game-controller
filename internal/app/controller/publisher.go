@@ -62,7 +62,7 @@ func initTeamInfo(t *sslproto.SSL_Referee_TeamInfo) {
 }
 
 // Publish the state and command
-func (p *Publisher) Publish(state *RefBoxState, command *RefBoxEventCommand) {
+func (p *Publisher) Publish(state *State, command *RefBoxEventCommand) {
 
 	if p.conn == nil {
 		return
@@ -80,11 +80,11 @@ func (p *Publisher) Publish(state *RefBoxState, command *RefBoxEventCommand) {
 	}
 }
 
-func updateMessage(r *sslproto.SSL_Referee, state *RefBoxState, command *RefBoxEventCommand) {
+func updateMessage(r *sslproto.SSL_Referee, state *State, command *RefBoxEventCommand) {
 
 	*r.PacketTimestamp = uint64(time.Now().UnixNano() / 1000)
 	*r.Stage = mapStage(state.Stage)
-	*r.StageTimeLeft = int32(state.GameTimeLeft.Nanoseconds() / 1000)
+	*r.StageTimeLeft = int32(state.StageTimeLeft.Nanoseconds() / 1000)
 	*r.BlueTeamOnPositiveHalf = state.TeamState[TeamBlue].OnPositiveHalf
 	updateTeam(r.Yellow, state.TeamState[TeamYellow])
 	updateTeam(r.Blue, state.TeamState[TeamBlue])
@@ -131,7 +131,7 @@ func commandByTeam(command *RefBoxEventCommand, blueCommand sslproto.SSL_Referee
 	return yellowCommand
 }
 
-func updateTeam(team *sslproto.SSL_Referee_TeamInfo, state *RefBoxTeamState) {
+func updateTeam(team *sslproto.SSL_Referee_TeamInfo, state *TeamInfo) {
 	*team.Name = state.Name
 	*team.Score = uint32(state.Goals)
 	*team.RedCards = uint32(state.RedCards)
@@ -150,7 +150,7 @@ func mapTimes(durations []time.Duration) []uint32 {
 	return times
 }
 
-func mapStage(stage RefBoxStage) sslproto.SSL_Referee_Stage {
+func mapStage(stage Stage) sslproto.SSL_Referee_Stage {
 	switch stage {
 	case StagePreGame:
 		return sslproto.SSL_Referee_NORMAL_FIRST_HALF_PRE

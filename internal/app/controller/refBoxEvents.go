@@ -154,8 +154,8 @@ func processStage(s *RefBoxEventStage) error {
 		return errors.Errorf("Unknown stage operation: %v", s.StageOperation)
 	}
 
-	refBox.State.GameTimeLeft = refBox.StageTimes[refBox.State.Stage]
-	refBox.State.GameTimeElapsed = 0
+	refBox.State.StageTimeLeft = refBox.StageTimes[refBox.State.Stage]
+	refBox.State.StageTimeElapsed = 0
 
 	if refBox.State.Stage == StageFirstHalf {
 		refBox.MatchTimeStart = time.Now()
@@ -172,7 +172,7 @@ func processStage(s *RefBoxEventStage) error {
 	return nil
 }
 
-func indexOfStage(stage RefBoxStage) (int, error) {
+func indexOfStage(stage Stage) (int, error) {
 	for i, v := range Stages {
 		if v == stage {
 			return i, nil
@@ -307,7 +307,7 @@ func processCard(card *RefBoxEventCard) error {
 	return errors.Errorf("Unknown operation: %v", card.Operation)
 }
 
-func modifyCard(card *RefBoxEventCard, teamState *RefBoxTeamState) error {
+func modifyCard(card *RefBoxEventCard, teamState *TeamInfo) error {
 	if card.Type == CardTypeRed {
 		return errors.New("Red cards can not be modified")
 	}
@@ -319,7 +319,7 @@ func modifyCard(card *RefBoxEventCard, teamState *RefBoxTeamState) error {
 	return nil
 }
 
-func addCard(card *RefBoxEventCard, teamState *RefBoxTeamState) error {
+func addCard(card *RefBoxEventCard, teamState *TeamInfo) error {
 	if card.Type == CardTypeYellow {
 		log.Printf("Add yellow card for team %v", card.ForTeam)
 		teamState.YellowCards++
@@ -331,7 +331,7 @@ func addCard(card *RefBoxEventCard, teamState *RefBoxTeamState) error {
 	return nil
 }
 
-func revokeCard(card *RefBoxEventCard, teamState *RefBoxTeamState) error {
+func revokeCard(card *RefBoxEventCard, teamState *TeamInfo) error {
 	if card.Type == CardTypeYellow {
 		if teamState.YellowCards > 0 {
 			log.Printf("Revoke yellow card for team %v", card.ForTeam)

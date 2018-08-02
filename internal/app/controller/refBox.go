@@ -16,15 +16,15 @@ const configFileName = "config/ssl-game-controller.yaml"
 var refBox = NewRefBox()
 
 type RefBox struct {
-	State             *RefBoxState
+	State             *State
 	timer             timer.Timer
 	MatchTimeStart    time.Time
 	notifyUpdateState chan struct{}
-	StateHistory      []RefBoxState
+	StateHistory      []State
 	Config            Config
 	stateHistoryFile  *os.File
 	lastStateFile     *os.File
-	StageTimes        map[RefBoxStage]time.Duration
+	StageTimes        map[Stage]time.Duration
 	Publisher         Publisher
 }
 
@@ -177,7 +177,7 @@ func (r *RefBox) UndoLastAction() {
 	}
 }
 func (r *RefBox) loadStages() {
-	r.StageTimes = map[RefBoxStage]time.Duration{}
+	r.StageTimes = map[Stage]time.Duration{}
 	for _, stage := range Stages {
 		r.StageTimes[stage] = 0
 	}
@@ -193,8 +193,8 @@ func (r *RefBox) loadStages() {
 
 func updateTimes(r *RefBox, delta time.Duration) {
 	if r.State.GameState == GameStateRunning {
-		r.State.GameTimeElapsed += delta
-		r.State.GameTimeLeft -= delta
+		r.State.StageTimeElapsed += delta
+		r.State.StageTimeLeft -= delta
 
 		for _, teamState := range r.State.TeamState {
 			reduceYellowCardTimes(teamState, delta)
@@ -207,13 +207,13 @@ func updateTimes(r *RefBox, delta time.Duration) {
 	}
 }
 
-func reduceYellowCardTimes(teamState *RefBoxTeamState, delta time.Duration) {
+func reduceYellowCardTimes(teamState *TeamInfo, delta time.Duration) {
 	for i := range teamState.YellowCardTimes {
 		teamState.YellowCardTimes[i] -= delta
 	}
 }
 
-func removeElapsedYellowCards(teamState *RefBoxTeamState) {
+func removeElapsedYellowCards(teamState *TeamInfo) {
 	b := teamState.YellowCardTimes[:0]
 	for _, x := range teamState.YellowCardTimes {
 		if x > 0 {
