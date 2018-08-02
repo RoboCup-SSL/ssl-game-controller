@@ -25,7 +25,7 @@ type RefBox struct {
 	stateHistoryFile  *os.File
 	lastStateFile     *os.File
 	StageTimes        map[RefBoxStage]time.Duration
-	Publisher         RefBoxPublisher
+	Publisher         Publisher
 }
 
 func NewRefBox() (refBox *RefBox) {
@@ -36,9 +36,17 @@ func NewRefBox() (refBox *RefBox) {
 	refBox.notifyUpdateState = make(chan struct{})
 	refBox.MatchTimeStart = time.Unix(0, 0)
 	refBox.State = NewRefBoxState(refBox.Config)
-	refBox.Publisher = NewRefBoxPublisher(refBox.Config.Publish.Address)
+	refBox.Publisher = loadPublisher(refBox.Config)
 
 	return
+}
+
+func loadPublisher(config Config) Publisher {
+	publisher, err := NewPublisher(config.Publish.Address)
+	if err != nil {
+		log.Printf("Could not start publisher on %v. %v", config.Publish.Address, err)
+	}
+	return publisher
 }
 
 func loadConfig() Config {

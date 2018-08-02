@@ -10,31 +10,31 @@ import (
 
 const maxDatagramSize = 8192
 
-type RefBoxPublisher struct {
-	Conn    *net.UDPConn
-	Message sslproto.SSL_Referee
+type Publisher struct {
+	conn    *net.UDPConn
+	message sslproto.SSL_Referee
 }
 
-// NewBroadcaster creates a new UDP multicast connection on which to broadcast
-func NewRefBoxPublisher(address string) RefBoxPublisher {
+// Create a new publisher that publishes referee messages via UDP to the teams
+func NewPublisher(address string) (publisher Publisher, err error) {
 	addr, err := net.ResolveUDPAddr("udp", address)
 	if err != nil {
-		log.Fatalln(err)
+		return
 	}
 
 	conn, err := net.DialUDP("udp", nil, addr)
 	if err != nil {
-		log.Fatalln(err)
+		return
 	}
+
 	conn.SetReadBuffer(maxDatagramSize)
 	log.Println("Connected to", address)
 
-	publisher := RefBoxPublisher{}
-	publisher.Conn = conn
+	publisher.conn = conn
 
-	initRefereeMessage(&publisher.Message)
+	initRefereeMessage(&publisher.message)
 
-	return publisher
+	return
 }
 
 func initRefereeMessage(m *sslproto.SSL_Referee) {
@@ -61,15 +61,20 @@ func initTeamInfo(t *sslproto.SSL_Referee_TeamInfo) {
 	t.Goalie = new(uint32)
 }
 
-func (p *RefBoxPublisher) Publish(state *RefBoxState, command *RefBoxEventCommand) {
+// Publish the state and command
+func (p *Publisher) Publish(state *RefBoxState, command *RefBoxEventCommand) {
 
-	updateMessage(&p.Message, state, command)
-	bytes, err := proto.Marshal(&p.Message)
+	if p.conn == nil {
+		return
+	}
+
+	updateMessage(&p.message, state, command)
+	bytes, err := proto.Marshal(&p.message)
 	if err != nil {
 		log.Printf("Could not marshal referee message: %v\nError: %v", state, err)
 		return
 	}
-	_, err = p.Conn.Write(bytes)
+	_, err = p.conn.Write(bytes)
 	if err != nil {
 		log.Printf("Could not write message: %v", err)
 	}
@@ -90,6 +95,7 @@ func updateMessage(r *sslproto.SSL_Referee, state *RefBoxState, command *RefBoxE
 		*r.CommandTimestamp = uint64(time.Now().UnixNano() / 1000)
 	}
 }
+
 func mapCommand(c *RefBoxEventCommand) sslproto.SSL_Referee_Command {
 	switch c.Type {
 	case CommandHalt:
