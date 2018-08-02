@@ -6,14 +6,20 @@ The ssl-refbox that will be introduced at RoboCup 2019
 
 ## Project setup
 
+### Requirements
+You need to install Go and setup the GOPATH first.
+
 ### Development
 Run the backend:
 ```bash
-go build
-./ssl-game-controller
+cd cmd/ssl-game-controller
+go install
+cd ../..
+ssl-game-controller
 ```
+Or use the provided IntelliJ run configuration.
 
-Run the [UI](ui/README.md)
+Then, run the [UI](ui/README.md).
 
 ### Production / Release
-Will be different, but yet to setup ;)
+Will be different, but yet to be setup ;)

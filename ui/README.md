@@ -3,6 +3,7 @@
 The UI part of ssl-refbox
 
 ## Project setup
+Install `npm`, then install the project dependencies: 
 ```
 npm install
 ```
