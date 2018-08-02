@@ -132,7 +132,7 @@ func (r *RefBox) Tick() {
 }
 
 // Update publishes the state to the UI and the teams
-func (r *RefBox) Update(command *RefBoxEventCommand) {
+func (r *RefBox) Update(command *EventCommand) {
 	r.notifyUpdateState <- struct{}{}
 	refBox.Publisher.Publish(refBox.State, command)
 }

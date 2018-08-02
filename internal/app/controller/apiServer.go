@@ -61,7 +61,7 @@ func listenForNewEvents(conn *websocket.Conn) {
 }
 
 func handleNewEventMessage(b []byte) {
-	event := RefBoxEvent{}
+	event := Event{}
 	err := json.Unmarshal(b, &event)
 	if err != nil {
 		log.Println("Could not read event:", string(b), err)

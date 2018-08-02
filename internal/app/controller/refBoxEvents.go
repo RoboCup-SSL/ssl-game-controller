@@ -9,69 +9,124 @@ import (
 	"time"
 )
 
+// CardType is one of yellow or red
 type CardType string
-type CardOperation string
-type RefCommand string
-type ModifyType string
-type StageOperation string
-type TriggerType string
 
 const (
+	// CardTypeYellow yellow card
 	CardTypeYellow CardType = "yellow"
-	CardTypeRed    CardType = "red"
+	// CardTypeRed red card
+	CardTypeRed CardType = "red"
+)
 
-	CardOperationAdd    CardOperation = "add"
+// CardOperation on a card
+type CardOperation string
+
+const (
+	// CardOperationAdd add a card
+	CardOperationAdd CardOperation = "add"
+	// CardOperationRevoke revoke a card
 	CardOperationRevoke CardOperation = "revoke"
+	// CardOperationModify modify a card
 	CardOperationModify CardOperation = "modify"
+)
 
-	CommandHalt          RefCommand = "halt"
-	CommandStop          RefCommand = "stop"
-	CommandNormalStart   RefCommand = "normalStart"
-	CommandForceStart    RefCommand = "forceStart"
-	CommandDirect        RefCommand = "direct"
-	CommandIndirect      RefCommand = "indirect"
-	CommandKickoff       RefCommand = "kickoff"
-	CommandPenalty       RefCommand = "penalty"
-	CommandTimeout       RefCommand = "timeout"
+// RefCommand is a command to be send to the teams
+type RefCommand string
+
+const (
+	// CommandHalt HALT
+	CommandHalt RefCommand = "halt"
+	// CommandStop STOP
+	CommandStop RefCommand = "stop"
+	// CommandNormalStart NORMAL_START
+	CommandNormalStart RefCommand = "normalStart"
+	// CommandForceStart FORCE_START
+	CommandForceStart RefCommand = "forceStart"
+	// CommandDirect DIRECT
+	CommandDirect RefCommand = "direct"
+	// CommandIndirect INDIRECT
+	CommandIndirect RefCommand = "indirect"
+	// CommandKickoff KICKOFF
+	CommandKickoff RefCommand = "kickoff"
+	// CommandPenalty PENALTY
+	CommandPenalty RefCommand = "penalty"
+	// CommandTimeout TIMEOUT
+	CommandTimeout RefCommand = "timeout"
+	// CommandBallPlacement BALL_PLACEMENT
 	CommandBallPlacement RefCommand = "ballPlacement"
-	CommandGoal          RefCommand = "goal"
+	// CommandGoal GOAL
+	CommandGoal RefCommand = "goal"
+)
 
-	ModifyGoals           ModifyType = "goals"
-	ModifyGoalie          ModifyType = "goalie"
-	ModifyYellowCards     ModifyType = "yellowCards"
-	ModifyYellowCardTime  ModifyType = "yellowCardTime"
-	ModifyRedCards        ModifyType = "redCards"
-	ModifyTimeoutsLeft    ModifyType = "timeoutsLeft"
+// ModifyType is something to be modified
+type ModifyType string
+
+const (
+	// ModifyGoals goals
+	ModifyGoals ModifyType = "goals"
+	// ModifyGoalie goalie
+	ModifyGoalie ModifyType = "goalie"
+	// ModifyYellowCards yellow cards
+	ModifyYellowCards ModifyType = "yellowCards"
+	// ModifyYellowCardTime yellow card time
+	ModifyYellowCardTime ModifyType = "yellowCardTime"
+	// ModifyRedCards red cards
+	ModifyRedCards ModifyType = "redCards"
+	// ModifyTimeoutsLeft number of timeouts left
+	ModifyTimeoutsLeft ModifyType = "timeoutsLeft"
+	// ModifyTimeoutTimeLeft timeout time left
 	ModifyTimeoutTimeLeft ModifyType = "timeoutTimeLeft"
-	ModifyOnPositiveHalf  ModifyType = "onPositiveHalf"
-	ModifyTeamName        ModifyType = "teamName"
+	// ModifyOnPositiveHalf on positive half?
+	ModifyOnPositiveHalf ModifyType = "onPositiveHalf"
+	// ModifyTeamName name of the team
+	ModifyTeamName ModifyType = "teamName"
+)
 
-	TriggerResetMatch  TriggerType = "resetMatch"
-	TriggerSwitchColor TriggerType = "switchColor"
-	TriggerUndo        TriggerType = "undo"
+// StageOperation to apply on the current stage
+type StageOperation string
 
-	StageNext     StageOperation = "next"
+const (
+	// StageNext next stage
+	StageNext StageOperation = "next"
+	// StagePrevious previous stage
 	StagePrevious StageOperation = "previous"
 )
 
+// TriggerType is something that can be triggered
+type TriggerType string
+
+const (
+	// TriggerResetMatch reset match
+	TriggerResetMatch TriggerType = "resetMatch"
+	// TriggerSwitchColor switch color
+	TriggerSwitchColor TriggerType = "switchColor"
+	// TriggerUndo undo last action
+	TriggerUndo TriggerType = "undo"
+)
+
+// CardModification to apply to a card
 type CardModification struct {
-	CardId   int           `json:"cardId"`
+	CardID   int           `json:"cardId"`
 	TimeLeft time.Duration `json:"timeLeft"`
 }
 
-type RefBoxEventCard struct {
+// EventCard is an event that can be applied
+type EventCard struct {
 	ForTeam      Team             `json:"forTeam"`
 	Type         CardType         `json:"cardType"`
 	Operation    CardOperation    `json:"operation"`
 	Modification CardModification `json:"modification"`
 }
 
-type RefBoxEventCommand struct {
+// EventCommand is an event that can be applied
+type EventCommand struct {
 	ForTeam *Team      `json:"forTeam"`
 	Type    RefCommand `json:"commandType"`
 }
 
-type RefBoxEventModifyValue struct {
+// EventModifyValue is an event that can be applied
+type EventModifyValue struct {
 	Type      ModifyType `json:"modifyType"`
 	ForTeam   Team       `json:"forTeam"`
 	ValueStr  *string    `json:"valueStr"`
@@ -79,23 +134,26 @@ type RefBoxEventModifyValue struct {
 	ValueBool *bool      `json:"valueBool"`
 }
 
-type RefBoxEventTrigger struct {
+// EventTrigger is an event that can be applied
+type EventTrigger struct {
 	Type TriggerType `json:"triggerType"`
 }
 
-type RefBoxEventStage struct {
+// EventStage is an event that can be applied
+type EventStage struct {
 	StageOperation StageOperation `json:"stageOperation"`
 }
 
-type RefBoxEvent struct {
-	Card    *RefBoxEventCard        `json:"card"`
-	Command *RefBoxEventCommand     `json:"command"`
-	Modify  *RefBoxEventModifyValue `json:"modify"`
-	Stage   *RefBoxEventStage       `json:"stage"`
-	Trigger *RefBoxEventTrigger     `json:"trigger"`
+// Event holds all possible events. Only one at a time can be applied
+type Event struct {
+	Card    *EventCard        `json:"card"`
+	Command *EventCommand     `json:"command"`
+	Modify  *EventModifyValue `json:"modify"`
+	Stage   *EventStage       `json:"stage"`
+	Trigger *EventTrigger     `json:"trigger"`
 }
 
-func processEvent(event *RefBoxEvent) error {
+func processEvent(event *Event) error {
 	if event.Card != nil {
 		return processCard(event.Card)
 	} else if event.Command != nil {
@@ -107,10 +165,10 @@ func processEvent(event *RefBoxEvent) error {
 	} else if event.Trigger != nil {
 		return processTrigger(event.Trigger)
 	}
-	return errors.New("Unknown event.")
+	return errors.New("unknown event")
 }
 
-func processTrigger(t *RefBoxEventTrigger) error {
+func processTrigger(t *EventTrigger) error {
 	if t.Type == TriggerResetMatch {
 		refBox.State = NewState(refBox.Config)
 		refBox.MatchTimeStart = time.Unix(0, 0)
@@ -127,12 +185,12 @@ func processTrigger(t *RefBoxEventTrigger) error {
 	return nil
 }
 
-func processStage(s *RefBoxEventStage) error {
+func processStage(s *EventStage) error {
 	if refBox.State.GameState != GameStateHalted && refBox.State.GameState != GameStateStopped {
 		return errors.New("The game state must be halted or stopped to change the stage")
 	}
 
-	index, err := indexOfStage(refBox.State.Stage)
+	index, err := refBox.State.Stage.index()
 	if err != nil {
 		return err
 	}
@@ -170,17 +228,8 @@ func processStage(s *RefBoxEventStage) error {
 	return nil
 }
 
-func indexOfStage(stage Stage) (int, error) {
-	for i, v := range Stages {
-		if v == stage {
-			return i, nil
-		}
-	}
-	return 0, errors.Errorf("unknown stage: %v", stage)
-}
-
-func processModify(m *RefBoxEventModifyValue) error {
-	if unknownTeam(m.ForTeam) {
+func processModify(m *EventModifyValue) error {
+	if m.ForTeam.Unknown() {
 		return errors.Errorf("Unknown team: %v", m.ForTeam)
 	}
 	teamState := refBox.State.TeamState[m.ForTeam]
@@ -238,7 +287,7 @@ func processModify(m *RefBoxEventModifyValue) error {
 	return nil
 }
 
-func processCommand(c *RefBoxEventCommand) error {
+func processCommand(c *EventCommand) error {
 	switch c.Type {
 	case CommandHalt:
 		refBox.State.GameState = GameStateHalted
@@ -287,7 +336,7 @@ func processCommand(c *RefBoxEventCommand) error {
 	return nil
 }
 
-func processCard(card *RefBoxEventCard) error {
+func processCard(card *EventCard) error {
 	if card.ForTeam != TeamYellow && card.ForTeam != TeamBlue {
 		return errors.Errorf("Unknown team: %v", card.ForTeam)
 	}
@@ -305,19 +354,19 @@ func processCard(card *RefBoxEventCard) error {
 	return errors.Errorf("Unknown operation: %v", card.Operation)
 }
 
-func modifyCard(card *RefBoxEventCard, teamState *TeamInfo) error {
+func modifyCard(card *EventCard, teamState *TeamInfo) error {
 	if card.Type == CardTypeRed {
 		return errors.New("Red cards can not be modified")
 	}
 	nCardTimes := len(teamState.YellowCardTimes)
-	if card.Modification.CardId >= nCardTimes {
-		return errors.Errorf("Invalid card id %v. Only %v card times available", card.Modification.CardId, nCardTimes)
+	if card.Modification.CardID >= nCardTimes {
+		return errors.Errorf("Invalid card id %v. Only %v card times available", card.Modification.CardID, nCardTimes)
 	}
-	teamState.YellowCardTimes[card.Modification.CardId] = card.Modification.TimeLeft
+	teamState.YellowCardTimes[card.Modification.CardID] = card.Modification.TimeLeft
 	return nil
 }
 
-func addCard(card *RefBoxEventCard, teamState *TeamInfo) error {
+func addCard(card *EventCard, teamState *TeamInfo) error {
 	if card.Type == CardTypeYellow {
 		log.Printf("Add yellow card for team %v", card.ForTeam)
 		teamState.YellowCards++
@@ -329,7 +378,7 @@ func addCard(card *RefBoxEventCard, teamState *TeamInfo) error {
 	return nil
 }
 
-func revokeCard(card *RefBoxEventCard, teamState *TeamInfo) error {
+func revokeCard(card *EventCard, teamState *TeamInfo) error {
 	if card.Type == CardTypeYellow {
 		if teamState.YellowCards > 0 {
 			log.Printf("Revoke yellow card for team %v", card.ForTeam)
@@ -353,8 +402,9 @@ func revokeCard(card *RefBoxEventCard, teamState *TeamInfo) error {
 	return nil
 }
 
-func unknownTeam(team Team) bool {
-	return team != "Yellow" && team != "Blue"
+// Unknown returns true if the team is not blue or yellow
+func (t Team) Unknown() bool {
+	return t != "Yellow" && t != "Blue"
 }
 
 func strToDuration(s string) (duration time.Duration, err error) {
@@ -389,14 +439,14 @@ func strToDuration(s string) (duration time.Duration, err error) {
 	return
 }
 
-func (c RefBoxEventCommand) String() string {
+func (c EventCommand) String() string {
 	if c.ForTeam == nil {
 		return string(c.Type)
 	}
 	return fmt.Sprintf("%v for %v", c.Type, *c.ForTeam)
 }
 
-func (m RefBoxEventModifyValue) String() string {
+func (m EventModifyValue) String() string {
 	str := fmt.Sprintf("%v for %v", m.Type, m.ForTeam)
 	if m.ValueBool != nil {
 		if *m.ValueBool {
@@ -412,4 +462,13 @@ func (m RefBoxEventModifyValue) String() string {
 		str += " int:" + string(*m.ValueInt)
 	}
 	return str
+}
+
+func (s Stage) index() (int, error) {
+	for i, v := range Stages {
+		if v == s {
+			return i, nil
+		}
+	}
+	return 0, errors.Errorf("unknown stage: %v", s)
 }

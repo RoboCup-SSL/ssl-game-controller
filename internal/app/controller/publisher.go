@@ -63,7 +63,7 @@ func initTeamInfo(t *sslproto.SSL_Referee_TeamInfo) {
 }
 
 // Publish the state and command
-func (p *Publisher) Publish(state *State, command *RefBoxEventCommand) {
+func (p *Publisher) Publish(state *State, command *EventCommand) {
 
 	if p.conn == nil {
 		return
@@ -81,7 +81,7 @@ func (p *Publisher) Publish(state *State, command *RefBoxEventCommand) {
 	}
 }
 
-func updateMessage(r *sslproto.SSL_Referee, state *State, command *RefBoxEventCommand) {
+func updateMessage(r *sslproto.SSL_Referee, state *State, command *EventCommand) {
 
 	*r.PacketTimestamp = uint64(time.Now().UnixNano() / 1000)
 	*r.Stage = mapStage(state.Stage)
@@ -97,7 +97,7 @@ func updateMessage(r *sslproto.SSL_Referee, state *State, command *RefBoxEventCo
 	}
 }
 
-func mapCommand(c *RefBoxEventCommand) sslproto.SSL_Referee_Command {
+func mapCommand(c *EventCommand) sslproto.SSL_Referee_Command {
 	switch c.Type {
 	case CommandHalt:
 		return sslproto.SSL_Referee_HALT
@@ -125,7 +125,7 @@ func mapCommand(c *RefBoxEventCommand) sslproto.SSL_Referee_Command {
 	return -1
 }
 
-func commandByTeam(command *RefBoxEventCommand, blueCommand sslproto.SSL_Referee_Command, yellowCommand sslproto.SSL_Referee_Command) sslproto.SSL_Referee_Command {
+func commandByTeam(command *EventCommand, blueCommand sslproto.SSL_Referee_Command, yellowCommand sslproto.SSL_Referee_Command) sslproto.SSL_Referee_Command {
 	if *command.ForTeam == TeamBlue {
 		return blueCommand
 	}
