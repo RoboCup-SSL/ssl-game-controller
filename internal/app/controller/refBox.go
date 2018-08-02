@@ -21,7 +21,7 @@ type RefBox struct {
 	MatchTimeStart    time.Time
 	notifyUpdateState chan struct{}
 	StateHistory      []RefBoxState
-	Config            RefBoxConfig
+	Config            Config
 	stateHistoryFile  *os.File
 	lastStateFile     *os.File
 	StageTimes        map[RefBoxStage]time.Duration
@@ -29,15 +29,24 @@ type RefBox struct {
 }
 
 func NewRefBox() (refBox *RefBox) {
+
 	refBox = new(RefBox)
+	refBox.Config = loadConfig()
 	refBox.timer = timer.NewTimer()
 	refBox.notifyUpdateState = make(chan struct{})
 	refBox.MatchTimeStart = time.Unix(0, 0)
-	refBox.Config = LoadRefBoxConfig(configFileName)
 	refBox.State = NewRefBoxState(refBox.Config)
 	refBox.Publisher = NewRefBoxPublisher(refBox.Config.Publish.Address)
 
 	return
+}
+
+func loadConfig() Config {
+	config, err := LoadConfig(configFileName)
+	if err != nil {
+		log.Printf("Warning: Could not load config: %v", err)
+	}
+	return config
 }
 
 func RunRefBox() {

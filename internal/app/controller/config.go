@@ -1,13 +1,14 @@
 package controller
 
 import (
+	"github.com/pkg/errors"
 	"gopkg.in/yaml.v2"
-	"log"
 	"os"
 	"time"
 )
 
-type RefBoxConfigSpecial struct {
+// special configs that are different between normal and overtime halves
+type ConfigSpecial struct {
 	HalfDuration     time.Duration `yaml:"half-duration"`
 	HalfTimeDuration time.Duration `yaml:"half-time-duration"`
 	TimeoutDuration  time.Duration `yaml:"timeout-duration"`
@@ -15,42 +16,73 @@ type RefBoxConfigSpecial struct {
 	BreakAfter       time.Duration `yaml:"break-after"`
 }
 
-type RefBoxConfigGlobal struct {
+// global configs
+type ConfigGlobal struct {
 	YellowCardDuration time.Duration `yaml:"yellow-card-duration"`
 }
 
-type RefBoxConfigPublish struct {
+// publish configs
+type ConfigPublish struct {
 	Address string `yaml:"address"`
 }
 
-type RefBoxConfig struct {
-	Publish  RefBoxConfigPublish `yaml:"publish"`
-	Global   RefBoxConfigGlobal  `yaml:"global"`
-	Normal   RefBoxConfigSpecial `yaml:"normal"`
-	Overtime RefBoxConfigSpecial `yaml:"overtime"`
+// Config structure for the game controller
+type Config struct {
+	Publish  ConfigPublish `yaml:"publish"`
+	Global   ConfigGlobal  `yaml:"global"`
+	Normal   ConfigSpecial `yaml:"normal"`
+	Overtime ConfigSpecial `yaml:"overtime"`
 }
 
-func LoadRefBoxConfig(fileName string) RefBoxConfig {
+// Load a config from given file
+func LoadConfig(fileName string) (config Config, err error) {
+
+	config = DefaultConfig()
 
 	f, err := os.OpenFile(fileName, os.O_RDONLY, 0600)
 	if err != nil {
-		log.Fatal("Can not open config files ", err)
+		err = errors.Errorf("Can not open config file %v. %v", fileName, err)
+		return
 	}
 
+	b, err := readAll(f)
+
+	err = yaml.Unmarshal(b, &config)
+	if err != nil {
+		err = errors.Errorf("Could not unmarshal config file %v. %v", fileName, err)
+	}
+
+	return
+}
+
+// Create a config with default values
+func DefaultConfig() (c Config) {
+	c.Publish.Address = "224.5.23.1:10003"
+	c.Global.YellowCardDuration = 2 * time.Minute
+
+	c.Normal.HalfDuration = 5 * time.Minute
+	c.Normal.HalfTimeDuration = 5 * time.Minute
+	c.Normal.Timeouts = 4
+	c.Normal.TimeoutDuration = 5 * time.Minute
+	c.Normal.BreakAfter = 5 * time.Minute
+
+	c.Overtime.HalfDuration = 2*time.Minute + 30*time.Second
+	c.Overtime.HalfTimeDuration = 2 * time.Minute
+	c.Overtime.Timeouts = 2
+	c.Overtime.TimeoutDuration = 5 * time.Minute
+	c.Overtime.BreakAfter = 2 * time.Minute
+
+	return
+}
+
+func readAll(f *os.File) ([]byte, error) {
 	b := make([]byte, 10000)
 	n, err := f.Read(b)
 	if err != nil {
-		log.Fatal("Can not read config files ", err)
+		return []byte{}, errors.Errorf("Can not read config files: %v", err)
 	}
 	if n == len(b) {
-		log.Fatal("Buffer size for reading config file is too small")
+		return []byte{}, errors.New("Buffer size for reading config file is too small")
 	}
-
-	config := RefBoxConfig{}
-	err = yaml.Unmarshal(b[:n], &config)
-	if err != nil {
-		log.Fatal("Could not unmarshal config file ", err)
-	}
-
-	return config
+	return b[:n], nil
 }

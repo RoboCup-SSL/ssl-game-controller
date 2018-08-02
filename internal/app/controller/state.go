@@ -76,7 +76,7 @@ type RefBoxState struct {
 	TeamState       map[Team]*RefBoxTeamState `json:"teamState"`
 }
 
-func NewRefBoxState(config RefBoxConfig) (refBoxState *RefBoxState) {
+func NewRefBoxState(config Config) (refBoxState *RefBoxState) {
 	refBoxState = new(RefBoxState)
 	refBoxState.Stage = StagePreGame
 	refBoxState.GameState = GameStateHalted
