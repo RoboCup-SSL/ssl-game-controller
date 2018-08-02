@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// special configs that are different between normal and overtime halves
+// ConfigSpecial holds configs that are different between normal and overtime halves
 type ConfigSpecial struct {
 	HalfDuration     time.Duration `yaml:"half-duration"`
 	HalfTimeDuration time.Duration `yaml:"half-time-duration"`
@@ -16,12 +16,12 @@ type ConfigSpecial struct {
 	BreakAfter       time.Duration `yaml:"break-after"`
 }
 
-// global configs
+// ConfigGlobal holds configs that are valid for the whole game
 type ConfigGlobal struct {
 	YellowCardDuration time.Duration `yaml:"yellow-card-duration"`
 }
 
-// publish configs
+// ConfigPublish holds configs for publishing the state and commands to the teams
 type ConfigPublish struct {
 	Address string `yaml:"address"`
 }
@@ -34,7 +34,7 @@ type Config struct {
 	Overtime ConfigSpecial `yaml:"overtime"`
 }
 
-// Load a config from given file
+// LoadConfig loads a config from given file
 func LoadConfig(fileName string) (config Config, err error) {
 
 	config = DefaultConfig()
@@ -55,7 +55,7 @@ func LoadConfig(fileName string) (config Config, err error) {
 	return
 }
 
-// Create a config with default values
+// DefaultConfig creates a config with default values
 func DefaultConfig() (c Config) {
 	c.Publish.Address = "224.5.23.1:10003"
 	c.Global.YellowCardDuration = 2 * time.Minute

@@ -4,15 +4,17 @@ import (
 	"time"
 )
 
-// a team, one of Yellow or Blue
+// Team is one of Yellow or Blue
 type Team string
 
 const (
+	// TeamYellow is the yellow team
 	TeamYellow Team = "Yellow"
-	TeamBlue   Team = "Blue"
+	// TeamBlue is the blue team
+	TeamBlue Team = "Blue"
 )
 
-// return the other team
+// Other returns the other team
 // if the team is not Yellow or Blue, return the same team
 func (t Team) Other() Team {
 	if t == TeamYellow {
@@ -23,27 +25,41 @@ func (t Team) Other() Team {
 	return t
 }
 
-// a stage of a match
+// Stage represents the different stages of a game
 type Stage string
 
 const (
-	StagePreGame               Stage = "Pre-Game"
-	StageFirstHalf             Stage = "First Half"
-	StageHalfTime              Stage = "Half Time"
-	StageSecondHalfPre         Stage = "Pre-Second Half"
-	StageSecondHalf            Stage = "Second Half"
-	StageOvertimeBreak         Stage = "Overtime Break"
-	StageOvertimeFirstHalfPre  Stage = "Pre-Overtime First Half"
-	StageOvertimeFirstHalf     Stage = "Overtime First Half"
-	StageOvertimeHalfTime      Stage = "Overtime Half Time"
+	// StagePreGame before game has started
+	StagePreGame Stage = "Pre-Game"
+	// StageFirstHalf in first half
+	StageFirstHalf Stage = "First Half"
+	// StageHalfTime in half time
+	StageHalfTime Stage = "Half Time"
+	// StageSecondHalfPre before second half
+	StageSecondHalfPre Stage = "Pre-Second Half"
+	// StageSecondHalf in second half
+	StageSecondHalf Stage = "Second Half"
+	// StageOvertimeBreak in break to overtime
+	StageOvertimeBreak Stage = "Overtime Break"
+	// StageOvertimeFirstHalfPre before first overtime half
+	StageOvertimeFirstHalfPre Stage = "Pre-Overtime First Half"
+	// StageOvertimeFirstHalf in first overtime half
+	StageOvertimeFirstHalf Stage = "Overtime First Half"
+	// StageOvertimeHalfTime in overtime half time
+	StageOvertimeHalfTime Stage = "Overtime Half Time"
+	// StageOvertimeSecondHalfPre before second overtime half
 	StageOvertimeSecondHalfPre Stage = "Pre-Overtime Second Half"
-	StageOvertimeSecondHalf    Stage = "Overtime Second Half"
-	StageShootoutBreak         Stage = "Shootout Half Time"
-	StageShootout              Stage = "Shootout"
-	StagePostGame              Stage = "End of Game"
+	// StageOvertimeSecondHalf in second overtime half
+	StageOvertimeSecondHalf Stage = "Overtime Second Half"
+	// StageShootoutBreak in break to shootout
+	StageShootoutBreak Stage = "Shootout Break"
+	// StageShootout in Shootout
+	StageShootout Stage = "Shootout"
+	// StagePostGame after game ended
+	StagePostGame Stage = "End of Game"
 )
 
-// all available stages, ordered
+// Stages include all available stages, ordered
 var Stages = []Stage{
 	StagePreGame,
 	StageFirstHalf,
@@ -61,20 +77,27 @@ var Stages = []Stage{
 	StagePostGame,
 }
 
-// a game state of a game
+// GameState of a game
 type GameState string
 
 const (
-	GameStateHalted        GameState = "Halted"
-	GameStateStopped       GameState = "Stopped"
-	GameStateRunning       GameState = "Running"
-	GameStatePreKickoff    GameState = "Prepare Kickoff"
-	GameStatePrePenalty    GameState = "Prepare Penalty"
-	GameStateTimeout       GameState = "Timeout"
+	// GameStateHalted halted
+	GameStateHalted GameState = "Halted"
+	// GameStateStopped stopped
+	GameStateStopped GameState = "Stopped"
+	// GameStateRunning running
+	GameStateRunning GameState = "Running"
+	// GameStatePreKickoff kickoff
+	GameStatePreKickoff GameState = "Prepare Kickoff"
+	// GameStatePrePenalty penalty
+	GameStatePrePenalty GameState = "Prepare Penalty"
+	// GameStateTimeout timeout
+	GameStateTimeout GameState = "Timeout"
+	// GameStateBallPlacement ball placement
 	GameStateBallPlacement GameState = "Ball Placement"
 )
 
-// team information
+// TeamInfo about a team
 type TeamInfo struct {
 	Name            string          `json:"name"`
 	Goals           int             `json:"goals"`
@@ -87,7 +110,7 @@ type TeamInfo struct {
 	OnPositiveHalf  bool            `json:"onPositiveHalf"`
 }
 
-// the state of the game
+// State of the game
 type State struct {
 	Stage            Stage              `json:"stage"`
 	GameState        GameState          `json:"gameState"`
@@ -98,8 +121,8 @@ type State struct {
 	TeamState        map[Team]*TeamInfo `json:"teamState"`
 }
 
-// create a new state, initialized for the start of a new game
-func NewRefBoxState(config Config) (refBoxState *State) {
+// NewState creates a new state, initialized for the start of a new game
+func NewState(config Config) (refBoxState *State) {
 	refBoxState = new(State)
 	refBoxState.Stage = StagePreGame
 	refBoxState.GameState = GameStateHalted
@@ -112,14 +135,14 @@ func NewRefBoxState(config Config) (refBoxState *State) {
 	refBoxState.TeamState = map[Team]*TeamInfo{}
 	refBoxState.TeamState[TeamYellow] = new(TeamInfo)
 	refBoxState.TeamState[TeamBlue] = new(TeamInfo)
-	*refBoxState.TeamState[TeamYellow] = NewTeamInfo(config)
-	*refBoxState.TeamState[TeamBlue] = NewTeamInfo(config)
+	*refBoxState.TeamState[TeamYellow] = newTeamInfo(config)
+	*refBoxState.TeamState[TeamBlue] = newTeamInfo(config)
 	refBoxState.TeamState[TeamBlue].OnPositiveHalf = !refBoxState.TeamState[TeamYellow].OnPositiveHalf
 
 	return
 }
 
-func NewTeamInfo(config Config) (t TeamInfo) {
+func newTeamInfo(config Config) (t TeamInfo) {
 	t.Name = ""
 	t.Goals = 0
 	t.Goalie = 0

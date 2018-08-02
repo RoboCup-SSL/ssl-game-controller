@@ -10,12 +10,13 @@ import (
 
 const maxDatagramSize = 8192
 
+// Publisher can publish state and commands to the teams
 type Publisher struct {
 	conn    *net.UDPConn
 	message sslproto.SSL_Referee
 }
 
-// Create a new publisher that publishes referee messages via UDP to the teams
+// NewPublisher creates a new publisher that publishes referee messages via UDP to the teams
 func NewPublisher(address string) (publisher Publisher, err error) {
 	addr, err := net.ResolveUDPAddr("udp", address)
 	if err != nil {

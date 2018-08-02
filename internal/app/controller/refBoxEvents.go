@@ -114,7 +114,7 @@ func processEvent(event *RefBoxEvent) error {
 
 func processTrigger(t *RefBoxEventTrigger) error {
 	if t.Type == TriggerResetMatch {
-		refBox.State = NewRefBoxState(refBox.Config)
+		refBox.State = NewState(refBox.Config)
 		refBox.MatchTimeStart = time.Unix(0, 0)
 	} else if t.Type == TriggerSwitchColor {
 		yellow := refBox.State.TeamState[TeamYellow]

@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-// handle incoming web socket connections
+// WsHandler handles incoming web socket connections
 func WsHandler(w http.ResponseWriter, r *http.Request) {
 	u := websocket.Upgrader{
 		ReadBufferSize:  1024,

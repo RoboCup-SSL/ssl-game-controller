@@ -35,7 +35,7 @@ func NewRefBox() (refBox *RefBox) {
 	refBox.timer = timer.NewTimer()
 	refBox.notifyUpdateState = make(chan struct{})
 	refBox.MatchTimeStart = time.Unix(0, 0)
-	refBox.State = NewRefBoxState(refBox.Config)
+	refBox.State = NewState(refBox.Config)
 	refBox.Publisher = loadPublisher(refBox.Config)
 
 	return
