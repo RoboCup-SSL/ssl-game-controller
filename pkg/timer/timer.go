@@ -9,14 +9,14 @@ import (
 // This is usually the system time, but can be something else for unit tests.
 type TimeProvider func() time.Time
 
-// The default system time provider
+// SysTimeProvider is the default system time provider
 var SysTimeProvider = func() time.Time { return time.Now() }
 
-// A SleepConsumer sleeps the given amount of time.
+// SleepConsumer sleeps the given amount of time.
 // This is usually the time.Sleep method, but can be something else for unit tests.
 type SleepConsumer func(time.Duration)
 
-// The default system sleep consumer
+// SysSleepConsumer is the default system sleep consumer
 var SysSleepConsumer = func(d time.Duration) { time.Sleep(d) }
 
 // A Timer can be started and stopped. It will start at zero and count up, while running.
@@ -31,7 +31,7 @@ type Timer struct {
 	continueChan  chan struct{}
 }
 
-// Create a new stopped timer based on system time
+// NewTimer creates a new stopped timer based on system time
 func NewTimer() Timer {
 	return Timer{
 		time.Now(),
@@ -43,12 +43,12 @@ func NewTimer() Timer {
 		make(chan struct{})}
 }
 
-// Is timer currently running?
+// Running returns if timer is currently running
 func (t *Timer) Running() bool {
 	return t.running
 }
 
-// Return the elapsed time of this timer
+// Elapsed returns the elapsed time of this timer
 func (t *Timer) Elapsed() time.Duration {
 	if t.running {
 		return t.offset + t.TimeProvider().Sub(t.start)
@@ -56,6 +56,7 @@ func (t *Timer) Elapsed() time.Duration {
 	return t.offset
 }
 
+// Delta returns the time since last call to Delta
 func (t *Timer) Delta() time.Duration {
 	elapsed := t.Elapsed()
 	delta := elapsed - t.deltaOffset
@@ -89,7 +90,7 @@ func (t *Timer) Stop() error {
 	return nil
 }
 
-// Wait until the internal timer duration is reached.
+// WaitTill waits until the internal timer duration is reached.
 func (t *Timer) WaitTill(duration time.Duration) error {
 	if !t.running {
 		select {
@@ -105,7 +106,7 @@ func (t *Timer) WaitTill(duration time.Duration) error {
 	return nil
 }
 
-// Wait until the internal timer has reached the next full second
+// WaitTillNextFullSecond waits until the internal timer has reached the next full second
 func (t *Timer) WaitTillNextFullSecond() error {
 	elapsed := t.Elapsed()
 	nextDuration := elapsed.Truncate(time.Second) + time.Second
