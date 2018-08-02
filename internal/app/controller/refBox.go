@@ -15,6 +15,7 @@ const configFileName = "config/ssl-game-controller.yaml"
 
 var refBox = NewRefBox()
 
+// RefBox controls a game
 type RefBox struct {
 	State             *State
 	timer             timer.Timer
@@ -28,6 +29,7 @@ type RefBox struct {
 	Publisher         Publisher
 }
 
+// NewRefBox creates a new refBox
 func NewRefBox() (refBox *RefBox) {
 
 	refBox = new(RefBox)
@@ -41,26 +43,12 @@ func NewRefBox() (refBox *RefBox) {
 	return
 }
 
-func loadPublisher(config Config) Publisher {
-	publisher, err := NewPublisher(config.Publish.Address)
-	if err != nil {
-		log.Printf("Could not start publisher on %v. %v", config.Publish.Address, err)
-	}
-	return publisher
-}
-
-func loadConfig() Config {
-	config, err := LoadConfig(configFileName)
-	if err != nil {
-		log.Printf("Warning: Could not load config: %v", err)
-	}
-	return config
-}
-
+// RunRefBox starts the global refBox
 func RunRefBox() {
 	refBox.Run()
 }
 
+// Run the refBox by loading configs, states, timer, etc.
 func (r *RefBox) Run() (err error) {
 
 	os.MkdirAll(logDir, os.ModePerm)
@@ -83,6 +71,22 @@ func (r *RefBox) Run() (err error) {
 		}
 	}()
 	return nil
+}
+
+func loadPublisher(config Config) Publisher {
+	publisher, err := NewPublisher(config.Publish.Address)
+	if err != nil {
+		log.Printf("Could not start publisher on %v. %v", config.Publish.Address, err)
+	}
+	return publisher
+}
+
+func loadConfig() Config {
+	config, err := LoadConfig(configFileName)
+	if err != nil {
+		log.Printf("Warning: Could not load config: %v", err)
+	}
+	return config
 }
 
 func (r *RefBox) openStateFiles() {
@@ -117,6 +121,7 @@ func (r *RefBox) readLastState() {
 	}
 }
 
+// Tick updates the times of the state and removes cards, if necessary
 func (r *RefBox) Tick() {
 	delta := r.timer.Delta()
 	updateTimes(r, delta)
@@ -126,16 +131,19 @@ func (r *RefBox) Tick() {
 	}
 }
 
+// Update publishes the state to the UI and the teams
 func (r *RefBox) Update(command *RefBoxEventCommand) {
 	r.notifyUpdateState <- struct{}{}
 	refBox.Publisher.Publish(refBox.State, command)
 }
 
+// SaveState writes the latest state out and logs the state history
 func (r *RefBox) SaveState() {
 	r.SaveLatestState()
 	r.SaveStateHistory()
 }
 
+// SaveLatestState writes the current state into a file
 func (r *RefBox) SaveLatestState() {
 	jsonState, err := json.MarshalIndent(r.State, "", "  ")
 	if err != nil {
@@ -154,6 +162,7 @@ func (r *RefBox) SaveLatestState() {
 	r.lastStateFile.Sync()
 }
 
+// SaveStateHistory writes the current state to the history file
 func (r *RefBox) SaveStateHistory() {
 
 	r.StateHistory = append(r.StateHistory, *r.State)
@@ -169,6 +178,7 @@ func (r *RefBox) SaveStateHistory() {
 	r.stateHistoryFile.Sync()
 }
 
+// UndoLastAction restores the last state from internal history
 func (r *RefBox) UndoLastAction() {
 	lastIndex := len(r.StateHistory) - 2
 	if lastIndex >= 0 {
@@ -176,6 +186,7 @@ func (r *RefBox) UndoLastAction() {
 		r.StateHistory = r.StateHistory[0:lastIndex]
 	}
 }
+
 func (r *RefBox) loadStages() {
 	r.StageTimes = map[Stage]time.Duration{}
 	for _, stage := range Stages {

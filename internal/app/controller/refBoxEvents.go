@@ -106,10 +106,8 @@ func processEvent(event *RefBoxEvent) error {
 		return processStage(event.Stage)
 	} else if event.Trigger != nil {
 		return processTrigger(event.Trigger)
-	} else {
-		return errors.New("Unknown event.")
 	}
-	return nil
+	return errors.New("Unknown event.")
 }
 
 func processTrigger(t *RefBoxEventTrigger) error {
