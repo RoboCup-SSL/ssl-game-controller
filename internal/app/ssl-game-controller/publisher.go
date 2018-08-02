@@ -1,4 +1,4 @@
-package main
+package ssl_game_controller
 
 import (
 	"github.com/RoboCup-SSL/ssl-go-tools/sslproto"

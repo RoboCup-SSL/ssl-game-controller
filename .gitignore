@@ -10,5 +10,4 @@
 *.sw*
 
 # ignore binary produced by go build
-ssl-game-controller
 logs

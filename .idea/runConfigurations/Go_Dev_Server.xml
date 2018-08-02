@@ -6,7 +6,7 @@
     <kind value="DIRECTORY" />
     <filePath value="$PROJECT_DIR$/main.go" />
     <package value="github.com/g3force/ssl-refbox" />
-    <directory value="$PROJECT_DIR$/" />
+    <directory value="$PROJECT_DIR$/cmd/ssl-game-controller" />
     <method v="2" />
   </configuration>
 </component>

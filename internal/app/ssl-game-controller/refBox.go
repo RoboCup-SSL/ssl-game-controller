@@ -1,7 +1,8 @@
-package main
+package ssl_game_controller
 
 import (
 	"encoding/json"
+	"github.com/g3force/ssl-game-controller/pkg/timer"
 	"io"
 	"log"
 	"os"
@@ -10,11 +11,13 @@ import (
 
 const logDir = "logs"
 const lastStateFileName = logDir + "/lastState.json"
-const configFileName = "config.yaml"
+const configFileName = "config/ssl-game-controller.yaml"
+
+var refBox = NewRefBox()
 
 type RefBox struct {
 	State             *RefBoxState
-	timer             Timer
+	timer             timer.Timer
 	MatchTimeStart    time.Time
 	notifyUpdateState chan struct{}
 	StateHistory      []RefBoxState
@@ -27,7 +30,7 @@ type RefBox struct {
 
 func NewRefBox() (refBox *RefBox) {
 	refBox = new(RefBox)
-	refBox.timer = NewTimer()
+	refBox.timer = timer.NewTimer()
 	refBox.notifyUpdateState = make(chan struct{})
 	refBox.MatchTimeStart = time.Unix(0, 0)
 	refBox.Config = LoadRefBoxConfig(configFileName)
@@ -35,6 +38,10 @@ func NewRefBox() (refBox *RefBox) {
 	refBox.Publisher = NewRefBoxPublisher(refBox.Config.Publish.Address)
 
 	return
+}
+
+func RunRefBox() {
+	refBox.Run()
 }
 
 func (r *RefBox) Run() (err error) {

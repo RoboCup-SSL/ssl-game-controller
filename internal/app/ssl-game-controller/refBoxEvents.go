@@ -1,4 +1,4 @@
-package main
+package ssl_game_controller
 
 import (
 	"fmt"
