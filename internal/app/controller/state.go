@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/pkg/errors"
 	"time"
 )
 
@@ -14,15 +15,20 @@ const (
 	TeamBlue Team = "Blue"
 )
 
-// Other returns the other team
+// Opposite returns the other team
 // if the team is not Yellow or Blue, return the same team
-func (t Team) Other() Team {
+func (t Team) Opposite() Team {
 	if t == TeamYellow {
 		return TeamBlue
 	} else if t == TeamBlue {
 		return TeamYellow
 	}
 	return t
+}
+
+// Unknown returns true if the team is not blue or yellow
+func (t Team) Unknown() bool {
+	return t != "Yellow" && t != "Blue"
 }
 
 // Stage represents the different stages of a game
@@ -75,6 +81,15 @@ var Stages = []Stage{
 	StageShootoutBreak,
 	StageShootout,
 	StagePostGame,
+}
+
+func (s Stage) index() (int, error) {
+	for i, v := range Stages {
+		if v == s {
+			return i, nil
+		}
+	}
+	return 0, errors.Errorf("unknown stage: %v", s)
 }
 
 // GameState of a game
