@@ -137,35 +137,35 @@ type State struct {
 }
 
 // NewState creates a new state, initialized for the start of a new game
-func NewState(config Config) (refBoxState *State) {
-	refBoxState = new(State)
-	refBoxState.Stage = StagePreGame
-	refBoxState.GameState = GameStateHalted
+func NewState() (s *State) {
+	s = new(State)
+	s.Stage = StagePreGame
+	s.GameState = GameStateHalted
 
 	// for some reason, the UI does not reset times correctly if duration is zero, so set it to 1ns
-	refBoxState.StageTimeLeft = 1
-	refBoxState.StageTimeElapsed = 1
-	refBoxState.MatchDuration = 1
+	s.StageTimeLeft = 1
+	s.StageTimeElapsed = 1
+	s.MatchDuration = 1
 
-	refBoxState.TeamState = map[Team]*TeamInfo{}
-	refBoxState.TeamState[TeamYellow] = new(TeamInfo)
-	refBoxState.TeamState[TeamBlue] = new(TeamInfo)
-	*refBoxState.TeamState[TeamYellow] = newTeamInfo(config)
-	*refBoxState.TeamState[TeamBlue] = newTeamInfo(config)
-	refBoxState.TeamState[TeamBlue].OnPositiveHalf = !refBoxState.TeamState[TeamYellow].OnPositiveHalf
+	s.TeamState = map[Team]*TeamInfo{}
+	s.TeamState[TeamYellow] = new(TeamInfo)
+	s.TeamState[TeamBlue] = new(TeamInfo)
+	*s.TeamState[TeamYellow] = newTeamInfo()
+	*s.TeamState[TeamBlue] = newTeamInfo()
+	s.TeamState[TeamBlue].OnPositiveHalf = !s.TeamState[TeamYellow].OnPositiveHalf
 
 	return
 }
 
-func newTeamInfo(config Config) (t TeamInfo) {
+func newTeamInfo() (t TeamInfo) {
 	t.Name = ""
 	t.Goals = 0
 	t.Goalie = 0
 	t.YellowCards = 0
 	t.YellowCardTimes = []time.Duration{}
 	t.RedCards = 0
-	t.TimeoutsLeft = config.Normal.Timeouts
-	t.TimeoutTimeLeft = config.Normal.TimeoutDuration
+	t.TimeoutsLeft = 0
+	t.TimeoutTimeLeft = 0
 	t.OnPositiveHalf = true
 	return
 }

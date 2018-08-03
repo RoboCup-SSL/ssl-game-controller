@@ -8,62 +8,145 @@ import (
 	"time"
 )
 
-func processEvent(event *Event) error {
+type Engine struct {
+	State          *State
+	MatchTimeStart time.Time
+	StageTimes     map[Stage]time.Duration
+	config         ConfigGame
+	StateHistory   []State
+}
+
+func NewEngine(config ConfigGame) (e Engine) {
+	e.config = config
+	e.loadStages()
+	e.ResetGame()
+	return
+}
+
+func (e *Engine) ResetGame() {
+	e.State = NewState()
+	e.State.TeamState[TeamBlue].TimeoutTimeLeft = e.config.Normal.TimeoutDuration
+	e.State.TeamState[TeamYellow].TimeoutTimeLeft = e.config.Normal.TimeoutDuration
+	e.State.TeamState[TeamBlue].TimeoutsLeft = e.config.Normal.Timeouts
+	e.State.TeamState[TeamYellow].TimeoutsLeft = e.config.Normal.Timeouts
+
+	e.MatchTimeStart = time.Unix(0, 0)
+
+}
+
+// Tick updates the times of the state and removes cards, if necessary
+func (e *Engine) Tick(delta time.Duration) {
+	e.updateTimes(delta)
+
+	if e.MatchTimeStart.After(time.Unix(0, 0)) {
+		e.State.MatchDuration = time.Now().Sub(e.MatchTimeStart)
+	}
+}
+
+// UndoLastAction restores the last state from internal history
+func (e *Engine) UndoLastAction() {
+	lastIndex := len(e.StateHistory) - 2
+	if lastIndex >= 0 {
+		*e.State = e.StateHistory[lastIndex]
+		e.StateHistory = e.StateHistory[0:lastIndex]
+	}
+}
+
+func (e *Engine) Process(event Event) error {
+	err := e.processEvent(event)
+	if err == nil {
+		e.StateHistory = append(e.StateHistory, *e.State)
+	}
+	return err
+}
+
+func (e *Engine) loadStages() {
+	e.StageTimes = map[Stage]time.Duration{}
+	for _, stage := range Stages {
+		e.StageTimes[stage] = 0
+	}
+	e.StageTimes[StageFirstHalf] = e.config.Normal.HalfDuration
+	e.StageTimes[StageHalfTime] = e.config.Normal.HalfTimeDuration
+	e.StageTimes[StageSecondHalf] = e.config.Normal.HalfDuration
+	e.StageTimes[StageOvertimeBreak] = e.config.Normal.BreakAfter
+	e.StageTimes[StageOvertimeFirstHalf] = e.config.Overtime.HalfDuration
+	e.StageTimes[StageOvertimeHalfTime] = e.config.Overtime.HalfTimeDuration
+	e.StageTimes[StageOvertimeSecondHalf] = e.config.Overtime.HalfDuration
+	e.StageTimes[StageShootoutBreak] = e.config.Overtime.BreakAfter
+}
+
+func (e *Engine) updateTimes(delta time.Duration) {
+	if e.State.GameState == GameStateRunning {
+		e.State.StageTimeElapsed += delta
+		e.State.StageTimeLeft -= delta
+
+		for _, teamState := range e.State.TeamState {
+			reduceYellowCardTimes(teamState, delta)
+			removeElapsedYellowCards(teamState)
+		}
+	}
+
+	if e.State.GameState == GameStateTimeout && e.State.GameStateFor != nil {
+		e.State.TeamState[*e.State.GameStateFor].TimeoutTimeLeft -= delta
+	}
+}
+
+func (e *Engine) processEvent(event Event) error {
 	if event.Command != nil {
-		return processCommand(event.Command)
+		return e.processCommand(event.Command)
 	} else if event.Modify != nil {
-		return processModify(event.Modify)
+		return e.processModify(event.Modify)
 	} else if event.Stage != nil {
-		return processStage(event.Stage)
+		return e.processStage(event.Stage)
 	} else if event.Card != nil {
-		return processCard(event.Card)
+		return e.processCard(event.Card)
 	} else if event.Trigger != nil {
-		return processTrigger(event.Trigger)
+		return e.processTrigger(event.Trigger)
 	}
 	return errors.New("unknown event")
 }
 
-func processCommand(c *EventCommand) error {
+func (e *Engine) processCommand(c *EventCommand) error {
 	switch c.Type {
 	case CommandHalt:
-		RefBox.State.GameState = GameStateHalted
-		RefBox.State.GameStateFor = nil
+		e.State.GameState = GameStateHalted
+		e.State.GameStateFor = nil
 	case CommandStop:
-		RefBox.State.GameState = GameStateStopped
-		RefBox.State.GameStateFor = nil
+		e.State.GameState = GameStateStopped
+		e.State.GameStateFor = nil
 	case CommandForceStart, CommandNormalStart, CommandDirect, CommandIndirect:
-		RefBox.State.GameState = GameStateRunning
-		RefBox.State.GameStateFor = nil
+		e.State.GameState = GameStateRunning
+		e.State.GameStateFor = nil
 	case CommandKickoff:
 		if c.ForTeam == nil {
 			return errors.New("Team required for kickoff")
 		}
-		RefBox.State.GameState = GameStatePreKickoff
-		RefBox.State.GameStateFor = c.ForTeam
+		e.State.GameState = GameStatePreKickoff
+		e.State.GameStateFor = c.ForTeam
 	case CommandPenalty:
 		if c.ForTeam == nil {
 			return errors.New("Team required for penalty")
 		}
-		RefBox.State.GameState = GameStatePrePenalty
-		RefBox.State.GameStateFor = c.ForTeam
+		e.State.GameState = GameStatePrePenalty
+		e.State.GameStateFor = c.ForTeam
 	case CommandBallPlacement:
 		if c.ForTeam == nil {
 			return errors.New("Team required for ball placement")
 		}
-		RefBox.State.GameState = GameStateBallPlacement
-		RefBox.State.GameStateFor = c.ForTeam
+		e.State.GameState = GameStateBallPlacement
+		e.State.GameStateFor = c.ForTeam
 	case CommandGoal:
 		if c.ForTeam == nil {
 			return errors.New("Team required for goal")
 		}
-		RefBox.State.TeamState[*c.ForTeam].Goals++
+		e.State.TeamState[*c.ForTeam].Goals++
 	case CommandTimeout:
 		if c.ForTeam == nil {
 			return errors.New("Team required for timeout")
 		}
-		RefBox.State.TeamState[*c.ForTeam].TimeoutsLeft--
-		RefBox.State.GameState = GameStateTimeout
-		RefBox.State.GameStateFor = c.ForTeam
+		e.State.TeamState[*c.ForTeam].TimeoutsLeft--
+		e.State.GameState = GameStateTimeout
+		e.State.GameStateFor = c.ForTeam
 	default:
 		return errors.Errorf("Unknown command: %v", c)
 	}
@@ -72,11 +155,11 @@ func processCommand(c *EventCommand) error {
 	return nil
 }
 
-func processModify(m *EventModifyValue) error {
+func (e *Engine) processModify(m *EventModifyValue) error {
 	if m.ForTeam.Unknown() {
 		return errors.Errorf("Unknown team: %v", m.ForTeam)
 	}
-	teamState := RefBox.State.TeamState[m.ForTeam]
+	teamState := e.State.TeamState[m.ForTeam]
 	if m.Goals != nil {
 		teamState.Goals = *m.Goals
 	} else if m.Goalie != nil {
@@ -91,7 +174,7 @@ func processModify(m *EventModifyValue) error {
 		teamState.Name = *m.TeamName
 	} else if m.OnPositiveHalf != nil {
 		teamState.OnPositiveHalf = *m.OnPositiveHalf
-		RefBox.State.TeamState[m.ForTeam.Opposite()].OnPositiveHalf = !*m.OnPositiveHalf
+		e.State.TeamState[m.ForTeam.Opposite()].OnPositiveHalf = !*m.OnPositiveHalf
 	} else if m.YellowCardTime != nil {
 		cardId := m.YellowCardTime.CardID
 		if cardId < 0 || cardId >= len(teamState.YellowCardTimes) {
@@ -113,12 +196,12 @@ func processModify(m *EventModifyValue) error {
 	return nil
 }
 
-func processStage(s *EventStage) error {
-	if RefBox.State.GameState != GameStateHalted && RefBox.State.GameState != GameStateStopped {
+func (e *Engine) processStage(s *EventStage) error {
+	if e.State.GameState != GameStateHalted && e.State.GameState != GameStateStopped {
 		return errors.New("The game state must be halted or stopped to change the stage")
 	}
 
-	index, err := RefBox.State.Stage.index()
+	index, err := e.State.Stage.index()
 	if err != nil {
 		return err
 	}
@@ -127,28 +210,28 @@ func processStage(s *EventStage) error {
 		if nextIndex >= len(Stages) {
 			return errors.New("No next stage")
 		}
-		RefBox.State.Stage = Stages[nextIndex]
+		e.State.Stage = Stages[nextIndex]
 	} else if s.StageOperation == StagePrevious {
 		nextIndex := index - 1
 		if nextIndex < 0 {
 			return errors.New("No previous stage")
 		}
-		RefBox.State.Stage = Stages[nextIndex]
+		e.State.Stage = Stages[nextIndex]
 	} else {
 		return errors.Errorf("Unknown stage operation: %v", s.StageOperation)
 	}
 
-	RefBox.State.StageTimeLeft = RefBox.StageTimes[RefBox.State.Stage]
-	RefBox.State.StageTimeElapsed = 0
+	e.State.StageTimeLeft = e.StageTimes[e.State.Stage]
+	e.State.StageTimeElapsed = 0
 
-	if RefBox.State.Stage == StageFirstHalf {
-		RefBox.MatchTimeStart = time.Now()
+	if e.State.Stage == StageFirstHalf {
+		e.MatchTimeStart = time.Now()
 	}
-	if RefBox.State.Stage == StageOvertimeFirstHalfPre {
-		RefBox.State.TeamState[TeamYellow].TimeoutsLeft = RefBox.Config.Overtime.Timeouts
-		RefBox.State.TeamState[TeamYellow].TimeoutTimeLeft = RefBox.Config.Overtime.TimeoutDuration
-		RefBox.State.TeamState[TeamBlue].TimeoutsLeft = RefBox.Config.Overtime.Timeouts
-		RefBox.State.TeamState[TeamBlue].TimeoutTimeLeft = RefBox.Config.Overtime.TimeoutDuration
+	if e.State.Stage == StageOvertimeFirstHalfPre {
+		e.State.TeamState[TeamYellow].TimeoutsLeft = e.config.Overtime.Timeouts
+		e.State.TeamState[TeamYellow].TimeoutTimeLeft = e.config.Overtime.TimeoutDuration
+		e.State.TeamState[TeamBlue].TimeoutsLeft = e.config.Overtime.Timeouts
+		e.State.TeamState[TeamBlue].TimeoutTimeLeft = e.config.Overtime.TimeoutDuration
 	}
 
 	log.Printf("Processed stage %v", s.StageOperation)
@@ -156,16 +239,16 @@ func processStage(s *EventStage) error {
 	return nil
 }
 
-func processCard(card *EventCard) error {
+func (e *Engine) processCard(card *EventCard) error {
 	if card.ForTeam != TeamYellow && card.ForTeam != TeamBlue {
 		return errors.Errorf("Unknown team: %v", card.ForTeam)
 	}
 	if card.Type != CardTypeYellow && card.Type != CardTypeRed {
 		return errors.Errorf("Unknown card type: %v", card.Type)
 	}
-	teamState := RefBox.State.TeamState[card.ForTeam]
+	teamState := e.State.TeamState[card.ForTeam]
 	if card.Operation == CardOperationAdd {
-		return addCard(card, teamState)
+		return addCard(card, teamState, e.config.YellowCardDuration)
 	} else if card.Operation == CardOperationRevoke {
 		return revokeCard(card, teamState)
 	} else if card.Operation == CardOperationModify {
@@ -186,11 +269,11 @@ func modifyCard(card *EventCard, teamState *TeamInfo) error {
 	return nil
 }
 
-func addCard(card *EventCard, teamState *TeamInfo) error {
+func addCard(card *EventCard, teamState *TeamInfo, duration time.Duration) error {
 	if card.Type == CardTypeYellow {
 		log.Printf("Add yellow card for team %v", card.ForTeam)
 		teamState.YellowCards++
-		teamState.YellowCardTimes = append(teamState.YellowCardTimes, RefBox.Config.Global.YellowCardDuration)
+		teamState.YellowCardTimes = append(teamState.YellowCardTimes, duration)
 	} else if card.Type == CardTypeRed {
 		log.Printf("Add red card for team %v", card.ForTeam)
 		teamState.RedCards++
@@ -198,16 +281,16 @@ func addCard(card *EventCard, teamState *TeamInfo) error {
 	return nil
 }
 
-func processTrigger(t *EventTrigger) error {
+func (e *Engine) processTrigger(t *EventTrigger) error {
 	if t.Type == TriggerResetMatch {
-		RefBox.State = NewState(RefBox.Config)
-		RefBox.MatchTimeStart = time.Unix(0, 0)
+		e.ResetGame()
+
 	} else if t.Type == TriggerSwitchColor {
-		yellow := RefBox.State.TeamState[TeamYellow]
-		RefBox.State.TeamState[TeamYellow] = RefBox.State.TeamState[TeamBlue]
-		RefBox.State.TeamState[TeamBlue] = yellow
+		yellow := e.State.TeamState[TeamYellow]
+		e.State.TeamState[TeamYellow] = e.State.TeamState[TeamBlue]
+		e.State.TeamState[TeamBlue] = yellow
 	} else if t.Type == TriggerUndo {
-		RefBox.UndoLastAction()
+		e.UndoLastAction()
 	} else {
 		return errors.Errorf("Unknown trigger: %v", t.Type)
 	}
@@ -269,4 +352,20 @@ func strToDuration(s string) (duration time.Duration, err error) {
 	duration += time.Minute * time.Duration(minutes)
 	duration += time.Second * time.Duration(seconds)
 	return
+}
+
+func reduceYellowCardTimes(teamState *TeamInfo, delta time.Duration) {
+	for i := range teamState.YellowCardTimes {
+		teamState.YellowCardTimes[i] -= delta
+	}
+}
+
+func removeElapsedYellowCards(teamState *TeamInfo) {
+	b := teamState.YellowCardTimes[:0]
+	for _, x := range teamState.YellowCardTimes {
+		if x > 0 {
+			b = append(b, x)
+		}
+	}
+	teamState.YellowCardTimes = b
 }

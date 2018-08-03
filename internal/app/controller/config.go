@@ -16,9 +16,11 @@ type ConfigSpecial struct {
 	BreakAfter       time.Duration `yaml:"break-after"`
 }
 
-// ConfigGlobal holds configs that are valid for the whole game
-type ConfigGlobal struct {
+// ConfigGame holds configs that are valid for the whole game
+type ConfigGame struct {
 	YellowCardDuration time.Duration `yaml:"yellow-card-duration"`
+	Normal             ConfigSpecial `yaml:"normal"`
+	Overtime           ConfigSpecial `yaml:"overtime"`
 }
 
 // ConfigPublish holds configs for publishing the state and commands to the teams
@@ -28,10 +30,8 @@ type ConfigPublish struct {
 
 // Config structure for the game controller
 type Config struct {
-	Publish  ConfigPublish `yaml:"publish"`
-	Global   ConfigGlobal  `yaml:"global"`
-	Normal   ConfigSpecial `yaml:"normal"`
-	Overtime ConfigSpecial `yaml:"overtime"`
+	Publish ConfigPublish `yaml:"publish"`
+	Game    ConfigGame    `yaml:"game"`
 }
 
 // LoadConfig loads a config from given file
@@ -58,19 +58,19 @@ func LoadConfig(fileName string) (config Config, err error) {
 // DefaultConfig creates a config with default values
 func DefaultConfig() (c Config) {
 	c.Publish.Address = "224.5.23.1:10003"
-	c.Global.YellowCardDuration = 2 * time.Minute
+	c.Game.YellowCardDuration = 2 * time.Minute
 
-	c.Normal.HalfDuration = 5 * time.Minute
-	c.Normal.HalfTimeDuration = 5 * time.Minute
-	c.Normal.Timeouts = 4
-	c.Normal.TimeoutDuration = 5 * time.Minute
-	c.Normal.BreakAfter = 5 * time.Minute
+	c.Game.Normal.HalfDuration = 5 * time.Minute
+	c.Game.Normal.HalfTimeDuration = 5 * time.Minute
+	c.Game.Normal.Timeouts = 4
+	c.Game.Normal.TimeoutDuration = 5 * time.Minute
+	c.Game.Normal.BreakAfter = 5 * time.Minute
 
-	c.Overtime.HalfDuration = 2*time.Minute + 30*time.Second
-	c.Overtime.HalfTimeDuration = 2 * time.Minute
-	c.Overtime.Timeouts = 2
-	c.Overtime.TimeoutDuration = 5 * time.Minute
-	c.Overtime.BreakAfter = 2 * time.Minute
+	c.Game.Overtime.HalfDuration = 2*time.Minute + 30*time.Second
+	c.Game.Overtime.HalfTimeDuration = 2 * time.Minute
+	c.Game.Overtime.Timeouts = 2
+	c.Game.Overtime.TimeoutDuration = 5 * time.Minute
+	c.Game.Overtime.BreakAfter = 2 * time.Minute
 
 	return
 }
