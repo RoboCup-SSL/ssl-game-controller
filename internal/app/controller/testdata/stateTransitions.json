@@ -1,0 +1,114 @@
+[
+  {
+    "state": {
+      "stage": "First Half Pre",
+      "gameState": "Halted",
+      "gameStateForTeam": null,
+      "gameTimeElapsed": 0,
+      "gameTimeLeft": 0,
+      "matchDuration": 0,
+      "teamState": {
+        "Blue": {
+          "name": "",
+          "goals": 0,
+          "goalie": 0,
+          "yellowCards": 0,
+          "yellowCardTimes": [],
+          "redCards": 0,
+          "timeoutsLeft": 4,
+          "timeoutTimeLeft": 300000000000,
+          "onPositiveHalf": false
+        },
+        "Yellow": {
+          "name": "",
+          "goals": 0,
+          "goalie": 0,
+          "yellowCards": 0,
+          "yellowCardTimes": [],
+          "redCards": 0,
+          "timeoutsLeft": 4,
+          "timeoutTimeLeft": 300000000000,
+          "onPositiveHalf": true
+        }
+      }
+    }
+  },
+  {
+    "event": {
+      "command": {
+        "commandType": "stop"
+      }
+    },
+    "state": {
+      "stage": "First Half Pre",
+      "gameState": "Stopped",
+      "gameStateForTeam": null,
+      "gameTimeElapsed": 0,
+      "gameTimeLeft": 0,
+      "matchDuration": 0,
+      "teamState": {
+        "Blue": {
+          "name": "",
+          "goals": 0,
+          "goalie": 0,
+          "yellowCards": 0,
+          "yellowCardTimes": [],
+          "redCards": 0,
+          "timeoutsLeft": 4,
+          "timeoutTimeLeft": 300000000000,
+          "onPositiveHalf": false
+        },
+        "Yellow": {
+          "name": "",
+          "goals": 0,
+          "goalie": 0,
+          "yellowCards": 0,
+          "yellowCardTimes": [],
+          "redCards": 0,
+          "timeoutsLeft": 4,
+          "timeoutTimeLeft": 300000000000,
+          "onPositiveHalf": true
+        }
+      }
+    }
+  },
+  {
+    "event": {
+      "command": {
+        "commandType": "forceStart"
+      }
+    },
+    "state": {
+      "stage": "First Half Pre",
+      "gameState": "Running",
+      "gameStateForTeam": null,
+      "gameTimeElapsed": 0,
+      "gameTimeLeft": 0,
+      "matchDuration": 0,
+      "teamState": {
+        "Blue": {
+          "name": "",
+          "goals": 0,
+          "goalie": 0,
+          "yellowCards": 0,
+          "yellowCardTimes": [],
+          "redCards": 0,
+          "timeoutsLeft": 4,
+          "timeoutTimeLeft": 300000000000,
+          "onPositiveHalf": false
+        },
+        "Yellow": {
+          "name": "",
+          "goals": 0,
+          "goalie": 0,
+          "yellowCards": 0,
+          "yellowCardTimes": [],
+          "redCards": 0,
+          "timeoutsLeft": 4,
+          "timeoutTimeLeft": 300000000000,
+          "onPositiveHalf": true
+        }
+      }
+    }
+  }
+]

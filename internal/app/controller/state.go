@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"encoding/json"
 	"github.com/pkg/errors"
 	"time"
 )
@@ -168,4 +169,20 @@ func newTeamInfo() (t TeamInfo) {
 	t.TimeoutTimeLeft = 0
 	t.OnPositiveHalf = true
 	return
+}
+
+func (t TeamInfo) String() string {
+	bytes, e := json.Marshal(t)
+	if e != nil {
+		return e.Error()
+	}
+	return string(bytes)
+}
+
+func (s State) String() string {
+	bytes, e := json.Marshal(s)
+	if e != nil {
+		return e.Error()
+	}
+	return string(bytes)
 }
