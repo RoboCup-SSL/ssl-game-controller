@@ -7,8 +7,17 @@ import (
 	"net/http"
 )
 
+type ApiServer struct {
+	Consumer    EventConsumer
+	connections []*websocket.Conn
+}
+
+type EventConsumer interface {
+	OnNewEvent(event Event)
+}
+
 // WsHandler handles incoming web socket connections
-func WsHandler(w http.ResponseWriter, r *http.Request) {
+func (a *ApiServer) WsHandler(w http.ResponseWriter, r *http.Request) {
 	u := websocket.Upgrader{
 		ReadBufferSize:  1024,
 		WriteBufferSize: 1024,
@@ -20,35 +29,41 @@ func WsHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
-	defer conn.Close()
-	defer log.Println("Client disconnected")
+	defer a.disconnect(conn)
 
 	log.Println("Client connected")
 
-	go listenForNewEvents(conn)
+	a.connections = append(a.connections, conn)
 
-	publishState(conn)
+	a.listenForNewEvents(conn)
 }
 
-func publishState(conn *websocket.Conn) {
-	for {
-		b, err := json.Marshal(refBox.State)
-		if err != nil {
-			log.Println("Marshal error:", err)
-		}
+func (a *ApiServer) PublishState(state State) {
+	b, err := json.Marshal(state)
+	if err != nil {
+		log.Println("Marshal error:", err)
+	}
 
+	for _, conn := range a.connections {
 		err = conn.WriteMessage(websocket.TextMessage, b)
 		if err != nil {
 			log.Println("Could not write message.", err)
-			return
 		}
-
-		// wait to be notified
-		<-refBox.notifyUpdateState
 	}
 }
 
-func listenForNewEvents(conn *websocket.Conn) {
+func (a *ApiServer) disconnect(conn *websocket.Conn) {
+	conn.Close()
+	for i, c := range a.connections {
+		if c == conn {
+			a.connections = append(a.connections[:i], a.connections[i+1:]...)
+			break
+		}
+	}
+	log.Println("Client disconnected")
+}
+
+func (a *ApiServer) listenForNewEvents(conn *websocket.Conn) {
 	for {
 		messageType, b, err := conn.ReadMessage()
 		if err != nil || messageType != websocket.TextMessage {
@@ -56,11 +71,11 @@ func listenForNewEvents(conn *websocket.Conn) {
 			return
 		}
 
-		handleNewEventMessage(b)
+		a.handleNewEventMessage(b)
 	}
 }
 
-func handleNewEventMessage(b []byte) {
+func (a *ApiServer) handleNewEventMessage(b []byte) {
 	event := Event{}
 	err := json.Unmarshal(b, &event)
 	if err != nil {
@@ -68,12 +83,7 @@ func handleNewEventMessage(b []byte) {
 		return
 	}
 
-	err = processEvent(&event)
-	if err != nil {
-		log.Println("Could not process event:", string(b), err)
-		return
+	if a.Consumer != nil {
+		a.Consumer.OnNewEvent(event)
 	}
-
-	refBox.SaveState()
-	refBox.Update(event.Command)
 }
