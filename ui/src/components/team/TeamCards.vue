@@ -58,8 +58,7 @@
                 this.$socket.sendObj({
                     'modify': {
                         'forTeam': this.teamColor,
-                        'modifyType': 'yellowCards',
-                        'valueInt': Number(v)
+                        'yellowCards': Number(v)
                     }
                 })
             },
@@ -67,8 +66,7 @@
                 this.$socket.sendObj({
                     'modify': {
                         'forTeam': this.teamColor,
-                        'modifyType': 'redCards',
-                        'valueInt': Number(v)
+                        'redCards': Number(v)
                     }
                 })
             },
@@ -76,9 +74,7 @@
                 this.$socket.sendObj({
                     'modify': {
                         'forTeam': this.teamColor,
-                        'modifyType': 'yellowCardTime',
-                        'valueInt': index,
-                        'valueStr': v
+                        'yellowCardTime': {'cardID': index, 'duration': v}
                     }
                 })
             },

@@ -18,8 +18,7 @@
                 this.$socket.sendObj({
                     'modify': {
                         'forTeam': this.teamColor,
-                        'modifyType': 'onPositiveHalf',
-                        'valueBool': !currentValue
+                        'onPositiveHalf': !currentValue
                     }
                 })
             },

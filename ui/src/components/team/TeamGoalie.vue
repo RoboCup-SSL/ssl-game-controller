@@ -1,7 +1,7 @@
 <template>
     <div class="team-goalie">
         <EditableLabelNumber
-                label="Goalie-ID: "
+                label="Goalie: "
                 title="The goalie number"
                 :value="goalie"
                 :callback="updateGoalie"
@@ -25,8 +25,7 @@
                 this.$socket.sendObj({
                     'modify': {
                         'forTeam': this.teamColor,
-                        'modifyType': 'goalie',
-                        'valueInt': Number(v)
+                        'goalie': Number(v)
                     }
                 })
             },

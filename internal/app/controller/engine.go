@@ -77,54 +77,36 @@ func processModify(m *EventModifyValue) error {
 		return errors.Errorf("Unknown team: %v", m.ForTeam)
 	}
 	teamState := refBox.State.TeamState[m.ForTeam]
-	switch m.Type {
-	case ModifyGoalie:
-		if m.ValueInt != nil {
-			teamState.Goalie = *m.ValueInt
+	if m.Goals != nil {
+		teamState.Goals = *m.Goals
+	} else if m.Goalie != nil {
+		teamState.Goalie = *m.Goalie
+	} else if m.YellowCards != nil {
+		teamState.YellowCards = *m.YellowCards
+	} else if m.RedCards != nil {
+		teamState.RedCards = *m.RedCards
+	} else if m.TimeoutsLeft != nil {
+		teamState.TimeoutsLeft = *m.TimeoutsLeft
+	} else if m.TeamName != nil {
+		teamState.Name = *m.TeamName
+	} else if m.OnPositiveHalf != nil {
+		teamState.OnPositiveHalf = *m.OnPositiveHalf
+		refBox.State.TeamState[m.ForTeam.Opposite()].OnPositiveHalf = !*m.OnPositiveHalf
+	} else if m.YellowCardTime != nil {
+		cardId := m.YellowCardTime.CardID
+		if cardId < 0 || cardId >= len(teamState.YellowCardTimes) {
+			return errors.Errorf("Invalid card index: %v", cardId)
 		}
-	case ModifyGoals:
-		if m.ValueInt != nil {
-			teamState.Goals = *m.ValueInt
+		if duration, err := strToDuration(m.YellowCardTime.Duration); err == nil {
+			teamState.YellowCardTimes[cardId] = duration
 		}
-	case ModifyOnPositiveHalf:
-		if m.ValueBool != nil {
-			teamState.OnPositiveHalf = *m.ValueBool
-			refBox.State.TeamState[m.ForTeam.Opposite()].OnPositiveHalf = !*m.ValueBool
+	} else if m.TimeoutTimeLeft != nil {
+		if duration, err := strToDuration(*m.TimeoutTimeLeft); err == nil {
+			teamState.TimeoutTimeLeft = duration
+		} else {
+			return err
 		}
-	case ModifyRedCards:
-		if m.ValueInt != nil {
-			teamState.RedCards = *m.ValueInt
-		}
-	case ModifyYellowCards:
-		if m.ValueInt != nil {
-			teamState.YellowCards = *m.ValueInt
-		}
-	case ModifyTeamName:
-		if m.ValueStr != nil {
-			teamState.Name = *m.ValueStr
-		}
-	case ModifyTimeoutsLeft:
-		if m.ValueInt != nil {
-			teamState.TimeoutsLeft = *m.ValueInt
-		}
-	case ModifyTimeoutTimeLeft:
-		if m.ValueStr != nil {
-			if duration, err := strToDuration(*m.ValueStr); err == nil {
-				teamState.TimeoutTimeLeft = duration
-			} else {
-				return err
-			}
-		}
-	case ModifyYellowCardTime:
-		if m.ValueStr != nil && m.ValueInt != nil {
-			if *m.ValueInt < 0 || *m.ValueInt >= len(teamState.YellowCardTimes) {
-				return errors.Errorf("Invalid card index: %v", *m.ValueInt)
-			}
-			if duration, err := strToDuration(*m.ValueStr); err == nil {
-				teamState.YellowCardTimes[*m.ValueInt] = duration
-			}
-		}
-	default:
+	} else {
 		return errors.Errorf("Unknown modify: %v", m)
 	}
 	log.Printf("Processed modification %v", m)

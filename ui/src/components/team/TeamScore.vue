@@ -25,8 +25,7 @@
                 this.$socket.sendObj({
                     'modify': {
                         'forTeam': this.teamColor,
-                        'modifyType': 'goals',
-                        'valueInt': Number(v)
+                        'goals': Number(v)
                     }
                 })
             }

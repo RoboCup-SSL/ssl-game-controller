@@ -59,8 +59,7 @@
                 this.$socket.sendObj({
                     'modify': {
                         'forTeam': this.teamColor,
-                        'modifyType': 'teamName',
-                        'valueStr': v
+                        'teamName': v
                     }
                 })
             }

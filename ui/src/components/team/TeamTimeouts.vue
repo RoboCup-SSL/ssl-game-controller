@@ -30,8 +30,7 @@
                 this.$socket.sendObj({
                     'modify': {
                         'forTeam': this.teamColor,
-                        'modifyType': 'timeoutsLeft',
-                        'valueInt': Number(v)
+                        'timeoutsLeft': Number(v)
                     }
                 })
             },
@@ -39,8 +38,7 @@
                 this.$socket.sendObj({
                     'modify': {
                         'forTeam': this.teamColor,
-                        'modifyType': 'timeoutTimeLeft',
-                        'valueStr': v
+                        'timeoutTimeLeft': v
                     }
                 })
             },

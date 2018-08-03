@@ -55,30 +55,6 @@ const (
 	CommandGoal RefCommand = "goal"
 )
 
-// ModifyType is something to be modified
-type ModifyType string
-
-const (
-	// ModifyGoals goals
-	ModifyGoals ModifyType = "goals"
-	// ModifyGoalie goalie
-	ModifyGoalie ModifyType = "goalie"
-	// ModifyYellowCards yellow cards
-	ModifyYellowCards ModifyType = "yellowCards"
-	// ModifyYellowCardTime yellow card time
-	ModifyYellowCardTime ModifyType = "yellowCardTime"
-	// ModifyRedCards red cards
-	ModifyRedCards ModifyType = "redCards"
-	// ModifyTimeoutsLeft number of timeouts left
-	ModifyTimeoutsLeft ModifyType = "timeoutsLeft"
-	// ModifyTimeoutTimeLeft timeout time left
-	ModifyTimeoutTimeLeft ModifyType = "timeoutTimeLeft"
-	// ModifyOnPositiveHalf on positive half?
-	ModifyOnPositiveHalf ModifyType = "onPositiveHalf"
-	// ModifyTeamName name of the team
-	ModifyTeamName ModifyType = "teamName"
-)
-
 // StageOperation to apply on the current stage
 type StageOperation string
 
@@ -128,31 +104,57 @@ func (c EventCommand) String() string {
 	return fmt.Sprintf("%v for %v", c.Type, *c.ForTeam)
 }
 
+// EventModifyCardTime holds the duration for a certain yellow card duration
+type EventModifyCardTime struct {
+	CardID   int    `json:"cardId"`
+	Duration string `json:"duration"`
+}
+
 // EventModifyValue is an event that can be applied
 type EventModifyValue struct {
-	Type      ModifyType `json:"modifyType"`
-	ForTeam   Team       `json:"forTeam"`
-	ValueStr  *string    `json:"valueStr"`
-	ValueInt  *int       `json:"valueInt"`
-	ValueBool *bool      `json:"valueBool"`
+	ForTeam Team `json:"forTeam"`
+
+	Goals           *int                 `json:"goals"`
+	Goalie          *int                 `json:"goalie"`
+	YellowCards     *int                 `json:"yellowCards"`
+	YellowCardTime  *EventModifyCardTime `json:"yellowCardTime"`
+	RedCards        *int                 `json:"redCards"`
+	TimeoutsLeft    *int                 `json:"timeoutsLeft"`
+	TimeoutTimeLeft *string              `json:"timeoutTimeLeft"`
+	OnPositiveHalf  *bool                `json:"onPositiveHalf"`
+	TeamName        *string              `json:"teamName"`
 }
 
 func (m EventModifyValue) String() string {
-	str := fmt.Sprintf("%v for %v", m.Type, m.ForTeam)
-	if m.ValueBool != nil {
-		if *m.ValueBool {
-			str += " bool:true"
-		} else {
-			str += " bool:false"
-		}
+	str := fmt.Sprintf("modify for %v:", m.ForTeam)
+	if m.Goals != nil {
+		return fmt.Sprintf("%v Goals=%v", str, *m.Goals)
 	}
-	if m.ValueStr != nil {
-		str += " str:" + *m.ValueStr
+	if m.Goalie != nil {
+		return fmt.Sprintf("%v Goalie=%v", str, *m.Goalie)
 	}
-	if m.ValueInt != nil {
-		str += " int:" + string(*m.ValueInt)
+	if m.YellowCards != nil {
+		return fmt.Sprintf("%v YellowCards=%v", str, *m.YellowCards)
 	}
-	return str
+	if m.YellowCardTime != nil {
+		return fmt.Sprintf("%v YellowCardTime=%v", str, *m.YellowCardTime)
+	}
+	if m.RedCards != nil {
+		return fmt.Sprintf("%v RedCards=%v", str, *m.RedCards)
+	}
+	if m.TimeoutsLeft != nil {
+		return fmt.Sprintf("%v TimeoutsLeft=%v", str, *m.TimeoutsLeft)
+	}
+	if m.TimeoutTimeLeft != nil {
+		return fmt.Sprintf("%v TimeoutTimeLeft=%v", str, *m.TimeoutTimeLeft)
+	}
+	if m.OnPositiveHalf != nil {
+		return fmt.Sprintf("%v OnPositiveHalf=%v", str, *m.OnPositiveHalf)
+	}
+	if m.TeamName != nil {
+		return fmt.Sprintf("%v TeamName=%v", str, *m.TeamName)
+	}
+	return fmt.Sprintf("%v undefined", str)
 }
 
 // EventTrigger is an event that can be applied
