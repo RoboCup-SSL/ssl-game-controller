@@ -5,8 +5,6 @@ jobs:
     - image: circleci/node:10.8.0
     steps:
     - checkout
-    - attach_workspace:
-        at: ./ui/dist
     - run:
         name: "Install dependencies"
         command: npm install
@@ -19,6 +17,10 @@ jobs:
         name: "Build"
         command: npm run build
         working_directory: ui
+    - persist_to_workspace:
+        root: .
+        paths:
+        - ui/dist/*
 
   backend:
     docker:
@@ -28,19 +30,22 @@ jobs:
     steps:
     - checkout
     - attach_workspace:
-        at: ./ui/dist
-    - attach_workspace:
-        at: ./release
+        at: .
+    - run: ls -al **
     - run: go get -v -t -d ./...
     - run: go test -v ./...
     - run:
         working_directory: cmd/ssl-game-controller
         command: |
-          go get -v github.com/gobuffalo/packr/...
+          go get -v github.com/gobuffalo/packr/packr
           GOOS=linux GOARCH=amd64 packr build -o ../../release/linux/ssl-game-controller
           GOOS=windows GOARCH=amd64 packr build -o ../../release/windows/ssl-game-controller.exe
           GOOS=darwin GOARCH=amd64 packr build -o ../../release/darwin/ssl-game-controller
     - run: ls -al **
+    - persist_to_workspace:
+        root: .
+        paths:
+        - release/*
 
   deploy:
     docker:
@@ -49,7 +54,7 @@ jobs:
     working_directory: /go/src/github.com/g3force/ssl-game-controller
     steps:
     - attach_workspace:
-        at: ./release
+        at: .
     - run: ls -al **
 
   publish-github-release:
@@ -58,7 +63,6 @@ jobs:
     steps:
     - attach_workspace:
         at: ./release
-    - run: ls -al **
     - run:
         name: "Publish Release on GitHub"
         command: |
@@ -77,6 +81,6 @@ workflows:
     - deploy:
         requires:
         - backend
-    - publish-github-release:
-        requires:
-        - backend
+#    - publish-github-release:
+#        requires:
+#        - backend
