@@ -29,8 +29,17 @@ jobs:
     - checkout
     - attach_workspace:
         at: ./ui/dist
+    - attach_workspace:
+        at: ./release
     - run: go get -v -t -d ./...
     - run: go test -v ./...
+    - run:
+        working_directory: cmd/ssl-game-controller
+        command: |
+          go get -v github.com/gobuffalo/packr
+          GOOS=linux GOARCH=amd64 /go/bin/packr build -o ../../release/linux/ssl-game-controller
+          GOOS=windows GOARCH=amd64 /go/bin/packr build -o ../../release/windows/ssl-game-controller.exe
+          GOOS=darwin GOARCH=amd64 /go/bin/packr build -o ../../release/darwin/ssl-game-controller
 
   deploy:
     docker:
@@ -40,24 +49,31 @@ jobs:
     steps:
     - checkout
     - attach_workspace:
-        at: ./ui/dist
-    - run: go get -v -t -d ./...
-    - run: go get -v github.com/gobuffalo/packr
-    - run:
-        working_directory: cmd/ssl-game-controller
-        command: |
-          GOOS=linux GOARCH=amd64 /go/bin/packr build -o ../../release/linux/ssl-game-controller
-          GOOS=windows GOARCH=amd64 /go/bin/packr build -o ../../release/windows/ssl-game-controller.exe
-          GOOS=darwin GOARCH=amd64 /go/bin/packr build -o ../../release/darwin/ssl-game-controller
+        at: ./release
     - run: ll release && tree release
 
+
+  publish-github-release:
+    docker:
+    - image: circleci/golang:1.8
+    steps:
+    - attach_workspace:
+        at: ./release
+    - run:
+        name: "Publish Release on GitHub"
+        command: |
+          go get github.com/tcnksm/ghr
+          VERSION=$(my-binary --version)
+          ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./artifacts/
 
 workflows:
   version: 2
   release:
     jobs:
     - frontend
-    - backend
-    - deploy:
+    - backend:
         requires:
         - frontend
+    - deploy:
+        requires:
+        - backend
