@@ -1,8 +1,5 @@
 matrix:
   include:
-  - language: go
-    go:
-    - master
   - language: node_js
     node_js:
     - node
@@ -12,3 +9,16 @@ matrix:
     - npm install
     - npm test
     - npm run build
+    - tar czf ui.tar.gz dist/*
+    deploy:
+      provider: releases
+      api_key:
+        secure: HafchUV4+LQymySbGBwxhaIL/Rac9xfy9/bD9BwZMHGBsdQoLfTMUmU3YJ5KOWsCY0bd/GWZT+PAQW7ybpXtUWVL4ODPH9GOtSgQwCFgUkN9JLR6br4/5ctIWRWs8EupNwXXN7ijjB3h6tmpADRfs/YqeF0BGjIhT44dcRxC588CZ6nSG5lnQndsKHPNzXLkrTL7a3SQFyJnXmDLPAjUMOHdXWf8Mw+oQ+uBJZYXxVCHR8LW0XUyEFUrdSykE9Qw4wMvF7UIk8ZnBFgf92ba8R2zgNN0ibWxYpSoum868lV+Vnj+zdfuriZQX5qo0lCQmmGOJ3gb+c0VnLR7z4P6vm8zDaoaGFQYLLDnhYywl8OjZkiRAD15IIlDEYiV26IDnA/LJxLC2MnV9l08yHwvPguq5gTT9Sv1mnNCEpJoIDSkxtncA4vTig3yqBOsz6qGAltMYDvjzAQuIHvj1UxsTUOhAplcwZS9Qd1V3QNd0Q0bpdOLon3u0Ewd094W//sz4BLVsO62n5epH6pB7X0vfRCOcPiZr0CSrT+ZYw9OwWbp8Z8tj5r8OKj+UkMtc36wy6D9BAepHLbpvdBq9E4wa+L1u07pDjnYfYnoHd05AIv20xSRB8jmMdCPPkPGZWv21TjImSvSJYoB/AX9Zy0oYQeF3+vmDzfFQcoHo9YaJDc=
+      file: ui.tar.gz
+      skip_cleanup: true
+      on:
+        repo: RoboCup-SSL/ssl-game-controller
+        tags: true
+  - language: go
+    go:
+    - master
