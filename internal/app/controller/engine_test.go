@@ -3,6 +3,7 @@ package controller
 import (
 	"encoding/json"
 	"io/ioutil"
+	"log"
 	"path/filepath"
 	"reflect"
 	"strings"
@@ -27,6 +28,7 @@ func Test_transitions(t *testing.T) {
 }
 
 func processTransitionFile(t *testing.T, fileName string) {
+	log.Printf("Process %v", fileName)
 	path := filepath.Join("testdata", fileName)
 	bytes, err := ioutil.ReadFile(path)
 	if err != nil {
