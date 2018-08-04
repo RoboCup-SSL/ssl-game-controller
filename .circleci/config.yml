@@ -47,7 +47,7 @@ jobs:
 
   publish-github-release:
     docker:
-    - image: circleci/golang:1.8
+    - image: circleci/golang:1.10
     steps:
     - attach_workspace:
         at: .
@@ -60,7 +60,7 @@ jobs:
 
 workflows:
   version: 2
-  release:
+  main:
     jobs:
     - frontend
     - backend:
@@ -69,3 +69,6 @@ workflows:
     - publish-github-release:
         requires:
         - backend
+        filters:
+          tags:
+            only: /^v.*/
