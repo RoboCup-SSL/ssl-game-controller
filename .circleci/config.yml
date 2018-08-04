@@ -40,6 +40,7 @@ jobs:
           GOOS=linux GOARCH=amd64 packr build -o ../../release/linux/ssl-game-controller
           GOOS=windows GOARCH=amd64 packr build -o ../../release/windows/ssl-game-controller.exe
           GOOS=darwin GOARCH=amd64 packr build -o ../../release/darwin/ssl-game-controller
+    - run: ls -al **
 
   deploy:
     docker:
@@ -49,7 +50,7 @@ jobs:
     steps:
     - attach_workspace:
         at: ./release
-    - run: ll release && tree release
+    - run: ls -al **
 
   publish-github-release:
     docker:
@@ -57,6 +58,7 @@ jobs:
     steps:
     - attach_workspace:
         at: ./release
+    - run: ls -al **
     - run:
         name: "Publish Release on GitHub"
         command: |
