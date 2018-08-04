@@ -41,7 +41,6 @@ func LoadConfig(fileName string) (config Config, err error) {
 
 	f, err := os.OpenFile(fileName, os.O_RDONLY, 0600)
 	if err != nil {
-		err = errors.Errorf("Can not open config file %v. %v", fileName, err)
 		return
 	}
 

@@ -81,7 +81,7 @@ func loadPublisher(config Config) Publisher {
 func loadConfig() Config {
 	config, err := LoadConfig(configFileName)
 	if err != nil {
-		log.Printf("Warning: Could not load config: %v", err)
+		log.Printf("Could not load config: %v", err)
 	}
 	return config
 }
