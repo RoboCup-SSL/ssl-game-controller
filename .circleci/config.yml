@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  ui:
+  frontend:
     docker:
     - image: circleci/node:10.8.0
     steps:
@@ -20,23 +20,38 @@ jobs:
         command: npm run build
         working_directory: ui
 
-  build:
+  backend:
     docker:
     - image: circleci/golang:1.10
 
     working_directory: /go/src/github.com/g3force/ssl-game-controller
     steps:
+    - checkout
     - attach_workspace:
         at: ./ui/dist
-    - checkout
     - run: go get -v -t -d ./...
     - run: go test -v ./...
+
+  deploy:
+    docker:
+    - image: circleci/golang:1.10
+
+    working_directory: /go/src/github.com/g3force/ssl-game-controller
+    steps:
+    - checkout
+    - attach_workspace:
+        at: ./ui/dist
+    - run: go get -v -t -d ./...
+    - run: ./release.sh
+    - run: ll release && tree release
+
 
 workflows:
   version: 2
   release:
     jobs:
-    - ui
-    - build:
+    - frontend
+    - backend
+    - deploy:
         requires:
-        - ui
+        - frontend
