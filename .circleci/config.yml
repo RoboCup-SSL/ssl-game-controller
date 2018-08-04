@@ -42,7 +42,12 @@ jobs:
     - attach_workspace:
         at: ./ui/dist
     - run: go get -v -t -d ./...
-    - run: ./release.sh
+    - run:
+        working_directory: cmd/ssl-game-controller
+        command: |
+          GOOS=linux GOARCH=amd64 packr build -o ../../release/linux/ssl-game-controller
+          GOOS=windows GOARCH=amd64 packr build -o ../../release/windows/ssl-game-controller.exe
+          GOOS=darwin GOARCH=amd64 packr build -o ../../release/darwin/ssl-game-controller
     - run: ll release && tree release
 
 
