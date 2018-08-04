@@ -2,6 +2,7 @@
     <div>
         <b-button v-on:click="resetMatch">Reset Match</b-button>
         <b-button v-on:click="switchColor">Switch colors</b-button>
+        <b-button v-on:click="switchSides">Switch sides</b-button>
         <b-button v-on:click="previousStage">Previous Stage</b-button>
         <b-button v-on:click="nextStage">Next Stage</b-button>
         <b-button v-on:click="undo">Undo Last Action</b-button>
@@ -13,20 +14,35 @@
         name: "ControlMatch",
         methods: {
             resetMatch: function () {
-                this.$socket.sendObj({'trigger': {'triggerType': 'resetMatch'}})
+                this.$socket.sendObj({
+                    'trigger': {'triggerType': 'resetMatch'}
+                })
             },
             switchColor: function () {
-                this.$socket.sendObj({'trigger': {'triggerType': 'switchColor'}})
+                this.$socket.sendObj({
+                    'trigger': {'triggerType': 'switchColor'}
+                })
             },
-            previousStage: function () {
-                this.$socket.sendObj({'stage': {'stageOperation': 'previous'}})
-            },
-            nextStage: function () {
-                this.$socket.sendObj({'stage': {'stageOperation': 'next'}})
+            switchSides: function () {
+                this.$socket.sendObj({
+                    'trigger': {'triggerType': 'switchSides'}
+                })
             },
             undo: function () {
-                this.$socket.sendObj({'trigger': {'triggerType': 'undo'}})
-            }
+                this.$socket.sendObj({
+                    'trigger': {'triggerType': 'undo'}
+                })
+            },
+            previousStage: function () {
+                this.$socket.sendObj({
+                    'stage': {'stageOperation': 'previous'}
+                })
+            },
+            nextStage: function () {
+                this.$socket.sendObj({
+                    'stage': {'stageOperation': 'next'}
+                })
+            },
         }
     }
 </script>

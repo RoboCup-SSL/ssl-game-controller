@@ -304,11 +304,14 @@ func addCard(card *EventCard, teamState *TeamInfo, duration time.Duration) error
 func (e *Engine) processTrigger(t *EventTrigger) (*EventCommand, error) {
 	if t.Type == TriggerResetMatch {
 		e.ResetGame()
-
 	} else if t.Type == TriggerSwitchColor {
 		yellow := e.State.TeamState[TeamYellow]
 		e.State.TeamState[TeamYellow] = e.State.TeamState[TeamBlue]
 		e.State.TeamState[TeamBlue] = yellow
+	} else if t.Type == TriggerSwitchSides {
+		yellowOnPositiveHalf := e.State.TeamState[TeamYellow].OnPositiveHalf
+		e.State.TeamState[TeamYellow].OnPositiveHalf = !yellowOnPositiveHalf
+		e.State.TeamState[TeamBlue].OnPositiveHalf = yellowOnPositiveHalf
 	} else if t.Type == TriggerUndo {
 		e.UndoLastAction()
 	} else {

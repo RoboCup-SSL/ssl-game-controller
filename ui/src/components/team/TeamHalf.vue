@@ -1,8 +1,7 @@
 <template>
     <div>
-        <label v-show="teamState.onPositiveHalf">On positive half</label>
-        <label v-show="!teamState.onPositiveHalf">On negative half</label>
-        <b-button v-on:click="switchHalf">Switch</b-button>
+        <span v-show="teamState.onPositiveHalf">On positive half</span>
+        <span v-show="!teamState.onPositiveHalf">On negative half</span>
     </div>
 </template>
 
@@ -11,17 +10,6 @@
         name: "TeamHalf",
         props: {
             teamColor: String
-        },
-        methods: {
-            switchHalf: function () {
-                let currentValue = this.teamState.onPositiveHalf;
-                this.$socket.sendObj({
-                    'modify': {
-                        'forTeam': this.teamColor,
-                        'onPositiveHalf': !currentValue
-                    }
-                })
-            },
         },
         computed: {
             teamState: function () {

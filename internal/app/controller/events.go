@@ -73,6 +73,8 @@ const (
 	TriggerResetMatch TriggerType = "resetMatch"
 	// TriggerSwitchColor switch color
 	TriggerSwitchColor TriggerType = "switchColor"
+	// TriggerSwitchSides switch sides/goals (onPositiveHalf)
+	TriggerSwitchSides TriggerType = "switchSides"
 	// TriggerUndo undo last action
 	TriggerUndo TriggerType = "undo"
 )
