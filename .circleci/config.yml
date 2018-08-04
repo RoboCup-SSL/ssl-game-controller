@@ -1,0 +1,88 @@
+version: 2
+jobs:
+  frontend:
+    docker:
+    - image: circleci/node:10.8.0
+    steps:
+    - checkout
+    - run:
+        name: "Install dependencies"
+        command: npm install
+        working_directory: ui
+    - run:
+        name: "Run tests"
+        command: npm test
+        working_directory: ui
+    - run:
+        name: "Build"
+        command: npm run build
+        working_directory: ui
+    - persist_to_workspace:
+        root: .
+        paths:
+        - ui/dist/*
+
+  backend:
+    docker:
+    - image: circleci/golang:1.10
+
+    working_directory: /go/src/github.com/RoboCup-SSL/ssl-game-controller
+    steps:
+    - checkout
+    - attach_workspace:
+        at: .
+    - run: go get -v -t -d ./...
+    - run: go test -v ./...
+    - run:
+        working_directory: cmd/ssl-game-controller
+        command: |
+          go get -v github.com/gobuffalo/packr/packr
+          GOOS=linux GOARCH=amd64 packr build -o ../../release/ssl-game-controller_linux_amd64
+          GOOS=darwin GOARCH=amd64 packr build -o ../../release/ssl-game-controller_darwin_amd64
+          GOOS=windows GOARCH=amd64 packr build -o ../../release/ssl-game-controller_windows_amd64.exe
+    - persist_to_workspace:
+        root: .
+        paths:
+        - release/*
+
+  publish-github-release:
+    docker:
+    - image: circleci/golang:1.10
+    steps:
+    - attach_workspace:
+        at: .
+    - run:
+        name: "Prepare artifacts"
+        working_directory: release
+        command: |
+          mv ssl-game-controller_linux_amd64 ssl-game-controller_${CIRCLE_TAG}_linux_amd64
+          mv ssl-game-controller_darwin_amd64 ssl-game-controller_${CIRCLE_TAG}_darwin_amd64
+          mv ssl-game-controller_windows_amd64.exe ssl-game-controller_${CIRCLE_TAG}_windows_amd64.exe
+    - run:
+        name: "Publish Release on GitHub"
+        command: |
+          go get github.com/tcnksm/ghr
+          ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_TAG} ./release/
+
+workflows:
+  version: 2
+  main:
+    jobs:
+    - frontend:
+        filters:
+          tags:
+            only: /.*/
+    - backend:
+        requires:
+        - frontend
+        filters:
+          tags:
+            only: /.*/
+    - publish-github-release:
+        requires:
+        - backend
+        filters:
+          branches:
+            ignore: /.*/
+          tags:
+            only: /^v.*/
