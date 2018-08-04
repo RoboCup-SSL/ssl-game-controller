@@ -19,6 +19,6 @@ matrix:
       on:
         repo: RoboCup-SSL/ssl-game-controller
         tags: true
-      - language: go
-        go:
-        - master
+  - language: go
+    go:
+    - master
