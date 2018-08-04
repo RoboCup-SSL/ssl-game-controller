@@ -42,6 +42,7 @@ jobs:
     - attach_workspace:
         at: ./ui/dist
     - run: go get -v -t -d ./...
+    - run: go get -v github.com/gobuffalo/packr
     - run:
         working_directory: cmd/ssl-game-controller
         command: |
