@@ -2,7 +2,7 @@ package controller
 
 import (
 	"encoding/json"
-	"github.com/g3force/ssl-game-controller/pkg/timer"
+	"github.com/RoboCup-SSL/ssl-game-controller/pkg/timer"
 	"io"
 	"log"
 	"os"
