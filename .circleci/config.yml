@@ -37,9 +37,9 @@ jobs:
         working_directory: cmd/ssl-game-controller
         command: |
           go get -v github.com/gobuffalo/packr/packr
-          GOOS=linux GOARCH=amd64 packr build -o ../../release/linux/ssl-game-controller
-          GOOS=windows GOARCH=amd64 packr build -o ../../release/windows/ssl-game-controller.exe
-          GOOS=darwin GOARCH=amd64 packr build -o ../../release/darwin/ssl-game-controller
+          GOOS=linux GOARCH=amd64 packr build -o ../../release/ssl-game-controller_linux_amd64
+          GOOS=darwin GOARCH=amd64 packr build -o ../../release/ssl-game-controller_darwin_amd64
+          GOOS=windows GOARCH=amd64 packr build -o ../../release/ssl-game-controller_windows_amd64.exe
     - persist_to_workspace:
         root: .
         paths:
@@ -52,11 +52,17 @@ jobs:
     - attach_workspace:
         at: .
     - run:
+        name: "Prepare artifacts"
+        working_directory: release
+        command: |
+          mv ssl-game-controller_linux_amd64 ssl-game-controller_${CIRCLE_TAG}_linux_amd64
+          mv ssl-game-controller_dargin_amd64 ssl-game-controller_${CIRCLE_TAG}_darwin_amd64
+          mv ssl-game-controller_windows_amd64.exe ssl-game-controller_${CIRCLE_TAG}_windows_amd64.exe
+    - run:
         name: "Publish Release on GitHub"
         command: |
           go get github.com/tcnksm/ghr
-          VERSION=latest
-          ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./release/
+          ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_TAG} ./release/
 
 workflows:
   version: 2
