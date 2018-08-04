@@ -70,5 +70,7 @@ workflows:
         requires:
         - backend
         filters:
+          branches:
+            ignore: /.*/
           tags:
             only: /^v.*/
