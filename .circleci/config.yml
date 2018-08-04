@@ -7,10 +7,19 @@ jobs:
     - checkout
     - attach_workspace:
         at: ./ui/dist
-    - run: cd ui
-    - run: npm install
-    - run: npm test
-    - run: npm run build
+    - cd:
+    - run:
+        name: "Install dependencies"
+        command: npm install
+        working_directory: ui
+    - run:
+        name: "Run tests"
+        command: npm test
+        working_directory: ui
+    - run:
+        name: "Build"
+        command: npm run build
+        working_directory: ui
 
   build:
     docker:
