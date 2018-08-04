@@ -56,7 +56,7 @@ jobs:
         working_directory: release
         command: |
           mv ssl-game-controller_linux_amd64 ssl-game-controller_${CIRCLE_TAG}_linux_amd64
-          mv ssl-game-controller_dargin_amd64 ssl-game-controller_${CIRCLE_TAG}_darwin_amd64
+          mv ssl-game-controller_darwin_amd64 ssl-game-controller_${CIRCLE_TAG}_darwin_amd64
           mv ssl-game-controller_windows_amd64.exe ssl-game-controller_${CIRCLE_TAG}_windows_amd64.exe
     - run:
         name: "Publish Release on GitHub"
