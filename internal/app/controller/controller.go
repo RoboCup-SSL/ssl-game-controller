@@ -123,8 +123,8 @@ func (r *GameController) readLastState() {
 
 // publish publishes the state to the UI and the teams
 func (r *GameController) publish(command *EventCommand) {
+	r.saveLatestState()
 	if command != nil {
-		r.saveLatestState()
 		r.saveStateHistory()
 	}
 	r.ApiServer.PublishState(*r.Engine.State)
