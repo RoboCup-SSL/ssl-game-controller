@@ -62,10 +62,16 @@ workflows:
   version: 2
   main:
     jobs:
-    - frontend
+    - frontend:
+        filters:
+          tags:
+            only: /.*/
     - backend:
         requires:
         - frontend
+        filters:
+          tags:
+            only: /.*/
     - publish-github-release:
         requires:
         - backend
