@@ -38,9 +38,9 @@
             }
         },
         watch: {
-            editValue: function (newTeamName) {
+            editValue: function (val) {
                 this.edit = false;
-                this.callback(this.editValue)
+                this.callback(val);
             }
         }
     }
