@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/g3force/ssl-game-controller/internal/app/controller"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/controller"
 	"github.com/gobuffalo/packr"
 	"net/http"
 )
