@@ -62,11 +62,11 @@ func (r *GameController) Run() (err error) {
 }
 
 func (r *GameController) OnNewEvent(event Event) {
-	err := r.Engine.Process(event)
+	cmd, err := r.Engine.Process(event)
 	if err != nil {
 		log.Println("Could not process event:", event, err)
 	} else {
-		r.publish(event.Command)
+		r.publish(cmd)
 	}
 }
 

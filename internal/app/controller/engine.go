@@ -52,12 +52,12 @@ func (e *Engine) UndoLastAction() {
 	}
 }
 
-func (e *Engine) Process(event Event) error {
-	err := e.processEvent(event)
+func (e *Engine) Process(event Event) (*EventCommand, error) {
+	cmd, err := e.processEvent(event)
 	if err == nil {
 		e.StateHistory = append(e.StateHistory, *e.State)
 	}
-	return err
+	return cmd, err
 }
 
 func (e *Engine) loadStages() {
@@ -91,7 +91,7 @@ func (e *Engine) updateTimes(delta time.Duration) {
 	}
 }
 
-func (e *Engine) processEvent(event Event) error {
+func (e *Engine) processEvent(event Event) (*EventCommand, error) {
 	if event.Command != nil {
 		return e.processCommand(event.Command)
 	} else if event.Modify != nil {
@@ -103,10 +103,10 @@ func (e *Engine) processEvent(event Event) error {
 	} else if event.Trigger != nil {
 		return e.processTrigger(event.Trigger)
 	}
-	return errors.New("unknown event")
+	return nil, errors.New("unknown event")
 }
 
-func (e *Engine) processCommand(c *EventCommand) error {
+func (e *Engine) processCommand(c *EventCommand) (*EventCommand, error) {
 	switch c.Type {
 	case CommandHalt:
 		e.State.GameState = GameStateHalted
@@ -114,51 +114,54 @@ func (e *Engine) processCommand(c *EventCommand) error {
 	case CommandStop:
 		e.State.GameState = GameStateStopped
 		e.State.GameStateFor = nil
-	case CommandForceStart, CommandNormalStart, CommandDirect, CommandIndirect:
+	case CommandNormalStart:
+		e.State.GameState = GameStateRunning
+		e.State.GameStateFor = nil
+		e.updatePreStages()
+	case CommandForceStart, CommandDirect, CommandIndirect:
 		e.State.GameState = GameStateRunning
 		e.State.GameStateFor = nil
 	case CommandKickoff:
 		if c.ForTeam == nil {
-			return errors.New("Team required for kickoff")
+			return nil, errors.New("Team required for kickoff")
 		}
 		e.State.GameState = GameStatePreKickoff
 		e.State.GameStateFor = c.ForTeam
 	case CommandPenalty:
 		if c.ForTeam == nil {
-			return errors.New("Team required for penalty")
+			return nil, errors.New("Team required for penalty")
 		}
 		e.State.GameState = GameStatePrePenalty
 		e.State.GameStateFor = c.ForTeam
 	case CommandBallPlacement:
 		if c.ForTeam == nil {
-			return errors.New("Team required for ball placement")
+			return nil, errors.New("Team required for ball placement")
 		}
 		e.State.GameState = GameStateBallPlacement
 		e.State.GameStateFor = c.ForTeam
 	case CommandGoal:
 		if c.ForTeam == nil {
-			return errors.New("Team required for goal")
+			return nil, errors.New("Team required for goal")
 		}
 		e.State.TeamState[*c.ForTeam].Goals++
 	case CommandTimeout:
 		if c.ForTeam == nil {
-			return errors.New("Team required for timeout")
+			return nil, errors.New("Team required for timeout")
 		}
 		e.State.TeamState[*c.ForTeam].TimeoutsLeft--
 		e.State.GameState = GameStateTimeout
 		e.State.GameStateFor = c.ForTeam
 	default:
-		return errors.Errorf("Unknown command: %v", c)
+		return nil, errors.Errorf("Unknown command: %v", c)
 	}
 
-	e.updatePreStages()
 	log.Printf("Processed command %v", *c)
-	return nil
+	return c, nil
 }
 
-func (e *Engine) processModify(m *EventModifyValue) error {
+func (e *Engine) processModify(m *EventModifyValue) (*EventCommand, error) {
 	if m.ForTeam.Unknown() {
-		return errors.Errorf("Unknown team: %v", m.ForTeam)
+		return nil, errors.Errorf("Unknown team: %v", m.ForTeam)
 	}
 	teamState := e.State.TeamState[m.ForTeam]
 	if m.Goals != nil {
@@ -179,7 +182,7 @@ func (e *Engine) processModify(m *EventModifyValue) error {
 	} else if m.YellowCardTime != nil {
 		cardId := m.YellowCardTime.CardID
 		if cardId < 0 || cardId >= len(teamState.YellowCardTimes) {
-			return errors.Errorf("Invalid card index: %v", cardId)
+			return nil, errors.Errorf("Invalid card index: %v", cardId)
 		}
 		if duration, err := strToDuration(m.YellowCardTime.Duration); err == nil {
 			teamState.YellowCardTimes[cardId] = duration
@@ -188,78 +191,90 @@ func (e *Engine) processModify(m *EventModifyValue) error {
 		if duration, err := strToDuration(*m.TimeoutTimeLeft); err == nil {
 			teamState.TimeoutTimeLeft = duration
 		} else {
-			return err
+			return nil, err
 		}
 	} else {
-		return errors.Errorf("Unknown modify: %v", m)
+		return nil, errors.Errorf("Unknown modify: %v", m)
 	}
 	log.Printf("Processed modification %v", m)
-	return nil
+	return nil, nil
 }
 
-func (e *Engine) processStage(s *EventStage) error {
+func (e *Engine) processStage(s *EventStage) (*EventCommand, error) {
 	if e.State.GameState != GameStateHalted && e.State.GameState != GameStateStopped {
-		return errors.New("The game state must be halted or stopped to change the stage")
+		return nil, errors.New("The game state must be halted or stopped to change the stage")
 	}
 
-	index, err := e.State.Stage.index()
-	if err != nil {
-		return err
-	}
+	var cmd *EventCommand
 	if s.StageOperation == StageNext {
-		nextIndex := index + 1
-		if nextIndex >= len(Stages) {
-			return errors.New("No next stage")
-		}
-		e.updateStage(Stages[nextIndex])
+		cmd = e.updateStage(e.State.Stage.Next())
 	} else if s.StageOperation == StagePrevious {
-		nextIndex := index - 1
-		if nextIndex < 0 {
-			return errors.New("No previous stage")
-		}
-		e.updateStage(Stages[nextIndex])
+		cmd = e.updateStage(e.State.Stage.Previous())
 	} else {
-		return errors.Errorf("Unknown stage operation: %v", s.StageOperation)
+		return nil, errors.Errorf("Unknown stage operation: %v", s.StageOperation)
 	}
 
 	log.Printf("Processed stage %v", s.StageOperation)
 
-	return nil
+	return cmd, nil
 }
 
-func (e *Engine) updateStage(stage Stage) {
-	e.State.Stage = stage
+func (e *Engine) updateStage(stage Stage) (cmd *EventCommand) {
 
-	e.State.StageTimeLeft = e.StageTimes[e.State.Stage]
+	e.State.StageTimeLeft = e.StageTimes[stage]
 	e.State.StageTimeElapsed = 0
 
-	if e.State.Stage == StageFirstHalf {
+	if !e.State.Stage.IsPreStage() {
+		e.State.GameState = GameStateHalted
+		e.State.GameStateFor = nil
+		cmd = &EventCommand{nil, CommandHalt}
+	}
+
+	if stage == StageFirstHalf {
 		e.MatchTimeStart = time.Now()
 	}
-	if e.State.Stage == StageOvertimeFirstHalfPre {
+
+	if stage == StageOvertimeFirstHalfPre {
 		e.State.TeamState[TeamYellow].TimeoutsLeft = e.config.Overtime.Timeouts
 		e.State.TeamState[TeamYellow].TimeoutTimeLeft = e.config.Overtime.TimeoutDuration
 		e.State.TeamState[TeamBlue].TimeoutsLeft = e.config.Overtime.Timeouts
 		e.State.TeamState[TeamBlue].TimeoutTimeLeft = e.config.Overtime.TimeoutDuration
 	}
+
+	e.State.Stage = stage
+	return
 }
 
-func (e *Engine) processCard(card *EventCard) error {
+func (e *Engine) updatePreStages() {
+
+	switch e.State.Stage {
+	case StagePreGame:
+		e.updateStage(StageFirstHalf)
+	case StageSecondHalfPre:
+		e.updateStage(StageSecondHalf)
+	case StageOvertimeFirstHalfPre:
+		e.updateStage(StageOvertimeFirstHalf)
+	case StageOvertimeSecondHalfPre:
+		e.updateStage(StageOvertimeSecondHalf)
+	}
+}
+
+func (e *Engine) processCard(card *EventCard) (*EventCommand, error) {
 	if card.ForTeam != TeamYellow && card.ForTeam != TeamBlue {
-		return errors.Errorf("Unknown team: %v", card.ForTeam)
+		return nil, errors.Errorf("Unknown team: %v", card.ForTeam)
 	}
 	if card.Type != CardTypeYellow && card.Type != CardTypeRed {
-		return errors.Errorf("Unknown card type: %v", card.Type)
+		return nil, errors.Errorf("Unknown card type: %v", card.Type)
 	}
 	teamState := e.State.TeamState[card.ForTeam]
 	if card.Operation == CardOperationAdd {
-		return addCard(card, teamState, e.config.YellowCardDuration)
+		return nil, addCard(card, teamState, e.config.YellowCardDuration)
 	} else if card.Operation == CardOperationRevoke {
-		return revokeCard(card, teamState)
+		return nil, revokeCard(card, teamState)
 	} else if card.Operation == CardOperationModify {
-		return modifyCard(card, teamState)
+		return nil, modifyCard(card, teamState)
 	}
-	return errors.Errorf("Unknown operation: %v", card.Operation)
+	return nil, errors.Errorf("Unknown operation: %v", card.Operation)
 }
 
 func modifyCard(card *EventCard, teamState *TeamInfo) error {
@@ -286,7 +301,7 @@ func addCard(card *EventCard, teamState *TeamInfo, duration time.Duration) error
 	return nil
 }
 
-func (e *Engine) processTrigger(t *EventTrigger) error {
+func (e *Engine) processTrigger(t *EventTrigger) (*EventCommand, error) {
 	if t.Type == TriggerResetMatch {
 		e.ResetGame()
 
@@ -297,10 +312,10 @@ func (e *Engine) processTrigger(t *EventTrigger) error {
 	} else if t.Type == TriggerUndo {
 		e.UndoLastAction()
 	} else {
-		return errors.Errorf("Unknown trigger: %v", t.Type)
+		return nil, errors.Errorf("Unknown trigger: %v", t.Type)
 	}
 	log.Printf("Processed trigger %v", t.Type)
-	return nil
+	return nil, nil
 }
 
 func revokeCard(card *EventCard, teamState *TeamInfo) error {
@@ -325,22 +340,6 @@ func revokeCard(card *EventCard, teamState *TeamInfo) error {
 		}
 	}
 	return nil
-}
-
-func (e *Engine) updatePreStages() {
-	proceedPreStages := e.State.GameState != GameStateHalted
-	if proceedPreStages {
-		switch e.State.Stage {
-		case StagePreGame:
-			e.updateStage(StageFirstHalf)
-		case StageSecondHalfPre:
-			e.updateStage(StageSecondHalf)
-		case StageOvertimeFirstHalfPre:
-			e.updateStage(StageOvertimeFirstHalf)
-		case StageOvertimeSecondHalfPre:
-			e.updateStage(StageOvertimeSecondHalf)
-		}
-	}
 }
 
 func strToDuration(s string) (duration time.Duration, err error) {

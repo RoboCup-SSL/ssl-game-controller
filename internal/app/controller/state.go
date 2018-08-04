@@ -37,7 +37,7 @@ type Stage string
 
 const (
 	// StagePreGame before game has started
-	StagePreGame Stage = "Pre-Game"
+	StagePreGame Stage = "Pre-First Half"
 	// StageFirstHalf in first half
 	StageFirstHalf Stage = "First Half"
 	// StageHalfTime in half time
@@ -91,6 +91,38 @@ func (s Stage) index() (int, error) {
 		}
 	}
 	return 0, errors.Errorf("unknown stage: %v", s)
+}
+
+func (s Stage) Next() Stage {
+	index, err := s.index()
+	if err != nil {
+		return s
+	}
+	nextIndex := index + 1
+	if nextIndex >= len(Stages) {
+		return s
+	}
+	return Stages[nextIndex]
+}
+
+func (s Stage) Previous() Stage {
+	index, err := s.index()
+	if err != nil {
+		return s
+	}
+	nextIndex := index - 1
+	if nextIndex < 0 {
+		return s
+	}
+	return Stages[nextIndex]
+}
+
+func (s Stage) IsPreStage() bool {
+	switch s {
+	case StagePreGame, StageSecondHalfPre, StageOvertimeFirstHalfPre, StageOvertimeSecondHalfPre:
+		return true
+	}
+	return false
 }
 
 // GameState of a game

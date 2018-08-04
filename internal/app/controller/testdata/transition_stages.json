@@ -1,11 +1,89 @@
 [
   {
     "state": {
-      "stage": "Pre-Game",
+      "stage": "Pre-First Half",
       "gameState": "Halted",
       "gameStateForTeam": null,
       "gameTimeElapsed": 0,
       "gameTimeLeft": 0,
+      "matchDuration": 0,
+      "teamState": {
+        "Blue": {
+          "name": "",
+          "goals": 0,
+          "goalie": 0,
+          "yellowCards": 0,
+          "yellowCardTimes": [],
+          "redCards": 0,
+          "timeoutsLeft": 4,
+          "timeoutTimeLeft": 300000000000,
+          "onPositiveHalf": false
+        },
+        "Yellow": {
+          "name": "",
+          "goals": 0,
+          "goalie": 0,
+          "yellowCards": 0,
+          "yellowCardTimes": [],
+          "redCards": 0,
+          "timeoutsLeft": 4,
+          "timeoutTimeLeft": 300000000000,
+          "onPositiveHalf": true
+        }
+      }
+    }
+  },
+  {
+    "event": {
+      "command": {
+        "commandType": "stop"
+      }
+    },
+    "state": {
+      "stage": "Pre-First Half",
+      "gameState": "Stopped",
+      "gameStateForTeam": null,
+      "gameTimeElapsed": 0,
+      "gameTimeLeft": 0,
+      "matchDuration": 0,
+      "teamState": {
+        "Blue": {
+          "name": "",
+          "goals": 0,
+          "goalie": 0,
+          "yellowCards": 0,
+          "yellowCardTimes": [],
+          "redCards": 0,
+          "timeoutsLeft": 4,
+          "timeoutTimeLeft": 300000000000,
+          "onPositiveHalf": false
+        },
+        "Yellow": {
+          "name": "",
+          "goals": 0,
+          "goalie": 0,
+          "yellowCards": 0,
+          "yellowCardTimes": [],
+          "redCards": 0,
+          "timeoutsLeft": 4,
+          "timeoutTimeLeft": 300000000000,
+          "onPositiveHalf": true
+        }
+      }
+    }
+  },
+  {
+    "event": {
+      "command": {
+        "commandType": "normalStart"
+      }
+    },
+    "state": {
+      "stage": "First Half",
+      "gameState": "Running",
+      "gameStateForTeam": null,
+      "gameTimeElapsed": 0,
+      "gameTimeLeft": 300000000000,
       "matchDuration": 0,
       "teamState": {
         "Blue": {
@@ -80,7 +158,85 @@
     },
     "state": {
       "stage": "Half Time",
-      "gameState": "Stopped",
+      "gameState": "Halted",
+      "gameStateForTeam": null,
+      "gameTimeElapsed": 0,
+      "gameTimeLeft": 300000000000,
+      "matchDuration": 0,
+      "teamState": {
+        "Blue": {
+          "name": "",
+          "goals": 0,
+          "goalie": 0,
+          "yellowCards": 0,
+          "yellowCardTimes": [],
+          "redCards": 0,
+          "timeoutsLeft": 4,
+          "timeoutTimeLeft": 300000000000,
+          "onPositiveHalf": false
+        },
+        "Yellow": {
+          "name": "",
+          "goals": 0,
+          "goalie": 0,
+          "yellowCards": 0,
+          "yellowCardTimes": [],
+          "redCards": 0,
+          "timeoutsLeft": 4,
+          "timeoutTimeLeft": 300000000000,
+          "onPositiveHalf": true
+        }
+      }
+    }
+  },
+  {
+    "event": {
+      "stage": {
+        "stageOperation": "next"
+      }
+    },
+    "state": {
+      "stage": "Pre-Second Half",
+      "gameState": "Halted",
+      "gameStateForTeam": null,
+      "gameTimeElapsed": 0,
+      "gameTimeLeft": 0,
+      "matchDuration": 0,
+      "teamState": {
+        "Blue": {
+          "name": "",
+          "goals": 0,
+          "goalie": 0,
+          "yellowCards": 0,
+          "yellowCardTimes": [],
+          "redCards": 0,
+          "timeoutsLeft": 4,
+          "timeoutTimeLeft": 300000000000,
+          "onPositiveHalf": false
+        },
+        "Yellow": {
+          "name": "",
+          "goals": 0,
+          "goalie": 0,
+          "yellowCards": 0,
+          "yellowCardTimes": [],
+          "redCards": 0,
+          "timeoutsLeft": 4,
+          "timeoutTimeLeft": 300000000000,
+          "onPositiveHalf": true
+        }
+      }
+    }
+  },
+  {
+    "event": {
+      "stage": {
+        "stageOperation": "next"
+      }
+    },
+    "state": {
+      "stage": "Second Half",
+      "gameState": "Halted",
       "gameStateForTeam": null,
       "gameTimeElapsed": 0,
       "gameTimeLeft": 300000000000,

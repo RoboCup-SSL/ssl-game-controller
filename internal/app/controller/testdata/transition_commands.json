@@ -1,11 +1,11 @@
 [
   {
     "state": {
-      "stage": "Pre-Game",
+      "stage": "First Half",
       "gameState": "Halted",
       "gameStateForTeam": null,
       "gameTimeElapsed": 0,
-      "gameTimeLeft": 0,
+      "gameTimeLeft": 300000000000,
       "matchDuration": 0,
       "teamState": {
         "Blue": {
