@@ -31,7 +31,6 @@ jobs:
     - checkout
     - attach_workspace:
         at: .
-    - run: ls -al **
     - run: go get -v -t -d ./...
     - run: go test -v ./...
     - run:
@@ -41,28 +40,17 @@ jobs:
           GOOS=linux GOARCH=amd64 packr build -o ../../release/linux/ssl-game-controller
           GOOS=windows GOARCH=amd64 packr build -o ../../release/windows/ssl-game-controller.exe
           GOOS=darwin GOARCH=amd64 packr build -o ../../release/darwin/ssl-game-controller
-    - run: ls -al **
     - persist_to_workspace:
         root: .
         paths:
         - release/*
-
-  deploy:
-    docker:
-    - image: circleci/golang:1.10
-
-    working_directory: /go/src/github.com/g3force/ssl-game-controller
-    steps:
-    - attach_workspace:
-        at: .
-    - run: ls -al **
 
   publish-github-release:
     docker:
     - image: circleci/golang:1.8
     steps:
     - attach_workspace:
-        at: ./release
+        at: .
     - run:
         name: "Publish Release on GitHub"
         command: |
@@ -78,9 +66,6 @@ workflows:
     - backend:
         requires:
         - frontend
-    - deploy:
+    - publish-github-release:
         requires:
         - backend
-#    - publish-github-release:
-#        requires:
-#        - backend
