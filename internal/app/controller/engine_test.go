@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"path/filepath"
 	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -14,23 +15,34 @@ type StateTransitions struct {
 }
 
 func Test_transitions(t *testing.T) {
-	path := filepath.Join("testdata", "stateTransitions.json")
+	files, err := ioutil.ReadDir("testdata")
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, f := range files {
+		if !f.IsDir() && strings.HasPrefix(f.Name(), "transition_") {
+			processTransitionFile(t, f.Name())
+		}
+	}
+}
+
+func processTransitionFile(t *testing.T, fileName string) {
+	path := filepath.Join("testdata", fileName)
 	bytes, err := ioutil.ReadFile(path)
 	if err != nil {
 		t.Fatal(err)
 	}
 	stateTransitions := make([]StateTransitions, 0)
 	json.Unmarshal(bytes, &stateTransitions)
-
 	config := DefaultConfig().Game
 	e := NewEngine(config)
-	for _, s := range stateTransitions {
+	for i, s := range stateTransitions {
 
 		if s.Event != nil {
 			e.Process(*s.Event)
 
 			if s.State != nil && !reflect.DeepEqual(*e.State, *s.State) {
-				t.Errorf("\nExpected: %v\n     got: %v", *s.State, *e.State)
+				t.Errorf("Step %v of %v failed.\nExpected: %v\n     got: %v", i+1, fileName, *s.State, *e.State)
 			}
 		}
 

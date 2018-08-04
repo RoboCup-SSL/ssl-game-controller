@@ -151,6 +151,7 @@ func (e *Engine) processCommand(c *EventCommand) error {
 		return errors.Errorf("Unknown command: %v", c)
 	}
 
+	e.updatePreStages()
 	log.Printf("Processed command %v", *c)
 	return nil
 }
@@ -210,16 +211,24 @@ func (e *Engine) processStage(s *EventStage) error {
 		if nextIndex >= len(Stages) {
 			return errors.New("No next stage")
 		}
-		e.State.Stage = Stages[nextIndex]
+		e.updateStage(Stages[nextIndex])
 	} else if s.StageOperation == StagePrevious {
 		nextIndex := index - 1
 		if nextIndex < 0 {
 			return errors.New("No previous stage")
 		}
-		e.State.Stage = Stages[nextIndex]
+		e.updateStage(Stages[nextIndex])
 	} else {
 		return errors.Errorf("Unknown stage operation: %v", s.StageOperation)
 	}
+
+	log.Printf("Processed stage %v", s.StageOperation)
+
+	return nil
+}
+
+func (e *Engine) updateStage(stage Stage) {
+	e.State.Stage = stage
 
 	e.State.StageTimeLeft = e.StageTimes[e.State.Stage]
 	e.State.StageTimeElapsed = 0
@@ -233,10 +242,6 @@ func (e *Engine) processStage(s *EventStage) error {
 		e.State.TeamState[TeamBlue].TimeoutsLeft = e.config.Overtime.Timeouts
 		e.State.TeamState[TeamBlue].TimeoutTimeLeft = e.config.Overtime.TimeoutDuration
 	}
-
-	log.Printf("Processed stage %v", s.StageOperation)
-
-	return nil
 }
 
 func (e *Engine) processCard(card *EventCard) error {
@@ -320,6 +325,22 @@ func revokeCard(card *EventCard, teamState *TeamInfo) error {
 		}
 	}
 	return nil
+}
+
+func (e *Engine) updatePreStages() {
+	proceedPreStages := e.State.GameState != GameStateHalted
+	if proceedPreStages {
+		switch e.State.Stage {
+		case StagePreGame:
+			e.updateStage(StageFirstHalf)
+		case StageSecondHalfPre:
+			e.updateStage(StageSecondHalf)
+		case StageOvertimeFirstHalfPre:
+			e.updateStage(StageOvertimeFirstHalf)
+		case StageOvertimeSecondHalfPre:
+			e.updateStage(StageOvertimeSecondHalf)
+		}
+	}
 }
 
 func strToDuration(s string) (duration time.Duration, err error) {

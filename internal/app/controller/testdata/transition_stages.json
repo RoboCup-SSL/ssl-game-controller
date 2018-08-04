@@ -1,7 +1,7 @@
 [
   {
     "state": {
-      "stage": "First Half Pre",
+      "stage": "Pre-Game",
       "gameState": "Halted",
       "gameStateForTeam": null,
       "gameTimeElapsed": 0,
@@ -40,11 +40,11 @@
       }
     },
     "state": {
-      "stage": "First Half Pre",
+      "stage": "First Half",
       "gameState": "Stopped",
       "gameStateForTeam": null,
       "gameTimeElapsed": 0,
-      "gameTimeLeft": 0,
+      "gameTimeLeft": 300000000000,
       "matchDuration": 0,
       "teamState": {
         "Blue": {
@@ -74,16 +74,16 @@
   },
   {
     "event": {
-      "command": {
-        "commandType": "forceStart"
+      "stage": {
+        "stageOperation": "next"
       }
     },
     "state": {
-      "stage": "First Half Pre",
-      "gameState": "Running",
+      "stage": "Half Time",
+      "gameState": "Stopped",
       "gameStateForTeam": null,
       "gameTimeElapsed": 0,
-      "gameTimeLeft": 0,
+      "gameTimeLeft": 300000000000,
       "matchDuration": 0,
       "teamState": {
         "Blue": {
