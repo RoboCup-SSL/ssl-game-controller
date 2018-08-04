@@ -7,7 +7,6 @@ jobs:
     - checkout
     - attach_workspace:
         at: ./ui/dist
-    - cd:
     - run:
         name: "Install dependencies"
         command: npm install
