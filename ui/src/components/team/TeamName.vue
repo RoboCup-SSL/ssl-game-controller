@@ -1,13 +1,10 @@
 <template>
-    <div>
         <EditableLabelSelect
                 label="Name: "
                 :value="team.name"
                 :options="teams"
                 :callback="updateTeamName"
         />
-    </div>
-
 </template>
 
 <script>

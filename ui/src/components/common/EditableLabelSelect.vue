@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <span>
         <label v-show="edit === false"
                @dblclick="switchToEdit">
             {{label}} {{value}}
@@ -12,7 +12,7 @@
                        v-model="editValue"
                        :options="options"
                        class="mb-3"></b-form-select>
-    </div>
+    </span>
 </template>
 
 <script>

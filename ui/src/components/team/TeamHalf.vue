@@ -1,8 +1,8 @@
 <template>
-    <div>
-        <span v-show="teamState.onPositiveHalf">On positive half</span>
-        <span v-show="!teamState.onPositiveHalf">On negative half</span>
-    </div>
+    <span>
+        <label v-show="teamState.onPositiveHalf">On positive half</label>
+        <label v-show="!teamState.onPositiveHalf">On negative half</label>
+    </span>
 </template>
 
 <script>

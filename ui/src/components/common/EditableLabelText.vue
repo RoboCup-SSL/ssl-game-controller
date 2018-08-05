@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <span>
         <label v-show="g.edit === false"
                for="edit-input"
                @dblclick="edit">
@@ -15,7 +15,7 @@
                @keyup.enter="updateValue"
                id="edit-input"
                size="10"/>
-    </div>
+    </span>
 </template>
 
 <script>

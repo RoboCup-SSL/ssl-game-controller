@@ -1,5 +1,5 @@
 <template>
-    <div class="editable-label">
+    <span class="editable-label">
         <span v-show="g.edit === false"
               @dblclick="edit"
               ref="span-id"
@@ -11,7 +11,7 @@
                @keyup.enter="updateValue"
                size="5"
         />
-    </div>
+    </span>
 </template>
 
 <script>

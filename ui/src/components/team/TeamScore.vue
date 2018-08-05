@@ -1,13 +1,11 @@
 <template>
-    <div class="team-score">
-        <EditableLabelNumber
-                :label="'Goals: '"
-                :title="'Number of goals'"
-                :value="score"
-                :callback="updateGoals"
-                :min="0"
-                :max="99"/>
-    </div>
+    <EditableLabelNumber
+            :label="'Goals: '"
+            :title="'Number of goals'"
+            :value="score"
+            :callback="updateGoals"
+            :min="0"
+            :max="99"/>
 </template>
 
 <script>

@@ -1,5 +1,5 @@
 <template>
-    <div class="editable-label">
+    <span class="editable-label">
         <label v-show="g.edit === false"
                for="edit-input"
                @dblclick="edit">
@@ -18,7 +18,7 @@
                :title="title"
                :min="min"
                :max="max"/>
-    </div>
+    </span>
 </template>
 
 <script>

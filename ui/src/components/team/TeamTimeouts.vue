@@ -1,16 +1,17 @@
 <template>
-    <div class="team-timeouts">
+    <span>
         <EditableLabelNumber
                 label="Timeouts left: "
                 :value="timeoutsLeft"
                 :callback="updateTimeoutsLeft"
                 :min="0"
                 :max="4"/>
-        Timeout time left:
+        (
         <EditableLabelDuration
                 :value="timeoutTimeLeft"
                 :callback="updateTimeoutTimeLeft"/>
-    </div>
+        )
+    </span>
 </template>
 
 <script>
