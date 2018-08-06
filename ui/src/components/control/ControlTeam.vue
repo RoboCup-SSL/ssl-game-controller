@@ -8,10 +8,13 @@
 
         <br/>
 
+        <ControlTeamTimeout :team-color="teamColor"/>
         <b-button v-on:click="send('goal')">Goal</b-button>
         <b-button v-on:click="addYellowCard" v-hotkey="keymapYellowCard">Yellow Card</b-button>
+
+        <br/>
+
         <b-button v-on:click="revokeYellowCard" v-if="teamState.yellowCardTimes.length>0">Revoke Yellow Card</b-button>
-        <ControlTeamTimeout :team-color="teamColor"/>
     </div>
 </template>
 

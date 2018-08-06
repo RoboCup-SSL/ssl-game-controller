@@ -1,5 +1,5 @@
 <template>
-    <div class="team-overview">
+    <span>
         <h2 v-b-tooltip.hover title="Edit team data by double-clicking a value"> Team {{teamColor}}</h2>
         <div>
             <TeamName
@@ -36,7 +36,7 @@
                     :yellow-cards="team.yellowCards"
                     :yellow-card-times="team.yellowCardTimes"/>
         </div>
-    </div>
+    </span>
 </template>
 
 <script>
@@ -68,8 +68,4 @@
 </script>
 
 <style scoped>
-    .team-overview {
-        margin: 1em;
-    }
-
 </style>

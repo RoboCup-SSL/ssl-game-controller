@@ -1,13 +1,13 @@
 <template>
     <div id="app">
         <GameState/>
-        <TeamOverview team-color="Yellow" style="float: left"/>
-        <TeamOverview team-color="Blue" style="float: left"/>
+        <TeamOverview class="team-views" team-color="Yellow"/>
+        <TeamOverview class="team-views" team-color="Blue"/>
+        <ControlTeam class="team-views" team-color="Yellow"/>
+        <ControlTeam class="team-views" team-color="Blue"/>
         <ControlGeneral/>
-        <ControlTeam team-color="Yellow"/>
-        <ControlTeam team-color="Blue"/>
-        <ControlMatch/>
-        <Debug/>
+        <ControlMatch class="match-controls"/>
+        <Debug class="debug"/>
     </div>
 </template>
 
@@ -40,5 +40,22 @@
         text-align: center;
         color: #2c3e50;
         margin-top: 1em;
+    }
+
+    .debug {
+        position: fixed;
+        bottom: 0;
+    }
+
+    .match-controls {
+        width: 100%;
+        position: fixed;
+        bottom: 0;
+        text-align: center;
+    }
+
+    .team-views {
+        float: left;
+        margin: 0.5em;
     }
 </style>

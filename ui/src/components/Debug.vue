@@ -21,11 +21,6 @@
 </script>
 
 <style scoped>
-    .debug {
-        position: absolute;
-        bottom: 0;
-    }
-
     #collapse1 {
         overflow-y: scroll;
         max-height: 500px;

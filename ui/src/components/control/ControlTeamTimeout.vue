@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <span>
         <b-button v-show="!timeoutRunning" v-on:click="startTimeout">Start Timeout</b-button>
         <b-button v-show="timeoutRunning" v-on:click="stopTimeout">Stop Timeout</b-button>
-    </div>
+    </span>
 </template>
 
 <script>
