@@ -2,7 +2,7 @@
     <div class="control-team">
         <h2>Team {{teamColor}}</h2>
         <span v-b-tooltip.hover
-              title="Prepare for a kickoff">
+              :title="'Prepare for a kickoff (' + Object.keys(keymapKickoff)[0] + ')'">
         <b-button v-hotkey="keymapKickoff"
                   v-on:click="send('kickoff')"
                   v-bind:disabled="halted || running || preparing">
@@ -10,7 +10,7 @@
         </b-button>
         </span>
         <span v-b-tooltip.hover
-              title="Perform direct kick (corner and goal kicks)">
+              :title="'Perform direct kick (corner and goal kicks) (' + Object.keys(keymapDirect)[0] + ')'">
         <b-button v-hotkey="keymapDirect"
                   v-on:click="send('direct')"
                   v-bind:disabled="halted || running || preparing">
@@ -18,7 +18,7 @@
         </b-button>
         </span>
         <span v-b-tooltip.hover
-              title="Perform indirect kick (throw-in)">
+              :title="'Perform indirect kick (throw-in) (' + Object.keys(keymapIndirect)[0] + ')'">
         <b-button v-hotkey="keymapIndirect"
                   v-on:click="send('indirect')"
                   v-bind:disabled="halted || running || preparing">

@@ -1,7 +1,7 @@
 <template>
     <span class="control-general">
         <span v-b-tooltip.hover
-              title="Immediately stop all robots">
+              :title="'Immediately stop all robots (' + Object.keys(keymapHalt)[0] + ')'">
             <b-button v-hotkey="keymapHalt"
                       v-on:click="send('halt')"
                       v-bind:disabled="halted">
@@ -9,7 +9,7 @@
             </b-button>
         </span>
         <span v-b-tooltip.hover
-              title="Robots have to keep distance to the ball">
+              :title="'Robots have to keep distance to the ball (' + Object.keys(keymapStop)[0] + ')'">
             <b-button v-hotkey="keymapStop"
                       v-on:click="send('stop')"
                       v-bind:disabled="stopped || !inNormalHalf">
@@ -17,7 +17,7 @@
             </b-button>
         </span>
         <span v-b-tooltip.hover
-              title="Restart the game in draw situations">
+              :title="'Restart the game in draw situations (' + Object.keys(keymapForceStart)[0] + ')'">
             <b-button v-hotkey="keymapForceStart"
                       v-on:click="send('forceStart')"
                       v-bind:disabled="!stopped || !inNormalHalf">
@@ -25,7 +25,7 @@
             </b-button>
         </span>
         <span v-b-tooltip.hover
-              title="Continue game after a prepare state">
+              :title="'Continue game after a prepare state (' + Object.keys(keymapNormalStart)[0] + ')'">
             <b-button v-hotkey="keymapNormalStart"
                       v-on:click="send('normalStart')"
                       v-bind:disabled="!prepareSth || !inNormalHalf">
