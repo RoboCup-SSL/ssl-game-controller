@@ -23,10 +23,9 @@
         <b-collapse id="collapseDurations" class="mt-2">
             <EditableLabelDuration
                     class="editable-label"
-                    v-bind:key="time"
-                    v-for="(time, index) in yellowCardTimes"
-                    :value="time"
-                    :callback="(v) => updateCardTime(v, index)"/>
+                    v-for="(cardTime, cardId) in yellowCardTimes"
+                    :value="cardTime"
+                    :callback="(v) => updateCardTime(v, cardId)"/>
         </b-collapse>
     </span>
 </template>

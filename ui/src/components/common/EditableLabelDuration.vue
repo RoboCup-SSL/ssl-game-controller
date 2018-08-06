@@ -1,5 +1,5 @@
 <template>
-    <span class="editable-label">
+    <span>
         <span v-show="g.edit === false"
               @dblclick="edit"
               ref="span-id"
