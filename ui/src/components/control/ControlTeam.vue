@@ -1,20 +1,43 @@
 <template>
     <div class="control-team">
         <h2>Team {{teamColor}}</h2>
-        <b-button v-hotkey="keymapKickoff" v-on:click="send('kickoff')">Kickoff</b-button>
-        <b-button v-hotkey="keymapDirect" v-on:click="send('direct')">Direct</b-button>
-        <b-button v-hotkey="keymapIndirect" v-on:click="send('indirect')">Indirect</b-button>
-        <b-button v-on:click="send('penalty')">Penalty</b-button>
+        <b-button v-hotkey="keymapKickoff"
+                  v-on:click="send('kickoff')"
+                  v-bind:disabled="halted || running || preparing">
+            Kickoff
+        </b-button>
+        <b-button v-hotkey="keymapDirect"
+                  v-on:click="send('direct')"
+                  v-bind:disabled="halted || running || preparing">
+            Direct
+        </b-button>
+        <b-button v-hotkey="keymapIndirect"
+                  v-on:click="send('indirect')"
+                  v-bind:disabled="halted || running || preparing">
+            Indirect
+        </b-button>
+        <b-button v-on:click="send('penalty')"
+                  v-bind:disabled="halted || running || preparing">
+            Penalty
+        </b-button>
 
         <br/>
 
         <ControlTeamTimeout :team-color="teamColor"/>
-        <b-button v-on:click="send('goal')">Goal</b-button>
-        <b-button v-on:click="addYellowCard" v-hotkey="keymapYellowCard">Yellow Card</b-button>
+        <b-button v-on:click="send('goal')">
+            Goal
+        </b-button>
+        <b-button v-on:click="addYellowCard"
+                  v-hotkey="keymapYellowCard">
+            Yellow Card
+        </b-button>
 
         <br/>
 
-        <b-button v-on:click="revokeYellowCard" v-if="teamState.yellowCardTimes.length>0">Revoke Yellow Card</b-button>
+        <b-button v-on:click="revokeYellowCard"
+                  v-bind:disabled="teamState.yellowCardTimes.length===0">
+            Revoke Yellow Card
+        </b-button>
     </div>
 </template>
 
@@ -72,7 +95,19 @@
                     case 'Blue':
                         return {'numpad 6': this.addYellowCard};
                 }
-            }
+            },
+            state() {
+                return this.$store.state.refBoxState
+            },
+            halted() {
+                return this.state.gameState === 'Halted';
+            },
+            running() {
+                return this.state.gameState === 'Running';
+            },
+            preparing() {
+                return this.state.gameState.startsWith('Prepare');
+            },
         }
     }
 </script>

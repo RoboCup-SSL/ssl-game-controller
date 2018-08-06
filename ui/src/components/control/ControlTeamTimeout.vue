@@ -1,11 +1,20 @@
 <template>
     <span>
-        <b-button v-show="!timeoutRunning" v-on:click="startTimeout">Start Timeout</b-button>
-        <b-button v-show="timeoutRunning" v-on:click="stopTimeout">Stop Timeout</b-button>
+        <b-button v-show="!timeoutRunning"
+                  v-on:click="startTimeout"
+                  v-bind:disabled="!inNormalHalf">
+            Start Timeout
+        </b-button>
+        <b-button v-show="timeoutRunning"
+                  v-on:click="stopTimeout">
+            Stop Timeout
+        </b-button>
     </span>
 </template>
 
 <script>
+    import {isInNormalHalf} from "../../main";
+
     export default {
         name: "ControlTeamTimeout",
         props: {
@@ -17,7 +26,10 @@
             },
             timeoutRunning: function () {
                 return this.gameState === "Timeout" && this.$store.state.refBoxState.gameStateForTeam === this.teamColor
-            }
+            },
+            inNormalHalf() {
+                return isInNormalHalf(this.$store.state.refBoxState);
+            },
         },
         methods: {
             startTimeout: function () {
@@ -25,7 +37,7 @@
             },
             stopTimeout: function () {
                 this.$socket.sendObj({'command': {'commandType': 'stop'}})
-            }
+            },
         }
     }
 </script>

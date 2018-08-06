@@ -37,6 +37,10 @@ export class RefBoxState {
     teamState = {'Yellow': new TeamState(), 'Blue': new TeamState()};
 }
 
+export let isInNormalHalf = function (state) {
+    return state.stage === 'First Half';
+};
+
 Vue.use(TimestampFormatter);
 
 // use Vuex for state management with the Vuex.Store
