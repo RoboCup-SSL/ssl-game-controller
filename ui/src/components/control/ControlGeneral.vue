@@ -1,25 +1,37 @@
 <template>
     <span class="control-general">
-        <b-button v-hotkey="keymapHalt"
-                  v-on:click="send('halt')"
-                  v-bind:disabled="halted">
-            Halt
-        </b-button>
-        <b-button v-hotkey="keymapStop"
-                  v-on:click="send('stop')"
-                  v-bind:disabled="stopped || !inNormalHalf">
-            Stop
-        </b-button>
-        <b-button v-hotkey="keymapForceStart"
-                  v-on:click="send('forceStart')"
-                  v-bind:disabled="!stopped || !inNormalHalf">
-            Force Start
-        </b-button>
-        <b-button v-hotkey="keymapNormalStart"
-                  v-on:click="send('normalStart')"
-                  v-bind:disabled="!prepareSth || !inNormalHalf">
-            Normal Start
-        </b-button>
+        <span v-b-tooltip.hover
+              title="Immediately stop all robots">
+            <b-button v-hotkey="keymapHalt"
+                      v-on:click="send('halt')"
+                      v-bind:disabled="halted">
+                Halt
+            </b-button>
+        </span>
+        <span v-b-tooltip.hover
+              title="Robots have to keep distance to the ball">
+            <b-button v-hotkey="keymapStop"
+                      v-on:click="send('stop')"
+                      v-bind:disabled="stopped || !inNormalHalf">
+                Stop
+            </b-button>
+        </span>
+        <span v-b-tooltip.hover
+              title="Restart the game in draw situations">
+            <b-button v-hotkey="keymapForceStart"
+                      v-on:click="send('forceStart')"
+                      v-bind:disabled="!stopped || !inNormalHalf">
+                Force Start
+            </b-button>
+        </span>
+        <span v-b-tooltip.hover
+              title="Continue game after a prepare state">
+            <b-button v-hotkey="keymapNormalStart"
+                      v-on:click="send('normalStart')"
+                      v-bind:disabled="!prepareSth || !inNormalHalf">
+                Normal Start
+            </b-button>
+        </span>
     </span>
 </template>
 

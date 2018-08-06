@@ -1,25 +1,37 @@
 <template>
     <div class="control-team">
         <h2>Team {{teamColor}}</h2>
+        <span v-b-tooltip.hover
+              title="Prepare for a kickoff">
         <b-button v-hotkey="keymapKickoff"
                   v-on:click="send('kickoff')"
                   v-bind:disabled="halted || running || preparing">
             Kickoff
         </b-button>
+        </span>
+        <span v-b-tooltip.hover
+              title="Perform direct kick (corner and goal kicks)">
         <b-button v-hotkey="keymapDirect"
                   v-on:click="send('direct')"
                   v-bind:disabled="halted || running || preparing">
             Direct
         </b-button>
+        </span>
+        <span v-b-tooltip.hover
+              title="Perform indirect kick (throw-in)">
         <b-button v-hotkey="keymapIndirect"
                   v-on:click="send('indirect')"
                   v-bind:disabled="halted || running || preparing">
             Indirect
         </b-button>
+        </span>
+        <span v-b-tooltip.hover
+              title="Prepare for a penalty kick">
         <b-button v-on:click="send('penalty')"
                   v-bind:disabled="halted || running || preparing">
             Penalty
         </b-button>
+        </span>
 
         <br/>
 
