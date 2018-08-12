@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"github.com/RoboCup-SSL/ssl-go-tools/sslproto"
+	"github.com/RoboCup-SSL/ssl-game-controller/pkg/proto"
 	"github.com/golang/protobuf/proto"
 	"log"
 	"net"
@@ -60,6 +60,9 @@ func initTeamInfo(t *sslproto.SSL_Referee_TeamInfo) {
 	t.Timeouts = new(uint32)
 	t.TimeoutTime = new(uint32)
 	t.Goalie = new(uint32)
+	t.BotCollisions = new(uint32)
+	t.BallPlacementFailures = new(uint32)
+	t.BotSpeedInfringements = new(uint32)
 }
 
 // Publish the state and command
@@ -141,6 +144,9 @@ func updateTeam(team *sslproto.SSL_Referee_TeamInfo, state *TeamInfo) {
 	*team.Timeouts = uint32(state.TimeoutsLeft)
 	*team.TimeoutTime = uint32(state.TimeoutTimeLeft.Nanoseconds() / 1000)
 	*team.Goalie = uint32(state.Goalie)
+	*team.BotCollisions = uint32(state.BotCollisions)
+	*team.BallPlacementFailures = uint32(state.BallPlacementFailures)
+	*team.BotSpeedInfringements = uint32(state.BotSpeedInfringements)
 }
 
 func mapTimes(durations []time.Duration) []uint32 {
