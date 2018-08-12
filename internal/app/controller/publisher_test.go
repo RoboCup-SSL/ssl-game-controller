@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/RoboCup-SSL/ssl-go-tools/sslproto"
+	"github.com/RoboCup-SSL/ssl-game-controller/pkg/proto"
 )
 
 func Test_updateMessage(t *testing.T) {
