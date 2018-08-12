@@ -1,16 +1,22 @@
 <template>
     <div id="app">
-        <div id="header">
-            <ControlGeneral class="header-item"/>
-            <GameState id="game-state" class="header-item"/>
+        <div id="app-header">
+            <ControlGeneral class="app-header-item"/>
+            <GameState id="game-state" class="app-header-item"/>
         </div>
         <div id="main-elements">
-            <TeamOverview class="team-views" team-color="Yellow"/>
-            <TeamOverview class="team-views" team-color="Blue"/>
-            <ControlTeam class="team-views" team-color="Yellow"/>
-            <ControlTeam class="team-views" team-color="Blue"/>
+            <div class="team-container">
+                <TeamOverview class="team-views" team-color="Yellow"/>
+                <ControlTeam class="team-views" team-color="Yellow"/>
+            </div>
+            <div id="field">
+                <Field/>
+            </div>
+            <div class="team-container">
+                <TeamOverview class="team-views" team-color="Blue"/>
+                <ControlTeam class="team-views" team-color="Blue"/>
+            </div>
         </div>
-        <Field/>
         <ControlMatch id="match-controls"/>
         <Debug id="debug"/>
     </div>
@@ -48,7 +54,7 @@
         color: #2c3e50;
     }
 
-    #header {
+    #app-header {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap-reverse;
@@ -57,7 +63,7 @@
         align-content: flex-start;
     }
 
-    .header-item {
+    .app-header-item {
         margin: 0.3em;
     }
 
@@ -73,6 +79,16 @@
         justify-content: flex-start;
         align-items: flex-start;
         align-content: flex-start;
+        flex-grow: 1;
+    }
+
+    #field {
+        flex-grow: 1;
+    }
+
+    .team-container {
+        display: flex;
+        flex-direction: column;
     }
 
     #match-controls {

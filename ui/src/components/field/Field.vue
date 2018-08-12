@@ -72,8 +72,8 @@
             field: {
                 type: Object,
                 default: function () {
-                    let fieldWidth = 2000;
-                    let fieldLength = 3000;
+                    let fieldWidth = 9000;
+                    let fieldLength = 12000;
                     let centerCircleRadius = 500;
                     return {
                         fieldWidth: fieldWidth,
@@ -185,5 +185,9 @@
 </script>
 
 <style scoped>
-
+    .field-canvas {
+        width: 100%;
+        height: 100%;
+        display: table-row;
+    }
 </style>
