@@ -7,7 +7,7 @@
       "gameTimeElapsed": 0,
       "gameTimeLeft": 0,
       "matchDuration": 0,
-      "matchTimeStart": "1970-01-01T01:00:00+01:00",
+      "matchTimeStart": 0,
       "teamState": {
         "Blue": {
           "name": "",
@@ -47,7 +47,7 @@
       "gameTimeElapsed": 0,
       "gameTimeLeft": 0,
       "matchDuration": 0,
-      "matchTimeStart": "1970-01-01T01:00:00+01:00",
+      "matchTimeStart": 0,
       "teamState": {
         "Blue": {
           "name": "",
@@ -87,7 +87,7 @@
       "gameTimeElapsed": 0,
       "gameTimeLeft": 300000000000,
       "matchDuration": 0,
-      "matchTimeStart": "1970-01-01T01:00:01+01:00",
+      "matchTimeStart": 1000000000,
       "teamState": {
         "Blue": {
           "name": "",
@@ -127,7 +127,7 @@
       "gameTimeElapsed": 0,
       "gameTimeLeft": 300000000000,
       "matchDuration": 0,
-      "matchTimeStart": "1970-01-01T01:00:01+01:00",
+      "matchTimeStart": 1000000000,
       "teamState": {
         "Blue": {
           "name": "",
@@ -167,7 +167,7 @@
       "gameTimeElapsed": 0,
       "gameTimeLeft": 300000000000,
       "matchDuration": 0,
-      "matchTimeStart": "1970-01-01T01:00:01+01:00",
+      "matchTimeStart": 1000000000,
       "teamState": {
         "Blue": {
           "name": "",
@@ -207,7 +207,7 @@
       "gameTimeElapsed": 0,
       "gameTimeLeft": 0,
       "matchDuration": 0,
-      "matchTimeStart": "1970-01-01T01:00:01+01:00",
+      "matchTimeStart": 1000000000,
       "teamState": {
         "Blue": {
           "name": "",
@@ -247,7 +247,7 @@
       "gameTimeElapsed": 0,
       "gameTimeLeft": 300000000000,
       "matchDuration": 0,
-      "matchTimeStart": "1970-01-01T01:00:01+01:00",
+      "matchTimeStart": 1000000000,
       "teamState": {
         "Blue": {
           "name": "",
