@@ -8,6 +8,7 @@
         <ControlGeneral/>
         <ControlMatch class="match-controls"/>
         <Debug class="debug"/>
+        <Field/>
     </div>
 </template>
 
@@ -18,10 +19,12 @@
     import ControlTeam from "./components/control/ControlTeam";
     import Debug from "./components/Debug";
     import ControlMatch from "./components/control/ControlMatch";
+    import Field from "./components/field/Field";
 
     export default {
         name: 'app',
         components: {
+            Field,
             ControlMatch,
             Debug,
             ControlTeam,
