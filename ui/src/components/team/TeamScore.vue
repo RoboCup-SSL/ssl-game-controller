@@ -1,7 +1,6 @@
 <template>
     <EditableLabelNumber
             :label="'Goals: '"
-            :title="'Number of goals'"
             :value="score"
             :callback="updateGoals"
             :min="0"

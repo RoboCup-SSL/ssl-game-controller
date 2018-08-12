@@ -1,5 +1,5 @@
 <template>
-    <span>
+    <div>
         <EditableLabelNumber
                 label="Yellow cards: "
                 :value="yellowCards"
@@ -28,7 +28,7 @@
                     :value="cardTime"
                     :callback="(v) => updateCardTime(v, cardId)"/>
         </b-collapse>
-    </span>
+    </div>
 </template>
 
 <script>
@@ -65,8 +65,4 @@
 </script>
 
 <style scoped>
-    .editable-label {
-        margin-left: 0.15em;
-        margin-right: 0.15em;
-    }
 </style>

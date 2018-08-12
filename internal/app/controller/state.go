@@ -147,15 +147,18 @@ const (
 
 // TeamInfo about a team
 type TeamInfo struct {
-	Name            string          `json:"name"`
-	Goals           int             `json:"goals"`
-	Goalie          int             `json:"goalie"`
-	YellowCards     int             `json:"yellowCards"`
-	YellowCardTimes []time.Duration `json:"yellowCardTimes"`
-	RedCards        int             `json:"redCards"`
-	TimeoutsLeft    int             `json:"timeoutsLeft"`
-	TimeoutTimeLeft time.Duration   `json:"timeoutTimeLeft"`
-	OnPositiveHalf  bool            `json:"onPositiveHalf"`
+	Name                  string          `json:"name"`
+	Goals                 int             `json:"goals"`
+	Goalie                int             `json:"goalie"`
+	YellowCards           int             `json:"yellowCards"`
+	YellowCardTimes       []time.Duration `json:"yellowCardTimes"`
+	RedCards              int             `json:"redCards"`
+	TimeoutsLeft          int             `json:"timeoutsLeft"`
+	TimeoutTimeLeft       time.Duration   `json:"timeoutTimeLeft"`
+	OnPositiveHalf        bool            `json:"onPositiveHalf"`
+	BotCollisions         int             `json:"botCollisions"`
+	BallPlacementFailures int             `json:"ballPlacementFailures"`
+	BotSpeedInfringements int             `json:"botSpeedInfringements"`
 }
 
 // State of the game
@@ -201,6 +204,9 @@ func newTeamInfo() (t TeamInfo) {
 	t.TimeoutsLeft = 0
 	t.TimeoutTimeLeft = 0
 	t.OnPositiveHalf = true
+	t.BotCollisions = 0
+	t.BallPlacementFailures = 0
+	t.BotSpeedInfringements = 0
 	return
 }
 

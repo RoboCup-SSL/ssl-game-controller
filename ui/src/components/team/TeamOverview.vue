@@ -37,6 +37,10 @@
                         :yellow-cards="team.yellowCards"
                         :yellow-card-times="team.yellowCardTimes"/>
             </div>
+            <div>
+                <TeamCounters
+                        :team-color="teamColor"/>
+            </div>
         </div>
     </div>
 </template>
@@ -50,13 +54,20 @@
     import TeamName from "./TeamName";
     import TeamYellowCards from "./TeamYellowCards";
     import TeamRedCards from "./TeamRedCards";
+    import TeamCounters from "./TeamCounters";
 
     export default {
         name: "TeamOverview",
         components: {
+            TeamCounters,
             TeamRedCards,
             TeamYellowCards,
-            TeamName, TeamHalf, EditableLabelText, TeamGoalie, TeamTimeouts, TeamScore
+            TeamName,
+            TeamHalf,
+            EditableLabelText,
+            TeamGoalie,
+            TeamTimeouts,
+            TeamScore
         },
         props: {
             teamColor: String

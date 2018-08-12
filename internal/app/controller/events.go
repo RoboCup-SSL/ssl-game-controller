@@ -116,15 +116,18 @@ type EventModifyCardTime struct {
 type EventModifyValue struct {
 	ForTeam Team `json:"forTeam"`
 
-	Goals           *int                 `json:"goals"`
-	Goalie          *int                 `json:"goalie"`
-	YellowCards     *int                 `json:"yellowCards"`
-	YellowCardTime  *EventModifyCardTime `json:"yellowCardTime"`
-	RedCards        *int                 `json:"redCards"`
-	TimeoutsLeft    *int                 `json:"timeoutsLeft"`
-	TimeoutTimeLeft *string              `json:"timeoutTimeLeft"`
-	OnPositiveHalf  *bool                `json:"onPositiveHalf"`
-	TeamName        *string              `json:"teamName"`
+	Goals                 *int                 `json:"goals"`
+	Goalie                *int                 `json:"goalie"`
+	YellowCards           *int                 `json:"yellowCards"`
+	YellowCardTime        *EventModifyCardTime `json:"yellowCardTime"`
+	RedCards              *int                 `json:"redCards"`
+	TimeoutsLeft          *int                 `json:"timeoutsLeft"`
+	TimeoutTimeLeft       *string              `json:"timeoutTimeLeft"`
+	OnPositiveHalf        *bool                `json:"onPositiveHalf"`
+	TeamName              *string              `json:"teamName"`
+	BotCollisions         *int                 `json:"botCollisions"`
+	BallPlacementFailures *int                 `json:"ballPlacementFailures"`
+	BotSpeedInfringements *int                 `json:"botSpeedInfringements"`
 }
 
 func (m EventModifyValue) String() string {
@@ -155,6 +158,15 @@ func (m EventModifyValue) String() string {
 	}
 	if m.TeamName != nil {
 		return fmt.Sprintf("%v TeamName=%v", str, *m.TeamName)
+	}
+	if m.BotCollisions != nil {
+		return fmt.Sprintf("%v BotCollisions=%v", str, *m.BotCollisions)
+	}
+	if m.BallPlacementFailures != nil {
+		return fmt.Sprintf("%v BallPlacementFailures=%v", str, *m.BallPlacementFailures)
+	}
+	if m.BotSpeedInfringements != nil {
+		return fmt.Sprintf("%v BotSpeedInfringements=%v", str, *m.BotSpeedInfringements)
 	}
 	return fmt.Sprintf("%v undefined", str)
 }

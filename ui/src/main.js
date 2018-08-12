@@ -18,13 +18,16 @@ Vue.use(BootstrapVue);
 export class TeamState {
     name = 'someone';
     goals = 0;
-    goalie = 1;
-    yellowCards = 3;
-    yellowCardTimes = [50, 60];
+    goalie = 0;
+    yellowCards = 0;
+    yellowCardTimes = [];
     redCards = 0;
     timeoutsLeft = 4;
-    timeoutTimeLeft = 60;
+    timeoutTimeLeft = 300;
     onPositiveHalf = true;
+    botCollisions = 0;
+    ballPlacementFailures = 0;
+    botSpeedInfringements = 0;
 }
 
 export class RefBoxState {
