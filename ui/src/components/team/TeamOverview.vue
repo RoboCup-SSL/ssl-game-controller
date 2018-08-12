@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="team-overview">
         <h2 v-b-tooltip.hover title="Edit team data by double-clicking a value"> Team {{teamColor}}</h2>
         <div>
             <TeamName
@@ -68,4 +68,7 @@
 </script>
 
 <style scoped>
+    .team-overview {
+        text-align: left;
+    }
 </style>

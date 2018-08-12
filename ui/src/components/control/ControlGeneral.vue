@@ -79,6 +79,7 @@
 
 <style scoped>
     button {
-        margin: 0.5em;
+        margin-right: 0.5em;
+        margin-bottom: 0.5em;
     }
 </style>

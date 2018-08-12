@@ -1,14 +1,18 @@
 <template>
     <div id="app">
-        <GameState/>
-        <TeamOverview class="team-views" team-color="Yellow"/>
-        <TeamOverview class="team-views" team-color="Blue"/>
-        <ControlTeam class="team-views" team-color="Yellow"/>
-        <ControlTeam class="team-views" team-color="Blue"/>
-        <ControlGeneral/>
-        <ControlMatch class="match-controls"/>
-        <Debug class="debug"/>
+        <div id="header">
+            <ControlGeneral class="header-item"/>
+            <GameState id="game-state" class="header-item"/>
+        </div>
+        <div id="main-elements">
+            <TeamOverview class="team-views" team-color="Yellow"/>
+            <TeamOverview class="team-views" team-color="Blue"/>
+            <ControlTeam class="team-views" team-color="Yellow"/>
+            <ControlTeam class="team-views" team-color="Blue"/>
+        </div>
         <Field/>
+        <ControlMatch id="match-controls"/>
+        <Debug id="debug"/>
     </div>
 </template>
 
@@ -42,19 +46,45 @@
         -moz-osx-font-smoothing: grayscale;
         text-align: center;
         color: #2c3e50;
-        margin-top: 1em;
     }
 
-    .debug {
-        position: fixed;
-        bottom: 0;
+    #header {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap-reverse;
+        justify-content: space-between;
+        align-items: baseline;
+        align-content: flex-start;
     }
 
-    .match-controls {
+    .header-item {
+        margin: 0.3em;
+    }
+
+    #game-state {
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+
+    #main-elements {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        align-items: flex-start;
+        align-content: flex-start;
+    }
+
+    #match-controls {
         width: 100%;
         position: fixed;
         bottom: 0;
         text-align: center;
+    }
+
+    #debug {
+        position: fixed;
+        bottom: 0;
     }
 
     .team-views {
