@@ -8,6 +8,7 @@ import (
 	"reflect"
 	"strings"
 	"testing"
+	"time"
 )
 
 type StateTransitions struct {
@@ -38,6 +39,9 @@ func processTransitionFile(t *testing.T, fileName string) {
 	json.Unmarshal(bytes, &stateTransitions)
 	config := DefaultConfig().Game
 	e := NewEngine(config)
+	e.TimeProvider = func() time.Time {
+		return time.Unix(1, 0)
+	}
 	for i, s := range stateTransitions {
 
 		if s.Event != nil {

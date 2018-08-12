@@ -13,12 +13,14 @@ type Engine struct {
 	StageTimes   map[Stage]time.Duration
 	config       ConfigGame
 	StateHistory []State
+	TimeProvider func() time.Time
 }
 
 func NewEngine(config ConfigGame) (e Engine) {
 	e.config = config
 	e.loadStages()
 	e.ResetGame()
+	e.TimeProvider = func() time.Time { return time.Now() }
 	return
 }
 
@@ -35,7 +37,7 @@ func (e *Engine) Tick(delta time.Duration) {
 	e.updateTimes(delta)
 
 	if e.State.MatchTimeStart.After(time.Unix(0, 0)) {
-		e.State.MatchDuration = time.Now().Sub(e.State.MatchTimeStart)
+		e.State.MatchDuration = e.TimeProvider().Sub(e.State.MatchTimeStart)
 	}
 }
 
@@ -227,7 +229,7 @@ func (e *Engine) updateStage(stage Stage) (cmd *EventCommand) {
 	}
 
 	if stage == StageFirstHalf {
-		e.State.MatchTimeStart = time.Now()
+		e.State.MatchTimeStart = e.TimeProvider()
 	}
 
 	if stage == StageOvertimeFirstHalfPre {
