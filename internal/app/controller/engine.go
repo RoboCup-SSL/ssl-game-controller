@@ -9,11 +9,10 @@ import (
 )
 
 type Engine struct {
-	State          *State
-	MatchTimeStart time.Time
-	StageTimes     map[Stage]time.Duration
-	config         ConfigGame
-	StateHistory   []State
+	State        *State
+	StageTimes   map[Stage]time.Duration
+	config       ConfigGame
+	StateHistory []State
 }
 
 func NewEngine(config ConfigGame) (e Engine) {
@@ -29,17 +28,14 @@ func (e *Engine) ResetGame() {
 	e.State.TeamState[TeamYellow].TimeoutTimeLeft = e.config.Normal.TimeoutDuration
 	e.State.TeamState[TeamBlue].TimeoutsLeft = e.config.Normal.Timeouts
 	e.State.TeamState[TeamYellow].TimeoutsLeft = e.config.Normal.Timeouts
-
-	e.MatchTimeStart = time.Unix(0, 0)
-
 }
 
 // Tick updates the times of the state and removes cards, if necessary
 func (e *Engine) Tick(delta time.Duration) {
 	e.updateTimes(delta)
 
-	if e.MatchTimeStart.After(time.Unix(0, 0)) {
-		e.State.MatchDuration = time.Now().Sub(e.MatchTimeStart)
+	if e.State.MatchTimeStart.After(time.Unix(0, 0)) {
+		e.State.MatchDuration = time.Now().Sub(e.State.MatchTimeStart)
 	}
 }
 
@@ -231,7 +227,7 @@ func (e *Engine) updateStage(stage Stage) (cmd *EventCommand) {
 	}
 
 	if stage == StageFirstHalf {
-		e.MatchTimeStart = time.Now()
+		e.State.MatchTimeStart = time.Now()
 	}
 
 	if stage == StageOvertimeFirstHalfPre {

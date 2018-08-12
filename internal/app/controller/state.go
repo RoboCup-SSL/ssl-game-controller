@@ -165,6 +165,7 @@ type State struct {
 	GameStateFor     *Team              `json:"gameStateForTeam"`
 	StageTimeElapsed time.Duration      `json:"gameTimeElapsed"`
 	StageTimeLeft    time.Duration      `json:"gameTimeLeft"`
+	MatchTimeStart   time.Time          `json:"matchTimeStart"`
 	MatchDuration    time.Duration      `json:"matchDuration"`
 	TeamState        map[Team]*TeamInfo `json:"teamState"`
 }
@@ -175,10 +176,10 @@ func NewState() (s *State) {
 	s.Stage = StagePreGame
 	s.GameState = GameStateHalted
 
-	// for some reason, the UI does not reset times correctly if duration is zero, so set it to 1ns
-	s.StageTimeLeft = 1
-	s.StageTimeElapsed = 1
-	s.MatchDuration = 1
+	s.StageTimeLeft = 0
+	s.StageTimeElapsed = 0
+	s.MatchDuration = 0
+	s.MatchTimeStart = time.Unix(0, 0)
 
 	s.TeamState = map[Team]*TeamInfo{}
 	s.TeamState[TeamYellow] = new(TeamInfo)

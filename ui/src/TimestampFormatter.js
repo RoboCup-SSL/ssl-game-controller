@@ -13,8 +13,17 @@ const formatNsDuration = function (timestamp) {
     return sign + padWithZero(minutes) + ':' + padWithZero(fullSeconds);
 };
 
+const isNumeric = function (n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+};
+
 const process = function (el, binding) {
-    const timestamp = binding.value || el.innerHTML;
+    let timestamp;
+    if (isNumeric(binding.value)) {
+        timestamp = binding.value;
+    } else {
+        timestamp = el.innerHTML;
+    }
     if (!isNaN(timestamp)) {
         el.innerHTML = formatNsDuration(timestamp);
     }
