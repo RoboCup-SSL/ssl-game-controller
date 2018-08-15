@@ -1,6 +1,5 @@
 <template>
     <div class="control-team">
-        <h2>Team {{teamColor}}</h2>
         <span v-b-tooltip.hover
               :title="'Prepare for a kickoff (' + Object.keys(keymapKickoff)[0] + ')'">
         <b-button v-hotkey="keymapKickoff"

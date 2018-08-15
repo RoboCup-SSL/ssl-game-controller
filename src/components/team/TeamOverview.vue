@@ -1,6 +1,5 @@
 <template>
     <div>
-        <h2 v-b-tooltip.hover title="Edit team data by double-clicking a value"> Team {{teamColor}}</h2>
         <div class="content">
             <div>
                 <TeamName

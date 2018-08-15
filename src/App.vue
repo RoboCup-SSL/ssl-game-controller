@@ -6,6 +6,7 @@
         </div>
         <div id="main-elements">
             <div class="team-container">
+                <h2>Yellow Team</h2>
                 <TeamOverview class="team-views" team-color="Yellow"/>
                 <ControlTeam class="team-views" team-color="Yellow"/>
             </div>
@@ -13,6 +14,7 @@
                 <iframe src="http://localhost:8082/" frameborder="none"></iframe>
             </div>
             <div class="team-container">
+                <h2>Blue Team</h2>
                 <TeamOverview class="team-views" team-color="Blue"/>
                 <ControlTeam class="team-views" team-color="Blue"/>
             </div>
