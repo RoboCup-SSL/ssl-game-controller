@@ -17,12 +17,12 @@ You need to install following dependencies first:
  * Go
  * NPM
 
-### Compile
+### Prepare
 ```bash
-# install dependencies for backend
+# download dependencies for backend
 go get -v -d ./...
 
-# install dependencies for frontend
+# download dependencies for frontend
 npm install
 ```
 

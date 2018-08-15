@@ -41,7 +41,7 @@ func setupVisionClient() {
 }
 
 func setupUi() {
-	box := packr.NewBox("../../ui/dist")
+	box := packr.NewBox("../../dist")
 	http.Handle("/", http.FileServer(box))
 	if box.Has("index.html") {
 		log.Printf("UI is available at http://%v", *address)
