@@ -5,24 +5,51 @@
 
 # ssl-game-controller
 
-The ssl-refbox that will be introduced at RoboCup 2019
+The [ssl-refbox](https://github.com/RoboCup-SSL/ssl-refbox) replacement that will be introduced at RoboCup 2019
 
-## Project setup
+## Usage
+If you just want to use this app, simply download the latest [release binary](https://github.com/RoboCup-SSL/ssl-game-controller/releases/latest). The binary is self-contained. No dependencies are required.
+
+## Development
 
 ### Requirements
-You need to install Go and setup the GOPATH first.
+You need to install following dependencies first: 
+ * Go
+ * NPM
 
-### Development
+### Compile
+```bash
+# install dependencies for backend
+go get -v -d ./...
+
+# install dependencies for frontend
+npm install
+```
+
+### Run
 Run the backend:
 ```bash
-cd cmd/ssl-game-controller
-go install
-cd ../..
-ssl-game-controller
+go run cmd/ssl-game-controller/main.go
 ```
-Or use the provided IntelliJ run configuration.
 
-Then, run the [UI](ui/README.md).
+Run the UI:
+```bash
+# compile and hot-reload
+npm run serve
+```
+Or use the provided IntelliJ run configurations.
 
-### Production / Release
-Will be different, but yet to be setup ;)
+### Build self-containing release binary
+First, build the UI resources
+```bash
+# compile and minify UI
+npm run build
+```
+Then build the backend with `packr`
+```bash
+# get packr
+go get github.com/gobuffalo/packr/packr
+# install the binary
+cd cmd/ssl-game-controller
+packr install
+```
