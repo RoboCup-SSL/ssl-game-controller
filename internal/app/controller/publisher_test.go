@@ -9,7 +9,7 @@ import (
 )
 
 func Test_updateMessage(t *testing.T) {
-	proto := sslproto.SSL_Referee{}
+	proto := sslproto.Referee{}
 	initRefereeMessage(&proto)
 	state := NewState()
 	team := TeamYellow
@@ -20,13 +20,13 @@ func Test_updateMessage(t *testing.T) {
 	if *proto.PacketTimestamp <= 0 {
 		t.Errorf("Wrong packet timestamp: %v", *proto.PacketTimestamp)
 	}
-	if *proto.Stage != sslproto.SSL_Referee_NORMAL_FIRST_HALF_PRE {
+	if *proto.Stage != sslproto.Referee_NORMAL_FIRST_HALF_PRE {
 		t.Errorf("Wrong Stage: %v", *proto.Stage)
 	}
 	if *proto.StageTimeLeft != 0 {
 		t.Errorf("Wrong StageTimeLeft: %v", *proto.StageTimeLeft)
 	}
-	if *proto.Command != sslproto.SSL_Referee_DIRECT_FREE_YELLOW {
+	if *proto.Command != sslproto.Referee_DIRECT_FREE_YELLOW {
 		t.Errorf("Wrong command: %v", *proto.Command)
 	}
 	if *proto.CommandCounter != 1 {
