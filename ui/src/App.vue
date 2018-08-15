@@ -10,7 +10,7 @@
                 <ControlTeam class="team-views" team-color="Yellow"/>
             </div>
             <div id="field">
-                <Field/>
+                <iframe src="http://localhost:8082/" frameborder="none"></iframe>
             </div>
             <div class="team-container">
                 <TeamOverview class="team-views" team-color="Blue"/>
@@ -29,12 +29,10 @@
     import ControlTeam from "./components/control/ControlTeam";
     import Debug from "./components/Debug";
     import ControlMatch from "./components/control/ControlMatch";
-    import Field from "./components/field/Field";
 
     export default {
         name: 'app',
         components: {
-            Field,
             ControlMatch,
             Debug,
             ControlTeam,
@@ -52,6 +50,10 @@
         -moz-osx-font-smoothing: grayscale;
         text-align: center;
         color: #2c3e50;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: stretch;
     }
 
     #app-header {
@@ -77,13 +79,18 @@
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: flex-start;
-        align-items: flex-start;
+        align-items: stretch;
         align-content: flex-start;
         flex-grow: 1;
     }
 
     #field {
         flex-grow: 1;
+    }
+
+    #field iframe {
+        width: 100%;
+        height: 100%;
     }
 
     .team-container {

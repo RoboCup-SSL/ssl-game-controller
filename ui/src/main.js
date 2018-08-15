@@ -1,6 +1,6 @@
 import Vue from 'vue'
-import Vuex from 'vuex'
 import App from './App.vue'
+import store from "./store";
 import VueNativeSock from 'vue-native-websocket'
 // use hotkeys for binding keyboard keys to buttons and other components
 import VueHotkey from 'v-hotkey'
@@ -11,68 +11,24 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import TimestampFormatter from "./TimestampFormatter";
 
 Vue.use(VueHotkey);
-
 Vue.use(BootstrapVue);
-
-
-export class TeamState {
-    name = 'someone';
-    goals = 0;
-    goalie = 0;
-    yellowCards = 0;
-    yellowCardTimes = [];
-    redCards = 0;
-    timeoutsLeft = 4;
-    timeoutTimeLeft = 300;
-    onPositiveHalf = true;
-    botCollisions = 0;
-    ballPlacementFailures = 0;
-    botSpeedInfringements = 0;
-}
-
-export class RefBoxState {
-    stage = 'unknown';
-    gameState = 'unknown';
-    gameStateForTeam = null;
-    gameTimeElapsed = 0;
-    gameTimeLeft = 0;
-    matchDuration = 0;
-    teamState = {'Yellow': new TeamState(), 'Blue': new TeamState()};
-}
+Vue.use(TimestampFormatter);
 
 export let isInNormalHalf = function (state) {
     return state.stage === 'First Half';
 };
 
-Vue.use(TimestampFormatter);
-
-// use Vuex for state management with the Vuex.Store
-Vue.use(Vuex);
-const store = new Vuex.Store({
-    state: {
-        latestMessage: 'unknown',
-        refBoxState: new RefBoxState(),
-    },
-    mutations: {
-        SOCKET_ONOPEN() {
-        },
-        SOCKET_ONCLOSE() {
-        },
-        SOCKET_ONERROR() {
-        },
-        SOCKET_ONMESSAGE(state, message) {
-            state.latestMessage = message;
-            state.refBoxState = message;
-        },
-        SOCKET_RECONNECT() {
-        },
-        SOCKET_RECONNECT_ERROR() {
-        },
-    }
-});
+let wsAddress;
+if (process.env.NODE_ENV === 'development') {
+    // use the default backend port
+    wsAddress = 'ws://localhost:8081/api/control';
+} else {
+    // UI and backend are served on the same host+port on production builds
+    wsAddress = 'ws://' + window.location.hostname + ':' + window.location.port + '/api/control';
+}
 
 // Connect to the backend with a single websocket that communicates with JSON format and is attached to the store
-Vue.use(VueNativeSock, 'ws://localhost:8081/ws', {
+Vue.use(VueNativeSock, wsAddress, {
     reconnection: true,
     format: 'json',
     store: store,
