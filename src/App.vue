@@ -9,18 +9,20 @@
                 <h2>Yellow Team</h2>
                 <TeamOverview class="team-views" team-color="Yellow"/>
                 <ControlTeam class="team-views" team-color="Yellow"/>
+                <ControlTeamEvent class="team-views" team-color="Yellow"/>
             </div>
-            <div id="field">
+            <div class="main-middle-container">
+                <GameEvents/>
                 <iframe src="http://localhost:8082/" frameborder="none"></iframe>
             </div>
             <div class="team-container">
                 <h2>Blue Team</h2>
                 <TeamOverview class="team-views" team-color="Blue"/>
                 <ControlTeam class="team-views" team-color="Blue"/>
+                <ControlTeamEvent class="team-views" team-color="Blue"/>
             </div>
         </div>
         <ControlMatch id="match-controls"/>
-        <Debug id="debug"/>
     </div>
 </template>
 
@@ -29,14 +31,16 @@
     import TeamOverview from "./components/team/TeamOverview";
     import ControlGeneral from "./components/control/ControlGeneral";
     import ControlTeam from "./components/control/ControlTeam";
-    import Debug from "./components/Debug";
     import ControlMatch from "./components/control/ControlMatch";
+    import ControlTeamEvent from "./components/control/ControlTeamEvent";
+    import GameEvents from "./components/GameEvents";
 
     export default {
         name: 'app',
         components: {
+            GameEvents,
+            ControlTeamEvent,
             ControlMatch,
-            Debug,
             ControlTeam,
             ControlGeneral,
             TeamOverview,
@@ -86,11 +90,17 @@
         flex-grow: 1;
     }
 
-    #field {
+    .main-middle-container {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        align-content: stretch;
         flex-grow: 1;
     }
 
-    #field iframe {
+    .main-middle-container iframe {
+        flex-grow: 1;
         width: 100%;
         height: 100%;
     }

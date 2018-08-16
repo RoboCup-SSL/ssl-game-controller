@@ -67,6 +67,9 @@ func (r *GameController) OnNewEvent(event Event) {
 		log.Println("Could not process event:", event, err)
 	} else {
 		r.publish(cmd)
+		if cmd != nil {
+			r.publishGameEvents()
+		}
 	}
 }
 
@@ -129,6 +132,11 @@ func (r *GameController) publish(command *EventCommand) {
 	}
 	r.ApiServer.PublishState(*r.Engine.State)
 	r.Publisher.Publish(r.Engine.State, command)
+}
+
+// publishGameEvents publishes the current list of game events
+func (r *GameController) publishGameEvents() {
+	r.ApiServer.PublishGameEvents(r.Engine.GameEvents)
 }
 
 // saveLatestState writes the current state into a file

@@ -16,6 +16,11 @@ type EventConsumer interface {
 	OnNewEvent(event Event)
 }
 
+type MessageWrapper struct {
+	State      *State          `json:"state"`
+	GameEvents *[]RefereeEvent `json:"gameEvents"`
+}
+
 // WsHandler handles incoming web socket connections
 func (a *ApiServer) WsHandler(w http.ResponseWriter, r *http.Request) {
 	u := websocket.Upgrader{
@@ -38,8 +43,8 @@ func (a *ApiServer) WsHandler(w http.ResponseWriter, r *http.Request) {
 	a.listenForNewEvents(conn)
 }
 
-func (a *ApiServer) PublishState(state State) {
-	b, err := json.Marshal(state)
+func (a *ApiServer) PublishWrapper(wrapper MessageWrapper) {
+	b, err := json.Marshal(wrapper)
 	if err != nil {
 		log.Println("Marshal error:", err)
 	}
@@ -50,6 +55,16 @@ func (a *ApiServer) PublishState(state State) {
 			log.Println("Could not write message.", err)
 		}
 	}
+}
+
+func (a *ApiServer) PublishState(state State) {
+	wrapper := MessageWrapper{State: &state}
+	a.PublishWrapper(wrapper)
+}
+
+func (a *ApiServer) PublishGameEvents(gameEvents []RefereeEvent) {
+	wrapper := MessageWrapper{GameEvents: &gameEvents}
+	a.PublishWrapper(wrapper)
 }
 
 func (a *ApiServer) disconnect(conn *websocket.Conn) {

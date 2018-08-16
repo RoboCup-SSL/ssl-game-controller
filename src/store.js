@@ -30,8 +30,8 @@ export class RefBoxState {
 
 export default new Vuex.Store({
     state: {
-        latestMessage: 'unknown',
         refBoxState: new RefBoxState(),
+        gameEvents: []
     },
     mutations: {
         SOCKET_ONOPEN() {
@@ -41,8 +41,12 @@ export default new Vuex.Store({
         SOCKET_ONERROR() {
         },
         SOCKET_ONMESSAGE(state, message) {
-            state.latestMessage = message;
-            state.refBoxState = message;
+            if (message.state != null) {
+                state.refBoxState = message.state;
+            }
+            if (message.gameEvents) {
+                state.gameEvents = message.gameEvents;
+            }
         },
         SOCKET_RECONNECT() {
         },

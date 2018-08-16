@@ -14,6 +14,7 @@ type Engine struct {
 	config       ConfigGame
 	StateHistory []State
 	TimeProvider func() time.Time
+	GameEvents   []RefereeEvent
 }
 
 func NewEngine(config ConfigGame) (e Engine) {
@@ -55,7 +56,31 @@ func (e *Engine) Process(event Event) (*EventCommand, error) {
 	if err == nil {
 		e.StateHistory = append(e.StateHistory, *e.State)
 	}
+	if cmd != nil {
+		e.LogCommand(cmd)
+	}
 	return cmd, err
+}
+
+func (e *Engine) LogGameEvent(eventType GameEventType) {
+	gameEvent := RefereeEvent{
+		Timestamp:     e.TimeProvider(),
+		StageTime:     e.State.StageTimeElapsed,
+		Type:          RefereeEventGameEvent,
+		GameEventType: &eventType,
+	}
+	e.GameEvents = append(e.GameEvents, gameEvent)
+}
+
+func (e *Engine) LogCommand(command *EventCommand) {
+	gameEvent := RefereeEvent{
+		Timestamp: e.TimeProvider(),
+		StageTime: e.State.StageTimeElapsed,
+		Type:      RefereeEventCommand,
+		Command:   &command.Type,
+		Team:      command.ForTeam,
+	}
+	e.GameEvents = append(e.GameEvents, gameEvent)
 }
 
 func (e *Engine) loadStages() {
