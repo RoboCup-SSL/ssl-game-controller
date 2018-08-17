@@ -8,13 +8,15 @@ import (
 	"time"
 )
 
+const maxHistorySize = 10
+
 type Engine struct {
-	State        *State
-	StageTimes   map[Stage]time.Duration
-	config       ConfigGame
-	StateHistory []State
-	TimeProvider func() time.Time
-	RefereeEvent []RefereeEvent
+	State         *State
+	RefereeEvents []RefereeEvent
+	StageTimes    map[Stage]time.Duration
+	config        ConfigGame
+	TimeProvider  func() time.Time
+	History       History
 }
 
 func NewEngine(config ConfigGame) (e Engine) {
@@ -31,7 +33,7 @@ func (e *Engine) ResetGame() {
 	e.State.TeamState[TeamYellow].TimeoutTimeLeft = e.config.Normal.TimeoutDuration
 	e.State.TeamState[TeamBlue].TimeoutsLeft = e.config.Normal.Timeouts
 	e.State.TeamState[TeamYellow].TimeoutsLeft = e.config.Normal.Timeouts
-	e.RefereeEvent = []RefereeEvent{}
+	e.History = History{}
 }
 
 // Tick updates the times of the state and removes cards, if necessary
@@ -45,22 +47,26 @@ func (e *Engine) Tick(delta time.Duration) {
 
 // UndoLastAction restores the last state from internal history
 func (e *Engine) UndoLastAction() {
-	lastIndex := len(e.StateHistory) - 2
+	lastIndex := len(e.History) - 2
 	if lastIndex >= 0 {
-		*e.State = e.StateHistory[lastIndex]
-		e.StateHistory = e.StateHistory[0:lastIndex]
+		*e.State = e.History[lastIndex].State
+		e.History = e.History[0:lastIndex]
 	}
 }
 
-func (e *Engine) Process(event Event) (*EventCommand, error) {
+func (e *Engine) Process(event Event) error {
 	cmd, err := e.processEvent(event)
-	if err == nil {
-		e.StateHistory = append(e.StateHistory, *e.State)
+	if err != nil {
+		return err
 	}
 	if cmd != nil {
 		e.LogCommand(cmd)
 	}
-	return cmd, err
+	e.History = append(e.History, HistoryEntry{*e.State, e.RefereeEvents})
+	if len(e.History) > maxHistorySize {
+		e.History = e.History[1:]
+	}
+	return nil
 }
 
 func (e *Engine) LogGameEvent(eventType GameEventType) {
@@ -70,7 +76,7 @@ func (e *Engine) LogGameEvent(eventType GameEventType) {
 		Type:          RefereeEventGameEvent,
 		GameEventType: &eventType,
 	}
-	e.RefereeEvent = append(e.RefereeEvent, gameEvent)
+	e.RefereeEvents = append(e.RefereeEvents, gameEvent)
 }
 
 func (e *Engine) LogCommand(command *EventCommand) {
@@ -81,7 +87,7 @@ func (e *Engine) LogCommand(command *EventCommand) {
 		Command:   &command.Type,
 		Team:      command.ForTeam,
 	}
-	e.RefereeEvent = append(e.RefereeEvent, gameEvent)
+	e.RefereeEvents = append(e.RefereeEvents, gameEvent)
 }
 
 func (e *Engine) loadStages() {

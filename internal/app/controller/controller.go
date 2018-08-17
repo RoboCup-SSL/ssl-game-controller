@@ -1,27 +1,20 @@
 package controller
 
 import (
-	"encoding/json"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/timer"
-	"io"
 	"log"
-	"os"
-	"time"
 )
 
-const logDir = "logs"
-const lastStateFileName = logDir + "/lastState.json"
 const configFileName = "config/ssl-game-controller.yaml"
 
 // GameController controls a game
 type GameController struct {
 	Config           Config
-	stateHistoryFile *os.File
-	lastStateFile    *os.File
 	Publisher        Publisher
 	ApiServer        ApiServer
 	Engine           Engine
 	timer            timer.Timer
+	historyPreserver HistoryPreserver
 }
 
 // NewGameController creates a new RefBox
@@ -42,34 +35,41 @@ func NewGameController() (r *GameController) {
 // Run the GameController by starting an endless loop in the background
 func (r *GameController) Run() (err error) {
 
-	r.openStateFiles()
-	r.readLastState()
+	if err := r.historyPreserver.Open(); err != nil {
+		log.Print("Could not open history", err)
+	} else {
+		history, err := r.historyPreserver.Load()
+		if err != nil {
+			log.Print("Could not load history", err)
+		} else if len(*history) > 0 {
+			r.Engine.History = *history
+			*r.Engine.State = r.Engine.History[len(r.Engine.History)-1].State
+			r.Engine.RefereeEvents = r.Engine.History[len(r.Engine.History)-1].RefereeEvents
+		}
+	}
+
+	r.ApiServer.PublishState(*r.Engine.State)
+	r.ApiServer.PublishGameEvents(r.Engine.RefereeEvents)
 
 	go func() {
-		if r.stateHistoryFile != nil {
-			defer r.stateHistoryFile.Close()
-		}
-		if r.lastStateFile != nil {
-			defer r.lastStateFile.Close()
-		}
+		defer r.historyPreserver.Close()
 		for {
 			r.timer.WaitTillNextFullSecond()
 			r.Engine.Tick(r.timer.Delta())
-			r.saveLatestState()
-			r.publish(nil)
+			r.historyPreserver.Save(r.Engine.History)
+			r.publish()
 		}
 	}()
 	return nil
 }
 
 func (r *GameController) OnNewEvent(event Event) {
-	cmd, err := r.Engine.Process(event)
+	err := r.Engine.Process(event)
 	if err != nil {
 		log.Println("Could not process event:", event, err)
 	} else {
-		r.saveLatestState()
-		r.saveStateHistory()
-		r.publish(cmd)
+		r.historyPreserver.Save(r.Engine.History)
+		r.publish()
 		r.publishGameEvents()
 	}
 }
@@ -90,81 +90,13 @@ func loadConfig() Config {
 	return config
 }
 
-func (r *GameController) openStateFiles() {
-	os.MkdirAll(logDir, os.ModePerm)
-
-	stateHistoryLogFileName := logDir + "/state-history_" + time.Now().Format("2006-01-02_15-04-05") + ".log"
-	f, err := os.OpenFile(stateHistoryLogFileName, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
-	if err != nil {
-		log.Fatal("Can not open state history log file", err)
-	}
-	r.stateHistoryFile = f
-
-	f, err = os.OpenFile(lastStateFileName, os.O_RDWR|os.O_CREATE, 0600)
-	if err != nil {
-		log.Fatal("Can not open last state file", err)
-	}
-	r.lastStateFile = f
-}
-
-func (r *GameController) readLastState() {
-	bufSize := 10000
-	b := make([]byte, bufSize)
-	n, err := r.lastStateFile.Read(b)
-	if err != nil && err != io.EOF {
-		log.Fatal("Could not read from last state file ", err)
-	}
-	if n == bufSize {
-		log.Fatal("Buffer size too small")
-	}
-	if n > 0 {
-		err = json.Unmarshal(b[:n], r.Engine.State)
-		if err != nil {
-			log.Fatalf("Could not read last state: %v %v", string(b), err)
-		}
-	}
-}
-
 // publish publishes the state to the UI and the teams
-func (r *GameController) publish(command *EventCommand) {
+func (r *GameController) publish() {
 	r.ApiServer.PublishState(*r.Engine.State)
 	r.Publisher.Publish(r.Engine.State)
 }
 
 // publishGameEvents publishes the current list of game events
 func (r *GameController) publishGameEvents() {
-	r.ApiServer.PublishGameEvents(r.Engine.RefereeEvent)
-}
-
-// saveLatestState writes the current state into a file
-func (r *GameController) saveLatestState() {
-	jsonState, err := json.MarshalIndent(r.Engine.State, "", "  ")
-	if err != nil {
-		log.Print("Can not marshal state ", err)
-		return
-	}
-
-	err = r.lastStateFile.Truncate(0)
-	if err != nil {
-		log.Fatal("Can not truncate last state file ", err)
-	}
-	_, err = r.lastStateFile.WriteAt(jsonState, 0)
-	if err != nil {
-		log.Print("Could not write last state ", err)
-	}
-	r.lastStateFile.Sync()
-}
-
-// saveStateHistory writes the current state to the history file
-func (r *GameController) saveStateHistory() {
-
-	jsonState, err := json.Marshal(r.Engine.State)
-	if err != nil {
-		log.Print("Can not marshal state ", err)
-		return
-	}
-
-	r.stateHistoryFile.Write(jsonState)
-	r.stateHistoryFile.WriteString("\n")
-	r.stateHistoryFile.Sync()
+	r.ApiServer.PublishGameEvents(r.Engine.RefereeEvents)
 }

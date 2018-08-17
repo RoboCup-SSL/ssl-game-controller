@@ -8,8 +8,10 @@ import (
 )
 
 type ApiServer struct {
-	Consumer    EventConsumer
-	connections []*websocket.Conn
+	Consumer            EventConsumer
+	connections         []*websocket.Conn
+	latestState         State
+	latestRefereeEvents []RefereeEvent
 }
 
 type EventConsumer interface {
@@ -17,8 +19,8 @@ type EventConsumer interface {
 }
 
 type MessageWrapper struct {
-	State      *State          `json:"state"`
-	GameEvents *[]RefereeEvent `json:"gameEvents"`
+	State         *State          `json:"state"`
+	RefereeEvents *[]RefereeEvent `json:"gameEvents"`
 }
 
 // WsHandler handles incoming web socket connections
@@ -40,6 +42,8 @@ func (a *ApiServer) WsHandler(w http.ResponseWriter, r *http.Request) {
 
 	a.connections = append(a.connections, conn)
 
+	a.publishFullWrapper(conn)
+
 	a.listenForNewEvents(conn)
 }
 
@@ -57,13 +61,27 @@ func (a *ApiServer) PublishWrapper(wrapper MessageWrapper) {
 	}
 }
 
+func (a *ApiServer) publishFullWrapper(conn *websocket.Conn) {
+	wrapper := MessageWrapper{&a.latestState, &a.latestRefereeEvents}
+	b, err := json.Marshal(wrapper)
+	if err != nil {
+		log.Println("Marshal error:", err)
+	}
+	err = conn.WriteMessage(websocket.TextMessage, b)
+	if err != nil {
+		log.Println("Could not write message.", err)
+	}
+}
+
 func (a *ApiServer) PublishState(state State) {
+	a.latestState = state
 	wrapper := MessageWrapper{State: &state}
 	a.PublishWrapper(wrapper)
 }
 
-func (a *ApiServer) PublishGameEvents(gameEvents []RefereeEvent) {
-	wrapper := MessageWrapper{GameEvents: &gameEvents}
+func (a *ApiServer) PublishGameEvents(events []RefereeEvent) {
+	a.latestRefereeEvents = events
+	wrapper := MessageWrapper{RefereeEvents: &events}
 	a.PublishWrapper(wrapper)
 }
 

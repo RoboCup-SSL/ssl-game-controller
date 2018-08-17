@@ -21,4 +21,4 @@ yarn-debug.log*
 yarn-error.log*
 
 # app-specific ignores
-logs
+history.json
