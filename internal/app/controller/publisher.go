@@ -28,7 +28,7 @@ func NewPublisher(address string) (publisher Publisher, err error) {
 		return
 	}
 
-	conn.SetReadBuffer(maxDatagramSize)
+	conn.SetWriteBuffer(maxDatagramSize)
 	log.Println("Publishing to", address)
 
 	publisher.conn = conn
