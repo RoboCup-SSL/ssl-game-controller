@@ -2,11 +2,11 @@
 
 set -e
 
-cd ui
+# UI
 npm install
 npm run build
-cd ..
 
+# backend
 go get -v -d ./...
 cd cmd/ssl-game-controller
 go get -u -v github.com/gobuffalo/packr/packr
