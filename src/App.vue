@@ -117,11 +117,6 @@
         text-align: center;
     }
 
-    #debug {
-        position: fixed;
-        bottom: 0;
-    }
-
     .team-views {
         float: left;
         margin: 0.5em;
