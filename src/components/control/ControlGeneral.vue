@@ -62,13 +62,13 @@
                 return this.$store.state.refBoxState
             },
             halted() {
-                return this.state.gameState === 'Halted';
+                return this.state.command === 'halt';
             },
             stopped() {
-                return this.state.gameState === 'Stopped';
+                return this.state.command === 'stop';
             },
             prepareSth() {
-                return this.state.gameState.startsWith('Prepare');
+                return this.state.command === 'kickoff' || this.state.command === 'penalty';
             },
             inNormalHalf() {
                 return isInNormalHalf(this.state);

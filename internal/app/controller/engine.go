@@ -14,7 +14,7 @@ type Engine struct {
 	config       ConfigGame
 	StateHistory []State
 	TimeProvider func() time.Time
-	GameEvents   []RefereeEvent
+	RefereeEvent []RefereeEvent
 }
 
 func NewEngine(config ConfigGame) (e Engine) {
@@ -31,6 +31,7 @@ func (e *Engine) ResetGame() {
 	e.State.TeamState[TeamYellow].TimeoutTimeLeft = e.config.Normal.TimeoutDuration
 	e.State.TeamState[TeamBlue].TimeoutsLeft = e.config.Normal.Timeouts
 	e.State.TeamState[TeamYellow].TimeoutsLeft = e.config.Normal.Timeouts
+	e.RefereeEvent = []RefereeEvent{}
 }
 
 // Tick updates the times of the state and removes cards, if necessary
@@ -69,7 +70,7 @@ func (e *Engine) LogGameEvent(eventType GameEventType) {
 		Type:          RefereeEventGameEvent,
 		GameEventType: &eventType,
 	}
-	e.GameEvents = append(e.GameEvents, gameEvent)
+	e.RefereeEvent = append(e.RefereeEvent, gameEvent)
 }
 
 func (e *Engine) LogCommand(command *EventCommand) {
@@ -80,7 +81,7 @@ func (e *Engine) LogCommand(command *EventCommand) {
 		Command:   &command.Type,
 		Team:      command.ForTeam,
 	}
-	e.GameEvents = append(e.GameEvents, gameEvent)
+	e.RefereeEvent = append(e.RefereeEvent, gameEvent)
 }
 
 func (e *Engine) loadStages() {
@@ -99,7 +100,7 @@ func (e *Engine) loadStages() {
 }
 
 func (e *Engine) updateTimes(delta time.Duration) {
-	if e.State.GameState == GameStateRunning {
+	if e.State.GameState() == GameStateRunning {
 		e.State.StageTimeElapsed += delta
 		e.State.StageTimeLeft -= delta
 
@@ -109,8 +110,8 @@ func (e *Engine) updateTimes(delta time.Duration) {
 		}
 	}
 
-	if e.State.GameState == GameStateTimeout && e.State.GameStateFor != nil {
-		e.State.TeamState[*e.State.GameStateFor].TimeoutTimeLeft -= delta
+	if e.State.GameState() == GameStateTimeout && e.State.CommandFor != nil {
+		e.State.TeamState[*e.State.CommandFor].TimeoutTimeLeft -= delta
 	}
 }
 
@@ -131,52 +132,24 @@ func (e *Engine) processEvent(event Event) (*EventCommand, error) {
 
 func (e *Engine) processCommand(c *EventCommand) (*EventCommand, error) {
 	switch c.Type {
-	case CommandHalt:
-		e.State.GameState = GameStateHalted
-		e.State.GameStateFor = nil
-	case CommandStop:
-		e.State.GameState = GameStateStopped
-		e.State.GameStateFor = nil
-	case CommandNormalStart:
-		e.State.GameState = GameStateRunning
-		e.State.GameStateFor = nil
-		e.updatePreStages()
-	case CommandForceStart, CommandDirect, CommandIndirect:
-		e.State.GameState = GameStateRunning
-		e.State.GameStateFor = nil
-	case CommandKickoff:
+	case CommandDirect, CommandIndirect, CommandKickoff, CommandPenalty, CommandTimeout, CommandBallPlacement:
 		if c.ForTeam == nil {
-			return nil, errors.New("Team required for kickoff")
+			return nil, errors.Errorf("Team required for %v", c.Type)
 		}
-		e.State.GameState = GameStatePreKickoff
-		e.State.GameStateFor = c.ForTeam
-	case CommandPenalty:
-		if c.ForTeam == nil {
-			return nil, errors.New("Team required for penalty")
-		}
-		e.State.GameState = GameStatePrePenalty
-		e.State.GameStateFor = c.ForTeam
-	case CommandBallPlacement:
-		if c.ForTeam == nil {
-			return nil, errors.New("Team required for ball placement")
-		}
-		e.State.GameState = GameStateBallPlacement
-		e.State.GameStateFor = c.ForTeam
-	case CommandGoal:
-		if c.ForTeam == nil {
-			return nil, errors.New("Team required for goal")
-		}
-		e.State.TeamState[*c.ForTeam].Goals++
-	case CommandTimeout:
-		if c.ForTeam == nil {
-			return nil, errors.New("Team required for timeout")
-		}
-		e.State.TeamState[*c.ForTeam].TimeoutsLeft--
-		e.State.GameState = GameStateTimeout
-		e.State.GameStateFor = c.ForTeam
+	case CommandHalt, CommandStop, CommandForceStart, CommandNormalStart:
 	default:
 		return nil, errors.Errorf("Unknown command: %v", c)
 	}
+
+	if c.Type == CommandTimeout {
+		e.State.TeamState[*c.ForTeam].TimeoutsLeft--
+		e.State.CommandFor = c.ForTeam
+	} else if c.Type == CommandNormalStart {
+		e.updatePreStages()
+	}
+
+	e.State.Command = c.Type
+	e.State.CommandFor = c.ForTeam
 
 	log.Printf("Processed command %v", *c)
 	return c, nil
@@ -230,7 +203,7 @@ func (e *Engine) processModify(m *EventModifyValue) (*EventCommand, error) {
 }
 
 func (e *Engine) processStage(s *EventStage) (*EventCommand, error) {
-	if e.State.GameState != GameStateHalted && e.State.GameState != GameStateStopped {
+	if e.State.GameState() != GameStateHalted && e.State.GameState() != GameStateStopped {
 		return nil, errors.New("The game state must be halted or stopped to change the stage")
 	}
 
@@ -254,8 +227,8 @@ func (e *Engine) updateStage(stage Stage) (cmd *EventCommand) {
 	e.State.StageTimeElapsed = 0
 
 	if !e.State.Stage.IsPreStage() {
-		e.State.GameState = GameStateHalted
-		e.State.GameStateFor = nil
+		e.State.Command = CommandHalt
+		e.State.CommandFor = nil
 		cmd = &EventCommand{nil, CommandHalt}
 	}
 

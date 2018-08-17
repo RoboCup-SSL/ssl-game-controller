@@ -4,12 +4,12 @@
             {{state.stage}}
         </span>
         |
-        <span v-format-ns-duration="state.gameTimeElapsed"
+        <span v-format-ns-duration="state.stageTimeElapsed"
               v-b-tooltip.hover
               title="Total time elapsed in the current stage">
         </span>
         |
-        <span v-format-ns-duration="state.gameTimeLeft"
+        <span v-format-ns-duration="state.stageTimeLeft"
               v-b-tooltip.hover
               title="Total time left for this stage">
         </span>
@@ -19,8 +19,8 @@
               title="Total real time elapsed since the match has been started">
         </span>
         |
-        <span v-b-tooltip.hover title="Current game state">
-            {{state.gameState}} <span v-if="state.gameStateForTeam != null">for {{state.gameStateForTeam}}</span>
+        <span v-b-tooltip.hover title="Current command">
+            {{state.command}} <span v-if="state.commandForTeam != null">for {{state.commandForTeam}}</span>
         </span>
     </div>
 </template>

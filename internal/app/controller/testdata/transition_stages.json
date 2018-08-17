@@ -2,10 +2,10 @@
   {
     "state": {
       "stage": "Pre-First Half",
-      "gameState": "Halted",
-      "gameStateForTeam": null,
-      "gameTimeElapsed": 0,
-      "gameTimeLeft": 0,
+      "command": "halt",
+      "commandForTeam": null,
+      "stageTimeElapsed": 0,
+      "stageTimeLeft": 0,
       "matchDuration": 0,
       "matchTimeStart": 0,
       "teamState": {
@@ -42,10 +42,10 @@
     },
     "state": {
       "stage": "Pre-First Half",
-      "gameState": "Stopped",
-      "gameStateForTeam": null,
-      "gameTimeElapsed": 0,
-      "gameTimeLeft": 0,
+      "command": "stop",
+      "commandForTeam": null,
+      "stageTimeElapsed": 0,
+      "stageTimeLeft": 0,
       "matchDuration": 0,
       "matchTimeStart": 0,
       "teamState": {
@@ -82,10 +82,10 @@
     },
     "state": {
       "stage": "First Half",
-      "gameState": "Running",
-      "gameStateForTeam": null,
-      "gameTimeElapsed": 0,
-      "gameTimeLeft": 300000000000,
+      "command": "normalStart",
+      "commandForTeam": null,
+      "stageTimeElapsed": 0,
+      "stageTimeLeft": 300000000000,
       "matchDuration": 0,
       "matchTimeStart": 1000000000,
       "teamState": {
@@ -122,10 +122,10 @@
     },
     "state": {
       "stage": "First Half",
-      "gameState": "Stopped",
-      "gameStateForTeam": null,
-      "gameTimeElapsed": 0,
-      "gameTimeLeft": 300000000000,
+      "command": "stop",
+      "commandForTeam": null,
+      "stageTimeElapsed": 0,
+      "stageTimeLeft": 300000000000,
       "matchDuration": 0,
       "matchTimeStart": 1000000000,
       "teamState": {
@@ -162,10 +162,10 @@
     },
     "state": {
       "stage": "Half Time",
-      "gameState": "Halted",
-      "gameStateForTeam": null,
-      "gameTimeElapsed": 0,
-      "gameTimeLeft": 300000000000,
+      "command": "halt",
+      "commandForTeam": null,
+      "stageTimeElapsed": 0,
+      "stageTimeLeft": 300000000000,
       "matchDuration": 0,
       "matchTimeStart": 1000000000,
       "teamState": {
@@ -202,10 +202,10 @@
     },
     "state": {
       "stage": "Pre-Second Half",
-      "gameState": "Halted",
-      "gameStateForTeam": null,
-      "gameTimeElapsed": 0,
-      "gameTimeLeft": 0,
+      "command": "halt",
+      "commandForTeam": null,
+      "stageTimeElapsed": 0,
+      "stageTimeLeft": 0,
       "matchDuration": 0,
       "matchTimeStart": 1000000000,
       "teamState": {
@@ -242,10 +242,10 @@
     },
     "state": {
       "stage": "Second Half",
-      "gameState": "Halted",
-      "gameStateForTeam": null,
-      "gameTimeElapsed": 0,
-      "gameTimeLeft": 300000000000,
+      "command": "halt",
+      "commandForTeam": null,
+      "stageTimeElapsed": 0,
+      "stageTimeLeft": 300000000000,
       "matchDuration": 0,
       "matchTimeStart": 1000000000,
       "teamState": {

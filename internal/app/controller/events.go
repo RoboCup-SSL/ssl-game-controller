@@ -27,34 +27,6 @@ const (
 	CardOperationModify CardOperation = "modify"
 )
 
-// RefCommand is a command to be send to the teams
-type RefCommand string
-
-const (
-	// CommandHalt HALT
-	CommandHalt RefCommand = "halt"
-	// CommandStop STOP
-	CommandStop RefCommand = "stop"
-	// CommandNormalStart NORMAL_START
-	CommandNormalStart RefCommand = "normalStart"
-	// CommandForceStart FORCE_START
-	CommandForceStart RefCommand = "forceStart"
-	// CommandDirect DIRECT
-	CommandDirect RefCommand = "direct"
-	// CommandIndirect INDIRECT
-	CommandIndirect RefCommand = "indirect"
-	// CommandKickoff KICKOFF
-	CommandKickoff RefCommand = "kickoff"
-	// CommandPenalty PENALTY
-	CommandPenalty RefCommand = "penalty"
-	// CommandTimeout TIMEOUT
-	CommandTimeout RefCommand = "timeout"
-	// CommandBallPlacement BALL_PLACEMENT
-	CommandBallPlacement RefCommand = "ballPlacement"
-	// CommandGoal GOAL
-	CommandGoal RefCommand = "goal"
-)
-
 // StageOperation to apply on the current stage
 type StageOperation string
 

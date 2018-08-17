@@ -35,7 +35,7 @@
         <br/>
 
         <ControlTeamTimeout :team-color="teamColor"/>
-        <b-button v-on:click="send('goal')">
+        <b-button v-on:click="addGoal">
             Goal
         </b-button>
         <b-button v-on:click="addYellowCard"
@@ -72,6 +72,9 @@
             },
             revokeYellowCard: function () {
                 this.$socket.sendObj({'card': {'forTeam': this.teamColor, 'cardType': 'yellow', 'operation': 'revoke'}})
+            },
+            addGoal: function () {
+                this.$socket.sendObj({'modify': {'forTeam': this.teamColor, 'goals': this.teamState.goals + 1}})
             },
         },
         computed: {
@@ -111,13 +114,16 @@
                 return this.$store.state.refBoxState
             },
             halted() {
-                return this.state.gameState === 'Halted';
+                return this.state.command === 'halt';
             },
             running() {
-                return this.state.gameState === 'Running';
+                return this.state.command === 'forceStart'
+                    || this.state.command === 'normalStart'
+                    || this.state.command === 'direct'
+                    || this.state.command === 'indirect';
             },
             preparing() {
-                return this.state.gameState.startsWith('Prepare');
+                return this.state.command === 'kickoff' || this.state.command === 'penalty';
             },
         }
     }

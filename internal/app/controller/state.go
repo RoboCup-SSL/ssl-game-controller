@@ -125,6 +125,32 @@ func (s Stage) IsPreStage() bool {
 	return false
 }
 
+// RefCommand is a command to be send to the teams
+type RefCommand string
+
+const (
+	// CommandHalt HALT
+	CommandHalt RefCommand = "halt"
+	// CommandStop STOP
+	CommandStop RefCommand = "stop"
+	// CommandNormalStart NORMAL_START
+	CommandNormalStart RefCommand = "normalStart"
+	// CommandForceStart FORCE_START
+	CommandForceStart RefCommand = "forceStart"
+	// CommandDirect DIRECT
+	CommandDirect RefCommand = "direct"
+	// CommandIndirect INDIRECT
+	CommandIndirect RefCommand = "indirect"
+	// CommandKickoff KICKOFF
+	CommandKickoff RefCommand = "kickoff"
+	// CommandPenalty PENALTY
+	CommandPenalty RefCommand = "penalty"
+	// CommandTimeout TIMEOUT
+	CommandTimeout RefCommand = "timeout"
+	// CommandBallPlacement BALL_PLACEMENT
+	CommandBallPlacement RefCommand = "ballPlacement"
+)
+
 // GameState of a game
 type GameState string
 
@@ -164,10 +190,10 @@ type TeamInfo struct {
 // State of the game
 type State struct {
 	Stage            Stage              `json:"stage"`
-	GameState        GameState          `json:"gameState"`
-	GameStateFor     *Team              `json:"gameStateForTeam"`
-	StageTimeElapsed time.Duration      `json:"gameTimeElapsed"`
-	StageTimeLeft    time.Duration      `json:"gameTimeLeft"`
+	Command          RefCommand         `json:"command"`
+	CommandFor       *Team              `json:"commandForTeam"`
+	StageTimeElapsed time.Duration      `json:"stageTimeElapsed"`
+	StageTimeLeft    time.Duration      `json:"stageTimeLeft"`
 	MatchTimeStart   time.Time          `json:"matchTimeStart"`
 	MatchDuration    time.Duration      `json:"matchDuration"`
 	TeamState        map[Team]*TeamInfo `json:"teamState"`
@@ -177,7 +203,7 @@ type State struct {
 func NewState() (s *State) {
 	s = new(State)
 	s.Stage = StagePreGame
-	s.GameState = GameStateHalted
+	s.Command = CommandHalt
 
 	s.StageTimeLeft = 0
 	s.StageTimeElapsed = 0
@@ -192,6 +218,26 @@ func NewState() (s *State) {
 	s.TeamState[TeamBlue].OnPositiveHalf = !s.TeamState[TeamYellow].OnPositiveHalf
 
 	return
+}
+
+func (s State) GameState() GameState {
+	switch s.Command {
+	case CommandHalt:
+		return GameStateHalted
+	case CommandStop:
+		return GameStateStopped
+	case CommandNormalStart, CommandForceStart, CommandDirect, CommandIndirect:
+		return GameStateRunning
+	case CommandKickoff:
+		return GameStatePreKickoff
+	case CommandPenalty:
+		return GameStatePrePenalty
+	case CommandTimeout:
+		return GameStateTimeout
+	case CommandBallPlacement:
+		return GameStateBallPlacement
+	}
+	return ""
 }
 
 func newTeamInfo() (t TeamInfo) {

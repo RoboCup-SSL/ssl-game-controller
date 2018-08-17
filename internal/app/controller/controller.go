@@ -55,6 +55,7 @@ func (r *GameController) Run() (err error) {
 		for {
 			r.timer.WaitTillNextFullSecond()
 			r.Engine.Tick(r.timer.Delta())
+			r.saveLatestState()
 			r.publish(nil)
 		}
 	}()
@@ -66,10 +67,10 @@ func (r *GameController) OnNewEvent(event Event) {
 	if err != nil {
 		log.Println("Could not process event:", event, err)
 	} else {
+		r.saveLatestState()
+		r.saveStateHistory()
 		r.publish(cmd)
-		if cmd != nil {
-			r.publishGameEvents()
-		}
+		r.publishGameEvents()
 	}
 }
 
@@ -126,17 +127,13 @@ func (r *GameController) readLastState() {
 
 // publish publishes the state to the UI and the teams
 func (r *GameController) publish(command *EventCommand) {
-	r.saveLatestState()
-	if command != nil {
-		r.saveStateHistory()
-	}
 	r.ApiServer.PublishState(*r.Engine.State)
-	r.Publisher.Publish(r.Engine.State, command)
+	r.Publisher.Publish(r.Engine.State)
 }
 
 // publishGameEvents publishes the current list of game events
 func (r *GameController) publishGameEvents() {
-	r.ApiServer.PublishGameEvents(r.Engine.GameEvents)
+	r.ApiServer.PublishGameEvents(r.Engine.RefereeEvent)
 }
 
 // saveLatestState writes the current state into a file

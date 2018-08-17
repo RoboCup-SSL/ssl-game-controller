@@ -21,11 +21,11 @@
             teamColor: String
         },
         computed: {
-            gameState: function () {
-                return this.$store.state.refBoxState.gameState
+            command: function () {
+                return this.$store.state.refBoxState.command
             },
             timeoutRunning: function () {
-                return this.gameState === "Timeout" && this.$store.state.refBoxState.gameStateForTeam === this.teamColor
+                return this.command === "timeout" && this.$store.state.refBoxState.commandForTeam === this.teamColor
             },
             inNormalHalf() {
                 return isInNormalHalf(this.$store.state.refBoxState);

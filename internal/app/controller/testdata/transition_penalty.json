@@ -2,10 +2,10 @@
   {
     "state": {
       "stage": "First Half",
-      "gameState": "Stopped",
-      "gameStateForTeam": null,
-      "gameTimeElapsed": 0,
-      "gameTimeLeft": 300000000000,
+      "command": "stop",
+      "commandForTeam": null,
+      "stageTimeElapsed": 0,
+      "stageTimeLeft": 300000000000,
       "matchDuration": 0,
       "matchTimeStart": 0,
       "teamState": {
@@ -43,10 +43,10 @@
     },
     "state": {
       "stage": "First Half",
-      "gameState": "Prepare Penalty",
-      "gameStateForTeam": "Yellow",
-      "gameTimeElapsed": 0,
-      "gameTimeLeft": 300000000000,
+      "command": "penalty",
+      "commandForTeam": "Yellow",
+      "stageTimeElapsed": 0,
+      "stageTimeLeft": 300000000000,
       "matchDuration": 0,
       "matchTimeStart": 0,
       "teamState": {
@@ -83,10 +83,10 @@
     },
     "state": {
       "stage": "First Half",
-      "gameState": "Running",
-      "gameStateForTeam": null,
-      "gameTimeElapsed": 0,
-      "gameTimeLeft": 300000000000,
+      "command": "normalStart",
+      "commandForTeam": null,
+      "stageTimeElapsed": 0,
+      "stageTimeLeft": 300000000000,
       "matchDuration": 0,
       "matchTimeStart": 0,
       "teamState": {
