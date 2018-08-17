@@ -41,7 +41,7 @@ func main() {
 			log.Fatal("Buffer size too small")
 		}
 		refMsg := refproto.Referee{}
-		proto.Unmarshal(b, &refMsg)
+		proto.Unmarshal(b[0:n], &refMsg)
 
 		b, err := json.Marshal(refMsg)
 		if err != nil {
