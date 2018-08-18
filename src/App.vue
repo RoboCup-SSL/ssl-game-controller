@@ -9,7 +9,6 @@
                 <h2>Yellow Team</h2>
                 <TeamOverview class="team-views" team-color="Yellow"/>
                 <ControlTeam class="team-views" team-color="Yellow"/>
-                <ControlTeamEvent class="team-views" team-color="Yellow"/>
             </div>
             <div class="main-middle-container">
                 <GameEvents/>
@@ -19,7 +18,6 @@
                 <h2>Blue Team</h2>
                 <TeamOverview class="team-views" team-color="Blue"/>
                 <ControlTeam class="team-views" team-color="Blue"/>
-                <ControlTeamEvent class="team-views" team-color="Blue"/>
             </div>
         </div>
         <ControlMatch id="match-controls"/>
@@ -32,14 +30,12 @@
     import ControlGeneral from "./components/control/ControlGeneral";
     import ControlTeam from "./components/control/ControlTeam";
     import ControlMatch from "./components/control/ControlMatch";
-    import ControlTeamEvent from "./components/control/ControlTeamEvent";
     import GameEvents from "./components/GameEvents";
 
     export default {
         name: 'app',
         components: {
             GameEvents,
-            ControlTeamEvent,
             ControlMatch,
             ControlTeam,
             ControlGeneral,
