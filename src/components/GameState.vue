@@ -1,5 +1,10 @@
 <template>
     <div>
+        <span v-b-tooltip.hover title="Last game event" v-if="state.gameEvent !== 'none'">
+            {{state.gameEvent}} <span v-if="state.gameEventForTeam !== ''">({{state.gameEventForTeam}})</span>
+            |
+        </span>
+
         <span v-b-tooltip.hover title="The current stage of the game">
             {{state.stage}}
         </span>
@@ -21,10 +26,6 @@
         |
         <span v-b-tooltip.hover title="Current command">
             {{state.command}} <span v-if="state.commandForTeam !== ''">for {{state.commandForTeam}}</span>
-        </span>
-        |
-        <span v-b-tooltip.hover title="Last game event">
-            {{state.gameEvent}} <span v-if="state.gameEventForTeam !== ''">for {{state.gameEventForTeam}}</span>
         </span>
     </div>
 </template>

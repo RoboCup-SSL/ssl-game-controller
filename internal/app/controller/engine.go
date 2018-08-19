@@ -50,6 +50,10 @@ func (e *Engine) SendCommand(command RefCommand, forTeam Team) {
 	e.State.Command = command
 	e.State.CommandFor = forTeam
 	e.LogCommand()
+
+	if command.RunningState() && e.State.GameEvent != GameEventNone {
+		e.SendGameEvent(GameEventNone, "")
+	}
 }
 
 func (e *Engine) SendGameEvent(gameEvent GameEventType, forTeam Team) {

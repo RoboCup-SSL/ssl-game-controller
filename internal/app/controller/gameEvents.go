@@ -5,7 +5,7 @@ import "time"
 type GameEventType string
 
 const (
-	GameEventUnknown                GameEventType = "unknown"
+	GameEventNone                   GameEventType = "none"
 	GameEventBallLeftFieldTouchLine GameEventType = "ballLeftFieldTouchLine"
 	GameEventBallLeftFieldGoalLine  GameEventType = "ballLeftFieldGoalLine"
 )

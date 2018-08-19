@@ -156,6 +156,15 @@ const (
 	CommandBallPlacement RefCommand = "ballPlacement"
 )
 
+func (c RefCommand) RunningState() bool {
+	switch c {
+	case CommandNormalStart, CommandForceStart, CommandDirect, CommandIndirect:
+		return true
+	default:
+		return false
+	}
+}
+
 // GameState of a game
 type GameState string
 
@@ -211,7 +220,7 @@ func NewState() (s *State) {
 	s = new(State)
 	s.Stage = StagePreGame
 	s.Command = CommandHalt
-	s.GameEvent = GameEventUnknown
+	s.GameEvent = GameEventNone
 
 	s.StageTimeLeft = 0
 	s.StageTimeElapsed = 0
