@@ -15,6 +15,7 @@ type RefereeEventType string
 const (
 	RefereeEventCommand   RefereeEventType = "command"
 	RefereeEventStage     RefereeEventType = "stage"
+	RefereeEventCard      RefereeEventType = "card"
 	RefereeEventGameEvent RefereeEventType = "gameEvent"
 )
 
