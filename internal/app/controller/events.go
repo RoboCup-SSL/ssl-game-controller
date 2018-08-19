@@ -49,6 +49,8 @@ const (
 	TriggerSwitchSides TriggerType = "switchSides"
 	// TriggerUndo undo last action
 	TriggerUndo TriggerType = "undo"
+	// TriggerContinue continues based on the current game event
+	TriggerContinue TriggerType = "continue"
 )
 
 // CardModification to apply to a card

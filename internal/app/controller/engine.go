@@ -72,6 +72,18 @@ func (e *Engine) UndoLastAction() {
 	}
 }
 
+func (e *Engine) Continue() error {
+	switch e.State.GameEvent {
+	case GameEventBallLeftFieldTouchLine:
+		e.SendCommand(CommandIndirect, e.State.GameEventFor.Opposite())
+	case GameEventBallLeftFieldGoalLine:
+		e.SendCommand(CommandDirect, e.State.GameEventFor.Opposite())
+	default:
+		return errors.New("No game event present")
+	}
+	return nil
+}
+
 func (e *Engine) Process(event Event) error {
 	err := e.processEvent(event)
 	if err != nil {
@@ -326,7 +338,7 @@ func addCard(card *EventCard, teamState *TeamInfo, duration time.Duration) error
 	return nil
 }
 
-func (e *Engine) processTrigger(t *EventTrigger) error {
+func (e *Engine) processTrigger(t *EventTrigger) (err error) {
 	if t.Type == TriggerResetMatch {
 		e.ResetGame()
 	} else if t.Type == TriggerSwitchColor {
@@ -339,11 +351,13 @@ func (e *Engine) processTrigger(t *EventTrigger) error {
 		e.State.TeamState[TeamBlue].OnPositiveHalf = yellowOnPositiveHalf
 	} else if t.Type == TriggerUndo {
 		e.UndoLastAction()
+	} else if t.Type == TriggerContinue {
+		err = e.Continue()
 	} else {
 		return errors.Errorf("Unknown trigger: %v", t.Type)
 	}
 	log.Printf("Processed trigger %v", t.Type)
-	return nil
+	return err
 }
 
 func (e *Engine) processGameEvent(t *EventGameEvent) error {

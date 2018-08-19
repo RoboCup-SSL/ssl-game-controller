@@ -32,6 +32,14 @@
                 Normal Start
             </b-button>
         </span>
+        <span v-b-tooltip.hover
+              :title="'Continue based on last game event (' + Object.keys(keymapContinue)[0] + ')'">
+            <b-button v-hotkey="keymapContinue"
+                      v-on:click="triggerContinue"
+                      v-bind:disabled="!gameEventPresent">
+                Continue
+            </b-button>
+        </span>
     </span>
 </template>
 
@@ -42,7 +50,10 @@
         name: "ControlGeneral",
         methods: {
             send: function (command) {
-                this.$socket.sendObj({'command': {'commandType': command}})
+                this.$socket.sendObj({command: {commandType: command}})
+            },
+            triggerContinue() {
+                this.$socket.sendObj({trigger: {triggerType: 'continue'}})
             }
         },
         computed: {
@@ -56,7 +67,10 @@
                 return {'numpad 5': () => this.send('forceStart')}
             },
             keymapNormalStart() {
-                return {'numpad +': () => this.send('normalStart')}
+                return {'numpad -': () => this.send('normalStart')}
+            },
+            keymapContinue() {
+                return {'numpad +': () => this.triggerContinue()}
             },
             state() {
                 return this.$store.state.refBoxState
@@ -73,6 +87,9 @@
             inNormalHalf() {
                 return isInNormalHalf(this.state);
             },
+            gameEventPresent() {
+                return this.state.gameEvent !== 'none';
+            }
         }
     }
 </script>
