@@ -67,6 +67,7 @@ func (e *Engine) UndoLastAction() {
 	lastIndex := len(e.History) - 2
 	if lastIndex >= 0 {
 		*e.State = e.History[lastIndex].State
+		e.RefereeEvents = e.History[lastIndex].RefereeEvents
 		e.History = e.History[0:lastIndex]
 	}
 }
