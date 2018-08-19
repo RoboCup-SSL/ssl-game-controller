@@ -132,6 +132,8 @@ func (e *Engine) processEvent(event Event) (*EventCommand, error) {
 		return e.processCard(event.Card)
 	} else if event.Trigger != nil {
 		return e.processTrigger(event.Trigger)
+	} else if event.GameEvent != nil {
+		return e.processGameEvent(event.GameEvent)
 	}
 	return nil, errors.New("unknown event")
 }
@@ -326,6 +328,12 @@ func (e *Engine) processTrigger(t *EventTrigger) (*EventCommand, error) {
 		return nil, errors.Errorf("Unknown trigger: %v", t.Type)
 	}
 	log.Printf("Processed trigger %v", t.Type)
+	return nil, nil
+}
+
+func (e *Engine) processGameEvent(t *EventGameEvent) (*EventCommand, error) {
+
+	log.Printf("Processed game event %v", t)
 	return nil, nil
 }
 

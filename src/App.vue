@@ -11,7 +11,7 @@
                 <ControlTeam class="team-views" team-color="Yellow"/>
             </div>
             <div class="main-middle-container">
-                <GameEvents/>
+                <Events/>
                 <iframe src="http://localhost:8082/" frameborder="none"></iframe>
             </div>
             <div class="team-container">
@@ -30,12 +30,12 @@
     import ControlGeneral from "./components/control/ControlGeneral";
     import ControlTeam from "./components/control/ControlTeam";
     import ControlMatch from "./components/control/ControlMatch";
-    import GameEvents from "./components/GameEvents";
+    import Events from "./components/events/Events";
 
     export default {
         name: 'app',
         components: {
-            GameEvents,
+            Events,
             ControlMatch,
             ControlTeam,
             ControlGeneral,
