@@ -12,7 +12,13 @@
             </div>
             <div class="main-middle-container">
                 <Events/>
-                <iframe src="http://localhost:8082/" frameborder="none"></iframe>
+                <iframe :src="visionClientAddress" frameborder="none" v-if="showVisionClient"
+                        class="vision-client"></iframe>
+                <div class="vision-client" v-show="!showVisionClient">
+                    <p>The vision-client is shown here, if it is running.</p>
+                    <p>It is expected to run at <a :href="visionClientAddress">{{visionClientAddress}}</a></p>
+                    <b-button variant="primary" @click="checkVisionClientAvailability">Reload</b-button>
+                </div>
             </div>
             <div class="team-container">
                 <h2>Blue Team</h2>
@@ -41,6 +47,34 @@
             ControlGeneral,
             TeamOverview,
             GameState
+        },
+        props: {
+            visionClientAddress: {
+                type: String,
+                default: "http://localhost:8082"
+            }
+        },
+        data() {
+            return {
+                showVisionClient: false
+            }
+        },
+        methods: {
+            checkVisionClientAvailability() {
+                let rq = new XMLHttpRequest();
+
+                rq.onreadystatechange = function (vm) {
+                    if (this.readyState === XMLHttpRequest.DONE) {
+                        vm.showVisionClient = this.status === 200;
+                    }
+                }.bind(rq, this);
+
+                rq.open("GET", this.visionClientAddress);
+                rq.send();
+            }
+        },
+        mounted() {
+            this.checkVisionClientAvailability();
         }
     }
 </script>
@@ -95,7 +129,7 @@
         flex-grow: 1;
     }
 
-    .main-middle-container iframe {
+    .vision-client {
         flex-grow: 1;
         width: 100%;
         height: 100%;
