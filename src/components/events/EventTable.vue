@@ -52,7 +52,7 @@
                         sortable: true
                     },
                     {
-                        key: 'command',
+                        key: 'name',
                         sortable: false
                     },
                     {

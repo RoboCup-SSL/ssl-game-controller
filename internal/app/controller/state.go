@@ -32,6 +32,11 @@ func (t Team) Unknown() bool {
 	return t != "Yellow" && t != "Blue"
 }
 
+// Known returns true if the team is blue or yellow
+func (t Team) Known() bool {
+	return !t.Unknown()
+}
+
 // Stage represents the different stages of a game
 type Stage string
 
@@ -191,7 +196,9 @@ type TeamInfo struct {
 type State struct {
 	Stage            Stage              `json:"stage"`
 	Command          RefCommand         `json:"command"`
-	CommandFor       *Team              `json:"commandForTeam"`
+	GameEvent        GameEventType      `json:"gameEvent"`
+	GameEventFor     Team               `json:"gameEventForTeam"`
+	CommandFor       Team               `json:"commandForTeam"`
 	StageTimeElapsed time.Duration      `json:"stageTimeElapsed"`
 	StageTimeLeft    time.Duration      `json:"stageTimeLeft"`
 	MatchTimeStart   time.Time          `json:"matchTimeStart"`
@@ -204,6 +211,7 @@ func NewState() (s *State) {
 	s = new(State)
 	s.Stage = StagePreGame
 	s.Command = CommandHalt
+	s.GameEvent = GameEventUnknown
 
 	s.StageTimeLeft = 0
 	s.StageTimeElapsed = 0

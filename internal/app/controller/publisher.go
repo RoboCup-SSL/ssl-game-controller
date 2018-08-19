@@ -113,7 +113,7 @@ func updateCommand(r *refproto.Referee, newCommand refproto.Referee_Command) {
 	*r.CommandTimestamp = uint64(time.Now().UnixNano() / 1000)
 }
 
-func mapCommand(command RefCommand, team *Team) refproto.Referee_Command {
+func mapCommand(command RefCommand, team Team) refproto.Referee_Command {
 	switch command {
 	case CommandHalt:
 		return refproto.Referee_HALT
@@ -139,8 +139,8 @@ func mapCommand(command RefCommand, team *Team) refproto.Referee_Command {
 	return -1
 }
 
-func commandByTeam(team *Team, blueCommand refproto.Referee_Command, yellowCommand refproto.Referee_Command) refproto.Referee_Command {
-	if *team == TeamBlue {
+func commandByTeam(team Team, blueCommand refproto.Referee_Command, yellowCommand refproto.Referee_Command) refproto.Referee_Command {
+	if team == TeamBlue {
 		return blueCommand
 	}
 	return yellowCommand

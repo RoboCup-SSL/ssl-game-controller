@@ -21,7 +21,9 @@ export class TeamState {
 export class RefBoxState {
     stage = 'unknown';
     command = 'unknown';
-    commandForTeam = null;
+    commandForTeam = '';
+    gameEvent = 'unknown';
+    gameEventForTeam = '';
     stageTimeElapsed = 0;
     stageTimeLeft = 0;
     matchDuration = 0;

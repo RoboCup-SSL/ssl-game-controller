@@ -4,19 +4,25 @@ import "time"
 
 type GameEventType string
 
+const (
+	GameEventUnknown                GameEventType = "unknown"
+	GameEventBallLeftFieldTouchLine GameEventType = "ballLeftFieldTouchLine"
+	GameEventBallLeftFieldGoalLine  GameEventType = "ballLeftFieldGoalLine"
+)
+
 type RefereeEventType string
 
 const (
 	RefereeEventCommand   RefereeEventType = "command"
+	RefereeEventStage     RefereeEventType = "stage"
 	RefereeEventGameEvent RefereeEventType = "gameEvent"
 )
 
 type RefereeEvent struct {
-	Timestamp     time.Time        `json:"timestamp"`
-	StageTime     time.Duration    `json:"stageTime"`
-	Type          RefereeEventType `json:"type"`
-	GameEventType *GameEventType   `json:"gameEventType"`
-	Command       *RefCommand      `json:"command"`
-	Team          *Team            `json:"team"`
-	Description   *string          `json:"description"`
+	Timestamp   time.Time        `json:"timestamp"`
+	StageTime   time.Duration    `json:"stageTime"`
+	Type        RefereeEventType `json:"type"`
+	Name        string           `json:"name"`
+	Team        Team             `json:"team"`
+	Description string           `json:"description"`
 }
