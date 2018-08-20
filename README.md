@@ -18,11 +18,17 @@ You need to install following dependencies first:
  * NPM
 
 ### Prepare
+Download and install to [GOPATH](https://github.com/golang/go/wiki/GOPATH):
 ```bash
-# download dependencies for backend
-go get -v -d ./...
-
-# download dependencies for frontend
+go get -u github.com/RoboCup-SSL/ssl-game-controller/...
+```
+Switch to checked-out repo
+Install
+```bash
+cd $GOPATH/src/github.com/RoboCup-SSL/ssl-game-controller/
+```
+Download dependencies for frontend
+```bash
 npm install
 ```
 
