@@ -97,9 +97,10 @@ message Referee {
         // The yellow team just scored a goal.
         // For information only.
         // For rules compliance, teams must treat as STOP.
-        GOAL_YELLOW = 14;
-        // The blue team just scored a goal.
-        GOAL_BLUE = 15;
+        // Deprecated: Use the score field from the team infos instead. That way, you can also detect revoked goals.
+        GOAL_YELLOW = 14 [deprecated = true];
+        // The blue team just scored a goal. See also GOAL_YELLOW.
+        GOAL_BLUE = 15 [deprecated = true];
         // Equivalent to STOP, but the yellow team must pick up the ball and
         // drop it in the Designated Position.
         BALL_PLACEMENT_YELLOW = 16;
