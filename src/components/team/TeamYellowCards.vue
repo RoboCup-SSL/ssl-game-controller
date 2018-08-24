@@ -11,23 +11,35 @@
             (
             <span v-b-tooltip.hover
                   title="Active yellow cards">{{yellowCardTimes.length}}</span>
-            <span v-b-toggle.collapseDurations v-show="yellowCardTimes.length>0">
+            <span v-show="yellowCardTimes.length>0">
                 |
                 <span v-b-tooltip.hover
-                      title="Next yellow card due, click to show all"
+                      title="Next yellow card due"
                       v-format-ns-duration="yellowCardTimes[0]"></span>
             </span>
             )
         </span>
 
-        <b-collapse id="collapseDurations" class="mt-2">
+        <a class="btn-edit"
+           v-if="!showAllCards"
+           @click="showAllCards=!showAllCards">
+            <font-awesome-icon icon="caret-square-down"/>
+        </a>
+        <a class="btn-edit"
+           v-if="showAllCards"
+           @click="showAllCards=!showAllCards">
+            <font-awesome-icon icon="caret-square-up"/>
+        </a>
+
+        <div class="card-times-container" v-if="showAllCards">
+            <label class="lbl-times"> Times: </label>
             <EditableLabelDuration
                     class="editable-label"
-                    v-bind:key="cardTime"
+                    v-bind:key="cardId"
                     v-for="(cardTime, cardId) in yellowCardTimes"
                     :value="cardTime"
                     :callback="(v) => updateCardTime(v, cardId)"/>
-        </b-collapse>
+        </div>
     </div>
 </template>
 
@@ -42,6 +54,11 @@
             yellowCards: Number,
             yellowCardTimes: Array,
             teamColor: String
+        },
+        data() {
+            return {
+                showAllCards: false
+            }
         },
         methods: {
             updateYellowCards: function (v) {
@@ -65,4 +82,14 @@
 </script>
 
 <style scoped>
+    .lbl-times {
+        margin-right: 0.3em;
+    }
+    .card-times-container {
+        margin-left: 0.5em;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        max-width: 300px;
+    }
 </style>

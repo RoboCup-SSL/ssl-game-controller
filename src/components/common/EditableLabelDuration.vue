@@ -1,7 +1,6 @@
 <template>
-    <span>
+    <span class="label-duration">
         <span v-show="g.edit === false"
-              @dblclick="edit"
               ref="span-id"
               v-format-ns-duration="value"></span>
         <input v-show="g.edit === true"
@@ -10,7 +9,9 @@
                v-on:blur="updateValue"
                @keyup.enter="updateValue"
                size="5"
+               ref="input"
         />
+        <a class="btn-edit" v-on:click="edit()" v-show="!g.edit"><font-awesome-icon icon="edit"/></a>
     </span>
 </template>
 
@@ -32,11 +33,18 @@
             edit: function () {
                 this.g.edit = true;
                 this.g.value = this.$refs["span-id"].innerHTML;
+                this.$nextTick(() => this.$refs.input.focus())
             }
         }
     }
 </script>
 
 <style scoped>
-
+    input {
+        text-align: center;
+    }
+    .btn-edit {
+        margin-left: 0.3em;
+        margin-right: 0.3em;
+    }
 </style>

@@ -1,17 +1,22 @@
 <template>
     <span>
-        <label v-show="edit === false"
-               @dblclick="switchToEdit">
+        <label v-show="!g.edit">
             {{label}} {{value}}
         </label>
-        <label v-show="edit === true">
+        <label v-show="g.edit">
             {{label}}
         </label>
-        <b-form-select v-show="edit === true"
-                       id="edit-input"
-                       v-model="editValue"
-                       :options="options"
-                       class="mb-3"></b-form-select>
+        <select v-show="g.edit"
+                id="edit-input"
+                v-model="g.value"
+                @blur="updateValue"
+                ref="input"
+                class="custom-select">
+            <option v-for="option in options" :key="option" :value="option">
+                {{ option }}
+            </option>
+        </select>
+        <a class="btn-edit" v-on:click="switchToEdit()" v-show="!g.edit"><font-awesome-icon icon="edit"/></a>
     </span>
 </template>
 
@@ -25,7 +30,7 @@
             callback: Function
         },
         data: function () {
-            return {edit: false, editValue: ""}
+            return {g: {edit: false, value: 0}}
         },
         methods: {
             updateValue: function () {
@@ -33,19 +38,20 @@
                 this.callback(this.g.value)
             },
             switchToEdit: function () {
-                this.edit = true;
-                this.editValue = this.value;
+                this.g.edit = true;
+                this.g.value = this.value;
+                this.$nextTick(() => this.$refs.input.focus())
             }
         },
-        watch: {
-            editValue: function (val) {
-                this.edit = false;
-                this.callback(val);
-            }
-        }
     }
 </script>
 
 <style scoped>
-
+    .btn-edit {
+        margin-left: 0.3em;
+        margin-right: 0.3em;
+    }
+    select {
+        width: auto !important;
+    }
 </style>
