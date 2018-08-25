@@ -1,7 +1,6 @@
 package timer
 
 import (
-	"github.com/pkg/errors"
 	"time"
 )
 
@@ -65,9 +64,9 @@ func (t *Timer) Delta() time.Duration {
 }
 
 // Start capturing the time
-func (t *Timer) Start() error {
+func (t *Timer) Start() {
 	if t.running {
-		return errors.New("timer already started")
+		return
 	}
 	t.start = t.TimeProvider()
 	t.running = true
@@ -76,18 +75,15 @@ func (t *Timer) Start() error {
 	case <-t.continueChan:
 	default:
 	}
-
-	return nil
 }
 
 // Stop capturing the time
-func (t *Timer) Stop() error {
+func (t *Timer) Stop() {
 	if !t.running {
-		return errors.New("timer is not running")
+		return
 	}
 	t.offset = t.Elapsed()
 	t.running = false
-	return nil
 }
 
 // WaitTill waits until the internal timer duration is reached.
@@ -103,7 +99,6 @@ func (t *Timer) WaitTill(duration time.Duration) {
 	if sleepTime > 0 {
 		t.SleepConsumer(sleepTime)
 	}
-	return
 }
 
 // WaitTillNextFullSecond waits until the internal timer has reached the next full second

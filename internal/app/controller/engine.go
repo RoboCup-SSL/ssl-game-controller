@@ -322,7 +322,6 @@ func (e *Engine) updateStage(stage Stage) {
 	}
 
 	e.State.Stage = stage
-	return
 }
 
 func (e *Engine) updatePreStages() {

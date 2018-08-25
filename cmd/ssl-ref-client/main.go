@@ -26,7 +26,9 @@ func main() {
 		log.Fatal(err)
 	}
 
-	conn.SetReadBuffer(maxDatagramSize)
+	if err := conn.SetReadBuffer(maxDatagramSize); err != nil {
+		log.Printf("Could not set read buffer to %v.", maxDatagramSize)
+	}
 	log.Println("Receiving from", *refereeAddress)
 
 	b := make([]byte, maxDatagramSize)
@@ -41,7 +43,10 @@ func main() {
 			log.Fatal("Buffer size too small")
 		}
 		refMsg := refproto.Referee{}
-		proto.Unmarshal(b[0:n], &refMsg)
+		if err := proto.Unmarshal(b[0:n], &refMsg); err != nil {
+			log.Println("Could not unmarshal referee message")
+			continue
+		}
 
 		b, err := json.Marshal(refMsg)
 		if err != nil {

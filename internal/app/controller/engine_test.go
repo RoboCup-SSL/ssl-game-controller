@@ -36,16 +36,24 @@ func processTransitionFile(t *testing.T, fileName string) {
 		t.Fatal(err)
 	}
 	stateTransitions := make([]StateTransitions, 0)
-	json.Unmarshal(bytes, &stateTransitions)
+	if err := json.Unmarshal(bytes, &stateTransitions); err != nil {
+		t.Fatal("Could not unmarshal state transitions:", err)
+	}
 	config := DefaultConfig().Game
 	e := NewEngine(config)
 	e.TimeProvider = func() time.Time {
-		return time.Unix(1, 0)
+		ts, err := time.Parse("2006-01-02T15:04:05Z", "2006-01-02T15:04:05Z")
+		if err != nil {
+			t.Fatal("Could not parse time")
+		}
+		return ts
 	}
 	for i, s := range stateTransitions {
 
 		if s.Event != nil {
-			e.Process(*s.Event)
+			if err := e.Process(*s.Event); err != nil {
+				t.Fatalf("Could not process event: %v", *s.Event)
+			}
 
 			if s.State != nil && !reflect.DeepEqual(*e.State, *s.State) {
 				t.Errorf("Step %v of %v failed.\nExpected: %v\n     got: %v", i+1, fileName, *s.State, *e.State)

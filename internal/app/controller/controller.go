@@ -34,7 +34,7 @@ func NewGameController() (r *GameController) {
 }
 
 // Run the GameController by starting an endless loop in the background
-func (c *GameController) Run() (err error) {
+func (c *GameController) Run() {
 
 	if err := c.historyPreserver.Open(); err != nil {
 		log.Print("Could not open history", err)
@@ -61,7 +61,6 @@ func (c *GameController) Run() (err error) {
 			c.publish()
 		}
 	}()
-	return nil
 }
 
 func (c *GameController) OnNewEvent(event Event) {
