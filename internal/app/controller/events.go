@@ -35,6 +35,8 @@ const (
 	StageNext StageOperation = "next"
 	// StagePrevious previous stage
 	StagePrevious StageOperation = "previous"
+	// StageEndGame ends the game
+	StageEndGame StageOperation = "endGame"
 )
 
 // TriggerType is something that can be triggered

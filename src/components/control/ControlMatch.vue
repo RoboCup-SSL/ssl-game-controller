@@ -29,6 +29,11 @@
                   :disabled="forbidMatchControls || noNextStage">
             Next Stage
         </b-button>
+        <b-button v-b-tooltip.hover title="Finish the game"
+                  v-on:click="endGame"
+                  :disabled="forbidMatchControls || noNextStage">
+            End of Game
+        </b-button>
     </div>
 </template>
 
@@ -64,6 +69,11 @@
             nextStage: function () {
                 this.$socket.sendObj({
                     'stage': {'stageOperation': 'next'}
+                })
+            },
+            endGame: function () {
+                this.$socket.sendObj({
+                    'stage': {'stageOperation': 'endGame'}
                 })
             },
         },

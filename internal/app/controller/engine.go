@@ -295,6 +295,8 @@ func (e *Engine) processStage(s *EventStage) error {
 		e.updateStage(e.State.Stage.Next())
 	} else if s.StageOperation == StagePrevious {
 		e.updateStage(e.State.Stage.Previous())
+	} else if s.StageOperation == StageEndGame {
+		e.updateStage(StagePostGame)
 	} else {
 		return errors.Errorf("Unknown stage operation: %v", s.StageOperation)
 	}
