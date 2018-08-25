@@ -91,25 +91,24 @@ func (t *Timer) Stop() error {
 }
 
 // WaitTill waits until the internal timer duration is reached.
-func (t *Timer) WaitTill(duration time.Duration) error {
+func (t *Timer) WaitTill(duration time.Duration) {
 	if !t.running {
 		select {
 		case t.continueChan <- struct{}{}:
 		case <-time.After(1 * time.Second):
-			return nil
+			return
 		}
 	}
 	sleepTime := duration - t.Elapsed()
 	if sleepTime > 0 {
 		t.SleepConsumer(sleepTime)
 	}
-	return nil
+	return
 }
 
 // WaitTillNextFullSecond waits until the internal timer has reached the next full second
-func (t *Timer) WaitTillNextFullSecond() error {
+func (t *Timer) WaitTillNextFullSecond() {
 	elapsed := t.Elapsed()
 	nextDuration := elapsed.Truncate(time.Second) + time.Second
 	t.WaitTill(nextDuration)
-	return nil
 }
