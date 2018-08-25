@@ -1,7 +1,8 @@
 <template>
     <div>
         <b-button v-b-tooltip.hover title="Start a new match by resetting everything"
-                  v-on:click="resetMatch">
+                  v-on:click="resetMatch"
+                  :disabled="forbidMatchControls">
             Reset Match
         </b-button>
         <b-button v-b-tooltip.hover title="Undo the last state change"
@@ -9,19 +10,23 @@
             Undo
         </b-button>
         <b-button v-b-tooltip.hover title="Switch the colors of the teams, keep everything else"
-                  v-on:click="switchColor">
+                  v-on:click="switchColor"
+                  :disabled="forbidMatchControls">
             Switch colors
         </b-button>
         <b-button v-b-tooltip.hover title="Switch the playing half (the goal) of the teams"
-                  v-on:click="switchSides">
+                  v-on:click="switchSides"
+                  :disabled="forbidMatchControls">
             Switch sides
         </b-button>
         <b-button v-b-tooltip.hover title="Change back to the previous stage (if something went wrong)"
-                  v-on:click="previousStage">
+                  v-on:click="previousStage"
+                  :disabled="forbidMatchControls">
             Previous Stage
         </b-button>
         <b-button v-b-tooltip.hover title="Proceed to the next stage"
-                  v-on:click="nextStage">
+                  v-on:click="nextStage"
+                  :disabled="forbidMatchControls">
             Next Stage
         </b-button>
     </div>
@@ -61,6 +66,20 @@
                     'stage': {'stageOperation': 'next'}
                 })
             },
+        },
+        computed: {
+            state() {
+                return this.$store.state.refBoxState
+            },
+            halted() {
+                return this.state.command === 'halt';
+            },
+            stopped() {
+                return this.state.command === 'stop';
+            },
+            forbidMatchControls() {
+                return !this.stopped && !this.halted;
+            }
         }
     }
 </script>

@@ -9,12 +9,13 @@ const configFileName = "config/ssl-game-controller.yaml"
 
 // GameController controls a game
 type GameController struct {
-	Config           Config
-	Publisher        Publisher
-	ApiServer        ApiServer
-	Engine           Engine
-	timer            timer.Timer
-	historyPreserver HistoryPreserver
+	Config                      Config
+	Publisher                   Publisher
+	ApiServer                   ApiServer
+	Engine                      Engine
+	timer                       timer.Timer
+	historyPreserver            HistoryPreserver
+	numRefereeEventsLastPublish int
 }
 
 // NewGameController creates a new RefBox
@@ -33,44 +34,43 @@ func NewGameController() (r *GameController) {
 }
 
 // Run the GameController by starting an endless loop in the background
-func (r *GameController) Run() (err error) {
+func (c *GameController) Run() (err error) {
 
-	if err := r.historyPreserver.Open(); err != nil {
+	if err := c.historyPreserver.Open(); err != nil {
 		log.Print("Could not open history", err)
 	} else {
-		history, err := r.historyPreserver.Load()
+		history, err := c.historyPreserver.Load()
 		if err != nil {
 			log.Print("Could not load history", err)
 		} else if len(*history) > 0 {
-			r.Engine.History = *history
-			*r.Engine.State = r.Engine.History[len(r.Engine.History)-1].State
-			r.Engine.RefereeEvents = r.Engine.History[len(r.Engine.History)-1].RefereeEvents
+			c.Engine.History = *history
+			*c.Engine.State = c.Engine.History[len(c.Engine.History)-1].State
+			c.Engine.RefereeEvents = c.Engine.History[len(c.Engine.History)-1].RefereeEvents
 		}
 	}
 
-	r.ApiServer.PublishState(*r.Engine.State)
-	r.ApiServer.PublishGameEvents(r.Engine.RefereeEvents)
+	c.ApiServer.PublishState(*c.Engine.State)
+	c.ApiServer.PublishRefereeEvents(c.Engine.RefereeEvents)
 
 	go func() {
-		defer r.historyPreserver.Close()
+		defer c.historyPreserver.Close()
 		for {
-			r.timer.WaitTillNextFullSecond()
-			r.Engine.Tick(r.timer.Delta())
-			r.historyPreserver.Save(r.Engine.History)
-			r.publish()
+			c.timer.WaitTillNextFullSecond()
+			c.Engine.Tick(c.timer.Delta())
+			c.historyPreserver.Save(c.Engine.History)
+			c.publish()
 		}
 	}()
 	return nil
 }
 
-func (r *GameController) OnNewEvent(event Event) {
-	err := r.Engine.Process(event)
+func (c *GameController) OnNewEvent(event Event) {
+	err := c.Engine.Process(event)
 	if err != nil {
 		log.Println("Could not process event:", event, err)
 	} else {
-		r.historyPreserver.Save(r.Engine.History)
-		r.publish()
-		r.publishGameEvents()
+		c.historyPreserver.Save(c.Engine.History)
+		c.publish()
 	}
 }
 
@@ -91,12 +91,12 @@ func loadConfig() Config {
 }
 
 // publish publishes the state to the UI and the teams
-func (r *GameController) publish() {
-	r.ApiServer.PublishState(*r.Engine.State)
-	r.Publisher.Publish(r.Engine.State)
-}
+func (c *GameController) publish() {
+	if len(c.Engine.RefereeEvents) != c.numRefereeEventsLastPublish {
+		c.ApiServer.PublishRefereeEvents(c.Engine.RefereeEvents)
+		c.numRefereeEventsLastPublish = len(c.Engine.RefereeEvents)
+	}
 
-// publishGameEvents publishes the current list of game events
-func (r *GameController) publishGameEvents() {
-	r.ApiServer.PublishGameEvents(r.Engine.RefereeEvents)
+	c.ApiServer.PublishState(*c.Engine.State)
+	c.Publisher.Publish(c.Engine.State)
 }

@@ -16,6 +16,7 @@ const (
 	RefereeEventCommand   RefereeEventType = "command"
 	RefereeEventStage     RefereeEventType = "stage"
 	RefereeEventCard      RefereeEventType = "card"
+	RefereeEventTime      RefereeEventType = "time"
 	RefereeEventGameEvent RefereeEventType = "gameEvent"
 )
 

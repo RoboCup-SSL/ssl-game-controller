@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"github.com/pkg/errors"
 	"log"
 	"strconv"
@@ -122,6 +123,38 @@ func (e *Engine) LogCommand() {
 	e.RefereeEvents = append(e.RefereeEvents, refereeEvent)
 }
 
+func (e *Engine) LogCard(card *EventCard) {
+	refereeEvent := RefereeEvent{
+		Timestamp: e.TimeProvider(),
+		StageTime: e.State.StageTimeElapsed,
+		Type:      RefereeEventCard,
+		Name:      fmt.Sprintf("%v %v card", card.Operation, card.Type),
+		Team:      card.ForTeam,
+	}
+	e.RefereeEvents = append(e.RefereeEvents, refereeEvent)
+}
+
+func (e *Engine) LogTime(description string, forTeam Team) {
+	refereeEvent := RefereeEvent{
+		Timestamp: e.TimeProvider(),
+		StageTime: e.State.StageTimeElapsed,
+		Type:      RefereeEventTime,
+		Name:      description,
+		Team:      forTeam,
+	}
+	e.RefereeEvents = append(e.RefereeEvents, refereeEvent)
+}
+
+func (e *Engine) LogStage(stage Stage) {
+	refereeEvent := RefereeEvent{
+		Timestamp: e.TimeProvider(),
+		StageTime: e.State.StageTimeElapsed,
+		Type:      RefereeEventStage,
+		Name:      string(stage),
+	}
+	e.RefereeEvents = append(e.RefereeEvents, refereeEvent)
+}
+
 func (e *Engine) loadStages() {
 	e.StageTimes = map[Stage]time.Duration{}
 	for _, stage := range Stages {
@@ -142,14 +175,23 @@ func (e *Engine) updateTimes(delta time.Duration) {
 		e.State.StageTimeElapsed += delta
 		e.State.StageTimeLeft -= delta
 
-		for _, teamState := range e.State.TeamState {
+		if e.State.StageTimeLeft+delta > 0 && e.State.StageTimeLeft <= 0 {
+			e.LogTime("Stage time elapsed", "")
+		}
+
+		for team, teamState := range e.State.TeamState {
 			reduceYellowCardTimes(teamState, delta)
-			removeElapsedYellowCards(teamState)
+			e.removeElapsedYellowCards(team, teamState)
 		}
 	}
 
 	if e.State.GameState() == GameStateTimeout && e.State.CommandFor.Known() {
 		e.State.TeamState[e.State.CommandFor].TimeoutTimeLeft -= delta
+
+		timeLeft := e.State.TeamState[e.State.CommandFor].TimeoutTimeLeft
+		if timeLeft+delta > 0 && timeLeft <= 0 {
+			e.LogTime("Timeout time elapsed", e.State.CommandFor)
+		}
 	}
 }
 
@@ -259,6 +301,7 @@ func (e *Engine) processStage(s *EventStage) error {
 }
 
 func (e *Engine) updateStage(stage Stage) {
+	e.LogStage(stage)
 
 	e.State.StageTimeLeft = e.StageTimes[stage]
 	e.State.StageTimeElapsed = 0
@@ -296,7 +339,7 @@ func (e *Engine) updatePreStages() {
 	}
 }
 
-func (e *Engine) processCard(card *EventCard) error {
+func (e *Engine) processCard(card *EventCard) (err error) {
 	if card.ForTeam != TeamYellow && card.ForTeam != TeamBlue {
 		return errors.Errorf("Unknown team: %v", card.ForTeam)
 	}
@@ -305,13 +348,19 @@ func (e *Engine) processCard(card *EventCard) error {
 	}
 	teamState := e.State.TeamState[card.ForTeam]
 	if card.Operation == CardOperationAdd {
-		return addCard(card, teamState, e.config.YellowCardDuration)
+		err = addCard(card, teamState, e.config.YellowCardDuration)
 	} else if card.Operation == CardOperationRevoke {
-		return revokeCard(card, teamState)
+		err = revokeCard(card, teamState)
 	} else if card.Operation == CardOperationModify {
 		return modifyCard(card, teamState)
+	} else {
+		return errors.Errorf("Unknown operation: %v", card.Operation)
 	}
-	return errors.Errorf("Unknown operation: %v", card.Operation)
+
+	if err == nil {
+		e.LogCard(card)
+	}
+	return
 }
 
 func modifyCard(card *EventCard, teamState *TeamInfo) error {
@@ -436,11 +485,13 @@ func reduceYellowCardTimes(teamState *TeamInfo, delta time.Duration) {
 	}
 }
 
-func removeElapsedYellowCards(teamState *TeamInfo) {
+func (e *Engine) removeElapsedYellowCards(team Team, teamState *TeamInfo) {
 	b := teamState.YellowCardTimes[:0]
 	for _, x := range teamState.YellowCardTimes {
 		if x > 0 {
 			b = append(b, x)
+		} else {
+			e.LogTime("Yellow card time elapsed", team)
 		}
 	}
 	teamState.YellowCardTimes = b
