@@ -79,7 +79,7 @@ func (a *ApiServer) PublishState(state State) {
 	a.PublishWrapper(wrapper)
 }
 
-func (a *ApiServer) PublishGameEvents(events []RefereeEvent) {
+func (a *ApiServer) PublishRefereeEvents(events []RefereeEvent) {
 	a.latestRefereeEvents = events
 	wrapper := MessageWrapper{RefereeEvents: &events}
 	a.PublishWrapper(wrapper)
