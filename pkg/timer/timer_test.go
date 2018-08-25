@@ -56,20 +56,14 @@ func TestTimerWaitTill(t *testing.T) {
 		t.Error(err)
 	}
 	*curTime = curTime.Add(2 * time.Second)
-	err = timer.WaitTill(5 * time.Second)
-	if err != nil {
-		t.Error(err)
-	}
+	timer.WaitTill(5 * time.Second)
 	if *sleepDuration != 3*time.Second {
 		t.Errorf("Expected a sleep duration of 3s, but was %v", *sleepDuration)
 	}
 
 	*sleepDuration = 0
 	*curTime = curTime.Add(100 * time.Millisecond)
-	err = timer.WaitTillNextFullSecond()
-	if err != nil {
-		t.Error(err)
-	}
+	timer.WaitTillNextFullSecond()
 	if *sleepDuration != 900*time.Millisecond {
 		t.Errorf("Expected a sleep duration of 900ms, but was %v", *sleepDuration)
 	}
