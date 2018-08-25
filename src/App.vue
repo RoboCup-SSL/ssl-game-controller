@@ -12,8 +12,11 @@
             </div>
             <div class="main-middle-container">
                 <Events/>
-                <iframe :src="visionClientAddress" frameborder="none" v-if="showVisionClient"
-                        class="vision-client"></iframe>
+                <iframe :src="visionClientAddress"
+                        frameborder="none"
+                        v-if="showVisionClient"
+                        class="vision-client">
+                </iframe>
                 <div class="vision-client" v-show="!showVisionClient">
                     <p>The vision-client is shown here, if it is running.</p>
                     <p>It is expected to run at <a :href="visionClientAddress">{{visionClientAddress}}</a></p>
@@ -126,7 +129,16 @@
         flex-wrap: nowrap;
         justify-content: flex-start;
         align-content: stretch;
+        align-items: stretch;
         flex-grow: 1;
+    }
+
+    @-moz-document url-prefix() {
+        /* CSS-Hack for limiting following style to Firefox only */
+        .main-middle-container {
+            /* Setting height to 100% in Chrome and Firefox has contradictory effects*/
+            height: 100%;
+        }
     }
 
     .vision-client {
@@ -150,5 +162,11 @@
     .team-views {
         float: left;
         margin: 0.5em;
+    }
+
+    iframe {
+        border: 0;
+        width: 100%;
+        height: 100%
     }
 </style>
