@@ -130,6 +130,14 @@ func (s Stage) IsPreStage() bool {
 	return false
 }
 
+func (s Stage) IsPausedStage() bool {
+	switch s {
+	case StageHalfTime, StageOvertimeBreak, StageOvertimeHalfTime, StageShootoutBreak:
+		return true
+	}
+	return false
+}
+
 // RefCommand is a command to be send to the teams
 type RefCommand string
 

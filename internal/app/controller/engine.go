@@ -170,8 +170,12 @@ func (e *Engine) loadStages() {
 	e.StageTimes[StageShootoutBreak] = e.config.Overtime.BreakAfter
 }
 
+func (e *Engine) countStageTime() bool {
+	return e.State.Stage.IsPausedStage() || e.State.GameState() == GameStateRunning
+}
+
 func (e *Engine) updateTimes(delta time.Duration) {
-	if e.State.GameState() == GameStateRunning {
+	if e.countStageTime() {
 		e.State.StageTimeElapsed += delta
 		e.State.StageTimeLeft -= delta
 
