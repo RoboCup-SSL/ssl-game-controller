@@ -107,3 +107,10 @@ func (t *Timer) WaitTillNextFullSecond() {
 	nextDuration := elapsed.Truncate(time.Second) + time.Second
 	t.WaitTill(nextDuration)
 }
+
+// WaitTillNextFull waits until the internal timer has reached the next full given duration
+func (t *Timer) WaitTillNextFull(d time.Duration) {
+	elapsed := t.Elapsed()
+	nextDuration := elapsed.Truncate(d) + d
+	t.WaitTill(nextDuration)
+}

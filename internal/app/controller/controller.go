@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/timer"
 	"log"
+	"time"
 )
 
 const configFileName = "config/ssl-game-controller.yaml"
@@ -52,15 +53,25 @@ func (c *GameController) Run() {
 	c.ApiServer.PublishState(*c.Engine.State)
 	c.ApiServer.PublishRefereeEvents(c.Engine.RefereeEvents)
 
-	go func() {
-		defer c.historyPreserver.Close()
-		for {
-			c.timer.WaitTillNextFullSecond()
-			c.Engine.Tick(c.timer.Delta())
-			c.historyPreserver.Save(c.Engine.History)
-			c.publish()
-		}
-	}()
+	go c.publishApi()
+	go c.publishNetwork()
+}
+
+func (c *GameController) publishApi() {
+	defer c.historyPreserver.Close()
+	for {
+		c.timer.WaitTillNextFullSecond()
+		c.Engine.Tick(c.timer.Delta())
+		c.historyPreserver.Save(c.Engine.History)
+		c.publish()
+	}
+}
+
+func (c *GameController) publishNetwork() {
+	for {
+		c.timer.WaitTillNextFull(100 * time.Millisecond)
+		c.Publisher.Publish(c.Engine.State)
+	}
 }
 
 func (c *GameController) OnNewEvent(event Event) {
@@ -97,5 +108,4 @@ func (c *GameController) publish() {
 	}
 
 	c.ApiServer.PublishState(*c.Engine.State)
-	c.Publisher.Publish(c.Engine.State)
 }
