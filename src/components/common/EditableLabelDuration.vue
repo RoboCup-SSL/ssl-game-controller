@@ -27,8 +27,10 @@
         },
         methods: {
             updateValue: function () {
-                this.g.edit = false;
-                this.callback(this.g.value)
+                if (this.g.edit) {
+                    this.g.edit = false;
+                    this.callback(this.g.value)
+                }
             },
             edit: function () {
                 this.g.edit = true;
@@ -43,6 +45,7 @@
     input {
         text-align: center;
     }
+
     .btn-edit {
         margin-left: 0.3em;
         margin-right: 0.3em;
