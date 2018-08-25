@@ -45,6 +45,9 @@ func LoadConfig(fileName string) (config Config, err error) {
 	}
 
 	b, err := readAll(f)
+	if err != nil {
+		return
+	}
 
 	err = yaml.Unmarshal(b, &config)
 	if err != nil {

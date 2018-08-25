@@ -205,9 +205,9 @@ type TeamInfo struct {
 type State struct {
 	Stage            Stage              `json:"stage"`
 	Command          RefCommand         `json:"command"`
+	CommandFor       Team               `json:"commandForTeam"`
 	GameEvent        GameEventType      `json:"gameEvent"`
 	GameEventFor     Team               `json:"gameEventForTeam"`
-	CommandFor       Team               `json:"commandForTeam"`
 	StageTimeElapsed time.Duration      `json:"stageTimeElapsed"`
 	StageTimeLeft    time.Duration      `json:"stageTimeLeft"`
 	MatchTimeStart   time.Time          `json:"matchTimeStart"`

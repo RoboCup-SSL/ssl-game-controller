@@ -33,7 +33,7 @@ func Test_updateMessage(t *testing.T) {
 	if *referee.CommandTimestamp != 0 {
 		t.Errorf("Wrong CommandTimestamp: %v", *referee.CommandTimestamp)
 	}
-	if *referee.BlueTeamOnPositiveHalf != false {
+	if *referee.BlueTeamOnPositiveHalf {
 		t.Errorf("Wrong half: %v", *referee.BlueTeamOnPositiveHalf)
 	}
 	if referee.Yellow == nil {

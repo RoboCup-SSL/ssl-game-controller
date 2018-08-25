@@ -11,10 +11,7 @@ func TestTimerStartStop(t *testing.T) {
 	timer := NewTimer()
 	timer.TimeProvider = func() time.Time { return *curTime }
 
-	err := timer.Start()
-	if err != nil {
-		t.Error(err)
-	}
+	timer.Start()
 
 	*curTime = curTime.Add(1 * time.Second)
 	elapsed := timer.Elapsed()
@@ -22,20 +19,14 @@ func TestTimerStartStop(t *testing.T) {
 		t.Errorf("Expected 1s elapsed, but was %v", elapsed)
 	}
 
-	err = timer.Stop()
-	if err != nil {
-		t.Error(err)
-	}
+	timer.Stop()
 	*curTime = curTime.Add(2 * time.Second)
 	elapsed = timer.Elapsed()
 	if elapsed != 1*time.Second {
 		t.Errorf("Expected 1s elapsed, but was %v", elapsed)
 	}
 
-	err = timer.Start()
-	if err != nil {
-		t.Error(err)
-	}
+	timer.Start()
 	*curTime = curTime.Add(3 * time.Second)
 	elapsed = timer.Elapsed()
 	if elapsed != 4*time.Second {
@@ -51,10 +42,7 @@ func TestTimerWaitTill(t *testing.T) {
 	sleepDuration := new(time.Duration)
 	timer.SleepConsumer = func(d time.Duration) { *sleepDuration = d }
 
-	err := timer.Start()
-	if err != nil {
-		t.Error(err)
-	}
+	timer.Start()
 	*curTime = curTime.Add(2 * time.Second)
 	timer.WaitTill(5 * time.Second)
 	if *sleepDuration != 3*time.Second {

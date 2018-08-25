@@ -4,10 +4,12 @@
       "stage": "First Half",
       "command": "halt",
       "commandForTeam": null,
+      "gameEvent": "none",
+      "gameEventForTeam": "",
       "stageTimeElapsed": 0,
       "stageTimeLeft": 300000000000,
       "matchDuration": 0,
-      "matchTimeStart": 0,
+      "matchTimeStart": "2006-01-02T15:04:05Z",
       "teamState": {
         "Blue": {
           "name": "",
@@ -44,10 +46,12 @@
       "stage": "First Half",
       "command": "stop",
       "commandForTeam": null,
+      "gameEvent": "none",
+      "gameEventForTeam": "",
       "stageTimeElapsed": 0,
       "stageTimeLeft": 300000000000,
       "matchDuration": 0,
-      "matchTimeStart": 0,
+      "matchTimeStart": "2006-01-02T15:04:05Z",
       "teamState": {
         "Blue": {
           "name": "",
@@ -85,10 +89,12 @@
       "stage": "First Half",
       "command": "kickoff",
       "commandForTeam": "Yellow",
+      "gameEvent": "none",
+      "gameEventForTeam": "",
       "stageTimeElapsed": 0,
       "stageTimeLeft": 300000000000,
       "matchDuration": 0,
-      "matchTimeStart": 0,
+      "matchTimeStart": "2006-01-02T15:04:05Z",
       "teamState": {
         "Blue": {
           "name": "",
@@ -125,10 +131,12 @@
       "stage": "First Half",
       "command": "normalStart",
       "commandForTeam": null,
+      "gameEvent": "none",
+      "gameEventForTeam": "",
       "stageTimeElapsed": 0,
       "stageTimeLeft": 300000000000,
       "matchDuration": 0,
-      "matchTimeStart": 0,
+      "matchTimeStart": "2006-01-02T15:04:05Z",
       "teamState": {
         "Blue": {
           "name": "",
@@ -165,10 +173,12 @@
       "stage": "First Half",
       "command": "stop",
       "commandForTeam": null,
+      "gameEvent": "none",
+      "gameEventForTeam": "",
       "stageTimeElapsed": 0,
       "stageTimeLeft": 300000000000,
       "matchDuration": 0,
-      "matchTimeStart": 0,
+      "matchTimeStart": "2006-01-02T15:04:05Z",
       "teamState": {
         "Blue": {
           "name": "",
@@ -205,11 +215,13 @@
     "state": {
       "stage": "First Half",
       "command": "direct",
-      "commandForTeam": null,
+      "commandForTeam": "Blue",
+      "gameEvent": "none",
+      "gameEventForTeam": "",
       "stageTimeElapsed": 0,
       "stageTimeLeft": 300000000000,
       "matchDuration": 0,
-      "matchTimeStart": 0,
+      "matchTimeStart": "2006-01-02T15:04:05Z",
       "teamState": {
         "Blue": {
           "name": "",
@@ -246,10 +258,12 @@
       "stage": "First Half",
       "command": "stop",
       "commandForTeam": null,
+      "gameEvent": "none",
+      "gameEventForTeam": "",
       "stageTimeElapsed": 0,
       "stageTimeLeft": 300000000000,
       "matchDuration": 0,
-      "matchTimeStart": 0,
+      "matchTimeStart": "2006-01-02T15:04:05Z",
       "teamState": {
         "Blue": {
           "name": "",
@@ -286,11 +300,13 @@
     "state": {
       "stage": "First Half",
       "command": "indirect",
-      "commandForTeam": null,
+      "commandForTeam": "Yellow",
+      "gameEvent": "none",
+      "gameEventForTeam": "",
       "stageTimeElapsed": 0,
       "stageTimeLeft": 300000000000,
       "matchDuration": 0,
-      "matchTimeStart": 0,
+      "matchTimeStart": "2006-01-02T15:04:05Z",
       "teamState": {
         "Blue": {
           "name": "",
