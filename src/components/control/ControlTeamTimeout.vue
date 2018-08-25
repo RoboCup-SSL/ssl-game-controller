@@ -2,7 +2,7 @@
     <span>
         <b-button v-show="!timeoutRunning"
                   v-on:click="startTimeout"
-                  v-bind:disabled="!inNormalHalf">
+                  v-bind:disabled="disableTimeoutButton">
             Start Timeout
         </b-button>
         <b-button v-show="timeoutRunning"
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-    import {isInNormalHalf} from "../../main";
+    import {isNonPausedStage, isPreStage} from "../../refereeState";
 
     export default {
         name: "ControlTeamTimeout",
@@ -27,8 +27,9 @@
             timeoutRunning: function () {
                 return this.command === "timeout" && this.$store.state.refBoxState.commandForTeam === this.teamColor
             },
-            inNormalHalf() {
-                return isInNormalHalf(this.$store.state.refBoxState);
+            disableTimeoutButton() {
+                return !isNonPausedStage(this.$store.state.refBoxState)
+                    && !isPreStage(this.$store.state.refBoxState);
             },
         },
         methods: {

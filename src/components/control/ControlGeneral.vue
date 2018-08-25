@@ -12,7 +12,7 @@
               :title="'Robots have to keep distance to the ball (' + Object.keys(keymapStop)[0] + ')'">
             <b-button v-hotkey="keymapStop"
                       v-on:click="send('stop')"
-                      v-bind:disabled="stopped || !inNormalHalf">
+                      v-bind:disabled="stopped || !stopAllowed">
                 Stop
             </b-button>
         </span>
@@ -20,7 +20,7 @@
               :title="'Restart the game in draw situations (' + Object.keys(keymapForceStart)[0] + ')'">
             <b-button v-hotkey="keymapForceStart"
                       v-on:click="send('forceStart')"
-                      v-bind:disabled="!stopped || !inNormalHalf">
+                      v-bind:disabled="!stopped || !forceStartAllowed">
                 Force Start
             </b-button>
         </span>
@@ -28,7 +28,7 @@
               :title="'Continue game after a prepare state (' + Object.keys(keymapNormalStart)[0] + ')'">
             <b-button v-hotkey="keymapNormalStart"
                       v-on:click="send('normalStart')"
-                      v-bind:disabled="!prepareSth || !inNormalHalf">
+                      v-bind:disabled="!prepareSth || !normalStartAllowed">
                 Normal Start
             </b-button>
         </span>
@@ -44,7 +44,7 @@
 </template>
 
 <script>
-    import {isInNormalHalf} from "../../main";
+    import {isNonPausedStage, isPreStage} from "../../refereeState";
 
     export default {
         name: "ControlGeneral",
@@ -84,8 +84,15 @@
             prepareSth() {
                 return this.state.command === 'kickoff' || this.state.command === 'penalty';
             },
-            inNormalHalf() {
-                return isInNormalHalf(this.state);
+            forceStartAllowed() {
+                return isNonPausedStage(this.state);
+            },
+            normalStartAllowed() {
+                return isNonPausedStage(this.state) || this.state.command === 'kickoff';
+            },
+            stopAllowed() {
+                return isNonPausedStage(this.$store.state.refBoxState)
+                    || isPreStage(this.$store.state.refBoxState);
             },
             gameEventPresent() {
                 return this.state.gameEvent !== 'none';

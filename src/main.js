@@ -27,10 +27,6 @@ library.add(faCaretSquareDown);
 library.add(faCaretSquareUp);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
-export let isInNormalHalf = function (state) {
-    return state.stage === 'First Half';
-};
-
 let wsAddress;
 if (process.env.NODE_ENV === 'development') {
     // use the default backend port

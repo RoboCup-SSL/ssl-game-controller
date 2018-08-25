@@ -12,7 +12,7 @@
               :title="'Perform direct kick (corner and goal kicks) (' + Object.keys(keymapDirect)[0] + ')'">
         <b-button v-hotkey="keymapDirect"
                   v-on:click="send('direct')"
-                  v-bind:disabled="halted || running || preparing">
+                  v-bind:disabled="halted || running || preparing || !nonPausedStage">
             Direct
         </b-button>
         </span>
@@ -20,14 +20,14 @@
               :title="'Perform indirect kick (throw-in) (' + Object.keys(keymapIndirect)[0] + ')'">
         <b-button v-hotkey="keymapIndirect"
                   v-on:click="send('indirect')"
-                  v-bind:disabled="halted || running || preparing">
+                  v-bind:disabled="halted || running || preparing || !nonPausedStage">
             Indirect
         </b-button>
         </span>
         <span v-b-tooltip.hover
               title="Prepare for a penalty kick">
         <b-button v-on:click="send('penalty')"
-                  v-bind:disabled="halted || running || preparing">
+                  v-bind:disabled="halted || running || preparing || !nonPausedStage">
             Penalty
         </b-button>
         </span>
@@ -54,6 +54,7 @@
 
 <script>
     import ControlTeamTimeout from "./ControlTeamTimeout";
+    import {isNonPausedStage} from "../../refereeState";
 
     export default {
         name: "ControlTeam",
@@ -124,6 +125,9 @@
             },
             preparing() {
                 return this.state.command === 'kickoff' || this.state.command === 'penalty';
+            },
+            nonPausedStage() {
+                return isNonPausedStage(this.state);
             },
         }
     }
