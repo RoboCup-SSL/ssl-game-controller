@@ -35,6 +35,7 @@ func (e *Engine) ResetGame() {
 	e.State.TeamState[TeamBlue].TimeoutsLeft = e.config.Normal.Timeouts
 	e.State.TeamState[TeamYellow].TimeoutsLeft = e.config.Normal.Timeouts
 	e.RefereeEvents = []RefereeEvent{}
+	e.State.Division = e.config.DefaultDivision
 }
 
 // Tick updates the times of the state and removes cards, if necessary
@@ -239,6 +240,18 @@ func (e *Engine) processCommand(c *EventCommand) error {
 }
 
 func (e *Engine) processModify(m *EventModifyValue) error {
+	// process team-independent modifies
+	if m.Division != nil {
+		if *m.Division == DivA || *m.Division == DivB {
+			e.State.Division = *m.Division
+			log.Printf("Processed modification %v", m)
+			return nil
+		} else {
+			return errors.Errorf("Invalid divsion: %v", *m.Division)
+		}
+	}
+
+	// process team-dependent modifies
 	if m.ForTeam.Unknown() {
 		return errors.Errorf("Unknown team: %v", m.ForTeam)
 	}

@@ -104,6 +104,7 @@ type EventModifyValue struct {
 	BotCollisions         *int                 `json:"botCollisions"`
 	BallPlacementFailures *int                 `json:"ballPlacementFailures"`
 	BotSpeedInfringements *int                 `json:"botSpeedInfringements"`
+	Division              *Division            `json:"division"`
 }
 
 func (m EventModifyValue) String() string {
@@ -143,6 +144,9 @@ func (m EventModifyValue) String() string {
 	}
 	if m.BotSpeedInfringements != nil {
 		return fmt.Sprintf("%v BotSpeedInfringements=%v", str, *m.BotSpeedInfringements)
+	}
+	if m.Division != nil {
+		return fmt.Sprintf("%v Division=%v", str, *m.Division)
 	}
 	return fmt.Sprintf("%v undefined", str)
 }

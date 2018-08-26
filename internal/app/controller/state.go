@@ -37,6 +37,13 @@ func (t Team) Known() bool {
 	return !t.Unknown()
 }
 
+type Division string
+
+const (
+	DivA Division = "Div A"
+	DivB Division = "Div B"
+)
+
 // Stage represents the different stages of a game
 type Stage string
 
@@ -221,6 +228,7 @@ type State struct {
 	MatchTimeStart   time.Time          `json:"matchTimeStart"`
 	MatchDuration    time.Duration      `json:"matchDuration"`
 	TeamState        map[Team]*TeamInfo `json:"teamState"`
+	Division         Division           `json:"division"`
 }
 
 // NewState creates a new state, initialized for the start of a new game
@@ -241,6 +249,8 @@ func NewState() (s *State) {
 	*s.TeamState[TeamYellow] = newTeamInfo()
 	*s.TeamState[TeamBlue] = newTeamInfo()
 	s.TeamState[TeamBlue].OnPositiveHalf = !s.TeamState[TeamYellow].OnPositiveHalf
+
+	s.Division = DivA
 
 	return
 }

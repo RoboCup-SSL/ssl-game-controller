@@ -19,6 +19,7 @@ type ConfigSpecial struct {
 // ConfigGame holds configs that are valid for the whole game
 type ConfigGame struct {
 	YellowCardDuration time.Duration `yaml:"yellow-card-duration"`
+	DefaultDivision    Division      `yaml:"default-division"`
 	Normal             ConfigSpecial `yaml:"normal"`
 	Overtime           ConfigSpecial `yaml:"overtime"`
 }
@@ -73,6 +74,8 @@ func DefaultConfig() (c Config) {
 	c.Game.Overtime.Timeouts = 2
 	c.Game.Overtime.TimeoutDuration = 5 * time.Minute
 	c.Game.Overtime.BreakAfter = 2 * time.Minute
+
+	c.Game.DefaultDivision = DivA
 
 	return
 }

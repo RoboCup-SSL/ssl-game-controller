@@ -34,12 +34,23 @@
                   :disabled="forbidMatchControls || noNextStage">
             End of Game
         </b-button>
+        <div class="divisions btn-group-toggle btn-group">
+            <label :class="{btn:true, 'btn-secondary': true, active: isDivA}" @click="switchDivision('Div A')">Div
+                A</label>
+            <label :class="{btn:true, 'btn-secondary': true, active: !isDivA}" @click="switchDivision('Div B')">Div
+                B</label>
+        </div>
     </div>
 </template>
 
 <script>
     export default {
         name: "ControlMatch",
+        data() {
+            return {
+                selected: 'Div A',
+            }
+        },
         methods: {
             resetMatch: function () {
                 this.$socket.sendObj({
@@ -76,10 +87,18 @@
                     'stage': {'stageOperation': 'endGame'}
                 })
             },
+            switchDivision(division) {
+                this.$socket.sendObj({
+                    'modify': {'division': division}
+                })
+            }
         },
         computed: {
             state() {
                 return this.$store.state.refBoxState
+            },
+            isDivA() {
+                return this.$store.state.refBoxState.division === 'Div A';
             },
             halted() {
                 return this.state.command === 'halt';
@@ -101,7 +120,7 @@
 </script>
 
 <style scoped>
-    button {
+    button, .divisions {
         margin: 0.5em;
     }
 </style>
