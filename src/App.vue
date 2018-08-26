@@ -18,7 +18,8 @@
                         class="vision-client">
                 </iframe>
                 <div class="vision-client" v-show="!showVisionClient">
-                    <p>The vision-client is shown here, if it is running.</p>
+                    <p>The <a href="https://github.com/RoboCup-SSL/ssl-vision-client" target="_blank">
+                        vision-client</a> is shown here, if it is running.</p>
                     <p>It is expected to run at <a :href="visionClientAddress">{{visionClientAddress}}</a></p>
                     <b-button variant="primary" @click="checkVisionClientAvailability">Reload</b-button>
                 </div>
