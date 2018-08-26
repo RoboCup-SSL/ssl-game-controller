@@ -21,12 +21,12 @@
         </span>
 
         <a class="btn-edit"
-           v-if="!showAllCards"
+           v-if="yellowCardTimes.length > 0 && !showAllCards"
            @click="showAllCards=!showAllCards">
             <font-awesome-icon icon="caret-square-down"/>
         </a>
         <a class="btn-edit"
-           v-if="showAllCards"
+           v-if="yellowCardTimes.length > 0 && showAllCards"
            @click="showAllCards=!showAllCards">
             <font-awesome-icon icon="caret-square-up"/>
         </a>
