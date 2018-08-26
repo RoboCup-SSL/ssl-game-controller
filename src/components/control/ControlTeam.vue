@@ -3,7 +3,8 @@
         <span v-b-tooltip.hover
               :title="'Prepare for a kickoff (' + Object.keys(keymapKickoff)[0] + ')'">
         <b-button v-hotkey="keymapKickoff"
-                  v-on:click="send('kickoff')"
+                  ref="btnKickoff"
+                  v-on:click="sendKickoff"
                   v-bind:disabled="halted || running || preparing">
             Kickoff
         </b-button>
@@ -11,7 +12,8 @@
         <span v-b-tooltip.hover
               :title="'Perform direct kick (corner and goal kicks) (' + Object.keys(keymapDirect)[0] + ')'">
         <b-button v-hotkey="keymapDirect"
-                  v-on:click="send('direct')"
+                  ref="btnDirect"
+                  v-on:click="sendDirect"
                   v-bind:disabled="halted || running || preparing || !nonPausedStage">
             Direct
         </b-button>
@@ -19,14 +21,15 @@
         <span v-b-tooltip.hover
               :title="'Perform indirect kick (throw-in) (' + Object.keys(keymapIndirect)[0] + ')'">
         <b-button v-hotkey="keymapIndirect"
-                  v-on:click="send('indirect')"
+                  ref="btnIndirect"
+                  v-on:click="sendIndirect"
                   v-bind:disabled="halted || running || preparing || !nonPausedStage">
             Indirect
         </b-button>
         </span>
         <span v-b-tooltip.hover
               title="Prepare for a penalty kick">
-        <b-button v-on:click="send('penalty')"
+        <b-button v-on:click="sendPenalty"
                   v-bind:disabled="halted || running || preparing || !nonPausedStage">
             Penalty
         </b-button>
@@ -38,8 +41,7 @@
         <b-button v-on:click="addGoal">
             Goal
         </b-button>
-        <b-button v-on:click="addYellowCard"
-                  v-hotkey="keymapYellowCard">
+        <b-button v-on:click="addYellowCard">
             Yellow Card
         </b-button>
 
@@ -77,6 +79,24 @@
             addGoal: function () {
                 this.$socket.sendObj({'modify': {'forTeam': this.teamColor, 'goals': this.teamState.goals + 1}})
             },
+            sendKickoff() {
+                if (!this.$refs.btnKickoff.disabled) {
+                    this.send('kickoff')
+                }
+            },
+            sendDirect() {
+                if (!this.$refs.btnDirect.disabled) {
+                    this.send('direct')
+                }
+            },
+            sendIndirect() {
+                if (!this.$refs.btnIndirect.disabled) {
+                    this.send('indirect')
+                }
+            },
+            sendPenalty() {
+                this.send('penalty')
+            },
         },
         computed: {
             teamState: function () {
@@ -84,31 +104,23 @@
             },
             keymapKickoff() {
                 if (this.teamColor === 'Yellow') {
-                    return {'numpad 1': () => this.send('kickoff')};
+                    return {'numpad 1': this.sendKickoff};
                 } else if (this.teamColor === 'Blue') {
-                    return {'numpad 3': () => this.send('kickoff')};
+                    return {'numpad 3': this.sendKickoff};
                 }
             },
             keymapDirect() {
                 if (this.teamColor === 'Yellow') {
-                    return {'numpad 7': () => this.send('direct')};
+                    return {'numpad 7': this.sendDirect};
                 } else if (this.teamColor === 'Blue') {
-                    return {'numpad 9': () => this.send('direct')};
+                    return {'numpad 9': this.sendDirect};
                 }
             },
             keymapIndirect() {
                 if (this.teamColor === 'Yellow') {
-                    return {'numpad 4': () => this.send('indirect')};
+                    return {'numpad 4': this.sendIndirect};
                 } else if (this.teamColor === 'Blue') {
-                    return {'numpad 6': () => this.send('indirect')};
-                }
-            },
-            keymapYellowCard() {
-                switch (this.teamColor) {
-                    case 'Yellow':
-                        return {'numpad 4': this.addYellowCard};
-                    case 'Blue':
-                        return {'numpad 6': this.addYellowCard};
+                    return {'numpad 6': this.sendIndirect};
                 }
             },
             state() {
