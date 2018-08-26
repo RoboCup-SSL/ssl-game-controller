@@ -35,7 +35,6 @@ func (e *Engine) ResetGame() {
 	e.State.TeamState[TeamBlue].TimeoutsLeft = e.config.Normal.Timeouts
 	e.State.TeamState[TeamYellow].TimeoutsLeft = e.config.Normal.Timeouts
 	e.RefereeEvents = []RefereeEvent{}
-	e.History = History{}
 }
 
 // Tick updates the times of the state and removes cards, if necessary
