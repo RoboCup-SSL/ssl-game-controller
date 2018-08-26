@@ -34,8 +34,10 @@
         },
         methods: {
             updateValue: function () {
-                this.g.edit = false;
-                this.callback(this.g.value)
+                if (this.g.edit) {
+                    this.g.edit = false;
+                    this.callback(this.g.value)
+                }
             },
             switchToEdit: function () {
                 this.g.edit = true;

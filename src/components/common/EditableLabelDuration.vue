@@ -5,7 +5,6 @@
               v-format-ns-duration="value"></span>
         <input v-show="g.edit === true"
                v-model="g.value"
-               title=""
                v-on:blur="updateValue"
                @keyup.enter="updateValue"
                size="5"

@@ -10,6 +10,7 @@
         </label>
         <input v-show="g.edit === true"
                v-model="g.value"
+               v-on:focus="g.focused = true"
                v-on:blur="updateValue"
                @keyup.enter="updateValue"
                :title="title"
@@ -19,7 +20,7 @@
                type="number"
                ref="input"
         />
-        <a class="btn-edit" v-on:click="edit()" v-show="!g.edit"><font-awesome-icon icon="edit"/></a>
+        <a class="btn-edit" v-on:click="edit" v-show="!g.edit"><font-awesome-icon icon="edit"/></a>
     </span>
 </template>
 
@@ -35,17 +36,23 @@
             callback: Function
         },
         data: function () {
-            return {g: {edit: false, value: 0}}
+            return {g: {edit: false, value: 0, focused: false}}
         },
         methods: {
             updateValue: function () {
-                this.g.edit = false;
-                this.callback(this.g.value)
+                if (this.g.edit && this.g.focused) {
+                    this.g.edit = false;
+                    this.callback(this.g.value)
+                }
+                // remembering the focus is necessary for Firefox, as it fires the onblur too early
+                this.g.focused = false;
             },
             edit: function () {
                 this.g.edit = true;
                 this.g.value = this.value;
-                this.$nextTick(() => this.$refs.input.focus())
+                this.$nextTick(() => {
+                    this.$refs.input.focus();
+                })
             }
         }
     }
@@ -55,6 +62,7 @@
     input {
         text-align: center;
     }
+
     .btn-edit {
         margin-left: 0.3em;
         margin-right: 0.3em;
