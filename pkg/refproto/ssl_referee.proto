@@ -144,6 +144,8 @@ message Referee {
         optional uint32 ball_placement_failures = 10;
         // The total number of infringements where robots were too fast during game stoppage
         optional uint32 bot_speed_infringements = 11;
+        // Indicate if the team is able and allowed to place the ball
+        optional bool can_place_ball = 12;
     }
 
     // Information about the two teams.

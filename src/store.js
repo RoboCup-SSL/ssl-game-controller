@@ -16,6 +16,7 @@ export class TeamState {
     botCollisions = 0;
     ballPlacementFailures = 0;
     botSpeedInfringements = 0;
+    canPlaceBall = true;
 }
 
 export class RefBoxState {
@@ -28,6 +29,7 @@ export class RefBoxState {
     stageTimeLeft = 0;
     matchDuration = 0;
     teamState = {'Yellow': new TeamState(), 'Blue': new TeamState()};
+    division = 'Div A';
 }
 
 export default new Vuex.Store({

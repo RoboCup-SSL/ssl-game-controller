@@ -40,6 +40,10 @@
                 <TeamCounters
                         :team-color="teamColor"/>
             </div>
+            <div>
+                <TeamBallPlacement
+                        :team-color="teamColor"/>
+            </div>
         </div>
     </div>
 </template>
@@ -54,10 +58,12 @@
     import TeamYellowCards from "./TeamYellowCards";
     import TeamRedCards from "./TeamRedCards";
     import TeamCounters from "./TeamCounters";
+    import TeamBallPlacement from "./TeamBallPlacement";
 
     export default {
         name: "TeamOverview",
         components: {
+            TeamBallPlacement,
             TeamCounters,
             TeamRedCards,
             TeamYellowCards,

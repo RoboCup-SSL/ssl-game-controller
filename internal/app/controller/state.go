@@ -214,6 +214,7 @@ type TeamInfo struct {
 	BotCollisions         int             `json:"botCollisions"`
 	BallPlacementFailures int             `json:"ballPlacementFailures"`
 	BotSpeedInfringements int             `json:"botSpeedInfringements"`
+	CanPlaceBall          bool            `json:"canPlaceBall"`
 }
 
 // State of the game

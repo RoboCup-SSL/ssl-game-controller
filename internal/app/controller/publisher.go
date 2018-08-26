@@ -65,6 +65,7 @@ func initTeamInfo(t *refproto.Referee_TeamInfo) {
 	t.BotCollisions = new(uint32)
 	t.BallPlacementFailures = new(uint32)
 	t.BotSpeedInfringements = new(uint32)
+	t.CanPlaceBall = new(bool)
 }
 
 // Publish the state and command
@@ -160,6 +161,7 @@ func updateTeam(team *refproto.Referee_TeamInfo, state *TeamInfo) {
 	*team.BotCollisions = uint32(state.BotCollisions)
 	*team.BallPlacementFailures = uint32(state.BallPlacementFailures)
 	*team.BotSpeedInfringements = uint32(state.BotSpeedInfringements)
+	*team.CanPlaceBall = state.CanPlaceBall
 }
 
 func mapTimes(durations []time.Duration) []uint32 {

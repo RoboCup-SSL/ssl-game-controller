@@ -291,10 +291,12 @@ func (e *Engine) processModify(m *EventModifyValue) error {
 		} else {
 			return err
 		}
+	} else if m.CanPlaceBall != nil {
+		teamState.CanPlaceBall = *m.CanPlaceBall
 	} else {
 		return errors.Errorf("Unknown modify: %v", m)
 	}
-	log.Printf("Processed modification %v", m)
+	log.Printf("Processed %v", m)
 	return nil
 }
 
