@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+import "ssl_game_controller_common.proto";
+
+// a registration that must be send by teams and autoRefs to the controller as the very first message
+message TeamRegistration {
+    // the exact team name as published by the game-controller
+    string team_name = 1;
+}
+
+// wrapper for all requests from a team's computer to the controller
+message TeamToControllerRequest {
+    oneof request {
+        BotId desired_keeper = 1;
+        AdvantageResponse advantage_response = 2;
+    }
+
+    enum AdvantageResponse {
+        option allow_alias = true;
+        // no choice -> will default to STOP
+        UNDECIDED = 0;
+        // stop the game and handle the foul immediately
+        STOP = 0;
+        // continue the game until the next stop of the game, then handle the foul
+        CONTINUE = 1;
+    }
+}
+
+// wrapper for all requests from controller to a team's computer
+message ControllerToTeamRequest {
+    oneof request {
+        // the team is offered an advantage choice
+        AdvantageChoice advantage_choice = 1;
+    }
+
+    message AdvantageChoice {
+        // the type of foul that occurred
+        Foul foul = 1;
+
+        enum Foul {
+            // default value when not set
+            UNKNOWN = 0;
+            // an opponent has crashed with one of the teams bots
+            COLLISION = 1;
+        }
+    }
+}

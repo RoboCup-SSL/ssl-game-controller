@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+enum Team {
+    UNKNOWN = 0;
+    YELLOW = 1;
+    BLUE = 2;
+}
+
+message BotId {
+    int32 id = 1;
+    Team team = 2;
+}
+
+message Location {
+    // the x-coordinate in [m] in the ssl-vision coordinate system
+    float x = 1;
+    // the y-coordinate in [m] in the ssl-vision coordinate system
+    float y = 2;
+}
+
+// a reply that is sent by the controller for each request from teams or autoRefs
+message ControllerReply {
+    StatusCode status_code = 1;
+    string reason = 2;
+
+    enum StatusCode {
+        UNKNOWN = 0;
+        OK = 1;
+        REJECTED = 2;
+    }
+}

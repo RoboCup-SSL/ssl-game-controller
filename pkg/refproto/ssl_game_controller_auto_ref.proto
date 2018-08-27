@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+import "ssl_game_controller_common.proto";
+
+// a registration that must be send by autoRefs to the controller as the very first message
+message AutoRefRegistration {
+    // unique identifier of the client
+    string identifier = 1;
+}
+
+// wrapper for all requests from any autoRef to the controller
+message AutoRefToControllerRequest {
+    // a detected game event
+    GameEvent game_event = 1;
+    // a message about the current state or situation of the game
+    AutoRefMessage auto_ref_message = 2;
+    // ready to continue the game (all conditions met: Ball is placed and bots are located at legal positions)
+    bool ready_to_continue = 3;
+}
+
+// exactly one game event
+message GameEvent {
+    oneof event {
+        BallLeftFieldEvent ball_left_field_touch_line = 1;
+        BallLeftFieldEvent ball_left_field_goal_line = 2;
+    }
+
+    message BallLeftFieldEvent {
+        // the bot that last touched the ball
+        BotId by_bot = 1;
+        // the location where the ball left the field
+        Location location = 2;
+    }
+}
+
+// a message from autoRef, describing the current state or situation
+message AutoRefMessage {
+    oneof message {
+        // no message available
+        None none = 1;
+        // the ball has been placed successfully
+        BallPlaced ball_placed = 2;
+        // one or more bots are at invalid locations and need to move
+        WaitForBots wait_for_bots = 3;
+    }
+
+    message None {
+    }
+
+    message BallPlaced {
+        // the time taken for placing the ball
+        float time_taken = 1;
+        // the distance between placement location and actual ball position
+        float precision = 2;
+        // the distance between the initial ball location and the placement position
+        float distance = 3;
+    }
+
+    message WaitForBots {
+        // the bots that are waited for
+        repeated Violator violators = 1;
+
+        message Violator {
+            // the id of the violator
+            BotId bot_id = 1;
+            // the distance to the next valid position
+            float distance = 2;
+        }
+    }
+}
