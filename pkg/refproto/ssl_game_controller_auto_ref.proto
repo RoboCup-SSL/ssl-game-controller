@@ -15,7 +15,16 @@ message AutoRefToControllerRequest {
     // a message about the current state or situation of the game
     AutoRefMessage auto_ref_message = 2;
     // ready to continue the game (all conditions met: Ball is placed and bots are located at legal positions)
-    bool ready_to_continue = 3;
+    ReadyState ready = 3;
+
+    enum ReadyState {
+        // unknown or not set
+        UNKNOWN = 0;
+        // the game can continue (all conditions met: Ball is placed and bots are located at legal positions)
+        READY_TO_CONTINUE = 1;
+        // waiting for ball placement or bots to move to valid positions
+        WAITING = 2;
+    }
 }
 
 // exactly one game event
@@ -36,8 +45,8 @@ message GameEvent {
 // a message from autoRef, describing the current state or situation
 message AutoRefMessage {
     oneof message {
-        // no message available
-        None none = 1;
+        // a custom message
+        string custom = 1;
         // the ball has been placed successfully
         BallPlaced ball_placed = 2;
         // one or more bots are at invalid locations and need to move

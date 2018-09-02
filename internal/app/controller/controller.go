@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/timer"
 	"log"
 	"time"
@@ -13,6 +14,7 @@ type GameController struct {
 	Config                      Config
 	Publisher                   Publisher
 	ApiServer                   ApiServer
+	AutoRefServer               AutoRefServer
 	Engine                      Engine
 	timer                       timer.Timer
 	historyPreserver            HistoryPreserver
@@ -20,18 +22,25 @@ type GameController struct {
 }
 
 // NewGameController creates a new RefBox
-func NewGameController() (r *GameController) {
+func NewGameController() (c *GameController) {
 
-	r = new(GameController)
-	r.Config = loadConfig()
-	r.ApiServer = ApiServer{}
-	r.ApiServer.Consumer = r
-	r.Publisher = loadPublisher(r.Config)
-	r.Engine = NewEngine(r.Config.Game)
-	r.timer = timer.NewTimer()
-	r.timer.Start()
+	c = new(GameController)
+	c.Config = loadConfig()
+	c.Publisher = loadPublisher(c.Config)
+	c.ApiServer = ApiServer{}
+	c.ApiServer.Consumer = c
+	c.AutoRefServer = NewAutoRefServer()
+	c.AutoRefServer.ProcessRequest = c.ProcessAutoRefRequests
+	go c.AutoRefServer.Listen(c.Config.Server.AutoRef.Address)
+	c.Engine = NewEngine(c.Config.Game)
+	c.timer = timer.NewTimer()
+	c.timer.Start()
 
 	return
+}
+
+func (c *GameController) ProcessAutoRefRequests(request refproto.AutoRefToControllerRequest) {
+	log.Print("Received ", request)
 }
 
 // Run the GameController by starting an endless loop in the background

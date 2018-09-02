@@ -29,10 +29,27 @@ type ConfigPublish struct {
 	Address string `yaml:"address"`
 }
 
+// ConfigServer holds configs for the available server services
+type ConfigServer struct {
+	AutoRef ConfigServerAutoRef `yaml:"auto-ref"`
+	Team    ConfigServerTeam    `yaml:"team"`
+}
+
+// ConfigServerAutoRef holds configs for the autoRef server
+type ConfigServerAutoRef struct {
+	Address string `yaml:"address"`
+}
+
+// ConfigServerTeam holds configs for the team server
+type ConfigServerTeam struct {
+	Address string `yaml:"address"`
+}
+
 // Config structure for the game controller
 type Config struct {
 	Publish ConfigPublish `yaml:"publish"`
 	Game    ConfigGame    `yaml:"game"`
+	Server  ConfigServer  `yaml:"server"`
 }
 
 // LoadConfig loads a config from given file
