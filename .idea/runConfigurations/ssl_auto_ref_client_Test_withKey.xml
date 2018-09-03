@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="ssl-auto-ref-client Test withKey" type="GoApplicationRunConfiguration" factoryName="Go Application">
+    <module name="ssl-game-controller" />
+    <working_directory value="$PROJECT_DIR$/" />
+    <go_parameters value="-i" />
+    <parameters value="-privateKey cmd/ssl-auto-ref-client/Test.key.pem -identifier Test" />
+    <kind value="FILE" />
+    <filePath value="$PROJECT_DIR$/cmd/ssl-auto-ref-client/main.go" />
+    <package value="github.com/RoboCup-SSL/ssl-game-controller" />
+    <directory value="$PROJECT_DIR$/" />
+    <method v="2" />
+  </configuration>
+</component>

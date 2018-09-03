@@ -3,13 +3,14 @@ node_modules
 /dist
 
 # Editor directories and files
-.idea
+.idea/*
 .vscode
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw*
+!.idea/runConfigurations
 
 # local env files
 .env.local

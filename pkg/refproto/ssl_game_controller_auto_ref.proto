@@ -2,20 +2,24 @@ syntax = "proto3";
 
 import "ssl_game_controller_common.proto";
 
-// a registration that must be send by autoRefs to the controller as the very first message
+// AutoRefRegistration is the first message that a client must send to the controller to identify itself
 message AutoRefRegistration {
-    // unique identifier of the client
+    // identifier is a unique name of the client
     string identifier = 1;
+    // signature can optionally be specified to enable secure communication
+    Signature signature = 2;
 }
 
-// wrapper for all requests from any autoRef to the controller
+// AutoRefToControllerRequest is the wrapper message for all subsequent requests from the client to the controller
 message AutoRefToControllerRequest {
-    // a detected game event
+    // game_event is an optional event that the autoRef detected during the game
     GameEvent game_event = 1;
-    // a message about the current state or situation of the game
+    // auto_ref_message is an optional message that describes the current state or situation of the game/autoRef
     AutoRefMessage auto_ref_message = 2;
     // ready to continue the game (all conditions met: Ball is placed and bots are located at legal positions)
     ReadyState ready = 3;
+    // signature can optionally be specified to enable secure communication
+    Signature signature = 4;
 
     enum ReadyState {
         // unknown or not set
@@ -27,7 +31,7 @@ message AutoRefToControllerRequest {
     }
 }
 
-// exactly one game event
+// GameEvent contains exactly one game event
 message GameEvent {
     oneof event {
         BallLeftFieldEvent ball_left_field_touch_line = 1;
@@ -46,14 +50,12 @@ message GameEvent {
 message AutoRefMessage {
     oneof message {
         // a custom message
+        // an empty string indicates that there is no message
         string custom = 1;
         // the ball has been placed successfully
         BallPlaced ball_placed = 2;
         // one or more bots are at invalid locations and need to move
         WaitForBots wait_for_bots = 3;
-    }
-
-    message None {
     }
 
     message BallPlaced {

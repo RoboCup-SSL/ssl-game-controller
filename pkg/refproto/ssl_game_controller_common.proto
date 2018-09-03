@@ -20,12 +20,34 @@ message Location {
 
 // a reply that is sent by the controller for each request from teams or autoRefs
 message ControllerReply {
+    // status_code is an optional code that indicates the result of the last request
     StatusCode status_code = 1;
+    // reason is an optional explanation of the status code
     string reason = 2;
+    // next_token must be send with the next request, if secure communication is used
+    // the token is used to avoid replay attacks
+    // the token is always present in the very first message before the registration starts
+    // the token is not present, if secure communication is not used
+    string next_token = 3;
+    // verification indicates if the last request could be verified (secure communication)
+    Verification verification = 4;
 
     enum StatusCode {
-        UNKNOWN = 0;
+        UNKNOWN_STATUS_CODE = 0;
         OK = 1;
         REJECTED = 2;
     }
+
+    enum Verification {
+        UNKNOWN_VERIFICATION = 0;
+        VERIFIED = 1;
+        UNVERIFIED = 2;
+    }
+}
+
+message Signature {
+    // token is the mandatory token that was received with the last controller reply
+    string token = 1;
+    // pkcs1v15 is the mandatory PKCS1v15 signature of this message
+    bytes pkcs1v15 = 2;
 }

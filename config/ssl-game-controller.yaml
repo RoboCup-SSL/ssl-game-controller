@@ -3,6 +3,7 @@ publish:
 server:
   auto-ref:
     address: :10007
+    trusted-keys-dir: config/trusted_keys/auto_ref
   team:
     address: :10008
 game:

@@ -11,7 +11,10 @@ message TeamRegistration {
 // wrapper for all requests from a team's computer to the controller
 message TeamToControllerRequest {
     oneof request {
+        // request a new desired keeper id
+        // this is only allowed during STOP and will be rejected otherwise
         BotId desired_keeper = 1;
+        // response to an advantage choice request
         AdvantageResponse advantage_response = 2;
     }
 

@@ -30,6 +30,7 @@ func NewGameController() (c *GameController) {
 	c.ApiServer = ApiServer{}
 	c.ApiServer.Consumer = c
 	c.AutoRefServer = NewAutoRefServer()
+	c.AutoRefServer.LoadTrustedKeys(c.Config.Server.AutoRef.TrustedKeysDir)
 	c.AutoRefServer.ProcessRequest = c.ProcessAutoRefRequests
 	go c.AutoRefServer.Listen(c.Config.Server.AutoRef.Address)
 	c.Engine = NewEngine(c.Config.Game)
@@ -39,8 +40,9 @@ func NewGameController() (c *GameController) {
 	return
 }
 
-func (c *GameController) ProcessAutoRefRequests(request refproto.AutoRefToControllerRequest) {
+func (c *GameController) ProcessAutoRefRequests(request refproto.AutoRefToControllerRequest) error {
 	log.Print("Received ", request)
+	return nil
 }
 
 // Run the GameController by starting an endless loop in the background
