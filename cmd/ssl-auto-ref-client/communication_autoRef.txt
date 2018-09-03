@@ -1,0 +1,14 @@
+# https://www.websequencediagrams.com/
+
+AutoRef->Controller: establish TCP connection
+Controller->Controller: generate new token
+Controller->AutoRef: ControllerReply ( token )
+AutoRef->Controller: AutoRefRegistration ( identifier, [ token, signature ] )
+Controller-->Controller: verify token
+Controller-->Controller: verify signature
+Controller->AutoRef: ControllerReply ( ok | reject )
+
+loop
+AutoRef->Controller: AutoRefToControllerRequest
+Controller->AutoRef: ControllerReply ( ok | reject )
+end

@@ -10,6 +10,11 @@ The [ssl-refbox](https://github.com/RoboCup-SSL/ssl-refbox) replacement that wil
 ## Usage
 If you just want to use this app, simply download the latest [release binary](https://github.com/RoboCup-SSL/ssl-game-controller/releases/latest). The binary is self-contained. No dependencies are required.
 
+### Reference Clients
+There are some reference clients:
+ * [ssl-ref-client](./cmd/ssl-ref-client): A client that receives referee messages
+ * [ssl-auto-ref-client](./cmd/ssl-auto-ref-client/README.md): A client that connects to the controller as an autoRef
+
 ## Development
 
 ### Requirements
