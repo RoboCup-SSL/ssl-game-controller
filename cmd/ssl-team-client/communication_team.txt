@@ -1,0 +1,19 @@
+# https://www.websequencediagrams.com/
+
+Team->Controller: establish TCP connection
+Controller->Controller: generate new token
+Controller->Team: ControllerReply ( token )
+Team->Controller: TeamRegistration ( teamName, [ token, signature ] )
+Controller-->Controller: verify token
+Controller-->Controller: verify signature
+Controller->Team: ControllerReply ( ok | reject )
+
+loop
+alt team requests a change
+Team->Controller: TeamToControllerRequest
+Controller->Team: ControllerReply ( ok | reject )
+else controller requests a decision
+Controller->Team: ControllerToTeamRequest
+Team->Controller: TeamToControllerRequest
+end
+end

@@ -21,8 +21,15 @@ The private key is used on the client side to sign the complete message, excludi
 The public key must be provided to the game-controller. 
 By default, the game-controller searches for public keys in [config/trusted_keys/auto_ref](../../config/trusted_keys/auto_ref) with the pattern `<identifier>.pub.pem`.
 
-The [genKey.sh](../../tools/genKey.sh) script can be used to generate a new pair of public and private key. The public key is automatically moved to the default trusted keys directory.
+The [genKey.sh](../../tools/genKey.sh) script can be used to generate a new pair of public and private key.
 
 The controller sends a token with each reply. It must be included in the next request, when using the signature. The token is required to avoid replay attacks.
 
 If a public key is present for the identifier provided during registration, a signature is required. Else, the signature is ignored. The controller reply indicates, if the last request could be verified.
+
+## Sample client
+The sample client, that is included in this folder, can be used to test the connection. It can be run with 
+```bash
+go run cmd/ssl-auto-ref-client/main.go
+``` 
+Pass it the `-h` parameter to get the available options.

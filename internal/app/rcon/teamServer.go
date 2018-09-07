@@ -40,7 +40,7 @@ func (c *TeamClient) receiveRegistration(server *TeamServer) error {
 	}
 	c.Id = *registration.TeamName
 	if _, exists := server.Clients[c.Id]; exists {
-		return errors.New("Client with given identifier already registered: " + c.Id)
+		return errors.New("Team with given name already registered: " + c.Id)
 	}
 	c.PubKey = server.TrustedKeys[c.Id]
 	if c.PubKey != nil {

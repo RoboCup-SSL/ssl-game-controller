@@ -14,6 +14,7 @@ If you just want to use this app, simply download the latest [release binary](ht
 There are some reference clients:
  * [ssl-ref-client](./cmd/ssl-ref-client): A client that receives referee messages
  * [ssl-auto-ref-client](./cmd/ssl-auto-ref-client/README.md): A client that connects to the controller as an autoRef
+ * [ssl-team-client](./cmd/ssl-team-client/README.md): A client that connects to the controller as a team
 
 ## Development
 
