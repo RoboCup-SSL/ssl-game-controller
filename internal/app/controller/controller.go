@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/rcon"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/timer"
 	"log"
@@ -14,7 +15,7 @@ type GameController struct {
 	Config                      Config
 	Publisher                   Publisher
 	ApiServer                   ApiServer
-	AutoRefServer               AutoRefServer
+	AutoRefServer               rcon.AutoRefServer
 	Engine                      Engine
 	timer                       timer.Timer
 	historyPreserver            HistoryPreserver
@@ -29,7 +30,7 @@ func NewGameController() (c *GameController) {
 	c.Publisher = loadPublisher(c.Config)
 	c.ApiServer = ApiServer{}
 	c.ApiServer.Consumer = c
-	c.AutoRefServer = NewAutoRefServer()
+	c.AutoRefServer = rcon.NewAutoRefServer()
 	c.AutoRefServer.LoadTrustedKeys(c.Config.Server.AutoRef.TrustedKeysDir)
 	c.AutoRefServer.ProcessRequest = c.ProcessAutoRefRequests
 	go c.AutoRefServer.Listen(c.Config.Server.AutoRef.Address)
