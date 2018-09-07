@@ -1,6 +1,7 @@
 syntax = "proto2";
 
 import "ssl_game_event.proto";
+import "ssl_game_event_2019.proto";
 
 // Each UDP packet contains one of these messages.
 message Referee {
@@ -169,5 +170,21 @@ message Referee {
     optional bool blueTeamOnPositiveHalf = 10;
 
     // The game event that caused the referee command
-    optional Game_Event gameEvent = 11;
+    // deprecated in favor for current_game_event
+    optional Game_Event gameEvent = 11 [deprecated = true];
+
+    // the game event that is currently processed
+    optional GameEvent current_game_event = 12;
+
+    // all non-finished proposed game events that may be processed next
+    repeated ProposedGameEvent proposed_game_events = 13;
+}
+
+message ProposedGameEvent {
+    // the UNIX timestamp when the game event was proposed
+    required uint64 timestamp = 1;
+    // the identifier of the proposer
+    required string proposer_id = 2;
+    // the actual game event
+    required GameEvent game_event = 3;
 }

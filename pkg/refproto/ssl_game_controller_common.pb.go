@@ -18,12 +18,16 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
+// Team is either blue or yellow
 type Team int32
 
 const (
+	// team not set
 	Team_UNKNOWN Team = 0
-	Team_YELLOW  Team = 1
-	Team_BLUE    Team = 2
+	// yellow team
+	Team_YELLOW Team = 1
+	// blue team
+	Team_BLUE Team = 2
 )
 
 var Team_name = map[int32]string{
@@ -37,11 +41,24 @@ var Team_value = map[string]int32{
 	"BLUE":    2,
 }
 
+func (x Team) Enum() *Team {
+	p := new(Team)
+	*p = x
+	return p
+}
 func (x Team) String() string {
 	return proto.EnumName(Team_name, int32(x))
 }
+func (x *Team) UnmarshalJSON(data []byte) error {
+	value, err := proto.UnmarshalJSONEnum(Team_value, data, "Team")
+	if err != nil {
+		return err
+	}
+	*x = Team(value)
+	return nil
+}
 func (Team) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_common_f6a58e0b28037b96, []int{0}
+	return fileDescriptor_ssl_game_controller_common_16b4409192a2e794, []int{0}
 }
 
 type ControllerReply_StatusCode int32
@@ -63,11 +80,24 @@ var ControllerReply_StatusCode_value = map[string]int32{
 	"REJECTED": 2,
 }
 
+func (x ControllerReply_StatusCode) Enum() *ControllerReply_StatusCode {
+	p := new(ControllerReply_StatusCode)
+	*p = x
+	return p
+}
 func (x ControllerReply_StatusCode) String() string {
 	return proto.EnumName(ControllerReply_StatusCode_name, int32(x))
 }
+func (x *ControllerReply_StatusCode) UnmarshalJSON(data []byte) error {
+	value, err := proto.UnmarshalJSONEnum(ControllerReply_StatusCode_value, data, "ControllerReply_StatusCode")
+	if err != nil {
+		return err
+	}
+	*x = ControllerReply_StatusCode(value)
+	return nil
+}
 func (ControllerReply_StatusCode) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_common_f6a58e0b28037b96, []int{2, 0}
+	return fileDescriptor_ssl_game_controller_common_16b4409192a2e794, []int{2, 0}
 }
 
 type ControllerReply_Verification int32
@@ -89,16 +119,32 @@ var ControllerReply_Verification_value = map[string]int32{
 	"UNVERIFIED":           2,
 }
 
+func (x ControllerReply_Verification) Enum() *ControllerReply_Verification {
+	p := new(ControllerReply_Verification)
+	*p = x
+	return p
+}
 func (x ControllerReply_Verification) String() string {
 	return proto.EnumName(ControllerReply_Verification_name, int32(x))
 }
+func (x *ControllerReply_Verification) UnmarshalJSON(data []byte) error {
+	value, err := proto.UnmarshalJSONEnum(ControllerReply_Verification_value, data, "ControllerReply_Verification")
+	if err != nil {
+		return err
+	}
+	*x = ControllerReply_Verification(value)
+	return nil
+}
 func (ControllerReply_Verification) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_common_f6a58e0b28037b96, []int{2, 1}
+	return fileDescriptor_ssl_game_controller_common_16b4409192a2e794, []int{2, 1}
 }
 
+// BotId is the combination of a team and a robot id
 type BotId struct {
-	Id                   int32    `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Team                 Team     `protobuf:"varint,2,opt,name=team,proto3,enum=Team" json:"team,omitempty"`
+	// the robot id - a negative value indicates that the id is not set
+	Id *int32 `protobuf:"varint,1,opt,name=id" json:"id,omitempty"`
+	// the team that the robot belongs to
+	Team                 *Team    `protobuf:"varint,2,opt,name=team,enum=Team" json:"team,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -108,7 +154,7 @@ func (m *BotId) Reset()         { *m = BotId{} }
 func (m *BotId) String() string { return proto.CompactTextString(m) }
 func (*BotId) ProtoMessage()    {}
 func (*BotId) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_common_f6a58e0b28037b96, []int{0}
+	return fileDescriptor_ssl_game_controller_common_16b4409192a2e794, []int{0}
 }
 func (m *BotId) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BotId.Unmarshal(m, b)
@@ -129,24 +175,25 @@ func (m *BotId) XXX_DiscardUnknown() {
 var xxx_messageInfo_BotId proto.InternalMessageInfo
 
 func (m *BotId) GetId() int32 {
-	if m != nil {
-		return m.Id
+	if m != nil && m.Id != nil {
+		return *m.Id
 	}
 	return 0
 }
 
 func (m *BotId) GetTeam() Team {
-	if m != nil {
-		return m.Team
+	if m != nil && m.Team != nil {
+		return *m.Team
 	}
 	return Team_UNKNOWN
 }
 
+// Location is a 2d-coordinate on the field in ssl-vision coordinate system. Units are in meters.
 type Location struct {
 	// the x-coordinate in [m] in the ssl-vision coordinate system
-	X float32 `protobuf:"fixed32,1,opt,name=x,proto3" json:"x,omitempty"`
+	X *float32 `protobuf:"fixed32,1,req,name=x" json:"x,omitempty"`
 	// the y-coordinate in [m] in the ssl-vision coordinate system
-	Y                    float32  `protobuf:"fixed32,2,opt,name=y,proto3" json:"y,omitempty"`
+	Y                    *float32 `protobuf:"fixed32,2,req,name=y" json:"y,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -156,7 +203,7 @@ func (m *Location) Reset()         { *m = Location{} }
 func (m *Location) String() string { return proto.CompactTextString(m) }
 func (*Location) ProtoMessage()    {}
 func (*Location) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_common_f6a58e0b28037b96, []int{1}
+	return fileDescriptor_ssl_game_controller_common_16b4409192a2e794, []int{1}
 }
 func (m *Location) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Location.Unmarshal(m, b)
@@ -177,15 +224,15 @@ func (m *Location) XXX_DiscardUnknown() {
 var xxx_messageInfo_Location proto.InternalMessageInfo
 
 func (m *Location) GetX() float32 {
-	if m != nil {
-		return m.X
+	if m != nil && m.X != nil {
+		return *m.X
 	}
 	return 0
 }
 
 func (m *Location) GetY() float32 {
-	if m != nil {
-		return m.Y
+	if m != nil && m.Y != nil {
+		return *m.Y
 	}
 	return 0
 }
@@ -193,26 +240,26 @@ func (m *Location) GetY() float32 {
 // a reply that is sent by the controller for each request from teams or autoRefs
 type ControllerReply struct {
 	// status_code is an optional code that indicates the result of the last request
-	StatusCode ControllerReply_StatusCode `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3,enum=ControllerReply_StatusCode" json:"status_code,omitempty"`
+	StatusCode *ControllerReply_StatusCode `protobuf:"varint,1,opt,name=status_code,json=statusCode,enum=ControllerReply_StatusCode" json:"status_code,omitempty"`
 	// reason is an optional explanation of the status code
-	Reason string `protobuf:"bytes,2,opt,name=reason,proto3" json:"reason,omitempty"`
+	Reason *string `protobuf:"bytes,2,opt,name=reason" json:"reason,omitempty"`
 	// next_token must be send with the next request, if secure communication is used
 	// the token is used to avoid replay attacks
 	// the token is always present in the very first message before the registration starts
 	// the token is not present, if secure communication is not used
-	NextToken string `protobuf:"bytes,3,opt,name=next_token,json=nextToken,proto3" json:"next_token,omitempty"`
+	NextToken *string `protobuf:"bytes,3,opt,name=next_token,json=nextToken" json:"next_token,omitempty"`
 	// verification indicates if the last request could be verified (secure communication)
-	Verification         ControllerReply_Verification `protobuf:"varint,4,opt,name=verification,proto3,enum=ControllerReply_Verification" json:"verification,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}                     `json:"-"`
-	XXX_unrecognized     []byte                       `json:"-"`
-	XXX_sizecache        int32                        `json:"-"`
+	Verification         *ControllerReply_Verification `protobuf:"varint,4,opt,name=verification,enum=ControllerReply_Verification" json:"verification,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                      `json:"-"`
+	XXX_unrecognized     []byte                        `json:"-"`
+	XXX_sizecache        int32                         `json:"-"`
 }
 
 func (m *ControllerReply) Reset()         { *m = ControllerReply{} }
 func (m *ControllerReply) String() string { return proto.CompactTextString(m) }
 func (*ControllerReply) ProtoMessage()    {}
 func (*ControllerReply) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_common_f6a58e0b28037b96, []int{2}
+	return fileDescriptor_ssl_game_controller_common_16b4409192a2e794, []int{2}
 }
 func (m *ControllerReply) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ControllerReply.Unmarshal(m, b)
@@ -233,38 +280,39 @@ func (m *ControllerReply) XXX_DiscardUnknown() {
 var xxx_messageInfo_ControllerReply proto.InternalMessageInfo
 
 func (m *ControllerReply) GetStatusCode() ControllerReply_StatusCode {
-	if m != nil {
-		return m.StatusCode
+	if m != nil && m.StatusCode != nil {
+		return *m.StatusCode
 	}
 	return ControllerReply_UNKNOWN_STATUS_CODE
 }
 
 func (m *ControllerReply) GetReason() string {
-	if m != nil {
-		return m.Reason
+	if m != nil && m.Reason != nil {
+		return *m.Reason
 	}
 	return ""
 }
 
 func (m *ControllerReply) GetNextToken() string {
-	if m != nil {
-		return m.NextToken
+	if m != nil && m.NextToken != nil {
+		return *m.NextToken
 	}
 	return ""
 }
 
 func (m *ControllerReply) GetVerification() ControllerReply_Verification {
-	if m != nil {
-		return m.Verification
+	if m != nil && m.Verification != nil {
+		return *m.Verification
 	}
 	return ControllerReply_UNKNOWN_VERIFICATION
 }
 
+// Signature can be added to a request to let it be verfied by the controller
 type Signature struct {
-	// token is the mandatory token that was received with the last controller reply
-	Token string `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
-	// pkcs1v15 is the mandatory PKCS1v15 signature of this message
-	Pkcs1V15             []byte   `protobuf:"bytes,2,opt,name=pkcs1v15,proto3" json:"pkcs1v15,omitempty"`
+	// the token that was received with the last controller reply
+	Token *string `protobuf:"bytes,1,req,name=token" json:"token,omitempty"`
+	// the PKCS1v15 signature of this message
+	Pkcs1V15             []byte   `protobuf:"bytes,2,req,name=pkcs1v15" json:"pkcs1v15,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -274,7 +322,7 @@ func (m *Signature) Reset()         { *m = Signature{} }
 func (m *Signature) String() string { return proto.CompactTextString(m) }
 func (*Signature) ProtoMessage()    {}
 func (*Signature) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_common_f6a58e0b28037b96, []int{3}
+	return fileDescriptor_ssl_game_controller_common_16b4409192a2e794, []int{3}
 }
 func (m *Signature) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Signature.Unmarshal(m, b)
@@ -295,8 +343,8 @@ func (m *Signature) XXX_DiscardUnknown() {
 var xxx_messageInfo_Signature proto.InternalMessageInfo
 
 func (m *Signature) GetToken() string {
-	if m != nil {
-		return m.Token
+	if m != nil && m.Token != nil {
+		return *m.Token
 	}
 	return ""
 }
@@ -319,35 +367,35 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("ssl_game_controller_common.proto", fileDescriptor_ssl_game_controller_common_f6a58e0b28037b96)
+	proto.RegisterFile("ssl_game_controller_common.proto", fileDescriptor_ssl_game_controller_common_16b4409192a2e794)
 }
 
-var fileDescriptor_ssl_game_controller_common_f6a58e0b28037b96 = []byte{
-	// 404 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x64, 0x92, 0xc1, 0x6f, 0xd3, 0x30,
-	0x14, 0xc6, 0x6b, 0xd3, 0x96, 0xf6, 0x2d, 0x2a, 0xd6, 0x63, 0x82, 0x00, 0x9a, 0x54, 0xe5, 0x80,
-	0x06, 0x87, 0x4a, 0x2b, 0xe2, 0x04, 0x1c, 0xba, 0xd4, 0x93, 0xca, 0xaa, 0x44, 0x72, 0x92, 0x4d,
-	0x9c, 0xa2, 0x90, 0x98, 0x29, 0x5a, 0x12, 0x57, 0x89, 0x37, 0xb5, 0xff, 0x24, 0x7f, 0x13, 0x8a,
-	0x33, 0xc2, 0x80, 0x9b, 0xbf, 0xcf, 0xef, 0xe7, 0xef, 0x3d, 0xdb, 0x30, 0x6f, 0x9a, 0x22, 0xbe,
-	0x49, 0x4a, 0x19, 0xa7, 0xaa, 0xd2, 0xb5, 0x2a, 0x0a, 0x59, 0xc7, 0xa9, 0x2a, 0x4b, 0x55, 0x2d,
-	0x76, 0xb5, 0xd2, 0xca, 0x59, 0xc2, 0xe8, 0x5c, 0xe9, 0x4d, 0x86, 0x33, 0xa0, 0x79, 0x66, 0x93,
-	0x39, 0x39, 0x1d, 0x09, 0x9a, 0x67, 0xf8, 0x0a, 0x86, 0x5a, 0x26, 0xa5, 0x4d, 0xe7, 0xe4, 0x74,
-	0xb6, 0x1c, 0x2d, 0x42, 0x99, 0x94, 0xc2, 0x58, 0xce, 0x5b, 0x98, 0x6c, 0x55, 0x9a, 0xe8, 0x5c,
-	0x55, 0x68, 0x01, 0xd9, 0x1b, 0x8a, 0x0a, 0xb2, 0x6f, 0xd5, 0xc1, 0x10, 0x54, 0x90, 0x83, 0xf3,
-	0x93, 0xc2, 0x33, 0xb7, 0xcf, 0x15, 0x72, 0x57, 0x1c, 0xf0, 0x33, 0x1c, 0x35, 0x3a, 0xd1, 0x77,
-	0x4d, 0x9c, 0xaa, 0x4c, 0x1a, 0x72, 0xb6, 0x7c, 0xb3, 0xf8, 0xa7, 0x6c, 0x11, 0x98, 0x1a, 0x57,
-	0x65, 0x52, 0x40, 0xd3, 0xaf, 0xf1, 0x05, 0x8c, 0x6b, 0x99, 0x34, 0xaa, 0x32, 0x21, 0x53, 0xf1,
-	0xa0, 0xf0, 0x04, 0xa0, 0x92, 0x7b, 0x1d, 0x6b, 0x75, 0x2b, 0x2b, 0xfb, 0x89, 0xd9, 0x9b, 0xb6,
-	0x4e, 0xd8, 0x1a, 0xb8, 0x02, 0xeb, 0x5e, 0xd6, 0xf9, 0x8f, 0xbc, 0x6b, 0xda, 0x1e, 0x9a, 0xd4,
-	0x93, 0xff, 0x52, 0xaf, 0x1e, 0x15, 0x89, 0xbf, 0x10, 0xe7, 0x13, 0xc0, 0x9f, 0x9e, 0xf0, 0x25,
-	0x3c, 0x8f, 0xbc, 0x4b, 0xcf, 0xbf, 0xf6, 0xe2, 0x20, 0x5c, 0x85, 0x51, 0x10, 0xbb, 0xfe, 0x9a,
-	0xb3, 0x01, 0x8e, 0x81, 0xfa, 0x97, 0x8c, 0xa0, 0x05, 0x13, 0xc1, 0xbf, 0x72, 0x37, 0xe4, 0x6b,
-	0x46, 0x9d, 0x0b, 0xb0, 0x1e, 0x1f, 0x8d, 0x36, 0x1c, 0xff, 0xc6, 0xaf, 0xb8, 0xd8, 0x5c, 0x6c,
-	0xdc, 0x55, 0xb8, 0xf1, 0x3d, 0x36, 0x68, 0xb9, 0xce, 0xe1, 0x6b, 0x46, 0x70, 0x06, 0x10, 0x79,
-	0xbd, 0xa6, 0xce, 0x17, 0x98, 0x06, 0xf9, 0x4d, 0x95, 0xe8, 0xbb, 0x5a, 0xe2, 0x31, 0x8c, 0xba,
-	0x71, 0x89, 0x19, 0xb7, 0x13, 0xf8, 0x1a, 0x26, 0xbb, 0xdb, 0xb4, 0x39, 0xbb, 0x3f, 0xfb, 0x68,
-	0xee, 0xc8, 0x12, 0xbd, 0x7e, 0xff, 0x0e, 0x86, 0xed, 0x2b, 0xe2, 0x11, 0x3c, 0x7d, 0x88, 0x67,
-	0x03, 0x04, 0x18, 0x7f, 0xe3, 0xdb, 0xad, 0x7f, 0xcd, 0x08, 0x4e, 0x60, 0x78, 0xbe, 0x8d, 0x38,
-	0xa3, 0xdf, 0xc7, 0xe6, 0x77, 0x7c, 0xf8, 0x15, 0x00, 0x00, 0xff, 0xff, 0xd9, 0xcd, 0x59, 0x23,
-	0x41, 0x02, 0x00, 0x00,
+var fileDescriptor_ssl_game_controller_common_16b4409192a2e794 = []byte{
+	// 401 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x64, 0x91, 0x51, 0x8f, 0x93, 0x40,
+	0x14, 0x85, 0x3b, 0x63, 0x5b, 0xdb, 0xbb, 0xa4, 0x4e, 0xae, 0x1b, 0x45, 0xcd, 0x26, 0x0d, 0x0f,
+	0xa6, 0xfa, 0xd0, 0x64, 0x9b, 0xf8, 0xa4, 0x3e, 0x74, 0xe9, 0x6c, 0x82, 0x4b, 0x20, 0x19, 0x60,
+	0x37, 0x3e, 0x11, 0x02, 0xe3, 0x86, 0x2c, 0x30, 0x0d, 0xcc, 0x6e, 0xda, 0x3f, 0xe9, 0x6f, 0x32,
+	0xc0, 0x8a, 0xab, 0xbe, 0xf1, 0x1d, 0xee, 0x99, 0x73, 0x66, 0x2e, 0x2c, 0x9b, 0xa6, 0x88, 0x6f,
+	0x93, 0x52, 0xc6, 0xa9, 0xaa, 0x74, 0xad, 0x8a, 0x42, 0xd6, 0x71, 0xaa, 0xca, 0x52, 0x55, 0xeb,
+	0x7d, 0xad, 0xb4, 0xb2, 0x36, 0x30, 0xb9, 0x50, 0xda, 0xc9, 0x70, 0x01, 0x34, 0xcf, 0x4c, 0xb2,
+	0x24, 0xab, 0x89, 0xa0, 0x79, 0x86, 0x6f, 0x60, 0xac, 0x65, 0x52, 0x9a, 0x74, 0x49, 0x56, 0x8b,
+	0xcd, 0x64, 0x1d, 0xca, 0xa4, 0x14, 0x9d, 0x64, 0xbd, 0x87, 0x99, 0xab, 0xd2, 0x44, 0xe7, 0xaa,
+	0x42, 0x03, 0xc8, 0xc1, 0x24, 0x4b, 0xba, 0xa2, 0x82, 0x1c, 0x5a, 0x3a, 0x9a, 0xb4, 0xa7, 0xa3,
+	0xf5, 0x93, 0xc2, 0x0b, 0x7b, 0xc8, 0x15, 0x72, 0x5f, 0x1c, 0xf1, 0x0b, 0x9c, 0x34, 0x3a, 0xd1,
+	0xf7, 0x4d, 0x9c, 0xaa, 0x4c, 0x76, 0x79, 0x8b, 0xcd, 0xbb, 0xf5, 0x3f, 0x63, 0xeb, 0xa0, 0x9b,
+	0xb1, 0x55, 0x26, 0x05, 0x34, 0xc3, 0x37, 0xbe, 0x82, 0x69, 0x2d, 0x93, 0x46, 0x55, 0x5d, 0xad,
+	0xb9, 0x78, 0x24, 0x3c, 0x03, 0xa8, 0xe4, 0x41, 0xc7, 0x5a, 0xdd, 0xc9, 0xca, 0x7c, 0xd6, 0xfd,
+	0x9b, 0xb7, 0x4a, 0xd8, 0x0a, 0xb8, 0x05, 0xe3, 0x41, 0xd6, 0xf9, 0x8f, 0xbc, 0x2f, 0x6d, 0x8e,
+	0xbb, 0xd4, 0xb3, 0xff, 0x52, 0xaf, 0x9f, 0x0c, 0x89, 0xbf, 0x2c, 0xd6, 0x67, 0x80, 0x3f, 0x9d,
+	0xf0, 0x35, 0xbc, 0x8c, 0xbc, 0x2b, 0xcf, 0xbf, 0xf1, 0xe2, 0x20, 0xdc, 0x86, 0x51, 0x10, 0xdb,
+	0xfe, 0x8e, 0xb3, 0x11, 0x4e, 0x81, 0xfa, 0x57, 0x8c, 0xa0, 0x01, 0x33, 0xc1, 0xbf, 0x71, 0x3b,
+	0xe4, 0x3b, 0x46, 0xad, 0x4b, 0x30, 0x9e, 0x1e, 0x8d, 0x26, 0x9c, 0xfe, 0xb6, 0x5f, 0x73, 0xe1,
+	0x5c, 0x3a, 0xf6, 0x36, 0x74, 0x7c, 0x8f, 0x8d, 0x5a, 0x5f, 0xaf, 0xf0, 0x1d, 0x23, 0xb8, 0x00,
+	0x88, 0xbc, 0x81, 0xa9, 0xf5, 0x15, 0xe6, 0x41, 0x7e, 0x5b, 0x25, 0xfa, 0xbe, 0x96, 0x78, 0x0a,
+	0x93, 0xfe, 0xba, 0xed, 0xeb, 0xcf, 0x45, 0x0f, 0xf8, 0x16, 0x66, 0xfb, 0xbb, 0xb4, 0x39, 0x7f,
+	0x38, 0xff, 0xd4, 0x2d, 0xc2, 0x10, 0x03, 0x7f, 0xfc, 0x00, 0xe3, 0x76, 0x8b, 0x78, 0x02, 0xcf,
+	0x1f, 0xe3, 0xd9, 0x08, 0x01, 0xa6, 0xdf, 0xb9, 0xeb, 0xfa, 0x37, 0x8c, 0xe0, 0x0c, 0xc6, 0x17,
+	0x6e, 0xc4, 0x19, 0xfd, 0x15, 0x00, 0x00, 0xff, 0xff, 0x7a, 0x57, 0x47, 0x1a, 0x39, 0x02, 0x00,
+	0x00,
 }

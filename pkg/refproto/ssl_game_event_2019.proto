@@ -1,0 +1,264 @@
+syntax = "proto2";
+
+import "ssl_game_controller_common.proto";
+
+// GameEvent contains exactly one game event
+message GameEvent {
+    // the event that occurred
+    oneof event {
+        BallLeftFieldEvent ball_left_field_touch_line = 1;
+        BallLeftFieldEvent ball_left_field_goal_line = 2;
+        Icing icing = 3;
+        Goal goal = 4;
+        IndirectGoal indirect_goal = 5;
+        ChipOnGoal chip_on_goal = 6;
+        RobotStopSpeed robot_stop_speed = 7;
+        DefenderToKickPointDistance defender_to_kick_point_distance = 8;
+        BotCrashDrawn bot_crash_drawn = 9;
+        BotCrashUnique bot_crash_unique = 10;
+        BotPushing bot_pushing = 11;
+        BotTippedOver bot_tipped_over = 12;
+        MultipleDefender multiple_defender = 13;
+        MultipleDefenderPartially multiple_defender_partially = 14;
+        AttackerInDefenseArea attacker_in_defense_area = 15;
+        BallSpeed ball_speed = 16;
+        BallDribbling ball_dribbling = 17;
+        AttackerTouchedKeeper attacker_touched_keeper = 18;
+        DoubleTouch double_touch = 19;
+        AttackerToDefenceArea attacker_to_defence_area = 20;
+        BallHolding ball_holding = 21;
+        MultipleYellowCards multiple_yellow_cards = 22;
+        MultipleBotCollisions multiple_bot_collisions = 23;
+        MultipleRobotStopSpeed multiple_robot_stop_speed = 24;
+        NumberOfPlayers number_of_players = 25;
+        KickTimeout kick_timeout = 26;
+        NoProgressInGame no_progress_in_game = 27;
+        PlacementFailedByTeamInFavor placement_failed_by_team_in_favor = 28;
+        PlacementFailedByOpponent placement_failed_by_opponent = 29;
+        PlacementInterference placement_interference = 30;
+        UnsportiveBehaviorMinor unsportive_behavior_minor = 31;
+        UnsportiveBehaviorMajor unsportive_behavior_major = 32;
+    }
+
+    message BallLeftFieldEvent {
+        // the bot that last touched the ball
+        required BotId by_bot = 1;
+        // the location where the ball left the field
+        optional Location location = 2;
+    }
+    message Icing {
+        // the bot that last touched the ball
+        required BotId by_bot = 1;
+        // the location where the ball left the field
+        optional Location location = 2;
+        // the location where the ball was last touched
+        optional Location kick_location = 3;
+    }
+    message Goal {
+        // the bot that scored the goal - at least the team must be set
+        required BotId by_bot = 1;
+        // the location where the ball entered the goal
+        optional Location location = 2;
+        // the location where the ball was kicked
+        optional Location kick_location = 3;
+    }
+    // the ball entered the goal directly during an indirect free kick
+    message IndirectGoal {
+        // the bot that kicked the ball - at least the team must be set
+        required BotId by_bot = 1;
+        // the location where the ball entered the goal
+        optional Location location = 2;
+        // the location where the ball was kicked
+        optional Location kick_location = 3;
+    }
+    message ChipOnGoal {
+        // the bot that kicked the ball - at least the team must be set
+        required BotId by_bot = 1;
+        // the location where the ball entered the goal
+        optional Location location = 2;
+        // the location where the ball was kicked
+        optional Location kick_location = 3;
+        // the maximum height of the ball, before it entered the goal and since the last kick
+        required float max_ball_height = 4;
+    }
+    message RobotStopSpeed {
+        // the bot that was too fast
+        required BotId by_bot = 1;
+        // the location of the bot
+        optional Location location = 2;
+        // the bot speed [m/s]
+        required float speed = 3;
+    }
+    message DefenderToKickPointDistance {
+        // the bot that violates the distance to the kick point
+        required BotId by_bot = 1;
+        // the location of the bot
+        optional Location location = 2;
+        // the distance [m] from bot to the kick point (including the minimum radius)
+        optional float distance = 3;
+    }
+    message BotCrashDrawn {
+        // the first bot that is involved
+        required BotId bot_one = 1;
+        // the second bot that is involved - should be from the opposite team
+        required BotId bot_two = 2;
+        // the calculated crash speed [m/s] of the two bots
+        required float crash_speed = 3;
+        // the difference [m/s] of the velocity of the two bots
+        required float speed_diff = 4;
+        // the location of the crash (center between both bots)
+        optional Location location = 5;
+    }
+    message BotCrashUnique {
+        // the first bot that is involved
+        required BotId violator = 1;
+        // the second bot that is involved - should be from the opposite team
+        required BotId victim = 2;
+        // the calculated crash speed [m/s] of the two bots
+        required float crash_speed = 3;
+        // the difference [m/s] of the velocity of the two bots
+        required float speed_diff = 4;
+        // the location of the crash (center between both bots)
+        optional Location location = 5;
+    }
+    message BotPushing {
+        // the bot that pushed the other bot
+        required BotId violator = 1;
+        // the bot that was pushed - should be from the opposite team
+        required BotId victim = 2;
+        // the pushed distance [m]
+        optional float pushed_distance = 3;
+    }
+    message BotTippedOver {
+        // the bot that pushed the other bot
+        required BotId violator = 1;
+        // the location of the bot
+        optional Location location = 2;
+    }
+    message MultipleDefender {
+        // the bot that is inside the penalty area
+        required BotId by_bot = 1;
+        // the location of the bot
+        optional Location location = 2;
+        // the distance [m] from bot case to the nearest point outside the penalty area
+        optional float distance = 3;
+    }
+    message MultipleDefenderPartially {
+        // the bot that is partially inside the penalty area
+        required BotId by_bot = 1;
+        // the location of the bot
+        optional Location location = 2;
+        // the distance [m] that the bot is inside the penalty area
+        optional float distance = 3;
+    }
+    message AttackerInDefenseArea {
+        // the bot that is inside the penalty area
+        required BotId by_bot = 1;
+        // the location of the bot
+        optional Location location = 2;
+        // the distance [m] that the bot is inside the penalty area
+        optional float distance = 3;
+    }
+    message BallSpeed {
+        // the bot that kicked too fast
+        required BotId by_bot = 1;
+        // the absolute initial ball speed (kick speed)
+        required float initial_ball_speed = 2;
+        // the maximum height that the ball has reached during the kick
+        optional float max_ball_height = 3;
+        // the location of the bot
+        optional Location location = 4;
+    }
+    message BallDribbling {
+        // the bot that dribbled too far
+        required BotId by_bot = 1;
+        // the location where the dribbling started
+        optional Location start = 2;
+        // the location where the maximum dribbling distance was reached
+        optional Location end = 3;
+    }
+    message AttackerTouchedKeeper {
+        // the bot that touched the opponent keeper
+        required BotId by_bot = 1;
+        // the location of the bot
+        optional Location location = 2;
+    }
+    message DoubleTouch {
+        // the bot that touched the ball twice
+        required BotId by_bot = 1;
+        // the location of the bot
+        optional Location location = 2;
+    }
+    message AttackerToDefenceArea {
+        // the bot that is too close to the defense area
+        required BotId by_bot = 1;
+        // the distance of the bot to the penalty area
+        required float distance = 2;
+        // the location of the bot
+        optional Location location = 3;
+    }
+    message BallHolding {
+        // the bot that holds the ball
+        required BotId by_bot = 1;
+        // the location of the bot
+        optional Location location = 2;
+        // the duration [s] that the ball hold the ball
+        optional float duration = 3;
+    }
+    message MultipleYellowCards {
+        // the team that received multiple yellow cards
+        required Team team = 1;
+    }
+    message MultipleBotCollisions {
+        // the team that collected multiple bot collisions
+        required Team team = 1;
+    }
+    message MultipleRobotStopSpeed {
+        // the team that had too many fast robots during stop
+        required Team team = 1;
+    }
+    message NumberOfPlayers {
+        // the team that has too many robots
+        required Team team = 1;
+        // the number of bots that the team has too much on the field
+        required int32 bots_too_much = 2;
+    }
+    message KickTimeout {
+        // the team that that should have kicked
+        required Team team = 1;
+        // the time [s] that was waited
+        required float time = 2;
+    }
+    message NoProgressInGame {
+        // the time [s] that was waited
+        required float time = 1;
+    }
+    message PlacementFailedByTeamInFavor {
+        // the team that failed
+        required Team team = 1;
+        // the remaining distance from ball to placement position
+        required float remaining_distance = 2;
+    }
+    message PlacementFailedByOpponent {
+        // the team that failed
+        required Team team = 1;
+        // the remaining distance from ball to placement position
+        required float remaining_distance = 2;
+    }
+    message PlacementInterference {
+        // the bot that interfered the placement
+        required BotId by_bot = 1;
+    }
+    message UnsportiveBehaviorMinor {
+        // the team that found guilty
+        required Team team = 1;
+        // an explanation of the situation and decision
+        required string reason = 2;
+    }
+    message UnsportiveBehaviorMajor {
+        // the team that found guilty
+        required Team team = 1;
+        // an explanation of the situation and decision
+        required string reason = 2;
+    }
+}

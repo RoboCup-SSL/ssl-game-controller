@@ -78,14 +78,14 @@ func (c *Client) register() {
 	if err := sslconn.ReceiveMessage(c.conn, &controllerReply); err != nil {
 		log.Fatal("Failed receiving controller reply: ", err)
 	}
-	if controllerReply.NextToken == "" {
+	if controllerReply.NextToken == nil {
 		log.Fatal("Missing next token")
 	}
 
 	registration := refproto.AutoRefRegistration{}
-	registration.Identifier = *clientIdentifier
+	registration.Identifier = clientIdentifier
 	if privateKey != nil {
-		registration.Signature = &refproto.Signature{Token: controllerReply.NextToken}
+		registration.Signature = &refproto.Signature{Token: controllerReply.NextToken, Pkcs1V15: []byte{}}
 		registration.Signature.Pkcs1V15 = sign(privateKey, &registration)
 	}
 	log.Print("Sending registration")
@@ -97,18 +97,29 @@ func (c *Client) register() {
 	if err := sslconn.ReceiveMessage(c.conn, &controllerReply); err != nil {
 		log.Fatal("Failed receiving controller reply: ", err)
 	}
-	if controllerReply.StatusCode != refproto.ControllerReply_OK {
-		log.Fatal("Registration rejected: ", controllerReply.Reason)
+	if controllerReply.StatusCode == nil || *controllerReply.StatusCode != refproto.ControllerReply_OK {
+		reason := ""
+		if controllerReply.Reason != nil {
+			reason = *controllerReply.Reason
+		}
+		log.Fatal("Registration rejected: ", reason)
 	}
 	log.Printf("Successfully registered as %v", *clientIdentifier)
-	c.token = controllerReply.NextToken
+	if controllerReply.NextToken != nil {
+		c.token = *controllerReply.NextToken
+	} else {
+		c.token = ""
+	}
 }
 
 func (c *Client) sendGameEvent() {
 	event := refproto.GameEvent_BallLeftFieldTouchLine{}
 	event.BallLeftFieldTouchLine = new(refproto.GameEvent_BallLeftFieldEvent)
-	event.BallLeftFieldTouchLine.ByBot = &refproto.BotId{Id: 1, Team: refproto.Team_BLUE}
-	event.BallLeftFieldTouchLine.Location = &refproto.Location{X: 1000, Y: 4500}
+	event.BallLeftFieldTouchLine.ByBot = &refproto.BotId{Id: new(int32), Team: new(refproto.Team)}
+	*event.BallLeftFieldTouchLine.ByBot.Team = refproto.Team_BLUE
+	event.BallLeftFieldTouchLine.Location = &refproto.Location{X: new(float32), Y: new(float32)}
+	*event.BallLeftFieldTouchLine.Location.X = 1000
+	*event.BallLeftFieldTouchLine.Location.Y = 4500
 	gameEvent := refproto.GameEvent{Event: &event}
 	request := refproto.AutoRefToControllerRequest{GameEvent: &gameEvent}
 	c.sendRequest(&request)
@@ -122,7 +133,7 @@ func (c *Client) sendAutoRefMessage(msg string) {
 
 func (c *Client) sendRequest(request *refproto.AutoRefToControllerRequest) {
 	if privateKey != nil {
-		request.Signature = &refproto.Signature{Token: c.token}
+		request.Signature = &refproto.Signature{Token: &c.token, Pkcs1V15: []byte{}}
 		request.Signature.Pkcs1V15 = sign(privateKey, request)
 	}
 
@@ -138,10 +149,14 @@ func (c *Client) sendRequest(request *refproto.AutoRefToControllerRequest) {
 		log.Fatal("Failed receiving controller reply: ", err)
 	}
 	log.Print("Received reply: ", controllerReply)
-	if controllerReply.StatusCode != refproto.ControllerReply_OK {
+	if controllerReply.StatusCode == nil || *controllerReply.StatusCode != refproto.ControllerReply_OK {
 		log.Fatal("Message rejected: ", controllerReply.Reason)
 	}
-	c.token = controllerReply.NextToken
+	if controllerReply.NextToken != nil {
+		c.token = *controllerReply.NextToken
+	} else {
+		c.token = ""
+	}
 }
 
 func sign(privateKey *rsa.PrivateKey, message proto.Message) []byte {

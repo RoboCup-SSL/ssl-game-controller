@@ -1,36 +1,44 @@
-syntax = "proto3";
+syntax = "proto2";
 
+// Team is either blue or yellow
 enum Team {
+    // team not set
     UNKNOWN = 0;
+    // yellow team
     YELLOW = 1;
+    // blue team
     BLUE = 2;
 }
 
+// BotId is the combination of a team and a robot id
 message BotId {
-    int32 id = 1;
-    Team team = 2;
+    // the robot id - a negative value indicates that the id is not set
+    optional int32 id = 1;
+    // the team that the robot belongs to
+    optional Team team = 2;
 }
 
+// Location is a 2d-coordinate on the field in ssl-vision coordinate system. Units are in meters.
 message Location {
     // the x-coordinate in [m] in the ssl-vision coordinate system
-    float x = 1;
+    required float x = 1;
     // the y-coordinate in [m] in the ssl-vision coordinate system
-    float y = 2;
+    required float y = 2;
 }
 
 // a reply that is sent by the controller for each request from teams or autoRefs
 message ControllerReply {
     // status_code is an optional code that indicates the result of the last request
-    StatusCode status_code = 1;
+    optional StatusCode status_code = 1;
     // reason is an optional explanation of the status code
-    string reason = 2;
+    optional string reason = 2;
     // next_token must be send with the next request, if secure communication is used
     // the token is used to avoid replay attacks
     // the token is always present in the very first message before the registration starts
     // the token is not present, if secure communication is not used
-    string next_token = 3;
+    optional string next_token = 3;
     // verification indicates if the last request could be verified (secure communication)
-    Verification verification = 4;
+    optional Verification verification = 4;
 
     enum StatusCode {
         UNKNOWN_STATUS_CODE = 0;
@@ -45,9 +53,10 @@ message ControllerReply {
     }
 }
 
+// Signature can be added to a request to let it be verfied by the controller
 message Signature {
-    // token is the mandatory token that was received with the last controller reply
-    string token = 1;
-    // pkcs1v15 is the mandatory PKCS1v15 signature of this message
-    bytes pkcs1v15 = 2;
+    // the token that was received with the last controller reply
+    required string token = 1;
+    // the PKCS1v15 signature of this message
+    required bytes pkcs1v15 = 2;
 }

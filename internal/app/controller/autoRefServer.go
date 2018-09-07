@@ -79,10 +79,11 @@ func (s *AutoRefServer) Listen(address string) error {
 func (c *AutoRefClient) receiveRegistration(server *AutoRefServer) error {
 	registration := refproto.AutoRefRegistration{}
 	sslconn.ReceiveMessage(c.conn, &registration)
-	c.id = registration.Identifier
-	if len(c.id) < 1 {
+
+	if registration.Identifier == nil || len(*registration.Identifier) < 1 {
 		return errors.New("No identifier specified")
 	}
+	c.id = *registration.Identifier
 	if _, exists := server.Clients[c.id]; exists {
 		return errors.New("Client with given identifier already registered: " + c.id)
 	}
@@ -105,8 +106,12 @@ func (c *AutoRefClient) verifyRegistration(registration refproto.AutoRefRegistra
 	if registration.Signature == nil {
 		return errors.New("Missing signature")
 	}
-	if registration.Signature.Token != c.token {
-		return errors.Errorf("Client %v sent an invalid token: %v != %v", c.id, registration.Signature.Token, c.token)
+	if registration.Signature.Token == nil || *registration.Signature.Token != c.token {
+		sendToken := ""
+		if registration.Signature.Token != nil {
+			sendToken = *registration.Signature.Token
+		}
+		return errors.Errorf("Client %v sent an invalid token: %v != %v", c.id, sendToken, c.token)
 	}
 	signature := registration.Signature.Pkcs1V15
 	registration.Signature.Pkcs1V15 = []byte{}
@@ -123,12 +128,17 @@ func (c *AutoRefClient) verifyRequest(req refproto.AutoRefToControllerRequest) e
 	if req.Signature == nil {
 		return errors.New("Missing signature")
 	}
-	if req.Signature.Token != c.token {
-		return errors.Errorf("Invalid token: %v != %v", req.Signature.Token, c.token)
+	if req.Signature.Token == nil || *req.Signature.Token != c.token {
+		sendToken := ""
+		if req.Signature.Token != nil {
+			sendToken = *req.Signature.Token
+		}
+		return errors.Errorf("Invalid token: %v != %v", sendToken, c.token)
 	}
 	signature := req.Signature.Pkcs1V15
 	req.Signature.Pkcs1V15 = []byte{}
 	err := verifySignature(c.pubKey, &req, signature)
+	req.Signature.Pkcs1V15 = signature
 	if err != nil {
 		return errors.Wrap(err, "Verification failed.")
 	}
@@ -183,8 +193,10 @@ func (s *AutoRefServer) closeConnection(conn net.Conn, id string) {
 func (c *AutoRefClient) reject(reason string) {
 	log.Print("Reject connection: " + reason)
 	reply := refproto.ControllerReply{}
-	reply.StatusCode = refproto.ControllerReply_REJECTED
-	reply.Reason = reason
+	reply.StatusCode = new(refproto.ControllerReply_StatusCode)
+	*reply.StatusCode = refproto.ControllerReply_REJECTED
+	reply.Reason = new(string)
+	*reply.Reason = reason
 	if err := sslconn.SendMessage(c.conn, &reply); err != nil {
 		log.Print("Failed to send reply: ", err)
 	}
@@ -192,12 +204,15 @@ func (c *AutoRefClient) reject(reason string) {
 
 func (c *AutoRefClient) ok() {
 	reply := refproto.ControllerReply{}
-	reply.StatusCode = refproto.ControllerReply_OK
+	reply.StatusCode = new(refproto.ControllerReply_StatusCode)
+	*reply.StatusCode = refproto.ControllerReply_OK
+	reply.Verification = new(refproto.ControllerReply_Verification)
 	if c.token != "" {
-		reply.NextToken = c.token
-		reply.Verification = refproto.ControllerReply_VERIFIED
+		reply.NextToken = new(string)
+		*reply.NextToken = c.token
+		*reply.Verification = refproto.ControllerReply_VERIFIED
 	} else {
-		reply.Verification = refproto.ControllerReply_UNVERIFIED
+		*reply.Verification = refproto.ControllerReply_UNVERIFIED
 	}
 	if err := sslconn.SendMessage(c.conn, &reply); err != nil {
 		log.Print("Failed to send reply: ", err)

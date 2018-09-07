@@ -18,41 +18,58 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
-type AutoRefToControllerRequest_ReadyState int32
+type AutoRefToControllerRequest_State int32
 
 const (
 	// unknown or not set
-	AutoRefToControllerRequest_UNKNOWN AutoRefToControllerRequest_ReadyState = 0
+	AutoRefToControllerRequest_UNKNOWN AutoRefToControllerRequest_State = 0
 	// the game can continue (all conditions met: Ball is placed and bots are located at legal positions)
-	AutoRefToControllerRequest_READY_TO_CONTINUE AutoRefToControllerRequest_ReadyState = 1
-	// waiting for ball placement or bots to move to valid positions
-	AutoRefToControllerRequest_WAITING AutoRefToControllerRequest_ReadyState = 2
+	AutoRefToControllerRequest_READY_TO_CONTINUE AutoRefToControllerRequest_State = 1
+	// waiting for the ball to be placed
+	AutoRefToControllerRequest_WAIT_FOR_PLACEMENT AutoRefToControllerRequest_State = 2
+	// waiting for the bots to move to valid positions
+	AutoRefToControllerRequest_WAIT_FOR_VALID_POSITIONS AutoRefToControllerRequest_State = 3
 )
 
-var AutoRefToControllerRequest_ReadyState_name = map[int32]string{
+var AutoRefToControllerRequest_State_name = map[int32]string{
 	0: "UNKNOWN",
 	1: "READY_TO_CONTINUE",
-	2: "WAITING",
+	2: "WAIT_FOR_PLACEMENT",
+	3: "WAIT_FOR_VALID_POSITIONS",
 }
-var AutoRefToControllerRequest_ReadyState_value = map[string]int32{
-	"UNKNOWN":           0,
-	"READY_TO_CONTINUE": 1,
-	"WAITING":           2,
+var AutoRefToControllerRequest_State_value = map[string]int32{
+	"UNKNOWN":                  0,
+	"READY_TO_CONTINUE":        1,
+	"WAIT_FOR_PLACEMENT":       2,
+	"WAIT_FOR_VALID_POSITIONS": 3,
 }
 
-func (x AutoRefToControllerRequest_ReadyState) String() string {
-	return proto.EnumName(AutoRefToControllerRequest_ReadyState_name, int32(x))
+func (x AutoRefToControllerRequest_State) Enum() *AutoRefToControllerRequest_State {
+	p := new(AutoRefToControllerRequest_State)
+	*p = x
+	return p
 }
-func (AutoRefToControllerRequest_ReadyState) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_auto_ref_feb87c80fb00ac9a, []int{1, 0}
+func (x AutoRefToControllerRequest_State) String() string {
+	return proto.EnumName(AutoRefToControllerRequest_State_name, int32(x))
+}
+func (x *AutoRefToControllerRequest_State) UnmarshalJSON(data []byte) error {
+	value, err := proto.UnmarshalJSONEnum(AutoRefToControllerRequest_State_value, data, "AutoRefToControllerRequest_State")
+	if err != nil {
+		return err
+	}
+	*x = AutoRefToControllerRequest_State(value)
+	return nil
+}
+func (AutoRefToControllerRequest_State) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_ssl_game_controller_auto_ref_be330828d413742b, []int{1, 0}
 }
 
 // AutoRefRegistration is the first message that a client must send to the controller to identify itself
 type AutoRefRegistration struct {
 	// identifier is a unique name of the client
-	Identifier string `protobuf:"bytes,1,opt,name=identifier,proto3" json:"identifier,omitempty"`
+	Identifier *string `protobuf:"bytes,1,req,name=identifier" json:"identifier,omitempty"`
 	// signature can optionally be specified to enable secure communication
-	Signature            *Signature `protobuf:"bytes,2,opt,name=signature,proto3" json:"signature,omitempty"`
+	Signature            *Signature `protobuf:"bytes,2,opt,name=signature" json:"signature,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
 	XXX_unrecognized     []byte     `json:"-"`
 	XXX_sizecache        int32      `json:"-"`
@@ -62,7 +79,7 @@ func (m *AutoRefRegistration) Reset()         { *m = AutoRefRegistration{} }
 func (m *AutoRefRegistration) String() string { return proto.CompactTextString(m) }
 func (*AutoRefRegistration) ProtoMessage()    {}
 func (*AutoRefRegistration) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_auto_ref_feb87c80fb00ac9a, []int{0}
+	return fileDescriptor_ssl_game_controller_auto_ref_be330828d413742b, []int{0}
 }
 func (m *AutoRefRegistration) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AutoRefRegistration.Unmarshal(m, b)
@@ -83,8 +100,8 @@ func (m *AutoRefRegistration) XXX_DiscardUnknown() {
 var xxx_messageInfo_AutoRefRegistration proto.InternalMessageInfo
 
 func (m *AutoRefRegistration) GetIdentifier() string {
-	if m != nil {
-		return m.Identifier
+	if m != nil && m.Identifier != nil {
+		return *m.Identifier
 	}
 	return ""
 }
@@ -99,13 +116,13 @@ func (m *AutoRefRegistration) GetSignature() *Signature {
 // AutoRefToControllerRequest is the wrapper message for all subsequent requests from the client to the controller
 type AutoRefToControllerRequest struct {
 	// game_event is an optional event that the autoRef detected during the game
-	GameEvent *GameEvent `protobuf:"bytes,1,opt,name=game_event,json=gameEvent,proto3" json:"game_event,omitempty"`
+	GameEvent *GameEvent `protobuf:"bytes,1,opt,name=game_event,json=gameEvent" json:"game_event,omitempty"`
 	// auto_ref_message is an optional message that describes the current state or situation of the game/autoRef
-	AutoRefMessage *AutoRefMessage `protobuf:"bytes,2,opt,name=auto_ref_message,json=autoRefMessage,proto3" json:"auto_ref_message,omitempty"`
-	// ready to continue the game (all conditions met: Ball is placed and bots are located at legal positions)
-	Ready AutoRefToControllerRequest_ReadyState `protobuf:"varint,3,opt,name=ready,proto3,enum=AutoRefToControllerRequest_ReadyState" json:"ready,omitempty"`
+	AutoRefMessage *AutoRefMessage `protobuf:"bytes,2,opt,name=auto_ref_message,json=autoRefMessage" json:"auto_ref_message,omitempty"`
+	// the current state of the autoRef
+	State *AutoRefToControllerRequest_State `protobuf:"varint,3,opt,name=state,enum=AutoRefToControllerRequest_State" json:"state,omitempty"`
 	// signature can optionally be specified to enable secure communication
-	Signature            *Signature `protobuf:"bytes,4,opt,name=signature,proto3" json:"signature,omitempty"`
+	Signature            *Signature `protobuf:"bytes,4,opt,name=signature" json:"signature,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
 	XXX_unrecognized     []byte     `json:"-"`
 	XXX_sizecache        int32      `json:"-"`
@@ -115,7 +132,7 @@ func (m *AutoRefToControllerRequest) Reset()         { *m = AutoRefToControllerR
 func (m *AutoRefToControllerRequest) String() string { return proto.CompactTextString(m) }
 func (*AutoRefToControllerRequest) ProtoMessage()    {}
 func (*AutoRefToControllerRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_auto_ref_feb87c80fb00ac9a, []int{1}
+	return fileDescriptor_ssl_game_controller_auto_ref_be330828d413742b, []int{1}
 }
 func (m *AutoRefToControllerRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AutoRefToControllerRequest.Unmarshal(m, b)
@@ -149,9 +166,9 @@ func (m *AutoRefToControllerRequest) GetAutoRefMessage() *AutoRefMessage {
 	return nil
 }
 
-func (m *AutoRefToControllerRequest) GetReady() AutoRefToControllerRequest_ReadyState {
-	if m != nil {
-		return m.Ready
+func (m *AutoRefToControllerRequest) GetState() AutoRefToControllerRequest_State {
+	if m != nil && m.State != nil {
+		return *m.State
 	}
 	return AutoRefToControllerRequest_UNKNOWN
 }
@@ -159,200 +176,6 @@ func (m *AutoRefToControllerRequest) GetReady() AutoRefToControllerRequest_Ready
 func (m *AutoRefToControllerRequest) GetSignature() *Signature {
 	if m != nil {
 		return m.Signature
-	}
-	return nil
-}
-
-// GameEvent contains exactly one game event
-type GameEvent struct {
-	// Types that are valid to be assigned to Event:
-	//	*GameEvent_BallLeftFieldTouchLine
-	//	*GameEvent_BallLeftFieldGoalLine
-	Event                isGameEvent_Event `protobuf_oneof:"event"`
-	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
-	XXX_unrecognized     []byte            `json:"-"`
-	XXX_sizecache        int32             `json:"-"`
-}
-
-func (m *GameEvent) Reset()         { *m = GameEvent{} }
-func (m *GameEvent) String() string { return proto.CompactTextString(m) }
-func (*GameEvent) ProtoMessage()    {}
-func (*GameEvent) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_auto_ref_feb87c80fb00ac9a, []int{2}
-}
-func (m *GameEvent) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_GameEvent.Unmarshal(m, b)
-}
-func (m *GameEvent) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_GameEvent.Marshal(b, m, deterministic)
-}
-func (dst *GameEvent) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent.Merge(dst, src)
-}
-func (m *GameEvent) XXX_Size() int {
-	return xxx_messageInfo_GameEvent.Size(m)
-}
-func (m *GameEvent) XXX_DiscardUnknown() {
-	xxx_messageInfo_GameEvent.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_GameEvent proto.InternalMessageInfo
-
-type isGameEvent_Event interface {
-	isGameEvent_Event()
-}
-
-type GameEvent_BallLeftFieldTouchLine struct {
-	BallLeftFieldTouchLine *GameEvent_BallLeftFieldEvent `protobuf:"bytes,1,opt,name=ball_left_field_touch_line,json=ballLeftFieldTouchLine,proto3,oneof"`
-}
-
-type GameEvent_BallLeftFieldGoalLine struct {
-	BallLeftFieldGoalLine *GameEvent_BallLeftFieldEvent `protobuf:"bytes,2,opt,name=ball_left_field_goal_line,json=ballLeftFieldGoalLine,proto3,oneof"`
-}
-
-func (*GameEvent_BallLeftFieldTouchLine) isGameEvent_Event() {}
-
-func (*GameEvent_BallLeftFieldGoalLine) isGameEvent_Event() {}
-
-func (m *GameEvent) GetEvent() isGameEvent_Event {
-	if m != nil {
-		return m.Event
-	}
-	return nil
-}
-
-func (m *GameEvent) GetBallLeftFieldTouchLine() *GameEvent_BallLeftFieldEvent {
-	if x, ok := m.GetEvent().(*GameEvent_BallLeftFieldTouchLine); ok {
-		return x.BallLeftFieldTouchLine
-	}
-	return nil
-}
-
-func (m *GameEvent) GetBallLeftFieldGoalLine() *GameEvent_BallLeftFieldEvent {
-	if x, ok := m.GetEvent().(*GameEvent_BallLeftFieldGoalLine); ok {
-		return x.BallLeftFieldGoalLine
-	}
-	return nil
-}
-
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*GameEvent) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _GameEvent_OneofMarshaler, _GameEvent_OneofUnmarshaler, _GameEvent_OneofSizer, []interface{}{
-		(*GameEvent_BallLeftFieldTouchLine)(nil),
-		(*GameEvent_BallLeftFieldGoalLine)(nil),
-	}
-}
-
-func _GameEvent_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*GameEvent)
-	// event
-	switch x := m.Event.(type) {
-	case *GameEvent_BallLeftFieldTouchLine:
-		b.EncodeVarint(1<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.BallLeftFieldTouchLine); err != nil {
-			return err
-		}
-	case *GameEvent_BallLeftFieldGoalLine:
-		b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.BallLeftFieldGoalLine); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GameEvent.Event has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _GameEvent_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*GameEvent)
-	switch tag {
-	case 1: // event.ball_left_field_touch_line
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GameEvent_BallLeftFieldEvent)
-		err := b.DecodeMessage(msg)
-		m.Event = &GameEvent_BallLeftFieldTouchLine{msg}
-		return true, err
-	case 2: // event.ball_left_field_goal_line
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GameEvent_BallLeftFieldEvent)
-		err := b.DecodeMessage(msg)
-		m.Event = &GameEvent_BallLeftFieldGoalLine{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _GameEvent_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*GameEvent)
-	// event
-	switch x := m.Event.(type) {
-	case *GameEvent_BallLeftFieldTouchLine:
-		s := proto.Size(x.BallLeftFieldTouchLine)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GameEvent_BallLeftFieldGoalLine:
-		s := proto.Size(x.BallLeftFieldGoalLine)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
-}
-
-type GameEvent_BallLeftFieldEvent struct {
-	// the bot that last touched the ball
-	ByBot *BotId `protobuf:"bytes,1,opt,name=by_bot,json=byBot,proto3" json:"by_bot,omitempty"`
-	// the location where the ball left the field
-	Location             *Location `protobuf:"bytes,2,opt,name=location,proto3" json:"location,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_unrecognized     []byte    `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
-}
-
-func (m *GameEvent_BallLeftFieldEvent) Reset()         { *m = GameEvent_BallLeftFieldEvent{} }
-func (m *GameEvent_BallLeftFieldEvent) String() string { return proto.CompactTextString(m) }
-func (*GameEvent_BallLeftFieldEvent) ProtoMessage()    {}
-func (*GameEvent_BallLeftFieldEvent) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_auto_ref_feb87c80fb00ac9a, []int{2, 0}
-}
-func (m *GameEvent_BallLeftFieldEvent) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_GameEvent_BallLeftFieldEvent.Unmarshal(m, b)
-}
-func (m *GameEvent_BallLeftFieldEvent) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_GameEvent_BallLeftFieldEvent.Marshal(b, m, deterministic)
-}
-func (dst *GameEvent_BallLeftFieldEvent) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_BallLeftFieldEvent.Merge(dst, src)
-}
-func (m *GameEvent_BallLeftFieldEvent) XXX_Size() int {
-	return xxx_messageInfo_GameEvent_BallLeftFieldEvent.Size(m)
-}
-func (m *GameEvent_BallLeftFieldEvent) XXX_DiscardUnknown() {
-	xxx_messageInfo_GameEvent_BallLeftFieldEvent.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_GameEvent_BallLeftFieldEvent proto.InternalMessageInfo
-
-func (m *GameEvent_BallLeftFieldEvent) GetByBot() *BotId {
-	if m != nil {
-		return m.ByBot
-	}
-	return nil
-}
-
-func (m *GameEvent_BallLeftFieldEvent) GetLocation() *Location {
-	if m != nil {
-		return m.Location
 	}
 	return nil
 }
@@ -373,7 +196,7 @@ func (m *AutoRefMessage) Reset()         { *m = AutoRefMessage{} }
 func (m *AutoRefMessage) String() string { return proto.CompactTextString(m) }
 func (*AutoRefMessage) ProtoMessage()    {}
 func (*AutoRefMessage) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_auto_ref_feb87c80fb00ac9a, []int{3}
+	return fileDescriptor_ssl_game_controller_auto_ref_be330828d413742b, []int{2}
 }
 func (m *AutoRefMessage) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AutoRefMessage.Unmarshal(m, b)
@@ -398,15 +221,15 @@ type isAutoRefMessage_Message interface {
 }
 
 type AutoRefMessage_Custom struct {
-	Custom string `protobuf:"bytes,1,opt,name=custom,proto3,oneof"`
+	Custom string `protobuf:"bytes,1,opt,name=custom,oneof"`
 }
 
 type AutoRefMessage_BallPlaced_ struct {
-	BallPlaced *AutoRefMessage_BallPlaced `protobuf:"bytes,2,opt,name=ball_placed,json=ballPlaced,proto3,oneof"`
+	BallPlaced *AutoRefMessage_BallPlaced `protobuf:"bytes,2,opt,name=ball_placed,json=ballPlaced,oneof"`
 }
 
 type AutoRefMessage_WaitForBots_ struct {
-	WaitForBots *AutoRefMessage_WaitForBots `protobuf:"bytes,3,opt,name=wait_for_bots,json=waitForBots,proto3,oneof"`
+	WaitForBots *AutoRefMessage_WaitForBots `protobuf:"bytes,3,opt,name=wait_for_bots,json=waitForBots,oneof"`
 }
 
 func (*AutoRefMessage_Custom) isAutoRefMessage_Message() {}
@@ -532,13 +355,14 @@ func _AutoRefMessage_OneofSizer(msg proto.Message) (n int) {
 	return n
 }
 
+// the result of the ball placement
 type AutoRefMessage_BallPlaced struct {
 	// the time taken for placing the ball
-	TimeTaken float32 `protobuf:"fixed32,1,opt,name=time_taken,json=timeTaken,proto3" json:"time_taken,omitempty"`
+	TimeTaken *float32 `protobuf:"fixed32,1,req,name=time_taken,json=timeTaken" json:"time_taken,omitempty"`
 	// the distance between placement location and actual ball position
-	Precision float32 `protobuf:"fixed32,2,opt,name=precision,proto3" json:"precision,omitempty"`
+	Precision *float32 `protobuf:"fixed32,2,req,name=precision" json:"precision,omitempty"`
 	// the distance between the initial ball location and the placement position
-	Distance             float32  `protobuf:"fixed32,3,opt,name=distance,proto3" json:"distance,omitempty"`
+	Distance             *float32 `protobuf:"fixed32,3,req,name=distance" json:"distance,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -548,7 +372,7 @@ func (m *AutoRefMessage_BallPlaced) Reset()         { *m = AutoRefMessage_BallPl
 func (m *AutoRefMessage_BallPlaced) String() string { return proto.CompactTextString(m) }
 func (*AutoRefMessage_BallPlaced) ProtoMessage()    {}
 func (*AutoRefMessage_BallPlaced) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_auto_ref_feb87c80fb00ac9a, []int{3, 0}
+	return fileDescriptor_ssl_game_controller_auto_ref_be330828d413742b, []int{2, 0}
 }
 func (m *AutoRefMessage_BallPlaced) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AutoRefMessage_BallPlaced.Unmarshal(m, b)
@@ -569,29 +393,30 @@ func (m *AutoRefMessage_BallPlaced) XXX_DiscardUnknown() {
 var xxx_messageInfo_AutoRefMessage_BallPlaced proto.InternalMessageInfo
 
 func (m *AutoRefMessage_BallPlaced) GetTimeTaken() float32 {
-	if m != nil {
-		return m.TimeTaken
+	if m != nil && m.TimeTaken != nil {
+		return *m.TimeTaken
 	}
 	return 0
 }
 
 func (m *AutoRefMessage_BallPlaced) GetPrecision() float32 {
-	if m != nil {
-		return m.Precision
+	if m != nil && m.Precision != nil {
+		return *m.Precision
 	}
 	return 0
 }
 
 func (m *AutoRefMessage_BallPlaced) GetDistance() float32 {
-	if m != nil {
-		return m.Distance
+	if m != nil && m.Distance != nil {
+		return *m.Distance
 	}
 	return 0
 }
 
+// the bots that is waited for
 type AutoRefMessage_WaitForBots struct {
 	// the bots that are waited for
-	Violators            []*AutoRefMessage_WaitForBots_Violator `protobuf:"bytes,1,rep,name=violators,proto3" json:"violators,omitempty"`
+	Violators            []*AutoRefMessage_WaitForBots_Violator `protobuf:"bytes,1,rep,name=violators" json:"violators,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                               `json:"-"`
 	XXX_unrecognized     []byte                                 `json:"-"`
 	XXX_sizecache        int32                                  `json:"-"`
@@ -601,7 +426,7 @@ func (m *AutoRefMessage_WaitForBots) Reset()         { *m = AutoRefMessage_WaitF
 func (m *AutoRefMessage_WaitForBots) String() string { return proto.CompactTextString(m) }
 func (*AutoRefMessage_WaitForBots) ProtoMessage()    {}
 func (*AutoRefMessage_WaitForBots) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_auto_ref_feb87c80fb00ac9a, []int{3, 1}
+	return fileDescriptor_ssl_game_controller_auto_ref_be330828d413742b, []int{2, 1}
 }
 func (m *AutoRefMessage_WaitForBots) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AutoRefMessage_WaitForBots.Unmarshal(m, b)
@@ -630,9 +455,9 @@ func (m *AutoRefMessage_WaitForBots) GetViolators() []*AutoRefMessage_WaitForBot
 
 type AutoRefMessage_WaitForBots_Violator struct {
 	// the id of the violator
-	BotId *BotId `protobuf:"bytes,1,opt,name=bot_id,json=botId,proto3" json:"bot_id,omitempty"`
+	BotId *BotId `protobuf:"bytes,1,req,name=bot_id,json=botId" json:"bot_id,omitempty"`
 	// the distance to the next valid position
-	Distance             float32  `protobuf:"fixed32,2,opt,name=distance,proto3" json:"distance,omitempty"`
+	Distance             *float32 `protobuf:"fixed32,2,req,name=distance" json:"distance,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -642,7 +467,7 @@ func (m *AutoRefMessage_WaitForBots_Violator) Reset()         { *m = AutoRefMess
 func (m *AutoRefMessage_WaitForBots_Violator) String() string { return proto.CompactTextString(m) }
 func (*AutoRefMessage_WaitForBots_Violator) ProtoMessage()    {}
 func (*AutoRefMessage_WaitForBots_Violator) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_auto_ref_feb87c80fb00ac9a, []int{3, 1, 0}
+	return fileDescriptor_ssl_game_controller_auto_ref_be330828d413742b, []int{2, 1, 0}
 }
 func (m *AutoRefMessage_WaitForBots_Violator) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AutoRefMessage_WaitForBots_Violator.Unmarshal(m, b)
@@ -670,8 +495,8 @@ func (m *AutoRefMessage_WaitForBots_Violator) GetBotId() *BotId {
 }
 
 func (m *AutoRefMessage_WaitForBots_Violator) GetDistance() float32 {
-	if m != nil {
-		return m.Distance
+	if m != nil && m.Distance != nil {
+		return *m.Distance
 	}
 	return 0
 }
@@ -679,59 +504,51 @@ func (m *AutoRefMessage_WaitForBots_Violator) GetDistance() float32 {
 func init() {
 	proto.RegisterType((*AutoRefRegistration)(nil), "AutoRefRegistration")
 	proto.RegisterType((*AutoRefToControllerRequest)(nil), "AutoRefToControllerRequest")
-	proto.RegisterType((*GameEvent)(nil), "GameEvent")
-	proto.RegisterType((*GameEvent_BallLeftFieldEvent)(nil), "GameEvent.BallLeftFieldEvent")
 	proto.RegisterType((*AutoRefMessage)(nil), "AutoRefMessage")
 	proto.RegisterType((*AutoRefMessage_BallPlaced)(nil), "AutoRefMessage.BallPlaced")
 	proto.RegisterType((*AutoRefMessage_WaitForBots)(nil), "AutoRefMessage.WaitForBots")
 	proto.RegisterType((*AutoRefMessage_WaitForBots_Violator)(nil), "AutoRefMessage.WaitForBots.Violator")
-	proto.RegisterEnum("AutoRefToControllerRequest_ReadyState", AutoRefToControllerRequest_ReadyState_name, AutoRefToControllerRequest_ReadyState_value)
+	proto.RegisterEnum("AutoRefToControllerRequest_State", AutoRefToControllerRequest_State_name, AutoRefToControllerRequest_State_value)
 }
 
 func init() {
-	proto.RegisterFile("ssl_game_controller_auto_ref.proto", fileDescriptor_ssl_game_controller_auto_ref_feb87c80fb00ac9a)
+	proto.RegisterFile("ssl_game_controller_auto_ref.proto", fileDescriptor_ssl_game_controller_auto_ref_be330828d413742b)
 }
 
-var fileDescriptor_ssl_game_controller_auto_ref_feb87c80fb00ac9a = []byte{
-	// 625 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x54, 0xc1, 0x6e, 0xd3, 0x4c,
-	0x10, 0x8e, 0xdd, 0xbf, 0x69, 0x3d, 0xd6, 0x5f, 0xc2, 0xa2, 0xa2, 0x60, 0x28, 0x8a, 0x22, 0x40,
-	0xe1, 0xe2, 0x43, 0x38, 0x21, 0xd1, 0x43, 0x5c, 0xd2, 0x26, 0xa2, 0xa4, 0x68, 0x9b, 0x52, 0x15,
-	0x0e, 0xab, 0xb5, 0x3d, 0x0e, 0x2b, 0xd6, 0xde, 0x62, 0x6f, 0x5a, 0xf5, 0x4d, 0x78, 0x04, 0x78,
-	0x04, 0xde, 0x0e, 0xd9, 0xb1, 0xe3, 0xa6, 0x85, 0x8a, 0x93, 0x3d, 0xdf, 0x7e, 0xf3, 0xcd, 0x37,
-	0x3b, 0x63, 0x43, 0x37, 0xcb, 0x24, 0x9b, 0xf1, 0x18, 0x59, 0xa0, 0x12, 0x9d, 0x2a, 0x29, 0x31,
-	0x65, 0x7c, 0xae, 0x15, 0x4b, 0x31, 0x72, 0xcf, 0x53, 0xa5, 0x95, 0xd3, 0xf9, 0x13, 0x27, 0x50,
-	0x71, 0xac, 0x92, 0x05, 0xa3, 0xcb, 0xe0, 0xc1, 0x60, 0xae, 0x15, 0xc5, 0x88, 0xe2, 0x4c, 0x64,
-	0x3a, 0xe5, 0x5a, 0xa8, 0x84, 0x3c, 0x05, 0x10, 0x21, 0x26, 0x5a, 0x44, 0x02, 0xd3, 0xb6, 0xd1,
-	0x31, 0x7a, 0x16, 0xbd, 0x86, 0x90, 0x1e, 0x58, 0x99, 0x98, 0x25, 0x5c, 0xcf, 0x53, 0x6c, 0x9b,
-	0x1d, 0xa3, 0x67, 0xf7, 0xc1, 0x3d, 0xae, 0x10, 0x5a, 0x1f, 0x76, 0x7f, 0x9a, 0xe0, 0x94, 0x15,
-	0xa6, 0x6a, 0x6f, 0xe9, 0x82, 0xe2, 0xb7, 0x39, 0x66, 0x9a, 0xbc, 0x04, 0x28, 0xfc, 0xe1, 0x05,
-	0x26, 0xba, 0x28, 0x94, 0x2b, 0x1d, 0xf0, 0x18, 0x87, 0x39, 0x42, 0xad, 0x59, 0xf5, 0x4a, 0x5e,
-	0x43, 0xab, 0x6a, 0x8f, 0xc5, 0x98, 0x65, 0x7c, 0x56, 0x95, 0xbe, 0xe7, 0x96, 0x15, 0xde, 0x2f,
-	0x60, 0xba, 0xc5, 0x57, 0x62, 0xf2, 0x06, 0xd6, 0x53, 0xe4, 0xe1, 0x55, 0x7b, 0xad, 0x63, 0xf4,
-	0xb6, 0xfa, 0x2f, 0xdc, 0xbf, 0x3b, 0x72, 0x69, 0x4e, 0x3c, 0xd6, 0x5c, 0x23, 0x5d, 0x24, 0xad,
-	0x36, 0xfb, 0xdf, 0x5d, 0xcd, 0xee, 0x02, 0xd4, 0xe9, 0xc4, 0x86, 0x8d, 0x93, 0xc9, 0xbb, 0xc9,
-	0xd1, 0xe9, 0xa4, 0xd5, 0x20, 0xdb, 0x70, 0x9f, 0x0e, 0x07, 0x6f, 0xcf, 0xd8, 0xf4, 0x88, 0xed,
-	0x1d, 0x4d, 0xa6, 0xe3, 0xc9, 0xc9, 0xb0, 0x65, 0xe4, 0x9c, 0xd3, 0xc1, 0x78, 0x3a, 0x9e, 0x1c,
-	0xb4, 0xcc, 0xee, 0x0f, 0x13, 0xac, 0x65, 0xeb, 0xe4, 0x33, 0x38, 0x3e, 0x97, 0x92, 0x49, 0x8c,
-	0x34, 0x8b, 0x04, 0xca, 0x90, 0x69, 0x35, 0x0f, 0xbe, 0x30, 0x29, 0x12, 0x2c, 0xaf, 0x6a, 0xa7,
-	0xbe, 0x2a, 0xd7, 0xe3, 0x52, 0x1e, 0x62, 0xa4, 0xf7, 0x73, 0x6a, 0x01, 0x8d, 0x1a, 0xf4, 0xa1,
-	0x7f, 0x1d, 0x9d, 0xe6, 0xf9, 0x87, 0x22, 0x41, 0x72, 0x06, 0x8f, 0x6e, 0x8a, 0xcf, 0x14, 0x97,
-	0x0b, 0x6d, 0xf3, 0xdf, 0xb4, 0xb7, 0x57, 0xb4, 0x0f, 0x14, 0x97, 0xb9, 0xb4, 0xf3, 0x09, 0xc8,
-	0x6d, 0x3a, 0xd9, 0x81, 0xa6, 0x7f, 0xc5, 0x7c, 0x55, 0x0d, 0xb9, 0xe9, 0x7a, 0x4a, 0x8f, 0x43,
-	0xba, 0xee, 0x5f, 0x79, 0x4a, 0x93, 0xe7, 0xb0, 0x29, 0x55, 0x50, 0x2c, 0x5f, 0x59, 0xde, 0x72,
-	0x0f, 0x4b, 0x80, 0x2e, 0x8f, 0xbc, 0x0d, 0x58, 0x2f, 0x36, 0xa5, 0xfb, 0x6b, 0x0d, 0xb6, 0x56,
-	0x87, 0x4e, 0xda, 0xd0, 0x0c, 0xe6, 0x99, 0x56, 0xf1, 0x62, 0x5f, 0x47, 0x0d, 0x5a, 0xc6, 0x64,
-	0x17, 0xec, 0xa2, 0xd9, 0x73, 0xc9, 0x03, 0x0c, 0x4b, 0x7d, 0xe7, 0xc6, 0xd2, 0x14, 0x3d, 0x7e,
-	0x28, 0x18, 0xa3, 0x06, 0x05, 0x7f, 0x19, 0x91, 0x01, 0xfc, 0x7f, 0xc9, 0x85, 0x66, 0x91, 0x4a,
-	0xf3, 0x06, 0xb2, 0x62, 0x8b, 0xec, 0xfe, 0xe3, 0x9b, 0x02, 0xa7, 0x5c, 0xe8, 0x7d, 0x95, 0x7a,
-	0x4a, 0x67, 0xa3, 0x06, 0xb5, 0x2f, 0xeb, 0xd0, 0x41, 0x80, 0x5a, 0x9e, 0xec, 0x00, 0x68, 0x11,
-	0x23, 0xd3, 0xfc, 0x2b, 0x26, 0x85, 0x5b, 0x93, 0x5a, 0x39, 0x32, 0xcd, 0x01, 0xf2, 0x04, 0xac,
-	0xf3, 0x14, 0x03, 0x91, 0x55, 0x97, 0x61, 0xd2, 0x1a, 0x20, 0x0e, 0x6c, 0x86, 0x22, 0xd3, 0x3c,
-	0x09, 0xb0, 0x30, 0x62, 0xd2, 0x65, 0xec, 0x7c, 0x37, 0xc0, 0xbe, 0xe6, 0x82, 0x78, 0x60, 0x5d,
-	0x08, 0x25, 0xb9, 0x56, 0x69, 0xd6, 0x36, 0x3a, 0x6b, 0x3d, 0xbb, 0xff, 0xec, 0x0e, 0xd7, 0xee,
-	0xc7, 0x92, 0x4c, 0xeb, 0x34, 0x67, 0x08, 0x9b, 0x15, 0x5c, 0x0c, 0x51, 0x69, 0x26, 0xc2, 0x5b,
-	0x43, 0xcc, 0x1f, 0x2b, 0xd6, 0xcc, 0x55, 0x6b, 0x9e, 0x05, 0x1b, 0xe5, 0x47, 0xeb, 0x37, 0x8b,
-	0x5f, 0xcf, 0xab, 0xdf, 0x01, 0x00, 0x00, 0xff, 0xff, 0x6b, 0x82, 0x2a, 0x94, 0xc2, 0x04, 0x00,
-	0x00,
+var fileDescriptor_ssl_game_controller_auto_ref_be330828d413742b = []byte{
+	// 544 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x92, 0xcf, 0x6e, 0xd3, 0x40,
+	0x10, 0xc6, 0x63, 0x87, 0xfe, 0xf1, 0x58, 0x94, 0xb0, 0x08, 0x64, 0x4c, 0x8b, 0x42, 0xc4, 0x21,
+	0x5c, 0x2c, 0xf0, 0x05, 0xf5, 0xc0, 0xc1, 0x69, 0x5d, 0x62, 0xd1, 0xda, 0xd1, 0xc6, 0x6d, 0xc4,
+	0x69, 0xb5, 0x71, 0x36, 0xd1, 0x0a, 0xdb, 0x1b, 0xbc, 0x9b, 0xf6, 0x55, 0x78, 0x15, 0xde, 0x80,
+	0xc7, 0x42, 0x76, 0x1c, 0xa7, 0xa9, 0xa0, 0x27, 0x7b, 0x7e, 0xf3, 0xed, 0xcc, 0x37, 0xb3, 0x0b,
+	0x3d, 0x29, 0x53, 0xb2, 0xa0, 0x19, 0x23, 0x89, 0xc8, 0x55, 0x21, 0xd2, 0x94, 0x15, 0x84, 0xae,
+	0x94, 0x20, 0x05, 0x9b, 0x3b, 0xcb, 0x42, 0x28, 0x61, 0x77, 0xff, 0xa5, 0x49, 0x44, 0x96, 0x89,
+	0xbc, 0x56, 0xbc, 0x6e, 0x14, 0xec, 0x96, 0xe5, 0x8a, 0xb8, 0x1f, 0x3f, 0x9d, 0xae, 0x53, 0x3d,
+	0x02, 0x2f, 0xbc, 0x95, 0x12, 0x98, 0xcd, 0x31, 0x5b, 0x70, 0xa9, 0x0a, 0xaa, 0xb8, 0xc8, 0xd1,
+	0x5b, 0x00, 0x3e, 0x63, 0xb9, 0xe2, 0x73, 0xce, 0x0a, 0x4b, 0xeb, 0xea, 0x7d, 0x03, 0xdf, 0x23,
+	0xa8, 0x0f, 0x86, 0xe4, 0x8b, 0x9c, 0xaa, 0x55, 0xc1, 0x2c, 0xbd, 0xab, 0xf5, 0x4d, 0x17, 0x9c,
+	0xf1, 0x86, 0xe0, 0x6d, 0xb2, 0xf7, 0x47, 0x07, 0xbb, 0xee, 0x10, 0x8b, 0xb3, 0xc6, 0x20, 0x66,
+	0x3f, 0x57, 0x4c, 0x2a, 0xf4, 0x01, 0x60, 0x6b, 0xcc, 0xd2, 0xea, 0x4a, 0x5f, 0x69, 0xc6, 0xfc,
+	0x92, 0x60, 0x63, 0xb1, 0xf9, 0x45, 0xa7, 0xd0, 0xd9, 0x4c, 0x4e, 0x32, 0x26, 0x25, 0x5d, 0x6c,
+	0x5a, 0x3f, 0x73, 0xea, 0x0e, 0x57, 0x6b, 0x8c, 0x8f, 0xe8, 0x4e, 0x8c, 0x3e, 0xc3, 0x9e, 0x54,
+	0x54, 0x31, 0xab, 0xdd, 0xd5, 0xfa, 0x47, 0xee, 0x3b, 0xe7, 0xff, 0x8e, 0x9c, 0x71, 0x29, 0xc4,
+	0x6b, 0xfd, 0xee, 0x9c, 0x4f, 0x1e, 0x9b, 0x93, 0xc2, 0x5e, 0x75, 0x12, 0x99, 0x70, 0x70, 0x1d,
+	0x7e, 0x0b, 0xa3, 0x49, 0xd8, 0x69, 0xa1, 0x97, 0xf0, 0x1c, 0xfb, 0xde, 0xf9, 0x77, 0x12, 0x47,
+	0xe4, 0x2c, 0x0a, 0xe3, 0x20, 0xbc, 0xf6, 0x3b, 0x1a, 0x7a, 0x05, 0x68, 0xe2, 0x05, 0x31, 0xb9,
+	0x88, 0x30, 0x19, 0x5d, 0x7a, 0x67, 0xfe, 0x95, 0x1f, 0xc6, 0x1d, 0x1d, 0x1d, 0x83, 0xd5, 0xf0,
+	0x1b, 0xef, 0x32, 0x38, 0x27, 0xa3, 0x68, 0x1c, 0xc4, 0x41, 0x14, 0x8e, 0x3b, 0xed, 0xde, 0xef,
+	0x36, 0x1c, 0xed, 0x0e, 0x8a, 0x2c, 0xd8, 0x4f, 0x56, 0x52, 0x89, 0xac, 0x5a, 0x9d, 0x31, 0x6c,
+	0xe1, 0x3a, 0x46, 0x5f, 0xc0, 0x9c, 0xd2, 0x34, 0x25, 0xcb, 0x94, 0x26, 0x6c, 0x56, 0x2f, 0xca,
+	0x7e, 0xb0, 0x28, 0x67, 0x40, 0xd3, 0x74, 0x54, 0x29, 0x86, 0x2d, 0x0c, 0xd3, 0x26, 0x42, 0x1e,
+	0x3c, 0xbd, 0xa3, 0x5c, 0x91, 0xb9, 0x28, 0xc8, 0x54, 0x28, 0x59, 0x6d, 0xce, 0x74, 0xdf, 0x3c,
+	0x2c, 0x30, 0xa1, 0x5c, 0x5d, 0x88, 0x62, 0x20, 0x94, 0x1c, 0xb6, 0xb0, 0x79, 0xb7, 0x0d, 0x6d,
+	0x06, 0xb0, 0x2d, 0x8f, 0x4e, 0x00, 0x14, 0xcf, 0x18, 0x51, 0xf4, 0x07, 0xcb, 0xab, 0x17, 0xa5,
+	0x63, 0xa3, 0x24, 0x71, 0x09, 0xd0, 0x31, 0x18, 0xcb, 0x82, 0x25, 0x5c, 0x72, 0x91, 0x5b, 0xfa,
+	0x3a, 0xdb, 0x00, 0x64, 0xc3, 0xe1, 0x8c, 0x4b, 0x45, 0xf3, 0xa4, 0xbc, 0xc2, 0x32, 0xd9, 0xc4,
+	0xf6, 0x2f, 0x0d, 0xcc, 0x7b, 0x2e, 0xd0, 0x00, 0x8c, 0x5b, 0x2e, 0x52, 0xaa, 0x44, 0x21, 0x2d,
+	0xad, 0xdb, 0xee, 0x9b, 0xee, 0xfb, 0x47, 0x5c, 0x3b, 0x37, 0xb5, 0x18, 0x6f, 0x8f, 0xd9, 0x3e,
+	0x1c, 0x6e, 0x30, 0x3a, 0x81, 0xfd, 0xa9, 0x50, 0x84, 0xcf, 0x2a, 0xd3, 0xa6, 0xbb, 0xef, 0x0c,
+	0x84, 0x0a, 0x66, 0x78, 0x6f, 0x5a, 0x7e, 0x76, 0xac, 0xe9, 0xbb, 0xd6, 0x06, 0x06, 0x1c, 0xd4,
+	0x0f, 0xf5, 0x6f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x4c, 0x94, 0xf3, 0x1d, 0xc9, 0x03, 0x00, 0x00,
 }
