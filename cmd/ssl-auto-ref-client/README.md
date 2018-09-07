@@ -7,6 +7,8 @@ The communication is established with a bidirectional TCP connection. Messages a
 
 The .proto files can be found [here](../../pkg/refproto).
 
+The default port is `10007`. The IP to connect to can be determined using the multicast referee messages.
+
 ## Connection Sequence
 The connection is described in the following sequence diagram:
 
