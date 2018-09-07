@@ -16,7 +16,7 @@ import (
 )
 
 type Server struct {
-	Clients           map[string]Client
+	Clients           map[string]*Client
 	TrustedKeys       map[string]*rsa.PublicKey
 	ConnectionHandler func(net.Conn)
 }
@@ -28,8 +28,9 @@ type Client struct {
 	PubKey *rsa.PublicKey
 }
 
-func NewServer() (s Server) {
-	s.Clients = map[string]Client{}
+func NewServer() (s *Server) {
+	s = new(Server)
+	s.Clients = map[string]*Client{}
 	s.TrustedKeys = map[string]*rsa.PublicKey{}
 	return
 }
@@ -40,7 +41,7 @@ func (s *Server) Listen(address string) error {
 		return err
 	}
 	defer listener.Close()
-	log.Print("Listening for autoRefs on ", address)
+	log.Print("Listening on ", address)
 
 	for {
 		conn, err := listener.Accept()

@@ -10,31 +10,35 @@ import (
 	"net"
 )
 
-type AutoRefServer struct {
-	ProcessRequest func(refproto.AutoRefToControllerRequest) error
+type TeamServer struct {
+	ProcessRequest   func(refproto.TeamToControllerRequest) error
+	AllowedTeamNames []string
 	*Server
 }
 
-type AutoRefClient struct {
+type TeamClient struct {
 	*Client
 }
 
-func NewAutoRefServer() (s *AutoRefServer) {
-	s = new(AutoRefServer)
-	s.ProcessRequest = func(refproto.AutoRefToControllerRequest) error { return nil }
+func NewTeamServer() (s *TeamServer) {
+	s = new(TeamServer)
+	s.ProcessRequest = func(refproto.TeamToControllerRequest) error { return nil }
 	s.Server = NewServer()
 	s.ConnectionHandler = s.handleClientConnection
 	return
 }
 
-func (c *AutoRefClient) receiveRegistration(server *AutoRefServer) error {
-	registration := refproto.AutoRefRegistration{}
+func (c *TeamClient) receiveRegistration(server *TeamServer) error {
+	registration := refproto.TeamRegistration{}
 	sslconn.ReceiveMessage(c.Conn, &registration)
 
-	if registration.Identifier == nil || len(*registration.Identifier) < 1 {
-		return errors.New("No identifier specified")
+	if registration.TeamName == nil {
+		return errors.New("No team name specified")
 	}
-	c.Id = *registration.Identifier
+	if !isAllowedTeamName(*registration.TeamName, server.AllowedTeamNames) {
+		return errors.Errorf("Invalid team name: '%v'. Expecting one of these: %v", *registration.TeamName, server.AllowedTeamNames)
+	}
+	c.Id = *registration.TeamName
 	if _, exists := server.Clients[c.Id]; exists {
 		return errors.New("Client with given identifier already registered: " + c.Id)
 	}
@@ -53,7 +57,16 @@ func (c *AutoRefClient) receiveRegistration(server *AutoRefServer) error {
 	return nil
 }
 
-func (c *AutoRefClient) verifyRegistration(registration refproto.AutoRefRegistration) error {
+func isAllowedTeamName(teamName string, allowed []string) bool {
+	for _, name := range allowed {
+		if name == teamName {
+			return true
+		}
+	}
+	return false
+}
+
+func (c *TeamClient) verifyRegistration(registration refproto.TeamRegistration) error {
 	if registration.Signature == nil {
 		return errors.New("Missing signature")
 	}
@@ -75,7 +88,7 @@ func (c *AutoRefClient) verifyRegistration(registration refproto.AutoRefRegistra
 	return nil
 }
 
-func (c *AutoRefClient) verifyRequest(req refproto.AutoRefToControllerRequest) error {
+func (c *TeamClient) verifyRequest(req refproto.TeamToControllerRequest) error {
 	if req.Signature == nil {
 		return errors.New("Missing signature")
 	}
@@ -97,10 +110,10 @@ func (c *AutoRefClient) verifyRequest(req refproto.AutoRefToControllerRequest) e
 	return nil
 }
 
-func (s *AutoRefServer) handleClientConnection(conn net.Conn) {
+func (s *TeamServer) handleClientConnection(conn net.Conn) {
 	defer conn.Close()
 
-	client := AutoRefClient{Client: &Client{Conn: conn, Token: uuid.New()}}
+	client := TeamClient{Client: &Client{Conn: conn, Token: uuid.New()}}
 	client.Ok()
 
 	err := client.receiveRegistration(s)
@@ -114,7 +127,7 @@ func (s *AutoRefServer) handleClientConnection(conn net.Conn) {
 	log.Printf("Client %v connected", client.Id)
 
 	for {
-		req := refproto.AutoRefToControllerRequest{}
+		req := refproto.TeamToControllerRequest{}
 		if err := sslconn.ReceiveMessage(conn, &req); err != nil {
 			if err == io.EOF {
 				return

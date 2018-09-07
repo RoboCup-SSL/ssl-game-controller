@@ -31,6 +31,7 @@
         "SRC",
         "SSH",
         "STOx’s",
+        "Test Team",
         "TIGERs Mannheim",
         "ULtron",
         "UMass Minutebots",

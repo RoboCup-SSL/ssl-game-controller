@@ -1,21 +1,26 @@
-syntax = "proto3";
+syntax = "proto2";
 
 import "ssl_game_controller_common.proto";
 
 // a registration that must be send by teams and autoRefs to the controller as the very first message
 message TeamRegistration {
     // the exact team name as published by the game-controller
-    string team_name = 1;
+    required string team_name = 1;
+    // signature can optionally be specified to enable secure communication
+    optional Signature signature = 2;
 }
 
 // wrapper for all requests from a team's computer to the controller
 message TeamToControllerRequest {
+    // signature can optionally be specified to enable secure communication
+    optional Signature signature = 1;
+
     oneof request {
         // request a new desired keeper id
         // this is only allowed during STOP and will be rejected otherwise
-        BotId desired_keeper = 1;
+        int32 desired_keeper = 2;
         // response to an advantage choice request
-        AdvantageResponse advantage_response = 2;
+        AdvantageResponse advantage_response = 3;
     }
 
     enum AdvantageResponse {
@@ -38,7 +43,7 @@ message ControllerToTeamRequest {
 
     message AdvantageChoice {
         // the type of foul that occurred
-        Foul foul = 1;
+        required Foul foul = 1;
 
         enum Foul {
             // default value when not set

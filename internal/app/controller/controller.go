@@ -15,7 +15,8 @@ type GameController struct {
 	Config                      Config
 	Publisher                   Publisher
 	ApiServer                   ApiServer
-	AutoRefServer               rcon.AutoRefServer
+	AutoRefServer               *rcon.AutoRefServer
+	TeamServer                  *rcon.TeamServer
 	Engine                      Engine
 	timer                       timer.Timer
 	historyPreserver            HistoryPreserver
@@ -30,10 +31,17 @@ func NewGameController() (c *GameController) {
 	c.Publisher = loadPublisher(c.Config)
 	c.ApiServer = ApiServer{}
 	c.ApiServer.Consumer = c
+
 	c.AutoRefServer = rcon.NewAutoRefServer()
 	c.AutoRefServer.LoadTrustedKeys(c.Config.Server.AutoRef.TrustedKeysDir)
 	c.AutoRefServer.ProcessRequest = c.ProcessAutoRefRequests
 	go c.AutoRefServer.Listen(c.Config.Server.AutoRef.Address)
+
+	c.TeamServer = rcon.NewTeamServer()
+	c.TeamServer.LoadTrustedKeys(c.Config.Server.Team.TrustedKeysDir)
+	c.TeamServer.ProcessRequest = c.ProcessTeamRequests
+	go c.TeamServer.Listen(c.Config.Server.Team.Address)
+
 	c.Engine = NewEngine(c.Config.Game)
 	c.timer = timer.NewTimer()
 	c.timer.Start()
@@ -42,7 +50,12 @@ func NewGameController() (c *GameController) {
 }
 
 func (c *GameController) ProcessAutoRefRequests(request refproto.AutoRefToControllerRequest) error {
-	log.Print("Received ", request)
+	log.Print("Received request from autoRef: ", request)
+	return nil
+}
+
+func (c *GameController) ProcessTeamRequests(request refproto.TeamToControllerRequest) error {
+	log.Print("Received request from team: ", request)
 	return nil
 }
 
@@ -119,5 +132,7 @@ func (c *GameController) publish() {
 		c.numRefereeEventsLastPublish = len(c.Engine.RefereeEvents)
 	}
 
+	c.TeamServer.AllowedTeamNames = []string{c.Engine.State.TeamState[TeamYellow].Name,
+		c.Engine.State.TeamState[TeamBlue].Name}
 	c.ApiServer.PublishState(*c.Engine.State)
 }

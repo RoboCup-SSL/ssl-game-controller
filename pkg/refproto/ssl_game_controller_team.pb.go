@@ -40,11 +40,24 @@ var TeamToControllerRequest_AdvantageResponse_value = map[string]int32{
 	"CONTINUE":  1,
 }
 
+func (x TeamToControllerRequest_AdvantageResponse) Enum() *TeamToControllerRequest_AdvantageResponse {
+	p := new(TeamToControllerRequest_AdvantageResponse)
+	*p = x
+	return p
+}
 func (x TeamToControllerRequest_AdvantageResponse) String() string {
 	return proto.EnumName(TeamToControllerRequest_AdvantageResponse_name, int32(x))
 }
+func (x *TeamToControllerRequest_AdvantageResponse) UnmarshalJSON(data []byte) error {
+	value, err := proto.UnmarshalJSONEnum(TeamToControllerRequest_AdvantageResponse_value, data, "TeamToControllerRequest_AdvantageResponse")
+	if err != nil {
+		return err
+	}
+	*x = TeamToControllerRequest_AdvantageResponse(value)
+	return nil
+}
 func (TeamToControllerRequest_AdvantageResponse) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_team_4d708d89459157ba, []int{1, 0}
+	return fileDescriptor_ssl_game_controller_team_839d905389e2358d, []int{1, 0}
 }
 
 type ControllerToTeamRequest_AdvantageChoice_Foul int32
@@ -65,27 +78,42 @@ var ControllerToTeamRequest_AdvantageChoice_Foul_value = map[string]int32{
 	"COLLISION": 1,
 }
 
+func (x ControllerToTeamRequest_AdvantageChoice_Foul) Enum() *ControllerToTeamRequest_AdvantageChoice_Foul {
+	p := new(ControllerToTeamRequest_AdvantageChoice_Foul)
+	*p = x
+	return p
+}
 func (x ControllerToTeamRequest_AdvantageChoice_Foul) String() string {
 	return proto.EnumName(ControllerToTeamRequest_AdvantageChoice_Foul_name, int32(x))
 }
+func (x *ControllerToTeamRequest_AdvantageChoice_Foul) UnmarshalJSON(data []byte) error {
+	value, err := proto.UnmarshalJSONEnum(ControllerToTeamRequest_AdvantageChoice_Foul_value, data, "ControllerToTeamRequest_AdvantageChoice_Foul")
+	if err != nil {
+		return err
+	}
+	*x = ControllerToTeamRequest_AdvantageChoice_Foul(value)
+	return nil
+}
 func (ControllerToTeamRequest_AdvantageChoice_Foul) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_team_4d708d89459157ba, []int{2, 0, 0}
+	return fileDescriptor_ssl_game_controller_team_839d905389e2358d, []int{2, 0, 0}
 }
 
 // a registration that must be send by teams and autoRefs to the controller as the very first message
 type TeamRegistration struct {
 	// the exact team name as published by the game-controller
-	TeamName             string   `protobuf:"bytes,1,opt,name=team_name,json=teamName,proto3" json:"team_name,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	TeamName *string `protobuf:"bytes,1,req,name=team_name,json=teamName" json:"team_name,omitempty"`
+	// signature can optionally be specified to enable secure communication
+	Signature            *Signature `protobuf:"bytes,2,opt,name=signature" json:"signature,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
+	XXX_unrecognized     []byte     `json:"-"`
+	XXX_sizecache        int32      `json:"-"`
 }
 
 func (m *TeamRegistration) Reset()         { *m = TeamRegistration{} }
 func (m *TeamRegistration) String() string { return proto.CompactTextString(m) }
 func (*TeamRegistration) ProtoMessage()    {}
 func (*TeamRegistration) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_team_4d708d89459157ba, []int{0}
+	return fileDescriptor_ssl_game_controller_team_839d905389e2358d, []int{0}
 }
 func (m *TeamRegistration) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TeamRegistration.Unmarshal(m, b)
@@ -106,14 +134,23 @@ func (m *TeamRegistration) XXX_DiscardUnknown() {
 var xxx_messageInfo_TeamRegistration proto.InternalMessageInfo
 
 func (m *TeamRegistration) GetTeamName() string {
-	if m != nil {
-		return m.TeamName
+	if m != nil && m.TeamName != nil {
+		return *m.TeamName
 	}
 	return ""
 }
 
+func (m *TeamRegistration) GetSignature() *Signature {
+	if m != nil {
+		return m.Signature
+	}
+	return nil
+}
+
 // wrapper for all requests from a team's computer to the controller
 type TeamToControllerRequest struct {
+	// signature can optionally be specified to enable secure communication
+	Signature *Signature `protobuf:"bytes,1,opt,name=signature" json:"signature,omitempty"`
 	// Types that are valid to be assigned to Request:
 	//	*TeamToControllerRequest_DesiredKeeper
 	//	*TeamToControllerRequest_AdvantageResponse_
@@ -127,7 +164,7 @@ func (m *TeamToControllerRequest) Reset()         { *m = TeamToControllerRequest
 func (m *TeamToControllerRequest) String() string { return proto.CompactTextString(m) }
 func (*TeamToControllerRequest) ProtoMessage()    {}
 func (*TeamToControllerRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_team_4d708d89459157ba, []int{1}
+	return fileDescriptor_ssl_game_controller_team_839d905389e2358d, []int{1}
 }
 func (m *TeamToControllerRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TeamToControllerRequest.Unmarshal(m, b)
@@ -147,16 +184,23 @@ func (m *TeamToControllerRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_TeamToControllerRequest proto.InternalMessageInfo
 
+func (m *TeamToControllerRequest) GetSignature() *Signature {
+	if m != nil {
+		return m.Signature
+	}
+	return nil
+}
+
 type isTeamToControllerRequest_Request interface {
 	isTeamToControllerRequest_Request()
 }
 
 type TeamToControllerRequest_DesiredKeeper struct {
-	DesiredKeeper *BotId `protobuf:"bytes,1,opt,name=desired_keeper,json=desiredKeeper,proto3,oneof"`
+	DesiredKeeper int32 `protobuf:"varint,2,opt,name=desired_keeper,json=desiredKeeper,oneof"`
 }
 
 type TeamToControllerRequest_AdvantageResponse_ struct {
-	AdvantageResponse TeamToControllerRequest_AdvantageResponse `protobuf:"varint,2,opt,name=advantage_response,json=advantageResponse,proto3,enum=TeamToControllerRequest_AdvantageResponse,oneof"`
+	AdvantageResponse TeamToControllerRequest_AdvantageResponse `protobuf:"varint,3,opt,name=advantage_response,json=advantageResponse,enum=TeamToControllerRequest_AdvantageResponse,oneof"`
 }
 
 func (*TeamToControllerRequest_DesiredKeeper) isTeamToControllerRequest_Request() {}
@@ -170,11 +214,11 @@ func (m *TeamToControllerRequest) GetRequest() isTeamToControllerRequest_Request
 	return nil
 }
 
-func (m *TeamToControllerRequest) GetDesiredKeeper() *BotId {
+func (m *TeamToControllerRequest) GetDesiredKeeper() int32 {
 	if x, ok := m.GetRequest().(*TeamToControllerRequest_DesiredKeeper); ok {
 		return x.DesiredKeeper
 	}
-	return nil
+	return 0
 }
 
 func (m *TeamToControllerRequest) GetAdvantageResponse() TeamToControllerRequest_AdvantageResponse {
@@ -197,12 +241,10 @@ func _TeamToControllerRequest_OneofMarshaler(msg proto.Message, b *proto.Buffer)
 	// request
 	switch x := m.Request.(type) {
 	case *TeamToControllerRequest_DesiredKeeper:
-		b.EncodeVarint(1<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DesiredKeeper); err != nil {
-			return err
-		}
-	case *TeamToControllerRequest_AdvantageResponse_:
 		b.EncodeVarint(2<<3 | proto.WireVarint)
+		b.EncodeVarint(uint64(x.DesiredKeeper))
+	case *TeamToControllerRequest_AdvantageResponse_:
+		b.EncodeVarint(3<<3 | proto.WireVarint)
 		b.EncodeVarint(uint64(x.AdvantageResponse))
 	case nil:
 	default:
@@ -214,15 +256,14 @@ func _TeamToControllerRequest_OneofMarshaler(msg proto.Message, b *proto.Buffer)
 func _TeamToControllerRequest_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
 	m := msg.(*TeamToControllerRequest)
 	switch tag {
-	case 1: // request.desired_keeper
-		if wire != proto.WireBytes {
+	case 2: // request.desired_keeper
+		if wire != proto.WireVarint {
 			return true, proto.ErrInternalBadWireType
 		}
-		msg := new(BotId)
-		err := b.DecodeMessage(msg)
-		m.Request = &TeamToControllerRequest_DesiredKeeper{msg}
+		x, err := b.DecodeVarint()
+		m.Request = &TeamToControllerRequest_DesiredKeeper{int32(x)}
 		return true, err
-	case 2: // request.advantage_response
+	case 3: // request.advantage_response
 		if wire != proto.WireVarint {
 			return true, proto.ErrInternalBadWireType
 		}
@@ -239,10 +280,8 @@ func _TeamToControllerRequest_OneofSizer(msg proto.Message) (n int) {
 	// request
 	switch x := m.Request.(type) {
 	case *TeamToControllerRequest_DesiredKeeper:
-		s := proto.Size(x.DesiredKeeper)
 		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
+		n += proto.SizeVarint(uint64(x.DesiredKeeper))
 	case *TeamToControllerRequest_AdvantageResponse_:
 		n += 1 // tag and wire
 		n += proto.SizeVarint(uint64(x.AdvantageResponse))
@@ -267,7 +306,7 @@ func (m *ControllerToTeamRequest) Reset()         { *m = ControllerToTeamRequest
 func (m *ControllerToTeamRequest) String() string { return proto.CompactTextString(m) }
 func (*ControllerToTeamRequest) ProtoMessage()    {}
 func (*ControllerToTeamRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_team_4d708d89459157ba, []int{2}
+	return fileDescriptor_ssl_game_controller_team_839d905389e2358d, []int{2}
 }
 func (m *ControllerToTeamRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ControllerToTeamRequest.Unmarshal(m, b)
@@ -292,7 +331,7 @@ type isControllerToTeamRequest_Request interface {
 }
 
 type ControllerToTeamRequest_AdvantageChoice_ struct {
-	AdvantageChoice *ControllerToTeamRequest_AdvantageChoice `protobuf:"bytes,1,opt,name=advantage_choice,json=advantageChoice,proto3,oneof"`
+	AdvantageChoice *ControllerToTeamRequest_AdvantageChoice `protobuf:"bytes,1,opt,name=advantage_choice,json=advantageChoice,oneof"`
 }
 
 func (*ControllerToTeamRequest_AdvantageChoice_) isControllerToTeamRequest_Request() {}
@@ -368,10 +407,10 @@ func _ControllerToTeamRequest_OneofSizer(msg proto.Message) (n int) {
 
 type ControllerToTeamRequest_AdvantageChoice struct {
 	// the type of foul that occurred
-	Foul                 ControllerToTeamRequest_AdvantageChoice_Foul `protobuf:"varint,1,opt,name=foul,proto3,enum=ControllerToTeamRequest_AdvantageChoice_Foul" json:"foul,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}                                     `json:"-"`
-	XXX_unrecognized     []byte                                       `json:"-"`
-	XXX_sizecache        int32                                        `json:"-"`
+	Foul                 *ControllerToTeamRequest_AdvantageChoice_Foul `protobuf:"varint,1,req,name=foul,enum=ControllerToTeamRequest_AdvantageChoice_Foul" json:"foul,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                                      `json:"-"`
+	XXX_unrecognized     []byte                                        `json:"-"`
+	XXX_sizecache        int32                                         `json:"-"`
 }
 
 func (m *ControllerToTeamRequest_AdvantageChoice) Reset() {
@@ -380,7 +419,7 @@ func (m *ControllerToTeamRequest_AdvantageChoice) Reset() {
 func (m *ControllerToTeamRequest_AdvantageChoice) String() string { return proto.CompactTextString(m) }
 func (*ControllerToTeamRequest_AdvantageChoice) ProtoMessage()    {}
 func (*ControllerToTeamRequest_AdvantageChoice) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_team_4d708d89459157ba, []int{2, 0}
+	return fileDescriptor_ssl_game_controller_team_839d905389e2358d, []int{2, 0}
 }
 func (m *ControllerToTeamRequest_AdvantageChoice) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ControllerToTeamRequest_AdvantageChoice.Unmarshal(m, b)
@@ -401,8 +440,8 @@ func (m *ControllerToTeamRequest_AdvantageChoice) XXX_DiscardUnknown() {
 var xxx_messageInfo_ControllerToTeamRequest_AdvantageChoice proto.InternalMessageInfo
 
 func (m *ControllerToTeamRequest_AdvantageChoice) GetFoul() ControllerToTeamRequest_AdvantageChoice_Foul {
-	if m != nil {
-		return m.Foul
+	if m != nil && m.Foul != nil {
+		return *m.Foul
 	}
 	return ControllerToTeamRequest_AdvantageChoice_UNKNOWN
 }
@@ -417,32 +456,33 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("ssl_game_controller_team.proto", fileDescriptor_ssl_game_controller_team_4d708d89459157ba)
+	proto.RegisterFile("ssl_game_controller_team.proto", fileDescriptor_ssl_game_controller_team_839d905389e2358d)
 }
 
-var fileDescriptor_ssl_game_controller_team_4d708d89459157ba = []byte{
-	// 364 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x92, 0xc1, 0xcb, 0xda, 0x40,
-	0x10, 0xc5, 0x13, 0x11, 0x35, 0x63, 0xd5, 0xb8, 0x17, 0xc5, 0x42, 0x91, 0x9c, 0xa4, 0xd0, 0x08,
-	0xf6, 0x5e, 0xd0, 0x68, 0x31, 0x28, 0x9b, 0xb2, 0x26, 0xf4, 0xd0, 0x43, 0xd8, 0x26, 0x53, 0x1b,
-	0x9a, 0x64, 0xed, 0x66, 0x2d, 0xfd, 0xbb, 0x0b, 0xbd, 0x97, 0x24, 0xb6, 0xa2, 0xfd, 0x84, 0xef,
-	0x98, 0x79, 0xef, 0xf7, 0x26, 0x6f, 0x58, 0x78, 0x55, 0x14, 0x69, 0x78, 0xe4, 0x19, 0x86, 0x91,
-	0xc8, 0x95, 0x14, 0x69, 0x8a, 0x32, 0x54, 0xc8, 0x33, 0xfb, 0x24, 0x85, 0x12, 0x93, 0xe9, 0x53,
-	0x7a, 0x24, 0xb2, 0x4c, 0xe4, 0xb5, 0xc3, 0x9a, 0x83, 0xe9, 0x23, 0xcf, 0x18, 0x1e, 0x93, 0x42,
-	0x49, 0xae, 0x12, 0x91, 0x93, 0x97, 0x60, 0x94, 0x19, 0x61, 0xce, 0x33, 0x1c, 0xeb, 0x53, 0x7d,
-	0x66, 0xb0, 0x4e, 0x39, 0xa0, 0x3c, 0x43, 0xeb, 0x97, 0x0e, 0xa3, 0x92, 0xf0, 0x85, 0xf3, 0x2f,
-	0x92, 0xe1, 0xf7, 0x33, 0x16, 0x8a, 0xcc, 0xa1, 0x1f, 0x63, 0x91, 0x48, 0x8c, 0xc3, 0x6f, 0x88,
-	0x27, 0x94, 0x15, 0xdd, 0x5d, 0xb4, 0xec, 0x95, 0x50, 0x6e, 0xbc, 0xd5, 0x58, 0xef, 0xa2, 0xef,
-	0x2a, 0x99, 0x7c, 0x02, 0xc2, 0xe3, 0x1f, 0x3c, 0x57, 0xfc, 0x88, 0xa1, 0xc4, 0xe2, 0x24, 0xf2,
-	0x02, 0xc7, 0x8d, 0xa9, 0x3e, 0xeb, 0x2f, 0x5e, 0xdb, 0x0f, 0xd6, 0xd8, 0xcb, 0xbf, 0x08, 0xbb,
-	0x10, 0x5b, 0x8d, 0x0d, 0xf9, 0xfd, 0xd0, 0x7a, 0x07, 0xc3, 0xff, 0x9c, 0xa4, 0x07, 0x46, 0x40,
-	0xd7, 0x1b, 0xc7, 0x5d, 0x6f, 0xd6, 0xa6, 0x46, 0x3a, 0xd0, 0x3c, 0xf8, 0xde, 0x07, 0x53, 0x23,
-	0x2f, 0xa0, 0xe3, 0x78, 0xd4, 0x77, 0x69, 0xb0, 0x31, 0xf5, 0x49, 0xc3, 0xd4, 0x57, 0x06, 0xb4,
-	0x65, 0xbd, 0xd1, 0xfa, 0xad, 0xc3, 0xe8, 0xfa, 0x1f, 0xbe, 0xa8, 0x4f, 0x56, 0x97, 0x0e, 0xc0,
-	0xbc, 0x76, 0x88, 0xbe, 0x8a, 0x24, 0xc2, 0x4b, 0xed, 0x99, 0xfd, 0x80, 0xb9, 0x36, 0x70, 0x2a,
-	0xff, 0x56, 0x63, 0x03, 0x7e, 0x3b, 0x9a, 0xfc, 0x84, 0xc1, 0x9d, 0x8b, 0x2c, 0xa1, 0xf9, 0x45,
-	0x9c, 0xd3, 0x2a, 0xbd, 0xbf, 0x78, 0xf3, 0xdc, 0x74, 0xfb, 0xbd, 0x38, 0xa7, 0xac, 0x42, 0x2d,
-	0x0b, 0x9a, 0xe5, 0x17, 0xe9, 0x42, 0x3b, 0xa0, 0x3b, 0xea, 0x7d, 0xa4, 0xa6, 0x56, 0xde, 0xc4,
-	0xf1, 0xf6, 0x7b, 0xf7, 0xe0, 0x7a, 0xf4, 0xa6, 0xf7, 0xe7, 0x56, 0xf5, 0x48, 0xde, 0xfe, 0x09,
-	0x00, 0x00, 0xff, 0xff, 0xb7, 0xe9, 0x88, 0x26, 0x68, 0x02, 0x00, 0x00,
+var fileDescriptor_ssl_game_controller_team_839d905389e2358d = []byte{
+	// 383 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x51, 0xd1, 0x8e, 0x93, 0x40,
+	0x14, 0x05, 0xac, 0xd9, 0x72, 0xd7, 0xed, 0xb2, 0xf3, 0xb2, 0x4d, 0x4d, 0x0c, 0xe1, 0x45, 0x62,
+	0x22, 0x0f, 0xfd, 0x00, 0x93, 0x95, 0xd6, 0x94, 0xec, 0x66, 0x30, 0x53, 0x88, 0x31, 0x3e, 0x90,
+	0x09, 0xbd, 0x22, 0x11, 0x98, 0x3a, 0x33, 0x18, 0x3f, 0xc4, 0x5f, 0xf5, 0xdd, 0x00, 0x5b, 0x49,
+	0x57, 0x6b, 0xf6, 0x71, 0xce, 0x3d, 0xe7, 0xdc, 0x7b, 0xce, 0xc0, 0x0b, 0xa5, 0xaa, 0xac, 0xe0,
+	0x35, 0x66, 0xb9, 0x68, 0xb4, 0x14, 0x55, 0x85, 0x32, 0xd3, 0xc8, 0xeb, 0x60, 0x2f, 0x85, 0x16,
+	0x0b, 0xf7, 0x5f, 0xf3, 0x5c, 0xd4, 0xb5, 0x68, 0x06, 0x86, 0xf7, 0x11, 0x9c, 0x04, 0x79, 0xcd,
+	0xb0, 0x28, 0x95, 0x96, 0x5c, 0x97, 0xa2, 0x21, 0xcf, 0xc1, 0xee, 0x3c, 0xb2, 0x86, 0xd7, 0x38,
+	0x37, 0x5d, 0xcb, 0xb7, 0xd9, 0xb4, 0x03, 0x28, 0xaf, 0x91, 0xf8, 0x60, 0xab, 0xb2, 0x68, 0xb8,
+	0x6e, 0x25, 0xce, 0x2d, 0xd7, 0xf4, 0xcf, 0x97, 0x10, 0x6c, 0x0f, 0x08, 0x1b, 0x87, 0xde, 0x4f,
+	0x0b, 0xae, 0x3b, 0xef, 0x44, 0x84, 0x7f, 0x96, 0x33, 0xfc, 0xd6, 0xa2, 0xd2, 0xc7, 0x2e, 0xe6,
+	0x7f, 0x5c, 0xc8, 0x4b, 0x98, 0xed, 0x50, 0x95, 0x12, 0x77, 0xd9, 0x57, 0xc4, 0x3d, 0xca, 0x7e,
+	0xe9, 0xd3, 0x8d, 0xc1, 0x2e, 0xee, 0xf1, 0xdb, 0x1e, 0x26, 0x9f, 0x80, 0xf0, 0xdd, 0x77, 0xde,
+	0x68, 0x5e, 0x60, 0x26, 0x51, 0xed, 0x45, 0xa3, 0x70, 0xfe, 0xc4, 0x35, 0xfd, 0xd9, 0xf2, 0x55,
+	0x70, 0xe2, 0x90, 0xe0, 0xe6, 0x20, 0x61, 0xf7, 0x8a, 0x8d, 0xc1, 0xae, 0xf8, 0x43, 0xd0, 0x7b,
+	0x03, 0x57, 0x7f, 0x31, 0xc9, 0x05, 0xd8, 0x29, 0x5d, 0xad, 0xc3, 0x68, 0xb5, 0x5e, 0x39, 0x06,
+	0x99, 0xc2, 0x64, 0x9b, 0xc4, 0xef, 0x1d, 0x83, 0x3c, 0x83, 0x69, 0x18, 0xd3, 0x24, 0xa2, 0xe9,
+	0xda, 0x31, 0x17, 0x96, 0x63, 0xbe, 0xb5, 0xe1, 0x4c, 0x0e, 0x1b, 0xbd, 0x5f, 0x26, 0x5c, 0x8f,
+	0x77, 0x24, 0x62, 0xa8, 0x7f, 0xa8, 0x25, 0x05, 0x67, 0xcc, 0x90, 0x7f, 0x11, 0x65, 0x7e, 0x68,
+	0xc7, 0x0f, 0x4e, 0x68, 0xc6, 0x04, 0x61, 0xcf, 0xdf, 0x18, 0xec, 0x92, 0x1f, 0x43, 0x8b, 0x1f,
+	0x70, 0xf9, 0x80, 0x45, 0x6e, 0x60, 0xf2, 0x59, 0xb4, 0x55, 0xff, 0xbd, 0xb3, 0xe5, 0xeb, 0xc7,
+	0xba, 0x07, 0xef, 0x44, 0x5b, 0xb1, 0x5e, 0xea, 0x79, 0x30, 0xe9, 0x5e, 0xe4, 0x1c, 0xce, 0x52,
+	0x7a, 0x4b, 0xe3, 0x0f, 0xd4, 0x31, 0xba, 0x4e, 0xc2, 0xf8, 0xee, 0x2e, 0xda, 0x46, 0x31, 0x3d,
+	0xca, 0xfd, 0x3b, 0x00, 0x00, 0xff, 0xff, 0x5b, 0xa4, 0x23, 0x54, 0xac, 0x02, 0x00, 0x00,
 }

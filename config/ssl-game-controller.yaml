@@ -6,6 +6,7 @@ server:
     trusted-keys-dir: config/trusted_keys/auto_ref
   team:
     address: :10008
+    trusted-keys-dir: config/trusted_keys/team
 game:
   yellow-card-duration: 2m
   default-division: Div A

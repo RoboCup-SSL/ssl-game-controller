@@ -43,7 +43,8 @@ type ConfigServerAutoRef struct {
 
 // ConfigServerTeam holds configs for the team server
 type ConfigServerTeam struct {
-	Address string `yaml:"address"`
+	Address        string `yaml:"address"`
+	TrustedKeysDir string `yaml:"trusted-keys-dir"`
 }
 
 // Config structure for the game controller
@@ -98,6 +99,7 @@ func DefaultConfig() (c Config) {
 	c.Server.AutoRef.Address = ":10007"
 	c.Server.AutoRef.TrustedKeysDir = "config/trusted_keys/auto_ref"
 	c.Server.Team.Address = ":10008"
+	c.Server.AutoRef.TrustedKeysDir = "config/trusted_keys/team"
 
 	return
 }
