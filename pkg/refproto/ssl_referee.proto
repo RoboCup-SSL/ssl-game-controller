@@ -167,11 +167,11 @@ message Referee {
     // True, if the blue team will have it's goal on the positive x-axis of the ssl-vision coordinate system
     // Obviously, the yellow team will play on the opposide half
     // For compatibility, this field is optional
-    optional bool blueTeamOnPositiveHalf = 10;
+    optional bool blue_team_on_positive_half = 10;
 
     // The game event that caused the referee command
-    // deprecated in favor for current_game_event
-    optional Game_Event gameEvent = 11 [deprecated = true];
+    // deprecated in favor of current_game_event
+    optional Game_Event game_event = 11 [deprecated = true];
 
     // the game event that is currently processed
     optional GameEvent current_game_event = 12;
