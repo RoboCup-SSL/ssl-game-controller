@@ -6,30 +6,30 @@
             </b-card-header>
             <b-collapse id="accordion-event-category1" accordion="accordion-event-category" role="tabpanel">
                 <b-card-body>
-                    <NewBallOutOfFieldEvent/>
+                    <EventAccordion accordion-name="ball-left-field" :categories="ballLeftFieldEvents"/>
                 </b-card-body>
             </b-collapse>
         </b-card>
         <b-card no-body class="mb-1">
             <b-card-header header-tag="header" class="p-1" role="tab">
-                <b-btn block href="#" v-b-toggle.accordion-event-category2 variant="primary">Minor offence</b-btn>
+                <b-btn block href="#" v-b-toggle.accordion-event-category2 variant="primary">Foul</b-btn>
             </b-card-header>
             <b-collapse id="accordion-event-category2" accordion="accordion-event-category" role="tabpanel">
                 <b-card-body>
                     <p class="card-text">
-                        A minor offence
+                        <EventAccordion accordion-name="foul" :categories="foulEvents"/>
                     </p>
                 </b-card-body>
             </b-collapse>
         </b-card>
         <b-card no-body class="mb-1">
             <b-card-header header-tag="header" class="p-1" role="tab">
-                <b-btn block href="#" v-b-toggle.accordion-event-category3 variant="primary">Foul</b-btn>
+                <b-btn block href="#" v-b-toggle.accordion-event-category3 variant="primary">Match proceeding</b-btn>
             </b-card-header>
             <b-collapse id="accordion-event-category3" accordion="accordion-event-category" role="tabpanel">
                 <b-card-body>
                     <p class="card-text">
-                        A foul
+                        TODO
                     </p>
                 </b-card-body>
             </b-collapse>
@@ -38,11 +38,22 @@
 </template>
 
 <script>
-    import NewBallOutOfFieldEvent from "./NewBallOutOfFieldEvent";
+    import EventAccordion from "./EventAccordion";
 
     export default {
         name: "NewEvent",
-        components: {NewBallOutOfFieldEvent},
+        components: {EventAccordion},
+        data() {
+            return {
+                ballLeftFieldEvents: [
+                    {name: 'Ball left field via goal line', component: 'BallLeftFieldGoalLine'},
+                    {name: 'Ball left field via touch line', component: 'BallLeftFieldTouchLine'},
+                ],
+                foulEvents: [
+                    {name: 'Robot too fast during stop', component: 'RobotStopSpeed'},
+                ]
+            }
+        }
     }
 </script>
 

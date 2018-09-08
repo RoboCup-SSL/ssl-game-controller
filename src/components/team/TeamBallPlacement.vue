@@ -15,7 +15,7 @@
             teamColor: String
         },
         methods: {
-            edit: function (v) {
+            edit: function () {
                 this.$socket.sendObj({
                     'modify': {
                         'forTeam': this.teamColor,
