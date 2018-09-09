@@ -72,14 +72,18 @@ func (c *GameController) ProcessTeamRequests(teamName string, request refproto.T
 	log.Print("Received request from team: ", request)
 
 	if x, ok := request.GetRequest().(*refproto.TeamToControllerRequest_AdvantageResponse_); ok {
+		if c.outstandingTeamChoice == nil {
+			return errors.New("No outstanding choice available. You are probably too late.")
+		}
+		responseTime := c.Engine.TimeProvider().Sub(c.outstandingTeamChoice.IssueTime)
 		if x.AdvantageResponse == refproto.TeamToControllerRequest_CONTINUE {
+			log.Printf("Team %v decided to continue the game within %v", c.outstandingTeamChoice.Team, responseTime)
 			c.outstandingTeamChoice = nil
-		} else if c.outstandingTeamChoice != nil {
+		} else {
+			log.Printf("Team %v decided to stop the game within %v", c.outstandingTeamChoice.Team, responseTime)
 			c.OnNewEvent(c.outstandingTeamChoice.Event)
 			c.outstandingTeamChoice = nil
 			return nil
-		} else {
-			return errors.New("No outstanding choice available. You are probably too late.")
 		}
 	}
 
