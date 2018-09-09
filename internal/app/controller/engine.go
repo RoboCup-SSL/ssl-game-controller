@@ -75,11 +75,13 @@ func (e *Engine) UndoLastAction() {
 func (e *Engine) Continue() error {
 	switch e.State.GameEvent.Type {
 	case GameEventBallLeftFieldTouchLine:
-		e.SendCommand(CommandIndirect, e.State.GameEvent.ForTeam.Opposite())
+		byTeam := NewTeam(*e.State.GameEvent.Details.BallLeftFieldTouchLine.ByTeam)
+		e.SendCommand(CommandIndirect, byTeam.Opposite())
 	case GameEventBallLeftFieldGoalLine:
-		e.SendCommand(CommandDirect, e.State.GameEvent.ForTeam.Opposite())
+		byTeam := NewTeam(*e.State.GameEvent.Details.BallLeftFieldGoalLine.ByTeam)
+		e.SendCommand(CommandDirect, byTeam.Opposite())
 	default:
-		return errors.New("No game event present")
+		return errors.Errorf("Unknown game event: %v", e.State.GameEvent)
 	}
 	return nil
 }
@@ -106,7 +108,7 @@ func (e *Engine) LogGameEvent() {
 		StageTime: e.State.StageTimeElapsed,
 		Type:      RefereeEventGameEvent,
 		Name:      string(e.State.GameEvent.Type),
-		Team:      e.State.GameEvent.ForTeam,
+		Team:      e.State.GameEvent.ByTeam(),
 	}
 	e.RefereeEvents = append(e.RefereeEvents, gameEvent)
 }
@@ -428,6 +430,10 @@ func (e *Engine) processTrigger(t *EventTrigger) (err error) {
 }
 
 func (e *Engine) processGameEvent(event *GameEvent) error {
+
+	if !event.Details.IsSet() {
+		return errors.Errorf("Incomplete game event: %v", event)
+	}
 
 	if e.State.GameState() != GameStateStopped && e.State.GameState() != GameStateHalted {
 		e.SendCommand(CommandStop, "")

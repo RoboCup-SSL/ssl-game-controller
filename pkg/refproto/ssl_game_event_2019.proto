@@ -26,7 +26,7 @@ message GameEvent {
         BotCrashUnique bot_crash_unique = 13;
         BotPushedBot bot_pushed_bot = 14;
         BotHeldBallDeliberately bot_held_ball_deliberately = 15;
-        AttackerDoubleTouchedBall bot_double_touched_ball = 16;
+        AttackerDoubleTouchedBall attacker_double_touched_ball = 16;
         AttackerTooCloseToDefenseArea attacker_too_close_to_defense_area = 17;
         AttackerInDefenseArea attacker_in_defense_area = 18;
         AttackerTouchedKeeper attacker_touched_keeper = 19;

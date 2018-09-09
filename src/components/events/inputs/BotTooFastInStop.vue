@@ -27,8 +27,7 @@
                 this.$socket.sendObj({
                     gameEvent: {
                         type: 'botTooFastInStop',
-                        forTeam: this.newEvent.team,
-                        details: {}
+                        details: {['botTooFastInStop']: {by_team: this.newEvent.team.toLocaleUpperCase()}}
                     }
                 });
                 this.$root.$emit('bv::hide::modal', 'new-event-modal');

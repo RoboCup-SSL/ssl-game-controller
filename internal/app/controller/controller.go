@@ -153,13 +153,7 @@ func (c *GameController) OnNewEvent(event Event) {
 			byTeamProto = *event.GameEvent.Details.BotPushedBot.ByTeam
 		}
 
-		var byTeam Team
-		if byTeamProto == refproto.Team_YELLOW {
-			byTeam = TeamYellow
-		} else if byTeamProto == refproto.Team_BLUE {
-			byTeam = TeamBlue
-		}
-
+		byTeam := NewTeam(byTeamProto)
 		if byTeam != "" {
 			teamName := c.Engine.State.TeamState[byTeam].Name
 			choiceType := refproto.ControllerToTeamRequest_AdvantageChoice_COLLISION

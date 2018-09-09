@@ -2,6 +2,7 @@ package controller
 
 import (
 	"encoding/json"
+	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
 	"github.com/pkg/errors"
 	"time"
 )
@@ -14,6 +15,8 @@ const (
 	TeamYellow Team = "Yellow"
 	// TeamBlue is the blue team
 	TeamBlue Team = "Blue"
+	// TeamUnknown is an unknown team
+	TeamUnknown Team = ""
 )
 
 // Opposite returns the other team
@@ -35,6 +38,16 @@ func (t Team) Unknown() bool {
 // Known returns true if the team is blue or yellow
 func (t Team) Known() bool {
 	return !t.Unknown()
+}
+
+// NewTeam creates a team from a protobuf team
+func NewTeam(team refproto.Team) Team {
+	if team == refproto.Team_YELLOW {
+		return TeamYellow
+	} else if team == refproto.Team_BLUE {
+		return TeamBlue
+	}
+	return TeamUnknown
 }
 
 type Division string

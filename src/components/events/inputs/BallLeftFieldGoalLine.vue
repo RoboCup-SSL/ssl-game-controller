@@ -27,8 +27,7 @@
                 this.$socket.sendObj({
                     gameEvent: {
                         type: 'ballLeftFieldGoalLine',
-                        forTeam: this.newEvent.team,
-                        details: {}
+                        details: {['ballLeftFieldGoalLine']: {by_team: this.newEvent.team.toLocaleUpperCase()}}
                     }
                 });
                 this.$root.$emit('bv::hide::modal', 'new-event-modal');
