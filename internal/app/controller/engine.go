@@ -74,16 +74,68 @@ func (e *Engine) UndoLastAction() {
 
 func (e *Engine) Continue() error {
 	switch e.State.GameEvent.Type {
-	case GameEventBallLeftFieldTouchLine:
-		byTeam := NewTeam(*e.State.GameEvent.Details.BallLeftFieldTouchLine.ByTeam)
-		e.SendCommand(CommandIndirect, byTeam.Opposite())
-	case GameEventBallLeftFieldGoalLine:
-		byTeam := NewTeam(*e.State.GameEvent.Details.BallLeftFieldGoalLine.ByTeam)
-		e.SendCommand(CommandDirect, byTeam.Opposite())
+	case GameEventBallLeftFieldTouchLine,
+		GameEventIcing,
+		GameEventBotKickedBallTooFast,
+		GameEventBotDribbledBallTooFar,
+		GameEventAttackerDoubleTouchedBall,
+		GameEventAttackerTooCloseToDefenseArea,
+		GameEventAttackerInDefenseArea,
+		GameEventAttackerTouchedKeeper,
+		GameEventDefenderInDefenseAreaPartially:
+		e.SendCommand(CommandIndirect, e.State.GameEvent.ByTeam().Opposite())
+	case GameEventBallLeftFieldGoalLine,
+		GameEventIndirectGoal,
+		GameEventChippedGoal,
+		GameEventBotCrashUnique,
+		GameEventBotPushedBot,
+		GameEventBotHeldBallDeliberately,
+		GameEventKeeperHeldBall:
+		e.SendCommand(CommandDirect, e.State.GameEvent.ByTeam().Opposite())
+	case GameEventGoal:
+		e.SendCommand(CommandKickoff, e.State.GameEvent.ByTeam().Opposite())
+	case GameEventBotCrashDrawn,
+		GameEventKickTimeout,
+		GameEventNoProgressInGame:
+		e.SendCommand(CommandForceStart, TeamUnknown)
+	case GameEventDefenderInDefenseArea,
+		GameEventMultipleYellowCards:
+		e.SendCommand(CommandPenalty, e.State.GameEvent.ByTeam().Opposite())
+	case GameEventBotInterferedPlacement,
+		GameEventDefenderTooCloseToKickPoint:
+		if cmd, err := e.LastGameStartCommand(); err != nil {
+			log.Print("Warn: ", err)
+		} else {
+			e.SendCommand(cmd, e.State.GameEvent.ByTeam().Opposite())
+		}
+	case GameEventPlacementFailedByTeamInFavor:
+		// TODO placement pos
+		e.SendCommand(CommandBallPlacement, e.State.GameEvent.ByTeam().Opposite())
+	case GameEventBotTooFastInStop,
+		GameEventBotTippedOver,
+		GameEventUnsportiveBehaviorMinor,
+		GameEventUnsportiveBehaviorMajor,
+		GameEventMultipleFouls,
+		GameEventPlacementFailedByOpponent:
+		// no command
 	default:
 		return errors.Errorf("Unknown game event: %v", e.State.GameEvent)
 	}
 	return nil
+}
+
+func (e *Engine) LastGameStartCommand() (RefCommand, error) {
+	for i := len(e.RefereeEvents) - 1; i >= 0; i-- {
+		event := e.RefereeEvents[i]
+		if event.Type == RefereeEventCommand {
+			cmd := RefCommand(event.Name)
+			switch cmd {
+			case CommandPenalty, CommandKickoff, CommandIndirect, CommandDirect:
+				return cmd, nil
+			}
+		}
+	}
+	return "", errors.New("No last game start command found.")
 }
 
 func (e *Engine) Process(event Event) error {
