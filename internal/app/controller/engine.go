@@ -78,6 +78,7 @@ func (e *Engine) Continue() error {
 		GameEventIcing,
 		GameEventBotKickedBallTooFast,
 		GameEventBotDribbledBallTooFar,
+		GameEventBotTippedOver,
 		GameEventAttackerDoubleTouchedBall,
 		GameEventAttackerTooCloseToDefenseArea,
 		GameEventAttackerInDefenseArea,
@@ -112,7 +113,6 @@ func (e *Engine) Continue() error {
 		// TODO placement pos
 		e.SendCommand(CommandBallPlacement, e.State.GameEvent.ByTeam().Opposite())
 	case GameEventBotTooFastInStop,
-		GameEventBotTippedOver,
 		GameEventUnsportiveBehaviorMinor,
 		GameEventUnsportiveBehaviorMajor,
 		GameEventMultipleFouls,
