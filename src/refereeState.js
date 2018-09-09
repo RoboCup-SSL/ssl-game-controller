@@ -13,3 +13,16 @@ export let isPreStage = function (state) {
         || state.stage === 'Pre-Overtime Second Half'
         || state.stage === 'Shootout';
 };
+
+export let convertStringLocation = function (loc) {
+    if (loc.x === null && loc.y === null) {
+        return null;
+    }
+    if (loc.x === null || loc.x === "") {
+        loc.x = "0";
+    }
+    if (loc.y === null || loc.y === "") {
+        loc.y = "0";
+    }
+    return {x: parseInt(loc.x), y: parseInt(loc.y)}
+};

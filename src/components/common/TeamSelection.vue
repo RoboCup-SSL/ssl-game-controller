@@ -1,6 +1,6 @@
 <template>
     <b-form-group :label="label" horizontal>
-        <b-form-radio-group id="select-team" v-model="newEvent.team" buttons>
+        <b-form-radio-group id="select-team" v-model="model.team" buttons>
             <b-form-radio value="Yellow">Yellow</b-form-radio>
             <b-form-radio value="Blue">Blue</b-form-radio>
             <b-form-radio value="unknown" :disabled="!allowUnknownTeam">No team</b-form-radio>
@@ -20,7 +20,7 @@
                 type: String,
                 default: ''
             },
-            newEvent: {
+            model: {
                 type: Object,
                 default: function () {
                     return {

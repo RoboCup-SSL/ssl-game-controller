@@ -1,9 +1,9 @@
 <template>
     <div>
-        <TeamSelection :newEvent="newEvent" label="By: " :allow-unknown-team="false"/>
+        <TeamSelection :model="model" label="By: " :allow-unknown-team="false"/>
         <b-button variant="primary"
                   @click="sendEvent()"
-                  :disabled="newEvent.team === null">
+                  :disabled="model.team === null">
             Add
         </b-button>
     </div>
@@ -17,7 +17,7 @@
         components: {TeamSelection},
         data() {
             return {
-                newEvent: {
+                model: {
                     team: null
                 }
             }
@@ -27,7 +27,7 @@
                 this.$socket.sendObj({
                     gameEvent: {
                         type: 'botTooFastInStop',
-                        details: {['botTooFastInStop']: {by_team: this.newEvent.team.toLocaleUpperCase()}}
+                        details: {['botTooFastInStop']: {by_team: this.model.team.toLocaleUpperCase()}}
                     }
                 });
                 this.$root.$emit('bv::hide::modal', 'new-event-modal');

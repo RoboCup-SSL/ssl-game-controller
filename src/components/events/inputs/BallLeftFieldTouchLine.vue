@@ -1,9 +1,11 @@
 <template>
     <div>
-        <TeamSelection :newEvent="newEvent" label="By: " :allow-unknown-team="false"/>
+        <TeamSelection :model="model" label="By: " :allow-unknown-team="false"/>
+        <BotSelection :model="model" label="By Bot: "/>
+        <LocationSelection :model="model.location" label="Location [mm]: "/>
         <b-button variant="primary"
                   @click="sendEvent()"
-                  :disabled="newEvent.team === null">
+                  :disabled="model.team === null">
             Add
         </b-button>
     </div>
@@ -11,14 +13,19 @@
 
 <script>
     import TeamSelection from "../../common/TeamSelection";
+    import BotSelection from "../../common/BotSelection";
+    import LocationSelection from "../../common/LocationSelection";
+    import {convertStringLocation} from "../../../refereeState";
 
     export default {
         name: "BallLeftFieldTouchLine",
-        components: {TeamSelection},
+        components: {BotSelection, TeamSelection, LocationSelection},
         data() {
             return {
-                newEvent: {
-                    team: null
+                model: {
+                    team: null,
+                    id: null,
+                    location: {x: null, y: null}
                 }
             }
         },
@@ -27,7 +34,13 @@
                 this.$socket.sendObj({
                     gameEvent: {
                         type: 'ballLeftFieldTouchLine',
-                        details: {['ballLeftFieldTouchLine']: {by_team: this.newEvent.team.toLocaleUpperCase()}}
+                        details: {
+                            ['ballLeftFieldTouchLine']: {
+                                by_team: this.model.team.toLocaleUpperCase(),
+                                by_bot: parseInt(this.model.id),
+                                location: convertStringLocation(this.model.location)
+                            }
+                        }
                     }
                 });
                 this.$root.$emit('bv::hide::modal', 'new-event-modal');
