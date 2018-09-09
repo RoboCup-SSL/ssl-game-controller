@@ -8,7 +8,7 @@
                           :per-page="perPage">
             </b-pagination>
 
-            <b-btn v-b-modal.new-event-modal size="sm" variant="primary" :disabled="newEventDisabled">New</b-btn>
+            <b-btn v-b-modal.new-event-modal size="sm" variant="primary">New</b-btn>
             <b-modal id="new-event-modal"
                      title="New Game Event"
                      :lazy="true">
@@ -40,9 +40,6 @@
             },
             state() {
                 return this.$store.state.refBoxState
-            },
-            newEventDisabled() {
-                return this.state.command !== 'stop' && this.state.command !== 'halt';
             }
         },
     }

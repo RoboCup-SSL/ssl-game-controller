@@ -430,6 +430,10 @@ func (e *Engine) processTrigger(t *EventTrigger) (err error) {
 
 func (e *Engine) processGameEvent(t *EventGameEvent) error {
 
+	if e.State.GameState() != GameStateStopped && e.State.GameState() != GameStateHalted {
+		e.SendCommand(CommandStop, "")
+	}
+
 	if t.BallLeftFieldTouchLine != nil {
 		e.SendGameEvent(GameEventBallLeftFieldTouchLine, t.BallLeftFieldTouchLine.Team)
 	} else if t.BallLeftFieldGoalLine != nil {
