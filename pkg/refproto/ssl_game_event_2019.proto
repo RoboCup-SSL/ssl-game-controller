@@ -25,7 +25,7 @@ message GameEvent {
         BotDribbledBallTooFar bot_dribbled_ball_too_far = 12;
         BotCrashUnique bot_crash_unique = 13;
         BotPushedBot bot_pushed_bot = 14;
-        BotHeldBallDeliberateley bot_held_ball_deliberateley = 15;
+        BotHeldBallDeliberately bot_held_ball_deliberately = 15;
         AttackerDoubleTouchedBall bot_double_touched_ball = 16;
         AttackerTooCloseToDefenseArea attacker_too_close_to_defense_area = 17;
         AttackerInDefenseArea attacker_in_defense_area = 18;
@@ -160,7 +160,7 @@ message GameEvent {
     // a bot pushed another bot over a significant distance
     message BotPushedBot {
         // the team that pushed the other team
-        required Team violating_team = 1;
+        required Team by_team = 1;
         // the bot that pushed the other bot
         optional uint32 violator = 2;
         // the bot of the opposite team that was pushed
@@ -266,7 +266,7 @@ message GameEvent {
         optional Location location = 4;
     }
     // a bot held the ball for too long
-    message BotHeldBallDeliberateley {
+    message BotHeldBallDeliberately {
         // the team that found guilty
         required Team by_team = 1;
         // the bot that holds the ball

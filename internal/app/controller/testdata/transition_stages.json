@@ -4,8 +4,11 @@
       "stage": "Pre-First Half",
       "command": "halt",
       "commandForTeam": null,
-      "gameEvent": "none",
-      "gameEventForTeam": "",
+      "gameEvent": {
+        "type": "none",
+        "forTeam": "",
+        "details": {}
+      },
       "stageTimeElapsed": 0,
       "stageTimeLeft": 0,
       "matchDuration": 0,
@@ -46,8 +49,11 @@
       "stage": "Pre-First Half",
       "command": "stop",
       "commandForTeam": null,
-      "gameEvent": "none",
-      "gameEventForTeam": "",
+      "gameEvent": {
+        "type": "none",
+        "forTeam": "",
+        "details": {}
+      },
       "stageTimeElapsed": 0,
       "stageTimeLeft": 0,
       "matchDuration": 0,
@@ -88,8 +94,11 @@
       "stage": "First Half",
       "command": "normalStart",
       "commandForTeam": null,
-      "gameEvent": "none",
-      "gameEventForTeam": "",
+      "gameEvent": {
+        "type": "none",
+        "forTeam": "",
+        "details": {}
+      },
       "stageTimeElapsed": 0,
       "stageTimeLeft": 300000000000,
       "matchDuration": 0,
@@ -130,8 +139,11 @@
       "stage": "First Half",
       "command": "stop",
       "commandForTeam": null,
-      "gameEvent": "none",
-      "gameEventForTeam": "",
+      "gameEvent": {
+        "type": "none",
+        "forTeam": "",
+        "details": {}
+      },
       "stageTimeElapsed": 0,
       "stageTimeLeft": 300000000000,
       "matchDuration": 0,
@@ -172,8 +184,11 @@
       "stage": "Half Time",
       "command": "halt",
       "commandForTeam": null,
-      "gameEvent": "none",
-      "gameEventForTeam": "",
+      "gameEvent": {
+        "type": "none",
+        "forTeam": "",
+        "details": {}
+      },
       "stageTimeElapsed": 0,
       "stageTimeLeft": 300000000000,
       "matchDuration": 0,
@@ -214,8 +229,11 @@
       "stage": "Pre-Second Half",
       "command": "halt",
       "commandForTeam": null,
-      "gameEvent": "none",
-      "gameEventForTeam": "",
+      "gameEvent": {
+        "type": "none",
+        "forTeam": "",
+        "details": {}
+      },
       "stageTimeElapsed": 0,
       "stageTimeLeft": 0,
       "matchDuration": 0,
@@ -256,8 +274,11 @@
       "stage": "Second Half",
       "command": "halt",
       "commandForTeam": null,
-      "gameEvent": "none",
-      "gameEventForTeam": "",
+      "gameEvent": {
+        "type": "none",
+        "forTeam": "",
+        "details": {}
+      },
       "stageTimeElapsed": 0,
       "stageTimeLeft": 300000000000,
       "matchDuration": 0,

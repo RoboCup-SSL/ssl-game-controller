@@ -18,14 +18,14 @@
 <script>
     import BallLeftFieldGoalLine from "./inputs/BallLeftFieldGoalLine";
     import BallLeftFieldTouchLine from "./inputs/BallLeftFieldTouchLine";
-    import RobotStopSpeed from "./inputs/RobotStopSpeed";
+    import BotTooFastInStop from "./inputs/BotTooFastInStop";
 
     export default {
         name: "EventAccordion",
         components: {
             BallLeftFieldGoalLine,
             BallLeftFieldTouchLine,
-            RobotStopSpeed
+            BotTooFastInStop
         },
         props: {
             accordionName: {

@@ -24,7 +24,13 @@
         },
         methods: {
             sendEvent: function () {
-                this.$socket.sendObj({gameEvent: {['ballLeftFieldTouchLine']: this.newEvent}});
+                this.$socket.sendObj({
+                    gameEvent: {
+                        type: 'ballLeftFieldTouchLine',
+                        forTeam: this.newEvent.team,
+                        details: {}
+                    }
+                });
                 this.$root.$emit('bv::hide::modal', 'new-event-modal');
             }
         },

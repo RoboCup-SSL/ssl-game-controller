@@ -222,8 +222,7 @@ type State struct {
 	Stage            Stage              `json:"stage"`
 	Command          RefCommand         `json:"command"`
 	CommandFor       Team               `json:"commandForTeam"`
-	GameEvent        GameEventType      `json:"gameEvent"`
-	GameEventFor     Team               `json:"gameEventForTeam"`
+	GameEvent        GameEvent          `json:"gameEvent"`
 	StageTimeElapsed time.Duration      `json:"stageTimeElapsed"`
 	StageTimeLeft    time.Duration      `json:"stageTimeLeft"`
 	MatchTimeStart   time.Time          `json:"matchTimeStart"`
@@ -237,7 +236,7 @@ func NewState() (s *State) {
 	s = new(State)
 	s.Stage = StagePreGame
 	s.Command = CommandHalt
-	s.GameEvent = GameEventNone
+	s.GameEvent.Type = GameEventNone
 
 	s.StageTimeLeft = 0
 	s.StageTimeElapsed = 0

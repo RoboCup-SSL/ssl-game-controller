@@ -165,37 +165,6 @@ type EventStage struct {
 	StageOperation StageOperation `json:"stageOperation"`
 }
 
-type EventGameEvent struct {
-	BallLeftFieldTouchLine *EventGameEventBallLeftField  `json:"ballLeftFieldTouchLine"`
-	BallLeftFieldGoalLine  *EventGameEventBallLeftField  `json:"ballLeftFieldGoalLine"`
-	BotCrashUnique         *EventGameEventBotCrashUnique `json:"botCrashUnique"`
-	BotPushing             *EventGameEventBotPushing     `json:"botPushing"`
-}
-
-type EventGameEventBallLeftField struct {
-	Team Team `json:"team"`
-}
-
-type EventGameEventBotCrashUnique struct {
-	Violator Team `json:"team"`
-	Victim   Team `json:"team"`
-}
-
-type EventGameEventBotPushing struct {
-	Violator Team `json:"team"`
-	Victim   Team `json:"team"`
-}
-
-func (e EventGameEvent) String() string {
-	if e.BallLeftFieldTouchLine != nil {
-		return fmt.Sprintf("Ball left field through touch line by %v", e.BallLeftFieldTouchLine.Team)
-	}
-	if e.BallLeftFieldGoalLine != nil {
-		return fmt.Sprintf("Ball left field through goal line by %v", e.BallLeftFieldGoalLine.Team)
-	}
-	return "unknown"
-}
-
 // Event holds all possible events. Only one at a time can be applied
 type Event struct {
 	Card      *EventCard        `json:"card"`
@@ -203,7 +172,7 @@ type Event struct {
 	Modify    *EventModifyValue `json:"modify"`
 	Stage     *EventStage       `json:"stage"`
 	Trigger   *EventTrigger     `json:"trigger"`
-	GameEvent *EventGameEvent   `json:"gameEvent"`
+	GameEvent *GameEvent        `json:"gameEvent"`
 }
 
 func (e Event) String() string {

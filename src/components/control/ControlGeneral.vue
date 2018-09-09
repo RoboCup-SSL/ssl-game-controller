@@ -41,7 +41,7 @@
             <b-button v-hotkey="keymapContinue"
                       ref="btnContinue"
                       v-on:click="triggerContinue"
-                      v-bind:disabled="!gameEventPresent">
+                      v-bind:disabled="!gameEventPresent || !stopped">
                 Continue
             </b-button>
         </span>
@@ -130,7 +130,7 @@
                     || isPreStage(this.$store.state.refBoxState);
             },
             gameEventPresent() {
-                return this.state.gameEvent !== 'none';
+                return this.state.gameEvent.type !== 'none';
             }
         }
     }

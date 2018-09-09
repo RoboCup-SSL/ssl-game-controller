@@ -13,7 +13,7 @@
     import TeamSelection from "../../common/TeamSelection";
 
     export default {
-        name: "RobotStopSpeed",
+        name: "BotTooFastInStop",
         components: {TeamSelection},
         data() {
             return {
@@ -24,7 +24,13 @@
         },
         methods: {
             sendEvent: function () {
-                this.$socket.sendObj({gameEvent: {['robotStopSpeed']: this.newEvent}});
+                this.$socket.sendObj({
+                    gameEvent: {
+                        type: 'botTooFastInStop',
+                        forTeam: this.newEvent.team,
+                        details: {}
+                    }
+                });
                 this.$root.$emit('bv::hide::modal', 'new-event-modal');
             }
         },

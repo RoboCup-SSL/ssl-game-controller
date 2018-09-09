@@ -4,8 +4,11 @@
       "stage": "First Half",
       "command": "stop",
       "commandForTeam": null,
-      "gameEvent": "none",
-      "gameEventForTeam": "",
+      "gameEvent": {
+        "type": "none",
+        "forTeam": "",
+        "details": {}
+      },
       "stageTimeElapsed": 0,
       "stageTimeLeft": 300000000000,
       "matchDuration": 0,
@@ -47,8 +50,11 @@
       "stage": "First Half",
       "command": "ballPlacement",
       "commandForTeam": "Yellow",
-      "gameEvent": "none",
-      "gameEventForTeam": "",
+      "gameEvent": {
+        "type": "none",
+        "forTeam": "",
+        "details": {}
+      },
       "stageTimeElapsed": 0,
       "stageTimeLeft": 300000000000,
       "matchDuration": 0,
@@ -89,8 +95,11 @@
       "stage": "First Half",
       "command": "stop",
       "commandForTeam": null,
-      "gameEvent": "none",
-      "gameEventForTeam": "",
+      "gameEvent": {
+        "type": "none",
+        "forTeam": "",
+        "details": {}
+      },
       "stageTimeElapsed": 0,
       "stageTimeLeft": 300000000000,
       "matchDuration": 0,

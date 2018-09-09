@@ -146,16 +146,22 @@ func (c *GameController) publishNetwork() {
 
 func (c *GameController) OnNewEvent(event Event) {
 	if event.GameEvent != nil {
-		var victimTeam Team
-		if event.GameEvent.BotCrashUnique != nil {
-			victimTeam = event.GameEvent.BotCrashUnique.Victim
-		} else if event.GameEvent.BotPushing != nil {
-			victimTeam = event.GameEvent.BotPushing.Victim
+		var byTeamProto refproto.Team
+		if event.GameEvent.Details.BotCrashUnique != nil {
+			byTeamProto = *event.GameEvent.Details.BotCrashUnique.ByTeam
+		} else if event.GameEvent.Details.BotPushedBot != nil {
+			byTeamProto = *event.GameEvent.Details.BotPushedBot.ByTeam
 		}
 
-		if victimTeam != "" {
-			victim := event.GameEvent.BotCrashUnique.Victim
-			teamName := c.Engine.State.TeamState[victim].Name
+		var byTeam Team
+		if byTeamProto == refproto.Team_YELLOW {
+			byTeam = TeamYellow
+		} else if byTeamProto == refproto.Team_BLUE {
+			byTeam = TeamBlue
+		}
+
+		if byTeam != "" {
+			teamName := c.Engine.State.TeamState[byTeam].Name
 			choiceType := refproto.ControllerToTeamRequest_AdvantageChoice_COLLISION
 			choice := refproto.ControllerToTeamRequest_AdvantageChoice{Foul: &choiceType}
 			requestPayload := refproto.ControllerToTeamRequest_AdvantageChoice_{AdvantageChoice: &choice}
@@ -164,7 +170,7 @@ func (c *GameController) OnNewEvent(event Event) {
 			if err != nil {
 				log.Print("Failed to ask for advantage choice: ", err)
 			} else {
-				c.outstandingTeamChoice = &TeamChoice{Team: victim, Event: event, IssueTime: c.Engine.TimeProvider()}
+				c.outstandingTeamChoice = &TeamChoice{Team: byTeam, Event: event, IssueTime: c.Engine.TimeProvider()}
 				go c.timeoutTeamChoice()
 				return
 			}

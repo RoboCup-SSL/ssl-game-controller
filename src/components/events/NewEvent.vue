@@ -46,11 +46,11 @@
         data() {
             return {
                 ballLeftFieldEvents: [
-                    {name: 'Ball left field via goal line', component: 'BallLeftFieldGoalLine'},
-                    {name: 'Ball left field via touch line', component: 'BallLeftFieldTouchLine'},
+                    {name: 'Via goal line', component: 'BallLeftFieldGoalLine'},
+                    {name: 'Via touch line', component: 'BallLeftFieldTouchLine'},
                 ],
                 foulEvents: [
-                    {name: 'Robot too fast during stop', component: 'RobotStopSpeed'},
+                    {name: 'Robot too fast during stop', component: 'BotTooFastInStop'},
                 ]
             }
         }

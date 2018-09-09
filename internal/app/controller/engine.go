@@ -52,14 +52,13 @@ func (e *Engine) SendCommand(command RefCommand, forTeam Team) {
 	e.State.CommandFor = forTeam
 	e.LogCommand()
 
-	if command.RunningState() && e.State.GameEvent != GameEventNone {
-		e.SendGameEvent(GameEventNone, "")
+	if command.RunningState() && e.State.GameEvent.Type != GameEventNone {
+		e.SendGameEvent(GameEvent{Type: GameEventNone})
 	}
 }
 
-func (e *Engine) SendGameEvent(gameEvent GameEventType, forTeam Team) {
+func (e *Engine) SendGameEvent(gameEvent GameEvent) {
 	e.State.GameEvent = gameEvent
-	e.State.GameEventFor = forTeam
 	e.LogGameEvent()
 }
 
@@ -74,11 +73,11 @@ func (e *Engine) UndoLastAction() {
 }
 
 func (e *Engine) Continue() error {
-	switch e.State.GameEvent {
+	switch e.State.GameEvent.Type {
 	case GameEventBallLeftFieldTouchLine:
-		e.SendCommand(CommandIndirect, e.State.GameEventFor.Opposite())
+		e.SendCommand(CommandIndirect, e.State.GameEvent.ForTeam.Opposite())
 	case GameEventBallLeftFieldGoalLine:
-		e.SendCommand(CommandDirect, e.State.GameEventFor.Opposite())
+		e.SendCommand(CommandDirect, e.State.GameEvent.ForTeam.Opposite())
 	default:
 		return errors.New("No game event present")
 	}
@@ -106,8 +105,8 @@ func (e *Engine) LogGameEvent() {
 		Timestamp: e.TimeProvider(),
 		StageTime: e.State.StageTimeElapsed,
 		Type:      RefereeEventGameEvent,
-		Name:      string(e.State.GameEvent),
-		Team:      e.State.GameEventFor,
+		Name:      string(e.State.GameEvent.Type),
+		Team:      e.State.GameEvent.ForTeam,
 	}
 	e.RefereeEvents = append(e.RefereeEvents, gameEvent)
 }
@@ -428,21 +427,15 @@ func (e *Engine) processTrigger(t *EventTrigger) (err error) {
 	return err
 }
 
-func (e *Engine) processGameEvent(t *EventGameEvent) error {
+func (e *Engine) processGameEvent(event *GameEvent) error {
 
 	if e.State.GameState() != GameStateStopped && e.State.GameState() != GameStateHalted {
 		e.SendCommand(CommandStop, "")
 	}
 
-	if t.BallLeftFieldTouchLine != nil {
-		e.SendGameEvent(GameEventBallLeftFieldTouchLine, t.BallLeftFieldTouchLine.Team)
-	} else if t.BallLeftFieldGoalLine != nil {
-		e.SendGameEvent(GameEventBallLeftFieldGoalLine, t.BallLeftFieldGoalLine.Team)
-	} else {
-		return errors.Errorf("Unknown game event: %v", *t)
-	}
+	e.SendGameEvent(*event)
 
-	log.Printf("Processed game event %v", t)
+	log.Printf("Processed game event %v", event)
 	return nil
 }
 
