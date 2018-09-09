@@ -1,7 +1,7 @@
 <template>
     <div>
         <span v-b-tooltip.hover title="Last game event" v-if="state.gameEvent.type !== 'none'">
-            {{state.gameEvent.type}} <span v-if="state.gameEvent.forTeam !== ''">({{state.gameEvent.forTeam}})</span>
+            {{state.gameEvent.type}}
             |
         </span>
 
