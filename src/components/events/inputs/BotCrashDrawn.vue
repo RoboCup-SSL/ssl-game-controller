@@ -1,7 +1,7 @@
 <template>
     <div>
-        <TeamSelection :model="model" label="By: " :allow-unknown-team="false"/>
-        <BotSelection :model="model" label="By Bot: "/>
+        <BotSelection :model="model.botYellow" label="Yellow Bot: "/>
+        <BotSelection :model="model.botBlue" label="Blue Bot: "/>
         <LocationSelection :model="model.location" label="Location [mm]: "/>
         <b-button variant="primary"
                   @click="sendEvent()"
@@ -18,13 +18,13 @@
     import {convertStringLocation} from "../../../refereeState";
 
     export default {
-        name: "BotTooFastInStop",
+        name: "BotCrashDrawn",
         components: {BotSelection, TeamSelection, LocationSelection},
         data() {
             return {
                 model: {
-                    team: null,
-                    id: null,
+                    botYellow: {id: null},
+                    botBlue: {id: null},
                     location: {x: null, y: null},
                 }
             }
@@ -33,11 +33,11 @@
             sendEvent: function () {
                 this.$socket.sendObj({
                     gameEvent: {
-                        type: 'botTooFastInStop',
+                        type: 'botCrashDrawn',
                         details: {
-                            ['botTooFastInStop']: {
-                                by_team: this.model.team.toLocaleUpperCase(),
-                                by_bot: parseInt(this.model.id),
+                            ['botCrashDrawn']: {
+                                bot_yellow: parseInt(this.model.botYellow.id),
+                                bot_blue: parseInt(this.model.botBlue.id),
                                 location: convertStringLocation(this.model.location),
                             }
                         }

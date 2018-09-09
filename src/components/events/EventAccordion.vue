@@ -18,14 +18,34 @@
 <script>
     import BallLeftFieldGoalLine from "./inputs/BallLeftFieldGoalLine";
     import BallLeftFieldTouchLine from "./inputs/BallLeftFieldTouchLine";
-    import BotTooFastInStop from "./inputs/BotTooFastInStop";
+    import BotCrashDrawn from "./inputs/BotCrashDrawn"
+    import BotCrashUnique from "./inputs/BotCrashUnique"
+    import BotPushedBot from "./inputs/BotPushedBot"
+    import BotTippedOver from "./inputs/BotTippedOver"
+    import BotTooFastInStop from "./inputs/BotTooFastInStop"
+    import ChippedGoal from "./inputs/ChippedGoal"
+    import DefenderInDefenseArea from "./inputs/DefenderInDefenseArea"
+    import DefenderTooCloseToKickPoint from "./inputs/DefenderTooCloseToKickPoint"
+    import Goal from "./inputs/Goal"
+    import Icing from "./inputs/Icing"
+    import IndirectGoal from "./inputs/IndirectGoal"
 
     export default {
         name: "EventAccordion",
         components: {
             BallLeftFieldGoalLine,
             BallLeftFieldTouchLine,
-            BotTooFastInStop
+            BotCrashDrawn,
+            BotCrashUnique,
+            BotPushedBot,
+            BotTippedOver,
+            BotTooFastInStop,
+            ChippedGoal,
+            DefenderInDefenseArea,
+            DefenderTooCloseToKickPoint,
+            Goal,
+            Icing,
+            IndirectGoal,
         },
         props: {
             accordionName: {

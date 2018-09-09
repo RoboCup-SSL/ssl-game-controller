@@ -48,9 +48,20 @@
                 ballLeftFieldEvents: [
                     {name: 'Via goal line', component: 'BallLeftFieldGoalLine'},
                     {name: 'Via touch line', component: 'BallLeftFieldTouchLine'},
+                    {name: 'Goal', component: 'Goal'},
+                    {name: 'Chipped Goal', component: 'ChippedGoal'},
+                    {name: 'Icing', component: 'Icing'},
+                    {name: 'Indirect Goal', component: 'IndirectGoal'},
                 ],
                 foulEvents: [
                     {name: 'Robot too fast during stop', component: 'BotTooFastInStop'},
+                    {name: 'Bot crashed with similar speeds', component: 'BotCrashDrawn'},
+                    {name: 'Bot crashed with different speeds', component: 'BotCrashUnique'},
+                    {name: 'One bot pushed another one', component: 'BotPushedBot'},
+                    {name: 'A bot tipped over', component: 'BotTippedOver'},
+                    {name: 'A bot was too fast in Stop', component: 'BotTooFastInStop'},
+                    {name: 'Defender touched ball in defense area', component: 'DefenderInDefenseArea'},
+                    {name: 'Defender was too close to kick point', component: 'DefenderTooCloseToKickPoint'},
                 ]
             }
         }

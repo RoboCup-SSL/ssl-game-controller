@@ -3,6 +3,7 @@
         <TeamSelection :model="model" label="By: " :allow-unknown-team="false"/>
         <BotSelection :model="model" label="By Bot: "/>
         <LocationSelection :model="model.location" label="Location [mm]: "/>
+        <LocationSelection :model="model.kickLocation" label="Kick Location [mm]: "/>
         <b-button variant="primary"
                   @click="sendEvent()"
                   :disabled="model.team === null">
@@ -18,7 +19,7 @@
     import {convertStringLocation} from "../../../refereeState";
 
     export default {
-        name: "BotTooFastInStop",
+        name: "Icing",
         components: {BotSelection, TeamSelection, LocationSelection},
         data() {
             return {
@@ -26,6 +27,7 @@
                     team: null,
                     id: null,
                     location: {x: null, y: null},
+                    kickLocation: {x: null, y: null},
                 }
             }
         },
@@ -33,12 +35,13 @@
             sendEvent: function () {
                 this.$socket.sendObj({
                     gameEvent: {
-                        type: 'botTooFastInStop',
+                        type: 'icing',
                         details: {
-                            ['botTooFastInStop']: {
+                            ['icing']: {
                                 by_team: this.model.team.toLocaleUpperCase(),
                                 by_bot: parseInt(this.model.id),
                                 location: convertStringLocation(this.model.location),
+                                kick_location: convertStringLocation(this.model.kickLocation),
                             }
                         }
                     }

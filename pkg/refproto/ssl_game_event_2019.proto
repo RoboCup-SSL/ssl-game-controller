@@ -175,7 +175,7 @@ message GameEvent {
         // the team that found guilty
         required Team by_team = 1;
         // the bot that tipped over
-        optional uint32 bot = 2;
+        optional uint32 by_bot = 2;
         // the location of the bot
         optional Location location = 3;
     }
