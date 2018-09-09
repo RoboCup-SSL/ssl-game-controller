@@ -22,3 +22,4 @@ game:
     timeout-duration: 5m
     timeouts: 2
     break-after: 2m
+  team-choice-timeout: 200ms

@@ -15,5 +15,6 @@ Controller->Team: ControllerReply ( ok | reject )
 else controller requests a decision
 Controller->Team: ControllerToTeamRequest
 Team->Controller: TeamToControllerRequest
+Controller->Team: ControllerReply ( ok | reject )
 end
 end

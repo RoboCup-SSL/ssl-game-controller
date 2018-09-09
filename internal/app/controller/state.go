@@ -307,3 +307,13 @@ func (s State) String() string {
 	}
 	return string(bytes)
 }
+
+func (s *State) TeamByName(teamName string) Team {
+	if s.TeamState[TeamBlue].Name == teamName {
+		return TeamBlue
+	}
+	if s.TeamState[TeamYellow].Name == teamName {
+		return TeamYellow
+	}
+	return ""
+}

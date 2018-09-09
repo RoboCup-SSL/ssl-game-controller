@@ -166,12 +166,24 @@ type EventStage struct {
 }
 
 type EventGameEvent struct {
-	BallLeftFieldTouchLine *EventGameEventBallLeftField `json:"ballLeftFieldTouchLine"`
-	BallLeftFieldGoalLine  *EventGameEventBallLeftField `json:"ballLeftFieldGoalLine"`
+	BallLeftFieldTouchLine *EventGameEventBallLeftField  `json:"ballLeftFieldTouchLine"`
+	BallLeftFieldGoalLine  *EventGameEventBallLeftField  `json:"ballLeftFieldGoalLine"`
+	BotCrashUnique         *EventGameEventBotCrashUnique `json:"botCrashUnique"`
+	BotPushing             *EventGameEventBotPushing     `json:"botPushing"`
 }
 
 type EventGameEventBallLeftField struct {
 	Team Team `json:"team"`
+}
+
+type EventGameEventBotCrashUnique struct {
+	Violator Team `json:"team"`
+	Victim   Team `json:"team"`
+}
+
+type EventGameEventBotPushing struct {
+	Violator Team `json:"team"`
+	Victim   Team `json:"team"`
 }
 
 func (e EventGameEvent) String() string {

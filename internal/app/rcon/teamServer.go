@@ -11,8 +11,8 @@ import (
 )
 
 type TeamServer struct {
-	ProcessRequest   func(refproto.TeamToControllerRequest) error
-	AllowedTeamNames []string
+	ProcessTeamRequest func(teamName string, request refproto.TeamToControllerRequest) error
+	AllowedTeamNames   []string
 	*Server
 }
 
@@ -22,7 +22,7 @@ type TeamClient struct {
 
 func NewTeamServer() (s *TeamServer) {
 	s = new(TeamServer)
-	s.ProcessRequest = func(refproto.TeamToControllerRequest) error { return nil }
+	s.ProcessTeamRequest = func(string, refproto.TeamToControllerRequest) error { return nil }
 	s.Server = NewServer()
 	s.ConnectionHandler = s.handleClientConnection
 	return
@@ -141,10 +141,21 @@ func (s *TeamServer) handleClientConnection(conn net.Conn) {
 				continue
 			}
 		}
-		if err := s.ProcessRequest(req); err != nil {
+		if err := s.ProcessTeamRequest(client.Id, req); err != nil {
 			client.Reject(err.Error())
 		} else {
 			client.Ok()
 		}
 	}
+}
+
+func (s *TeamServer) SendRequest(teamName string, request refproto.ControllerToTeamRequest) error {
+	if client, ok := s.Clients[teamName]; ok {
+		return client.SendRequest(request)
+	}
+	return errors.New("Client not connected")
+}
+
+func (c *Client) SendRequest(request refproto.ControllerToTeamRequest) error {
+	return sslconn.SendMessage(c.Conn, &request)
 }

@@ -22,6 +22,7 @@ type ConfigGame struct {
 	DefaultDivision    Division      `yaml:"default-division"`
 	Normal             ConfigSpecial `yaml:"normal"`
 	Overtime           ConfigSpecial `yaml:"overtime"`
+	TeamChoiceTimeout  time.Duration `yaml:"team-choice-timeout"`
 }
 
 // ConfigPublish holds configs for publishing the state and commands to the teams

@@ -4,7 +4,9 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/rcon"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/timer"
+	"github.com/pkg/errors"
 	"log"
+	"sync"
 	"time"
 )
 
@@ -21,6 +23,14 @@ type GameController struct {
 	timer                       timer.Timer
 	historyPreserver            HistoryPreserver
 	numRefereeEventsLastPublish int
+	outstandingTeamChoice       *TeamChoice
+	Mutex                       sync.Mutex
+}
+
+type TeamChoice struct {
+	Team      Team
+	Event     Event
+	IssueTime time.Time
 }
 
 // NewGameController creates a new RefBox
@@ -39,7 +49,7 @@ func NewGameController() (c *GameController) {
 
 	c.TeamServer = rcon.NewTeamServer()
 	c.TeamServer.LoadTrustedKeys(c.Config.Server.Team.TrustedKeysDir)
-	c.TeamServer.ProcessRequest = c.ProcessTeamRequests
+	c.TeamServer.ProcessTeamRequest = c.ProcessTeamRequests
 	go c.TeamServer.Listen(c.Config.Server.Team.Address)
 
 	c.Engine = NewEngine(c.Config.Game)
@@ -50,12 +60,43 @@ func NewGameController() (c *GameController) {
 }
 
 func (c *GameController) ProcessAutoRefRequests(request refproto.AutoRefToControllerRequest) error {
+	c.Mutex.Lock()
+	defer c.Mutex.Unlock()
 	log.Print("Received request from autoRef: ", request)
 	return nil
 }
 
-func (c *GameController) ProcessTeamRequests(request refproto.TeamToControllerRequest) error {
+func (c *GameController) ProcessTeamRequests(teamName string, request refproto.TeamToControllerRequest) error {
+	c.Mutex.Lock()
+	defer c.Mutex.Unlock()
 	log.Print("Received request from team: ", request)
+
+	if x, ok := request.GetRequest().(*refproto.TeamToControllerRequest_AdvantageResponse_); ok {
+		if x.AdvantageResponse == refproto.TeamToControllerRequest_CONTINUE {
+			c.outstandingTeamChoice = nil
+		} else if c.outstandingTeamChoice != nil {
+			c.OnNewEvent(c.outstandingTeamChoice.Event)
+			c.outstandingTeamChoice = nil
+			return nil
+		} else {
+			return errors.New("No outstanding choice available. You are probably too late.")
+		}
+	}
+
+	if c.Engine.State.GameState() != GameStateStopped {
+		return errors.New("Game is not stopped.")
+	}
+
+	team := c.Engine.State.TeamByName(teamName)
+	if team == "" {
+		return errors.New("Your team is not playing?!")
+	}
+
+	if x, ok := request.GetRequest().(*refproto.TeamToControllerRequest_DesiredKeeper); ok {
+		log.Printf("Changing goalie for team %v to %v", team, x.DesiredKeeper)
+		c.Engine.State.TeamState[team].Goalie = int(x.DesiredKeeper)
+	}
+
 	return nil
 }
 
@@ -100,12 +141,47 @@ func (c *GameController) publishNetwork() {
 }
 
 func (c *GameController) OnNewEvent(event Event) {
+	if event.GameEvent != nil {
+		var victimTeam Team
+		if event.GameEvent.BotCrashUnique != nil {
+			victimTeam = event.GameEvent.BotCrashUnique.Victim
+		} else if event.GameEvent.BotPushing != nil {
+			victimTeam = event.GameEvent.BotPushing.Victim
+		}
+
+		if victimTeam != "" {
+			victim := event.GameEvent.BotCrashUnique.Victim
+			teamName := c.Engine.State.TeamState[victim].Name
+			choiceType := refproto.ControllerToTeamRequest_AdvantageChoice_COLLISION
+			choice := refproto.ControllerToTeamRequest_AdvantageChoice{Foul: &choiceType}
+			requestPayload := refproto.ControllerToTeamRequest_AdvantageChoice_{AdvantageChoice: &choice}
+			request := refproto.ControllerToTeamRequest{Request: &requestPayload}
+			err := c.TeamServer.SendRequest(teamName, request)
+			if err != nil {
+				log.Print("Failed to ask for advantage choice: ", err)
+			} else {
+				c.outstandingTeamChoice = &TeamChoice{Team: victim, Event: event, IssueTime: c.Engine.TimeProvider()}
+				go c.timeoutTeamChoice()
+				return
+			}
+		}
+	}
+
 	err := c.Engine.Process(event)
 	if err != nil {
 		log.Println("Could not process event:", event, err)
 	} else {
 		c.historyPreserver.Save(c.Engine.History)
 		c.publish()
+	}
+}
+
+func (c *GameController) timeoutTeamChoice() {
+	time.Sleep(c.Config.Game.TeamChoiceTimeout)
+	c.Mutex.Lock()
+	defer c.Mutex.Unlock()
+	if c.outstandingTeamChoice != nil {
+		c.OnNewEvent(c.outstandingTeamChoice.Event)
 	}
 }
 
