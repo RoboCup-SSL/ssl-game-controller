@@ -19,6 +19,11 @@ var _ = math.Inf
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
 // GameEvent contains exactly one game event
+// Each game event has optional and required fields. The required fields are mandatory to process the event.
+// Some optional fields are only used for visualization, others are required to determine the ball placement position.
+// If fields are missing that are required for the ball placement position, no ball placement command will be issued.
+// Fields are marked optional to make testing and extending of the protocol easier.
+// An autoRef should ideally set all fields, except if there are good reasons to not do so.
 type GameEvent struct {
 	// the event that occurred
 	//
@@ -28,33 +33,32 @@ type GameEvent struct {
 	//	*GameEvent_Icing_
 	//	*GameEvent_Goal_
 	//	*GameEvent_IndirectGoal_
-	//	*GameEvent_ChipOnGoal_
-	//	*GameEvent_RobotStopSpeed_
-	//	*GameEvent_DefenderToKickPointDistance_
-	//	*GameEvent_BotCrashDrawn_
-	//	*GameEvent_BotCrashUnique_
-	//	*GameEvent_BotPushing_
+	//	*GameEvent_ChippedGoal_
+	//	*GameEvent_BotTooFastInStop_
 	//	*GameEvent_BotTippedOver_
-	//	*GameEvent_MultipleDefender_
-	//	*GameEvent_MultipleDefenderPartially_
+	//	*GameEvent_BotInterferedPlacement_
+	//	*GameEvent_BotCrashDrawn_
+	//	*GameEvent_BotKickedBallTooFast_
+	//	*GameEvent_BotDribbledBallTooFar_
+	//	*GameEvent_BotCrashUnique_
+	//	*GameEvent_BotPushedBot_
+	//	*GameEvent_BotHeldBallDeliberateley_
+	//	*GameEvent_BotDoubleTouchedBall
+	//	*GameEvent_AttackerTooCloseToDefenseArea_
 	//	*GameEvent_AttackerInDefenseArea_
-	//	*GameEvent_BallSpeed_
-	//	*GameEvent_BallDribbling_
 	//	*GameEvent_AttackerTouchedKeeper_
-	//	*GameEvent_DoubleTouch_
-	//	*GameEvent_AttackerToDefenceArea_
-	//	*GameEvent_BallHolding_
+	//	*GameEvent_DefenderTooCloseToKickPoint_
+	//	*GameEvent_DefenderInDefenseAreaPartially_
+	//	*GameEvent_DefenderInDefenseArea_
+	//	*GameEvent_KeeperHeldBall_
+	//	*GameEvent_UnsportiveBehaviorMinor_
+	//	*GameEvent_UnsportiveBehaviorMajor_
 	//	*GameEvent_MultipleYellowCards_
-	//	*GameEvent_MultipleBotCollisions_
-	//	*GameEvent_MultipleRobotStopSpeed_
-	//	*GameEvent_NumberOfPlayers_
+	//	*GameEvent_MultipleFouls_
 	//	*GameEvent_KickTimeout_
 	//	*GameEvent_NoProgressInGame_
 	//	*GameEvent_PlacementFailedByTeamInFavor_
 	//	*GameEvent_PlacementFailedByOpponent_
-	//	*GameEvent_PlacementInterference_
-	//	*GameEvent_UnsportiveBehaviorMinor_
-	//	*GameEvent_UnsportiveBehaviorMajor_
 	Event                isGameEvent_Event `protobuf_oneof:"event"`
 	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
 	XXX_unrecognized     []byte            `json:"-"`
@@ -65,7 +69,7 @@ func (m *GameEvent) Reset()         { *m = GameEvent{} }
 func (m *GameEvent) String() string { return proto.CompactTextString(m) }
 func (*GameEvent) ProtoMessage()    {}
 func (*GameEvent) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_2019_a0d50baf64c1b28a, []int{0}
+	return fileDescriptor_ssl_game_event_2019_51267f52d25ff0d1, []int{0}
 }
 func (m *GameEvent) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GameEvent.Unmarshal(m, b)
@@ -109,112 +113,108 @@ type GameEvent_IndirectGoal_ struct {
 	IndirectGoal *GameEvent_IndirectGoal `protobuf:"bytes,5,opt,name=indirect_goal,json=indirectGoal,oneof"`
 }
 
-type GameEvent_ChipOnGoal_ struct {
-	ChipOnGoal *GameEvent_ChipOnGoal `protobuf:"bytes,6,opt,name=chip_on_goal,json=chipOnGoal,oneof"`
+type GameEvent_ChippedGoal_ struct {
+	ChippedGoal *GameEvent_ChippedGoal `protobuf:"bytes,6,opt,name=chipped_goal,json=chippedGoal,oneof"`
 }
 
-type GameEvent_RobotStopSpeed_ struct {
-	RobotStopSpeed *GameEvent_RobotStopSpeed `protobuf:"bytes,7,opt,name=robot_stop_speed,json=robotStopSpeed,oneof"`
-}
-
-type GameEvent_DefenderToKickPointDistance_ struct {
-	DefenderToKickPointDistance *GameEvent_DefenderToKickPointDistance `protobuf:"bytes,8,opt,name=defender_to_kick_point_distance,json=defenderToKickPointDistance,oneof"`
-}
-
-type GameEvent_BotCrashDrawn_ struct {
-	BotCrashDrawn *GameEvent_BotCrashDrawn `protobuf:"bytes,9,opt,name=bot_crash_drawn,json=botCrashDrawn,oneof"`
-}
-
-type GameEvent_BotCrashUnique_ struct {
-	BotCrashUnique *GameEvent_BotCrashUnique `protobuf:"bytes,10,opt,name=bot_crash_unique,json=botCrashUnique,oneof"`
-}
-
-type GameEvent_BotPushing_ struct {
-	BotPushing *GameEvent_BotPushing `protobuf:"bytes,11,opt,name=bot_pushing,json=botPushing,oneof"`
+type GameEvent_BotTooFastInStop_ struct {
+	BotTooFastInStop *GameEvent_BotTooFastInStop `protobuf:"bytes,7,opt,name=bot_too_fast_in_stop,json=botTooFastInStop,oneof"`
 }
 
 type GameEvent_BotTippedOver_ struct {
-	BotTippedOver *GameEvent_BotTippedOver `protobuf:"bytes,12,opt,name=bot_tipped_over,json=botTippedOver,oneof"`
+	BotTippedOver *GameEvent_BotTippedOver `protobuf:"bytes,8,opt,name=bot_tipped_over,json=botTippedOver,oneof"`
 }
 
-type GameEvent_MultipleDefender_ struct {
-	MultipleDefender *GameEvent_MultipleDefender `protobuf:"bytes,13,opt,name=multiple_defender,json=multipleDefender,oneof"`
+type GameEvent_BotInterferedPlacement_ struct {
+	BotInterferedPlacement *GameEvent_BotInterferedPlacement `protobuf:"bytes,9,opt,name=bot_interfered_placement,json=botInterferedPlacement,oneof"`
 }
 
-type GameEvent_MultipleDefenderPartially_ struct {
-	MultipleDefenderPartially *GameEvent_MultipleDefenderPartially `protobuf:"bytes,14,opt,name=multiple_defender_partially,json=multipleDefenderPartially,oneof"`
+type GameEvent_BotCrashDrawn_ struct {
+	BotCrashDrawn *GameEvent_BotCrashDrawn `protobuf:"bytes,10,opt,name=bot_crash_drawn,json=botCrashDrawn,oneof"`
+}
+
+type GameEvent_BotKickedBallTooFast_ struct {
+	BotKickedBallTooFast *GameEvent_BotKickedBallTooFast `protobuf:"bytes,11,opt,name=bot_kicked_ball_too_fast,json=botKickedBallTooFast,oneof"`
+}
+
+type GameEvent_BotDribbledBallTooFar_ struct {
+	BotDribbledBallTooFar *GameEvent_BotDribbledBallTooFar `protobuf:"bytes,12,opt,name=bot_dribbled_ball_too_far,json=botDribbledBallTooFar,oneof"`
+}
+
+type GameEvent_BotCrashUnique_ struct {
+	BotCrashUnique *GameEvent_BotCrashUnique `protobuf:"bytes,13,opt,name=bot_crash_unique,json=botCrashUnique,oneof"`
+}
+
+type GameEvent_BotPushedBot_ struct {
+	BotPushedBot *GameEvent_BotPushedBot `protobuf:"bytes,14,opt,name=bot_pushed_bot,json=botPushedBot,oneof"`
+}
+
+type GameEvent_BotHeldBallDeliberateley_ struct {
+	BotHeldBallDeliberateley *GameEvent_BotHeldBallDeliberateley `protobuf:"bytes,15,opt,name=bot_held_ball_deliberateley,json=botHeldBallDeliberateley,oneof"`
+}
+
+type GameEvent_BotDoubleTouchedBall struct {
+	BotDoubleTouchedBall *GameEvent_AttackerDoubleTouchedBall `protobuf:"bytes,16,opt,name=bot_double_touched_ball,json=botDoubleTouchedBall,oneof"`
+}
+
+type GameEvent_AttackerTooCloseToDefenseArea_ struct {
+	AttackerTooCloseToDefenseArea *GameEvent_AttackerTooCloseToDefenseArea `protobuf:"bytes,17,opt,name=attacker_too_close_to_defense_area,json=attackerTooCloseToDefenseArea,oneof"`
 }
 
 type GameEvent_AttackerInDefenseArea_ struct {
-	AttackerInDefenseArea *GameEvent_AttackerInDefenseArea `protobuf:"bytes,15,opt,name=attacker_in_defense_area,json=attackerInDefenseArea,oneof"`
-}
-
-type GameEvent_BallSpeed_ struct {
-	BallSpeed *GameEvent_BallSpeed `protobuf:"bytes,16,opt,name=ball_speed,json=ballSpeed,oneof"`
-}
-
-type GameEvent_BallDribbling_ struct {
-	BallDribbling *GameEvent_BallDribbling `protobuf:"bytes,17,opt,name=ball_dribbling,json=ballDribbling,oneof"`
+	AttackerInDefenseArea *GameEvent_AttackerInDefenseArea `protobuf:"bytes,18,opt,name=attacker_in_defense_area,json=attackerInDefenseArea,oneof"`
 }
 
 type GameEvent_AttackerTouchedKeeper_ struct {
-	AttackerTouchedKeeper *GameEvent_AttackerTouchedKeeper `protobuf:"bytes,18,opt,name=attacker_touched_keeper,json=attackerTouchedKeeper,oneof"`
+	AttackerTouchedKeeper *GameEvent_AttackerTouchedKeeper `protobuf:"bytes,19,opt,name=attacker_touched_keeper,json=attackerTouchedKeeper,oneof"`
 }
 
-type GameEvent_DoubleTouch_ struct {
-	DoubleTouch *GameEvent_DoubleTouch `protobuf:"bytes,19,opt,name=double_touch,json=doubleTouch,oneof"`
+type GameEvent_DefenderTooCloseToKickPoint_ struct {
+	DefenderTooCloseToKickPoint *GameEvent_DefenderTooCloseToKickPoint `protobuf:"bytes,20,opt,name=defender_too_close_to_kick_point,json=defenderTooCloseToKickPoint,oneof"`
 }
 
-type GameEvent_AttackerToDefenceArea_ struct {
-	AttackerToDefenceArea *GameEvent_AttackerToDefenceArea `protobuf:"bytes,20,opt,name=attacker_to_defence_area,json=attackerToDefenceArea,oneof"`
+type GameEvent_DefenderInDefenseAreaPartially_ struct {
+	DefenderInDefenseAreaPartially *GameEvent_DefenderInDefenseAreaPartially `protobuf:"bytes,21,opt,name=defender_in_defense_area_partially,json=defenderInDefenseAreaPartially,oneof"`
 }
 
-type GameEvent_BallHolding_ struct {
-	BallHolding *GameEvent_BallHolding `protobuf:"bytes,21,opt,name=ball_holding,json=ballHolding,oneof"`
+type GameEvent_DefenderInDefenseArea_ struct {
+	DefenderInDefenseArea *GameEvent_DefenderInDefenseArea `protobuf:"bytes,22,opt,name=defender_in_defense_area,json=defenderInDefenseArea,oneof"`
 }
 
-type GameEvent_MultipleYellowCards_ struct {
-	MultipleYellowCards *GameEvent_MultipleYellowCards `protobuf:"bytes,22,opt,name=multiple_yellow_cards,json=multipleYellowCards,oneof"`
-}
-
-type GameEvent_MultipleBotCollisions_ struct {
-	MultipleBotCollisions *GameEvent_MultipleBotCollisions `protobuf:"bytes,23,opt,name=multiple_bot_collisions,json=multipleBotCollisions,oneof"`
-}
-
-type GameEvent_MultipleRobotStopSpeed_ struct {
-	MultipleRobotStopSpeed *GameEvent_MultipleRobotStopSpeed `protobuf:"bytes,24,opt,name=multiple_robot_stop_speed,json=multipleRobotStopSpeed,oneof"`
-}
-
-type GameEvent_NumberOfPlayers_ struct {
-	NumberOfPlayers *GameEvent_NumberOfPlayers `protobuf:"bytes,25,opt,name=number_of_players,json=numberOfPlayers,oneof"`
-}
-
-type GameEvent_KickTimeout_ struct {
-	KickTimeout *GameEvent_KickTimeout `protobuf:"bytes,26,opt,name=kick_timeout,json=kickTimeout,oneof"`
-}
-
-type GameEvent_NoProgressInGame_ struct {
-	NoProgressInGame *GameEvent_NoProgressInGame `protobuf:"bytes,27,opt,name=no_progress_in_game,json=noProgressInGame,oneof"`
-}
-
-type GameEvent_PlacementFailedByTeamInFavor_ struct {
-	PlacementFailedByTeamInFavor *GameEvent_PlacementFailedByTeamInFavor `protobuf:"bytes,28,opt,name=placement_failed_by_team_in_favor,json=placementFailedByTeamInFavor,oneof"`
-}
-
-type GameEvent_PlacementFailedByOpponent_ struct {
-	PlacementFailedByOpponent *GameEvent_PlacementFailedByOpponent `protobuf:"bytes,29,opt,name=placement_failed_by_opponent,json=placementFailedByOpponent,oneof"`
-}
-
-type GameEvent_PlacementInterference_ struct {
-	PlacementInterference *GameEvent_PlacementInterference `protobuf:"bytes,30,opt,name=placement_interference,json=placementInterference,oneof"`
+type GameEvent_KeeperHeldBall_ struct {
+	KeeperHeldBall *GameEvent_KeeperHeldBall `protobuf:"bytes,23,opt,name=keeper_held_ball,json=keeperHeldBall,oneof"`
 }
 
 type GameEvent_UnsportiveBehaviorMinor_ struct {
-	UnsportiveBehaviorMinor *GameEvent_UnsportiveBehaviorMinor `protobuf:"bytes,31,opt,name=unsportive_behavior_minor,json=unsportiveBehaviorMinor,oneof"`
+	UnsportiveBehaviorMinor *GameEvent_UnsportiveBehaviorMinor `protobuf:"bytes,24,opt,name=unsportive_behavior_minor,json=unsportiveBehaviorMinor,oneof"`
 }
 
 type GameEvent_UnsportiveBehaviorMajor_ struct {
-	UnsportiveBehaviorMajor *GameEvent_UnsportiveBehaviorMajor `protobuf:"bytes,32,opt,name=unsportive_behavior_major,json=unsportiveBehaviorMajor,oneof"`
+	UnsportiveBehaviorMajor *GameEvent_UnsportiveBehaviorMajor `protobuf:"bytes,25,opt,name=unsportive_behavior_major,json=unsportiveBehaviorMajor,oneof"`
+}
+
+type GameEvent_MultipleYellowCards_ struct {
+	MultipleYellowCards *GameEvent_MultipleYellowCards `protobuf:"bytes,26,opt,name=multiple_yellow_cards,json=multipleYellowCards,oneof"`
+}
+
+type GameEvent_MultipleFouls_ struct {
+	MultipleFouls *GameEvent_MultipleFouls `protobuf:"bytes,27,opt,name=multiple_fouls,json=multipleFouls,oneof"`
+}
+
+type GameEvent_KickTimeout_ struct {
+	KickTimeout *GameEvent_KickTimeout `protobuf:"bytes,28,opt,name=kick_timeout,json=kickTimeout,oneof"`
+}
+
+type GameEvent_NoProgressInGame_ struct {
+	NoProgressInGame *GameEvent_NoProgressInGame `protobuf:"bytes,29,opt,name=no_progress_in_game,json=noProgressInGame,oneof"`
+}
+
+type GameEvent_PlacementFailedByTeamInFavor_ struct {
+	PlacementFailedByTeamInFavor *GameEvent_PlacementFailedByTeamInFavor `protobuf:"bytes,30,opt,name=placement_failed_by_team_in_favor,json=placementFailedByTeamInFavor,oneof"`
+}
+
+type GameEvent_PlacementFailedByOpponent_ struct {
+	PlacementFailedByOpponent *GameEvent_PlacementFailedByOpponent `protobuf:"bytes,31,opt,name=placement_failed_by_opponent,json=placementFailedByOpponent,oneof"`
 }
 
 func (*GameEvent_BallLeftFieldTouchLine) isGameEvent_Event() {}
@@ -227,45 +227,49 @@ func (*GameEvent_Goal_) isGameEvent_Event() {}
 
 func (*GameEvent_IndirectGoal_) isGameEvent_Event() {}
 
-func (*GameEvent_ChipOnGoal_) isGameEvent_Event() {}
+func (*GameEvent_ChippedGoal_) isGameEvent_Event() {}
 
-func (*GameEvent_RobotStopSpeed_) isGameEvent_Event() {}
-
-func (*GameEvent_DefenderToKickPointDistance_) isGameEvent_Event() {}
-
-func (*GameEvent_BotCrashDrawn_) isGameEvent_Event() {}
-
-func (*GameEvent_BotCrashUnique_) isGameEvent_Event() {}
-
-func (*GameEvent_BotPushing_) isGameEvent_Event() {}
+func (*GameEvent_BotTooFastInStop_) isGameEvent_Event() {}
 
 func (*GameEvent_BotTippedOver_) isGameEvent_Event() {}
 
-func (*GameEvent_MultipleDefender_) isGameEvent_Event() {}
+func (*GameEvent_BotInterferedPlacement_) isGameEvent_Event() {}
 
-func (*GameEvent_MultipleDefenderPartially_) isGameEvent_Event() {}
+func (*GameEvent_BotCrashDrawn_) isGameEvent_Event() {}
+
+func (*GameEvent_BotKickedBallTooFast_) isGameEvent_Event() {}
+
+func (*GameEvent_BotDribbledBallTooFar_) isGameEvent_Event() {}
+
+func (*GameEvent_BotCrashUnique_) isGameEvent_Event() {}
+
+func (*GameEvent_BotPushedBot_) isGameEvent_Event() {}
+
+func (*GameEvent_BotHeldBallDeliberateley_) isGameEvent_Event() {}
+
+func (*GameEvent_BotDoubleTouchedBall) isGameEvent_Event() {}
+
+func (*GameEvent_AttackerTooCloseToDefenseArea_) isGameEvent_Event() {}
 
 func (*GameEvent_AttackerInDefenseArea_) isGameEvent_Event() {}
 
-func (*GameEvent_BallSpeed_) isGameEvent_Event() {}
-
-func (*GameEvent_BallDribbling_) isGameEvent_Event() {}
-
 func (*GameEvent_AttackerTouchedKeeper_) isGameEvent_Event() {}
 
-func (*GameEvent_DoubleTouch_) isGameEvent_Event() {}
+func (*GameEvent_DefenderTooCloseToKickPoint_) isGameEvent_Event() {}
 
-func (*GameEvent_AttackerToDefenceArea_) isGameEvent_Event() {}
+func (*GameEvent_DefenderInDefenseAreaPartially_) isGameEvent_Event() {}
 
-func (*GameEvent_BallHolding_) isGameEvent_Event() {}
+func (*GameEvent_DefenderInDefenseArea_) isGameEvent_Event() {}
+
+func (*GameEvent_KeeperHeldBall_) isGameEvent_Event() {}
+
+func (*GameEvent_UnsportiveBehaviorMinor_) isGameEvent_Event() {}
+
+func (*GameEvent_UnsportiveBehaviorMajor_) isGameEvent_Event() {}
 
 func (*GameEvent_MultipleYellowCards_) isGameEvent_Event() {}
 
-func (*GameEvent_MultipleBotCollisions_) isGameEvent_Event() {}
-
-func (*GameEvent_MultipleRobotStopSpeed_) isGameEvent_Event() {}
-
-func (*GameEvent_NumberOfPlayers_) isGameEvent_Event() {}
+func (*GameEvent_MultipleFouls_) isGameEvent_Event() {}
 
 func (*GameEvent_KickTimeout_) isGameEvent_Event() {}
 
@@ -274,12 +278,6 @@ func (*GameEvent_NoProgressInGame_) isGameEvent_Event() {}
 func (*GameEvent_PlacementFailedByTeamInFavor_) isGameEvent_Event() {}
 
 func (*GameEvent_PlacementFailedByOpponent_) isGameEvent_Event() {}
-
-func (*GameEvent_PlacementInterference_) isGameEvent_Event() {}
-
-func (*GameEvent_UnsportiveBehaviorMinor_) isGameEvent_Event() {}
-
-func (*GameEvent_UnsportiveBehaviorMajor_) isGameEvent_Event() {}
 
 func (m *GameEvent) GetEvent() isGameEvent_Event {
 	if m != nil {
@@ -323,44 +321,16 @@ func (m *GameEvent) GetIndirectGoal() *GameEvent_IndirectGoal {
 	return nil
 }
 
-func (m *GameEvent) GetChipOnGoal() *GameEvent_ChipOnGoal {
-	if x, ok := m.GetEvent().(*GameEvent_ChipOnGoal_); ok {
-		return x.ChipOnGoal
+func (m *GameEvent) GetChippedGoal() *GameEvent_ChippedGoal {
+	if x, ok := m.GetEvent().(*GameEvent_ChippedGoal_); ok {
+		return x.ChippedGoal
 	}
 	return nil
 }
 
-func (m *GameEvent) GetRobotStopSpeed() *GameEvent_RobotStopSpeed {
-	if x, ok := m.GetEvent().(*GameEvent_RobotStopSpeed_); ok {
-		return x.RobotStopSpeed
-	}
-	return nil
-}
-
-func (m *GameEvent) GetDefenderToKickPointDistance() *GameEvent_DefenderToKickPointDistance {
-	if x, ok := m.GetEvent().(*GameEvent_DefenderToKickPointDistance_); ok {
-		return x.DefenderToKickPointDistance
-	}
-	return nil
-}
-
-func (m *GameEvent) GetBotCrashDrawn() *GameEvent_BotCrashDrawn {
-	if x, ok := m.GetEvent().(*GameEvent_BotCrashDrawn_); ok {
-		return x.BotCrashDrawn
-	}
-	return nil
-}
-
-func (m *GameEvent) GetBotCrashUnique() *GameEvent_BotCrashUnique {
-	if x, ok := m.GetEvent().(*GameEvent_BotCrashUnique_); ok {
-		return x.BotCrashUnique
-	}
-	return nil
-}
-
-func (m *GameEvent) GetBotPushing() *GameEvent_BotPushing {
-	if x, ok := m.GetEvent().(*GameEvent_BotPushing_); ok {
-		return x.BotPushing
+func (m *GameEvent) GetBotTooFastInStop() *GameEvent_BotTooFastInStop {
+	if x, ok := m.GetEvent().(*GameEvent_BotTooFastInStop_); ok {
+		return x.BotTooFastInStop
 	}
 	return nil
 }
@@ -372,16 +342,65 @@ func (m *GameEvent) GetBotTippedOver() *GameEvent_BotTippedOver {
 	return nil
 }
 
-func (m *GameEvent) GetMultipleDefender() *GameEvent_MultipleDefender {
-	if x, ok := m.GetEvent().(*GameEvent_MultipleDefender_); ok {
-		return x.MultipleDefender
+func (m *GameEvent) GetBotInterferedPlacement() *GameEvent_BotInterferedPlacement {
+	if x, ok := m.GetEvent().(*GameEvent_BotInterferedPlacement_); ok {
+		return x.BotInterferedPlacement
 	}
 	return nil
 }
 
-func (m *GameEvent) GetMultipleDefenderPartially() *GameEvent_MultipleDefenderPartially {
-	if x, ok := m.GetEvent().(*GameEvent_MultipleDefenderPartially_); ok {
-		return x.MultipleDefenderPartially
+func (m *GameEvent) GetBotCrashDrawn() *GameEvent_BotCrashDrawn {
+	if x, ok := m.GetEvent().(*GameEvent_BotCrashDrawn_); ok {
+		return x.BotCrashDrawn
+	}
+	return nil
+}
+
+func (m *GameEvent) GetBotKickedBallTooFast() *GameEvent_BotKickedBallTooFast {
+	if x, ok := m.GetEvent().(*GameEvent_BotKickedBallTooFast_); ok {
+		return x.BotKickedBallTooFast
+	}
+	return nil
+}
+
+func (m *GameEvent) GetBotDribbledBallTooFar() *GameEvent_BotDribbledBallTooFar {
+	if x, ok := m.GetEvent().(*GameEvent_BotDribbledBallTooFar_); ok {
+		return x.BotDribbledBallTooFar
+	}
+	return nil
+}
+
+func (m *GameEvent) GetBotCrashUnique() *GameEvent_BotCrashUnique {
+	if x, ok := m.GetEvent().(*GameEvent_BotCrashUnique_); ok {
+		return x.BotCrashUnique
+	}
+	return nil
+}
+
+func (m *GameEvent) GetBotPushedBot() *GameEvent_BotPushedBot {
+	if x, ok := m.GetEvent().(*GameEvent_BotPushedBot_); ok {
+		return x.BotPushedBot
+	}
+	return nil
+}
+
+func (m *GameEvent) GetBotHeldBallDeliberateley() *GameEvent_BotHeldBallDeliberateley {
+	if x, ok := m.GetEvent().(*GameEvent_BotHeldBallDeliberateley_); ok {
+		return x.BotHeldBallDeliberateley
+	}
+	return nil
+}
+
+func (m *GameEvent) GetBotDoubleTouchedBall() *GameEvent_AttackerDoubleTouchedBall {
+	if x, ok := m.GetEvent().(*GameEvent_BotDoubleTouchedBall); ok {
+		return x.BotDoubleTouchedBall
+	}
+	return nil
+}
+
+func (m *GameEvent) GetAttackerTooCloseToDefenseArea() *GameEvent_AttackerTooCloseToDefenseArea {
+	if x, ok := m.GetEvent().(*GameEvent_AttackerTooCloseToDefenseArea_); ok {
+		return x.AttackerTooCloseToDefenseArea
 	}
 	return nil
 }
@@ -393,20 +412,6 @@ func (m *GameEvent) GetAttackerInDefenseArea() *GameEvent_AttackerInDefenseArea 
 	return nil
 }
 
-func (m *GameEvent) GetBallSpeed() *GameEvent_BallSpeed {
-	if x, ok := m.GetEvent().(*GameEvent_BallSpeed_); ok {
-		return x.BallSpeed
-	}
-	return nil
-}
-
-func (m *GameEvent) GetBallDribbling() *GameEvent_BallDribbling {
-	if x, ok := m.GetEvent().(*GameEvent_BallDribbling_); ok {
-		return x.BallDribbling
-	}
-	return nil
-}
-
 func (m *GameEvent) GetAttackerTouchedKeeper() *GameEvent_AttackerTouchedKeeper {
 	if x, ok := m.GetEvent().(*GameEvent_AttackerTouchedKeeper_); ok {
 		return x.AttackerTouchedKeeper
@@ -414,23 +419,44 @@ func (m *GameEvent) GetAttackerTouchedKeeper() *GameEvent_AttackerTouchedKeeper 
 	return nil
 }
 
-func (m *GameEvent) GetDoubleTouch() *GameEvent_DoubleTouch {
-	if x, ok := m.GetEvent().(*GameEvent_DoubleTouch_); ok {
-		return x.DoubleTouch
+func (m *GameEvent) GetDefenderTooCloseToKickPoint() *GameEvent_DefenderTooCloseToKickPoint {
+	if x, ok := m.GetEvent().(*GameEvent_DefenderTooCloseToKickPoint_); ok {
+		return x.DefenderTooCloseToKickPoint
 	}
 	return nil
 }
 
-func (m *GameEvent) GetAttackerToDefenceArea() *GameEvent_AttackerToDefenceArea {
-	if x, ok := m.GetEvent().(*GameEvent_AttackerToDefenceArea_); ok {
-		return x.AttackerToDefenceArea
+func (m *GameEvent) GetDefenderInDefenseAreaPartially() *GameEvent_DefenderInDefenseAreaPartially {
+	if x, ok := m.GetEvent().(*GameEvent_DefenderInDefenseAreaPartially_); ok {
+		return x.DefenderInDefenseAreaPartially
 	}
 	return nil
 }
 
-func (m *GameEvent) GetBallHolding() *GameEvent_BallHolding {
-	if x, ok := m.GetEvent().(*GameEvent_BallHolding_); ok {
-		return x.BallHolding
+func (m *GameEvent) GetDefenderInDefenseArea() *GameEvent_DefenderInDefenseArea {
+	if x, ok := m.GetEvent().(*GameEvent_DefenderInDefenseArea_); ok {
+		return x.DefenderInDefenseArea
+	}
+	return nil
+}
+
+func (m *GameEvent) GetKeeperHeldBall() *GameEvent_KeeperHeldBall {
+	if x, ok := m.GetEvent().(*GameEvent_KeeperHeldBall_); ok {
+		return x.KeeperHeldBall
+	}
+	return nil
+}
+
+func (m *GameEvent) GetUnsportiveBehaviorMinor() *GameEvent_UnsportiveBehaviorMinor {
+	if x, ok := m.GetEvent().(*GameEvent_UnsportiveBehaviorMinor_); ok {
+		return x.UnsportiveBehaviorMinor
+	}
+	return nil
+}
+
+func (m *GameEvent) GetUnsportiveBehaviorMajor() *GameEvent_UnsportiveBehaviorMajor {
+	if x, ok := m.GetEvent().(*GameEvent_UnsportiveBehaviorMajor_); ok {
+		return x.UnsportiveBehaviorMajor
 	}
 	return nil
 }
@@ -442,23 +468,9 @@ func (m *GameEvent) GetMultipleYellowCards() *GameEvent_MultipleYellowCards {
 	return nil
 }
 
-func (m *GameEvent) GetMultipleBotCollisions() *GameEvent_MultipleBotCollisions {
-	if x, ok := m.GetEvent().(*GameEvent_MultipleBotCollisions_); ok {
-		return x.MultipleBotCollisions
-	}
-	return nil
-}
-
-func (m *GameEvent) GetMultipleRobotStopSpeed() *GameEvent_MultipleRobotStopSpeed {
-	if x, ok := m.GetEvent().(*GameEvent_MultipleRobotStopSpeed_); ok {
-		return x.MultipleRobotStopSpeed
-	}
-	return nil
-}
-
-func (m *GameEvent) GetNumberOfPlayers() *GameEvent_NumberOfPlayers {
-	if x, ok := m.GetEvent().(*GameEvent_NumberOfPlayers_); ok {
-		return x.NumberOfPlayers
+func (m *GameEvent) GetMultipleFouls() *GameEvent_MultipleFouls {
+	if x, ok := m.GetEvent().(*GameEvent_MultipleFouls_); ok {
+		return x.MultipleFouls
 	}
 	return nil
 }
@@ -491,27 +503,6 @@ func (m *GameEvent) GetPlacementFailedByOpponent() *GameEvent_PlacementFailedByO
 	return nil
 }
 
-func (m *GameEvent) GetPlacementInterference() *GameEvent_PlacementInterference {
-	if x, ok := m.GetEvent().(*GameEvent_PlacementInterference_); ok {
-		return x.PlacementInterference
-	}
-	return nil
-}
-
-func (m *GameEvent) GetUnsportiveBehaviorMinor() *GameEvent_UnsportiveBehaviorMinor {
-	if x, ok := m.GetEvent().(*GameEvent_UnsportiveBehaviorMinor_); ok {
-		return x.UnsportiveBehaviorMinor
-	}
-	return nil
-}
-
-func (m *GameEvent) GetUnsportiveBehaviorMajor() *GameEvent_UnsportiveBehaviorMajor {
-	if x, ok := m.GetEvent().(*GameEvent_UnsportiveBehaviorMajor_); ok {
-		return x.UnsportiveBehaviorMajor
-	}
-	return nil
-}
-
 // XXX_OneofFuncs is for the internal use of the proto package.
 func (*GameEvent) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
 	return _GameEvent_OneofMarshaler, _GameEvent_OneofUnmarshaler, _GameEvent_OneofSizer, []interface{}{
@@ -520,33 +511,32 @@ func (*GameEvent) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) err
 		(*GameEvent_Icing_)(nil),
 		(*GameEvent_Goal_)(nil),
 		(*GameEvent_IndirectGoal_)(nil),
-		(*GameEvent_ChipOnGoal_)(nil),
-		(*GameEvent_RobotStopSpeed_)(nil),
-		(*GameEvent_DefenderToKickPointDistance_)(nil),
-		(*GameEvent_BotCrashDrawn_)(nil),
-		(*GameEvent_BotCrashUnique_)(nil),
-		(*GameEvent_BotPushing_)(nil),
+		(*GameEvent_ChippedGoal_)(nil),
+		(*GameEvent_BotTooFastInStop_)(nil),
 		(*GameEvent_BotTippedOver_)(nil),
-		(*GameEvent_MultipleDefender_)(nil),
-		(*GameEvent_MultipleDefenderPartially_)(nil),
+		(*GameEvent_BotInterferedPlacement_)(nil),
+		(*GameEvent_BotCrashDrawn_)(nil),
+		(*GameEvent_BotKickedBallTooFast_)(nil),
+		(*GameEvent_BotDribbledBallTooFar_)(nil),
+		(*GameEvent_BotCrashUnique_)(nil),
+		(*GameEvent_BotPushedBot_)(nil),
+		(*GameEvent_BotHeldBallDeliberateley_)(nil),
+		(*GameEvent_BotDoubleTouchedBall)(nil),
+		(*GameEvent_AttackerTooCloseToDefenseArea_)(nil),
 		(*GameEvent_AttackerInDefenseArea_)(nil),
-		(*GameEvent_BallSpeed_)(nil),
-		(*GameEvent_BallDribbling_)(nil),
 		(*GameEvent_AttackerTouchedKeeper_)(nil),
-		(*GameEvent_DoubleTouch_)(nil),
-		(*GameEvent_AttackerToDefenceArea_)(nil),
-		(*GameEvent_BallHolding_)(nil),
+		(*GameEvent_DefenderTooCloseToKickPoint_)(nil),
+		(*GameEvent_DefenderInDefenseAreaPartially_)(nil),
+		(*GameEvent_DefenderInDefenseArea_)(nil),
+		(*GameEvent_KeeperHeldBall_)(nil),
+		(*GameEvent_UnsportiveBehaviorMinor_)(nil),
+		(*GameEvent_UnsportiveBehaviorMajor_)(nil),
 		(*GameEvent_MultipleYellowCards_)(nil),
-		(*GameEvent_MultipleBotCollisions_)(nil),
-		(*GameEvent_MultipleRobotStopSpeed_)(nil),
-		(*GameEvent_NumberOfPlayers_)(nil),
+		(*GameEvent_MultipleFouls_)(nil),
 		(*GameEvent_KickTimeout_)(nil),
 		(*GameEvent_NoProgressInGame_)(nil),
 		(*GameEvent_PlacementFailedByTeamInFavor_)(nil),
 		(*GameEvent_PlacementFailedByOpponent_)(nil),
-		(*GameEvent_PlacementInterference_)(nil),
-		(*GameEvent_UnsportiveBehaviorMinor_)(nil),
-		(*GameEvent_UnsportiveBehaviorMajor_)(nil),
 	}
 }
 
@@ -579,139 +569,134 @@ func _GameEvent_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
 		if err := b.EncodeMessage(x.IndirectGoal); err != nil {
 			return err
 		}
-	case *GameEvent_ChipOnGoal_:
+	case *GameEvent_ChippedGoal_:
 		b.EncodeVarint(6<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ChipOnGoal); err != nil {
+		if err := b.EncodeMessage(x.ChippedGoal); err != nil {
 			return err
 		}
-	case *GameEvent_RobotStopSpeed_:
+	case *GameEvent_BotTooFastInStop_:
 		b.EncodeVarint(7<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.RobotStopSpeed); err != nil {
-			return err
-		}
-	case *GameEvent_DefenderToKickPointDistance_:
-		b.EncodeVarint(8<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DefenderToKickPointDistance); err != nil {
-			return err
-		}
-	case *GameEvent_BotCrashDrawn_:
-		b.EncodeVarint(9<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.BotCrashDrawn); err != nil {
-			return err
-		}
-	case *GameEvent_BotCrashUnique_:
-		b.EncodeVarint(10<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.BotCrashUnique); err != nil {
-			return err
-		}
-	case *GameEvent_BotPushing_:
-		b.EncodeVarint(11<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.BotPushing); err != nil {
+		if err := b.EncodeMessage(x.BotTooFastInStop); err != nil {
 			return err
 		}
 	case *GameEvent_BotTippedOver_:
-		b.EncodeVarint(12<<3 | proto.WireBytes)
+		b.EncodeVarint(8<<3 | proto.WireBytes)
 		if err := b.EncodeMessage(x.BotTippedOver); err != nil {
 			return err
 		}
-	case *GameEvent_MultipleDefender_:
-		b.EncodeVarint(13<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.MultipleDefender); err != nil {
+	case *GameEvent_BotInterferedPlacement_:
+		b.EncodeVarint(9<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.BotInterferedPlacement); err != nil {
 			return err
 		}
-	case *GameEvent_MultipleDefenderPartially_:
+	case *GameEvent_BotCrashDrawn_:
+		b.EncodeVarint(10<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.BotCrashDrawn); err != nil {
+			return err
+		}
+	case *GameEvent_BotKickedBallTooFast_:
+		b.EncodeVarint(11<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.BotKickedBallTooFast); err != nil {
+			return err
+		}
+	case *GameEvent_BotDribbledBallTooFar_:
+		b.EncodeVarint(12<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.BotDribbledBallTooFar); err != nil {
+			return err
+		}
+	case *GameEvent_BotCrashUnique_:
+		b.EncodeVarint(13<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.BotCrashUnique); err != nil {
+			return err
+		}
+	case *GameEvent_BotPushedBot_:
 		b.EncodeVarint(14<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.MultipleDefenderPartially); err != nil {
+		if err := b.EncodeMessage(x.BotPushedBot); err != nil {
+			return err
+		}
+	case *GameEvent_BotHeldBallDeliberateley_:
+		b.EncodeVarint(15<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.BotHeldBallDeliberateley); err != nil {
+			return err
+		}
+	case *GameEvent_BotDoubleTouchedBall:
+		b.EncodeVarint(16<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.BotDoubleTouchedBall); err != nil {
+			return err
+		}
+	case *GameEvent_AttackerTooCloseToDefenseArea_:
+		b.EncodeVarint(17<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.AttackerTooCloseToDefenseArea); err != nil {
 			return err
 		}
 	case *GameEvent_AttackerInDefenseArea_:
-		b.EncodeVarint(15<<3 | proto.WireBytes)
+		b.EncodeVarint(18<<3 | proto.WireBytes)
 		if err := b.EncodeMessage(x.AttackerInDefenseArea); err != nil {
 			return err
 		}
-	case *GameEvent_BallSpeed_:
-		b.EncodeVarint(16<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.BallSpeed); err != nil {
-			return err
-		}
-	case *GameEvent_BallDribbling_:
-		b.EncodeVarint(17<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.BallDribbling); err != nil {
-			return err
-		}
 	case *GameEvent_AttackerTouchedKeeper_:
-		b.EncodeVarint(18<<3 | proto.WireBytes)
+		b.EncodeVarint(19<<3 | proto.WireBytes)
 		if err := b.EncodeMessage(x.AttackerTouchedKeeper); err != nil {
 			return err
 		}
-	case *GameEvent_DoubleTouch_:
-		b.EncodeVarint(19<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DoubleTouch); err != nil {
-			return err
-		}
-	case *GameEvent_AttackerToDefenceArea_:
+	case *GameEvent_DefenderTooCloseToKickPoint_:
 		b.EncodeVarint(20<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AttackerToDefenceArea); err != nil {
+		if err := b.EncodeMessage(x.DefenderTooCloseToKickPoint); err != nil {
 			return err
 		}
-	case *GameEvent_BallHolding_:
+	case *GameEvent_DefenderInDefenseAreaPartially_:
 		b.EncodeVarint(21<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.BallHolding); err != nil {
+		if err := b.EncodeMessage(x.DefenderInDefenseAreaPartially); err != nil {
 			return err
 		}
-	case *GameEvent_MultipleYellowCards_:
+	case *GameEvent_DefenderInDefenseArea_:
 		b.EncodeVarint(22<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.MultipleYellowCards); err != nil {
+		if err := b.EncodeMessage(x.DefenderInDefenseArea); err != nil {
 			return err
 		}
-	case *GameEvent_MultipleBotCollisions_:
+	case *GameEvent_KeeperHeldBall_:
 		b.EncodeVarint(23<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.MultipleBotCollisions); err != nil {
-			return err
-		}
-	case *GameEvent_MultipleRobotStopSpeed_:
-		b.EncodeVarint(24<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.MultipleRobotStopSpeed); err != nil {
-			return err
-		}
-	case *GameEvent_NumberOfPlayers_:
-		b.EncodeVarint(25<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NumberOfPlayers); err != nil {
-			return err
-		}
-	case *GameEvent_KickTimeout_:
-		b.EncodeVarint(26<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.KickTimeout); err != nil {
-			return err
-		}
-	case *GameEvent_NoProgressInGame_:
-		b.EncodeVarint(27<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoProgressInGame); err != nil {
-			return err
-		}
-	case *GameEvent_PlacementFailedByTeamInFavor_:
-		b.EncodeVarint(28<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.PlacementFailedByTeamInFavor); err != nil {
-			return err
-		}
-	case *GameEvent_PlacementFailedByOpponent_:
-		b.EncodeVarint(29<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.PlacementFailedByOpponent); err != nil {
-			return err
-		}
-	case *GameEvent_PlacementInterference_:
-		b.EncodeVarint(30<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.PlacementInterference); err != nil {
+		if err := b.EncodeMessage(x.KeeperHeldBall); err != nil {
 			return err
 		}
 	case *GameEvent_UnsportiveBehaviorMinor_:
-		b.EncodeVarint(31<<3 | proto.WireBytes)
+		b.EncodeVarint(24<<3 | proto.WireBytes)
 		if err := b.EncodeMessage(x.UnsportiveBehaviorMinor); err != nil {
 			return err
 		}
 	case *GameEvent_UnsportiveBehaviorMajor_:
-		b.EncodeVarint(32<<3 | proto.WireBytes)
+		b.EncodeVarint(25<<3 | proto.WireBytes)
 		if err := b.EncodeMessage(x.UnsportiveBehaviorMajor); err != nil {
+			return err
+		}
+	case *GameEvent_MultipleYellowCards_:
+		b.EncodeVarint(26<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.MultipleYellowCards); err != nil {
+			return err
+		}
+	case *GameEvent_MultipleFouls_:
+		b.EncodeVarint(27<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.MultipleFouls); err != nil {
+			return err
+		}
+	case *GameEvent_KickTimeout_:
+		b.EncodeVarint(28<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.KickTimeout); err != nil {
+			return err
+		}
+	case *GameEvent_NoProgressInGame_:
+		b.EncodeVarint(29<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.NoProgressInGame); err != nil {
+			return err
+		}
+	case *GameEvent_PlacementFailedByTeamInFavor_:
+		b.EncodeVarint(30<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.PlacementFailedByTeamInFavor); err != nil {
+			return err
+		}
+	case *GameEvent_PlacementFailedByOpponent_:
+		b.EncodeVarint(31<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.PlacementFailedByOpponent); err != nil {
 			return err
 		}
 	case nil:
@@ -764,55 +749,23 @@ func _GameEvent_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buff
 		err := b.DecodeMessage(msg)
 		m.Event = &GameEvent_IndirectGoal_{msg}
 		return true, err
-	case 6: // event.chip_on_goal
+	case 6: // event.chipped_goal
 		if wire != proto.WireBytes {
 			return true, proto.ErrInternalBadWireType
 		}
-		msg := new(GameEvent_ChipOnGoal)
+		msg := new(GameEvent_ChippedGoal)
 		err := b.DecodeMessage(msg)
-		m.Event = &GameEvent_ChipOnGoal_{msg}
+		m.Event = &GameEvent_ChippedGoal_{msg}
 		return true, err
-	case 7: // event.robot_stop_speed
+	case 7: // event.bot_too_fast_in_stop
 		if wire != proto.WireBytes {
 			return true, proto.ErrInternalBadWireType
 		}
-		msg := new(GameEvent_RobotStopSpeed)
+		msg := new(GameEvent_BotTooFastInStop)
 		err := b.DecodeMessage(msg)
-		m.Event = &GameEvent_RobotStopSpeed_{msg}
+		m.Event = &GameEvent_BotTooFastInStop_{msg}
 		return true, err
-	case 8: // event.defender_to_kick_point_distance
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GameEvent_DefenderToKickPointDistance)
-		err := b.DecodeMessage(msg)
-		m.Event = &GameEvent_DefenderToKickPointDistance_{msg}
-		return true, err
-	case 9: // event.bot_crash_drawn
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GameEvent_BotCrashDrawn)
-		err := b.DecodeMessage(msg)
-		m.Event = &GameEvent_BotCrashDrawn_{msg}
-		return true, err
-	case 10: // event.bot_crash_unique
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GameEvent_BotCrashUnique)
-		err := b.DecodeMessage(msg)
-		m.Event = &GameEvent_BotCrashUnique_{msg}
-		return true, err
-	case 11: // event.bot_pushing
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GameEvent_BotPushing)
-		err := b.DecodeMessage(msg)
-		m.Event = &GameEvent_BotPushing_{msg}
-		return true, err
-	case 12: // event.bot_tipped_over
+	case 8: // event.bot_tipped_over
 		if wire != proto.WireBytes {
 			return true, proto.ErrInternalBadWireType
 		}
@@ -820,23 +773,79 @@ func _GameEvent_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buff
 		err := b.DecodeMessage(msg)
 		m.Event = &GameEvent_BotTippedOver_{msg}
 		return true, err
-	case 13: // event.multiple_defender
+	case 9: // event.bot_interfered_placement
 		if wire != proto.WireBytes {
 			return true, proto.ErrInternalBadWireType
 		}
-		msg := new(GameEvent_MultipleDefender)
+		msg := new(GameEvent_BotInterferedPlacement)
 		err := b.DecodeMessage(msg)
-		m.Event = &GameEvent_MultipleDefender_{msg}
+		m.Event = &GameEvent_BotInterferedPlacement_{msg}
 		return true, err
-	case 14: // event.multiple_defender_partially
+	case 10: // event.bot_crash_drawn
 		if wire != proto.WireBytes {
 			return true, proto.ErrInternalBadWireType
 		}
-		msg := new(GameEvent_MultipleDefenderPartially)
+		msg := new(GameEvent_BotCrashDrawn)
 		err := b.DecodeMessage(msg)
-		m.Event = &GameEvent_MultipleDefenderPartially_{msg}
+		m.Event = &GameEvent_BotCrashDrawn_{msg}
 		return true, err
-	case 15: // event.attacker_in_defense_area
+	case 11: // event.bot_kicked_ball_too_fast
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(GameEvent_BotKickedBallTooFast)
+		err := b.DecodeMessage(msg)
+		m.Event = &GameEvent_BotKickedBallTooFast_{msg}
+		return true, err
+	case 12: // event.bot_dribbled_ball_too_far
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(GameEvent_BotDribbledBallTooFar)
+		err := b.DecodeMessage(msg)
+		m.Event = &GameEvent_BotDribbledBallTooFar_{msg}
+		return true, err
+	case 13: // event.bot_crash_unique
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(GameEvent_BotCrashUnique)
+		err := b.DecodeMessage(msg)
+		m.Event = &GameEvent_BotCrashUnique_{msg}
+		return true, err
+	case 14: // event.bot_pushed_bot
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(GameEvent_BotPushedBot)
+		err := b.DecodeMessage(msg)
+		m.Event = &GameEvent_BotPushedBot_{msg}
+		return true, err
+	case 15: // event.bot_held_ball_deliberateley
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(GameEvent_BotHeldBallDeliberateley)
+		err := b.DecodeMessage(msg)
+		m.Event = &GameEvent_BotHeldBallDeliberateley_{msg}
+		return true, err
+	case 16: // event.bot_double_touched_ball
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(GameEvent_AttackerDoubleTouchedBall)
+		err := b.DecodeMessage(msg)
+		m.Event = &GameEvent_BotDoubleTouchedBall{msg}
+		return true, err
+	case 17: // event.attacker_too_close_to_defense_area
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(GameEvent_AttackerTooCloseToDefenseArea)
+		err := b.DecodeMessage(msg)
+		m.Event = &GameEvent_AttackerTooCloseToDefenseArea_{msg}
+		return true, err
+	case 18: // event.attacker_in_defense_area
 		if wire != proto.WireBytes {
 			return true, proto.ErrInternalBadWireType
 		}
@@ -844,23 +853,7 @@ func _GameEvent_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buff
 		err := b.DecodeMessage(msg)
 		m.Event = &GameEvent_AttackerInDefenseArea_{msg}
 		return true, err
-	case 16: // event.ball_speed
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GameEvent_BallSpeed)
-		err := b.DecodeMessage(msg)
-		m.Event = &GameEvent_BallSpeed_{msg}
-		return true, err
-	case 17: // event.ball_dribbling
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GameEvent_BallDribbling)
-		err := b.DecodeMessage(msg)
-		m.Event = &GameEvent_BallDribbling_{msg}
-		return true, err
-	case 18: // event.attacker_touched_keeper
+	case 19: // event.attacker_touched_keeper
 		if wire != proto.WireBytes {
 			return true, proto.ErrInternalBadWireType
 		}
@@ -868,103 +861,39 @@ func _GameEvent_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buff
 		err := b.DecodeMessage(msg)
 		m.Event = &GameEvent_AttackerTouchedKeeper_{msg}
 		return true, err
-	case 19: // event.double_touch
+	case 20: // event.defender_too_close_to_kick_point
 		if wire != proto.WireBytes {
 			return true, proto.ErrInternalBadWireType
 		}
-		msg := new(GameEvent_DoubleTouch)
+		msg := new(GameEvent_DefenderTooCloseToKickPoint)
 		err := b.DecodeMessage(msg)
-		m.Event = &GameEvent_DoubleTouch_{msg}
+		m.Event = &GameEvent_DefenderTooCloseToKickPoint_{msg}
 		return true, err
-	case 20: // event.attacker_to_defence_area
+	case 21: // event.defender_in_defense_area_partially
 		if wire != proto.WireBytes {
 			return true, proto.ErrInternalBadWireType
 		}
-		msg := new(GameEvent_AttackerToDefenceArea)
+		msg := new(GameEvent_DefenderInDefenseAreaPartially)
 		err := b.DecodeMessage(msg)
-		m.Event = &GameEvent_AttackerToDefenceArea_{msg}
+		m.Event = &GameEvent_DefenderInDefenseAreaPartially_{msg}
 		return true, err
-	case 21: // event.ball_holding
+	case 22: // event.defender_in_defense_area
 		if wire != proto.WireBytes {
 			return true, proto.ErrInternalBadWireType
 		}
-		msg := new(GameEvent_BallHolding)
+		msg := new(GameEvent_DefenderInDefenseArea)
 		err := b.DecodeMessage(msg)
-		m.Event = &GameEvent_BallHolding_{msg}
+		m.Event = &GameEvent_DefenderInDefenseArea_{msg}
 		return true, err
-	case 22: // event.multiple_yellow_cards
+	case 23: // event.keeper_held_ball
 		if wire != proto.WireBytes {
 			return true, proto.ErrInternalBadWireType
 		}
-		msg := new(GameEvent_MultipleYellowCards)
+		msg := new(GameEvent_KeeperHeldBall)
 		err := b.DecodeMessage(msg)
-		m.Event = &GameEvent_MultipleYellowCards_{msg}
+		m.Event = &GameEvent_KeeperHeldBall_{msg}
 		return true, err
-	case 23: // event.multiple_bot_collisions
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GameEvent_MultipleBotCollisions)
-		err := b.DecodeMessage(msg)
-		m.Event = &GameEvent_MultipleBotCollisions_{msg}
-		return true, err
-	case 24: // event.multiple_robot_stop_speed
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GameEvent_MultipleRobotStopSpeed)
-		err := b.DecodeMessage(msg)
-		m.Event = &GameEvent_MultipleRobotStopSpeed_{msg}
-		return true, err
-	case 25: // event.number_of_players
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GameEvent_NumberOfPlayers)
-		err := b.DecodeMessage(msg)
-		m.Event = &GameEvent_NumberOfPlayers_{msg}
-		return true, err
-	case 26: // event.kick_timeout
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GameEvent_KickTimeout)
-		err := b.DecodeMessage(msg)
-		m.Event = &GameEvent_KickTimeout_{msg}
-		return true, err
-	case 27: // event.no_progress_in_game
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GameEvent_NoProgressInGame)
-		err := b.DecodeMessage(msg)
-		m.Event = &GameEvent_NoProgressInGame_{msg}
-		return true, err
-	case 28: // event.placement_failed_by_team_in_favor
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GameEvent_PlacementFailedByTeamInFavor)
-		err := b.DecodeMessage(msg)
-		m.Event = &GameEvent_PlacementFailedByTeamInFavor_{msg}
-		return true, err
-	case 29: // event.placement_failed_by_opponent
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GameEvent_PlacementFailedByOpponent)
-		err := b.DecodeMessage(msg)
-		m.Event = &GameEvent_PlacementFailedByOpponent_{msg}
-		return true, err
-	case 30: // event.placement_interference
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(GameEvent_PlacementInterference)
-		err := b.DecodeMessage(msg)
-		m.Event = &GameEvent_PlacementInterference_{msg}
-		return true, err
-	case 31: // event.unsportive_behavior_minor
+	case 24: // event.unsportive_behavior_minor
 		if wire != proto.WireBytes {
 			return true, proto.ErrInternalBadWireType
 		}
@@ -972,13 +901,61 @@ func _GameEvent_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buff
 		err := b.DecodeMessage(msg)
 		m.Event = &GameEvent_UnsportiveBehaviorMinor_{msg}
 		return true, err
-	case 32: // event.unsportive_behavior_major
+	case 25: // event.unsportive_behavior_major
 		if wire != proto.WireBytes {
 			return true, proto.ErrInternalBadWireType
 		}
 		msg := new(GameEvent_UnsportiveBehaviorMajor)
 		err := b.DecodeMessage(msg)
 		m.Event = &GameEvent_UnsportiveBehaviorMajor_{msg}
+		return true, err
+	case 26: // event.multiple_yellow_cards
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(GameEvent_MultipleYellowCards)
+		err := b.DecodeMessage(msg)
+		m.Event = &GameEvent_MultipleYellowCards_{msg}
+		return true, err
+	case 27: // event.multiple_fouls
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(GameEvent_MultipleFouls)
+		err := b.DecodeMessage(msg)
+		m.Event = &GameEvent_MultipleFouls_{msg}
+		return true, err
+	case 28: // event.kick_timeout
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(GameEvent_KickTimeout)
+		err := b.DecodeMessage(msg)
+		m.Event = &GameEvent_KickTimeout_{msg}
+		return true, err
+	case 29: // event.no_progress_in_game
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(GameEvent_NoProgressInGame)
+		err := b.DecodeMessage(msg)
+		m.Event = &GameEvent_NoProgressInGame_{msg}
+		return true, err
+	case 30: // event.placement_failed_by_team_in_favor
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(GameEvent_PlacementFailedByTeamInFavor)
+		err := b.DecodeMessage(msg)
+		m.Event = &GameEvent_PlacementFailedByTeamInFavor_{msg}
+		return true, err
+	case 31: // event.placement_failed_by_opponent
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(GameEvent_PlacementFailedByOpponent)
+		err := b.DecodeMessage(msg)
+		m.Event = &GameEvent_PlacementFailedByOpponent_{msg}
 		return true, err
 	default:
 		return false, nil
@@ -1014,33 +991,13 @@ func _GameEvent_OneofSizer(msg proto.Message) (n int) {
 		n += 1 // tag and wire
 		n += proto.SizeVarint(uint64(s))
 		n += s
-	case *GameEvent_ChipOnGoal_:
-		s := proto.Size(x.ChipOnGoal)
+	case *GameEvent_ChippedGoal_:
+		s := proto.Size(x.ChippedGoal)
 		n += 1 // tag and wire
 		n += proto.SizeVarint(uint64(s))
 		n += s
-	case *GameEvent_RobotStopSpeed_:
-		s := proto.Size(x.RobotStopSpeed)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GameEvent_DefenderToKickPointDistance_:
-		s := proto.Size(x.DefenderToKickPointDistance)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GameEvent_BotCrashDrawn_:
-		s := proto.Size(x.BotCrashDrawn)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GameEvent_BotCrashUnique_:
-		s := proto.Size(x.BotCrashUnique)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GameEvent_BotPushing_:
-		s := proto.Size(x.BotPushing)
+	case *GameEvent_BotTooFastInStop_:
+		s := proto.Size(x.BotTooFastInStop)
 		n += 1 // tag and wire
 		n += proto.SizeVarint(uint64(s))
 		n += s
@@ -1049,28 +1006,53 @@ func _GameEvent_OneofSizer(msg proto.Message) (n int) {
 		n += 1 // tag and wire
 		n += proto.SizeVarint(uint64(s))
 		n += s
-	case *GameEvent_MultipleDefender_:
-		s := proto.Size(x.MultipleDefender)
+	case *GameEvent_BotInterferedPlacement_:
+		s := proto.Size(x.BotInterferedPlacement)
 		n += 1 // tag and wire
 		n += proto.SizeVarint(uint64(s))
 		n += s
-	case *GameEvent_MultipleDefenderPartially_:
-		s := proto.Size(x.MultipleDefenderPartially)
+	case *GameEvent_BotCrashDrawn_:
+		s := proto.Size(x.BotCrashDrawn)
 		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *GameEvent_BotKickedBallTooFast_:
+		s := proto.Size(x.BotKickedBallTooFast)
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *GameEvent_BotDribbledBallTooFar_:
+		s := proto.Size(x.BotDribbledBallTooFar)
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *GameEvent_BotCrashUnique_:
+		s := proto.Size(x.BotCrashUnique)
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *GameEvent_BotPushedBot_:
+		s := proto.Size(x.BotPushedBot)
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *GameEvent_BotHeldBallDeliberateley_:
+		s := proto.Size(x.BotHeldBallDeliberateley)
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *GameEvent_BotDoubleTouchedBall:
+		s := proto.Size(x.BotDoubleTouchedBall)
+		n += 2 // tag and wire
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *GameEvent_AttackerTooCloseToDefenseArea_:
+		s := proto.Size(x.AttackerTooCloseToDefenseArea)
+		n += 2 // tag and wire
 		n += proto.SizeVarint(uint64(s))
 		n += s
 	case *GameEvent_AttackerInDefenseArea_:
 		s := proto.Size(x.AttackerInDefenseArea)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GameEvent_BallSpeed_:
-		s := proto.Size(x.BallSpeed)
-		n += 2 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GameEvent_BallDribbling_:
-		s := proto.Size(x.BallDribbling)
 		n += 2 // tag and wire
 		n += proto.SizeVarint(uint64(s))
 		n += s
@@ -1079,18 +1061,33 @@ func _GameEvent_OneofSizer(msg proto.Message) (n int) {
 		n += 2 // tag and wire
 		n += proto.SizeVarint(uint64(s))
 		n += s
-	case *GameEvent_DoubleTouch_:
-		s := proto.Size(x.DoubleTouch)
+	case *GameEvent_DefenderTooCloseToKickPoint_:
+		s := proto.Size(x.DefenderTooCloseToKickPoint)
 		n += 2 // tag and wire
 		n += proto.SizeVarint(uint64(s))
 		n += s
-	case *GameEvent_AttackerToDefenceArea_:
-		s := proto.Size(x.AttackerToDefenceArea)
+	case *GameEvent_DefenderInDefenseAreaPartially_:
+		s := proto.Size(x.DefenderInDefenseAreaPartially)
 		n += 2 // tag and wire
 		n += proto.SizeVarint(uint64(s))
 		n += s
-	case *GameEvent_BallHolding_:
-		s := proto.Size(x.BallHolding)
+	case *GameEvent_DefenderInDefenseArea_:
+		s := proto.Size(x.DefenderInDefenseArea)
+		n += 2 // tag and wire
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *GameEvent_KeeperHeldBall_:
+		s := proto.Size(x.KeeperHeldBall)
+		n += 2 // tag and wire
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *GameEvent_UnsportiveBehaviorMinor_:
+		s := proto.Size(x.UnsportiveBehaviorMinor)
+		n += 2 // tag and wire
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *GameEvent_UnsportiveBehaviorMajor_:
+		s := proto.Size(x.UnsportiveBehaviorMajor)
 		n += 2 // tag and wire
 		n += proto.SizeVarint(uint64(s))
 		n += s
@@ -1099,18 +1096,8 @@ func _GameEvent_OneofSizer(msg proto.Message) (n int) {
 		n += 2 // tag and wire
 		n += proto.SizeVarint(uint64(s))
 		n += s
-	case *GameEvent_MultipleBotCollisions_:
-		s := proto.Size(x.MultipleBotCollisions)
-		n += 2 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GameEvent_MultipleRobotStopSpeed_:
-		s := proto.Size(x.MultipleRobotStopSpeed)
-		n += 2 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GameEvent_NumberOfPlayers_:
-		s := proto.Size(x.NumberOfPlayers)
+	case *GameEvent_MultipleFouls_:
+		s := proto.Size(x.MultipleFouls)
 		n += 2 // tag and wire
 		n += proto.SizeVarint(uint64(s))
 		n += s
@@ -1134,21 +1121,6 @@ func _GameEvent_OneofSizer(msg proto.Message) (n int) {
 		n += 2 // tag and wire
 		n += proto.SizeVarint(uint64(s))
 		n += s
-	case *GameEvent_PlacementInterference_:
-		s := proto.Size(x.PlacementInterference)
-		n += 2 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GameEvent_UnsportiveBehaviorMinor_:
-		s := proto.Size(x.UnsportiveBehaviorMinor)
-		n += 2 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GameEvent_UnsportiveBehaviorMajor_:
-		s := proto.Size(x.UnsportiveBehaviorMajor)
-		n += 2 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
 	case nil:
 	default:
 		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
@@ -1156,11 +1128,14 @@ func _GameEvent_OneofSizer(msg proto.Message) (n int) {
 	return n
 }
 
+// the ball left the field normally
 type GameEvent_BallLeftFieldEvent struct {
+	// the team that last touched the ball
+	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// the bot that last touched the ball
-	ByBot *BotId `protobuf:"bytes,1,req,name=by_bot,json=byBot" json:"by_bot,omitempty"`
+	ByBot *uint32 `protobuf:"varint,2,opt,name=by_bot,json=byBot" json:"by_bot,omitempty"`
 	// the location where the ball left the field
-	Location             *Location `protobuf:"bytes,2,opt,name=location" json:"location,omitempty"`
+	Location             *Location `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
 	XXX_unrecognized     []byte    `json:"-"`
 	XXX_sizecache        int32     `json:"-"`
@@ -1170,7 +1145,7 @@ func (m *GameEvent_BallLeftFieldEvent) Reset()         { *m = GameEvent_BallLeft
 func (m *GameEvent_BallLeftFieldEvent) String() string { return proto.CompactTextString(m) }
 func (*GameEvent_BallLeftFieldEvent) ProtoMessage()    {}
 func (*GameEvent_BallLeftFieldEvent) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_2019_a0d50baf64c1b28a, []int{0, 0}
+	return fileDescriptor_ssl_game_event_2019_51267f52d25ff0d1, []int{0, 0}
 }
 func (m *GameEvent_BallLeftFieldEvent) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GameEvent_BallLeftFieldEvent.Unmarshal(m, b)
@@ -1190,11 +1165,18 @@ func (m *GameEvent_BallLeftFieldEvent) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GameEvent_BallLeftFieldEvent proto.InternalMessageInfo
 
-func (m *GameEvent_BallLeftFieldEvent) GetByBot() *BotId {
-	if m != nil {
-		return m.ByBot
+func (m *GameEvent_BallLeftFieldEvent) GetByTeam() Team {
+	if m != nil && m.ByTeam != nil {
+		return *m.ByTeam
 	}
-	return nil
+	return Team_UNKNOWN
+}
+
+func (m *GameEvent_BallLeftFieldEvent) GetByBot() uint32 {
+	if m != nil && m.ByBot != nil {
+		return *m.ByBot
+	}
+	return 0
 }
 
 func (m *GameEvent_BallLeftFieldEvent) GetLocation() *Location {
@@ -1204,13 +1186,16 @@ func (m *GameEvent_BallLeftFieldEvent) GetLocation() *Location {
 	return nil
 }
 
+// the ball left the field via goal line and a team committed icing
 type GameEvent_Icing struct {
+	// the team that last touched the ball
+	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// the bot that last touched the ball
-	ByBot *BotId `protobuf:"bytes,1,req,name=by_bot,json=byBot" json:"by_bot,omitempty"`
+	ByBot *uint32 `protobuf:"varint,2,opt,name=by_bot,json=byBot" json:"by_bot,omitempty"`
 	// the location where the ball left the field
-	Location *Location `protobuf:"bytes,2,opt,name=location" json:"location,omitempty"`
+	Location *Location `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
 	// the location where the ball was last touched
-	KickLocation         *Location `protobuf:"bytes,3,opt,name=kick_location,json=kickLocation" json:"kick_location,omitempty"`
+	KickLocation         *Location `protobuf:"bytes,4,opt,name=kick_location,json=kickLocation" json:"kick_location,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
 	XXX_unrecognized     []byte    `json:"-"`
 	XXX_sizecache        int32     `json:"-"`
@@ -1220,7 +1205,7 @@ func (m *GameEvent_Icing) Reset()         { *m = GameEvent_Icing{} }
 func (m *GameEvent_Icing) String() string { return proto.CompactTextString(m) }
 func (*GameEvent_Icing) ProtoMessage()    {}
 func (*GameEvent_Icing) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_2019_a0d50baf64c1b28a, []int{0, 1}
+	return fileDescriptor_ssl_game_event_2019_51267f52d25ff0d1, []int{0, 1}
 }
 func (m *GameEvent_Icing) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GameEvent_Icing.Unmarshal(m, b)
@@ -1240,11 +1225,18 @@ func (m *GameEvent_Icing) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GameEvent_Icing proto.InternalMessageInfo
 
-func (m *GameEvent_Icing) GetByBot() *BotId {
-	if m != nil {
-		return m.ByBot
+func (m *GameEvent_Icing) GetByTeam() Team {
+	if m != nil && m.ByTeam != nil {
+		return *m.ByTeam
 	}
-	return nil
+	return Team_UNKNOWN
+}
+
+func (m *GameEvent_Icing) GetByBot() uint32 {
+	if m != nil && m.ByBot != nil {
+		return *m.ByBot
+	}
+	return 0
 }
 
 func (m *GameEvent_Icing) GetLocation() *Location {
@@ -1261,13 +1253,16 @@ func (m *GameEvent_Icing) GetKickLocation() *Location {
 	return nil
 }
 
+// a team shot a valid goal
 type GameEvent_Goal struct {
+	// the team that shot the goal
+	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// the bot that scored the goal - at least the team must be set
-	ByBot *BotId `protobuf:"bytes,1,req,name=by_bot,json=byBot" json:"by_bot,omitempty"`
+	ByBot *uint32 `protobuf:"varint,2,opt,name=by_bot,json=byBot" json:"by_bot,omitempty"`
 	// the location where the ball entered the goal
-	Location *Location `protobuf:"bytes,2,opt,name=location" json:"location,omitempty"`
+	Location *Location `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
 	// the location where the ball was kicked
-	KickLocation         *Location `protobuf:"bytes,3,opt,name=kick_location,json=kickLocation" json:"kick_location,omitempty"`
+	KickLocation         *Location `protobuf:"bytes,4,opt,name=kick_location,json=kickLocation" json:"kick_location,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
 	XXX_unrecognized     []byte    `json:"-"`
 	XXX_sizecache        int32     `json:"-"`
@@ -1277,7 +1272,7 @@ func (m *GameEvent_Goal) Reset()         { *m = GameEvent_Goal{} }
 func (m *GameEvent_Goal) String() string { return proto.CompactTextString(m) }
 func (*GameEvent_Goal) ProtoMessage()    {}
 func (*GameEvent_Goal) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_2019_a0d50baf64c1b28a, []int{0, 2}
+	return fileDescriptor_ssl_game_event_2019_51267f52d25ff0d1, []int{0, 2}
 }
 func (m *GameEvent_Goal) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GameEvent_Goal.Unmarshal(m, b)
@@ -1297,11 +1292,18 @@ func (m *GameEvent_Goal) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GameEvent_Goal proto.InternalMessageInfo
 
-func (m *GameEvent_Goal) GetByBot() *BotId {
-	if m != nil {
-		return m.ByBot
+func (m *GameEvent_Goal) GetByTeam() Team {
+	if m != nil && m.ByTeam != nil {
+		return *m.ByTeam
 	}
-	return nil
+	return Team_UNKNOWN
+}
+
+func (m *GameEvent_Goal) GetByBot() uint32 {
+	if m != nil && m.ByBot != nil {
+		return *m.ByBot
+	}
+	return 0
 }
 
 func (m *GameEvent_Goal) GetLocation() *Location {
@@ -1320,12 +1322,14 @@ func (m *GameEvent_Goal) GetKickLocation() *Location {
 
 // the ball entered the goal directly during an indirect free kick
 type GameEvent_IndirectGoal struct {
+	// the team that tried to shoot the goal
+	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// the bot that kicked the ball - at least the team must be set
-	ByBot *BotId `protobuf:"bytes,1,req,name=by_bot,json=byBot" json:"by_bot,omitempty"`
+	ByBot *uint32 `protobuf:"varint,2,opt,name=by_bot,json=byBot" json:"by_bot,omitempty"`
 	// the location where the ball entered the goal
-	Location *Location `protobuf:"bytes,2,opt,name=location" json:"location,omitempty"`
+	Location *Location `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
 	// the location where the ball was kicked
-	KickLocation         *Location `protobuf:"bytes,3,opt,name=kick_location,json=kickLocation" json:"kick_location,omitempty"`
+	KickLocation         *Location `protobuf:"bytes,4,opt,name=kick_location,json=kickLocation" json:"kick_location,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
 	XXX_unrecognized     []byte    `json:"-"`
 	XXX_sizecache        int32     `json:"-"`
@@ -1335,7 +1339,7 @@ func (m *GameEvent_IndirectGoal) Reset()         { *m = GameEvent_IndirectGoal{}
 func (m *GameEvent_IndirectGoal) String() string { return proto.CompactTextString(m) }
 func (*GameEvent_IndirectGoal) ProtoMessage()    {}
 func (*GameEvent_IndirectGoal) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_2019_a0d50baf64c1b28a, []int{0, 3}
+	return fileDescriptor_ssl_game_event_2019_51267f52d25ff0d1, []int{0, 3}
 }
 func (m *GameEvent_IndirectGoal) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GameEvent_IndirectGoal.Unmarshal(m, b)
@@ -1355,11 +1359,18 @@ func (m *GameEvent_IndirectGoal) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GameEvent_IndirectGoal proto.InternalMessageInfo
 
-func (m *GameEvent_IndirectGoal) GetByBot() *BotId {
-	if m != nil {
-		return m.ByBot
+func (m *GameEvent_IndirectGoal) GetByTeam() Team {
+	if m != nil && m.ByTeam != nil {
+		return *m.ByTeam
 	}
-	return nil
+	return Team_UNKNOWN
+}
+
+func (m *GameEvent_IndirectGoal) GetByBot() uint32 {
+	if m != nil && m.ByBot != nil {
+		return *m.ByBot
+	}
+	return 0
 }
 
 func (m *GameEvent_IndirectGoal) GetLocation() *Location {
@@ -1376,207 +1387,242 @@ func (m *GameEvent_IndirectGoal) GetKickLocation() *Location {
 	return nil
 }
 
-type GameEvent_ChipOnGoal struct {
-	// the bot that kicked the ball - at least the team must be set
-	ByBot *BotId `protobuf:"bytes,1,req,name=by_bot,json=byBot" json:"by_bot,omitempty"`
+// the ball entered the goal, but was initially chipped
+type GameEvent_ChippedGoal struct {
+	// the team that tried to shoot the goal
+	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
+	// the bot that kicked the ball
+	ByBot *uint32 `protobuf:"varint,2,opt,name=by_bot,json=byBot" json:"by_bot,omitempty"`
 	// the location where the ball entered the goal
-	Location *Location `protobuf:"bytes,2,opt,name=location" json:"location,omitempty"`
+	Location *Location `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
 	// the location where the ball was kicked
-	KickLocation *Location `protobuf:"bytes,3,opt,name=kick_location,json=kickLocation" json:"kick_location,omitempty"`
+	KickLocation *Location `protobuf:"bytes,4,opt,name=kick_location,json=kickLocation" json:"kick_location,omitempty"`
 	// the maximum height of the ball, before it entered the goal and since the last kick
-	MaxBallHeight        *float32 `protobuf:"fixed32,4,req,name=max_ball_height,json=maxBallHeight" json:"max_ball_height,omitempty"`
+	MaxBallHeight        *float32 `protobuf:"fixed32,5,opt,name=max_ball_height,json=maxBallHeight" json:"max_ball_height,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *GameEvent_ChipOnGoal) Reset()         { *m = GameEvent_ChipOnGoal{} }
-func (m *GameEvent_ChipOnGoal) String() string { return proto.CompactTextString(m) }
-func (*GameEvent_ChipOnGoal) ProtoMessage()    {}
-func (*GameEvent_ChipOnGoal) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_2019_a0d50baf64c1b28a, []int{0, 4}
+func (m *GameEvent_ChippedGoal) Reset()         { *m = GameEvent_ChippedGoal{} }
+func (m *GameEvent_ChippedGoal) String() string { return proto.CompactTextString(m) }
+func (*GameEvent_ChippedGoal) ProtoMessage()    {}
+func (*GameEvent_ChippedGoal) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ssl_game_event_2019_51267f52d25ff0d1, []int{0, 4}
 }
-func (m *GameEvent_ChipOnGoal) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_GameEvent_ChipOnGoal.Unmarshal(m, b)
+func (m *GameEvent_ChippedGoal) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GameEvent_ChippedGoal.Unmarshal(m, b)
 }
-func (m *GameEvent_ChipOnGoal) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_GameEvent_ChipOnGoal.Marshal(b, m, deterministic)
+func (m *GameEvent_ChippedGoal) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GameEvent_ChippedGoal.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_ChipOnGoal) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_ChipOnGoal.Merge(dst, src)
+func (dst *GameEvent_ChippedGoal) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_ChippedGoal.Merge(dst, src)
 }
-func (m *GameEvent_ChipOnGoal) XXX_Size() int {
-	return xxx_messageInfo_GameEvent_ChipOnGoal.Size(m)
+func (m *GameEvent_ChippedGoal) XXX_Size() int {
+	return xxx_messageInfo_GameEvent_ChippedGoal.Size(m)
 }
-func (m *GameEvent_ChipOnGoal) XXX_DiscardUnknown() {
-	xxx_messageInfo_GameEvent_ChipOnGoal.DiscardUnknown(m)
+func (m *GameEvent_ChippedGoal) XXX_DiscardUnknown() {
+	xxx_messageInfo_GameEvent_ChippedGoal.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_GameEvent_ChipOnGoal proto.InternalMessageInfo
+var xxx_messageInfo_GameEvent_ChippedGoal proto.InternalMessageInfo
 
-func (m *GameEvent_ChipOnGoal) GetByBot() *BotId {
-	if m != nil {
-		return m.ByBot
+func (m *GameEvent_ChippedGoal) GetByTeam() Team {
+	if m != nil && m.ByTeam != nil {
+		return *m.ByTeam
 	}
-	return nil
+	return Team_UNKNOWN
 }
 
-func (m *GameEvent_ChipOnGoal) GetLocation() *Location {
+func (m *GameEvent_ChippedGoal) GetByBot() uint32 {
+	if m != nil && m.ByBot != nil {
+		return *m.ByBot
+	}
+	return 0
+}
+
+func (m *GameEvent_ChippedGoal) GetLocation() *Location {
 	if m != nil {
 		return m.Location
 	}
 	return nil
 }
 
-func (m *GameEvent_ChipOnGoal) GetKickLocation() *Location {
+func (m *GameEvent_ChippedGoal) GetKickLocation() *Location {
 	if m != nil {
 		return m.KickLocation
 	}
 	return nil
 }
 
-func (m *GameEvent_ChipOnGoal) GetMaxBallHeight() float32 {
+func (m *GameEvent_ChippedGoal) GetMaxBallHeight() float32 {
 	if m != nil && m.MaxBallHeight != nil {
 		return *m.MaxBallHeight
 	}
 	return 0
 }
 
-type GameEvent_RobotStopSpeed struct {
+// a bot moved too fast while the game was stopped
+type GameEvent_BotTooFastInStop struct {
+	// the team that found guilty
+	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// the bot that was too fast
-	ByBot *BotId `protobuf:"bytes,1,req,name=by_bot,json=byBot" json:"by_bot,omitempty"`
+	ByBot *uint32 `protobuf:"varint,2,opt,name=by_bot,json=byBot" json:"by_bot,omitempty"`
 	// the location of the bot
-	Location *Location `protobuf:"bytes,2,opt,name=location" json:"location,omitempty"`
+	Location *Location `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
 	// the bot speed [m/s]
-	Speed                *float32 `protobuf:"fixed32,3,req,name=speed" json:"speed,omitempty"`
+	Speed                *float32 `protobuf:"fixed32,4,opt,name=speed" json:"speed,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *GameEvent_RobotStopSpeed) Reset()         { *m = GameEvent_RobotStopSpeed{} }
-func (m *GameEvent_RobotStopSpeed) String() string { return proto.CompactTextString(m) }
-func (*GameEvent_RobotStopSpeed) ProtoMessage()    {}
-func (*GameEvent_RobotStopSpeed) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_2019_a0d50baf64c1b28a, []int{0, 5}
+func (m *GameEvent_BotTooFastInStop) Reset()         { *m = GameEvent_BotTooFastInStop{} }
+func (m *GameEvent_BotTooFastInStop) String() string { return proto.CompactTextString(m) }
+func (*GameEvent_BotTooFastInStop) ProtoMessage()    {}
+func (*GameEvent_BotTooFastInStop) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ssl_game_event_2019_51267f52d25ff0d1, []int{0, 5}
 }
-func (m *GameEvent_RobotStopSpeed) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_GameEvent_RobotStopSpeed.Unmarshal(m, b)
+func (m *GameEvent_BotTooFastInStop) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GameEvent_BotTooFastInStop.Unmarshal(m, b)
 }
-func (m *GameEvent_RobotStopSpeed) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_GameEvent_RobotStopSpeed.Marshal(b, m, deterministic)
+func (m *GameEvent_BotTooFastInStop) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GameEvent_BotTooFastInStop.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_RobotStopSpeed) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_RobotStopSpeed.Merge(dst, src)
+func (dst *GameEvent_BotTooFastInStop) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_BotTooFastInStop.Merge(dst, src)
 }
-func (m *GameEvent_RobotStopSpeed) XXX_Size() int {
-	return xxx_messageInfo_GameEvent_RobotStopSpeed.Size(m)
+func (m *GameEvent_BotTooFastInStop) XXX_Size() int {
+	return xxx_messageInfo_GameEvent_BotTooFastInStop.Size(m)
 }
-func (m *GameEvent_RobotStopSpeed) XXX_DiscardUnknown() {
-	xxx_messageInfo_GameEvent_RobotStopSpeed.DiscardUnknown(m)
+func (m *GameEvent_BotTooFastInStop) XXX_DiscardUnknown() {
+	xxx_messageInfo_GameEvent_BotTooFastInStop.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_GameEvent_RobotStopSpeed proto.InternalMessageInfo
+var xxx_messageInfo_GameEvent_BotTooFastInStop proto.InternalMessageInfo
 
-func (m *GameEvent_RobotStopSpeed) GetByBot() *BotId {
-	if m != nil {
-		return m.ByBot
+func (m *GameEvent_BotTooFastInStop) GetByTeam() Team {
+	if m != nil && m.ByTeam != nil {
+		return *m.ByTeam
 	}
-	return nil
+	return Team_UNKNOWN
 }
 
-func (m *GameEvent_RobotStopSpeed) GetLocation() *Location {
+func (m *GameEvent_BotTooFastInStop) GetByBot() uint32 {
+	if m != nil && m.ByBot != nil {
+		return *m.ByBot
+	}
+	return 0
+}
+
+func (m *GameEvent_BotTooFastInStop) GetLocation() *Location {
 	if m != nil {
 		return m.Location
 	}
 	return nil
 }
 
-func (m *GameEvent_RobotStopSpeed) GetSpeed() float32 {
+func (m *GameEvent_BotTooFastInStop) GetSpeed() float32 {
 	if m != nil && m.Speed != nil {
 		return *m.Speed
 	}
 	return 0
 }
 
-type GameEvent_DefenderToKickPointDistance struct {
+// a bot of the defending team got too close to the kick point during a free kick
+type GameEvent_DefenderTooCloseToKickPoint struct {
+	// the team that found guilty
+	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// the bot that violates the distance to the kick point
-	ByBot *BotId `protobuf:"bytes,1,req,name=by_bot,json=byBot" json:"by_bot,omitempty"`
+	ByBot *uint32 `protobuf:"varint,2,opt,name=by_bot,json=byBot" json:"by_bot,omitempty"`
 	// the location of the bot
-	Location *Location `protobuf:"bytes,2,opt,name=location" json:"location,omitempty"`
+	Location *Location `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
 	// the distance [m] from bot to the kick point (including the minimum radius)
-	Distance             *float32 `protobuf:"fixed32,3,opt,name=distance" json:"distance,omitempty"`
+	Distance             *float32 `protobuf:"fixed32,4,opt,name=distance" json:"distance,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *GameEvent_DefenderToKickPointDistance) Reset()         { *m = GameEvent_DefenderToKickPointDistance{} }
-func (m *GameEvent_DefenderToKickPointDistance) String() string { return proto.CompactTextString(m) }
-func (*GameEvent_DefenderToKickPointDistance) ProtoMessage()    {}
-func (*GameEvent_DefenderToKickPointDistance) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_2019_a0d50baf64c1b28a, []int{0, 6}
+func (m *GameEvent_DefenderTooCloseToKickPoint) Reset()         { *m = GameEvent_DefenderTooCloseToKickPoint{} }
+func (m *GameEvent_DefenderTooCloseToKickPoint) String() string { return proto.CompactTextString(m) }
+func (*GameEvent_DefenderTooCloseToKickPoint) ProtoMessage()    {}
+func (*GameEvent_DefenderTooCloseToKickPoint) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ssl_game_event_2019_51267f52d25ff0d1, []int{0, 6}
 }
-func (m *GameEvent_DefenderToKickPointDistance) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_GameEvent_DefenderToKickPointDistance.Unmarshal(m, b)
+func (m *GameEvent_DefenderTooCloseToKickPoint) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GameEvent_DefenderTooCloseToKickPoint.Unmarshal(m, b)
 }
-func (m *GameEvent_DefenderToKickPointDistance) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_GameEvent_DefenderToKickPointDistance.Marshal(b, m, deterministic)
+func (m *GameEvent_DefenderTooCloseToKickPoint) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GameEvent_DefenderTooCloseToKickPoint.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_DefenderToKickPointDistance) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_DefenderToKickPointDistance.Merge(dst, src)
+func (dst *GameEvent_DefenderTooCloseToKickPoint) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_DefenderTooCloseToKickPoint.Merge(dst, src)
 }
-func (m *GameEvent_DefenderToKickPointDistance) XXX_Size() int {
-	return xxx_messageInfo_GameEvent_DefenderToKickPointDistance.Size(m)
+func (m *GameEvent_DefenderTooCloseToKickPoint) XXX_Size() int {
+	return xxx_messageInfo_GameEvent_DefenderTooCloseToKickPoint.Size(m)
 }
-func (m *GameEvent_DefenderToKickPointDistance) XXX_DiscardUnknown() {
-	xxx_messageInfo_GameEvent_DefenderToKickPointDistance.DiscardUnknown(m)
+func (m *GameEvent_DefenderTooCloseToKickPoint) XXX_DiscardUnknown() {
+	xxx_messageInfo_GameEvent_DefenderTooCloseToKickPoint.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_GameEvent_DefenderToKickPointDistance proto.InternalMessageInfo
+var xxx_messageInfo_GameEvent_DefenderTooCloseToKickPoint proto.InternalMessageInfo
 
-func (m *GameEvent_DefenderToKickPointDistance) GetByBot() *BotId {
-	if m != nil {
-		return m.ByBot
+func (m *GameEvent_DefenderTooCloseToKickPoint) GetByTeam() Team {
+	if m != nil && m.ByTeam != nil {
+		return *m.ByTeam
 	}
-	return nil
+	return Team_UNKNOWN
 }
 
-func (m *GameEvent_DefenderToKickPointDistance) GetLocation() *Location {
+func (m *GameEvent_DefenderTooCloseToKickPoint) GetByBot() uint32 {
+	if m != nil && m.ByBot != nil {
+		return *m.ByBot
+	}
+	return 0
+}
+
+func (m *GameEvent_DefenderTooCloseToKickPoint) GetLocation() *Location {
 	if m != nil {
 		return m.Location
 	}
 	return nil
 }
 
-func (m *GameEvent_DefenderToKickPointDistance) GetDistance() float32 {
+func (m *GameEvent_DefenderTooCloseToKickPoint) GetDistance() float32 {
 	if m != nil && m.Distance != nil {
 		return *m.Distance
 	}
 	return 0
 }
 
+// two robots crashed into each other with similar speeds
 type GameEvent_BotCrashDrawn struct {
-	// the first bot that is involved
-	BotOne *BotId `protobuf:"bytes,1,req,name=bot_one,json=botOne" json:"bot_one,omitempty"`
-	// the second bot that is involved - should be from the opposite team
-	BotTwo *BotId `protobuf:"bytes,2,req,name=bot_two,json=botTwo" json:"bot_two,omitempty"`
-	// the calculated crash speed [m/s] of the two bots
-	CrashSpeed *float32 `protobuf:"fixed32,3,req,name=crash_speed,json=crashSpeed" json:"crash_speed,omitempty"`
-	// the difference [m/s] of the velocity of the two bots
-	SpeedDiff *float32 `protobuf:"fixed32,4,req,name=speed_diff,json=speedDiff" json:"speed_diff,omitempty"`
+	// the bot of the yellow team
+	BotYellow *uint32 `protobuf:"varint,1,opt,name=bot_yellow,json=botYellow" json:"bot_yellow,omitempty"`
+	// the bot of the blue team
+	BotBlue *uint32 `protobuf:"varint,2,opt,name=bot_blue,json=botBlue" json:"bot_blue,omitempty"`
 	// the location of the crash (center between both bots)
-	Location             *Location `protobuf:"bytes,5,opt,name=location" json:"location,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_unrecognized     []byte    `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
+	Location *Location `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
+	// the calculated crash speed [m/s] of the two bots
+	CrashSpeed *float32 `protobuf:"fixed32,4,opt,name=crash_speed,json=crashSpeed" json:"crash_speed,omitempty"`
+	// the difference [m/s] of the velocity of the two bots
+	SpeedDiff *float32 `protobuf:"fixed32,5,opt,name=speed_diff,json=speedDiff" json:"speed_diff,omitempty"`
+	// the angle [rad] in the range [0, pi/2] of the bot velocity vectors
+	// an angle of 0rad means, the bots mearly touched each other
+	// an angle of pi/2rad means, the bots crashed into each other frontal
+	CrashAngle           *float32 `protobuf:"fixed32,6,opt,name=crash_angle,json=crashAngle" json:"crash_angle,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *GameEvent_BotCrashDrawn) Reset()         { *m = GameEvent_BotCrashDrawn{} }
 func (m *GameEvent_BotCrashDrawn) String() string { return proto.CompactTextString(m) }
 func (*GameEvent_BotCrashDrawn) ProtoMessage()    {}
 func (*GameEvent_BotCrashDrawn) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_2019_a0d50baf64c1b28a, []int{0, 7}
+	return fileDescriptor_ssl_game_event_2019_51267f52d25ff0d1, []int{0, 7}
 }
 func (m *GameEvent_BotCrashDrawn) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GameEvent_BotCrashDrawn.Unmarshal(m, b)
@@ -1596,16 +1642,23 @@ func (m *GameEvent_BotCrashDrawn) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GameEvent_BotCrashDrawn proto.InternalMessageInfo
 
-func (m *GameEvent_BotCrashDrawn) GetBotOne() *BotId {
-	if m != nil {
-		return m.BotOne
+func (m *GameEvent_BotCrashDrawn) GetBotYellow() uint32 {
+	if m != nil && m.BotYellow != nil {
+		return *m.BotYellow
 	}
-	return nil
+	return 0
 }
 
-func (m *GameEvent_BotCrashDrawn) GetBotTwo() *BotId {
+func (m *GameEvent_BotCrashDrawn) GetBotBlue() uint32 {
+	if m != nil && m.BotBlue != nil {
+		return *m.BotBlue
+	}
+	return 0
+}
+
+func (m *GameEvent_BotCrashDrawn) GetLocation() *Location {
 	if m != nil {
-		return m.BotTwo
+		return m.Location
 	}
 	return nil
 }
@@ -1624,34 +1677,41 @@ func (m *GameEvent_BotCrashDrawn) GetSpeedDiff() float32 {
 	return 0
 }
 
-func (m *GameEvent_BotCrashDrawn) GetLocation() *Location {
-	if m != nil {
-		return m.Location
+func (m *GameEvent_BotCrashDrawn) GetCrashAngle() float32 {
+	if m != nil && m.CrashAngle != nil {
+		return *m.CrashAngle
 	}
-	return nil
+	return 0
 }
 
+// two robots crashed into each other and one team was found guilty to due significant speed difference
 type GameEvent_BotCrashUnique struct {
-	// the first bot that is involved
-	Violator *BotId `protobuf:"bytes,1,req,name=violator" json:"violator,omitempty"`
-	// the second bot that is involved - should be from the opposite team
-	Victim *BotId `protobuf:"bytes,2,req,name=victim" json:"victim,omitempty"`
-	// the calculated crash speed [m/s] of the two bots
-	CrashSpeed *float32 `protobuf:"fixed32,3,req,name=crash_speed,json=crashSpeed" json:"crash_speed,omitempty"`
-	// the difference [m/s] of the velocity of the two bots
-	SpeedDiff *float32 `protobuf:"fixed32,4,req,name=speed_diff,json=speedDiff" json:"speed_diff,omitempty"`
+	// the team that caused the crash
+	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
+	// the bot that caused the crash
+	Violator *uint32 `protobuf:"varint,2,opt,name=violator" json:"violator,omitempty"`
+	// the bot of the opposite team that was involved in the crash
+	Victim *uint32 `protobuf:"varint,3,opt,name=victim" json:"victim,omitempty"`
 	// the location of the crash (center between both bots)
-	Location             *Location `protobuf:"bytes,5,opt,name=location" json:"location,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_unrecognized     []byte    `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
+	Location *Location `protobuf:"bytes,4,opt,name=location" json:"location,omitempty"`
+	// the calculated crash speed vector [m/s] of the two bots
+	CrashSpeed *float32 `protobuf:"fixed32,5,opt,name=crash_speed,json=crashSpeed" json:"crash_speed,omitempty"`
+	// the difference [m/s] of the velocity of the two bots
+	SpeedDiff *float32 `protobuf:"fixed32,6,opt,name=speed_diff,json=speedDiff" json:"speed_diff,omitempty"`
+	// the angle [rad] in the range [0, pi/2] of the bot velocity vectors
+	// an angle of 0rad means, the bots mearly touched each other
+	// an angle of pi/2rad means, the bots crashed into each other frontal
+	CrashAngle           *float32 `protobuf:"fixed32,7,opt,name=crash_angle,json=crashAngle" json:"crash_angle,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *GameEvent_BotCrashUnique) Reset()         { *m = GameEvent_BotCrashUnique{} }
 func (m *GameEvent_BotCrashUnique) String() string { return proto.CompactTextString(m) }
 func (*GameEvent_BotCrashUnique) ProtoMessage()    {}
 func (*GameEvent_BotCrashUnique) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_2019_a0d50baf64c1b28a, []int{0, 8}
+	return fileDescriptor_ssl_game_event_2019_51267f52d25ff0d1, []int{0, 8}
 }
 func (m *GameEvent_BotCrashUnique) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GameEvent_BotCrashUnique.Unmarshal(m, b)
@@ -1671,16 +1731,30 @@ func (m *GameEvent_BotCrashUnique) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GameEvent_BotCrashUnique proto.InternalMessageInfo
 
-func (m *GameEvent_BotCrashUnique) GetViolator() *BotId {
-	if m != nil {
-		return m.Violator
+func (m *GameEvent_BotCrashUnique) GetByTeam() Team {
+	if m != nil && m.ByTeam != nil {
+		return *m.ByTeam
 	}
-	return nil
+	return Team_UNKNOWN
 }
 
-func (m *GameEvent_BotCrashUnique) GetVictim() *BotId {
+func (m *GameEvent_BotCrashUnique) GetViolator() uint32 {
+	if m != nil && m.Violator != nil {
+		return *m.Violator
+	}
+	return 0
+}
+
+func (m *GameEvent_BotCrashUnique) GetVictim() uint32 {
+	if m != nil && m.Victim != nil {
+		return *m.Victim
+	}
+	return 0
+}
+
+func (m *GameEvent_BotCrashUnique) GetLocation() *Location {
 	if m != nil {
-		return m.Victim
+		return m.Location
 	}
 	return nil
 }
@@ -1699,75 +1773,97 @@ func (m *GameEvent_BotCrashUnique) GetSpeedDiff() float32 {
 	return 0
 }
 
-func (m *GameEvent_BotCrashUnique) GetLocation() *Location {
+func (m *GameEvent_BotCrashUnique) GetCrashAngle() float32 {
+	if m != nil && m.CrashAngle != nil {
+		return *m.CrashAngle
+	}
+	return 0
+}
+
+// a bot pushed another bot over a significant distance
+type GameEvent_BotPushedBot struct {
+	// the team that pushed the other team
+	ViolatingTeam *Team `protobuf:"varint,1,req,name=violating_team,json=violatingTeam,enum=Team" json:"violating_team,omitempty"`
+	// the bot that pushed the other bot
+	Violator *uint32 `protobuf:"varint,2,opt,name=violator" json:"violator,omitempty"`
+	// the bot of the opposite team that was pushed
+	Victim *uint32 `protobuf:"varint,3,opt,name=victim" json:"victim,omitempty"`
+	// the location of the push (center between both bots)
+	Location *Location `protobuf:"bytes,4,opt,name=location" json:"location,omitempty"`
+	// the pushed distance [m]
+	PushedDistance       *float32 `protobuf:"fixed32,5,opt,name=pushed_distance,json=pushedDistance" json:"pushed_distance,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GameEvent_BotPushedBot) Reset()         { *m = GameEvent_BotPushedBot{} }
+func (m *GameEvent_BotPushedBot) String() string { return proto.CompactTextString(m) }
+func (*GameEvent_BotPushedBot) ProtoMessage()    {}
+func (*GameEvent_BotPushedBot) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ssl_game_event_2019_51267f52d25ff0d1, []int{0, 9}
+}
+func (m *GameEvent_BotPushedBot) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GameEvent_BotPushedBot.Unmarshal(m, b)
+}
+func (m *GameEvent_BotPushedBot) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GameEvent_BotPushedBot.Marshal(b, m, deterministic)
+}
+func (dst *GameEvent_BotPushedBot) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_BotPushedBot.Merge(dst, src)
+}
+func (m *GameEvent_BotPushedBot) XXX_Size() int {
+	return xxx_messageInfo_GameEvent_BotPushedBot.Size(m)
+}
+func (m *GameEvent_BotPushedBot) XXX_DiscardUnknown() {
+	xxx_messageInfo_GameEvent_BotPushedBot.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GameEvent_BotPushedBot proto.InternalMessageInfo
+
+func (m *GameEvent_BotPushedBot) GetViolatingTeam() Team {
+	if m != nil && m.ViolatingTeam != nil {
+		return *m.ViolatingTeam
+	}
+	return Team_UNKNOWN
+}
+
+func (m *GameEvent_BotPushedBot) GetViolator() uint32 {
+	if m != nil && m.Violator != nil {
+		return *m.Violator
+	}
+	return 0
+}
+
+func (m *GameEvent_BotPushedBot) GetVictim() uint32 {
+	if m != nil && m.Victim != nil {
+		return *m.Victim
+	}
+	return 0
+}
+
+func (m *GameEvent_BotPushedBot) GetLocation() *Location {
 	if m != nil {
 		return m.Location
 	}
 	return nil
 }
 
-type GameEvent_BotPushing struct {
-	// the bot that pushed the other bot
-	Violator *BotId `protobuf:"bytes,1,req,name=violator" json:"violator,omitempty"`
-	// the bot that was pushed - should be from the opposite team
-	Victim *BotId `protobuf:"bytes,2,req,name=victim" json:"victim,omitempty"`
-	// the pushed distance [m]
-	PushedDistance       *float32 `protobuf:"fixed32,3,opt,name=pushed_distance,json=pushedDistance" json:"pushed_distance,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *GameEvent_BotPushing) Reset()         { *m = GameEvent_BotPushing{} }
-func (m *GameEvent_BotPushing) String() string { return proto.CompactTextString(m) }
-func (*GameEvent_BotPushing) ProtoMessage()    {}
-func (*GameEvent_BotPushing) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_2019_a0d50baf64c1b28a, []int{0, 9}
-}
-func (m *GameEvent_BotPushing) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_GameEvent_BotPushing.Unmarshal(m, b)
-}
-func (m *GameEvent_BotPushing) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_GameEvent_BotPushing.Marshal(b, m, deterministic)
-}
-func (dst *GameEvent_BotPushing) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_BotPushing.Merge(dst, src)
-}
-func (m *GameEvent_BotPushing) XXX_Size() int {
-	return xxx_messageInfo_GameEvent_BotPushing.Size(m)
-}
-func (m *GameEvent_BotPushing) XXX_DiscardUnknown() {
-	xxx_messageInfo_GameEvent_BotPushing.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_GameEvent_BotPushing proto.InternalMessageInfo
-
-func (m *GameEvent_BotPushing) GetViolator() *BotId {
-	if m != nil {
-		return m.Violator
-	}
-	return nil
-}
-
-func (m *GameEvent_BotPushing) GetVictim() *BotId {
-	if m != nil {
-		return m.Victim
-	}
-	return nil
-}
-
-func (m *GameEvent_BotPushing) GetPushedDistance() float32 {
+func (m *GameEvent_BotPushedBot) GetPushedDistance() float32 {
 	if m != nil && m.PushedDistance != nil {
 		return *m.PushedDistance
 	}
 	return 0
 }
 
+// a bot tipped over
 type GameEvent_BotTippedOver struct {
-	// the bot that pushed the other bot
-	Violator *BotId `protobuf:"bytes,1,req,name=violator" json:"violator,omitempty"`
+	// the team that found guilty
+	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
+	// the bot that tipped over
+	Bot *uint32 `protobuf:"varint,2,opt,name=bot" json:"bot,omitempty"`
 	// the location of the bot
-	Location             *Location `protobuf:"bytes,2,opt,name=location" json:"location,omitempty"`
+	Location             *Location `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
 	XXX_unrecognized     []byte    `json:"-"`
 	XXX_sizecache        int32     `json:"-"`
@@ -1777,7 +1873,7 @@ func (m *GameEvent_BotTippedOver) Reset()         { *m = GameEvent_BotTippedOver
 func (m *GameEvent_BotTippedOver) String() string { return proto.CompactTextString(m) }
 func (*GameEvent_BotTippedOver) ProtoMessage()    {}
 func (*GameEvent_BotTippedOver) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_2019_a0d50baf64c1b28a, []int{0, 10}
+	return fileDescriptor_ssl_game_event_2019_51267f52d25ff0d1, []int{0, 10}
 }
 func (m *GameEvent_BotTippedOver) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GameEvent_BotTippedOver.Unmarshal(m, b)
@@ -1797,11 +1893,18 @@ func (m *GameEvent_BotTippedOver) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GameEvent_BotTippedOver proto.InternalMessageInfo
 
-func (m *GameEvent_BotTippedOver) GetViolator() *BotId {
-	if m != nil {
-		return m.Violator
+func (m *GameEvent_BotTippedOver) GetByTeam() Team {
+	if m != nil && m.ByTeam != nil {
+		return *m.ByTeam
 	}
-	return nil
+	return Team_UNKNOWN
+}
+
+func (m *GameEvent_BotTippedOver) GetBot() uint32 {
+	if m != nil && m.Bot != nil {
+		return *m.Bot
+	}
+	return 0
 }
 
 func (m *GameEvent_BotTippedOver) GetLocation() *Location {
@@ -1811,127 +1914,152 @@ func (m *GameEvent_BotTippedOver) GetLocation() *Location {
 	return nil
 }
 
-type GameEvent_MultipleDefender struct {
+// a defender other than the keeper was fully located inside its own defense and touched the ball
+type GameEvent_DefenderInDefenseArea struct {
+	// the team that found guilty
+	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// the bot that is inside the penalty area
-	ByBot *BotId `protobuf:"bytes,1,req,name=by_bot,json=byBot" json:"by_bot,omitempty"`
+	ByBot *uint32 `protobuf:"varint,2,opt,name=by_bot,json=byBot" json:"by_bot,omitempty"`
 	// the location of the bot
-	Location *Location `protobuf:"bytes,2,opt,name=location" json:"location,omitempty"`
-	// the distance [m] from bot case to the nearest point outside the penalty area
-	Distance             *float32 `protobuf:"fixed32,3,opt,name=distance" json:"distance,omitempty"`
+	Location *Location `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
+	// the distance [m] from bot case to the nearest point outside the defense area
+	Distance             *float32 `protobuf:"fixed32,4,opt,name=distance" json:"distance,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *GameEvent_MultipleDefender) Reset()         { *m = GameEvent_MultipleDefender{} }
-func (m *GameEvent_MultipleDefender) String() string { return proto.CompactTextString(m) }
-func (*GameEvent_MultipleDefender) ProtoMessage()    {}
-func (*GameEvent_MultipleDefender) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_2019_a0d50baf64c1b28a, []int{0, 11}
+func (m *GameEvent_DefenderInDefenseArea) Reset()         { *m = GameEvent_DefenderInDefenseArea{} }
+func (m *GameEvent_DefenderInDefenseArea) String() string { return proto.CompactTextString(m) }
+func (*GameEvent_DefenderInDefenseArea) ProtoMessage()    {}
+func (*GameEvent_DefenderInDefenseArea) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ssl_game_event_2019_51267f52d25ff0d1, []int{0, 11}
 }
-func (m *GameEvent_MultipleDefender) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_GameEvent_MultipleDefender.Unmarshal(m, b)
+func (m *GameEvent_DefenderInDefenseArea) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GameEvent_DefenderInDefenseArea.Unmarshal(m, b)
 }
-func (m *GameEvent_MultipleDefender) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_GameEvent_MultipleDefender.Marshal(b, m, deterministic)
+func (m *GameEvent_DefenderInDefenseArea) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GameEvent_DefenderInDefenseArea.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_MultipleDefender) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_MultipleDefender.Merge(dst, src)
+func (dst *GameEvent_DefenderInDefenseArea) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_DefenderInDefenseArea.Merge(dst, src)
 }
-func (m *GameEvent_MultipleDefender) XXX_Size() int {
-	return xxx_messageInfo_GameEvent_MultipleDefender.Size(m)
+func (m *GameEvent_DefenderInDefenseArea) XXX_Size() int {
+	return xxx_messageInfo_GameEvent_DefenderInDefenseArea.Size(m)
 }
-func (m *GameEvent_MultipleDefender) XXX_DiscardUnknown() {
-	xxx_messageInfo_GameEvent_MultipleDefender.DiscardUnknown(m)
+func (m *GameEvent_DefenderInDefenseArea) XXX_DiscardUnknown() {
+	xxx_messageInfo_GameEvent_DefenderInDefenseArea.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_GameEvent_MultipleDefender proto.InternalMessageInfo
+var xxx_messageInfo_GameEvent_DefenderInDefenseArea proto.InternalMessageInfo
 
-func (m *GameEvent_MultipleDefender) GetByBot() *BotId {
-	if m != nil {
-		return m.ByBot
+func (m *GameEvent_DefenderInDefenseArea) GetByTeam() Team {
+	if m != nil && m.ByTeam != nil {
+		return *m.ByTeam
 	}
-	return nil
+	return Team_UNKNOWN
 }
 
-func (m *GameEvent_MultipleDefender) GetLocation() *Location {
+func (m *GameEvent_DefenderInDefenseArea) GetByBot() uint32 {
+	if m != nil && m.ByBot != nil {
+		return *m.ByBot
+	}
+	return 0
+}
+
+func (m *GameEvent_DefenderInDefenseArea) GetLocation() *Location {
 	if m != nil {
 		return m.Location
 	}
 	return nil
 }
 
-func (m *GameEvent_MultipleDefender) GetDistance() float32 {
+func (m *GameEvent_DefenderInDefenseArea) GetDistance() float32 {
 	if m != nil && m.Distance != nil {
 		return *m.Distance
 	}
 	return 0
 }
 
-type GameEvent_MultipleDefenderPartially struct {
+// a defender other than the keeper was partially located inside its own defense area and touched the ball
+type GameEvent_DefenderInDefenseAreaPartially struct {
+	// the team that found guilty
+	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// the bot that is partially inside the penalty area
-	ByBot *BotId `protobuf:"bytes,1,req,name=by_bot,json=byBot" json:"by_bot,omitempty"`
+	ByBot *uint32 `protobuf:"varint,2,opt,name=by_bot,json=byBot" json:"by_bot,omitempty"`
 	// the location of the bot
-	Location *Location `protobuf:"bytes,2,opt,name=location" json:"location,omitempty"`
+	Location *Location `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
 	// the distance [m] that the bot is inside the penalty area
-	Distance             *float32 `protobuf:"fixed32,3,opt,name=distance" json:"distance,omitempty"`
+	Distance             *float32 `protobuf:"fixed32,4,opt,name=distance" json:"distance,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *GameEvent_MultipleDefenderPartially) Reset()         { *m = GameEvent_MultipleDefenderPartially{} }
-func (m *GameEvent_MultipleDefenderPartially) String() string { return proto.CompactTextString(m) }
-func (*GameEvent_MultipleDefenderPartially) ProtoMessage()    {}
-func (*GameEvent_MultipleDefenderPartially) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_2019_a0d50baf64c1b28a, []int{0, 12}
+func (m *GameEvent_DefenderInDefenseAreaPartially) Reset() {
+	*m = GameEvent_DefenderInDefenseAreaPartially{}
 }
-func (m *GameEvent_MultipleDefenderPartially) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_GameEvent_MultipleDefenderPartially.Unmarshal(m, b)
+func (m *GameEvent_DefenderInDefenseAreaPartially) String() string { return proto.CompactTextString(m) }
+func (*GameEvent_DefenderInDefenseAreaPartially) ProtoMessage()    {}
+func (*GameEvent_DefenderInDefenseAreaPartially) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ssl_game_event_2019_51267f52d25ff0d1, []int{0, 12}
 }
-func (m *GameEvent_MultipleDefenderPartially) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_GameEvent_MultipleDefenderPartially.Marshal(b, m, deterministic)
+func (m *GameEvent_DefenderInDefenseAreaPartially) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GameEvent_DefenderInDefenseAreaPartially.Unmarshal(m, b)
 }
-func (dst *GameEvent_MultipleDefenderPartially) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_MultipleDefenderPartially.Merge(dst, src)
+func (m *GameEvent_DefenderInDefenseAreaPartially) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GameEvent_DefenderInDefenseAreaPartially.Marshal(b, m, deterministic)
 }
-func (m *GameEvent_MultipleDefenderPartially) XXX_Size() int {
-	return xxx_messageInfo_GameEvent_MultipleDefenderPartially.Size(m)
+func (dst *GameEvent_DefenderInDefenseAreaPartially) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_DefenderInDefenseAreaPartially.Merge(dst, src)
 }
-func (m *GameEvent_MultipleDefenderPartially) XXX_DiscardUnknown() {
-	xxx_messageInfo_GameEvent_MultipleDefenderPartially.DiscardUnknown(m)
+func (m *GameEvent_DefenderInDefenseAreaPartially) XXX_Size() int {
+	return xxx_messageInfo_GameEvent_DefenderInDefenseAreaPartially.Size(m)
+}
+func (m *GameEvent_DefenderInDefenseAreaPartially) XXX_DiscardUnknown() {
+	xxx_messageInfo_GameEvent_DefenderInDefenseAreaPartially.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_GameEvent_MultipleDefenderPartially proto.InternalMessageInfo
+var xxx_messageInfo_GameEvent_DefenderInDefenseAreaPartially proto.InternalMessageInfo
 
-func (m *GameEvent_MultipleDefenderPartially) GetByBot() *BotId {
-	if m != nil {
-		return m.ByBot
+func (m *GameEvent_DefenderInDefenseAreaPartially) GetByTeam() Team {
+	if m != nil && m.ByTeam != nil {
+		return *m.ByTeam
 	}
-	return nil
+	return Team_UNKNOWN
 }
 
-func (m *GameEvent_MultipleDefenderPartially) GetLocation() *Location {
+func (m *GameEvent_DefenderInDefenseAreaPartially) GetByBot() uint32 {
+	if m != nil && m.ByBot != nil {
+		return *m.ByBot
+	}
+	return 0
+}
+
+func (m *GameEvent_DefenderInDefenseAreaPartially) GetLocation() *Location {
 	if m != nil {
 		return m.Location
 	}
 	return nil
 }
 
-func (m *GameEvent_MultipleDefenderPartially) GetDistance() float32 {
+func (m *GameEvent_DefenderInDefenseAreaPartially) GetDistance() float32 {
 	if m != nil && m.Distance != nil {
 		return *m.Distance
 	}
 	return 0
 }
 
+// an attacker touched the ball inside the opponent defense area
 type GameEvent_AttackerInDefenseArea struct {
+	// the team that found guilty
+	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// the bot that is inside the penalty area
-	ByBot *BotId `protobuf:"bytes,1,req,name=by_bot,json=byBot" json:"by_bot,omitempty"`
+	ByBot *uint32 `protobuf:"varint,2,opt,name=by_bot,json=byBot" json:"by_bot,omitempty"`
 	// the location of the bot
-	Location *Location `protobuf:"bytes,2,opt,name=location" json:"location,omitempty"`
+	Location *Location `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
 	// the distance [m] that the bot is inside the penalty area
-	Distance             *float32 `protobuf:"fixed32,3,opt,name=distance" json:"distance,omitempty"`
+	Distance             *float32 `protobuf:"fixed32,4,opt,name=distance" json:"distance,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -1941,7 +2069,7 @@ func (m *GameEvent_AttackerInDefenseArea) Reset()         { *m = GameEvent_Attac
 func (m *GameEvent_AttackerInDefenseArea) String() string { return proto.CompactTextString(m) }
 func (*GameEvent_AttackerInDefenseArea) ProtoMessage()    {}
 func (*GameEvent_AttackerInDefenseArea) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_2019_a0d50baf64c1b28a, []int{0, 13}
+	return fileDescriptor_ssl_game_event_2019_51267f52d25ff0d1, []int{0, 13}
 }
 func (m *GameEvent_AttackerInDefenseArea) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GameEvent_AttackerInDefenseArea.Unmarshal(m, b)
@@ -1961,11 +2089,18 @@ func (m *GameEvent_AttackerInDefenseArea) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GameEvent_AttackerInDefenseArea proto.InternalMessageInfo
 
-func (m *GameEvent_AttackerInDefenseArea) GetByBot() *BotId {
-	if m != nil {
-		return m.ByBot
+func (m *GameEvent_AttackerInDefenseArea) GetByTeam() Team {
+	if m != nil && m.ByTeam != nil {
+		return *m.ByTeam
 	}
-	return nil
+	return Team_UNKNOWN
+}
+
+func (m *GameEvent_AttackerInDefenseArea) GetByBot() uint32 {
+	if m != nil && m.ByBot != nil {
+		return *m.ByBot
+	}
+	return 0
 }
 
 func (m *GameEvent_AttackerInDefenseArea) GetLocation() *Location {
@@ -1982,134 +2117,157 @@ func (m *GameEvent_AttackerInDefenseArea) GetDistance() float32 {
 	return 0
 }
 
-type GameEvent_BallSpeed struct {
+// a bot kicked the ball too fast
+type GameEvent_BotKickedBallTooFast struct {
+	// the team that found guilty
+	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// the bot that kicked too fast
-	ByBot *BotId `protobuf:"bytes,1,req,name=by_bot,json=byBot" json:"by_bot,omitempty"`
+	ByBot *uint32 `protobuf:"varint,2,opt,name=by_bot,json=byBot" json:"by_bot,omitempty"`
+	// the location of the ball at the time of the highest speed
+	Location *Location `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
 	// the absolute initial ball speed (kick speed)
-	InitialBallSpeed *float32 `protobuf:"fixed32,2,req,name=initial_ball_speed,json=initialBallSpeed" json:"initial_ball_speed,omitempty"`
+	InitialBallSpeed *float32 `protobuf:"fixed32,4,opt,name=initial_ball_speed,json=initialBallSpeed" json:"initial_ball_speed,omitempty"`
 	// the maximum height that the ball has reached during the kick
-	MaxBallHeight *float32 `protobuf:"fixed32,3,opt,name=max_ball_height,json=maxBallHeight" json:"max_ball_height,omitempty"`
-	// the location of the bot
-	Location             *Location `protobuf:"bytes,4,opt,name=location" json:"location,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_unrecognized     []byte    `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
+	MaxBallHeight        *float32 `protobuf:"fixed32,5,opt,name=max_ball_height,json=maxBallHeight" json:"max_ball_height,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *GameEvent_BallSpeed) Reset()         { *m = GameEvent_BallSpeed{} }
-func (m *GameEvent_BallSpeed) String() string { return proto.CompactTextString(m) }
-func (*GameEvent_BallSpeed) ProtoMessage()    {}
-func (*GameEvent_BallSpeed) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_2019_a0d50baf64c1b28a, []int{0, 14}
+func (m *GameEvent_BotKickedBallTooFast) Reset()         { *m = GameEvent_BotKickedBallTooFast{} }
+func (m *GameEvent_BotKickedBallTooFast) String() string { return proto.CompactTextString(m) }
+func (*GameEvent_BotKickedBallTooFast) ProtoMessage()    {}
+func (*GameEvent_BotKickedBallTooFast) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ssl_game_event_2019_51267f52d25ff0d1, []int{0, 14}
 }
-func (m *GameEvent_BallSpeed) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_GameEvent_BallSpeed.Unmarshal(m, b)
+func (m *GameEvent_BotKickedBallTooFast) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GameEvent_BotKickedBallTooFast.Unmarshal(m, b)
 }
-func (m *GameEvent_BallSpeed) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_GameEvent_BallSpeed.Marshal(b, m, deterministic)
+func (m *GameEvent_BotKickedBallTooFast) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GameEvent_BotKickedBallTooFast.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_BallSpeed) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_BallSpeed.Merge(dst, src)
+func (dst *GameEvent_BotKickedBallTooFast) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_BotKickedBallTooFast.Merge(dst, src)
 }
-func (m *GameEvent_BallSpeed) XXX_Size() int {
-	return xxx_messageInfo_GameEvent_BallSpeed.Size(m)
+func (m *GameEvent_BotKickedBallTooFast) XXX_Size() int {
+	return xxx_messageInfo_GameEvent_BotKickedBallTooFast.Size(m)
 }
-func (m *GameEvent_BallSpeed) XXX_DiscardUnknown() {
-	xxx_messageInfo_GameEvent_BallSpeed.DiscardUnknown(m)
+func (m *GameEvent_BotKickedBallTooFast) XXX_DiscardUnknown() {
+	xxx_messageInfo_GameEvent_BotKickedBallTooFast.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_GameEvent_BallSpeed proto.InternalMessageInfo
+var xxx_messageInfo_GameEvent_BotKickedBallTooFast proto.InternalMessageInfo
 
-func (m *GameEvent_BallSpeed) GetByBot() *BotId {
-	if m != nil {
-		return m.ByBot
+func (m *GameEvent_BotKickedBallTooFast) GetByTeam() Team {
+	if m != nil && m.ByTeam != nil {
+		return *m.ByTeam
 	}
-	return nil
+	return Team_UNKNOWN
 }
 
-func (m *GameEvent_BallSpeed) GetInitialBallSpeed() float32 {
-	if m != nil && m.InitialBallSpeed != nil {
-		return *m.InitialBallSpeed
+func (m *GameEvent_BotKickedBallTooFast) GetByBot() uint32 {
+	if m != nil && m.ByBot != nil {
+		return *m.ByBot
 	}
 	return 0
 }
 
-func (m *GameEvent_BallSpeed) GetMaxBallHeight() float32 {
-	if m != nil && m.MaxBallHeight != nil {
-		return *m.MaxBallHeight
-	}
-	return 0
-}
-
-func (m *GameEvent_BallSpeed) GetLocation() *Location {
+func (m *GameEvent_BotKickedBallTooFast) GetLocation() *Location {
 	if m != nil {
 		return m.Location
 	}
 	return nil
 }
 
-type GameEvent_BallDribbling struct {
+func (m *GameEvent_BotKickedBallTooFast) GetInitialBallSpeed() float32 {
+	if m != nil && m.InitialBallSpeed != nil {
+		return *m.InitialBallSpeed
+	}
+	return 0
+}
+
+func (m *GameEvent_BotKickedBallTooFast) GetMaxBallHeight() float32 {
+	if m != nil && m.MaxBallHeight != nil {
+		return *m.MaxBallHeight
+	}
+	return 0
+}
+
+// a bot dribbled to ball too far
+type GameEvent_BotDribbledBallTooFar struct {
+	// the team that found guilty
+	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// the bot that dribbled too far
-	ByBot *BotId `protobuf:"bytes,1,req,name=by_bot,json=byBot" json:"by_bot,omitempty"`
+	ByBot *uint32 `protobuf:"varint,2,opt,name=by_bot,json=byBot" json:"by_bot,omitempty"`
 	// the location where the dribbling started
-	Start *Location `protobuf:"bytes,2,opt,name=start" json:"start,omitempty"`
+	Start *Location `protobuf:"bytes,3,opt,name=start" json:"start,omitempty"`
 	// the location where the maximum dribbling distance was reached
-	End                  *Location `protobuf:"bytes,3,opt,name=end" json:"end,omitempty"`
+	End                  *Location `protobuf:"bytes,4,opt,name=end" json:"end,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
 	XXX_unrecognized     []byte    `json:"-"`
 	XXX_sizecache        int32     `json:"-"`
 }
 
-func (m *GameEvent_BallDribbling) Reset()         { *m = GameEvent_BallDribbling{} }
-func (m *GameEvent_BallDribbling) String() string { return proto.CompactTextString(m) }
-func (*GameEvent_BallDribbling) ProtoMessage()    {}
-func (*GameEvent_BallDribbling) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_2019_a0d50baf64c1b28a, []int{0, 15}
+func (m *GameEvent_BotDribbledBallTooFar) Reset()         { *m = GameEvent_BotDribbledBallTooFar{} }
+func (m *GameEvent_BotDribbledBallTooFar) String() string { return proto.CompactTextString(m) }
+func (*GameEvent_BotDribbledBallTooFar) ProtoMessage()    {}
+func (*GameEvent_BotDribbledBallTooFar) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ssl_game_event_2019_51267f52d25ff0d1, []int{0, 15}
 }
-func (m *GameEvent_BallDribbling) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_GameEvent_BallDribbling.Unmarshal(m, b)
+func (m *GameEvent_BotDribbledBallTooFar) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GameEvent_BotDribbledBallTooFar.Unmarshal(m, b)
 }
-func (m *GameEvent_BallDribbling) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_GameEvent_BallDribbling.Marshal(b, m, deterministic)
+func (m *GameEvent_BotDribbledBallTooFar) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GameEvent_BotDribbledBallTooFar.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_BallDribbling) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_BallDribbling.Merge(dst, src)
+func (dst *GameEvent_BotDribbledBallTooFar) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_BotDribbledBallTooFar.Merge(dst, src)
 }
-func (m *GameEvent_BallDribbling) XXX_Size() int {
-	return xxx_messageInfo_GameEvent_BallDribbling.Size(m)
+func (m *GameEvent_BotDribbledBallTooFar) XXX_Size() int {
+	return xxx_messageInfo_GameEvent_BotDribbledBallTooFar.Size(m)
 }
-func (m *GameEvent_BallDribbling) XXX_DiscardUnknown() {
-	xxx_messageInfo_GameEvent_BallDribbling.DiscardUnknown(m)
+func (m *GameEvent_BotDribbledBallTooFar) XXX_DiscardUnknown() {
+	xxx_messageInfo_GameEvent_BotDribbledBallTooFar.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_GameEvent_BallDribbling proto.InternalMessageInfo
+var xxx_messageInfo_GameEvent_BotDribbledBallTooFar proto.InternalMessageInfo
 
-func (m *GameEvent_BallDribbling) GetByBot() *BotId {
-	if m != nil {
-		return m.ByBot
+func (m *GameEvent_BotDribbledBallTooFar) GetByTeam() Team {
+	if m != nil && m.ByTeam != nil {
+		return *m.ByTeam
 	}
-	return nil
+	return Team_UNKNOWN
 }
 
-func (m *GameEvent_BallDribbling) GetStart() *Location {
+func (m *GameEvent_BotDribbledBallTooFar) GetByBot() uint32 {
+	if m != nil && m.ByBot != nil {
+		return *m.ByBot
+	}
+	return 0
+}
+
+func (m *GameEvent_BotDribbledBallTooFar) GetStart() *Location {
 	if m != nil {
 		return m.Start
 	}
 	return nil
 }
 
-func (m *GameEvent_BallDribbling) GetEnd() *Location {
+func (m *GameEvent_BotDribbledBallTooFar) GetEnd() *Location {
 	if m != nil {
 		return m.End
 	}
 	return nil
 }
 
+// an attacker touched the opponent keeper
 type GameEvent_AttackerTouchedKeeper struct {
+	// the team that found guilty
+	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// the bot that touched the opponent keeper
-	ByBot *BotId `protobuf:"bytes,1,req,name=by_bot,json=byBot" json:"by_bot,omitempty"`
-	// the location of the bot
-	Location             *Location `protobuf:"bytes,2,opt,name=location" json:"location,omitempty"`
+	ByBot *uint32 `protobuf:"varint,2,opt,name=by_bot,json=byBot" json:"by_bot,omitempty"`
+	// the location of the contact point between bot and keeper
+	Location             *Location `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
 	XXX_unrecognized     []byte    `json:"-"`
 	XXX_sizecache        int32     `json:"-"`
@@ -2119,7 +2277,7 @@ func (m *GameEvent_AttackerTouchedKeeper) Reset()         { *m = GameEvent_Attac
 func (m *GameEvent_AttackerTouchedKeeper) String() string { return proto.CompactTextString(m) }
 func (*GameEvent_AttackerTouchedKeeper) ProtoMessage()    {}
 func (*GameEvent_AttackerTouchedKeeper) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_2019_a0d50baf64c1b28a, []int{0, 16}
+	return fileDescriptor_ssl_game_event_2019_51267f52d25ff0d1, []int{0, 16}
 }
 func (m *GameEvent_AttackerTouchedKeeper) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GameEvent_AttackerTouchedKeeper.Unmarshal(m, b)
@@ -2139,11 +2297,18 @@ func (m *GameEvent_AttackerTouchedKeeper) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GameEvent_AttackerTouchedKeeper proto.InternalMessageInfo
 
-func (m *GameEvent_AttackerTouchedKeeper) GetByBot() *BotId {
-	if m != nil {
-		return m.ByBot
+func (m *GameEvent_AttackerTouchedKeeper) GetByTeam() Team {
+	if m != nil && m.ByTeam != nil {
+		return *m.ByTeam
 	}
-	return nil
+	return Team_UNKNOWN
+}
+
+func (m *GameEvent_AttackerTouchedKeeper) GetByBot() uint32 {
+	if m != nil && m.ByBot != nil {
+		return *m.ByBot
+	}
+	return 0
 }
 
 func (m *GameEvent_AttackerTouchedKeeper) GetLocation() *Location {
@@ -2153,171 +2318,204 @@ func (m *GameEvent_AttackerTouchedKeeper) GetLocation() *Location {
 	return nil
 }
 
-type GameEvent_DoubleTouch struct {
+// an attacker touched the ball multiple times when it was not allowed to
+type GameEvent_AttackerDoubleTouchedBall struct {
+	// the team that found guilty
+	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// the bot that touched the ball twice
-	ByBot *BotId `protobuf:"bytes,1,req,name=by_bot,json=byBot" json:"by_bot,omitempty"`
-	// the location of the bot
-	Location             *Location `protobuf:"bytes,2,opt,name=location" json:"location,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_unrecognized     []byte    `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
-}
-
-func (m *GameEvent_DoubleTouch) Reset()         { *m = GameEvent_DoubleTouch{} }
-func (m *GameEvent_DoubleTouch) String() string { return proto.CompactTextString(m) }
-func (*GameEvent_DoubleTouch) ProtoMessage()    {}
-func (*GameEvent_DoubleTouch) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_2019_a0d50baf64c1b28a, []int{0, 17}
-}
-func (m *GameEvent_DoubleTouch) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_GameEvent_DoubleTouch.Unmarshal(m, b)
-}
-func (m *GameEvent_DoubleTouch) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_GameEvent_DoubleTouch.Marshal(b, m, deterministic)
-}
-func (dst *GameEvent_DoubleTouch) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_DoubleTouch.Merge(dst, src)
-}
-func (m *GameEvent_DoubleTouch) XXX_Size() int {
-	return xxx_messageInfo_GameEvent_DoubleTouch.Size(m)
-}
-func (m *GameEvent_DoubleTouch) XXX_DiscardUnknown() {
-	xxx_messageInfo_GameEvent_DoubleTouch.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_GameEvent_DoubleTouch proto.InternalMessageInfo
-
-func (m *GameEvent_DoubleTouch) GetByBot() *BotId {
-	if m != nil {
-		return m.ByBot
-	}
-	return nil
-}
-
-func (m *GameEvent_DoubleTouch) GetLocation() *Location {
-	if m != nil {
-		return m.Location
-	}
-	return nil
-}
-
-type GameEvent_AttackerToDefenceArea struct {
-	// the bot that is too close to the defense area
-	ByBot *BotId `protobuf:"bytes,1,req,name=by_bot,json=byBot" json:"by_bot,omitempty"`
-	// the distance of the bot to the penalty area
-	Distance *float32 `protobuf:"fixed32,2,req,name=distance" json:"distance,omitempty"`
-	// the location of the bot
+	ByBot *uint32 `protobuf:"varint,2,opt,name=by_bot,json=byBot" json:"by_bot,omitempty"`
+	// the location of the ball when it was first touched
 	Location             *Location `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
 	XXX_unrecognized     []byte    `json:"-"`
 	XXX_sizecache        int32     `json:"-"`
 }
 
-func (m *GameEvent_AttackerToDefenceArea) Reset()         { *m = GameEvent_AttackerToDefenceArea{} }
-func (m *GameEvent_AttackerToDefenceArea) String() string { return proto.CompactTextString(m) }
-func (*GameEvent_AttackerToDefenceArea) ProtoMessage()    {}
-func (*GameEvent_AttackerToDefenceArea) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_2019_a0d50baf64c1b28a, []int{0, 18}
+func (m *GameEvent_AttackerDoubleTouchedBall) Reset()         { *m = GameEvent_AttackerDoubleTouchedBall{} }
+func (m *GameEvent_AttackerDoubleTouchedBall) String() string { return proto.CompactTextString(m) }
+func (*GameEvent_AttackerDoubleTouchedBall) ProtoMessage()    {}
+func (*GameEvent_AttackerDoubleTouchedBall) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ssl_game_event_2019_51267f52d25ff0d1, []int{0, 17}
 }
-func (m *GameEvent_AttackerToDefenceArea) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_GameEvent_AttackerToDefenceArea.Unmarshal(m, b)
+func (m *GameEvent_AttackerDoubleTouchedBall) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GameEvent_AttackerDoubleTouchedBall.Unmarshal(m, b)
 }
-func (m *GameEvent_AttackerToDefenceArea) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_GameEvent_AttackerToDefenceArea.Marshal(b, m, deterministic)
+func (m *GameEvent_AttackerDoubleTouchedBall) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GameEvent_AttackerDoubleTouchedBall.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_AttackerToDefenceArea) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_AttackerToDefenceArea.Merge(dst, src)
+func (dst *GameEvent_AttackerDoubleTouchedBall) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_AttackerDoubleTouchedBall.Merge(dst, src)
 }
-func (m *GameEvent_AttackerToDefenceArea) XXX_Size() int {
-	return xxx_messageInfo_GameEvent_AttackerToDefenceArea.Size(m)
+func (m *GameEvent_AttackerDoubleTouchedBall) XXX_Size() int {
+	return xxx_messageInfo_GameEvent_AttackerDoubleTouchedBall.Size(m)
 }
-func (m *GameEvent_AttackerToDefenceArea) XXX_DiscardUnknown() {
-	xxx_messageInfo_GameEvent_AttackerToDefenceArea.DiscardUnknown(m)
+func (m *GameEvent_AttackerDoubleTouchedBall) XXX_DiscardUnknown() {
+	xxx_messageInfo_GameEvent_AttackerDoubleTouchedBall.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_GameEvent_AttackerToDefenceArea proto.InternalMessageInfo
+var xxx_messageInfo_GameEvent_AttackerDoubleTouchedBall proto.InternalMessageInfo
 
-func (m *GameEvent_AttackerToDefenceArea) GetByBot() *BotId {
+func (m *GameEvent_AttackerDoubleTouchedBall) GetByTeam() Team {
+	if m != nil && m.ByTeam != nil {
+		return *m.ByTeam
+	}
+	return Team_UNKNOWN
+}
+
+func (m *GameEvent_AttackerDoubleTouchedBall) GetByBot() uint32 {
+	if m != nil && m.ByBot != nil {
+		return *m.ByBot
+	}
+	return 0
+}
+
+func (m *GameEvent_AttackerDoubleTouchedBall) GetLocation() *Location {
 	if m != nil {
-		return m.ByBot
+		return m.Location
 	}
 	return nil
 }
 
-func (m *GameEvent_AttackerToDefenceArea) GetDistance() float32 {
+// an attacker was located too near to the opponent defense area when ball entered play
+type GameEvent_AttackerTooCloseToDefenseArea struct {
+	// the team that found guilty
+	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
+	// the bot that is too close to the defense area
+	ByBot *uint32 `protobuf:"varint,2,opt,name=by_bot,json=byBot" json:"by_bot,omitempty"`
+	// the distance of the bot to the penalty area
+	Distance *float32 `protobuf:"fixed32,3,opt,name=distance" json:"distance,omitempty"`
+	// the location of the bot
+	Location             *Location `protobuf:"bytes,4,opt,name=location" json:"location,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_unrecognized     []byte    `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
+}
+
+func (m *GameEvent_AttackerTooCloseToDefenseArea) Reset() {
+	*m = GameEvent_AttackerTooCloseToDefenseArea{}
+}
+func (m *GameEvent_AttackerTooCloseToDefenseArea) String() string { return proto.CompactTextString(m) }
+func (*GameEvent_AttackerTooCloseToDefenseArea) ProtoMessage()    {}
+func (*GameEvent_AttackerTooCloseToDefenseArea) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ssl_game_event_2019_51267f52d25ff0d1, []int{0, 18}
+}
+func (m *GameEvent_AttackerTooCloseToDefenseArea) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GameEvent_AttackerTooCloseToDefenseArea.Unmarshal(m, b)
+}
+func (m *GameEvent_AttackerTooCloseToDefenseArea) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GameEvent_AttackerTooCloseToDefenseArea.Marshal(b, m, deterministic)
+}
+func (dst *GameEvent_AttackerTooCloseToDefenseArea) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_AttackerTooCloseToDefenseArea.Merge(dst, src)
+}
+func (m *GameEvent_AttackerTooCloseToDefenseArea) XXX_Size() int {
+	return xxx_messageInfo_GameEvent_AttackerTooCloseToDefenseArea.Size(m)
+}
+func (m *GameEvent_AttackerTooCloseToDefenseArea) XXX_DiscardUnknown() {
+	xxx_messageInfo_GameEvent_AttackerTooCloseToDefenseArea.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GameEvent_AttackerTooCloseToDefenseArea proto.InternalMessageInfo
+
+func (m *GameEvent_AttackerTooCloseToDefenseArea) GetByTeam() Team {
+	if m != nil && m.ByTeam != nil {
+		return *m.ByTeam
+	}
+	return Team_UNKNOWN
+}
+
+func (m *GameEvent_AttackerTooCloseToDefenseArea) GetByBot() uint32 {
+	if m != nil && m.ByBot != nil {
+		return *m.ByBot
+	}
+	return 0
+}
+
+func (m *GameEvent_AttackerTooCloseToDefenseArea) GetDistance() float32 {
 	if m != nil && m.Distance != nil {
 		return *m.Distance
 	}
 	return 0
 }
 
-func (m *GameEvent_AttackerToDefenceArea) GetLocation() *Location {
+func (m *GameEvent_AttackerTooCloseToDefenseArea) GetLocation() *Location {
 	if m != nil {
 		return m.Location
 	}
 	return nil
 }
 
-type GameEvent_BallHolding struct {
+// a bot held the ball for too long
+type GameEvent_BotHeldBallDeliberateley struct {
+	// the team that found guilty
+	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// the bot that holds the ball
-	ByBot *BotId `protobuf:"bytes,1,req,name=by_bot,json=byBot" json:"by_bot,omitempty"`
-	// the location of the bot
-	Location *Location `protobuf:"bytes,2,opt,name=location" json:"location,omitempty"`
-	// the duration [s] that the ball hold the ball
-	Duration             *float32 `protobuf:"fixed32,3,opt,name=duration" json:"duration,omitempty"`
+	ByBot *uint32 `protobuf:"varint,2,opt,name=by_bot,json=byBot" json:"by_bot,omitempty"`
+	// the location of the ball
+	Location *Location `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
+	// the duration [s] that the bot hold the ball
+	Duration             *float32 `protobuf:"fixed32,4,opt,name=duration" json:"duration,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *GameEvent_BallHolding) Reset()         { *m = GameEvent_BallHolding{} }
-func (m *GameEvent_BallHolding) String() string { return proto.CompactTextString(m) }
-func (*GameEvent_BallHolding) ProtoMessage()    {}
-func (*GameEvent_BallHolding) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_2019_a0d50baf64c1b28a, []int{0, 19}
+func (m *GameEvent_BotHeldBallDeliberateley) Reset()         { *m = GameEvent_BotHeldBallDeliberateley{} }
+func (m *GameEvent_BotHeldBallDeliberateley) String() string { return proto.CompactTextString(m) }
+func (*GameEvent_BotHeldBallDeliberateley) ProtoMessage()    {}
+func (*GameEvent_BotHeldBallDeliberateley) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ssl_game_event_2019_51267f52d25ff0d1, []int{0, 19}
 }
-func (m *GameEvent_BallHolding) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_GameEvent_BallHolding.Unmarshal(m, b)
+func (m *GameEvent_BotHeldBallDeliberateley) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GameEvent_BotHeldBallDeliberateley.Unmarshal(m, b)
 }
-func (m *GameEvent_BallHolding) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_GameEvent_BallHolding.Marshal(b, m, deterministic)
+func (m *GameEvent_BotHeldBallDeliberateley) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GameEvent_BotHeldBallDeliberateley.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_BallHolding) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_BallHolding.Merge(dst, src)
+func (dst *GameEvent_BotHeldBallDeliberateley) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_BotHeldBallDeliberateley.Merge(dst, src)
 }
-func (m *GameEvent_BallHolding) XXX_Size() int {
-	return xxx_messageInfo_GameEvent_BallHolding.Size(m)
+func (m *GameEvent_BotHeldBallDeliberateley) XXX_Size() int {
+	return xxx_messageInfo_GameEvent_BotHeldBallDeliberateley.Size(m)
 }
-func (m *GameEvent_BallHolding) XXX_DiscardUnknown() {
-	xxx_messageInfo_GameEvent_BallHolding.DiscardUnknown(m)
+func (m *GameEvent_BotHeldBallDeliberateley) XXX_DiscardUnknown() {
+	xxx_messageInfo_GameEvent_BotHeldBallDeliberateley.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_GameEvent_BallHolding proto.InternalMessageInfo
+var xxx_messageInfo_GameEvent_BotHeldBallDeliberateley proto.InternalMessageInfo
 
-func (m *GameEvent_BallHolding) GetByBot() *BotId {
-	if m != nil {
-		return m.ByBot
+func (m *GameEvent_BotHeldBallDeliberateley) GetByTeam() Team {
+	if m != nil && m.ByTeam != nil {
+		return *m.ByTeam
 	}
-	return nil
+	return Team_UNKNOWN
 }
 
-func (m *GameEvent_BallHolding) GetLocation() *Location {
+func (m *GameEvent_BotHeldBallDeliberateley) GetByBot() uint32 {
+	if m != nil && m.ByBot != nil {
+		return *m.ByBot
+	}
+	return 0
+}
+
+func (m *GameEvent_BotHeldBallDeliberateley) GetLocation() *Location {
 	if m != nil {
 		return m.Location
 	}
 	return nil
 }
 
-func (m *GameEvent_BallHolding) GetDuration() float32 {
+func (m *GameEvent_BotHeldBallDeliberateley) GetDuration() float32 {
 	if m != nil && m.Duration != nil {
 		return *m.Duration
 	}
 	return 0
 }
 
+// a team collected multiple yellow cards, which results in a penalty kick
 type GameEvent_MultipleYellowCards struct {
 	// the team that received multiple yellow cards
-	Team                 *Team    `protobuf:"varint,1,req,name=team,enum=Team" json:"team,omitempty"`
+	ByTeam               *Team    `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -2327,7 +2525,7 @@ func (m *GameEvent_MultipleYellowCards) Reset()         { *m = GameEvent_Multipl
 func (m *GameEvent_MultipleYellowCards) String() string { return proto.CompactTextString(m) }
 func (*GameEvent_MultipleYellowCards) ProtoMessage()    {}
 func (*GameEvent_MultipleYellowCards) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_2019_a0d50baf64c1b28a, []int{0, 20}
+	return fileDescriptor_ssl_game_event_2019_51267f52d25ff0d1, []int{0, 20}
 }
 func (m *GameEvent_MultipleYellowCards) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GameEvent_MultipleYellowCards.Unmarshal(m, b)
@@ -2347,144 +2545,59 @@ func (m *GameEvent_MultipleYellowCards) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GameEvent_MultipleYellowCards proto.InternalMessageInfo
 
-func (m *GameEvent_MultipleYellowCards) GetTeam() Team {
-	if m != nil && m.Team != nil {
-		return *m.Team
+func (m *GameEvent_MultipleYellowCards) GetByTeam() Team {
+	if m != nil && m.ByTeam != nil {
+		return *m.ByTeam
 	}
 	return Team_UNKNOWN
 }
 
-type GameEvent_MultipleBotCollisions struct {
-	// the team that collected multiple bot collisions
-	Team                 *Team    `protobuf:"varint,1,req,name=team,enum=Team" json:"team,omitempty"`
+// a team collected multiple fouls, which results in a yellow card
+type GameEvent_MultipleFouls struct {
+	// the team that collected multiple fouls
+	ByTeam               *Team    `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *GameEvent_MultipleBotCollisions) Reset()         { *m = GameEvent_MultipleBotCollisions{} }
-func (m *GameEvent_MultipleBotCollisions) String() string { return proto.CompactTextString(m) }
-func (*GameEvent_MultipleBotCollisions) ProtoMessage()    {}
-func (*GameEvent_MultipleBotCollisions) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_2019_a0d50baf64c1b28a, []int{0, 21}
+func (m *GameEvent_MultipleFouls) Reset()         { *m = GameEvent_MultipleFouls{} }
+func (m *GameEvent_MultipleFouls) String() string { return proto.CompactTextString(m) }
+func (*GameEvent_MultipleFouls) ProtoMessage()    {}
+func (*GameEvent_MultipleFouls) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ssl_game_event_2019_51267f52d25ff0d1, []int{0, 21}
 }
-func (m *GameEvent_MultipleBotCollisions) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_GameEvent_MultipleBotCollisions.Unmarshal(m, b)
+func (m *GameEvent_MultipleFouls) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GameEvent_MultipleFouls.Unmarshal(m, b)
 }
-func (m *GameEvent_MultipleBotCollisions) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_GameEvent_MultipleBotCollisions.Marshal(b, m, deterministic)
+func (m *GameEvent_MultipleFouls) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GameEvent_MultipleFouls.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_MultipleBotCollisions) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_MultipleBotCollisions.Merge(dst, src)
+func (dst *GameEvent_MultipleFouls) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_MultipleFouls.Merge(dst, src)
 }
-func (m *GameEvent_MultipleBotCollisions) XXX_Size() int {
-	return xxx_messageInfo_GameEvent_MultipleBotCollisions.Size(m)
+func (m *GameEvent_MultipleFouls) XXX_Size() int {
+	return xxx_messageInfo_GameEvent_MultipleFouls.Size(m)
 }
-func (m *GameEvent_MultipleBotCollisions) XXX_DiscardUnknown() {
-	xxx_messageInfo_GameEvent_MultipleBotCollisions.DiscardUnknown(m)
+func (m *GameEvent_MultipleFouls) XXX_DiscardUnknown() {
+	xxx_messageInfo_GameEvent_MultipleFouls.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_GameEvent_MultipleBotCollisions proto.InternalMessageInfo
+var xxx_messageInfo_GameEvent_MultipleFouls proto.InternalMessageInfo
 
-func (m *GameEvent_MultipleBotCollisions) GetTeam() Team {
-	if m != nil && m.Team != nil {
-		return *m.Team
+func (m *GameEvent_MultipleFouls) GetByTeam() Team {
+	if m != nil && m.ByTeam != nil {
+		return *m.ByTeam
 	}
 	return Team_UNKNOWN
 }
 
-type GameEvent_MultipleRobotStopSpeed struct {
-	// the team that had too many fast robots during stop
-	Team                 *Team    `protobuf:"varint,1,req,name=team,enum=Team" json:"team,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *GameEvent_MultipleRobotStopSpeed) Reset()         { *m = GameEvent_MultipleRobotStopSpeed{} }
-func (m *GameEvent_MultipleRobotStopSpeed) String() string { return proto.CompactTextString(m) }
-func (*GameEvent_MultipleRobotStopSpeed) ProtoMessage()    {}
-func (*GameEvent_MultipleRobotStopSpeed) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_2019_a0d50baf64c1b28a, []int{0, 22}
-}
-func (m *GameEvent_MultipleRobotStopSpeed) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_GameEvent_MultipleRobotStopSpeed.Unmarshal(m, b)
-}
-func (m *GameEvent_MultipleRobotStopSpeed) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_GameEvent_MultipleRobotStopSpeed.Marshal(b, m, deterministic)
-}
-func (dst *GameEvent_MultipleRobotStopSpeed) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_MultipleRobotStopSpeed.Merge(dst, src)
-}
-func (m *GameEvent_MultipleRobotStopSpeed) XXX_Size() int {
-	return xxx_messageInfo_GameEvent_MultipleRobotStopSpeed.Size(m)
-}
-func (m *GameEvent_MultipleRobotStopSpeed) XXX_DiscardUnknown() {
-	xxx_messageInfo_GameEvent_MultipleRobotStopSpeed.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_GameEvent_MultipleRobotStopSpeed proto.InternalMessageInfo
-
-func (m *GameEvent_MultipleRobotStopSpeed) GetTeam() Team {
-	if m != nil && m.Team != nil {
-		return *m.Team
-	}
-	return Team_UNKNOWN
-}
-
-type GameEvent_NumberOfPlayers struct {
-	// the team that has too many robots
-	Team *Team `protobuf:"varint,1,req,name=team,enum=Team" json:"team,omitempty"`
-	// the number of bots that the team has too much on the field
-	BotsTooMuch          *int32   `protobuf:"varint,2,req,name=bots_too_much,json=botsTooMuch" json:"bots_too_much,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *GameEvent_NumberOfPlayers) Reset()         { *m = GameEvent_NumberOfPlayers{} }
-func (m *GameEvent_NumberOfPlayers) String() string { return proto.CompactTextString(m) }
-func (*GameEvent_NumberOfPlayers) ProtoMessage()    {}
-func (*GameEvent_NumberOfPlayers) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_2019_a0d50baf64c1b28a, []int{0, 23}
-}
-func (m *GameEvent_NumberOfPlayers) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_GameEvent_NumberOfPlayers.Unmarshal(m, b)
-}
-func (m *GameEvent_NumberOfPlayers) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_GameEvent_NumberOfPlayers.Marshal(b, m, deterministic)
-}
-func (dst *GameEvent_NumberOfPlayers) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_NumberOfPlayers.Merge(dst, src)
-}
-func (m *GameEvent_NumberOfPlayers) XXX_Size() int {
-	return xxx_messageInfo_GameEvent_NumberOfPlayers.Size(m)
-}
-func (m *GameEvent_NumberOfPlayers) XXX_DiscardUnknown() {
-	xxx_messageInfo_GameEvent_NumberOfPlayers.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_GameEvent_NumberOfPlayers proto.InternalMessageInfo
-
-func (m *GameEvent_NumberOfPlayers) GetTeam() Team {
-	if m != nil && m.Team != nil {
-		return *m.Team
-	}
-	return Team_UNKNOWN
-}
-
-func (m *GameEvent_NumberOfPlayers) GetBotsTooMuch() int32 {
-	if m != nil && m.BotsTooMuch != nil {
-		return *m.BotsTooMuch
-	}
-	return 0
-}
-
+// timeout waiting for the attacking team to perform the free kick
 type GameEvent_KickTimeout struct {
 	// the team that that should have kicked
-	Team *Team `protobuf:"varint,1,req,name=team,enum=Team" json:"team,omitempty"`
+	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// the time [s] that was waited
-	Time                 *float32 `protobuf:"fixed32,2,req,name=time" json:"time,omitempty"`
+	Time                 *float32 `protobuf:"fixed32,2,opt,name=time" json:"time,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -2494,7 +2607,7 @@ func (m *GameEvent_KickTimeout) Reset()         { *m = GameEvent_KickTimeout{} }
 func (m *GameEvent_KickTimeout) String() string { return proto.CompactTextString(m) }
 func (*GameEvent_KickTimeout) ProtoMessage()    {}
 func (*GameEvent_KickTimeout) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_2019_a0d50baf64c1b28a, []int{0, 24}
+	return fileDescriptor_ssl_game_event_2019_51267f52d25ff0d1, []int{0, 22}
 }
 func (m *GameEvent_KickTimeout) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GameEvent_KickTimeout.Unmarshal(m, b)
@@ -2514,9 +2627,9 @@ func (m *GameEvent_KickTimeout) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GameEvent_KickTimeout proto.InternalMessageInfo
 
-func (m *GameEvent_KickTimeout) GetTeam() Team {
-	if m != nil && m.Team != nil {
-		return *m.Team
+func (m *GameEvent_KickTimeout) GetByTeam() Team {
+	if m != nil && m.ByTeam != nil {
+		return *m.ByTeam
 	}
 	return Team_UNKNOWN
 }
@@ -2528,9 +2641,10 @@ func (m *GameEvent_KickTimeout) GetTime() float32 {
 	return 0
 }
 
+// game was stuck
 type GameEvent_NoProgressInGame struct {
 	// the time [s] that was waited
-	Time                 *float32 `protobuf:"fixed32,1,req,name=time" json:"time,omitempty"`
+	Time                 *float32 `protobuf:"fixed32,1,opt,name=time" json:"time,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -2540,7 +2654,7 @@ func (m *GameEvent_NoProgressInGame) Reset()         { *m = GameEvent_NoProgress
 func (m *GameEvent_NoProgressInGame) String() string { return proto.CompactTextString(m) }
 func (*GameEvent_NoProgressInGame) ProtoMessage()    {}
 func (*GameEvent_NoProgressInGame) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_2019_a0d50baf64c1b28a, []int{0, 25}
+	return fileDescriptor_ssl_game_event_2019_51267f52d25ff0d1, []int{0, 23}
 }
 func (m *GameEvent_NoProgressInGame) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GameEvent_NoProgressInGame.Unmarshal(m, b)
@@ -2567,11 +2681,12 @@ func (m *GameEvent_NoProgressInGame) GetTime() float32 {
 	return 0
 }
 
+// placement failed by the team that should bring the ball into play next
 type GameEvent_PlacementFailedByTeamInFavor struct {
 	// the team that failed
-	Team *Team `protobuf:"varint,1,req,name=team,enum=Team" json:"team,omitempty"`
+	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// the remaining distance from ball to placement position
-	RemainingDistance    *float32 `protobuf:"fixed32,2,req,name=remaining_distance,json=remainingDistance" json:"remaining_distance,omitempty"`
+	RemainingDistance    *float32 `protobuf:"fixed32,2,opt,name=remaining_distance,json=remainingDistance" json:"remaining_distance,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -2583,7 +2698,7 @@ func (m *GameEvent_PlacementFailedByTeamInFavor) Reset() {
 func (m *GameEvent_PlacementFailedByTeamInFavor) String() string { return proto.CompactTextString(m) }
 func (*GameEvent_PlacementFailedByTeamInFavor) ProtoMessage()    {}
 func (*GameEvent_PlacementFailedByTeamInFavor) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_2019_a0d50baf64c1b28a, []int{0, 26}
+	return fileDescriptor_ssl_game_event_2019_51267f52d25ff0d1, []int{0, 24}
 }
 func (m *GameEvent_PlacementFailedByTeamInFavor) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GameEvent_PlacementFailedByTeamInFavor.Unmarshal(m, b)
@@ -2603,9 +2718,9 @@ func (m *GameEvent_PlacementFailedByTeamInFavor) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GameEvent_PlacementFailedByTeamInFavor proto.InternalMessageInfo
 
-func (m *GameEvent_PlacementFailedByTeamInFavor) GetTeam() Team {
-	if m != nil && m.Team != nil {
-		return *m.Team
+func (m *GameEvent_PlacementFailedByTeamInFavor) GetByTeam() Team {
+	if m != nil && m.ByTeam != nil {
+		return *m.ByTeam
 	}
 	return Team_UNKNOWN
 }
@@ -2617,11 +2732,12 @@ func (m *GameEvent_PlacementFailedByTeamInFavor) GetRemainingDistance() float32 
 	return 0
 }
 
+// placement failed by the team other team
 type GameEvent_PlacementFailedByOpponent struct {
 	// the team that failed
-	Team *Team `protobuf:"varint,1,req,name=team,enum=Team" json:"team,omitempty"`
+	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// the remaining distance from ball to placement position
-	RemainingDistance    *float32 `protobuf:"fixed32,2,req,name=remaining_distance,json=remainingDistance" json:"remaining_distance,omitempty"`
+	RemainingDistance    *float32 `protobuf:"fixed32,2,opt,name=remaining_distance,json=remainingDistance" json:"remaining_distance,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -2631,7 +2747,7 @@ func (m *GameEvent_PlacementFailedByOpponent) Reset()         { *m = GameEvent_P
 func (m *GameEvent_PlacementFailedByOpponent) String() string { return proto.CompactTextString(m) }
 func (*GameEvent_PlacementFailedByOpponent) ProtoMessage()    {}
 func (*GameEvent_PlacementFailedByOpponent) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_2019_a0d50baf64c1b28a, []int{0, 27}
+	return fileDescriptor_ssl_game_event_2019_51267f52d25ff0d1, []int{0, 25}
 }
 func (m *GameEvent_PlacementFailedByOpponent) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GameEvent_PlacementFailedByOpponent.Unmarshal(m, b)
@@ -2651,9 +2767,9 @@ func (m *GameEvent_PlacementFailedByOpponent) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GameEvent_PlacementFailedByOpponent proto.InternalMessageInfo
 
-func (m *GameEvent_PlacementFailedByOpponent) GetTeam() Team {
-	if m != nil && m.Team != nil {
-		return *m.Team
+func (m *GameEvent_PlacementFailedByOpponent) GetByTeam() Team {
+	if m != nil && m.ByTeam != nil {
+		return *m.ByTeam
 	}
 	return Team_UNKNOWN
 }
@@ -2665,7 +2781,8 @@ func (m *GameEvent_PlacementFailedByOpponent) GetRemainingDistance() float32 {
 	return 0
 }
 
-type GameEvent_PlacementInterference struct {
+// a bot interfered the ball placement of the other team
+type GameEvent_BotInterferedPlacement struct {
 	// the bot that interfered the placement
 	ByBot                *BotId   `protobuf:"bytes,1,req,name=by_bot,json=byBot" json:"by_bot,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -2673,40 +2790,41 @@ type GameEvent_PlacementInterference struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *GameEvent_PlacementInterference) Reset()         { *m = GameEvent_PlacementInterference{} }
-func (m *GameEvent_PlacementInterference) String() string { return proto.CompactTextString(m) }
-func (*GameEvent_PlacementInterference) ProtoMessage()    {}
-func (*GameEvent_PlacementInterference) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_2019_a0d50baf64c1b28a, []int{0, 28}
+func (m *GameEvent_BotInterferedPlacement) Reset()         { *m = GameEvent_BotInterferedPlacement{} }
+func (m *GameEvent_BotInterferedPlacement) String() string { return proto.CompactTextString(m) }
+func (*GameEvent_BotInterferedPlacement) ProtoMessage()    {}
+func (*GameEvent_BotInterferedPlacement) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ssl_game_event_2019_51267f52d25ff0d1, []int{0, 26}
 }
-func (m *GameEvent_PlacementInterference) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_GameEvent_PlacementInterference.Unmarshal(m, b)
+func (m *GameEvent_BotInterferedPlacement) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GameEvent_BotInterferedPlacement.Unmarshal(m, b)
 }
-func (m *GameEvent_PlacementInterference) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_GameEvent_PlacementInterference.Marshal(b, m, deterministic)
+func (m *GameEvent_BotInterferedPlacement) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GameEvent_BotInterferedPlacement.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_PlacementInterference) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_PlacementInterference.Merge(dst, src)
+func (dst *GameEvent_BotInterferedPlacement) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_BotInterferedPlacement.Merge(dst, src)
 }
-func (m *GameEvent_PlacementInterference) XXX_Size() int {
-	return xxx_messageInfo_GameEvent_PlacementInterference.Size(m)
+func (m *GameEvent_BotInterferedPlacement) XXX_Size() int {
+	return xxx_messageInfo_GameEvent_BotInterferedPlacement.Size(m)
 }
-func (m *GameEvent_PlacementInterference) XXX_DiscardUnknown() {
-	xxx_messageInfo_GameEvent_PlacementInterference.DiscardUnknown(m)
+func (m *GameEvent_BotInterferedPlacement) XXX_DiscardUnknown() {
+	xxx_messageInfo_GameEvent_BotInterferedPlacement.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_GameEvent_PlacementInterference proto.InternalMessageInfo
+var xxx_messageInfo_GameEvent_BotInterferedPlacement proto.InternalMessageInfo
 
-func (m *GameEvent_PlacementInterference) GetByBot() *BotId {
+func (m *GameEvent_BotInterferedPlacement) GetByBot() *BotId {
 	if m != nil {
 		return m.ByBot
 	}
 	return nil
 }
 
+// a team was found guilty for minor unsportive behavior
 type GameEvent_UnsportiveBehaviorMinor struct {
 	// the team that found guilty
-	Team *Team `protobuf:"varint,1,req,name=team,enum=Team" json:"team,omitempty"`
+	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// an explanation of the situation and decision
 	Reason               *string  `protobuf:"bytes,2,req,name=reason" json:"reason,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -2718,7 +2836,7 @@ func (m *GameEvent_UnsportiveBehaviorMinor) Reset()         { *m = GameEvent_Uns
 func (m *GameEvent_UnsportiveBehaviorMinor) String() string { return proto.CompactTextString(m) }
 func (*GameEvent_UnsportiveBehaviorMinor) ProtoMessage()    {}
 func (*GameEvent_UnsportiveBehaviorMinor) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_2019_a0d50baf64c1b28a, []int{0, 29}
+	return fileDescriptor_ssl_game_event_2019_51267f52d25ff0d1, []int{0, 27}
 }
 func (m *GameEvent_UnsportiveBehaviorMinor) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GameEvent_UnsportiveBehaviorMinor.Unmarshal(m, b)
@@ -2738,9 +2856,9 @@ func (m *GameEvent_UnsportiveBehaviorMinor) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GameEvent_UnsportiveBehaviorMinor proto.InternalMessageInfo
 
-func (m *GameEvent_UnsportiveBehaviorMinor) GetTeam() Team {
-	if m != nil && m.Team != nil {
-		return *m.Team
+func (m *GameEvent_UnsportiveBehaviorMinor) GetByTeam() Team {
+	if m != nil && m.ByTeam != nil {
+		return *m.ByTeam
 	}
 	return Team_UNKNOWN
 }
@@ -2752,9 +2870,10 @@ func (m *GameEvent_UnsportiveBehaviorMinor) GetReason() string {
 	return ""
 }
 
+// a team was found guilty for major unsportive behavior
 type GameEvent_UnsportiveBehaviorMajor struct {
 	// the team that found guilty
-	Team *Team `protobuf:"varint,1,req,name=team,enum=Team" json:"team,omitempty"`
+	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// an explanation of the situation and decision
 	Reason               *string  `protobuf:"bytes,2,req,name=reason" json:"reason,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -2766,7 +2885,7 @@ func (m *GameEvent_UnsportiveBehaviorMajor) Reset()         { *m = GameEvent_Uns
 func (m *GameEvent_UnsportiveBehaviorMajor) String() string { return proto.CompactTextString(m) }
 func (*GameEvent_UnsportiveBehaviorMajor) ProtoMessage()    {}
 func (*GameEvent_UnsportiveBehaviorMajor) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_2019_a0d50baf64c1b28a, []int{0, 30}
+	return fileDescriptor_ssl_game_event_2019_51267f52d25ff0d1, []int{0, 28}
 }
 func (m *GameEvent_UnsportiveBehaviorMajor) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GameEvent_UnsportiveBehaviorMajor.Unmarshal(m, b)
@@ -2786,9 +2905,9 @@ func (m *GameEvent_UnsportiveBehaviorMajor) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GameEvent_UnsportiveBehaviorMajor proto.InternalMessageInfo
 
-func (m *GameEvent_UnsportiveBehaviorMajor) GetTeam() Team {
-	if m != nil && m.Team != nil {
-		return *m.Team
+func (m *GameEvent_UnsportiveBehaviorMajor) GetByTeam() Team {
+	if m != nil && m.ByTeam != nil {
+		return *m.ByTeam
 	}
 	return Team_UNKNOWN
 }
@@ -2800,150 +2919,211 @@ func (m *GameEvent_UnsportiveBehaviorMajor) GetReason() string {
 	return ""
 }
 
+// a keeper held the ball in its defense area for too long
+type GameEvent_KeeperHeldBall struct {
+	// the team that found guilty
+	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
+	// the location of the ball
+	Location *Location `protobuf:"bytes,2,opt,name=location" json:"location,omitempty"`
+	// the duration [s] that the keeper hold the ball
+	Duration             *float64 `protobuf:"fixed64,3,opt,name=duration" json:"duration,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GameEvent_KeeperHeldBall) Reset()         { *m = GameEvent_KeeperHeldBall{} }
+func (m *GameEvent_KeeperHeldBall) String() string { return proto.CompactTextString(m) }
+func (*GameEvent_KeeperHeldBall) ProtoMessage()    {}
+func (*GameEvent_KeeperHeldBall) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ssl_game_event_2019_51267f52d25ff0d1, []int{0, 29}
+}
+func (m *GameEvent_KeeperHeldBall) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GameEvent_KeeperHeldBall.Unmarshal(m, b)
+}
+func (m *GameEvent_KeeperHeldBall) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GameEvent_KeeperHeldBall.Marshal(b, m, deterministic)
+}
+func (dst *GameEvent_KeeperHeldBall) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_KeeperHeldBall.Merge(dst, src)
+}
+func (m *GameEvent_KeeperHeldBall) XXX_Size() int {
+	return xxx_messageInfo_GameEvent_KeeperHeldBall.Size(m)
+}
+func (m *GameEvent_KeeperHeldBall) XXX_DiscardUnknown() {
+	xxx_messageInfo_GameEvent_KeeperHeldBall.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GameEvent_KeeperHeldBall proto.InternalMessageInfo
+
+func (m *GameEvent_KeeperHeldBall) GetByTeam() Team {
+	if m != nil && m.ByTeam != nil {
+		return *m.ByTeam
+	}
+	return Team_UNKNOWN
+}
+
+func (m *GameEvent_KeeperHeldBall) GetLocation() *Location {
+	if m != nil {
+		return m.Location
+	}
+	return nil
+}
+
+func (m *GameEvent_KeeperHeldBall) GetDuration() float64 {
+	if m != nil && m.Duration != nil {
+		return *m.Duration
+	}
+	return 0
+}
+
 func init() {
 	proto.RegisterType((*GameEvent)(nil), "GameEvent")
 	proto.RegisterType((*GameEvent_BallLeftFieldEvent)(nil), "GameEvent.BallLeftFieldEvent")
 	proto.RegisterType((*GameEvent_Icing)(nil), "GameEvent.Icing")
 	proto.RegisterType((*GameEvent_Goal)(nil), "GameEvent.Goal")
 	proto.RegisterType((*GameEvent_IndirectGoal)(nil), "GameEvent.IndirectGoal")
-	proto.RegisterType((*GameEvent_ChipOnGoal)(nil), "GameEvent.ChipOnGoal")
-	proto.RegisterType((*GameEvent_RobotStopSpeed)(nil), "GameEvent.RobotStopSpeed")
-	proto.RegisterType((*GameEvent_DefenderToKickPointDistance)(nil), "GameEvent.DefenderToKickPointDistance")
+	proto.RegisterType((*GameEvent_ChippedGoal)(nil), "GameEvent.ChippedGoal")
+	proto.RegisterType((*GameEvent_BotTooFastInStop)(nil), "GameEvent.BotTooFastInStop")
+	proto.RegisterType((*GameEvent_DefenderTooCloseToKickPoint)(nil), "GameEvent.DefenderTooCloseToKickPoint")
 	proto.RegisterType((*GameEvent_BotCrashDrawn)(nil), "GameEvent.BotCrashDrawn")
 	proto.RegisterType((*GameEvent_BotCrashUnique)(nil), "GameEvent.BotCrashUnique")
-	proto.RegisterType((*GameEvent_BotPushing)(nil), "GameEvent.BotPushing")
+	proto.RegisterType((*GameEvent_BotPushedBot)(nil), "GameEvent.BotPushedBot")
 	proto.RegisterType((*GameEvent_BotTippedOver)(nil), "GameEvent.BotTippedOver")
-	proto.RegisterType((*GameEvent_MultipleDefender)(nil), "GameEvent.MultipleDefender")
-	proto.RegisterType((*GameEvent_MultipleDefenderPartially)(nil), "GameEvent.MultipleDefenderPartially")
+	proto.RegisterType((*GameEvent_DefenderInDefenseArea)(nil), "GameEvent.DefenderInDefenseArea")
+	proto.RegisterType((*GameEvent_DefenderInDefenseAreaPartially)(nil), "GameEvent.DefenderInDefenseAreaPartially")
 	proto.RegisterType((*GameEvent_AttackerInDefenseArea)(nil), "GameEvent.AttackerInDefenseArea")
-	proto.RegisterType((*GameEvent_BallSpeed)(nil), "GameEvent.BallSpeed")
-	proto.RegisterType((*GameEvent_BallDribbling)(nil), "GameEvent.BallDribbling")
+	proto.RegisterType((*GameEvent_BotKickedBallTooFast)(nil), "GameEvent.BotKickedBallTooFast")
+	proto.RegisterType((*GameEvent_BotDribbledBallTooFar)(nil), "GameEvent.BotDribbledBallTooFar")
 	proto.RegisterType((*GameEvent_AttackerTouchedKeeper)(nil), "GameEvent.AttackerTouchedKeeper")
-	proto.RegisterType((*GameEvent_DoubleTouch)(nil), "GameEvent.DoubleTouch")
-	proto.RegisterType((*GameEvent_AttackerToDefenceArea)(nil), "GameEvent.AttackerToDefenceArea")
-	proto.RegisterType((*GameEvent_BallHolding)(nil), "GameEvent.BallHolding")
+	proto.RegisterType((*GameEvent_AttackerDoubleTouchedBall)(nil), "GameEvent.AttackerDoubleTouchedBall")
+	proto.RegisterType((*GameEvent_AttackerTooCloseToDefenseArea)(nil), "GameEvent.AttackerTooCloseToDefenseArea")
+	proto.RegisterType((*GameEvent_BotHeldBallDeliberateley)(nil), "GameEvent.BotHeldBallDeliberateley")
 	proto.RegisterType((*GameEvent_MultipleYellowCards)(nil), "GameEvent.MultipleYellowCards")
-	proto.RegisterType((*GameEvent_MultipleBotCollisions)(nil), "GameEvent.MultipleBotCollisions")
-	proto.RegisterType((*GameEvent_MultipleRobotStopSpeed)(nil), "GameEvent.MultipleRobotStopSpeed")
-	proto.RegisterType((*GameEvent_NumberOfPlayers)(nil), "GameEvent.NumberOfPlayers")
+	proto.RegisterType((*GameEvent_MultipleFouls)(nil), "GameEvent.MultipleFouls")
 	proto.RegisterType((*GameEvent_KickTimeout)(nil), "GameEvent.KickTimeout")
 	proto.RegisterType((*GameEvent_NoProgressInGame)(nil), "GameEvent.NoProgressInGame")
 	proto.RegisterType((*GameEvent_PlacementFailedByTeamInFavor)(nil), "GameEvent.PlacementFailedByTeamInFavor")
 	proto.RegisterType((*GameEvent_PlacementFailedByOpponent)(nil), "GameEvent.PlacementFailedByOpponent")
-	proto.RegisterType((*GameEvent_PlacementInterference)(nil), "GameEvent.PlacementInterference")
+	proto.RegisterType((*GameEvent_BotInterferedPlacement)(nil), "GameEvent.BotInterferedPlacement")
 	proto.RegisterType((*GameEvent_UnsportiveBehaviorMinor)(nil), "GameEvent.UnsportiveBehaviorMinor")
 	proto.RegisterType((*GameEvent_UnsportiveBehaviorMajor)(nil), "GameEvent.UnsportiveBehaviorMajor")
+	proto.RegisterType((*GameEvent_KeeperHeldBall)(nil), "GameEvent.KeeperHeldBall")
 }
 
 func init() {
-	proto.RegisterFile("ssl_game_event_2019.proto", fileDescriptor_ssl_game_event_2019_a0d50baf64c1b28a)
+	proto.RegisterFile("ssl_game_event_2019.proto", fileDescriptor_ssl_game_event_2019_51267f52d25ff0d1)
 }
 
-var fileDescriptor_ssl_game_event_2019_a0d50baf64c1b28a = []byte{
-	// 1668 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x58, 0xe1, 0x6e, 0x1b, 0xb9,
-	0x11, 0x96, 0x6c, 0xcb, 0x89, 0x47, 0x96, 0xed, 0x30, 0xb1, 0xbd, 0x5a, 0x27, 0xb1, 0x2f, 0xe8,
-	0xe5, 0xfc, 0xa3, 0x67, 0x5c, 0x5d, 0xb4, 0xe8, 0xa1, 0x45, 0x81, 0x38, 0xbe, 0x9c, 0xdc, 0x73,
-	0xce, 0xc6, 0x46, 0xf7, 0x23, 0x39, 0xb4, 0x2c, 0x77, 0x97, 0xb2, 0x58, 0x73, 0xc9, 0x2d, 0x97,
-	0x52, 0x4e, 0x40, 0x83, 0xfe, 0xe9, 0xbb, 0x14, 0xe8, 0x13, 0x14, 0xe8, 0xf3, 0xf4, 0x3d, 0x0a,
-	0x72, 0x57, 0xab, 0x5d, 0xad, 0xa4, 0x04, 0x85, 0x90, 0xfc, 0x13, 0x67, 0xbe, 0xf9, 0x66, 0xc8,
-	0x19, 0x72, 0x67, 0x04, 0xed, 0x24, 0xe1, 0xf8, 0x86, 0x44, 0x14, 0xd3, 0x21, 0x15, 0x1a, 0x9f,
-	0x7e, 0xf5, 0x8b, 0xaf, 0x4f, 0x62, 0x25, 0xb5, 0x74, 0x8f, 0x72, 0x55, 0x20, 0x85, 0x56, 0x92,
-	0x73, 0xaa, 0x70, 0x20, 0xa3, 0x48, 0x8a, 0x14, 0xf1, 0xe4, 0xbf, 0x5f, 0xc2, 0xc6, 0xb7, 0x24,
-	0xa2, 0xdf, 0x18, 0x53, 0xf4, 0x23, 0xb8, 0x3e, 0xe1, 0x1c, 0x73, 0xda, 0xd3, 0xb8, 0xc7, 0x28,
-	0x0f, 0xb1, 0x96, 0x83, 0xa0, 0x8f, 0x39, 0x13, 0xd4, 0xa9, 0x1f, 0xd5, 0x8f, 0x9b, 0xa7, 0x8f,
-	0x4e, 0x72, 0xfc, 0xc9, 0x19, 0xe1, 0xfc, 0x92, 0xf6, 0xf4, 0x0b, 0x03, 0xb5, 0xa2, 0x4e, 0xcd,
-	0xdb, 0xf3, 0x8b, 0xd2, 0xae, 0xb1, 0xbf, 0x64, 0x82, 0xa2, 0xd7, 0xd0, 0x9e, 0x26, 0xbf, 0x91,
-	0x84, 0xa7, 0xdc, 0x2b, 0x1f, 0xc6, 0xbd, 0x5b, 0xe2, 0xfe, 0x56, 0x12, 0x6e, 0xa9, 0x8f, 0xa1,
-	0xc1, 0x02, 0x26, 0x6e, 0x9c, 0x55, 0x4b, 0xb3, 0x53, 0xa0, 0xb9, 0x30, 0xf2, 0x4e, 0xcd, 0x4b,
-	0x01, 0xe8, 0x73, 0x58, 0x33, 0x4e, 0x9d, 0x35, 0x0b, 0xdc, 0x2e, 0x00, 0x0d, 0x59, 0xa7, 0xe6,
-	0x59, 0x35, 0xfa, 0x3d, 0xb4, 0x98, 0x08, 0x99, 0xa2, 0x81, 0xb6, 0x41, 0x3a, 0x0d, 0x8b, 0xdf,
-	0x2f, 0x12, 0x67, 0xfa, 0xcc, 0x6e, 0x93, 0x15, 0xd6, 0xe8, 0x6b, 0xd8, 0x0c, 0xfa, 0x2c, 0xc6,
-	0x52, 0xa4, 0xe6, 0xeb, 0xd6, 0x7c, 0xb7, 0x60, 0xfe, 0xbc, 0xcf, 0xe2, 0x2b, 0x91, 0x19, 0x43,
-	0x90, 0xaf, 0xd0, 0x37, 0xb0, 0xa3, 0xa4, 0x2f, 0x35, 0x4e, 0xb4, 0x8c, 0x71, 0x12, 0x53, 0x1a,
-	0x3a, 0x77, 0xac, 0x79, 0xbb, 0x60, 0xee, 0x19, 0xc8, 0x2b, 0x2d, 0xe3, 0x57, 0x06, 0xd0, 0xa9,
-	0x79, 0x5b, 0xaa, 0x24, 0x41, 0x02, 0x0e, 0x43, 0xda, 0xa3, 0x22, 0xa4, 0x0a, 0x6b, 0x89, 0x6f,
-	0x59, 0x70, 0x8b, 0x63, 0xc9, 0x84, 0xc6, 0x21, 0x4b, 0x34, 0x11, 0x01, 0x75, 0xee, 0x5a, 0xd6,
-	0xa7, 0x05, 0xd6, 0xf3, 0xcc, 0xa2, 0x2b, 0xbf, 0x63, 0xc1, 0xed, 0xb5, 0x81, 0x9f, 0x67, 0xe8,
-	0x4e, 0xcd, 0x3b, 0x08, 0xe7, 0xab, 0xd1, 0x19, 0x6c, 0x9b, 0xa0, 0x03, 0x45, 0x92, 0x3e, 0x0e,
-	0x15, 0x79, 0x2b, 0x9c, 0x0d, 0xcb, 0xef, 0x14, 0x73, 0x2a, 0xf5, 0x73, 0x03, 0x38, 0x37, 0xfa,
-	0x4e, 0xcd, 0x6b, 0xf9, 0x45, 0x81, 0xd9, 0xfa, 0x84, 0x63, 0x20, 0xd8, 0x5f, 0x07, 0xd4, 0x81,
-	0xca, 0xd6, 0xc7, 0x24, 0x3f, 0x58, 0x80, 0xd9, 0xba, 0x5f, 0x92, 0xa0, 0xdf, 0x40, 0xd3, 0xd0,
-	0xc4, 0x83, 0xa4, 0x6f, 0x6a, 0xa2, 0x59, 0x39, 0xfb, 0x33, 0xa9, 0xaf, 0x53, 0xa5, 0x39, 0x7b,
-	0x3f, 0x5f, 0x8d, 0x37, 0xa1, 0x59, 0x1c, 0xd3, 0x10, 0xcb, 0x21, 0x55, 0xce, 0xe6, 0xac, 0x4d,
-	0x74, 0x2d, 0xe0, 0x6a, 0x48, 0x55, 0xb6, 0x89, 0x89, 0x00, 0xfd, 0x01, 0xee, 0x45, 0x03, 0xae,
-	0x59, 0xcc, 0x29, 0x1e, 0x1f, 0x98, 0xd3, 0xb2, 0x2c, 0x07, 0x05, 0x96, 0x97, 0x19, 0x66, 0x7c,
-	0xe4, 0x9d, 0x9a, 0xb7, 0x13, 0x4d, 0xc9, 0x50, 0x0f, 0x0e, 0x2a, 0x5c, 0x38, 0x26, 0x4a, 0x33,
-	0xc2, 0xf9, 0xc8, 0xd9, 0xb2, 0xac, 0x3f, 0x5b, 0xc0, 0x7a, 0x3d, 0xc6, 0x76, 0x6a, 0x5e, 0x3b,
-	0x9a, 0xa7, 0x44, 0x3f, 0x82, 0x43, 0xb4, 0x26, 0xc1, 0x2d, 0x55, 0x98, 0x89, 0xd4, 0x55, 0x42,
-	0x31, 0x51, 0x94, 0x38, 0xdb, 0xd6, 0xc9, 0x51, 0xc1, 0xc9, 0xb3, 0x0c, 0x7a, 0x21, 0xce, 0x53,
-	0xe0, 0x33, 0x45, 0x89, 0xb9, 0x9c, 0x64, 0x96, 0x02, 0xfd, 0x0a, 0xc0, 0xde, 0xfb, 0xb4, 0x94,
-	0x77, 0x2c, 0xdd, 0x83, 0xa9, 0x8b, 0x3e, 0xae, 0xe2, 0x0d, 0x7f, 0xbc, 0x40, 0xcf, 0x60, 0xcb,
-	0x9a, 0x85, 0x8a, 0xf9, 0x3e, 0x37, 0x89, 0xbc, 0x57, 0x4d, 0x05, 0xe1, 0xfc, 0x7c, 0xac, 0xb7,
-	0xa9, 0x28, 0x0a, 0xd0, 0x1b, 0xd8, 0xcf, 0xb7, 0x65, 0xdf, 0x31, 0x1a, 0xe2, 0x5b, 0x4a, 0x63,
-	0xaa, 0x1c, 0x34, 0x77, 0x57, 0xdd, 0x14, 0xf8, 0x9d, 0xc5, 0x15, 0x77, 0x55, 0x52, 0xa0, 0xdf,
-	0xc2, 0x66, 0x28, 0x07, 0x3e, 0xa7, 0x29, 0xb3, 0x73, 0xdf, 0x12, 0xee, 0x15, 0x2f, 0x93, 0x55,
-	0x5b, 0xab, 0x4e, 0xcd, 0x6b, 0x86, 0x93, 0x65, 0xe9, 0xbc, 0xb5, 0x4c, 0xcf, 0x3b, 0xc8, 0xce,
-	0xfb, 0xc1, 0x82, 0xc8, 0xce, 0x53, 0xe0, 0xf4, 0x79, 0x97, 0x14, 0x26, 0x32, 0x7b, 0x70, 0x7d,
-	0xc9, 0x43, 0x73, 0x6c, 0xbb, 0x95, 0xc8, 0xcc, 0xb1, 0x75, 0x52, 0xad, 0x89, 0xcc, 0x9f, 0x2c,
-	0x51, 0x17, 0x76, 0xf3, 0x8a, 0x1b, 0x51, 0xce, 0xe5, 0x5b, 0x1c, 0x10, 0x15, 0x26, 0xce, 0x9e,
-	0x65, 0x79, 0x3c, 0xa3, 0xd6, 0x5e, 0x5b, 0xd8, 0x73, 0x83, 0xea, 0xd4, 0xbc, 0xfb, 0x51, 0x55,
-	0x6c, 0x12, 0x91, 0xb3, 0xda, 0x1b, 0x2e, 0x39, 0x67, 0x09, 0x93, 0x22, 0x71, 0xf6, 0x2b, 0xdb,
-	0x1d, 0xf3, 0x9a, 0x7b, 0x9e, 0xe3, 0xcc, 0x76, 0xa3, 0x59, 0x0a, 0xf4, 0x27, 0xc8, 0x0b, 0x1b,
-	0x57, 0x1e, 0x4e, 0xc7, 0xb2, 0x7f, 0x36, 0x83, 0xbd, 0xf2, 0x80, 0xee, 0x45, 0x33, 0x35, 0xa8,
-	0x03, 0xf7, 0xc4, 0x20, 0xf2, 0xa9, 0xc2, 0xb2, 0x87, 0x63, 0x4e, 0x46, 0x54, 0x25, 0x4e, 0xdb,
-	0xf2, 0xba, 0x05, 0xde, 0xef, 0x2d, 0xe6, 0xaa, 0x77, 0x9d, 0x22, 0x3a, 0x35, 0x6f, 0x5b, 0x94,
-	0x45, 0x26, 0x31, 0xf6, 0x19, 0xd6, 0x2c, 0xa2, 0x72, 0xa0, 0x1d, 0xb7, 0x92, 0x18, 0xf3, 0xac,
-	0x76, 0x53, 0xad, 0x49, 0xcc, 0xed, 0x64, 0x89, 0x2e, 0xe1, 0xbe, 0x90, 0x38, 0x56, 0xf2, 0x46,
-	0xd1, 0x24, 0x31, 0xb7, 0xd4, 0x7c, 0xd7, 0x9d, 0x83, 0xca, 0xc3, 0xf2, 0xbd, 0xbc, 0xce, 0x40,
-	0x17, 0xc2, 0x48, 0xcd, 0xc3, 0x22, 0xa6, 0x64, 0x48, 0xc1, 0x67, 0x31, 0x27, 0x01, 0x8d, 0x4c,
-	0xc3, 0xd0, 0x23, 0x8c, 0xd3, 0x10, 0xfb, 0x23, 0xac, 0x29, 0x89, 0x0c, 0x75, 0x8f, 0x0c, 0xa5,
-	0x72, 0x1e, 0x5a, 0xee, 0x2f, 0x0a, 0xdc, 0xd7, 0x63, 0x9b, 0x17, 0xd6, 0xe4, 0x6c, 0xd4, 0xa5,
-	0x24, 0xba, 0x10, 0x2f, 0x0c, 0xbc, 0x53, 0xf3, 0x1e, 0xc6, 0x0b, 0xf4, 0xe8, 0x06, 0x1e, 0xce,
-	0xf2, 0x29, 0xe3, 0x58, 0x0a, 0x2a, 0xb4, 0xf3, 0xa8, 0xf2, 0x9a, 0x55, 0xdc, 0x5d, 0x65, 0x58,
-	0xf3, 0x9a, 0xc5, 0xf3, 0x94, 0xe8, 0x35, 0xec, 0x4d, 0x1c, 0x31, 0xa1, 0xa9, 0xea, 0x51, 0x65,
-	0xae, 0x87, 0xf3, 0xb8, 0x52, 0x6c, 0xb9, 0x8b, 0x8b, 0x02, 0xce, 0x14, 0x5b, 0x3c, 0x4b, 0x81,
-	0xfe, 0x0c, 0xed, 0x81, 0x48, 0x62, 0xa9, 0x34, 0x1b, 0x52, 0xec, 0xd3, 0x3e, 0x19, 0x32, 0xa9,
-	0x70, 0xc4, 0x84, 0x54, 0xce, 0xa1, 0x65, 0x7f, 0x52, 0x60, 0xff, 0x21, 0xc7, 0x9e, 0x65, 0xd0,
-	0x97, 0x06, 0xd9, 0xa9, 0x79, 0xfb, 0x83, 0xd9, 0xaa, 0xb9, 0x1e, 0xc8, 0x5f, 0xa4, 0x72, 0x8e,
-	0x3e, 0xc4, 0x83, 0x41, 0xce, 0xf1, 0x60, 0x54, 0xee, 0x1b, 0x40, 0xd5, 0xde, 0x0a, 0x3d, 0x82,
-	0x75, 0x7f, 0x64, 0x2e, 0xa7, 0x53, 0x3f, 0x5a, 0x39, 0x6e, 0x9e, 0xae, 0x9b, 0xef, 0xdc, 0x45,
-	0xe8, 0x35, 0xfc, 0xd1, 0x99, 0xd4, 0xe8, 0x73, 0xb8, 0xcb, 0x65, 0x40, 0x34, 0x93, 0x22, 0xeb,
-	0xd5, 0x36, 0x4e, 0x2e, 0x33, 0x81, 0x97, 0xab, 0xdc, 0x77, 0xd0, 0xb0, 0x0d, 0xd7, 0x72, 0xe8,
-	0xd0, 0x09, 0xb4, 0xec, 0x8d, 0xc9, 0xb1, 0xab, 0xd3, 0x58, 0x7b, 0xa3, 0xc6, 0x2b, 0xf7, 0x6f,
-	0xb0, 0x66, 0x7b, 0xa8, 0x4f, 0xe3, 0xfd, 0x1f, 0x75, 0xd8, 0x2c, 0x76, 0x85, 0x9f, 0x28, 0x8c,
-	0x7f, 0xd5, 0x01, 0x26, 0xdd, 0xe5, 0xa7, 0x09, 0x02, 0x3d, 0x85, 0xed, 0x88, 0xfc, 0x84, 0xd3,
-	0x0f, 0x11, 0x65, 0x37, 0x7d, 0xed, 0xac, 0x1d, 0xad, 0x1c, 0xaf, 0x78, 0xad, 0x88, 0xfc, 0x64,
-	0xbf, 0x3f, 0x56, 0xe8, 0x72, 0xd8, 0x9a, 0x7a, 0x6f, 0x97, 0x13, 0xef, 0x03, 0x68, 0xa4, 0x5f,
-	0x80, 0x55, 0xeb, 0x35, 0x5d, 0xb8, 0x7f, 0x87, 0x83, 0x05, 0x2d, 0xee, 0x92, 0x5c, 0xbb, 0x70,
-	0x37, 0x6f, 0xb1, 0xcd, 0x29, 0xad, 0x78, 0xf9, 0xda, 0xfd, 0x77, 0x1d, 0x5a, 0xa5, 0x26, 0x18,
-	0x1d, 0xc2, 0x1d, 0xf3, 0xcd, 0x92, 0x76, 0xbe, 0x2a, 0x3a, 0x5d, 0xf7, 0xa5, 0xbe, 0x12, 0x74,
-	0x0c, 0xd0, 0x6f, 0xa5, 0xb3, 0x52, 0x01, 0x74, 0xdf, 0x4a, 0x74, 0x08, 0xcd, 0xb4, 0x63, 0x2e,
-	0x6e, 0x18, 0xac, 0x68, 0x7c, 0xa2, 0x60, 0x55, 0x38, 0x64, 0xbd, 0x5e, 0x96, 0x86, 0x0d, 0x2b,
-	0x39, 0x67, 0xbd, 0x5e, 0x69, 0x5b, 0x8d, 0xf9, 0x57, 0xfb, 0x3f, 0x75, 0xd8, 0x2a, 0xb7, 0xde,
-	0xe8, 0x09, 0xdc, 0x1d, 0x32, 0xc9, 0x89, 0x96, 0x6a, 0x2a, 0xf8, 0x5c, 0x8e, 0x1e, 0xc3, 0xfa,
-	0x90, 0x05, 0x9a, 0x45, 0xd3, 0xd1, 0xa7, 0xd2, 0x8f, 0x15, 0xfd, 0x08, 0x60, 0xd2, 0xf5, 0x2f,
-	0x25, 0xf0, 0x2f, 0x60, 0xdb, 0x4c, 0x18, 0x36, 0xb0, 0x52, 0xb6, 0xb7, 0x52, 0xf1, 0xb8, 0xaa,
-	0xdc, 0x37, 0x36, 0xe5, 0x85, 0x09, 0xe1, 0x43, 0xbc, 0x7f, 0xe0, 0x7b, 0xab, 0x61, 0x67, 0xba,
-	0xe5, 0xff, 0x08, 0x55, 0xfc, 0x0e, 0xda, 0x73, 0x07, 0x8d, 0x8f, 0xe0, 0x7e, 0x04, 0xbb, 0x33,
-	0x47, 0x90, 0x8f, 0xe0, 0xfa, 0x9f, 0x75, 0xd8, 0xc8, 0xe7, 0x95, 0xf7, 0xf9, 0xfb, 0x39, 0x20,
-	0x26, 0x98, 0x39, 0x16, 0x5c, 0x18, 0x80, 0x56, 0x6c, 0x05, 0xef, 0x64, 0x9a, 0x09, 0xd9, 0x8c,
-	0x17, 0x33, 0xf5, 0x5e, 0x7e, 0x31, 0x4b, 0xbb, 0x58, 0x9b, 0x5f, 0x19, 0x1c, 0x5a, 0xa5, 0xe9,
-	0xe8, 0x7d, 0xc1, 0x1e, 0x42, 0x23, 0xd1, 0x44, 0xe9, 0xea, 0xc9, 0xa4, 0x72, 0x74, 0x00, 0xab,
-	0x54, 0x84, 0xd5, 0x77, 0xdf, 0x48, 0xdd, 0x3f, 0x4e, 0x52, 0x52, 0x1e, 0x93, 0x96, 0xd3, 0x56,
-	0xbc, 0x82, 0x66, 0x61, 0x9a, 0x5a, 0x12, 0xe9, 0xa8, 0x18, 0x73, 0x71, 0x80, 0x7a, 0x0f, 0x7d,
-	0xb1, 0x3e, 0xd2, 0x64, 0xe6, 0xeb, 0x92, 0xeb, 0xd5, 0xf9, 0xae, 0x25, 0x34, 0x0b, 0x33, 0xd8,
-	0x12, 0xeb, 0x76, 0xa0, 0x26, 0xbe, 0x4d, 0x5c, 0xd9, 0xda, 0xfd, 0x0a, 0xee, 0xcf, 0x18, 0xd7,
-	0x50, 0x1b, 0xd6, 0x4c, 0xcb, 0x6f, 0xdd, 0x6e, 0x9d, 0x36, 0x4e, 0x4c, 0xbb, 0xee, 0x59, 0x91,
-	0x7b, 0x0a, 0xbb, 0x33, 0x07, 0xb1, 0x45, 0x36, 0xbf, 0x84, 0xbd, 0xd9, 0xe3, 0xd5, 0x22, 0xa3,
-	0x6b, 0xd8, 0x9e, 0x9a, 0x9d, 0x16, 0xa0, 0xd1, 0x13, 0x68, 0xf9, 0x52, 0x27, 0x58, 0x4b, 0x89,
-	0x23, 0x33, 0x77, 0x9b, 0x0c, 0x34, 0xbc, 0xa6, 0x11, 0x76, 0xa5, 0x7c, 0x39, 0x08, 0xfa, 0xee,
-	0xef, 0xa0, 0x59, 0x18, 0xa4, 0x16, 0xb1, 0x21, 0x58, 0x33, 0xc3, 0x58, 0x96, 0x46, 0xfb, 0xdb,
-	0x7d, 0x0a, 0x3b, 0xd3, 0x23, 0x54, 0x8e, 0xab, 0x17, 0x70, 0x7d, 0x78, 0xb8, 0x68, 0x1c, 0x5a,
-	0xe4, 0xf6, 0x4b, 0x40, 0x8a, 0x46, 0x84, 0x09, 0x26, 0x6e, 0xf0, 0x54, 0x2d, 0xdd, 0xcb, 0x35,
-	0xf9, 0x07, 0x84, 0x42, 0x7b, 0xee, 0x24, 0xb4, 0x44, 0x37, 0xbf, 0x86, 0xdd, 0x99, 0xd3, 0xd0,
-	0x7b, 0xca, 0xd3, 0xbd, 0x84, 0xfd, 0x39, 0x73, 0xce, 0xa2, 0xe0, 0xf6, 0x60, 0x5d, 0x51, 0x92,
-	0xd8, 0x92, 0x5e, 0x39, 0xde, 0xf0, 0xb2, 0xd5, 0x1c, 0x36, 0x33, 0xb8, 0xfc, 0x1f, 0x6c, 0x67,
-	0x77, 0xa0, 0x61, 0xff, 0x14, 0xff, 0x5f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x74, 0xe9, 0xa6, 0x53,
-	0x25, 0x17, 0x00, 0x00,
+var fileDescriptor_ssl_game_event_2019_51267f52d25ff0d1 = []byte{
+	// 1741 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x59, 0x5f, 0x6f, 0xe4, 0x48,
+	0x11, 0x1f, 0x67, 0x33, 0xf9, 0x53, 0xc9, 0x24, 0xb9, 0xde, 0x4d, 0xd2, 0xe3, 0x6c, 0xb2, 0xb9,
+	0x85, 0xdb, 0x0b, 0xd2, 0x11, 0x60, 0x11, 0x42, 0x08, 0x09, 0x94, 0x6c, 0x2e, 0xe7, 0xe8, 0xb2,
+	0x5c, 0xf0, 0xe5, 0x1e, 0x96, 0xe3, 0x64, 0xda, 0x76, 0x4f, 0xa6, 0x2f, 0x76, 0xb7, 0x69, 0xf7,
+	0x64, 0x2f, 0x5f, 0x80, 0x27, 0x5e, 0x90, 0x40, 0x08, 0xc4, 0x47, 0xe1, 0x01, 0x89, 0x37, 0xde,
+	0xf8, 0x1e, 0x7c, 0x08, 0xd4, 0x6d, 0x8f, 0xc7, 0x1e, 0x7b, 0x32, 0xa3, 0x15, 0x61, 0xf7, 0x6d,
+	0xba, 0xea, 0xd7, 0xbf, 0xaa, 0xea, 0xae, 0x76, 0x55, 0xf7, 0x40, 0x37, 0x4d, 0x23, 0xef, 0x8a,
+	0xc4, 0xd4, 0xa3, 0x37, 0x94, 0x2b, 0xef, 0xf9, 0xf7, 0x7f, 0xf0, 0x93, 0xc3, 0x44, 0x0a, 0x25,
+	0xec, 0xfd, 0x42, 0x15, 0x08, 0xae, 0xa4, 0x88, 0x22, 0x2a, 0xbd, 0x40, 0xc4, 0xb1, 0xe0, 0x19,
+	0xe2, 0xe9, 0xdf, 0x7f, 0x08, 0xcb, 0x9f, 0x90, 0x98, 0x7e, 0xac, 0xa7, 0xa2, 0x2f, 0xc1, 0xf6,
+	0x49, 0x14, 0x79, 0x11, 0xed, 0x29, 0xaf, 0xc7, 0x68, 0x14, 0x7a, 0x4a, 0x0c, 0x82, 0xbe, 0x17,
+	0x31, 0x4e, 0xb1, 0xb5, 0x6f, 0x1d, 0xac, 0x3c, 0xdf, 0x3d, 0x2c, 0xf0, 0x87, 0xc7, 0x24, 0x8a,
+	0xce, 0x69, 0x4f, 0x9d, 0x6a, 0xa8, 0x11, 0x39, 0x2d, 0x77, 0xcb, 0x2f, 0x4b, 0x2f, 0xf5, 0xfc,
+	0x73, 0xc6, 0x29, 0x7a, 0x05, 0xdd, 0x71, 0xf2, 0x2b, 0x41, 0xa2, 0x8c, 0x7b, 0x6e, 0x36, 0xee,
+	0xcd, 0x0a, 0xf7, 0x27, 0x82, 0x44, 0x86, 0xfa, 0x00, 0xda, 0x2c, 0x60, 0xfc, 0x0a, 0x3f, 0x30,
+	0x34, 0x1b, 0x25, 0x9a, 0x33, 0x2d, 0x77, 0x5a, 0x6e, 0x06, 0x40, 0x1f, 0xc0, 0xbc, 0x36, 0x8a,
+	0xe7, 0x0d, 0x70, 0xbd, 0x04, 0xd4, 0x64, 0x4e, 0xcb, 0x35, 0x6a, 0xf4, 0x33, 0xe8, 0x30, 0x1e,
+	0x32, 0x49, 0x03, 0x65, 0x9c, 0xc4, 0x6d, 0x83, 0xdf, 0x2e, 0x13, 0xe7, 0xfa, 0x7c, 0xde, 0x2a,
+	0x2b, 0x8d, 0xd1, 0x4f, 0x61, 0x35, 0xe8, 0xb3, 0x24, 0xa1, 0x59, 0x8c, 0x78, 0xc1, 0x4c, 0xdf,
+	0x2a, 0x4d, 0x7f, 0x91, 0xa9, 0xf3, 0xd9, 0x2b, 0xc1, 0x68, 0x88, 0x5e, 0xc2, 0x23, 0x5f, 0x28,
+	0x4f, 0x09, 0xe1, 0xf5, 0x48, 0xaa, 0x3c, 0xc6, 0xbd, 0x54, 0x89, 0x04, 0x2f, 0x1a, 0x92, 0x9d,
+	0xf2, 0x1a, 0x09, 0x75, 0x29, 0xc4, 0x29, 0x49, 0xd5, 0x19, 0xff, 0x5c, 0x89, 0xc4, 0x69, 0xb9,
+	0x1b, 0xfe, 0x98, 0x0c, 0x1d, 0xc3, 0xba, 0xa1, 0xcb, 0xdc, 0x11, 0x37, 0x54, 0xe2, 0x25, 0xc3,
+	0x84, 0xc7, 0x98, 0x0c, 0xe0, 0xb3, 0x1b, 0x2a, 0x9d, 0x96, 0xdb, 0xf1, 0xcb, 0x02, 0xf4, 0x15,
+	0x60, 0xcd, 0xc1, 0xb8, 0xa2, 0xb2, 0x47, 0x25, 0x0d, 0xbd, 0x24, 0x22, 0x01, 0x8d, 0x29, 0x57,
+	0x78, 0xd9, 0x90, 0xbd, 0x5f, 0x25, 0x3b, 0x2b, 0x90, 0x17, 0x43, 0xa0, 0x49, 0x8d, 0x46, 0xcd,
+	0xd0, 0xc5, 0x40, 0x92, 0xb4, 0xef, 0x85, 0x92, 0xbc, 0xe6, 0x18, 0x9a, 0x5c, 0x7c, 0xa1, 0x01,
+	0x27, 0x5a, 0x9f, 0xbb, 0x38, 0x12, 0xa0, 0x57, 0x99, 0x8b, 0xd7, 0x2c, 0xb8, 0xa6, 0xa1, 0x67,
+	0x32, 0x6d, 0xb8, 0x82, 0x78, 0xc5, 0x90, 0x3d, 0xa9, 0x92, 0x7d, 0x6a, 0x90, 0x3a, 0xcd, 0xf2,
+	0xf5, 0x72, 0x5a, 0xae, 0x5e, 0xf8, 0x9a, 0x1c, 0xfd, 0x1a, 0xba, 0x9a, 0x3a, 0x94, 0xcc, 0xf7,
+	0xa3, 0x2a, 0xb9, 0xc4, 0xab, 0x86, 0x7b, 0xbf, 0xca, 0x7d, 0x92, 0x43, 0x0b, 0x16, 0x69, 0x92,
+	0xb7, 0x49, 0x81, 0x3e, 0x86, 0x8d, 0x51, 0xf0, 0x03, 0xce, 0x7e, 0x3b, 0xa0, 0xb8, 0x63, 0x48,
+	0xbb, 0x0d, 0xd1, 0x7f, 0x61, 0x00, 0x4e, 0xcb, 0x5d, 0xf3, 0x2b, 0x12, 0xf4, 0x73, 0xd0, 0x12,
+	0x2f, 0x19, 0xa4, 0x7d, 0xed, 0xa2, 0x50, 0x78, 0xad, 0x96, 0xb3, 0xc7, 0x42, 0x5d, 0x18, 0xfd,
+	0xb1, 0xd0, 0xd1, 0xae, 0xfa, 0xa5, 0x31, 0x0a, 0x61, 0x47, 0x13, 0xf4, 0xf5, 0xc1, 0x34, 0x11,
+	0x86, 0x34, 0x62, 0x3e, 0x95, 0x44, 0xd1, 0x88, 0xde, 0xe2, 0x75, 0xc3, 0xf6, 0xad, 0x2a, 0x9b,
+	0x43, 0x23, 0x13, 0xca, 0x49, 0x19, 0xea, 0xb4, 0x5c, 0xbd, 0x15, 0x8d, 0x3a, 0xf4, 0x15, 0x6c,
+	0x9b, 0xb5, 0x14, 0x03, 0x3f, 0xa2, 0xd9, 0xd7, 0x25, 0x5f, 0x51, 0xbc, 0x61, 0x2c, 0x7c, 0xbb,
+	0x64, 0xe1, 0x48, 0x29, 0x12, 0x5c, 0x53, 0x79, 0x62, 0xd0, 0x97, 0x19, 0x58, 0x73, 0xe6, 0x5b,
+	0x55, 0x93, 0xa3, 0x01, 0x3c, 0x25, 0xf9, 0x24, 0xb3, 0x43, 0x41, 0x24, 0x52, 0x6d, 0xc6, 0x0b,
+	0x69, 0x8f, 0xf2, 0x94, 0x7a, 0x44, 0x52, 0x82, 0xdf, 0x33, 0x96, 0x0e, 0x1a, 0x2c, 0x5d, 0x0a,
+	0xf1, 0x42, 0x4f, 0xb9, 0x14, 0x27, 0xd9, 0x84, 0x23, 0x49, 0x89, 0xd3, 0x72, 0x77, 0xc9, 0x5d,
+	0x00, 0xf4, 0x25, 0xe0, 0xc2, 0x2c, 0xe3, 0x55, 0x63, 0xa8, 0x96, 0x20, 0x43, 0x63, 0x67, 0xbc,
+	0x6a, 0x64, 0x93, 0x34, 0x29, 0xd0, 0xaf, 0x60, 0xbb, 0x14, 0x53, 0xb6, 0x60, 0xd7, 0x94, 0x26,
+	0x54, 0xe2, 0x87, 0x13, 0xb9, 0xf3, 0x45, 0xf9, 0xd4, 0xe0, 0xca, 0xdc, 0x15, 0x05, 0x12, 0xb0,
+	0x6f, 0x9c, 0x0d, 0xc7, 0xd7, 0x4b, 0x9f, 0x23, 0x2f, 0x11, 0x8c, 0x2b, 0xfc, 0xc8, 0x18, 0x79,
+	0x56, 0x32, 0x72, 0x92, 0x4f, 0x19, 0x2d, 0x86, 0x3e, 0x34, 0x17, 0x1a, 0xed, 0xb4, 0xdc, 0x9d,
+	0x70, 0xb2, 0x1a, 0xbd, 0x86, 0xa7, 0x85, 0xc1, 0xb1, 0x95, 0xf2, 0x12, 0x22, 0x15, 0x23, 0x51,
+	0x74, 0x8b, 0x37, 0x8d, 0xc9, 0xef, 0x34, 0x98, 0xac, 0x2c, 0xcd, 0xc5, 0x70, 0x82, 0xd3, 0x72,
+	0xf7, 0xc2, 0x3b, 0x11, 0x7a, 0x8b, 0x26, 0x19, 0xc6, 0x5b, 0xb5, 0x65, 0x6c, 0x34, 0xa7, 0x97,
+	0xb1, 0xd1, 0x8a, 0x3e, 0xc3, 0xd9, 0x8e, 0x8c, 0x8e, 0x0f, 0xde, 0xae, 0x9d, 0xe1, 0x7c, 0x33,
+	0xf2, 0x73, 0xa1, 0xcf, 0xf0, 0x75, 0x45, 0x82, 0x7e, 0x03, 0xdd, 0x01, 0x4f, 0x13, 0x21, 0x15,
+	0xbb, 0xa1, 0x9e, 0x4f, 0xfb, 0xe4, 0x86, 0x09, 0xe9, 0xc5, 0x8c, 0x0b, 0x89, 0xb1, 0xe1, 0x7b,
+	0x5a, 0xe2, 0xfb, 0xa2, 0xc0, 0x1e, 0xe7, 0xd0, 0x97, 0x1a, 0xe9, 0xb4, 0xdc, 0xed, 0x41, 0xb3,
+	0x6a, 0xa2, 0x05, 0xf2, 0xb5, 0x90, 0xb8, 0x3b, 0x8b, 0x05, 0x8d, 0x9c, 0x60, 0x41, 0xab, 0xd0,
+	0x25, 0x6c, 0xc6, 0x83, 0x48, 0xb1, 0x24, 0xa2, 0xde, 0x2d, 0x8d, 0x22, 0xf1, 0xda, 0x0b, 0x88,
+	0x0c, 0x53, 0x6c, 0x1b, 0xf6, 0xbd, 0x12, 0xfb, 0xcb, 0x1c, 0xf7, 0xca, 0xc0, 0x5e, 0x68, 0x94,
+	0xd3, 0x72, 0x1f, 0xc6, 0x75, 0x31, 0x3a, 0x82, 0xb5, 0x82, 0xb5, 0x27, 0x06, 0x51, 0x8a, 0x77,
+	0x6a, 0x05, 0x62, 0x48, 0x77, 0xaa, 0xf5, 0xba, 0x40, 0xc4, 0x65, 0x81, 0xae, 0xc9, 0x26, 0xa9,
+	0x15, 0x8b, 0xa9, 0x18, 0x28, 0xfc, 0xb8, 0x56, 0x93, 0x75, 0x96, 0x5e, 0x66, 0x5a, 0x5d, 0x93,
+	0xaf, 0x47, 0x43, 0x74, 0x0e, 0x0f, 0xb9, 0xf0, 0x12, 0x29, 0xae, 0x24, 0x4d, 0x53, 0x9d, 0x40,
+	0xba, 0xad, 0xc2, 0xbb, 0xb5, 0x92, 0xfc, 0x0b, 0x71, 0x91, 0x83, 0xce, 0xb8, 0x96, 0xea, 0x92,
+	0xcc, 0xc7, 0x64, 0x48, 0xc2, 0xfb, 0x45, 0xfd, 0xf4, 0x7a, 0x84, 0x99, 0xa2, 0x72, 0xeb, 0x29,
+	0x4a, 0x62, 0x4d, 0xdd, 0x23, 0x37, 0x42, 0xe2, 0x3d, 0xc3, 0xfd, 0x61, 0x89, 0xbb, 0x28, 0x98,
+	0xa7, 0x66, 0xca, 0xf1, 0xed, 0x25, 0x25, 0xf1, 0x19, 0x3f, 0xd5, 0x70, 0xa7, 0xe5, 0x3e, 0x4e,
+	0xee, 0xd0, 0xa3, 0x2b, 0x78, 0xdc, 0x64, 0x53, 0x24, 0x89, 0xe0, 0xba, 0x8c, 0x3f, 0xa9, 0x7d,
+	0x7d, 0x6b, 0xe6, 0x3e, 0xcb, 0xb1, 0x4e, 0xcb, 0xed, 0x26, 0x93, 0x94, 0xb6, 0x04, 0x54, 0xef,
+	0xdd, 0xd0, 0x1e, 0x2c, 0xe6, 0x11, 0x62, 0x6b, 0x7f, 0xee, 0x60, 0xed, 0x79, 0xfb, 0x50, 0x7b,
+	0xe7, 0x2e, 0xf8, 0xc6, 0x4b, 0xb4, 0x09, 0x0b, 0xfe, 0xad, 0x29, 0x5b, 0xba, 0x15, 0xec, 0xb8,
+	0x6d, 0xff, 0x56, 0x17, 0xa5, 0x0f, 0x60, 0x29, 0x12, 0x01, 0x51, 0x4c, 0xf0, 0xbc, 0xb9, 0x5b,
+	0x3e, 0x3c, 0xcf, 0x05, 0x6e, 0xa1, 0xb2, 0xff, 0x64, 0x41, 0xdb, 0x74, 0x7a, 0xf7, 0x6b, 0x07,
+	0x1d, 0x42, 0xc7, 0xe4, 0x50, 0x81, 0x9d, 0x1f, 0xc7, 0x9a, 0x1c, 0x1b, 0x8e, 0xec, 0x3f, 0x5a,
+	0x30, 0x6f, 0x7a, 0xba, 0x77, 0xcb, 0xad, 0xbf, 0x59, 0xb0, 0x5a, 0xee, 0x5f, 0xdf, 0x31, 0xf7,
+	0xfe, 0x69, 0xc1, 0x4a, 0xa9, 0x3f, 0x7e, 0xb7, 0xbc, 0x43, 0xcf, 0x60, 0x3d, 0x26, 0xdf, 0x64,
+	0x2d, 0x52, 0x9f, 0xb2, 0xab, 0xbe, 0x32, 0xb7, 0x83, 0x39, 0xb7, 0x13, 0x93, 0x6f, 0xcc, 0x87,
+	0xdd, 0x08, 0xed, 0xdf, 0x59, 0xb0, 0x31, 0xde, 0xa0, 0xdf, 0x73, 0x28, 0x8f, 0xa0, 0x9d, 0x26,
+	0x94, 0x86, 0x26, 0x84, 0x39, 0x37, 0x1b, 0xd8, 0x7f, 0xb6, 0x60, 0xe7, 0x8e, 0x8a, 0x7d, 0xcf,
+	0x3e, 0xd9, 0xb0, 0x14, 0xb2, 0x54, 0x11, 0x1e, 0xd0, 0xdc, 0xad, 0x62, 0x6c, 0xff, 0xdb, 0x82,
+	0x4e, 0xa5, 0xad, 0x47, 0xbb, 0x00, 0xba, 0x3d, 0xcc, 0x0a, 0x87, 0xb9, 0x71, 0x76, 0xdc, 0x65,
+	0x5f, 0xa8, 0xac, 0x16, 0xa0, 0x2e, 0x2c, 0x69, 0xb5, 0x1f, 0x0d, 0x68, 0xee, 0xcc, 0xa2, 0x2f,
+	0xd4, 0x71, 0x34, 0xa0, 0xb3, 0xba, 0xf3, 0x04, 0x56, 0xb2, 0x4e, 0xbb, 0xbc, 0x50, 0x60, 0x44,
+	0x9f, 0x6b, 0x89, 0xf6, 0xc0, 0xa8, 0xbc, 0x90, 0xf5, 0x7a, 0xf9, 0xce, 0x2e, 0x1b, 0xc9, 0x09,
+	0xeb, 0xf5, 0x46, 0xf3, 0x09, 0xbf, 0x8a, 0xa8, 0xb9, 0xd8, 0x0d, 0xe7, 0x1f, 0x69, 0x89, 0xfd,
+	0x1f, 0x0b, 0xd6, 0xaa, 0xcd, 0xfa, 0xd4, 0x05, 0xb6, 0x61, 0xe9, 0x86, 0x89, 0x88, 0x28, 0x21,
+	0xf3, 0xa8, 0x8a, 0x31, 0xda, 0x82, 0x85, 0x1b, 0x16, 0x28, 0x16, 0x9b, 0xa0, 0x3a, 0x6e, 0x3e,
+	0xaa, 0x84, 0x3b, 0x3f, 0x73, 0xb8, 0xed, 0x29, 0xe1, 0x2e, 0x4c, 0x09, 0x77, 0xb1, 0x16, 0xee,
+	0x3f, 0x2c, 0x58, 0x2d, 0x5f, 0x2b, 0xd0, 0x47, 0xb0, 0x96, 0x39, 0xcf, 0xf8, 0x55, 0x43, 0xcc,
+	0x9d, 0x42, 0x79, 0xdf, 0xa1, 0x7f, 0x08, 0xeb, 0xf9, 0x65, 0xa8, 0xc8, 0xbf, 0x2c, 0xfc, 0xb5,
+	0x4c, 0x7c, 0x32, 0xcc, 0xc2, 0xbe, 0x49, 0xc2, 0xd2, 0x6d, 0x77, 0xda, 0x7e, 0x6d, 0xc0, 0x83,
+	0xd1, 0x69, 0xd0, 0x3f, 0x67, 0x2d, 0x53, 0x7f, 0xb0, 0x60, 0xb3, 0xb1, 0xb3, 0x7c, 0x8b, 0x67,
+	0xf0, 0xaf, 0x16, 0xec, 0xdd, 0xdd, 0x5c, 0xbf, 0x45, 0xe7, 0xf4, 0x82, 0x35, 0xde, 0x96, 0xde,
+	0xa2, 0x4f, 0xff, 0xb2, 0xe0, 0x51, 0xd3, 0xf3, 0xc1, 0x3d, 0xbb, 0xf4, 0x11, 0x20, 0xc6, 0x99,
+	0xde, 0x91, 0xac, 0xf4, 0x94, 0xbf, 0x5f, 0x1b, 0xb9, 0x46, 0x7b, 0x93, 0x1d, 0xeb, 0x59, 0x8b,
+	0xd4, 0xef, 0x2d, 0xd8, 0x6c, 0x7c, 0xaf, 0x78, 0xd3, 0x68, 0x9e, 0x40, 0x3b, 0x55, 0x44, 0xaa,
+	0x7a, 0x28, 0x99, 0x1c, 0xed, 0xc0, 0x03, 0xca, 0xc3, 0xfa, 0xc1, 0xd5, 0x52, 0x7b, 0x30, 0xda,
+	0xee, 0xea, 0x3d, 0xf5, 0x7e, 0xdb, 0xc7, 0x5b, 0xe8, 0x4e, 0x7c, 0x6a, 0xb8, 0x67, 0xd3, 0x7f,
+	0xb1, 0x60, 0xf7, 0xce, 0xc7, 0x87, 0x37, 0xb5, 0x5f, 0x4e, 0xe1, 0x07, 0xd5, 0x14, 0x9e, 0xf1,
+	0x0b, 0xaa, 0xbb, 0x57, 0x3c, 0xe9, 0x91, 0xe7, 0xff, 0x70, 0x00, 0x07, 0x72, 0xe4, 0xa1, 0xf6,
+	0x3e, 0x1f, 0xdb, 0x3f, 0x82, 0x87, 0x0d, 0x37, 0xc7, 0x69, 0x0e, 0xd9, 0xdf, 0x83, 0x4e, 0xe5,
+	0x86, 0x38, 0x75, 0xc2, 0x11, 0xac, 0x94, 0x6e, 0x84, 0x53, 0x03, 0x46, 0x30, 0xaf, 0xaf, 0x96,
+	0x26, 0xdc, 0x39, 0xd7, 0xfc, 0xb6, 0x9f, 0xc1, 0xc6, 0xf8, 0x85, 0xb0, 0xc0, 0x59, 0x25, 0x5c,
+	0x0c, 0x8f, 0xef, 0xba, 0xdc, 0x4d, 0xb5, 0xfd, 0x5d, 0x40, 0x92, 0xc6, 0x84, 0x71, 0x5d, 0x74,
+	0x8b, 0x6d, 0xcf, 0x3c, 0x79, 0xaf, 0xd0, 0x14, 0x15, 0xef, 0x6b, 0xe8, 0x4e, 0xbc, 0xdc, 0xfd,
+	0xaf, 0x6d, 0xfd, 0x18, 0xb6, 0x9a, 0xdf, 0x83, 0xd1, 0x6e, 0x91, 0x21, 0xda, 0xce, 0xca, 0xf3,
+	0x05, 0xf3, 0x70, 0x1c, 0xe6, 0x99, 0x62, 0xff, 0x12, 0xb6, 0x27, 0x3c, 0x70, 0x4c, 0x75, 0x71,
+	0x0b, 0x16, 0x24, 0x25, 0xa9, 0xe0, 0x78, 0x6e, 0x7f, 0xee, 0x60, 0xd9, 0xcd, 0x47, 0x13, 0x28,
+	0xcd, 0xb3, 0xc5, 0x9b, 0x52, 0xa6, 0xb0, 0x56, 0x7d, 0xd6, 0x99, 0xca, 0x54, 0x3e, 0x01, 0x73,
+	0xb3, 0x9d, 0x00, 0x7d, 0x50, 0xac, 0xd1, 0x09, 0x38, 0x5e, 0x84, 0xb6, 0xf9, 0xaf, 0xe7, 0xbf,
+	0x01, 0x00, 0x00, 0xff, 0xff, 0xe2, 0xa2, 0xe2, 0xad, 0xfc, 0x19, 0x00, 0x00,
 }
