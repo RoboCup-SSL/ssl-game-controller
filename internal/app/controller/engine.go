@@ -483,7 +483,7 @@ func (e *Engine) processTrigger(t *EventTrigger) (err error) {
 
 func (e *Engine) processGameEvent(event *GameEvent) error {
 
-	if !event.Details.IsSet() {
+	if event.Details.EventType() == GameEventNone {
 		return errors.Errorf("Incomplete game event: %v", event)
 	}
 

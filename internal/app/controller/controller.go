@@ -63,6 +63,12 @@ func (c *GameController) ProcessAutoRefRequests(request refproto.AutoRefToContro
 	c.Mutex.Lock()
 	defer c.Mutex.Unlock()
 	log.Print("Received request from autoRef: ", request)
+
+	details := NewGameEventDetails(*request.GameEvent)
+	gameEventType := details.EventType()
+	event := Event{GameEvent: &GameEvent{Type: gameEventType, Details: details}}
+	c.OnNewEvent(event)
+
 	return nil
 }
 

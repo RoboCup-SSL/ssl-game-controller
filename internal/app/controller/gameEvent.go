@@ -95,12 +95,134 @@ type GameEventDetails struct {
 	PlacementFailedByOpponent      *refproto.GameEvent_PlacementFailedByOpponent      `json:"placementFailedByOpponent,omitempty"`
 }
 
-func (d GameEventDetails) IsSet() bool {
-	v := reflect.ValueOf(d)
-	for i := 0; i < v.NumField(); i++ {
-		if !v.Field(i).IsNil() {
-			return true
-		}
+func (d GameEventDetails) EventType() GameEventType {
+	if d.BallLeftFieldTouchLine != nil {
+		return GameEventBallLeftFieldTouchLine
 	}
-	return false
+	if d.BallLeftFieldGoalLine != nil {
+		return GameEventBallLeftFieldGoalLine
+	}
+	if d.Icing != nil {
+		return GameEventIcing
+	}
+	if d.Goal != nil {
+		return GameEventGoal
+	}
+	if d.IndirectGoal != nil {
+		return GameEventIndirectGoal
+	}
+	if d.ChippedGoal != nil {
+		return GameEventChippedGoal
+	}
+	if d.BotTooFastInStop != nil {
+		return GameEventBotTooFastInStop
+	}
+	if d.BotTippedOver != nil {
+		return GameEventBotTippedOver
+	}
+	if d.BotInterferedPlacement != nil {
+		return GameEventBotInterferedPlacement
+	}
+	if d.BotCrashDrawn != nil {
+		return GameEventBotCrashDrawn
+	}
+	if d.BotKickedBallTooFast != nil {
+		return GameEventBotKickedBallTooFast
+	}
+	if d.BotDribbledBallTooFar != nil {
+		return GameEventBotDribbledBallTooFar
+	}
+	if d.BotCrashUnique != nil {
+		return GameEventBotCrashUnique
+	}
+	if d.BotPushedBot != nil {
+		return GameEventBotPushedBot
+	}
+	if d.BotHeldBallDeliberately != nil {
+		return GameEventBotHeldBallDeliberately
+	}
+	if d.AttackerDoubleTouchedBall != nil {
+		return GameEventAttackerDoubleTouchedBall
+	}
+	if d.AttackerTooCloseToDefenseArea != nil {
+		return GameEventAttackerTooCloseToDefenseArea
+	}
+	if d.AttackerInDefenseArea != nil {
+		return GameEventAttackerInDefenseArea
+	}
+	if d.AttackerTouchedKeeper != nil {
+		return GameEventAttackerTouchedKeeper
+	}
+	if d.DefenderTooCloseToKickPoint != nil {
+		return GameEventDefenderTooCloseToKickPoint
+	}
+	if d.DefenderInDefenseAreaPartially != nil {
+		return GameEventDefenderInDefenseAreaPartially
+	}
+	if d.DefenderInDefenseArea != nil {
+		return GameEventDefenderInDefenseArea
+	}
+	if d.KeeperHeldBall != nil {
+		return GameEventKeeperHeldBall
+	}
+	if d.UnsportiveBehaviorMinor != nil {
+		return GameEventUnsportiveBehaviorMinor
+	}
+	if d.UnsportiveBehaviorMajor != nil {
+		return GameEventUnsportiveBehaviorMajor
+	}
+	if d.MultipleYellowCards != nil {
+		return GameEventMultipleYellowCards
+	}
+	if d.MultipleFouls != nil {
+		return GameEventMultipleFouls
+	}
+	if d.KickTimeout != nil {
+		return GameEventKickTimeout
+	}
+	if d.NoProgressInGame != nil {
+		return GameEventNoProgressInGame
+	}
+	if d.PlacementFailedByTeamInFavor != nil {
+		return GameEventPlacementFailedByTeamInFavor
+	}
+	if d.PlacementFailedByOpponent != nil {
+		return GameEventPlacementFailedByOpponent
+	}
+	return GameEventNone
+}
+
+func NewGameEventDetails(event refproto.GameEvent) (d GameEventDetails) {
+	d.BallLeftFieldTouchLine = event.GetBallLeftFieldTouchLine()
+	d.BallLeftFieldGoalLine = event.GetBallLeftFieldGoalLine()
+	d.Icing = event.GetIcing()
+	d.Goal = event.GetGoal()
+	d.IndirectGoal = event.GetIndirectGoal()
+	d.ChippedGoal = event.GetChippedGoal()
+	d.BotTooFastInStop = event.GetBotTooFastInStop()
+	d.BotTippedOver = event.GetBotTippedOver()
+	d.BotInterferedPlacement = event.GetBotInterferedPlacement()
+	d.BotCrashDrawn = event.GetBotCrashDrawn()
+	d.BotKickedBallTooFast = event.GetBotKickedBallTooFast()
+	d.BotDribbledBallTooFar = event.GetBotDribbledBallTooFar()
+	d.BotCrashUnique = event.GetBotCrashUnique()
+	d.BotPushedBot = event.GetBotPushedBot()
+	d.BotHeldBallDeliberately = event.GetBotHeldBallDeliberately()
+	d.AttackerDoubleTouchedBall = event.GetAttackerDoubleTouchedBall()
+	d.AttackerTooCloseToDefenseArea = event.GetAttackerTooCloseToDefenseArea()
+	d.AttackerInDefenseArea = event.GetAttackerInDefenseArea()
+	d.AttackerTouchedKeeper = event.GetAttackerTouchedKeeper()
+	d.DefenderTooCloseToKickPoint = event.GetDefenderTooCloseToKickPoint()
+	d.DefenderInDefenseAreaPartially = event.GetDefenderInDefenseAreaPartially()
+	d.DefenderInDefenseArea = event.GetDefenderInDefenseArea()
+	d.KeeperHeldBall = event.GetKeeperHeldBall()
+	d.UnsportiveBehaviorMinor = event.GetUnsportiveBehaviorMinor()
+	d.UnsportiveBehaviorMajor = event.GetUnsportiveBehaviorMajor()
+	d.MultipleYellowCards = event.GetMultipleYellowCards()
+	d.MultipleFouls = event.GetMultipleFouls()
+	d.KickTimeout = event.GetKickTimeout()
+	d.NoProgressInGame = event.GetNoProgressInGame()
+	d.PlacementFailedByTeamInFavor = event.GetPlacementFailedByTeamInFavor()
+	d.PlacementFailedByOpponent = event.GetPlacementFailedByOpponent()
+	return
 }
