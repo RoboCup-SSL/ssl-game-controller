@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"flag"
+	"fmt"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
 	"github.com/golang/protobuf/proto"
 	"log"
@@ -13,6 +14,7 @@ import (
 const maxDatagramSize = 8192
 
 var refereeAddress = flag.String("address", "224.5.23.1:10003", "The multicast address of ssl-game-controller, default: 224.5.23.1:10003")
+var fullScreen = flag.Bool("fullScreen", false, "Print the formatted message to the console, clearing the screen during print")
 
 func main() {
 	flag.Parse()
@@ -48,10 +50,17 @@ func main() {
 			continue
 		}
 
-		b, err := json.Marshal(refMsg)
-		if err != nil {
-			log.Fatal(err)
+		if *fullScreen {
+			// clear screen, move cursor to upper left corner
+			fmt.Print("\033[H\033[2J")
+			// print message formatted with line breaks
+			fmt.Print(proto.MarshalTextString(&refMsg))
+		} else {
+			b, err := json.Marshal(refMsg)
+			if err != nil {
+				log.Fatal(err)
+			}
+			log.Print(string(b))
 		}
-		log.Print(string(b))
 	}
 }
