@@ -1,5 +1,10 @@
 <template>
     <div>
+        <p>
+            Choose a game event and issue it in the current match. Most events are usually issued automatically
+            by automatic referees, but for testing purposes and manual corrections, events can be added here, too.
+            Only a subset of available parameters is presented here.
+        </p>
         <b-card no-body class="mb-1">
             <b-card-header header-tag="header" class="p-1" role="tab">
                 <b-btn block href="#" v-b-toggle.accordion-event-ball-left-field variant="primary">Ball left field
