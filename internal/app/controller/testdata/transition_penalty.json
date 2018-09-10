@@ -5,7 +5,7 @@
       "command": "stop",
       "commandForTeam": null,
       "gameEvent": {
-        "type": "none",
+        "type": "",
         "forTeam": "",
         "details": {}
       },
@@ -51,7 +51,7 @@
       "command": "penalty",
       "commandForTeam": "Yellow",
       "gameEvent": {
-        "type": "none",
+        "type": "",
         "forTeam": "",
         "details": {}
       },
@@ -96,7 +96,7 @@
       "command": "normalStart",
       "commandForTeam": null,
       "gameEvent": {
-        "type": "none",
+        "type": "",
         "forTeam": "",
         "details": {}
       },

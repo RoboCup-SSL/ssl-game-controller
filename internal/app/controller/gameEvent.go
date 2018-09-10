@@ -9,7 +9,7 @@ import (
 type GameEventType string
 
 const (
-	GameEventNone                           GameEventType = "none"
+	GameEventNone                           GameEventType = ""
 	GameEventBallLeftFieldTouchLine         GameEventType = "ballLeftFieldTouchLine"
 	GameEventBallLeftFieldGoalLine          GameEventType = "ballLeftFieldGoalLine"
 	GameEventIcing                          GameEventType = "icing"

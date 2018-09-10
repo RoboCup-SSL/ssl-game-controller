@@ -5,7 +5,7 @@
       "command": "halt",
       "commandForTeam": null,
       "gameEvent": {
-        "type": "none",
+        "type": "",
         "forTeam": "",
         "details": {}
       },
@@ -50,7 +50,7 @@
       "command": "stop",
       "commandForTeam": null,
       "gameEvent": {
-        "type": "none",
+        "type": "",
         "forTeam": "",
         "details": {}
       },
@@ -95,7 +95,7 @@
       "command": "normalStart",
       "commandForTeam": null,
       "gameEvent": {
-        "type": "none",
+        "type": "",
         "forTeam": "",
         "details": {}
       },
@@ -140,7 +140,7 @@
       "command": "stop",
       "commandForTeam": null,
       "gameEvent": {
-        "type": "none",
+        "type": "",
         "forTeam": "",
         "details": {}
       },
@@ -185,7 +185,7 @@
       "command": "halt",
       "commandForTeam": null,
       "gameEvent": {
-        "type": "none",
+        "type": "",
         "forTeam": "",
         "details": {}
       },
@@ -230,7 +230,7 @@
       "command": "halt",
       "commandForTeam": null,
       "gameEvent": {
-        "type": "none",
+        "type": "",
         "forTeam": "",
         "details": {}
       },
@@ -275,7 +275,7 @@
       "command": "halt",
       "commandForTeam": null,
       "gameEvent": {
-        "type": "none",
+        "type": "",
         "forTeam": "",
         "details": {}
       },

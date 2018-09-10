@@ -1,6 +1,6 @@
 <template>
     <div>
-        <span v-b-tooltip.hover title="Last game event" v-if="state.gameEvent.type !== 'none'">
+        <span v-b-tooltip.hover title="Last game event" v-if="state.gameEvent.type !== ''">
             {{state.gameEvent.type}}
             |
         </span>
