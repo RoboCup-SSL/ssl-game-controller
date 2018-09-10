@@ -24,5 +24,5 @@ export let convertStringLocation = function (loc) {
     if (loc.y === null || loc.y === "") {
         loc.y = "0";
     }
-    return {x: parseInt(loc.x), y: parseInt(loc.y)}
+    return {x: parseInt(loc.x) / 1000.0, y: parseInt(loc.y) / 1000.0}
 };
