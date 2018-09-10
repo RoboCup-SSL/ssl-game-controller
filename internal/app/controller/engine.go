@@ -74,45 +74,53 @@ func (e *Engine) UndoLastAction() {
 
 func (e *Engine) Continue() error {
 	switch e.State.GameEvent.Type {
-	case GameEventBallLeftFieldTouchLine,
+	case
+		GameEventBallLeftFieldTouchLine,
 		GameEventIcing,
 		GameEventBotKickedBallTooFast,
 		GameEventBotDribbledBallTooFar,
-		GameEventBotTippedOver,
 		GameEventAttackerDoubleTouchedBall,
 		GameEventAttackerTooCloseToDefenseArea,
 		GameEventAttackerInDefenseArea,
 		GameEventAttackerTouchedKeeper,
-		GameEventDefenderInDefenseAreaPartially:
+		GameEventDefenderInDefenseAreaPartially,
+		GameEventKickTimeout,
+		GameEventKeeperHeldBall:
 		e.SendCommand(CommandIndirect, e.State.GameEvent.ByTeam().Opposite())
-	case GameEventBallLeftFieldGoalLine,
+	case
+		GameEventBallLeftFieldGoalLine,
 		GameEventIndirectGoal,
 		GameEventChippedGoal,
+		GameEventBotTippedOver,
 		GameEventBotCrashUnique,
 		GameEventBotPushedBot,
-		GameEventBotHeldBallDeliberately,
-		GameEventKeeperHeldBall:
+		GameEventBotHeldBallDeliberately:
 		e.SendCommand(CommandDirect, e.State.GameEvent.ByTeam().Opposite())
-	case GameEventGoal:
+	case
+		GameEventGoal:
 		e.SendCommand(CommandKickoff, e.State.GameEvent.ByTeam().Opposite())
-	case GameEventBotCrashDrawn,
-		GameEventKickTimeout,
+	case
+		GameEventBotCrashDrawn,
 		GameEventNoProgressInGame:
 		e.SendCommand(CommandForceStart, TeamUnknown)
-	case GameEventDefenderInDefenseArea,
+	case
+		GameEventDefenderInDefenseArea,
 		GameEventMultipleYellowCards:
 		e.SendCommand(CommandPenalty, e.State.GameEvent.ByTeam().Opposite())
-	case GameEventBotInterferedPlacement,
+	case
+		GameEventBotInterferedPlacement,
 		GameEventDefenderTooCloseToKickPoint:
 		if cmd, err := e.LastGameStartCommand(); err != nil {
 			log.Print("Warn: ", err)
 		} else {
 			e.SendCommand(cmd, e.State.GameEvent.ByTeam().Opposite())
 		}
-	case GameEventPlacementFailedByTeamInFavor:
+	case
+		GameEventPlacementFailedByTeamInFavor:
 		// TODO placement pos
 		e.SendCommand(CommandBallPlacement, e.State.GameEvent.ByTeam().Opposite())
-	case GameEventBotTooFastInStop,
+	case
+		GameEventBotTooFastInStop,
 		GameEventUnsportiveBehaviorMinor,
 		GameEventUnsportiveBehaviorMajor,
 		GameEventMultipleFouls,
