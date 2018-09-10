@@ -224,9 +224,8 @@ type TeamInfo struct {
 	TimeoutsLeft          int             `json:"timeoutsLeft"`
 	TimeoutTimeLeft       time.Duration   `json:"timeoutTimeLeft"`
 	OnPositiveHalf        bool            `json:"onPositiveHalf"`
-	BotCollisions         int             `json:"botCollisions"`
+	FoulCounter           int             `json:"foulCounter"`
 	BallPlacementFailures int             `json:"ballPlacementFailures"`
-	BotSpeedInfringements int             `json:"botSpeedInfringements"`
 	CanPlaceBall          bool            `json:"canPlaceBall"`
 }
 
@@ -300,9 +299,8 @@ func newTeamInfo() (t TeamInfo) {
 	t.TimeoutsLeft = 0
 	t.TimeoutTimeLeft = 0
 	t.OnPositiveHalf = true
-	t.BotCollisions = 0
+	t.FoulCounter = 0
 	t.BallPlacementFailures = 0
-	t.BotSpeedInfringements = 0
 	return
 }
 

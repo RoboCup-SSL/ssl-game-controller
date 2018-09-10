@@ -2,25 +2,17 @@
     <div>
         <div>
             <EditableLabelNumber
-                    :label="'Bot collisions: '"
-                    :value="teamState.botCollisions"
-                    :callback="updateBotCollisions"
+                    :label="'Foul Counter: '"
+                    :value="teamState.foulCounter"
+                    :callback="updateFoulCounter"
                     :min="0"
                     :max="99"/>
         </div>
         <div>
             <EditableLabelNumber
-                    :label="'Ball-placement failures: '"
+                    :label="'Ball Placement failures: '"
                     :value="teamState.ballPlacementFailures"
                     :callback="updateBallPlacementFailures"
-                    :min="0"
-                    :max="99"/>
-        </div>
-        <div>
-            <EditableLabelNumber
-                    :label="'Bot-speed infringements: '"
-                    :value="teamState.botSpeedInfringements"
-                    :callback="updateBotSpeedInfringements"
                     :min="0"
                     :max="99"/>
         </div>
@@ -42,11 +34,11 @@
             }
         },
         methods: {
-            updateBotCollisions: function (v) {
+            updateFoulCounter: function (v) {
                 this.$socket.sendObj({
                     'modify': {
                         'forTeam': this.teamColor,
-                        'botCollisions': Number(v)
+                        'foulCounter': Number(v)
                     }
                 })
             },
@@ -58,14 +50,6 @@
                     }
                 })
             },
-            updateBotSpeedInfringements: function (v) {
-                this.$socket.sendObj({
-                    'modify': {
-                        'forTeam': this.teamColor,
-                        'botSpeedInfringements': Number(v)
-                    }
-                })
-            }
         }
     }
 </script>

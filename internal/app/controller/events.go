@@ -101,9 +101,8 @@ type EventModifyValue struct {
 	TimeoutTimeLeft       *string              `json:"timeoutTimeLeft"`
 	OnPositiveHalf        *bool                `json:"onPositiveHalf"`
 	TeamName              *string              `json:"teamName"`
-	BotCollisions         *int                 `json:"botCollisions"`
+	FoulCounter           *int                 `json:"foulCounter"`
 	BallPlacementFailures *int                 `json:"ballPlacementFailures"`
-	BotSpeedInfringements *int                 `json:"botSpeedInfringements"`
 	CanPlaceBall          *bool                `json:"canPlaceBall"`
 	Division              *Division            `json:"division"`
 }
@@ -137,14 +136,11 @@ func (m EventModifyValue) String() string {
 	if m.TeamName != nil {
 		return fmt.Sprintf("%v TeamName=%v", str, *m.TeamName)
 	}
-	if m.BotCollisions != nil {
-		return fmt.Sprintf("%v BotCollisions=%v", str, *m.BotCollisions)
+	if m.FoulCounter != nil {
+		return fmt.Sprintf("%v FoulCounter=%v", str, *m.FoulCounter)
 	}
 	if m.BallPlacementFailures != nil {
 		return fmt.Sprintf("%v BallPlacementFailures=%v", str, *m.BallPlacementFailures)
-	}
-	if m.BotSpeedInfringements != nil {
-		return fmt.Sprintf("%v BotSpeedInfringements=%v", str, *m.BotSpeedInfringements)
 	}
 	if m.CanPlaceBall != nil {
 		return fmt.Sprintf("%v CanPlaceBall=%v", str, *m.CanPlaceBall)

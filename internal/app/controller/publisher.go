@@ -62,9 +62,8 @@ func initTeamInfo(t *refproto.Referee_TeamInfo) {
 	t.Timeouts = new(uint32)
 	t.TimeoutTime = new(uint32)
 	t.Goalie = new(uint32)
-	t.BotCollisions = new(uint32)
+	t.FoulCounter = new(uint32)
 	t.BallPlacementFailures = new(uint32)
-	t.BotSpeedInfringements = new(uint32)
 	t.CanPlaceBall = new(bool)
 }
 
@@ -234,9 +233,8 @@ func updateTeam(team *refproto.Referee_TeamInfo, state *TeamInfo) {
 	*team.Timeouts = uint32(state.TimeoutsLeft)
 	*team.TimeoutTime = uint32(state.TimeoutTimeLeft.Nanoseconds() / 1000)
 	*team.Goalie = uint32(state.Goalie)
-	*team.BotCollisions = uint32(state.BotCollisions)
+	*team.FoulCounter = uint32(state.FoulCounter)
 	*team.BallPlacementFailures = uint32(state.BallPlacementFailures)
-	*team.BotSpeedInfringements = uint32(state.BotSpeedInfringements)
 	*team.CanPlaceBall = state.CanPlaceBall
 }
 

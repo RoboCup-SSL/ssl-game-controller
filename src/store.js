@@ -13,9 +13,8 @@ export class TeamState {
     timeoutsLeft = 4;
     timeoutTimeLeft = 300;
     onPositiveHalf = true;
-    botCollisions = 0;
+    foulCounter = 0;
     ballPlacementFailures = 0;
-    botSpeedInfringements = 0;
     canPlaceBall = true;
 }
 

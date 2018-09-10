@@ -343,12 +343,10 @@ func (e *Engine) processModify(m *EventModifyValue) error {
 	} else if m.OnPositiveHalf != nil {
 		teamState.OnPositiveHalf = *m.OnPositiveHalf
 		e.State.TeamState[m.ForTeam.Opposite()].OnPositiveHalf = !*m.OnPositiveHalf
-	} else if m.BotCollisions != nil {
-		teamState.BotCollisions = *m.BotCollisions
+	} else if m.FoulCounter != nil {
+		teamState.FoulCounter = *m.FoulCounter
 	} else if m.BallPlacementFailures != nil {
 		teamState.BallPlacementFailures = *m.BallPlacementFailures
-	} else if m.BotSpeedInfringements != nil {
-		teamState.BotSpeedInfringements = *m.BotSpeedInfringements
 	} else if m.YellowCardTime != nil {
 		cardId := m.YellowCardTime.CardID
 		if cardId < 0 || cardId >= len(teamState.YellowCardTimes) {
