@@ -437,7 +437,7 @@ func (e *Engine) processCard(card *EventCard) (err error) {
 	}
 	teamState := e.State.TeamState[card.ForTeam]
 	if card.Operation == CardOperationAdd {
-		err = addCard(card, teamState, e.config.YellowCardDuration)
+		addCard(card, teamState, e.config.YellowCardDuration)
 	} else if card.Operation == CardOperationRevoke {
 		err = revokeCard(card, teamState)
 	} else if card.Operation == CardOperationModify {
@@ -464,7 +464,7 @@ func modifyCard(card *EventCard, teamState *TeamInfo) error {
 	return nil
 }
 
-func addCard(card *EventCard, teamState *TeamInfo, duration time.Duration) error {
+func addCard(card *EventCard, teamState *TeamInfo, duration time.Duration) {
 	if card.Type == CardTypeYellow {
 		log.Printf("Add yellow card for team %v", card.ForTeam)
 		teamState.YellowCards++
@@ -473,7 +473,6 @@ func addCard(card *EventCard, teamState *TeamInfo, duration time.Duration) error
 		log.Printf("Add red card for team %v", card.ForTeam)
 		teamState.RedCards++
 	}
-	return nil
 }
 
 func (e *Engine) processTrigger(t *EventTrigger) (err error) {
@@ -506,6 +505,38 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 
 	if e.State.GameState() != GameStateStopped && e.State.GameState() != GameStateHalted {
 		e.SendCommand(CommandStop, "")
+	}
+
+	switch event.Type {
+	case GameEventBotCrashDrawn,
+		GameEventBotInterferedPlacement,
+		GameEventBotTippedOver,
+		GameEventBotCrashUnique,
+		GameEventBotPushedBot,
+		GameEventBotHeldBallDeliberately,
+		GameEventDefenderTooCloseToKickPoint,
+		GameEventBotTooFastInStop:
+		team := event.ByTeam()
+		if team.Unknown() {
+			e.State.TeamState[TeamYellow].FoulCounter++
+			e.State.TeamState[TeamBlue].FoulCounter++
+		} else {
+			e.State.TeamState[team].FoulCounter++
+		}
+	case GameEventUnsportiveBehaviorMinor,
+		GameEventMultipleFouls,
+		GameEventDefenderInDefenseAreaPartially:
+		team := event.ByTeam()
+		if team.Unknown() {
+			return errors.New("Missing team in game event")
+		}
+		addCard(&EventCard{Type: CardTypeYellow, ForTeam: team, Operation: CardOperationAdd}, e.State.TeamState[team], e.config.YellowCardDuration)
+	case GameEventUnsportiveBehaviorMajor:
+		team := event.ByTeam()
+		if team.Unknown() {
+			return errors.New("Missing team in game event")
+		}
+		addCard(&EventCard{Type: CardTypeRed, ForTeam: team, Operation: CardOperationAdd}, e.State.TeamState[team], 0)
 	}
 
 	switch event.Type {
