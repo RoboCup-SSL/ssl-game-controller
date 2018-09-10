@@ -17,28 +17,32 @@ message GameEvent {
         Goal goal = 4;
         IndirectGoal indirect_goal = 5;
         ChippedGoal chipped_goal = 6;
-        BotTooFastInStop bot_too_fast_in_stop = 7;
-        BotTippedOver bot_tipped_over = 8;
-        BotInterferedPlacement bot_interfered_placement = 9;
-        BotCrashDrawn bot_crash_drawn = 10;
-        BotKickedBallTooFast bot_kicked_ball_too_fast = 11;
-        BotDribbledBallTooFar bot_dribbled_ball_too_far = 12;
-        BotCrashUnique bot_crash_unique = 13;
-        BotPushedBot bot_pushed_bot = 14;
-        BotHeldBallDeliberately bot_held_ball_deliberately = 15;
-        AttackerDoubleTouchedBall attacker_double_touched_ball = 16;
-        AttackerTooCloseToDefenseArea attacker_too_close_to_defense_area = 17;
-        AttackerInDefenseArea attacker_in_defense_area = 18;
-        AttackerTouchedKeeper attacker_touched_keeper = 19;
-        DefenderTooCloseToKickPoint defender_too_close_to_kick_point = 20;
-        DefenderInDefenseAreaPartially defender_in_defense_area_partially = 21;
-        DefenderInDefenseArea defender_in_defense_area = 22;
-        KeeperHeldBall keeper_held_ball = 23;
-        UnsportiveBehaviorMinor unsportive_behavior_minor = 24;
-        UnsportiveBehaviorMajor unsportive_behavior_major = 25;
-        MultipleYellowCards multiple_yellow_cards = 26;
+
+        BotKickedBallTooFast bot_kicked_ball_too_fast = 7;
+        BotDribbledBallTooFar bot_dribbled_ball_too_far = 8;
+        AttackerDoubleTouchedBall attacker_double_touched_ball = 9;
+        AttackerTooCloseToDefenseArea attacker_too_close_to_defense_area = 10;
+        AttackerInDefenseArea attacker_in_defense_area = 11;
+        AttackerTouchedKeeper attacker_touched_keeper = 12;
+        DefenderInDefenseAreaPartially defender_in_defense_area_partially = 13;
+        KickTimeout kick_timeout = 14;
+        KeeperHeldBall keeper_held_ball = 15;
+
+        BotCrashDrawn bot_crash_drawn = 16;
+        BotInterferedPlacement bot_interfered_placement = 17;
+        BotTippedOver bot_tipped_over = 18;
+        BotCrashUnique bot_crash_unique = 19;
+        BotPushedBot bot_pushed_bot = 20;
+        BotHeldBallDeliberately bot_held_ball_deliberately = 21;
+        DefenderTooCloseToKickPoint defender_too_close_to_kick_point = 22;
+        DefenderInDefenseArea defender_in_defense_area = 23;
+        BotTooFastInStop bot_too_fast_in_stop = 24;
+
+        UnsportiveBehaviorMinor unsportive_behavior_minor = 25;
+        UnsportiveBehaviorMajor unsportive_behavior_major = 26;
         MultipleFouls multiple_fouls = 27;
-        KickTimeout kick_timeout = 28;
+        MultipleYellowCards multiple_yellow_cards = 28;
+
         NoProgressInGame no_progress_in_game = 29;
         PlacementFailedByTeamInFavor placement_failed_by_team_in_favor = 30;
         PlacementFailedByOpponent placement_failed_by_opponent = 31;
@@ -260,10 +264,10 @@ message GameEvent {
         required Team by_team = 1;
         // the bot that is too close to the defense area
         optional uint32 by_bot = 2;
-        // the distance of the bot to the penalty area
-        optional float distance = 3;
         // the location of the bot
-        optional Location location = 4;
+        optional Location location = 3;
+        // the distance of the bot to the penalty area
+        optional float distance = 4;
     }
     // a bot held the ball for too long
     message BotHeldBallDeliberately {
@@ -275,6 +279,15 @@ message GameEvent {
         optional Location location = 3;
         // the duration [s] that the bot hold the ball
         optional float duration = 4;
+    }
+    // a bot interfered the ball placement of the other team
+    message BotInterferedPlacement {
+        // the team that found guilty
+        required Team by_team = 1;
+        // the bot that interfered the placement
+        optional uint32 by_bot = 2;
+        // the location of the bot
+        optional Location location = 3;
     }
     // a team collected multiple yellow cards, which results in a penalty kick
     message MultipleYellowCards {
@@ -311,11 +324,6 @@ message GameEvent {
         required Team by_team = 1;
         // the remaining distance from ball to placement position
         optional float remaining_distance = 2;
-    }
-    // a bot interfered the ball placement of the other team
-    message BotInterferedPlacement {
-        // the bot that interfered the placement
-        required BotId by_bot = 1;
     }
     // a team was found guilty for minor unsportive behavior
     message UnsportiveBehaviorMinor {
