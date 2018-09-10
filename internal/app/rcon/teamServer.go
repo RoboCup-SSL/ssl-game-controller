@@ -153,7 +153,7 @@ func (s *TeamServer) SendRequest(teamName string, request refproto.ControllerToT
 	if client, ok := s.Clients[teamName]; ok {
 		return client.SendRequest(request)
 	}
-	return errors.New("Client not connected")
+	return errors.Errorf("Client '%v' not connected", teamName)
 }
 
 func (c *Client) SendRequest(request refproto.ControllerToTeamRequest) error {

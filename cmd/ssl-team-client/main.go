@@ -43,6 +43,10 @@ func main() {
 
 	client.register()
 	client.sendDesiredKeeper(3)
+
+	for {
+		client.ReplyToChoices()
+	}
 }
 
 func loadPrivateKey() {
@@ -115,6 +119,19 @@ func (c *Client) sendDesiredKeeper(id int32) {
 	message := refproto.TeamToControllerRequest_DesiredKeeper{DesiredKeeper: id}
 	request := refproto.TeamToControllerRequest{Request: &message}
 	c.sendRequest(&request)
+}
+
+func (c *Client) ReplyToChoices() {
+	request := refproto.ControllerToTeamRequest{}
+	if err := sslconn.ReceiveMessage(c.conn, &request); err != nil {
+		log.Fatal("Failed receiving controller request: ", err)
+	}
+	if request.GetAdvantageChoice() != nil {
+		log.Printf("Received choice for: %v", *request.GetAdvantageChoice().Foul)
+	}
+	reply := refproto.TeamToControllerRequest_AdvantageResponse_{AdvantageResponse: refproto.TeamToControllerRequest_CONTINUE}
+	response := refproto.TeamToControllerRequest{Request: &reply}
+	c.sendRequest(&response)
 }
 
 func (c *Client) sendRequest(request *refproto.TeamToControllerRequest) {

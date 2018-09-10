@@ -48,8 +48,10 @@ message ControllerToTeamRequest {
         enum Foul {
             // default value when not set
             UNKNOWN = 0;
-            // an opponent has crashed with one of the teams bots
+            // an opponent bot has crashed with one of your bots
             COLLISION = 1;
+            // an opponent bot has pushed one of your bots
+            PUSHING = 2;
         }
     }
 }

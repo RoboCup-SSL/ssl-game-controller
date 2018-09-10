@@ -84,13 +84,12 @@ func (c *GameController) ProcessTeamRequests(teamName string, request refproto.T
 		responseTime := c.Engine.TimeProvider().Sub(c.outstandingTeamChoice.IssueTime)
 		if x.AdvantageResponse == refproto.TeamToControllerRequest_CONTINUE {
 			log.Printf("Team %v decided to continue the game within %v", c.outstandingTeamChoice.Team, responseTime)
-			c.outstandingTeamChoice = nil
 		} else {
 			log.Printf("Team %v decided to stop the game within %v", c.outstandingTeamChoice.Team, responseTime)
 			c.OnNewEvent(c.outstandingTeamChoice.Event)
-			c.outstandingTeamChoice = nil
-			return nil
 		}
+		c.outstandingTeamChoice = nil
+		return nil
 	}
 
 	if c.Engine.State.GameState() != GameStateStopped {
@@ -153,16 +152,18 @@ func (c *GameController) publishNetwork() {
 func (c *GameController) OnNewEvent(event Event) {
 	if event.GameEvent != nil {
 		var byTeamProto refproto.Team
+		var choiceType refproto.ControllerToTeamRequest_AdvantageChoice_Foul
 		if event.GameEvent.Details.BotCrashUnique != nil {
 			byTeamProto = *event.GameEvent.Details.BotCrashUnique.ByTeam
+			choiceType = refproto.ControllerToTeamRequest_AdvantageChoice_COLLISION
 		} else if event.GameEvent.Details.BotPushedBot != nil {
 			byTeamProto = *event.GameEvent.Details.BotPushedBot.ByTeam
+			choiceType = refproto.ControllerToTeamRequest_AdvantageChoice_PUSHING
 		}
 
-		byTeam := NewTeam(byTeamProto)
-		if byTeam != "" {
-			teamName := c.Engine.State.TeamState[byTeam].Name
-			choiceType := refproto.ControllerToTeamRequest_AdvantageChoice_COLLISION
+		forTeam := NewTeam(byTeamProto).Opposite()
+		if forTeam != "" {
+			teamName := c.Engine.State.TeamState[forTeam].Name
 			choice := refproto.ControllerToTeamRequest_AdvantageChoice{Foul: &choiceType}
 			requestPayload := refproto.ControllerToTeamRequest_AdvantageChoice_{AdvantageChoice: &choice}
 			request := refproto.ControllerToTeamRequest{Request: &requestPayload}
@@ -170,7 +171,7 @@ func (c *GameController) OnNewEvent(event Event) {
 			if err != nil {
 				log.Print("Failed to ask for advantage choice: ", err)
 			} else {
-				c.outstandingTeamChoice = &TeamChoice{Team: byTeam, Event: event, IssueTime: c.Engine.TimeProvider()}
+				c.outstandingTeamChoice = &TeamChoice{Team: forTeam, Event: event, IssueTime: c.Engine.TimeProvider()}
 				go c.timeoutTeamChoice()
 				return
 			}
