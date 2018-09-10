@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
 	"reflect"
 )
@@ -190,6 +191,181 @@ func (d GameEventDetails) EventType() GameEventType {
 		return GameEventPlacementFailedByOpponent
 	}
 	return GameEventNone
+}
+
+func (d GameEventDetails) Description() string {
+	if d.BallLeftFieldTouchLine != nil {
+		if d.BallLeftFieldTouchLine.ByBot != nil {
+			return fmt.Sprintf("By bot %v", *d.BallLeftFieldTouchLine.ByBot)
+		}
+		return ""
+	}
+	if d.BallLeftFieldGoalLine != nil {
+		if d.BallLeftFieldGoalLine.ByBot != nil {
+			return fmt.Sprintf("By bot %v", *d.BallLeftFieldGoalLine.ByBot)
+		}
+		return ""
+	}
+	if d.Icing != nil {
+		if d.Icing.ByBot != nil {
+			return fmt.Sprintf("By bot %v", *d.Icing.ByBot)
+		}
+		return ""
+	}
+	if d.Goal != nil {
+		if d.Goal.ByBot != nil {
+			return fmt.Sprintf("By bot %v", *d.Goal.ByBot)
+		}
+		return ""
+	}
+	if d.IndirectGoal != nil {
+		if d.IndirectGoal.ByBot != nil {
+			return fmt.Sprintf("By bot %v", *d.IndirectGoal.ByBot)
+		}
+		return ""
+	}
+	if d.ChippedGoal != nil {
+		if d.ChippedGoal.ByBot != nil {
+			if d.ChippedGoal.MaxBallHeight != nil {
+				return fmt.Sprintf("By bot %v with %v m height", *d.ChippedGoal.ByBot, *d.ChippedGoal.MaxBallHeight)
+			}
+			return fmt.Sprintf("By bot %v", *d.ChippedGoal.ByBot)
+		}
+		return ""
+	}
+	if d.BotTooFastInStop != nil {
+		if d.BotTooFastInStop.ByBot != nil {
+			if d.BotTooFastInStop.Speed != nil {
+				return fmt.Sprintf("By bot %v with %v m/s", *d.BotTooFastInStop.ByBot, *d.BotTooFastInStop.Speed)
+			}
+			return fmt.Sprintf("By bot %v", *d.BotTooFastInStop.ByBot)
+		}
+		return ""
+	}
+	if d.BotTippedOver != nil {
+		if d.BotTippedOver.ByBot != nil {
+			return fmt.Sprintf("By bot %v", *d.BotTippedOver.ByBot)
+		}
+		return ""
+	}
+	if d.BotInterferedPlacement != nil {
+		if d.BotInterferedPlacement.ByBot != nil {
+			return fmt.Sprintf("By bot %v", *d.BotInterferedPlacement.ByBot)
+		}
+		return ""
+	}
+	if d.BotCrashDrawn != nil {
+		if d.BotCrashDrawn.BotBlue != nil && d.BotCrashDrawn.BotYellow != nil {
+			return fmt.Sprintf("By bot %v B and %v Y", *d.BotCrashDrawn.BotBlue, *d.BotCrashDrawn.BotYellow)
+		}
+		return ""
+	}
+	if d.BotKickedBallTooFast != nil {
+		if d.BotKickedBallTooFast.ByBot != nil {
+			return fmt.Sprintf("By bot %v", *d.BotKickedBallTooFast.ByBot)
+		}
+		return ""
+	}
+	if d.BotDribbledBallTooFar != nil {
+		if d.BotDribbledBallTooFar.ByBot != nil {
+			return fmt.Sprintf("By bot %v", *d.BotDribbledBallTooFar.ByBot)
+		}
+		return ""
+	}
+	if d.BotCrashUnique != nil {
+		if d.BotCrashUnique.Violator != nil && d.BotCrashUnique.Victim != nil {
+			return fmt.Sprintf("Bot %v by %v", *d.BotCrashUnique.Victim, *d.BotCrashUnique.Violator)
+		}
+		return ""
+	}
+	if d.BotPushedBot != nil {
+		if d.BotPushedBot.Violator != nil && d.BotPushedBot.Victim != nil {
+			return fmt.Sprintf("Bot %v by %v", *d.BotPushedBot.Victim, *d.BotPushedBot.Violator)
+		}
+		return ""
+	}
+	if d.BotHeldBallDeliberately != nil {
+		if d.BotHeldBallDeliberately.ByBot != nil {
+			return fmt.Sprintf("By bot %v", *d.BotHeldBallDeliberately.ByBot)
+		}
+		return ""
+	}
+	if d.AttackerDoubleTouchedBall != nil {
+		if d.AttackerDoubleTouchedBall.ByBot != nil {
+			return fmt.Sprintf("By bot %v", *d.AttackerDoubleTouchedBall.ByBot)
+		}
+		return ""
+	}
+	if d.AttackerTooCloseToDefenseArea != nil {
+		if d.AttackerTooCloseToDefenseArea.ByBot != nil {
+			return fmt.Sprintf("By bot %v", *d.AttackerTooCloseToDefenseArea.ByBot)
+		}
+		return ""
+	}
+	if d.AttackerInDefenseArea != nil {
+		if d.AttackerInDefenseArea.ByBot != nil {
+			return fmt.Sprintf("By bot %v", *d.AttackerInDefenseArea.ByBot)
+		}
+		return ""
+	}
+	if d.AttackerTouchedKeeper != nil {
+		if d.AttackerTouchedKeeper.ByBot != nil {
+			return fmt.Sprintf("By bot %v", *d.AttackerTouchedKeeper.ByBot)
+		}
+		return ""
+	}
+	if d.DefenderTooCloseToKickPoint != nil {
+		if d.DefenderTooCloseToKickPoint.ByBot != nil {
+			return fmt.Sprintf("By bot %v", *d.DefenderTooCloseToKickPoint.ByBot)
+		}
+		return ""
+	}
+	if d.DefenderInDefenseAreaPartially != nil {
+		if d.DefenderInDefenseAreaPartially.ByBot != nil {
+			return fmt.Sprintf("By bot %v", *d.DefenderInDefenseAreaPartially.ByBot)
+		}
+		return ""
+	}
+	if d.DefenderInDefenseArea != nil {
+		if d.DefenderInDefenseArea.ByBot != nil {
+			return fmt.Sprintf("By bot %v", *d.DefenderInDefenseArea.ByBot)
+		}
+		return ""
+	}
+	if d.KeeperHeldBall != nil {
+		return ""
+	}
+	if d.UnsportiveBehaviorMinor != nil {
+		if d.UnsportiveBehaviorMinor.Reason != nil {
+			return fmt.Sprintf("%v", *d.UnsportiveBehaviorMinor.Reason)
+		}
+		return ""
+	}
+	if d.UnsportiveBehaviorMajor != nil {
+		if d.UnsportiveBehaviorMajor.Reason != nil {
+			return fmt.Sprintf("%v", *d.UnsportiveBehaviorMajor.Reason)
+		}
+		return ""
+	}
+	if d.MultipleYellowCards != nil {
+		return ""
+	}
+	if d.MultipleFouls != nil {
+		return ""
+	}
+	if d.KickTimeout != nil {
+		return ""
+	}
+	if d.NoProgressInGame != nil {
+		return ""
+	}
+	if d.PlacementFailedByTeamInFavor != nil {
+		return ""
+	}
+	if d.PlacementFailedByOpponent != nil {
+		return ""
+	}
+	return ""
 }
 
 func NewGameEventDetails(event refproto.GameEvent) (d GameEventDetails) {

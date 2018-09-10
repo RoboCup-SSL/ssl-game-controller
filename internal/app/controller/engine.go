@@ -156,11 +156,12 @@ func (e *Engine) appendHistory() {
 
 func (e *Engine) LogGameEvent() {
 	gameEvent := RefereeEvent{
-		Timestamp: e.TimeProvider(),
-		StageTime: e.State.StageTimeElapsed,
-		Type:      RefereeEventGameEvent,
-		Name:      string(e.State.GameEvent.Type),
-		Team:      e.State.GameEvent.ByTeam(),
+		Timestamp:   e.TimeProvider(),
+		StageTime:   e.State.StageTimeElapsed,
+		Type:        RefereeEventGameEvent,
+		Name:        string(e.State.GameEvent.Type),
+		Team:        e.State.GameEvent.ByTeam(),
+		Description: e.State.GameEvent.Details.Description(),
 	}
 	e.RefereeEvents = append(e.RefereeEvents, gameEvent)
 }
