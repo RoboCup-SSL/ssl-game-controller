@@ -110,7 +110,7 @@ func (x *Referee_Stage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 func (Referee_Stage) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_referee_ca6c91b7b2d8780a, []int{0, 0}
+	return fileDescriptor_f003bb08adc02ebb, []int{0, 0}
 }
 
 // These are the "fine" states of play on the field.
@@ -218,7 +218,7 @@ func (x *Referee_Command) UnmarshalJSON(data []byte) error {
 	return nil
 }
 func (Referee_Command) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_referee_ca6c91b7b2d8780a, []int{0, 1}
+	return fileDescriptor_f003bb08adc02ebb, []int{0, 1}
 }
 
 // Each UDP packet contains one of these messages.
@@ -274,7 +274,7 @@ func (m *Referee) Reset()         { *m = Referee{} }
 func (m *Referee) String() string { return proto.CompactTextString(m) }
 func (*Referee) ProtoMessage()    {}
 func (*Referee) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_referee_ca6c91b7b2d8780a, []int{0}
+	return fileDescriptor_f003bb08adc02ebb, []int{0}
 }
 func (m *Referee) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Referee.Unmarshal(m, b)
@@ -429,7 +429,7 @@ func (m *Referee_TeamInfo) Reset()         { *m = Referee_TeamInfo{} }
 func (m *Referee_TeamInfo) String() string { return proto.CompactTextString(m) }
 func (*Referee_TeamInfo) ProtoMessage()    {}
 func (*Referee_TeamInfo) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_referee_ca6c91b7b2d8780a, []int{0, 0}
+	return fileDescriptor_f003bb08adc02ebb, []int{0, 0}
 }
 func (m *Referee_TeamInfo) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Referee_TeamInfo.Unmarshal(m, b)
@@ -542,7 +542,7 @@ func (m *Referee_Point) Reset()         { *m = Referee_Point{} }
 func (m *Referee_Point) String() string { return proto.CompactTextString(m) }
 func (*Referee_Point) ProtoMessage()    {}
 func (*Referee_Point) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_referee_ca6c91b7b2d8780a, []int{0, 1}
+	return fileDescriptor_f003bb08adc02ebb, []int{0, 1}
 }
 func (m *Referee_Point) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Referee_Point.Unmarshal(m, b)
@@ -592,7 +592,7 @@ func (m *ProposedGameEvent) Reset()         { *m = ProposedGameEvent{} }
 func (m *ProposedGameEvent) String() string { return proto.CompactTextString(m) }
 func (*ProposedGameEvent) ProtoMessage()    {}
 func (*ProposedGameEvent) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_referee_ca6c91b7b2d8780a, []int{1}
+	return fileDescriptor_f003bb08adc02ebb, []int{1}
 }
 func (m *ProposedGameEvent) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ProposedGameEvent.Unmarshal(m, b)
@@ -642,9 +642,9 @@ func init() {
 	proto.RegisterEnum("Referee_Command", Referee_Command_name, Referee_Command_value)
 }
 
-func init() { proto.RegisterFile("ssl_referee.proto", fileDescriptor_ssl_referee_ca6c91b7b2d8780a) }
+func init() { proto.RegisterFile("ssl_referee.proto", fileDescriptor_f003bb08adc02ebb) }
 
-var fileDescriptor_ssl_referee_ca6c91b7b2d8780a = []byte{
+var fileDescriptor_f003bb08adc02ebb = []byte{
 	// 1023 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x55, 0x4f, 0x6f, 0xe2, 0x46,
 	0x14, 0x5f, 0x1b, 0x08, 0xf0, 0x8c, 0xc1, 0xbc, 0xfc, 0x59, 0x87, 0xae, 0x54, 0x9a, 0x6e, 0x5b,

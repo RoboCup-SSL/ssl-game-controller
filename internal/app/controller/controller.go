@@ -84,10 +84,22 @@ func (c *GameController) ProcessTeamRequests(teamName string, request refproto.T
 		responseTime := c.Engine.TimeProvider().Sub(c.outstandingTeamChoice.IssueTime)
 		if x.AdvantageResponse == refproto.TeamToControllerRequest_CONTINUE {
 			log.Printf("Team %v decided to continue the game within %v", c.outstandingTeamChoice.Team, responseTime)
+			switch c.outstandingTeamChoice.Event.GameEvent.Type {
+			case GameEventBotCrashUnique:
+				c.outstandingTeamChoice.Event.GameEvent.Details.BotCrashUniqueContinue = c.outstandingTeamChoice.Event.GameEvent.Details.BotCrashUnique
+				c.outstandingTeamChoice.Event.GameEvent.Details.BotCrashUnique = nil
+				c.outstandingTeamChoice.Event.GameEvent.Type = GameEventBotCrashUniqueContinue
+			case GameEventBotPushedBot:
+				c.outstandingTeamChoice.Event.GameEvent.Details.BotPushedBotContinue = c.outstandingTeamChoice.Event.GameEvent.Details.BotPushedBot
+				c.outstandingTeamChoice.Event.GameEvent.Details.BotPushedBot = nil
+				c.outstandingTeamChoice.Event.GameEvent.Type = GameEventBotPushedBotContinue
+			default:
+				return errors.Errorf("Unsupported advantage choice game event: %v", c.outstandingTeamChoice.Event.GameEvent.Type)
+			}
 		} else {
 			log.Printf("Team %v decided to stop the game within %v", c.outstandingTeamChoice.Team, responseTime)
-			c.OnNewEvent(c.outstandingTeamChoice.Event)
 		}
+		c.OnNewEvent(c.outstandingTeamChoice.Event)
 		c.outstandingTeamChoice = nil
 		return nil
 	}
@@ -150,7 +162,7 @@ func (c *GameController) publishNetwork() {
 }
 
 func (c *GameController) OnNewEvent(event Event) {
-	if event.GameEvent != nil {
+	if c.outstandingTeamChoice == nil && event.GameEvent != nil {
 		var byTeamProto refproto.Team
 		var choiceType refproto.ControllerToTeamRequest_AdvantageChoice_Foul
 		if event.GameEvent.Details.BotCrashUnique != nil {

@@ -24,11 +24,13 @@
     import BallLeftFieldTouchLine from "./inputs/BallLeftFieldTouchLine"
     import BotCrashDrawn from "./inputs/BotCrashDrawn"
     import BotCrashUnique from "./inputs/BotCrashUnique"
+    import BotCrashUniqueContinue from "./inputs/BotCrashUniqueContinue"
     import BotDribbledBallTooFar from "./inputs/BotDribbledBallTooFar"
     import BotHeldBallDeliberately from "./inputs/BotHeldBallDeliberately"
     import BotInterferedPlacement from "./inputs/BotInterferedPlacement"
     import BotKickedBallTooFast from "./inputs/BotKickedBallTooFast"
     import BotPushedBot from "./inputs/BotPushedBot"
+    import BotPushedBotContinue from "./inputs/BotPushedBotContinue"
     import BotTippedOver from "./inputs/BotTippedOver"
     import BotTooFastInStop from "./inputs/BotTooFastInStop"
     import ChippedGoal from "./inputs/ChippedGoal"
@@ -59,11 +61,13 @@
             BallLeftFieldTouchLine,
             BotCrashDrawn,
             BotCrashUnique,
+            BotCrashUniqueContinue,
             BotDribbledBallTooFar,
             BotHeldBallDeliberately,
             BotInterferedPlacement,
             BotKickedBallTooFast,
             BotPushedBot,
+            BotPushedBotContinue,
             BotTippedOver,
             BotTooFastInStop,
             ChippedGoal,

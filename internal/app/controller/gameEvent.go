@@ -23,7 +23,9 @@ const (
 	GameEventBotKickedBallTooFast           GameEventType = "botKickedBallTooFast"
 	GameEventBotDribbledBallTooFar          GameEventType = "botDribbledBallTooFar"
 	GameEventBotCrashUnique                 GameEventType = "botCrashUnique"
+	GameEventBotCrashUniqueContinue         GameEventType = "botCrashUniqueContinue"
 	GameEventBotPushedBot                   GameEventType = "botPushedBot"
+	GameEventBotPushedBotContinue           GameEventType = "botPushedBotContinue"
 	GameEventBotHeldBallDeliberately        GameEventType = "botHeldBallDeliberately"
 	GameEventAttackerDoubleTouchedBall      GameEventType = "attackerDoubleTouchedBall"
 	GameEventAttackerTooCloseToDefenseArea  GameEventType = "attackerTooCloseToDefenseArea"
@@ -76,7 +78,9 @@ type GameEventDetails struct {
 	BotKickedBallTooFast           *refproto.GameEvent_BotKickedBallTooFast           `json:"botKickedBallTooFast,omitempty"`
 	BotDribbledBallTooFar          *refproto.GameEvent_BotDribbledBallTooFar          `json:"botDribbledBallTooFar,omitempty"`
 	BotCrashUnique                 *refproto.GameEvent_BotCrashUnique                 `json:"botCrashUnique,omitempty"`
+	BotCrashUniqueContinue         *refproto.GameEvent_BotCrashUnique                 `json:"botCrashUniqueContinue,omitempty"`
 	BotPushedBot                   *refproto.GameEvent_BotPushedBot                   `json:"botPushedBot,omitempty"`
+	BotPushedBotContinue           *refproto.GameEvent_BotPushedBot                   `json:"botPushedBotContinue,omitempty"`
 	BotHeldBallDeliberately        *refproto.GameEvent_BotHeldBallDeliberately        `json:"botHeldBallDeliberately,omitempty"`
 	AttackerDoubleTouchedBall      *refproto.GameEvent_AttackerDoubleTouchedBall      `json:"attackerDoubleTouchedBall,omitempty"`
 	AttackerTooCloseToDefenseArea  *refproto.GameEvent_AttackerTooCloseToDefenseArea  `json:"attackerTooCloseToDefenseArea,omitempty"`
@@ -136,8 +140,14 @@ func (d GameEventDetails) EventType() GameEventType {
 	if d.BotCrashUnique != nil {
 		return GameEventBotCrashUnique
 	}
+	if d.BotCrashUniqueContinue != nil {
+		return GameEventBotCrashUniqueContinue
+	}
 	if d.BotPushedBot != nil {
 		return GameEventBotPushedBot
+	}
+	if d.BotPushedBotContinue != nil {
+		return GameEventBotPushedBotContinue
 	}
 	if d.BotHeldBallDeliberately != nil {
 		return GameEventBotHeldBallDeliberately
@@ -278,9 +288,21 @@ func (d GameEventDetails) Description() string {
 		}
 		return ""
 	}
+	if d.BotCrashUniqueContinue != nil {
+		if d.BotCrashUniqueContinue.Violator != nil && d.BotCrashUniqueContinue.Victim != nil {
+			return fmt.Sprintf("Bot %v by %v", *d.BotCrashUniqueContinue.Victim, *d.BotCrashUniqueContinue.Violator)
+		}
+		return ""
+	}
 	if d.BotPushedBot != nil {
 		if d.BotPushedBot.Violator != nil && d.BotPushedBot.Victim != nil {
 			return fmt.Sprintf("Bot %v by %v", *d.BotPushedBot.Victim, *d.BotPushedBot.Violator)
+		}
+		return ""
+	}
+	if d.BotPushedBotContinue != nil {
+		if d.BotPushedBotContinue.Violator != nil && d.BotPushedBotContinue.Victim != nil {
+			return fmt.Sprintf("Bot %v by %v", *d.BotPushedBotContinue.Victim, *d.BotPushedBotContinue.Violator)
 		}
 		return ""
 	}
@@ -382,7 +404,9 @@ func NewGameEventDetails(event refproto.GameEvent) (d GameEventDetails) {
 	d.BotKickedBallTooFast = event.GetBotKickedBallTooFast()
 	d.BotDribbledBallTooFar = event.GetBotDribbledBallTooFar()
 	d.BotCrashUnique = event.GetBotCrashUnique()
+	d.BotCrashUniqueContinue = event.GetBotCrashUniqueContinue()
 	d.BotPushedBot = event.GetBotPushedBot()
+	d.BotPushedBotContinue = event.GetBotPushedBotContinue()
 	d.BotHeldBallDeliberately = event.GetBotHeldBallDeliberately()
 	d.AttackerDoubleTouchedBall = event.GetAttackerDoubleTouchedBall()
 	d.AttackerTooCloseToDefenseArea = event.GetAttackerTooCloseToDefenseArea()

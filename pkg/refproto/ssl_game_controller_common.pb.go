@@ -58,7 +58,7 @@ func (x *Team) UnmarshalJSON(data []byte) error {
 	return nil
 }
 func (Team) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_common_16b4409192a2e794, []int{0}
+	return fileDescriptor_3d09d87af007c4fe, []int{0}
 }
 
 type ControllerReply_StatusCode int32
@@ -97,7 +97,7 @@ func (x *ControllerReply_StatusCode) UnmarshalJSON(data []byte) error {
 	return nil
 }
 func (ControllerReply_StatusCode) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_common_16b4409192a2e794, []int{2, 0}
+	return fileDescriptor_3d09d87af007c4fe, []int{2, 0}
 }
 
 type ControllerReply_Verification int32
@@ -136,7 +136,7 @@ func (x *ControllerReply_Verification) UnmarshalJSON(data []byte) error {
 	return nil
 }
 func (ControllerReply_Verification) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_common_16b4409192a2e794, []int{2, 1}
+	return fileDescriptor_3d09d87af007c4fe, []int{2, 1}
 }
 
 // BotId is the combination of a team and a robot id
@@ -154,7 +154,7 @@ func (m *BotId) Reset()         { *m = BotId{} }
 func (m *BotId) String() string { return proto.CompactTextString(m) }
 func (*BotId) ProtoMessage()    {}
 func (*BotId) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_common_16b4409192a2e794, []int{0}
+	return fileDescriptor_3d09d87af007c4fe, []int{0}
 }
 func (m *BotId) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BotId.Unmarshal(m, b)
@@ -203,7 +203,7 @@ func (m *Location) Reset()         { *m = Location{} }
 func (m *Location) String() string { return proto.CompactTextString(m) }
 func (*Location) ProtoMessage()    {}
 func (*Location) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_common_16b4409192a2e794, []int{1}
+	return fileDescriptor_3d09d87af007c4fe, []int{1}
 }
 func (m *Location) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Location.Unmarshal(m, b)
@@ -259,7 +259,7 @@ func (m *ControllerReply) Reset()         { *m = ControllerReply{} }
 func (m *ControllerReply) String() string { return proto.CompactTextString(m) }
 func (*ControllerReply) ProtoMessage()    {}
 func (*ControllerReply) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_common_16b4409192a2e794, []int{2}
+	return fileDescriptor_3d09d87af007c4fe, []int{2}
 }
 func (m *ControllerReply) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ControllerReply.Unmarshal(m, b)
@@ -322,7 +322,7 @@ func (m *Signature) Reset()         { *m = Signature{} }
 func (m *Signature) String() string { return proto.CompactTextString(m) }
 func (*Signature) ProtoMessage()    {}
 func (*Signature) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_common_16b4409192a2e794, []int{3}
+	return fileDescriptor_3d09d87af007c4fe, []int{3}
 }
 func (m *Signature) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Signature.Unmarshal(m, b)
@@ -366,11 +366,9 @@ func init() {
 	proto.RegisterEnum("ControllerReply_Verification", ControllerReply_Verification_name, ControllerReply_Verification_value)
 }
 
-func init() {
-	proto.RegisterFile("ssl_game_controller_common.proto", fileDescriptor_ssl_game_controller_common_16b4409192a2e794)
-}
+func init() { proto.RegisterFile("ssl_game_controller_common.proto", fileDescriptor_3d09d87af007c4fe) }
 
-var fileDescriptor_ssl_game_controller_common_16b4409192a2e794 = []byte{
+var fileDescriptor_3d09d87af007c4fe = []byte{
 	// 401 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x64, 0x91, 0x51, 0x8f, 0x93, 0x40,
 	0x14, 0x85, 0x3b, 0x63, 0x5b, 0xdb, 0xbb, 0xa4, 0x4e, 0xae, 0x1b, 0x45, 0xcd, 0x26, 0x0d, 0x0f,

@@ -133,6 +133,8 @@ func (e *Engine) Continue() error {
 		GameEventBotTooFastInStop,
 		GameEventUnsportiveBehaviorMinor,
 		GameEventUnsportiveBehaviorMajor,
+		GameEventBotCrashUniqueContinue,
+		GameEventBotPushedBotContinue,
 		GameEventMultipleFouls,
 		GameEventPlacementFailedByOpponent:
 		// no command
@@ -504,7 +506,9 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 	}
 
 	if e.State.GameState() != GameStateStopped && e.State.GameState() != GameStateHalted {
-		e.SendCommand(CommandStop, "")
+		if event.Type != GameEventBotPushedBotContinue && event.Type != GameEventBotCrashUniqueContinue {
+			e.SendCommand(CommandStop, "")
+		}
 	}
 
 	switch event.Type {
@@ -512,7 +516,9 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 		GameEventBotInterferedPlacement,
 		GameEventBotTippedOver,
 		GameEventBotCrashUnique,
+		GameEventBotCrashUniqueContinue,
 		GameEventBotPushedBot,
+		GameEventBotPushedBotContinue,
 		GameEventBotHeldBallDeliberately,
 		GameEventDefenderTooCloseToKickPoint,
 		GameEventBotTooFastInStop:
@@ -544,6 +550,8 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 		GameEventUnsportiveBehaviorMinor,
 		GameEventUnsportiveBehaviorMajor,
 		GameEventMultipleFouls,
+		GameEventBotCrashUniqueContinue,
+		GameEventBotPushedBotContinue,
 		GameEventPlacementFailedByOpponent:
 		e.SendGameEventSecondary(*event)
 	default:

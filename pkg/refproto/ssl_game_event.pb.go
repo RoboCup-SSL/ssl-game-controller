@@ -139,7 +139,7 @@ func (x *Game_Event_GameEventType) UnmarshalJSON(data []byte) error {
 	return nil
 }
 func (Game_Event_GameEventType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_e2de2aad2c8475a2, []int{0, 0}
+	return fileDescriptor_9d7737834ddab500, []int{0, 0}
 }
 
 // a team
@@ -179,7 +179,7 @@ func (x *Game_Event_Team) UnmarshalJSON(data []byte) error {
 	return nil
 }
 func (Game_Event_Team) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_e2de2aad2c8475a2, []int{0, 1}
+	return fileDescriptor_9d7737834ddab500, []int{0, 1}
 }
 
 // a game event that caused a referee command
@@ -199,7 +199,7 @@ func (m *Game_Event) Reset()         { *m = Game_Event{} }
 func (m *Game_Event) String() string { return proto.CompactTextString(m) }
 func (*Game_Event) ProtoMessage()    {}
 func (*Game_Event) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_e2de2aad2c8475a2, []int{0}
+	return fileDescriptor_9d7737834ddab500, []int{0}
 }
 func (m *Game_Event) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Game_Event.Unmarshal(m, b)
@@ -253,7 +253,7 @@ func (m *Game_Event_Originator) Reset()         { *m = Game_Event_Originator{} }
 func (m *Game_Event_Originator) String() string { return proto.CompactTextString(m) }
 func (*Game_Event_Originator) ProtoMessage()    {}
 func (*Game_Event_Originator) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_event_e2de2aad2c8475a2, []int{0, 0}
+	return fileDescriptor_9d7737834ddab500, []int{0, 0}
 }
 func (m *Game_Event_Originator) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Game_Event_Originator.Unmarshal(m, b)
@@ -294,11 +294,9 @@ func init() {
 	proto.RegisterEnum("Game_Event_Team", Game_Event_Team_name, Game_Event_Team_value)
 }
 
-func init() {
-	proto.RegisterFile("ssl_game_event.proto", fileDescriptor_ssl_game_event_e2de2aad2c8475a2)
-}
+func init() { proto.RegisterFile("ssl_game_event.proto", fileDescriptor_9d7737834ddab500) }
 
-var fileDescriptor_ssl_game_event_e2de2aad2c8475a2 = []byte{
+var fileDescriptor_9d7737834ddab500 = []byte{
 	// 532 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x64, 0x92, 0x4f, 0x6f, 0x1a, 0x31,
 	0x10, 0xc5, 0x0b, 0x21, 0x7f, 0x18, 0xb2, 0xc4, 0x99, 0x90, 0x94, 0xb4, 0x95, 0x12, 0xa5, 0x3d,

@@ -36,8 +36,10 @@ message GameEvent {
         BotHeldBallDeliberately bot_held_ball_deliberately = 21;
         DefenderTooCloseToKickPoint defender_too_close_to_kick_point = 22;
         DefenderInDefenseArea defender_in_defense_area = 23;
-        BotTooFastInStop bot_too_fast_in_stop = 24;
 
+        BotCrashUnique bot_crash_unique_continue = 32;
+        BotPushedBot bot_pushed_bot_continue = 33;
+        BotTooFastInStop bot_too_fast_in_stop = 24;
         UnsportiveBehaviorMinor unsportive_behavior_minor = 25;
         UnsportiveBehaviorMajor unsportive_behavior_major = 26;
         MultipleFouls multiple_fouls = 27;

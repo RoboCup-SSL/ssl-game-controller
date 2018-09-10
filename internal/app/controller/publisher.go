@@ -143,8 +143,12 @@ func createGameEvent(event GameEvent) *refproto.GameEvent {
 		protoEvent.Event = &refproto.GameEvent_BotDribbledBallTooFar_{BotDribbledBallTooFar: event.Details.BotDribbledBallTooFar}
 	case GameEventBotCrashUnique:
 		protoEvent.Event = &refproto.GameEvent_BotCrashUnique_{BotCrashUnique: event.Details.BotCrashUnique}
+	case GameEventBotCrashUniqueContinue:
+		protoEvent.Event = &refproto.GameEvent_BotCrashUniqueContinue{BotCrashUniqueContinue: event.Details.BotCrashUniqueContinue}
 	case GameEventBotPushedBot:
 		protoEvent.Event = &refproto.GameEvent_BotPushedBot_{BotPushedBot: event.Details.BotPushedBot}
+	case GameEventBotPushedBotContinue:
+		protoEvent.Event = &refproto.GameEvent_BotPushedBotContinue{BotPushedBotContinue: event.Details.BotPushedBotContinue}
 	case GameEventBotHeldBallDeliberately:
 		protoEvent.Event = &refproto.GameEvent_BotHeldBallDeliberately_{BotHeldBallDeliberately: event.Details.BotHeldBallDeliberately}
 	case GameEventAttackerDoubleTouchedBall:

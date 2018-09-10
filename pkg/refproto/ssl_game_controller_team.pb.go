@@ -57,7 +57,7 @@ func (x *TeamToControllerRequest_AdvantageResponse) UnmarshalJSON(data []byte) e
 	return nil
 }
 func (TeamToControllerRequest_AdvantageResponse) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_team_8f7748411a9375d0, []int{1, 0}
+	return fileDescriptor_96c0c3d07dcb3676, []int{1, 0}
 }
 
 type ControllerToTeamRequest_AdvantageChoice_Foul int32
@@ -99,7 +99,7 @@ func (x *ControllerToTeamRequest_AdvantageChoice_Foul) UnmarshalJSON(data []byte
 	return nil
 }
 func (ControllerToTeamRequest_AdvantageChoice_Foul) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_team_8f7748411a9375d0, []int{2, 0, 0}
+	return fileDescriptor_96c0c3d07dcb3676, []int{2, 0, 0}
 }
 
 // a registration that must be send by teams and autoRefs to the controller as the very first message
@@ -117,7 +117,7 @@ func (m *TeamRegistration) Reset()         { *m = TeamRegistration{} }
 func (m *TeamRegistration) String() string { return proto.CompactTextString(m) }
 func (*TeamRegistration) ProtoMessage()    {}
 func (*TeamRegistration) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_team_8f7748411a9375d0, []int{0}
+	return fileDescriptor_96c0c3d07dcb3676, []int{0}
 }
 func (m *TeamRegistration) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TeamRegistration.Unmarshal(m, b)
@@ -168,7 +168,7 @@ func (m *TeamToControllerRequest) Reset()         { *m = TeamToControllerRequest
 func (m *TeamToControllerRequest) String() string { return proto.CompactTextString(m) }
 func (*TeamToControllerRequest) ProtoMessage()    {}
 func (*TeamToControllerRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_team_8f7748411a9375d0, []int{1}
+	return fileDescriptor_96c0c3d07dcb3676, []int{1}
 }
 func (m *TeamToControllerRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TeamToControllerRequest.Unmarshal(m, b)
@@ -310,7 +310,7 @@ func (m *ControllerToTeamRequest) Reset()         { *m = ControllerToTeamRequest
 func (m *ControllerToTeamRequest) String() string { return proto.CompactTextString(m) }
 func (*ControllerToTeamRequest) ProtoMessage()    {}
 func (*ControllerToTeamRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_team_8f7748411a9375d0, []int{2}
+	return fileDescriptor_96c0c3d07dcb3676, []int{2}
 }
 func (m *ControllerToTeamRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ControllerToTeamRequest.Unmarshal(m, b)
@@ -423,7 +423,7 @@ func (m *ControllerToTeamRequest_AdvantageChoice) Reset() {
 func (m *ControllerToTeamRequest_AdvantageChoice) String() string { return proto.CompactTextString(m) }
 func (*ControllerToTeamRequest_AdvantageChoice) ProtoMessage()    {}
 func (*ControllerToTeamRequest_AdvantageChoice) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_team_8f7748411a9375d0, []int{2, 0}
+	return fileDescriptor_96c0c3d07dcb3676, []int{2, 0}
 }
 func (m *ControllerToTeamRequest_AdvantageChoice) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ControllerToTeamRequest_AdvantageChoice.Unmarshal(m, b)
@@ -459,11 +459,9 @@ func init() {
 	proto.RegisterEnum("ControllerToTeamRequest_AdvantageChoice_Foul", ControllerToTeamRequest_AdvantageChoice_Foul_name, ControllerToTeamRequest_AdvantageChoice_Foul_value)
 }
 
-func init() {
-	proto.RegisterFile("ssl_game_controller_team.proto", fileDescriptor_ssl_game_controller_team_8f7748411a9375d0)
-}
+func init() { proto.RegisterFile("ssl_game_controller_team.proto", fileDescriptor_96c0c3d07dcb3676) }
 
-var fileDescriptor_ssl_game_controller_team_8f7748411a9375d0 = []byte{
+var fileDescriptor_96c0c3d07dcb3676 = []byte{
 	// 396 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x51, 0xdd, 0x6e, 0xd3, 0x30,
 	0x14, 0x8e, 0x43, 0xd1, 0x9a, 0x33, 0xd6, 0x79, 0xbe, 0x59, 0x55, 0x24, 0x54, 0xe5, 0x86, 0x08,

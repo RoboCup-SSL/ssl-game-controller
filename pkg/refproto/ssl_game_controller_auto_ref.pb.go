@@ -61,7 +61,7 @@ func (x *AutoRefToControllerRequest_State) UnmarshalJSON(data []byte) error {
 	return nil
 }
 func (AutoRefToControllerRequest_State) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_auto_ref_be330828d413742b, []int{1, 0}
+	return fileDescriptor_2fbb3ba3bab9727c, []int{1, 0}
 }
 
 // AutoRefRegistration is the first message that a client must send to the controller to identify itself
@@ -79,7 +79,7 @@ func (m *AutoRefRegistration) Reset()         { *m = AutoRefRegistration{} }
 func (m *AutoRefRegistration) String() string { return proto.CompactTextString(m) }
 func (*AutoRefRegistration) ProtoMessage()    {}
 func (*AutoRefRegistration) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_auto_ref_be330828d413742b, []int{0}
+	return fileDescriptor_2fbb3ba3bab9727c, []int{0}
 }
 func (m *AutoRefRegistration) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AutoRefRegistration.Unmarshal(m, b)
@@ -132,7 +132,7 @@ func (m *AutoRefToControllerRequest) Reset()         { *m = AutoRefToControllerR
 func (m *AutoRefToControllerRequest) String() string { return proto.CompactTextString(m) }
 func (*AutoRefToControllerRequest) ProtoMessage()    {}
 func (*AutoRefToControllerRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_auto_ref_be330828d413742b, []int{1}
+	return fileDescriptor_2fbb3ba3bab9727c, []int{1}
 }
 func (m *AutoRefToControllerRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AutoRefToControllerRequest.Unmarshal(m, b)
@@ -196,7 +196,7 @@ func (m *AutoRefMessage) Reset()         { *m = AutoRefMessage{} }
 func (m *AutoRefMessage) String() string { return proto.CompactTextString(m) }
 func (*AutoRefMessage) ProtoMessage()    {}
 func (*AutoRefMessage) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_auto_ref_be330828d413742b, []int{2}
+	return fileDescriptor_2fbb3ba3bab9727c, []int{2}
 }
 func (m *AutoRefMessage) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AutoRefMessage.Unmarshal(m, b)
@@ -372,7 +372,7 @@ func (m *AutoRefMessage_BallPlaced) Reset()         { *m = AutoRefMessage_BallPl
 func (m *AutoRefMessage_BallPlaced) String() string { return proto.CompactTextString(m) }
 func (*AutoRefMessage_BallPlaced) ProtoMessage()    {}
 func (*AutoRefMessage_BallPlaced) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_auto_ref_be330828d413742b, []int{2, 0}
+	return fileDescriptor_2fbb3ba3bab9727c, []int{2, 0}
 }
 func (m *AutoRefMessage_BallPlaced) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AutoRefMessage_BallPlaced.Unmarshal(m, b)
@@ -426,7 +426,7 @@ func (m *AutoRefMessage_WaitForBots) Reset()         { *m = AutoRefMessage_WaitF
 func (m *AutoRefMessage_WaitForBots) String() string { return proto.CompactTextString(m) }
 func (*AutoRefMessage_WaitForBots) ProtoMessage()    {}
 func (*AutoRefMessage_WaitForBots) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_auto_ref_be330828d413742b, []int{2, 1}
+	return fileDescriptor_2fbb3ba3bab9727c, []int{2, 1}
 }
 func (m *AutoRefMessage_WaitForBots) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AutoRefMessage_WaitForBots.Unmarshal(m, b)
@@ -467,7 +467,7 @@ func (m *AutoRefMessage_WaitForBots_Violator) Reset()         { *m = AutoRefMess
 func (m *AutoRefMessage_WaitForBots_Violator) String() string { return proto.CompactTextString(m) }
 func (*AutoRefMessage_WaitForBots_Violator) ProtoMessage()    {}
 func (*AutoRefMessage_WaitForBots_Violator) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ssl_game_controller_auto_ref_be330828d413742b, []int{2, 1, 0}
+	return fileDescriptor_2fbb3ba3bab9727c, []int{2, 1, 0}
 }
 func (m *AutoRefMessage_WaitForBots_Violator) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AutoRefMessage_WaitForBots_Violator.Unmarshal(m, b)
@@ -511,11 +511,9 @@ func init() {
 	proto.RegisterEnum("AutoRefToControllerRequest_State", AutoRefToControllerRequest_State_name, AutoRefToControllerRequest_State_value)
 }
 
-func init() {
-	proto.RegisterFile("ssl_game_controller_auto_ref.proto", fileDescriptor_ssl_game_controller_auto_ref_be330828d413742b)
-}
+func init() { proto.RegisterFile("ssl_game_controller_auto_ref.proto", fileDescriptor_2fbb3ba3bab9727c) }
 
-var fileDescriptor_ssl_game_controller_auto_ref_be330828d413742b = []byte{
+var fileDescriptor_2fbb3ba3bab9727c = []byte{
 	// 544 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x92, 0xcf, 0x6e, 0xd3, 0x40,
 	0x10, 0xc6, 0x63, 0x87, 0xfe, 0xf1, 0x58, 0x94, 0xb0, 0x08, 0x64, 0x4c, 0x8b, 0x42, 0xc4, 0x21,
