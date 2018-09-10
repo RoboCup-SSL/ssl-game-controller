@@ -232,16 +232,17 @@ type TeamInfo struct {
 
 // State of the game
 type State struct {
-	Stage            Stage              `json:"stage"`
-	Command          RefCommand         `json:"command"`
-	CommandFor       Team               `json:"commandForTeam"`
-	GameEvent        GameEvent          `json:"gameEvent"`
-	StageTimeElapsed time.Duration      `json:"stageTimeElapsed"`
-	StageTimeLeft    time.Duration      `json:"stageTimeLeft"`
-	MatchTimeStart   time.Time          `json:"matchTimeStart"`
-	MatchDuration    time.Duration      `json:"matchDuration"`
-	TeamState        map[Team]*TeamInfo `json:"teamState"`
-	Division         Division           `json:"division"`
+	Stage              Stage              `json:"stage"`
+	Command            RefCommand         `json:"command"`
+	CommandFor         Team               `json:"commandForTeam"`
+	GameEvent          GameEvent          `json:"gameEvent"`
+	GameEventSecondary GameEvent          `json:"gameEventSecondary"`
+	StageTimeElapsed   time.Duration      `json:"stageTimeElapsed"`
+	StageTimeLeft      time.Duration      `json:"stageTimeLeft"`
+	MatchTimeStart     time.Time          `json:"matchTimeStart"`
+	MatchDuration      time.Duration      `json:"matchDuration"`
+	TeamState          map[Team]*TeamInfo `json:"teamState"`
+	Division           Division           `json:"division"`
 }
 
 // NewState creates a new state, initialized for the start of a new game
@@ -250,6 +251,7 @@ func NewState() (s *State) {
 	s.Stage = StagePreGame
 	s.Command = CommandHalt
 	s.GameEvent.Type = GameEventNone
+	s.GameEventSecondary.Type = GameEventNone
 
 	s.StageTimeLeft = 0
 	s.StageTimeElapsed = 0

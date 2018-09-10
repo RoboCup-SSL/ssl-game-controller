@@ -52,14 +52,24 @@ func (e *Engine) SendCommand(command RefCommand, forTeam Team) {
 	e.State.CommandFor = forTeam
 	e.LogCommand()
 
-	if command.RunningState() && e.State.GameEvent.Type != GameEventNone {
-		e.SendGameEvent(GameEvent{Type: GameEventNone})
+	if command.RunningState() {
+		if e.State.GameEvent.Type != GameEventNone {
+			e.State.GameEvent = GameEvent{Type: GameEventNone}
+		}
+		if e.State.GameEventSecondary.Type != GameEventNone {
+			e.State.GameEventSecondary = GameEvent{Type: GameEventNone}
+		}
 	}
 }
 
-func (e *Engine) SendGameEvent(gameEvent GameEvent) {
+func (e *Engine) SendGameEventPrimary(gameEvent GameEvent) {
 	e.State.GameEvent = gameEvent
-	e.LogGameEvent()
+	e.LogGameEvent(gameEvent)
+}
+
+func (e *Engine) SendGameEventSecondary(gameEvent GameEvent) {
+	e.State.GameEventSecondary = gameEvent
+	e.LogGameEvent(gameEvent)
 }
 
 // UndoLastAction restores the last state from internal history
@@ -162,14 +172,14 @@ func (e *Engine) appendHistory() {
 	}
 }
 
-func (e *Engine) LogGameEvent() {
+func (e *Engine) LogGameEvent(event GameEvent) {
 	gameEvent := RefereeEvent{
 		Timestamp:   e.TimeProvider(),
 		StageTime:   e.State.StageTimeElapsed,
 		Type:        RefereeEventGameEvent,
-		Name:        string(e.State.GameEvent.Type),
-		Team:        e.State.GameEvent.ByTeam(),
-		Description: e.State.GameEvent.Details.Description(),
+		Name:        string(event.Type),
+		Team:        event.ByTeam(),
+		Description: event.Details.Description(),
 	}
 	e.RefereeEvents = append(e.RefereeEvents, gameEvent)
 }
@@ -500,7 +510,16 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 		e.SendCommand(CommandStop, "")
 	}
 
-	e.SendGameEvent(*event)
+	switch event.Type {
+	case GameEventBotTooFastInStop,
+		GameEventUnsportiveBehaviorMinor,
+		GameEventUnsportiveBehaviorMajor,
+		GameEventMultipleFouls,
+		GameEventPlacementFailedByOpponent:
+		e.SendGameEventSecondary(*event)
+	default:
+		e.SendGameEventPrimary(*event)
+	}
 
 	log.Printf("Processed game event %v", event)
 	return nil

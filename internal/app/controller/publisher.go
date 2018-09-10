@@ -102,6 +102,7 @@ func updateMessage(r *refproto.Referee, state *State) {
 	}
 
 	r.CurrentGameEvent = createGameEvent(state.GameEvent)
+	r.CurrentGameEventSecondary = createGameEvent(state.GameEventSecondary)
 
 	*r.PacketTimestamp = uint64(time.Now().UnixNano() / 1000)
 	*r.Stage = mapStage(state.Stage)

@@ -176,8 +176,11 @@ message Referee {
     // the game event that is currently processed
     optional GameEvent current_game_event = 12;
 
+    // the game event that was raised additionally during the current stop and has no influence on the game procedure
+    optional GameEvent current_game_event_secondary = 13;
+
     // all non-finished proposed game events that may be processed next
-    repeated ProposedGameEvent proposed_game_events = 13;
+    repeated ProposedGameEvent proposed_game_events = 14;
 }
 
 message ProposedGameEvent {
