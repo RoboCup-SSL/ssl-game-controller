@@ -506,10 +506,6 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 		return errors.Errorf("Incomplete game event: %v", event)
 	}
 
-	if e.State.GameState() != GameStateStopped && e.State.GameState() != GameStateHalted && !event.IsContinued() {
-		e.SendCommand(CommandStop, "")
-	}
-
 	if event.IncrementsFoulCounter() {
 		team := event.ByTeam()
 		if team.Unknown() {
@@ -540,6 +536,15 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 		e.SendGameEventSecondary(*event)
 	} else {
 		e.SendGameEventPrimary(*event)
+		e.State.PlacementPos = e.BallPlacementPos()
+	}
+
+	if e.State.GameState() != GameStateHalted && !event.IsContinued() {
+		if e.State.PlacementPos != nil {
+			e.SendCommand(CommandBallPlacement, e.State.GameEvent.ByTeam().Opposite())
+		} else if e.State.GameState() != GameStateStopped {
+			e.SendCommand(CommandStop, "")
+		}
 	}
 
 	log.Printf("Processed game event %v", event)
