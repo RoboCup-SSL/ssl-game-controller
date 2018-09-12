@@ -127,8 +127,9 @@ func (e *Engine) Continue() error {
 		}
 	case
 		GameEventPlacementFailedByTeamInFavor:
-		// TODO placement pos
-		e.SendCommand(CommandBallPlacement, e.State.GameEvent.ByTeam().Opposite())
+		if e.State.PlacementPos != nil {
+			e.SendCommand(CommandBallPlacement, e.State.GameEvent.ByTeam().Opposite())
+		}
 	case
 		GameEventBotTooFastInStop,
 		GameEventUnsportiveBehaviorMinor,

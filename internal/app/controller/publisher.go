@@ -114,6 +114,7 @@ func updateMessage(r *refproto.Referee, state *State) (republish bool) {
 
 	r.CurrentGameEvent = state.GameEvent.ToProto()
 	r.CurrentGameEventSecondary = state.GameEventSecondary.ToProto()
+	r.DesignatedPosition = mapLocation(state.PlacementPos)
 
 	*r.PacketTimestamp = uint64(time.Now().UnixNano() / 1000)
 	*r.Stage = mapStage(state.Stage)
@@ -217,4 +218,11 @@ func mapStage(stage Stage) refproto.Referee_Stage {
 		return refproto.Referee_POST_GAME
 	}
 	return -1
+}
+
+func mapLocation(location *Location) *refproto.Referee_Point {
+	if location == nil {
+		return nil
+	}
+	return &refproto.Referee_Point{X: &location.X, Y: &location.Y}
 }
