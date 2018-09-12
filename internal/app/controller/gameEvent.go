@@ -45,11 +45,13 @@ const (
 	GameEventPlacementFailedByOpponent      GameEventType = "placementFailedByOpponent"
 )
 
+// GameEvent combines the type of a game event with the corresponding detail structures
 type GameEvent struct {
 	Type    GameEventType    `json:"type"`
 	Details GameEventDetails `json:"details"`
 }
 
+// ByTeam extracts the `ByTeam` attribute from the game event details
 func (e GameEvent) ByTeam() Team {
 	v := reflect.ValueOf(e.Details)
 	for i := 0; i < v.NumField(); i++ {
@@ -61,6 +63,69 @@ func (e GameEvent) ByTeam() Team {
 		}
 	}
 	return TeamUnknown
+}
+
+// IncrementsFoulCounter checks if the game event increments the foul counter
+func (e GameEvent) IncrementsFoulCounter() bool {
+	switch e.Type {
+	case GameEventBotCrashDrawn,
+		GameEventBotInterferedPlacement,
+		GameEventBotTippedOver,
+		GameEventBotCrashUnique,
+		GameEventBotCrashUniqueContinue,
+		GameEventBotPushedBot,
+		GameEventBotPushedBotContinue,
+		GameEventBotHeldBallDeliberately,
+		GameEventDefenderTooCloseToKickPoint,
+		GameEventBotTooFastInStop:
+		return true
+	}
+	return false
+}
+
+// AddsYellowCard checks if this game event causes a yellow card
+func (e GameEvent) AddsYellowCard() bool {
+	switch e.Type {
+	case GameEventUnsportiveBehaviorMinor,
+		GameEventMultipleFouls,
+		GameEventDefenderInDefenseAreaPartially:
+		return true
+	}
+	return false
+}
+
+// AddsRedCard checks if this game event causes a red card
+func (e GameEvent) AddsRedCard() bool {
+	switch e.Type {
+	case GameEventUnsportiveBehaviorMajor:
+		return true
+	}
+	return false
+}
+
+// IsSecondary checks if this game event is a secondary one that does not influence the next referee command
+func (e GameEvent) IsSecondary() bool {
+	switch e.Type {
+	case GameEventBotTooFastInStop,
+		GameEventUnsportiveBehaviorMinor,
+		GameEventUnsportiveBehaviorMajor,
+		GameEventMultipleFouls,
+		GameEventBotCrashUniqueContinue,
+		GameEventBotPushedBotContinue,
+		GameEventPlacementFailedByOpponent:
+		return true
+	}
+	return false
+}
+
+// IsContinued checks if the game event is was continued (not stopped) based on the decision of a team
+func (e GameEvent) IsContinued() bool {
+	switch e.Type {
+	case GameEventBotPushedBotContinue,
+		GameEventBotCrashUniqueContinue:
+		return true
+	}
+	return false
 }
 
 // GameEventDetails holds details of a game event. Only one field should be non-nil

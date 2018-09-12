@@ -505,23 +505,11 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 		return errors.Errorf("Incomplete game event: %v", event)
 	}
 
-	if e.State.GameState() != GameStateStopped && e.State.GameState() != GameStateHalted {
-		if event.Type != GameEventBotPushedBotContinue && event.Type != GameEventBotCrashUniqueContinue {
-			e.SendCommand(CommandStop, "")
-		}
+	if e.State.GameState() != GameStateStopped && e.State.GameState() != GameStateHalted && !event.IsContinued() {
+		e.SendCommand(CommandStop, "")
 	}
 
-	switch event.Type {
-	case GameEventBotCrashDrawn,
-		GameEventBotInterferedPlacement,
-		GameEventBotTippedOver,
-		GameEventBotCrashUnique,
-		GameEventBotCrashUniqueContinue,
-		GameEventBotPushedBot,
-		GameEventBotPushedBotContinue,
-		GameEventBotHeldBallDeliberately,
-		GameEventDefenderTooCloseToKickPoint,
-		GameEventBotTooFastInStop:
+	if event.IncrementsFoulCounter() {
 		team := event.ByTeam()
 		if team.Unknown() {
 			e.State.TeamState[TeamYellow].FoulCounter++
@@ -529,15 +517,17 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 		} else {
 			e.State.TeamState[team].FoulCounter++
 		}
-	case GameEventUnsportiveBehaviorMinor,
-		GameEventMultipleFouls,
-		GameEventDefenderInDefenseAreaPartially:
+	}
+
+	if event.AddsYellowCard() {
 		team := event.ByTeam()
 		if team.Unknown() {
 			return errors.New("Missing team in game event")
 		}
 		addCard(&EventCard{Type: CardTypeYellow, ForTeam: team, Operation: CardOperationAdd}, e.State.TeamState[team], e.config.YellowCardDuration)
-	case GameEventUnsportiveBehaviorMajor:
+	}
+
+	if event.AddsRedCard() {
 		team := event.ByTeam()
 		if team.Unknown() {
 			return errors.New("Missing team in game event")
@@ -545,16 +535,9 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 		addCard(&EventCard{Type: CardTypeRed, ForTeam: team, Operation: CardOperationAdd}, e.State.TeamState[team], 0)
 	}
 
-	switch event.Type {
-	case GameEventBotTooFastInStop,
-		GameEventUnsportiveBehaviorMinor,
-		GameEventUnsportiveBehaviorMajor,
-		GameEventMultipleFouls,
-		GameEventBotCrashUniqueContinue,
-		GameEventBotPushedBotContinue,
-		GameEventPlacementFailedByOpponent:
+	if event.IsSecondary() {
 		e.SendGameEventSecondary(*event)
-	default:
+	} else {
 		e.SendGameEventPrimary(*event)
 	}
 
