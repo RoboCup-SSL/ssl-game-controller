@@ -74,7 +74,7 @@ func (p *Publisher) Publish(state *State) {
 		return
 	}
 
-	updateMessage(&p.message, state)
+	republish := updateMessage(&p.message, state)
 	bytes, err := proto.Marshal(&p.message)
 	if err != nil {
 		log.Printf("Could not marshal referee message: %v\nError: %v", state, err)
@@ -84,9 +84,15 @@ func (p *Publisher) Publish(state *State) {
 	if err != nil {
 		log.Printf("Could not write message: %v", err)
 	}
+
+	if republish {
+		// immediately publish again to send another command
+		p.Publish(state)
+	}
 }
 
-func updateMessage(r *refproto.Referee, state *State) {
+func updateMessage(r *refproto.Referee, state *State) (republish bool) {
+	republish = false
 
 	newCommand := mapCommand(state.Command, state.CommandFor)
 
@@ -94,8 +100,14 @@ func updateMessage(r *refproto.Referee, state *State) {
 	// a STOP command will automatically be send in the next update cycle
 	if state.TeamState[TeamYellow].Goals > int(*r.Yellow.Score) {
 		updateCommand(r, refproto.Referee_GOAL_YELLOW)
+		republish = true
 	} else if state.TeamState[TeamBlue].Goals > int(*r.Blue.Score) {
 		updateCommand(r, refproto.Referee_GOAL_BLUE)
+		republish = true
+	} else if state.Command == CommandBallPlacement && *r.Command != refproto.Referee_STOP {
+		// send a STOP before the ball placement command to be compatible with earlier behavior
+		updateCommand(r, refproto.Referee_STOP)
+		republish = true
 	} else if *r.Command != newCommand {
 		updateCommand(r, newCommand)
 	}
@@ -109,7 +121,7 @@ func updateMessage(r *refproto.Referee, state *State) {
 	*r.BlueTeamOnPositiveHalf = state.TeamState[TeamBlue].OnPositiveHalf
 	updateTeam(r.Yellow, state.TeamState[TeamYellow])
 	updateTeam(r.Blue, state.TeamState[TeamBlue])
-
+	return
 }
 
 func updateCommand(r *refproto.Referee, newCommand refproto.Referee_Command) {
