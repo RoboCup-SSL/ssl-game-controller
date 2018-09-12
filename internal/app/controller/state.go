@@ -242,6 +242,7 @@ type State struct {
 	MatchDuration      time.Duration      `json:"matchDuration"`
 	TeamState          map[Team]*TeamInfo `json:"teamState"`
 	Division           Division           `json:"division"`
+	PlacementPos       *Location          `json:"placementPos"`
 }
 
 // NewState creates a new state, initialized for the start of a new game
@@ -328,4 +329,10 @@ func (s *State) TeamByName(teamName string) Team {
 		return TeamYellow
 	}
 	return ""
+}
+
+// Location is a two-dimensional coordinate
+type Location struct {
+	X float32
+	Y float32
 }

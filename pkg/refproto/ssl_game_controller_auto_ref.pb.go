@@ -37,6 +37,7 @@ var AutoRefToControllerRequest_State_name = map[int32]string{
 	2: "WAIT_FOR_PLACEMENT",
 	3: "WAIT_FOR_VALID_POSITIONS",
 }
+
 var AutoRefToControllerRequest_State_value = map[string]int32{
 	"UNKNOWN":                  0,
 	"READY_TO_CONTINUE":        1,
@@ -49,9 +50,11 @@ func (x AutoRefToControllerRequest_State) Enum() *AutoRefToControllerRequest_Sta
 	*p = x
 	return p
 }
+
 func (x AutoRefToControllerRequest_State) String() string {
 	return proto.EnumName(AutoRefToControllerRequest_State_name, int32(x))
 }
+
 func (x *AutoRefToControllerRequest_State) UnmarshalJSON(data []byte) error {
 	value, err := proto.UnmarshalJSONEnum(AutoRefToControllerRequest_State_value, data, "AutoRefToControllerRequest_State")
 	if err != nil {
@@ -60,6 +63,7 @@ func (x *AutoRefToControllerRequest_State) UnmarshalJSON(data []byte) error {
 	*x = AutoRefToControllerRequest_State(value)
 	return nil
 }
+
 func (AutoRefToControllerRequest_State) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_2fbb3ba3bab9727c, []int{1, 0}
 }

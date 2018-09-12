@@ -34,6 +34,7 @@ var TeamToControllerRequest_AdvantageResponse_name = map[int32]string{
 	// Duplicate value: 0: "STOP",
 	1: "CONTINUE",
 }
+
 var TeamToControllerRequest_AdvantageResponse_value = map[string]int32{
 	"UNDECIDED": 0,
 	"STOP":      0,
@@ -45,9 +46,11 @@ func (x TeamToControllerRequest_AdvantageResponse) Enum() *TeamToControllerReque
 	*p = x
 	return p
 }
+
 func (x TeamToControllerRequest_AdvantageResponse) String() string {
 	return proto.EnumName(TeamToControllerRequest_AdvantageResponse_name, int32(x))
 }
+
 func (x *TeamToControllerRequest_AdvantageResponse) UnmarshalJSON(data []byte) error {
 	value, err := proto.UnmarshalJSONEnum(TeamToControllerRequest_AdvantageResponse_value, data, "TeamToControllerRequest_AdvantageResponse")
 	if err != nil {
@@ -56,6 +59,7 @@ func (x *TeamToControllerRequest_AdvantageResponse) UnmarshalJSON(data []byte) e
 	*x = TeamToControllerRequest_AdvantageResponse(value)
 	return nil
 }
+
 func (TeamToControllerRequest_AdvantageResponse) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_96c0c3d07dcb3676, []int{1, 0}
 }
@@ -76,6 +80,7 @@ var ControllerToTeamRequest_AdvantageChoice_Foul_name = map[int32]string{
 	1: "COLLISION",
 	2: "PUSHING",
 }
+
 var ControllerToTeamRequest_AdvantageChoice_Foul_value = map[string]int32{
 	"UNKNOWN":   0,
 	"COLLISION": 1,
@@ -87,9 +92,11 @@ func (x ControllerToTeamRequest_AdvantageChoice_Foul) Enum() *ControllerToTeamRe
 	*p = x
 	return p
 }
+
 func (x ControllerToTeamRequest_AdvantageChoice_Foul) String() string {
 	return proto.EnumName(ControllerToTeamRequest_AdvantageChoice_Foul_name, int32(x))
 }
+
 func (x *ControllerToTeamRequest_AdvantageChoice_Foul) UnmarshalJSON(data []byte) error {
 	value, err := proto.UnmarshalJSONEnum(ControllerToTeamRequest_AdvantageChoice_Foul_value, data, "ControllerToTeamRequest_AdvantageChoice_Foul")
 	if err != nil {
@@ -98,6 +105,7 @@ func (x *ControllerToTeamRequest_AdvantageChoice_Foul) UnmarshalJSON(data []byte
 	*x = ControllerToTeamRequest_AdvantageChoice_Foul(value)
 	return nil
 }
+
 func (ControllerToTeamRequest_AdvantageChoice_Foul) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_96c0c3d07dcb3676, []int{2, 0, 0}
 }

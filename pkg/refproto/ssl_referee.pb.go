@@ -76,6 +76,7 @@ var Referee_Stage_name = map[int32]string{
 	12: "PENALTY_SHOOTOUT",
 	13: "POST_GAME",
 }
+
 var Referee_Stage_value = map[string]int32{
 	"NORMAL_FIRST_HALF_PRE":  0,
 	"NORMAL_FIRST_HALF":      1,
@@ -98,9 +99,11 @@ func (x Referee_Stage) Enum() *Referee_Stage {
 	*p = x
 	return p
 }
+
 func (x Referee_Stage) String() string {
 	return proto.EnumName(Referee_Stage_name, int32(x))
 }
+
 func (x *Referee_Stage) UnmarshalJSON(data []byte) error {
 	value, err := proto.UnmarshalJSONEnum(Referee_Stage_value, data, "Referee_Stage")
 	if err != nil {
@@ -109,6 +112,7 @@ func (x *Referee_Stage) UnmarshalJSON(data []byte) error {
 	*x = Referee_Stage(value)
 	return nil
 }
+
 func (Referee_Stage) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_f003bb08adc02ebb, []int{0, 0}
 }
@@ -180,6 +184,7 @@ var Referee_Command_name = map[int32]string{
 	16: "BALL_PLACEMENT_YELLOW",
 	17: "BALL_PLACEMENT_BLUE",
 }
+
 var Referee_Command_value = map[string]int32{
 	"HALT":                   0,
 	"STOP":                   1,
@@ -206,9 +211,11 @@ func (x Referee_Command) Enum() *Referee_Command {
 	*p = x
 	return p
 }
+
 func (x Referee_Command) String() string {
 	return proto.EnumName(Referee_Command_name, int32(x))
 }
+
 func (x *Referee_Command) UnmarshalJSON(data []byte) error {
 	value, err := proto.UnmarshalJSONEnum(Referee_Command_value, data, "Referee_Command")
 	if err != nil {
@@ -217,6 +224,7 @@ func (x *Referee_Command) UnmarshalJSON(data []byte) error {
 	*x = Referee_Command(value)
 	return nil
 }
+
 func (Referee_Command) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_f003bb08adc02ebb, []int{0, 1}
 }

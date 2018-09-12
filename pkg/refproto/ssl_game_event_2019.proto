@@ -310,8 +310,10 @@ message GameEvent {
     }
     // game was stuck
     message NoProgressInGame {
+        // the location of the ball
+        optional Location location = 1;
         // the time [s] that was waited
-        optional float time = 1;
+        optional float time = 2;
     }
     // placement failed by the team that should bring the ball into play next
     message PlacementFailedByTeamInFavor {

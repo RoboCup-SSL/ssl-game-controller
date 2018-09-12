@@ -35,6 +35,7 @@ var Team_name = map[int32]string{
 	1: "YELLOW",
 	2: "BLUE",
 }
+
 var Team_value = map[string]int32{
 	"UNKNOWN": 0,
 	"YELLOW":  1,
@@ -46,9 +47,11 @@ func (x Team) Enum() *Team {
 	*p = x
 	return p
 }
+
 func (x Team) String() string {
 	return proto.EnumName(Team_name, int32(x))
 }
+
 func (x *Team) UnmarshalJSON(data []byte) error {
 	value, err := proto.UnmarshalJSONEnum(Team_value, data, "Team")
 	if err != nil {
@@ -57,6 +60,7 @@ func (x *Team) UnmarshalJSON(data []byte) error {
 	*x = Team(value)
 	return nil
 }
+
 func (Team) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_3d09d87af007c4fe, []int{0}
 }
@@ -74,10 +78,11 @@ var ControllerReply_StatusCode_name = map[int32]string{
 	1: "OK",
 	2: "REJECTED",
 }
+
 var ControllerReply_StatusCode_value = map[string]int32{
 	"UNKNOWN_STATUS_CODE": 0,
-	"OK":       1,
-	"REJECTED": 2,
+	"OK":                  1,
+	"REJECTED":            2,
 }
 
 func (x ControllerReply_StatusCode) Enum() *ControllerReply_StatusCode {
@@ -85,9 +90,11 @@ func (x ControllerReply_StatusCode) Enum() *ControllerReply_StatusCode {
 	*p = x
 	return p
 }
+
 func (x ControllerReply_StatusCode) String() string {
 	return proto.EnumName(ControllerReply_StatusCode_name, int32(x))
 }
+
 func (x *ControllerReply_StatusCode) UnmarshalJSON(data []byte) error {
 	value, err := proto.UnmarshalJSONEnum(ControllerReply_StatusCode_value, data, "ControllerReply_StatusCode")
 	if err != nil {
@@ -96,6 +103,7 @@ func (x *ControllerReply_StatusCode) UnmarshalJSON(data []byte) error {
 	*x = ControllerReply_StatusCode(value)
 	return nil
 }
+
 func (ControllerReply_StatusCode) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_3d09d87af007c4fe, []int{2, 0}
 }
@@ -113,6 +121,7 @@ var ControllerReply_Verification_name = map[int32]string{
 	1: "VERIFIED",
 	2: "UNVERIFIED",
 }
+
 var ControllerReply_Verification_value = map[string]int32{
 	"UNKNOWN_VERIFICATION": 0,
 	"VERIFIED":             1,
@@ -124,9 +133,11 @@ func (x ControllerReply_Verification) Enum() *ControllerReply_Verification {
 	*p = x
 	return p
 }
+
 func (x ControllerReply_Verification) String() string {
 	return proto.EnumName(ControllerReply_Verification_name, int32(x))
 }
+
 func (x *ControllerReply_Verification) UnmarshalJSON(data []byte) error {
 	value, err := proto.UnmarshalJSONEnum(ControllerReply_Verification_value, data, "ControllerReply_Verification")
 	if err != nil {
@@ -135,6 +146,7 @@ func (x *ControllerReply_Verification) UnmarshalJSON(data []byte) error {
 	*x = ControllerReply_Verification(value)
 	return nil
 }
+
 func (ControllerReply_Verification) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_3d09d87af007c4fe, []int{2, 1}
 }

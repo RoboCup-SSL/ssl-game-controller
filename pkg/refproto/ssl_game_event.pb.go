@@ -96,6 +96,7 @@ var Game_Event_GameEventType_name = map[int32]string{
 	21: "BALL_PLACEMENT_FAILED",
 	22: "CHIP_ON_GOAL",
 }
+
 var Game_Event_GameEventType_value = map[string]int32{
 	"UNKNOWN":                         0,
 	"CUSTOM":                          1,
@@ -127,9 +128,11 @@ func (x Game_Event_GameEventType) Enum() *Game_Event_GameEventType {
 	*p = x
 	return p
 }
+
 func (x Game_Event_GameEventType) String() string {
 	return proto.EnumName(Game_Event_GameEventType_name, int32(x))
 }
+
 func (x *Game_Event_GameEventType) UnmarshalJSON(data []byte) error {
 	value, err := proto.UnmarshalJSONEnum(Game_Event_GameEventType_value, data, "Game_Event_GameEventType")
 	if err != nil {
@@ -138,6 +141,7 @@ func (x *Game_Event_GameEventType) UnmarshalJSON(data []byte) error {
 	*x = Game_Event_GameEventType(value)
 	return nil
 }
+
 func (Game_Event_GameEventType) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_9d7737834ddab500, []int{0, 0}
 }
@@ -156,6 +160,7 @@ var Game_Event_Team_name = map[int32]string{
 	1: "TEAM_YELLOW",
 	2: "TEAM_BLUE",
 }
+
 var Game_Event_Team_value = map[string]int32{
 	"TEAM_UNKNOWN": 0,
 	"TEAM_YELLOW":  1,
@@ -167,9 +172,11 @@ func (x Game_Event_Team) Enum() *Game_Event_Team {
 	*p = x
 	return p
 }
+
 func (x Game_Event_Team) String() string {
 	return proto.EnumName(Game_Event_Team_name, int32(x))
 }
+
 func (x *Game_Event_Team) UnmarshalJSON(data []byte) error {
 	value, err := proto.UnmarshalJSONEnum(Game_Event_Team_value, data, "Game_Event_Team")
 	if err != nil {
@@ -178,6 +185,7 @@ func (x *Game_Event_Team) UnmarshalJSON(data []byte) error {
 	*x = Game_Event_Team(value)
 	return nil
 }
+
 func (Game_Event_Team) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_9d7737834ddab500, []int{0, 1}
 }
