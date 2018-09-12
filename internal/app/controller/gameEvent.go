@@ -3,6 +3,7 @@ package controller
 import (
 	"fmt"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
+	"log"
 	"reflect"
 )
 
@@ -126,6 +127,84 @@ func (e GameEvent) IsContinued() bool {
 		return true
 	}
 	return false
+}
+
+func (e GameEvent) ToProto() *refproto.GameEvent {
+	protoEvent := new(refproto.GameEvent)
+	switch e.Type {
+	case GameEventNone:
+		return nil
+	case GameEventBallLeftFieldGoalLine:
+		protoEvent.Event = &refproto.GameEvent_BallLeftFieldGoalLine{BallLeftFieldGoalLine: e.Details.BallLeftFieldGoalLine}
+	case GameEventBallLeftFieldTouchLine:
+		protoEvent.Event = &refproto.GameEvent_BallLeftFieldTouchLine{BallLeftFieldTouchLine: e.Details.BallLeftFieldTouchLine}
+	case GameEventIcing:
+		protoEvent.Event = &refproto.GameEvent_Icing_{Icing: e.Details.Icing}
+	case GameEventGoal:
+		protoEvent.Event = &refproto.GameEvent_Goal_{Goal: e.Details.Goal}
+	case GameEventIndirectGoal:
+		protoEvent.Event = &refproto.GameEvent_IndirectGoal_{IndirectGoal: e.Details.IndirectGoal}
+	case GameEventChippedGoal:
+		protoEvent.Event = &refproto.GameEvent_ChippedGoal_{ChippedGoal: e.Details.ChippedGoal}
+	case GameEventBotTooFastInStop:
+		protoEvent.Event = &refproto.GameEvent_BotTooFastInStop_{BotTooFastInStop: e.Details.BotTooFastInStop}
+	case GameEventBotTippedOver:
+		protoEvent.Event = &refproto.GameEvent_BotTippedOver_{BotTippedOver: e.Details.BotTippedOver}
+	case GameEventBotInterferedPlacement:
+		protoEvent.Event = &refproto.GameEvent_BotInterferedPlacement_{BotInterferedPlacement: e.Details.BotInterferedPlacement}
+	case GameEventBotCrashDrawn:
+		protoEvent.Event = &refproto.GameEvent_BotCrashDrawn_{BotCrashDrawn: e.Details.BotCrashDrawn}
+	case GameEventBotKickedBallTooFast:
+		protoEvent.Event = &refproto.GameEvent_BotKickedBallTooFast_{BotKickedBallTooFast: e.Details.BotKickedBallTooFast}
+	case GameEventBotDribbledBallTooFar:
+		protoEvent.Event = &refproto.GameEvent_BotDribbledBallTooFar_{BotDribbledBallTooFar: e.Details.BotDribbledBallTooFar}
+	case GameEventBotCrashUnique:
+		protoEvent.Event = &refproto.GameEvent_BotCrashUnique_{BotCrashUnique: e.Details.BotCrashUnique}
+	case GameEventBotCrashUniqueContinue:
+		protoEvent.Event = &refproto.GameEvent_BotCrashUniqueContinue{BotCrashUniqueContinue: e.Details.BotCrashUniqueContinue}
+	case GameEventBotPushedBot:
+		protoEvent.Event = &refproto.GameEvent_BotPushedBot_{BotPushedBot: e.Details.BotPushedBot}
+	case GameEventBotPushedBotContinue:
+		protoEvent.Event = &refproto.GameEvent_BotPushedBotContinue{BotPushedBotContinue: e.Details.BotPushedBotContinue}
+	case GameEventBotHeldBallDeliberately:
+		protoEvent.Event = &refproto.GameEvent_BotHeldBallDeliberately_{BotHeldBallDeliberately: e.Details.BotHeldBallDeliberately}
+	case GameEventAttackerDoubleTouchedBall:
+		protoEvent.Event = &refproto.GameEvent_AttackerDoubleTouchedBall_{AttackerDoubleTouchedBall: e.Details.AttackerDoubleTouchedBall}
+	case GameEventAttackerTooCloseToDefenseArea:
+		protoEvent.Event = &refproto.GameEvent_AttackerTooCloseToDefenseArea_{AttackerTooCloseToDefenseArea: e.Details.AttackerTooCloseToDefenseArea}
+	case GameEventAttackerInDefenseArea:
+		protoEvent.Event = &refproto.GameEvent_AttackerInDefenseArea_{AttackerInDefenseArea: e.Details.AttackerInDefenseArea}
+	case GameEventAttackerTouchedKeeper:
+		protoEvent.Event = &refproto.GameEvent_AttackerTouchedKeeper_{AttackerTouchedKeeper: e.Details.AttackerTouchedKeeper}
+	case GameEventDefenderTooCloseToKickPoint:
+		protoEvent.Event = &refproto.GameEvent_DefenderTooCloseToKickPoint_{DefenderTooCloseToKickPoint: e.Details.DefenderTooCloseToKickPoint}
+	case GameEventDefenderInDefenseAreaPartially:
+		protoEvent.Event = &refproto.GameEvent_DefenderInDefenseAreaPartially_{DefenderInDefenseAreaPartially: e.Details.DefenderInDefenseAreaPartially}
+	case GameEventDefenderInDefenseArea:
+		protoEvent.Event = &refproto.GameEvent_DefenderInDefenseArea_{DefenderInDefenseArea: e.Details.DefenderInDefenseArea}
+	case GameEventKeeperHeldBall:
+		protoEvent.Event = &refproto.GameEvent_KeeperHeldBall_{KeeperHeldBall: e.Details.KeeperHeldBall}
+	case GameEventUnsportiveBehaviorMinor:
+		protoEvent.Event = &refproto.GameEvent_UnsportiveBehaviorMinor_{UnsportiveBehaviorMinor: e.Details.UnsportiveBehaviorMinor}
+	case GameEventUnsportiveBehaviorMajor:
+		protoEvent.Event = &refproto.GameEvent_UnsportiveBehaviorMajor_{UnsportiveBehaviorMajor: e.Details.UnsportiveBehaviorMajor}
+	case GameEventMultipleYellowCards:
+		protoEvent.Event = &refproto.GameEvent_MultipleYellowCards_{MultipleYellowCards: e.Details.MultipleYellowCards}
+	case GameEventMultipleFouls:
+		protoEvent.Event = &refproto.GameEvent_MultipleFouls_{MultipleFouls: e.Details.MultipleFouls}
+	case GameEventKickTimeout:
+		protoEvent.Event = &refproto.GameEvent_KickTimeout_{KickTimeout: e.Details.KickTimeout}
+	case GameEventNoProgressInGame:
+		protoEvent.Event = &refproto.GameEvent_NoProgressInGame_{NoProgressInGame: e.Details.NoProgressInGame}
+	case GameEventPlacementFailedByTeamInFavor:
+		protoEvent.Event = &refproto.GameEvent_PlacementFailedByTeamInFavor_{PlacementFailedByTeamInFavor: e.Details.PlacementFailedByTeamInFavor}
+	case GameEventPlacementFailedByOpponent:
+		protoEvent.Event = &refproto.GameEvent_PlacementFailedByOpponent_{PlacementFailedByOpponent: e.Details.PlacementFailedByOpponent}
+	default:
+		log.Printf("Warn: Could not map game e %v", e.Type)
+		return nil
+	}
+	return protoEvent
 }
 
 // GameEventDetails holds details of a game event. Only one field should be non-nil
