@@ -9,7 +9,7 @@ server:
     trusted-keys-dir: config/trusted_keys/team
 game:
   yellow-card-duration: 2m
-  default-division: Div A
+  default-division: DivA
   normal:
     half-duration: 5m
     half-time-duration: 5m

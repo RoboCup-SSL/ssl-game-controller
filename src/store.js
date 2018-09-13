@@ -27,7 +27,7 @@ export class RefBoxState {
     stageTimeLeft = 0;
     matchDuration = 0;
     teamState = {'Yellow': new TeamState(), 'Blue': new TeamState()};
-    division = 'Div A';
+    division = 'DivA';
 }
 
 export default new Vuex.Store({

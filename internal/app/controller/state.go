@@ -53,8 +53,8 @@ func NewTeam(team refproto.Team) Team {
 type Division string
 
 const (
-	DivA Division = "Div A"
-	DivB Division = "Div B"
+	DivA Division = "DivA"
+	DivB Division = "DivB"
 )
 
 // Stage represents the different stages of a game

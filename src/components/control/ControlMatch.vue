@@ -35,9 +35,9 @@
             End of Game
         </b-button>
         <div class="divisions btn-group-toggle btn-group">
-            <label :class="{btn:true, 'btn-secondary': true, active: isDivA}" @click="switchDivision('Div A')">Div
+            <label :class="{btn:true, 'btn-secondary': true, active: isDivA}" @click="switchDivision('DivA')">Div
                 A</label>
-            <label :class="{btn:true, 'btn-secondary': true, active: !isDivA}" @click="switchDivision('Div B')">Div
+            <label :class="{btn:true, 'btn-secondary': true, active: !isDivA}" @click="switchDivision('DivB')">Div
                 B</label>
         </div>
     </div>
@@ -48,7 +48,7 @@
         name: "ControlMatch",
         data() {
             return {
-                selected: 'Div A',
+                selected: 'DivA',
             }
         },
         methods: {
@@ -98,7 +98,7 @@
                 return this.$store.state.refBoxState
             },
             isDivA() {
-                return this.$store.state.refBoxState.division === 'Div A';
+                return this.$store.state.refBoxState.division === 'DivA';
             },
             halted() {
                 return this.state.command === 'halt';
