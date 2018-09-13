@@ -15,7 +15,7 @@ const (
 )
 
 type RefereeEvent struct {
-	Timestamp   time.Time        `json:"timestamp"`
+	Timestamp   int64            `json:"timestamp"`
 	StageTime   time.Duration    `json:"stageTime"`
 	Type        RefereeEventType `json:"type"`
 	Name        string           `json:"name"`

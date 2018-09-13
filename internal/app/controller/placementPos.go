@@ -7,9 +7,11 @@ import (
 
 // BallPlacementPos determines the ball placement position based on the game event
 func (e *Engine) BallPlacementPos() *Location {
-	event := e.State.GameEvent
-
-	if event.Type == GameEventNone || event.IsSecondary() || event.IsContinued() {
+	if len(e.State.GameEvents) == 0 {
+		return nil
+	}
+	event := e.State.GameEvents[0]
+	if event.IsSecondary() || event.IsContinued() {
 		return nil
 	}
 

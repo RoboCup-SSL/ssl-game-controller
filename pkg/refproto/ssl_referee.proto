@@ -171,14 +171,12 @@ message Referee {
     // deprecated in favor of current_game_event
     optional Game_Event game_event = 11 [deprecated = true];
 
-    // the game event that is currently processed
-    optional GameEvent current_game_event = 12;
-
-    // the game event that was raised additionally during the current stop and has no influence on the game procedure
-    optional GameEvent current_game_event_secondary = 13;
+    // all game events that were detected since the last RUNNING state
+    // will be cleared as soon as the game is continued
+    repeated GameEvent game_events = 12;
 
     // all non-finished proposed game events that may be processed next
-    repeated ProposedGameEvent proposed_game_events = 14;
+    repeated ProposedGameEvent proposed_game_events = 13;
 }
 
 message ProposedGameEvent {

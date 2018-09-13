@@ -91,8 +91,8 @@ func (m *AutoRefRegistration) XXX_Unmarshal(b []byte) error {
 func (m *AutoRefRegistration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AutoRefRegistration.Marshal(b, m, deterministic)
 }
-func (dst *AutoRefRegistration) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AutoRefRegistration.Merge(dst, src)
+func (m *AutoRefRegistration) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AutoRefRegistration.Merge(m, src)
 }
 func (m *AutoRefRegistration) XXX_Size() int {
 	return xxx_messageInfo_AutoRefRegistration.Size(m)
@@ -144,8 +144,8 @@ func (m *AutoRefToControllerRequest) XXX_Unmarshal(b []byte) error {
 func (m *AutoRefToControllerRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AutoRefToControllerRequest.Marshal(b, m, deterministic)
 }
-func (dst *AutoRefToControllerRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AutoRefToControllerRequest.Merge(dst, src)
+func (m *AutoRefToControllerRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AutoRefToControllerRequest.Merge(m, src)
 }
 func (m *AutoRefToControllerRequest) XXX_Size() int {
 	return xxx_messageInfo_AutoRefToControllerRequest.Size(m)
@@ -208,8 +208,8 @@ func (m *AutoRefMessage) XXX_Unmarshal(b []byte) error {
 func (m *AutoRefMessage) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AutoRefMessage.Marshal(b, m, deterministic)
 }
-func (dst *AutoRefMessage) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AutoRefMessage.Merge(dst, src)
+func (m *AutoRefMessage) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AutoRefMessage.Merge(m, src)
 }
 func (m *AutoRefMessage) XXX_Size() int {
 	return xxx_messageInfo_AutoRefMessage.Size(m)
@@ -384,8 +384,8 @@ func (m *AutoRefMessage_BallPlaced) XXX_Unmarshal(b []byte) error {
 func (m *AutoRefMessage_BallPlaced) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AutoRefMessage_BallPlaced.Marshal(b, m, deterministic)
 }
-func (dst *AutoRefMessage_BallPlaced) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AutoRefMessage_BallPlaced.Merge(dst, src)
+func (m *AutoRefMessage_BallPlaced) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AutoRefMessage_BallPlaced.Merge(m, src)
 }
 func (m *AutoRefMessage_BallPlaced) XXX_Size() int {
 	return xxx_messageInfo_AutoRefMessage_BallPlaced.Size(m)
@@ -438,8 +438,8 @@ func (m *AutoRefMessage_WaitForBots) XXX_Unmarshal(b []byte) error {
 func (m *AutoRefMessage_WaitForBots) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AutoRefMessage_WaitForBots.Marshal(b, m, deterministic)
 }
-func (dst *AutoRefMessage_WaitForBots) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AutoRefMessage_WaitForBots.Merge(dst, src)
+func (m *AutoRefMessage_WaitForBots) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AutoRefMessage_WaitForBots.Merge(m, src)
 }
 func (m *AutoRefMessage_WaitForBots) XXX_Size() int {
 	return xxx_messageInfo_AutoRefMessage_WaitForBots.Size(m)
@@ -479,8 +479,8 @@ func (m *AutoRefMessage_WaitForBots_Violator) XXX_Unmarshal(b []byte) error {
 func (m *AutoRefMessage_WaitForBots_Violator) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AutoRefMessage_WaitForBots_Violator.Marshal(b, m, deterministic)
 }
-func (dst *AutoRefMessage_WaitForBots_Violator) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AutoRefMessage_WaitForBots_Violator.Merge(dst, src)
+func (m *AutoRefMessage_WaitForBots_Violator) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AutoRefMessage_WaitForBots_Violator.Merge(m, src)
 }
 func (m *AutoRefMessage_WaitForBots_Violator) XXX_Size() int {
 	return xxx_messageInfo_AutoRefMessage_WaitForBots_Violator.Size(m)

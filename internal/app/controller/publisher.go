@@ -104,7 +104,7 @@ func updateMessage(r *refproto.Referee, state *State) (republish bool) {
 	} else if state.TeamState[TeamBlue].Goals > int(*r.Blue.Score) {
 		updateCommand(r, refproto.Referee_GOAL_BLUE)
 		republish = true
-	} else if state.Command == CommandBallPlacement && *r.Command != refproto.Referee_STOP {
+	} else if state.Command == CommandBallPlacement && *r.Command != refproto.Referee_STOP && *r.Command != refproto.Referee_BALL_PLACEMENT_BLUE && *r.Command != refproto.Referee_BALL_PLACEMENT_YELLOW {
 		// send a STOP before the ball placement command to be compatible with earlier behavior
 		updateCommand(r, refproto.Referee_STOP)
 		republish = true
@@ -112,8 +112,7 @@ func updateMessage(r *refproto.Referee, state *State) (republish bool) {
 		updateCommand(r, newCommand)
 	}
 
-	r.CurrentGameEvent = state.GameEvent.ToProto()
-	r.CurrentGameEventSecondary = state.GameEventSecondary.ToProto()
+	r.GameEvents = mapGameEvents(state.GameEvents)
 	r.DesignatedPosition = mapLocation(state.PlacementPos)
 
 	*r.PacketTimestamp = uint64(time.Now().UnixNano() / 1000)
@@ -123,6 +122,13 @@ func updateMessage(r *refproto.Referee, state *State) (republish bool) {
 	updateTeam(r.Yellow, state.TeamState[TeamYellow])
 	updateTeam(r.Blue, state.TeamState[TeamBlue])
 	return
+}
+func mapGameEvents(events []*GameEvent) []*refproto.GameEvent {
+	mappedEvents := make([]*refproto.GameEvent, len(events))
+	for i, e := range events {
+		mappedEvents[i] = e.ToProto()
+	}
+	return mappedEvents
 }
 
 func updateCommand(r *refproto.Referee, newCommand refproto.Referee_Command) {

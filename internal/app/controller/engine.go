@@ -52,23 +52,13 @@ func (e *Engine) SendCommand(command RefCommand, forTeam Team) {
 	e.State.CommandFor = forTeam
 	e.LogCommand()
 
-	if command.RunningState() {
-		if e.State.GameEvent.Type != GameEventNone {
-			e.State.GameEvent = GameEvent{Type: GameEventNone}
-		}
-		if e.State.GameEventSecondary.Type != GameEventNone {
-			e.State.GameEventSecondary = GameEvent{Type: GameEventNone}
-		}
+	if command.RunningState() && len(e.State.GameEvents) > 0 {
+		e.State.GameEvents = []*GameEvent{}
 	}
 }
 
-func (e *Engine) SendGameEventPrimary(gameEvent GameEvent) {
-	e.State.GameEvent = gameEvent
-	e.LogGameEvent(gameEvent)
-}
-
-func (e *Engine) SendGameEventSecondary(gameEvent GameEvent) {
-	e.State.GameEventSecondary = gameEvent
+func (e *Engine) AddGameEvent(gameEvent GameEvent) {
+	e.State.GameEvents = append(e.State.GameEvents, &gameEvent)
 	e.LogGameEvent(gameEvent)
 }
 
@@ -83,7 +73,31 @@ func (e *Engine) UndoLastAction() {
 }
 
 func (e *Engine) Continue() error {
-	switch e.State.GameEvent.Type {
+	if len(e.State.GameEvents) == 0 {
+		return errors.New("No game events available to determine next action")
+	}
+	primaryEvent := e.State.GameEvents[0]
+	teamInFavor := primaryEvent.ByTeam().Opposite()
+
+	if e.State.Division == DivA {
+		for _, event := range e.State.GameEvents {
+			if event.Type == GameEventPlacementFailedByTeamInFavor {
+				switch primaryEvent.Type {
+				case
+					GameEventGoal,
+					GameEventDefenderInDefenseArea,
+					GameEventMultipleYellowCards:
+				default:
+					// the placement failed by team in favor
+					// the game is continued by the other team
+					e.SendCommand(CommandIndirect, teamInFavor.Opposite())
+				}
+				return nil
+			}
+		}
+	}
+
+	switch primaryEvent.Type {
 	case
 		GameEventBallLeftFieldTouchLine,
 		GameEventIcing,
@@ -96,7 +110,7 @@ func (e *Engine) Continue() error {
 		GameEventDefenderInDefenseAreaPartially,
 		GameEventKickTimeout,
 		GameEventKeeperHeldBall:
-		e.SendCommand(CommandIndirect, e.State.GameEvent.ByTeam().Opposite())
+		e.SendCommand(CommandIndirect, teamInFavor)
 	case
 		GameEventBallLeftFieldGoalLine,
 		GameEventIndirectGoal,
@@ -105,10 +119,10 @@ func (e *Engine) Continue() error {
 		GameEventBotCrashUnique,
 		GameEventBotPushedBot,
 		GameEventBotHeldBallDeliberately:
-		e.SendCommand(CommandDirect, e.State.GameEvent.ByTeam().Opposite())
+		e.SendCommand(CommandDirect, teamInFavor)
 	case
 		GameEventGoal:
-		e.SendCommand(CommandKickoff, e.State.GameEvent.ByTeam().Opposite())
+		e.SendCommand(CommandKickoff, teamInFavor)
 	case
 		GameEventBotCrashDrawn,
 		GameEventNoProgressInGame:
@@ -116,19 +130,14 @@ func (e *Engine) Continue() error {
 	case
 		GameEventDefenderInDefenseArea,
 		GameEventMultipleYellowCards:
-		e.SendCommand(CommandPenalty, e.State.GameEvent.ByTeam().Opposite())
+		e.SendCommand(CommandPenalty, teamInFavor)
 	case
 		GameEventBotInterferedPlacement,
 		GameEventDefenderTooCloseToKickPoint:
 		if cmd, err := e.LastGameStartCommand(); err != nil {
 			log.Print("Warn: ", err)
 		} else {
-			e.SendCommand(cmd, e.State.GameEvent.ByTeam().Opposite())
-		}
-	case
-		GameEventPlacementFailedByTeamInFavor:
-		if e.State.PlacementPos != nil {
-			e.SendCommand(CommandBallPlacement, e.State.GameEvent.ByTeam().Opposite())
+			e.SendCommand(cmd, teamInFavor)
 		}
 	case
 		GameEventBotTooFastInStop,
@@ -137,10 +146,11 @@ func (e *Engine) Continue() error {
 		GameEventBotCrashUniqueContinue,
 		GameEventBotPushedBotContinue,
 		GameEventMultipleFouls,
+		GameEventPlacementFailedByTeamInFavor,
 		GameEventPlacementFailedByOpponent:
 		// no command
 	default:
-		return errors.Errorf("Unknown game event: %v", e.State.GameEvent)
+		return errors.Errorf("Unknown game event: %v", e.State.GameEvents)
 	}
 	return nil
 }
@@ -177,7 +187,7 @@ func (e *Engine) appendHistory() {
 
 func (e *Engine) LogGameEvent(event GameEvent) {
 	gameEvent := RefereeEvent{
-		Timestamp:   e.TimeProvider(),
+		Timestamp:   e.TimeProvider().UnixNano(),
 		StageTime:   e.State.StageTimeElapsed,
 		Type:        RefereeEventGameEvent,
 		Name:        string(event.Type),
@@ -189,7 +199,7 @@ func (e *Engine) LogGameEvent(event GameEvent) {
 
 func (e *Engine) LogCommand() {
 	refereeEvent := RefereeEvent{
-		Timestamp: e.TimeProvider(),
+		Timestamp: e.TimeProvider().UnixNano(),
 		StageTime: e.State.StageTimeElapsed,
 		Type:      RefereeEventCommand,
 		Name:      string(e.State.Command),
@@ -200,7 +210,7 @@ func (e *Engine) LogCommand() {
 
 func (e *Engine) LogCard(card *EventCard) {
 	refereeEvent := RefereeEvent{
-		Timestamp: e.TimeProvider(),
+		Timestamp: e.TimeProvider().UnixNano(),
 		StageTime: e.State.StageTimeElapsed,
 		Type:      RefereeEventCard,
 		Name:      fmt.Sprintf("%v %v card", card.Operation, card.Type),
@@ -211,7 +221,7 @@ func (e *Engine) LogCard(card *EventCard) {
 
 func (e *Engine) LogTime(description string, forTeam Team) {
 	refereeEvent := RefereeEvent{
-		Timestamp: e.TimeProvider(),
+		Timestamp: e.TimeProvider().UnixNano(),
 		StageTime: e.State.StageTimeElapsed,
 		Type:      RefereeEventTime,
 		Name:      description,
@@ -222,7 +232,7 @@ func (e *Engine) LogTime(description string, forTeam Team) {
 
 func (e *Engine) LogStage(stage Stage) {
 	refereeEvent := RefereeEvent{
-		Timestamp: e.TimeProvider(),
+		Timestamp: e.TimeProvider().UnixNano(),
 		StageTime: e.State.StageTimeElapsed,
 		Type:      RefereeEventStage,
 		Name:      string(stage),
@@ -532,15 +542,11 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 		addCard(&EventCard{Type: CardTypeRed, ForTeam: team, Operation: CardOperationAdd}, e.State.TeamState[team], 0)
 	}
 
-	if event.IsSecondary() {
-		e.SendGameEventSecondary(*event)
-	} else {
-		e.SendGameEventPrimary(*event)
-		e.State.PlacementPos = e.BallPlacementPos()
-	}
+	e.AddGameEvent(*event)
+	e.State.PlacementPos = e.BallPlacementPos()
 
 	if e.State.GameState() != GameStateHalted && !event.IsContinued() {
-		teamInFavor := e.State.GameEvent.ByTeam().Opposite()
+		teamInFavor := event.ByTeam().Opposite()
 		if e.State.PlacementPos == nil {
 			e.SendCommand(CommandStop, "")
 		} else if e.State.TeamState[teamInFavor].CanPlaceBall {

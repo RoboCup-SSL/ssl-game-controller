@@ -174,8 +174,8 @@ func (m *BotId) XXX_Unmarshal(b []byte) error {
 func (m *BotId) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_BotId.Marshal(b, m, deterministic)
 }
-func (dst *BotId) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BotId.Merge(dst, src)
+func (m *BotId) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BotId.Merge(m, src)
 }
 func (m *BotId) XXX_Size() int {
 	return xxx_messageInfo_BotId.Size(m)
@@ -223,8 +223,8 @@ func (m *Location) XXX_Unmarshal(b []byte) error {
 func (m *Location) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Location.Marshal(b, m, deterministic)
 }
-func (dst *Location) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Location.Merge(dst, src)
+func (m *Location) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Location.Merge(m, src)
 }
 func (m *Location) XXX_Size() int {
 	return xxx_messageInfo_Location.Size(m)
@@ -279,8 +279,8 @@ func (m *ControllerReply) XXX_Unmarshal(b []byte) error {
 func (m *ControllerReply) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ControllerReply.Marshal(b, m, deterministic)
 }
-func (dst *ControllerReply) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ControllerReply.Merge(dst, src)
+func (m *ControllerReply) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ControllerReply.Merge(m, src)
 }
 func (m *ControllerReply) XXX_Size() int {
 	return xxx_messageInfo_ControllerReply.Size(m)
@@ -342,8 +342,8 @@ func (m *Signature) XXX_Unmarshal(b []byte) error {
 func (m *Signature) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Signature.Marshal(b, m, deterministic)
 }
-func (dst *Signature) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Signature.Merge(dst, src)
+func (m *Signature) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Signature.Merge(m, src)
 }
 func (m *Signature) XXX_Size() int {
 	return xxx_messageInfo_Signature.Size(m)

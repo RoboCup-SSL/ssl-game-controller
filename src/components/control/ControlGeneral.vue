@@ -130,7 +130,7 @@
                     || isPreStage(this.$store.state.refBoxState);
             },
             gameEventPresent() {
-                return this.state.gameEvent.type !== '';
+                return this.state.gameEvents.length > 0;
             }
         }
     }

@@ -113,6 +113,7 @@ func (e GameEvent) IsSecondary() bool {
 		GameEventMultipleFouls,
 		GameEventBotCrashUniqueContinue,
 		GameEventBotPushedBotContinue,
+		GameEventPlacementFailedByTeamInFavor,
 		GameEventPlacementFailedByOpponent:
 		return true
 	}

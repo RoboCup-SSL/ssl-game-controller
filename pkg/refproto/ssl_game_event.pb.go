@@ -215,8 +215,8 @@ func (m *Game_Event) XXX_Unmarshal(b []byte) error {
 func (m *Game_Event) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Game_Event.Marshal(b, m, deterministic)
 }
-func (dst *Game_Event) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Game_Event.Merge(dst, src)
+func (m *Game_Event) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Game_Event.Merge(m, src)
 }
 func (m *Game_Event) XXX_Size() int {
 	return xxx_messageInfo_Game_Event.Size(m)
@@ -269,8 +269,8 @@ func (m *Game_Event_Originator) XXX_Unmarshal(b []byte) error {
 func (m *Game_Event_Originator) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Game_Event_Originator.Marshal(b, m, deterministic)
 }
-func (dst *Game_Event_Originator) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Game_Event_Originator.Merge(dst, src)
+func (m *Game_Event_Originator) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Game_Event_Originator.Merge(m, src)
 }
 func (m *Game_Event_Originator) XXX_Size() int {
 	return xxx_messageInfo_Game_Event_Originator.Size(m)

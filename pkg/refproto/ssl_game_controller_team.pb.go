@@ -133,8 +133,8 @@ func (m *TeamRegistration) XXX_Unmarshal(b []byte) error {
 func (m *TeamRegistration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_TeamRegistration.Marshal(b, m, deterministic)
 }
-func (dst *TeamRegistration) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TeamRegistration.Merge(dst, src)
+func (m *TeamRegistration) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TeamRegistration.Merge(m, src)
 }
 func (m *TeamRegistration) XXX_Size() int {
 	return xxx_messageInfo_TeamRegistration.Size(m)
@@ -184,8 +184,8 @@ func (m *TeamToControllerRequest) XXX_Unmarshal(b []byte) error {
 func (m *TeamToControllerRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_TeamToControllerRequest.Marshal(b, m, deterministic)
 }
-func (dst *TeamToControllerRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TeamToControllerRequest.Merge(dst, src)
+func (m *TeamToControllerRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TeamToControllerRequest.Merge(m, src)
 }
 func (m *TeamToControllerRequest) XXX_Size() int {
 	return xxx_messageInfo_TeamToControllerRequest.Size(m)
@@ -326,8 +326,8 @@ func (m *ControllerToTeamRequest) XXX_Unmarshal(b []byte) error {
 func (m *ControllerToTeamRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ControllerToTeamRequest.Marshal(b, m, deterministic)
 }
-func (dst *ControllerToTeamRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ControllerToTeamRequest.Merge(dst, src)
+func (m *ControllerToTeamRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ControllerToTeamRequest.Merge(m, src)
 }
 func (m *ControllerToTeamRequest) XXX_Size() int {
 	return xxx_messageInfo_ControllerToTeamRequest.Size(m)
@@ -439,8 +439,8 @@ func (m *ControllerToTeamRequest_AdvantageChoice) XXX_Unmarshal(b []byte) error 
 func (m *ControllerToTeamRequest_AdvantageChoice) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ControllerToTeamRequest_AdvantageChoice.Marshal(b, m, deterministic)
 }
-func (dst *ControllerToTeamRequest_AdvantageChoice) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ControllerToTeamRequest_AdvantageChoice.Merge(dst, src)
+func (m *ControllerToTeamRequest_AdvantageChoice) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ControllerToTeamRequest_AdvantageChoice.Merge(m, src)
 }
 func (m *ControllerToTeamRequest_AdvantageChoice) XXX_Size() int {
 	return xxx_messageInfo_ControllerToTeamRequest_AdvantageChoice.Size(m)

@@ -79,8 +79,8 @@ func (m *GameEvent) XXX_Unmarshal(b []byte) error {
 func (m *GameEvent) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GameEvent.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent.Merge(dst, src)
+func (m *GameEvent) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent.Merge(m, src)
 }
 func (m *GameEvent) XXX_Size() int {
 	return xxx_messageInfo_GameEvent.Size(m)
@@ -1219,8 +1219,8 @@ func (m *GameEvent_BallLeftFieldEvent) XXX_Unmarshal(b []byte) error {
 func (m *GameEvent_BallLeftFieldEvent) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GameEvent_BallLeftFieldEvent.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_BallLeftFieldEvent) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_BallLeftFieldEvent.Merge(dst, src)
+func (m *GameEvent_BallLeftFieldEvent) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_BallLeftFieldEvent.Merge(m, src)
 }
 func (m *GameEvent_BallLeftFieldEvent) XXX_Size() int {
 	return xxx_messageInfo_GameEvent_BallLeftFieldEvent.Size(m)
@@ -1279,8 +1279,8 @@ func (m *GameEvent_Icing) XXX_Unmarshal(b []byte) error {
 func (m *GameEvent_Icing) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GameEvent_Icing.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_Icing) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_Icing.Merge(dst, src)
+func (m *GameEvent_Icing) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_Icing.Merge(m, src)
 }
 func (m *GameEvent_Icing) XXX_Size() int {
 	return xxx_messageInfo_GameEvent_Icing.Size(m)
@@ -1346,8 +1346,8 @@ func (m *GameEvent_Goal) XXX_Unmarshal(b []byte) error {
 func (m *GameEvent_Goal) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GameEvent_Goal.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_Goal) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_Goal.Merge(dst, src)
+func (m *GameEvent_Goal) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_Goal.Merge(m, src)
 }
 func (m *GameEvent_Goal) XXX_Size() int {
 	return xxx_messageInfo_GameEvent_Goal.Size(m)
@@ -1413,8 +1413,8 @@ func (m *GameEvent_IndirectGoal) XXX_Unmarshal(b []byte) error {
 func (m *GameEvent_IndirectGoal) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GameEvent_IndirectGoal.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_IndirectGoal) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_IndirectGoal.Merge(dst, src)
+func (m *GameEvent_IndirectGoal) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_IndirectGoal.Merge(m, src)
 }
 func (m *GameEvent_IndirectGoal) XXX_Size() int {
 	return xxx_messageInfo_GameEvent_IndirectGoal.Size(m)
@@ -1482,8 +1482,8 @@ func (m *GameEvent_ChippedGoal) XXX_Unmarshal(b []byte) error {
 func (m *GameEvent_ChippedGoal) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GameEvent_ChippedGoal.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_ChippedGoal) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_ChippedGoal.Merge(dst, src)
+func (m *GameEvent_ChippedGoal) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_ChippedGoal.Merge(m, src)
 }
 func (m *GameEvent_ChippedGoal) XXX_Size() int {
 	return xxx_messageInfo_GameEvent_ChippedGoal.Size(m)
@@ -1556,8 +1556,8 @@ func (m *GameEvent_BotTooFastInStop) XXX_Unmarshal(b []byte) error {
 func (m *GameEvent_BotTooFastInStop) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GameEvent_BotTooFastInStop.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_BotTooFastInStop) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_BotTooFastInStop.Merge(dst, src)
+func (m *GameEvent_BotTooFastInStop) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_BotTooFastInStop.Merge(m, src)
 }
 func (m *GameEvent_BotTooFastInStop) XXX_Size() int {
 	return xxx_messageInfo_GameEvent_BotTooFastInStop.Size(m)
@@ -1623,8 +1623,8 @@ func (m *GameEvent_DefenderTooCloseToKickPoint) XXX_Unmarshal(b []byte) error {
 func (m *GameEvent_DefenderTooCloseToKickPoint) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GameEvent_DefenderTooCloseToKickPoint.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_DefenderTooCloseToKickPoint) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_DefenderTooCloseToKickPoint.Merge(dst, src)
+func (m *GameEvent_DefenderTooCloseToKickPoint) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_DefenderTooCloseToKickPoint.Merge(m, src)
 }
 func (m *GameEvent_DefenderTooCloseToKickPoint) XXX_Size() int {
 	return xxx_messageInfo_GameEvent_DefenderTooCloseToKickPoint.Size(m)
@@ -1696,8 +1696,8 @@ func (m *GameEvent_BotCrashDrawn) XXX_Unmarshal(b []byte) error {
 func (m *GameEvent_BotCrashDrawn) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GameEvent_BotCrashDrawn.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_BotCrashDrawn) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_BotCrashDrawn.Merge(dst, src)
+func (m *GameEvent_BotCrashDrawn) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_BotCrashDrawn.Merge(m, src)
 }
 func (m *GameEvent_BotCrashDrawn) XXX_Size() int {
 	return xxx_messageInfo_GameEvent_BotCrashDrawn.Size(m)
@@ -1785,8 +1785,8 @@ func (m *GameEvent_BotCrashUnique) XXX_Unmarshal(b []byte) error {
 func (m *GameEvent_BotCrashUnique) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GameEvent_BotCrashUnique.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_BotCrashUnique) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_BotCrashUnique.Merge(dst, src)
+func (m *GameEvent_BotCrashUnique) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_BotCrashUnique.Merge(m, src)
 }
 func (m *GameEvent_BotCrashUnique) XXX_Size() int {
 	return xxx_messageInfo_GameEvent_BotCrashUnique.Size(m)
@@ -1875,8 +1875,8 @@ func (m *GameEvent_BotPushedBot) XXX_Unmarshal(b []byte) error {
 func (m *GameEvent_BotPushedBot) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GameEvent_BotPushedBot.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_BotPushedBot) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_BotPushedBot.Merge(dst, src)
+func (m *GameEvent_BotPushedBot) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_BotPushedBot.Merge(m, src)
 }
 func (m *GameEvent_BotPushedBot) XXX_Size() int {
 	return xxx_messageInfo_GameEvent_BotPushedBot.Size(m)
@@ -1947,8 +1947,8 @@ func (m *GameEvent_BotTippedOver) XXX_Unmarshal(b []byte) error {
 func (m *GameEvent_BotTippedOver) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GameEvent_BotTippedOver.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_BotTippedOver) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_BotTippedOver.Merge(dst, src)
+func (m *GameEvent_BotTippedOver) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_BotTippedOver.Merge(m, src)
 }
 func (m *GameEvent_BotTippedOver) XXX_Size() int {
 	return xxx_messageInfo_GameEvent_BotTippedOver.Size(m)
@@ -2007,8 +2007,8 @@ func (m *GameEvent_DefenderInDefenseArea) XXX_Unmarshal(b []byte) error {
 func (m *GameEvent_DefenderInDefenseArea) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GameEvent_DefenderInDefenseArea.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_DefenderInDefenseArea) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_DefenderInDefenseArea.Merge(dst, src)
+func (m *GameEvent_DefenderInDefenseArea) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_DefenderInDefenseArea.Merge(m, src)
 }
 func (m *GameEvent_DefenderInDefenseArea) XXX_Size() int {
 	return xxx_messageInfo_GameEvent_DefenderInDefenseArea.Size(m)
@@ -2076,8 +2076,8 @@ func (m *GameEvent_DefenderInDefenseAreaPartially) XXX_Unmarshal(b []byte) error
 func (m *GameEvent_DefenderInDefenseAreaPartially) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GameEvent_DefenderInDefenseAreaPartially.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_DefenderInDefenseAreaPartially) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_DefenderInDefenseAreaPartially.Merge(dst, src)
+func (m *GameEvent_DefenderInDefenseAreaPartially) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_DefenderInDefenseAreaPartially.Merge(m, src)
 }
 func (m *GameEvent_DefenderInDefenseAreaPartially) XXX_Size() int {
 	return xxx_messageInfo_GameEvent_DefenderInDefenseAreaPartially.Size(m)
@@ -2143,8 +2143,8 @@ func (m *GameEvent_AttackerInDefenseArea) XXX_Unmarshal(b []byte) error {
 func (m *GameEvent_AttackerInDefenseArea) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GameEvent_AttackerInDefenseArea.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_AttackerInDefenseArea) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_AttackerInDefenseArea.Merge(dst, src)
+func (m *GameEvent_AttackerInDefenseArea) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_AttackerInDefenseArea.Merge(m, src)
 }
 func (m *GameEvent_AttackerInDefenseArea) XXX_Size() int {
 	return xxx_messageInfo_GameEvent_AttackerInDefenseArea.Size(m)
@@ -2212,8 +2212,8 @@ func (m *GameEvent_BotKickedBallTooFast) XXX_Unmarshal(b []byte) error {
 func (m *GameEvent_BotKickedBallTooFast) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GameEvent_BotKickedBallTooFast.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_BotKickedBallTooFast) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_BotKickedBallTooFast.Merge(dst, src)
+func (m *GameEvent_BotKickedBallTooFast) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_BotKickedBallTooFast.Merge(m, src)
 }
 func (m *GameEvent_BotKickedBallTooFast) XXX_Size() int {
 	return xxx_messageInfo_GameEvent_BotKickedBallTooFast.Size(m)
@@ -2286,8 +2286,8 @@ func (m *GameEvent_BotDribbledBallTooFar) XXX_Unmarshal(b []byte) error {
 func (m *GameEvent_BotDribbledBallTooFar) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GameEvent_BotDribbledBallTooFar.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_BotDribbledBallTooFar) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_BotDribbledBallTooFar.Merge(dst, src)
+func (m *GameEvent_BotDribbledBallTooFar) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_BotDribbledBallTooFar.Merge(m, src)
 }
 func (m *GameEvent_BotDribbledBallTooFar) XXX_Size() int {
 	return xxx_messageInfo_GameEvent_BotDribbledBallTooFar.Size(m)
@@ -2351,8 +2351,8 @@ func (m *GameEvent_AttackerTouchedKeeper) XXX_Unmarshal(b []byte) error {
 func (m *GameEvent_AttackerTouchedKeeper) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GameEvent_AttackerTouchedKeeper.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_AttackerTouchedKeeper) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_AttackerTouchedKeeper.Merge(dst, src)
+func (m *GameEvent_AttackerTouchedKeeper) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_AttackerTouchedKeeper.Merge(m, src)
 }
 func (m *GameEvent_AttackerTouchedKeeper) XXX_Size() int {
 	return xxx_messageInfo_GameEvent_AttackerTouchedKeeper.Size(m)
@@ -2409,8 +2409,8 @@ func (m *GameEvent_AttackerDoubleTouchedBall) XXX_Unmarshal(b []byte) error {
 func (m *GameEvent_AttackerDoubleTouchedBall) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GameEvent_AttackerDoubleTouchedBall.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_AttackerDoubleTouchedBall) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_AttackerDoubleTouchedBall.Merge(dst, src)
+func (m *GameEvent_AttackerDoubleTouchedBall) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_AttackerDoubleTouchedBall.Merge(m, src)
 }
 func (m *GameEvent_AttackerDoubleTouchedBall) XXX_Size() int {
 	return xxx_messageInfo_GameEvent_AttackerDoubleTouchedBall.Size(m)
@@ -2471,8 +2471,8 @@ func (m *GameEvent_AttackerTooCloseToDefenseArea) XXX_Unmarshal(b []byte) error 
 func (m *GameEvent_AttackerTooCloseToDefenseArea) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GameEvent_AttackerTooCloseToDefenseArea.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_AttackerTooCloseToDefenseArea) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_AttackerTooCloseToDefenseArea.Merge(dst, src)
+func (m *GameEvent_AttackerTooCloseToDefenseArea) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_AttackerTooCloseToDefenseArea.Merge(m, src)
 }
 func (m *GameEvent_AttackerTooCloseToDefenseArea) XXX_Size() int {
 	return xxx_messageInfo_GameEvent_AttackerTooCloseToDefenseArea.Size(m)
@@ -2538,8 +2538,8 @@ func (m *GameEvent_BotHeldBallDeliberately) XXX_Unmarshal(b []byte) error {
 func (m *GameEvent_BotHeldBallDeliberately) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GameEvent_BotHeldBallDeliberately.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_BotHeldBallDeliberately) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_BotHeldBallDeliberately.Merge(dst, src)
+func (m *GameEvent_BotHeldBallDeliberately) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_BotHeldBallDeliberately.Merge(m, src)
 }
 func (m *GameEvent_BotHeldBallDeliberately) XXX_Size() int {
 	return xxx_messageInfo_GameEvent_BotHeldBallDeliberately.Size(m)
@@ -2603,8 +2603,8 @@ func (m *GameEvent_BotInterferedPlacement) XXX_Unmarshal(b []byte) error {
 func (m *GameEvent_BotInterferedPlacement) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GameEvent_BotInterferedPlacement.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_BotInterferedPlacement) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_BotInterferedPlacement.Merge(dst, src)
+func (m *GameEvent_BotInterferedPlacement) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_BotInterferedPlacement.Merge(m, src)
 }
 func (m *GameEvent_BotInterferedPlacement) XXX_Size() int {
 	return xxx_messageInfo_GameEvent_BotInterferedPlacement.Size(m)
@@ -2657,8 +2657,8 @@ func (m *GameEvent_MultipleYellowCards) XXX_Unmarshal(b []byte) error {
 func (m *GameEvent_MultipleYellowCards) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GameEvent_MultipleYellowCards.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_MultipleYellowCards) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_MultipleYellowCards.Merge(dst, src)
+func (m *GameEvent_MultipleYellowCards) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_MultipleYellowCards.Merge(m, src)
 }
 func (m *GameEvent_MultipleYellowCards) XXX_Size() int {
 	return xxx_messageInfo_GameEvent_MultipleYellowCards.Size(m)
@@ -2697,8 +2697,8 @@ func (m *GameEvent_MultipleFouls) XXX_Unmarshal(b []byte) error {
 func (m *GameEvent_MultipleFouls) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GameEvent_MultipleFouls.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_MultipleFouls) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_MultipleFouls.Merge(dst, src)
+func (m *GameEvent_MultipleFouls) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_MultipleFouls.Merge(m, src)
 }
 func (m *GameEvent_MultipleFouls) XXX_Size() int {
 	return xxx_messageInfo_GameEvent_MultipleFouls.Size(m)
@@ -2739,8 +2739,8 @@ func (m *GameEvent_KickTimeout) XXX_Unmarshal(b []byte) error {
 func (m *GameEvent_KickTimeout) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GameEvent_KickTimeout.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_KickTimeout) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_KickTimeout.Merge(dst, src)
+func (m *GameEvent_KickTimeout) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_KickTimeout.Merge(m, src)
 }
 func (m *GameEvent_KickTimeout) XXX_Size() int {
 	return xxx_messageInfo_GameEvent_KickTimeout.Size(m)
@@ -2788,8 +2788,8 @@ func (m *GameEvent_NoProgressInGame) XXX_Unmarshal(b []byte) error {
 func (m *GameEvent_NoProgressInGame) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GameEvent_NoProgressInGame.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_NoProgressInGame) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_NoProgressInGame.Merge(dst, src)
+func (m *GameEvent_NoProgressInGame) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_NoProgressInGame.Merge(m, src)
 }
 func (m *GameEvent_NoProgressInGame) XXX_Size() int {
 	return xxx_messageInfo_GameEvent_NoProgressInGame.Size(m)
@@ -2839,8 +2839,8 @@ func (m *GameEvent_PlacementFailedByTeamInFavor) XXX_Unmarshal(b []byte) error {
 func (m *GameEvent_PlacementFailedByTeamInFavor) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GameEvent_PlacementFailedByTeamInFavor.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_PlacementFailedByTeamInFavor) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_PlacementFailedByTeamInFavor.Merge(dst, src)
+func (m *GameEvent_PlacementFailedByTeamInFavor) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_PlacementFailedByTeamInFavor.Merge(m, src)
 }
 func (m *GameEvent_PlacementFailedByTeamInFavor) XXX_Size() int {
 	return xxx_messageInfo_GameEvent_PlacementFailedByTeamInFavor.Size(m)
@@ -2888,8 +2888,8 @@ func (m *GameEvent_PlacementFailedByOpponent) XXX_Unmarshal(b []byte) error {
 func (m *GameEvent_PlacementFailedByOpponent) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GameEvent_PlacementFailedByOpponent.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_PlacementFailedByOpponent) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_PlacementFailedByOpponent.Merge(dst, src)
+func (m *GameEvent_PlacementFailedByOpponent) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_PlacementFailedByOpponent.Merge(m, src)
 }
 func (m *GameEvent_PlacementFailedByOpponent) XXX_Size() int {
 	return xxx_messageInfo_GameEvent_PlacementFailedByOpponent.Size(m)
@@ -2937,8 +2937,8 @@ func (m *GameEvent_UnsportiveBehaviorMinor) XXX_Unmarshal(b []byte) error {
 func (m *GameEvent_UnsportiveBehaviorMinor) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GameEvent_UnsportiveBehaviorMinor.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_UnsportiveBehaviorMinor) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_UnsportiveBehaviorMinor.Merge(dst, src)
+func (m *GameEvent_UnsportiveBehaviorMinor) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_UnsportiveBehaviorMinor.Merge(m, src)
 }
 func (m *GameEvent_UnsportiveBehaviorMinor) XXX_Size() int {
 	return xxx_messageInfo_GameEvent_UnsportiveBehaviorMinor.Size(m)
@@ -2986,8 +2986,8 @@ func (m *GameEvent_UnsportiveBehaviorMajor) XXX_Unmarshal(b []byte) error {
 func (m *GameEvent_UnsportiveBehaviorMajor) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GameEvent_UnsportiveBehaviorMajor.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_UnsportiveBehaviorMajor) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_UnsportiveBehaviorMajor.Merge(dst, src)
+func (m *GameEvent_UnsportiveBehaviorMajor) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_UnsportiveBehaviorMajor.Merge(m, src)
 }
 func (m *GameEvent_UnsportiveBehaviorMajor) XXX_Size() int {
 	return xxx_messageInfo_GameEvent_UnsportiveBehaviorMajor.Size(m)
@@ -3037,8 +3037,8 @@ func (m *GameEvent_KeeperHeldBall) XXX_Unmarshal(b []byte) error {
 func (m *GameEvent_KeeperHeldBall) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GameEvent_KeeperHeldBall.Marshal(b, m, deterministic)
 }
-func (dst *GameEvent_KeeperHeldBall) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_KeeperHeldBall.Merge(dst, src)
+func (m *GameEvent_KeeperHeldBall) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_KeeperHeldBall.Merge(m, src)
 }
 func (m *GameEvent_KeeperHeldBall) XXX_Size() int {
 	return xxx_messageInfo_GameEvent_KeeperHeldBall.Size(m)

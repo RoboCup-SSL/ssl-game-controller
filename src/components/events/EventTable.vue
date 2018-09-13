@@ -68,7 +68,7 @@
         },
         methods: {
             formatTimestamp(timestamp) {
-                let date = new Date(timestamp);
+                let date = new Date(timestamp/1000000);
                 return date.format("HH:MM:ss,l");
             }
         }
