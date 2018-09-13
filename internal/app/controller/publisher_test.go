@@ -9,11 +9,12 @@ import (
 )
 
 func Test_updateMessage(t *testing.T) {
-	referee := refproto.Referee{}
-	initRefereeMessage(&referee)
 	state := NewState()
 
-	updateMessage(&referee, state)
+	r := &RefMessage{send: func() {}}
+	referee := &r.referee
+	initRefereeMessage(referee)
+	r.Publish(state)
 
 	if *referee.PacketTimestamp <= 0 {
 		t.Errorf("Wrong packet timestamp: %v", *referee.PacketTimestamp)

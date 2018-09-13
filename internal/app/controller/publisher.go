@@ -13,7 +13,12 @@ const maxDatagramSize = 8192
 // Publisher can publish state and commands to the teams
 type Publisher struct {
 	conn    *net.UDPConn
-	message refproto.Referee
+	message RefMessage
+}
+
+type RefMessage struct {
+	referee refproto.Referee
+	send    func()
 }
 
 // NewPublisher creates a new publisher that publishes referee messages via UDP to the teams
@@ -34,8 +39,9 @@ func NewPublisher(address string) (publisher Publisher, err error) {
 	log.Println("Publishing to", address)
 
 	publisher.conn = conn
+	publisher.message = RefMessage{send: publisher.send}
 
-	initRefereeMessage(&publisher.message)
+	initRefereeMessage(&publisher.message.referee)
 
 	return
 }
@@ -69,17 +75,21 @@ func initTeamInfo(t *refproto.Referee_TeamInfo) {
 
 // Publish the state and command
 func (p *Publisher) Publish(state *State) {
+	p.message.Publish(state)
+}
 
-	if p.conn == nil {
-		return
-	}
-
+// Publish the state and command
+func (p *RefMessage) Publish(state *State) {
 	p.setState(state)
 	p.sendCommands(state)
 }
 
 func (p *Publisher) send() {
-	bytes, err := proto.Marshal(&p.message)
+	if p.conn == nil {
+		return
+	}
+
+	bytes, err := proto.Marshal(&p.message.referee)
 	if err != nil {
 		log.Printf("Could not marshal referee message: %v\nError: %v", p.message, err)
 		return
@@ -90,8 +100,8 @@ func (p *Publisher) send() {
 	}
 }
 
-func (p *Publisher) setState(state *State) (republish bool) {
-	r := &p.message
+func (p *RefMessage) setState(state *State) (republish bool) {
+	r := &p.referee
 
 	r.GameEvents = mapGameEvents(state.GameEvents)
 	r.DesignatedPosition = mapLocation(state.PlacementPos)
@@ -105,26 +115,26 @@ func (p *Publisher) setState(state *State) (republish bool) {
 	return
 }
 
-func (p *Publisher) sendCommands(state *State) {
+func (p *RefMessage) sendCommands(state *State) {
 	newCommand := mapCommand(state.Command, state.CommandFor)
 
 	// send the GOAL command based on the team score for compatibility with old behavior
-	if state.TeamState[TeamYellow].Goals > int(*p.message.Yellow.Score) {
+	if state.TeamState[TeamYellow].Goals > int(*p.referee.Yellow.Score) {
 		p.updateCommand(refproto.Referee_GOAL_YELLOW)
 		p.send()
 		p.updateCommand(newCommand)
-	} else if state.TeamState[TeamBlue].Goals > int(*p.message.Blue.Score) {
+	} else if state.TeamState[TeamBlue].Goals > int(*p.referee.Blue.Score) {
 		p.updateCommand(refproto.Referee_GOAL_BLUE)
 		p.send()
 		p.updateCommand(newCommand)
-	} else if *p.message.Command != newCommand {
+	} else if *p.referee.Command != newCommand {
 		switch state.Command {
 		case CommandBallPlacement,
 			CommandDirect,
 			CommandIndirect,
 			CommandKickoff,
 			CommandPenalty:
-			if *p.message.Command != refproto.Referee_STOP {
+			if *p.referee.Command != refproto.Referee_STOP {
 				// send a STOP right before the actual command to be compatible with old behavior
 				p.updateCommand(refproto.Referee_STOP)
 				p.send()
@@ -136,18 +146,18 @@ func (p *Publisher) sendCommands(state *State) {
 	p.send()
 }
 
+func (p *RefMessage) updateCommand(newCommand refproto.Referee_Command) {
+	*p.referee.Command = newCommand
+	*p.referee.CommandCounter++
+	*p.referee.CommandTimestamp = uint64(time.Now().UnixNano() / 1000)
+}
+
 func mapGameEvents(events []*GameEvent) []*refproto.GameEvent {
 	mappedEvents := make([]*refproto.GameEvent, len(events))
 	for i, e := range events {
 		mappedEvents[i] = e.ToProto()
 	}
 	return mappedEvents
-}
-
-func (p *Publisher) updateCommand(newCommand refproto.Referee_Command) {
-	*p.message.Command = newCommand
-	*p.message.CommandCounter++
-	*p.message.CommandTimestamp = uint64(time.Now().UnixNano() / 1000)
 }
 
 func mapCommand(command RefCommand, team Team) refproto.Referee_Command {
