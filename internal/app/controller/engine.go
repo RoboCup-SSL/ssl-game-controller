@@ -547,12 +547,14 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 
 	if e.State.GameState() != GameStateHalted && !event.IsContinued() {
 		teamInFavor := event.ByTeam().Opposite()
-		if e.State.PlacementPos == nil {
-			e.SendCommand(CommandStop, "")
-		} else if e.State.TeamState[teamInFavor].CanPlaceBall {
-			e.SendCommand(CommandBallPlacement, teamInFavor)
-		} else if e.State.TeamState[teamInFavor.Opposite()].CanPlaceBall {
-			e.SendCommand(CommandBallPlacement, teamInFavor.Opposite())
+		if e.State.PlacementPos != nil {
+			if e.State.TeamState[teamInFavor].CanPlaceBall {
+				e.SendCommand(CommandBallPlacement, teamInFavor)
+			} else if e.State.TeamState[teamInFavor.Opposite()].CanPlaceBall {
+				e.SendCommand(CommandBallPlacement, teamInFavor.Opposite())
+			} else if e.State.GameState() != GameStateStopped {
+				e.SendCommand(CommandStop, "")
+			}
 		} else if e.State.GameState() != GameStateStopped {
 			e.SendCommand(CommandStop, "")
 		}
