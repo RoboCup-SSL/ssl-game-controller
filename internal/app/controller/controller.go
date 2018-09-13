@@ -64,10 +64,17 @@ func (c *GameController) ProcessAutoRefRequests(request refproto.AutoRefToContro
 	defer c.Mutex.Unlock()
 	log.Print("Received request from autoRef: ", request)
 
-	details := NewGameEventDetails(*request.GameEvent)
-	gameEventType := details.EventType()
-	event := Event{GameEvent: &GameEvent{Type: gameEventType, Details: details}}
-	c.OnNewEvent(event)
+	if request.GameEvent != nil {
+		details := NewGameEventDetails(*request.GameEvent)
+		gameEventType := details.EventType()
+		event := Event{GameEvent: &GameEvent{Type: gameEventType, Details: details}}
+		c.OnNewEvent(event)
+	}
+	if request.State != nil {
+		if *request.State == refproto.AutoRefToControllerRequest_READY_TO_CONTINUE {
+			c.Engine.Continue()
+		}
+	}
 
 	return nil
 }
