@@ -45,7 +45,7 @@
                     },
                     {
                         key: 'stageTime',
-                        sortable: false
+                        sortable: true
                     },
                     {
                         key: 'type',
@@ -53,15 +53,15 @@
                     },
                     {
                         key: 'name',
-                        sortable: false
+                        sortable: true
                     },
                     {
                         key: 'team',
-                        sortable: false
+                        sortable: true
                     },
                     {
                         key: 'description',
-                        sortable: false
+                        sortable: true
                     },
                 ],
             }
