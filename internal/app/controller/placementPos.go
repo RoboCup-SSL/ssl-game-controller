@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
 	"log"
+	"math"
 )
 
 // BallPlacementPos determines the ball placement position based on the game event
@@ -17,81 +18,134 @@ func (e *Engine) BallPlacementPos() *Location {
 
 	switch event.Type {
 	case GameEventBallLeftFieldTouchLine:
-		return validateProtoLocation(event.Details.BallLeftFieldTouchLine.Location)
+		return e.validateProtoLocation(event.Details.BallLeftFieldTouchLine.Location)
 	case GameEventBallLeftFieldGoalLine:
-		// TODO corner
-		return validateProtoLocation(event.Details.BallLeftFieldGoalLine.Location)
+		if event.Details.BallLeftFieldGoalLine.Location != nil && e.isGoalKick(event) {
+			location := mapProtoLocation(event.Details.BallLeftFieldGoalLine.Location)
+			maxX := e.Geometry.FieldLength/2 - e.Geometry.PlacementOffsetGoalLineGoalKick
+			if math.Abs(location.X) > maxX {
+				location.X = math.Copysign(maxX, location.X)
+			}
+			return e.validateLocation(location)
+		}
+		return e.validateProtoLocation(event.Details.BallLeftFieldGoalLine.Location)
 	case GameEventIcing:
-		return validateProtoLocation(event.Details.Icing.KickLocation)
+		return e.validateProtoLocation(event.Details.Icing.KickLocation)
 	case GameEventGoal:
 		return &Location{X: 0.0, Y: 0.0}
 	case GameEventIndirectGoal:
-		return validateProtoLocation(event.Details.IndirectGoal.KickLocation)
+		return e.validateProtoLocation(event.Details.IndirectGoal.KickLocation)
 	case GameEventChippedGoal:
-		return validateProtoLocation(event.Details.ChippedGoal.KickLocation)
+		return e.validateProtoLocation(event.Details.ChippedGoal.KickLocation)
 	case GameEventBotTippedOver:
-		return validateProtoLocation(event.Details.BotTippedOver.Location)
+		return e.validateProtoLocation(event.Details.BotTippedOver.Location)
 	case GameEventBotInterferedPlacement:
-		return validateLocation(e.State.PlacementPos)
+		return e.validateLocation(e.State.PlacementPos)
 	case GameEventBotCrashDrawn:
-		return validateProtoLocation(event.Details.BotCrashDrawn.Location)
+		return e.validateProtoLocation(event.Details.BotCrashDrawn.Location)
 	case GameEventBotKickedBallTooFast:
-		return validateProtoLocation(event.Details.BotKickedBallTooFast.Location)
+		return e.validateProtoLocation(event.Details.BotKickedBallTooFast.Location)
 	case GameEventBotDribbledBallTooFar:
-		return validateProtoLocation(event.Details.BotDribbledBallTooFar.Start)
+		return e.validateProtoLocation(event.Details.BotDribbledBallTooFar.Start)
 	case GameEventBotCrashUnique:
-		return validateProtoLocation(event.Details.BotCrashUnique.Location)
+		return e.validateProtoLocation(event.Details.BotCrashUnique.Location)
 	case GameEventBotCrashUniqueContinue:
-		return validateProtoLocation(event.Details.BotCrashUniqueContinue.Location)
+		return e.validateProtoLocation(event.Details.BotCrashUniqueContinue.Location)
 	case GameEventBotPushedBot:
-		return validateProtoLocation(event.Details.BotPushedBot.Location)
+		return e.validateProtoLocation(event.Details.BotPushedBot.Location)
 	case GameEventBotPushedBotContinue:
-		return validateProtoLocation(event.Details.BotPushedBotContinue.Location)
+		return e.validateProtoLocation(event.Details.BotPushedBotContinue.Location)
 	case GameEventBotHeldBallDeliberately:
-		return validateProtoLocation(event.Details.BotHeldBallDeliberately.Location)
+		return e.validateProtoLocation(event.Details.BotHeldBallDeliberately.Location)
 	case GameEventAttackerDoubleTouchedBall:
-		return validateProtoLocation(event.Details.AttackerDoubleTouchedBall.Location)
+		return e.validateProtoLocation(event.Details.AttackerDoubleTouchedBall.Location)
 	case GameEventAttackerTooCloseToDefenseArea:
-		return validateProtoLocation(event.Details.AttackerTooCloseToDefenseArea.Location)
+		return e.validateProtoLocation(event.Details.AttackerTooCloseToDefenseArea.Location)
 	case GameEventAttackerInDefenseArea:
-		return validateProtoLocation(event.Details.AttackerInDefenseArea.Location)
+		return e.validateProtoLocation(event.Details.AttackerInDefenseArea.Location)
 	case GameEventAttackerTouchedKeeper:
-		return validateProtoLocation(event.Details.AttackerTouchedKeeper.Location)
+		return e.validateProtoLocation(event.Details.AttackerTouchedKeeper.Location)
 	case GameEventDefenderTooCloseToKickPoint:
-		return validateLocation(e.State.PlacementPos)
+		return e.validateLocation(e.State.PlacementPos)
 	case GameEventDefenderInDefenseAreaPartially:
-		return validateProtoLocation(event.Details.DefenderInDefenseAreaPartially.Location)
+		return e.validateProtoLocation(event.Details.DefenderInDefenseAreaPartially.Location)
 	case GameEventDefenderInDefenseArea:
-		// TODO penalty mark
-		return nil
+		teamInFavor := event.ByTeam().Opposite()
+		location := Location{}
+		location.X = (e.Geometry.FieldLength / 2.0) - e.Geometry.PenaltyAreaDepth
+		if e.State.TeamState[teamInFavor].OnPositiveHalf {
+			location.X *= -1
+		}
+		return &location
 	case GameEventKeeperHeldBall:
-		return validateProtoLocation(event.Details.KeeperHeldBall.Location)
+		return e.validateProtoLocation(event.Details.KeeperHeldBall.Location)
 	case GameEventKickTimeout:
-		return validateLocation(e.State.PlacementPos)
+		return e.validateLocation(e.State.PlacementPos)
 	case GameEventNoProgressInGame:
-		return validateProtoLocation(event.Details.NoProgressInGame.Location)
+		return e.validateProtoLocation(event.Details.NoProgressInGame.Location)
 	case GameEventPlacementFailedByTeamInFavor:
-		return validateLocation(e.State.PlacementPos)
+		return e.validateLocation(e.State.PlacementPos)
 	case GameEventPlacementFailedByOpponent:
-		return validateLocation(e.State.PlacementPos)
+		return e.validateLocation(e.State.PlacementPos)
 	default:
 		log.Print("Warn: Unknown game event: ", event.Type)
 		return nil
 	}
 }
 
-func validateProtoLocation(location *refproto.Location) *Location {
-	if location == nil {
-		return nil
+func (e *Engine) isGoalKick(event *GameEvent) bool {
+	teamInFavor := event.ByTeam().Opposite()
+	location := mapProtoLocation(event.Details.BallLeftFieldGoalLine.Location)
+	if e.State.TeamState[teamInFavor].OnPositiveHalf && location.X > 0 {
+		return true
 	}
-	return validateLocation(&Location{X: *location.X, Y: *location.Y})
+	if !e.State.TeamState[teamInFavor].OnPositiveHalf && location.X < 0 {
+		return true
+	}
+	return false
 }
 
-func validateLocation(location *Location) *Location {
+func mapProtoLocation(location *refproto.Location) *Location {
+	return &Location{X: float64(*location.X), Y: float64(*location.Y)}
+}
+
+func (e *Engine) validateProtoLocation(location *refproto.Location) *Location {
 	if location == nil {
 		return nil
 	}
-	// TODO move inside field
-	// TODO move away from defense area
+	return e.validateLocation(mapProtoLocation(location))
+}
+
+func (e *Engine) validateLocation(location *Location) *Location {
+	if location == nil {
+		return nil
+	}
+
+	e.movePositionInsideField(location)
+	e.movePositionOutOfDefenseArea(location)
+
 	return location
+}
+
+func (e *Engine) movePositionOutOfDefenseArea(location *Location) {
+	maxX := e.Geometry.FieldLength/2 - e.Geometry.PenaltyAreaDepth - e.Geometry.PlacementOffsetDefenseArea
+	minY := e.Geometry.PenaltyAreaWidth + e.Geometry.PlacementOffsetDefenseArea
+	if math.Abs(location.X) > maxX && math.Abs(location.Y) < minY {
+		if math.Abs(maxX-math.Abs(location.X)) < math.Abs(minY-math.Abs(location.Y)) {
+			location.X = math.Copysign(maxX, location.X)
+		} else {
+			location.Y = math.Copysign(minY, location.Y)
+		}
+	}
+}
+
+func (e *Engine) movePositionInsideField(location *Location) {
+	maxX := e.Geometry.FieldLength/2 - e.Geometry.PlacementOffsetGoalLine
+	if math.Abs(location.X) > maxX {
+		location.X = math.Copysign(maxX, location.X)
+	}
+	maxY := e.Geometry.FieldWidth/2 - e.Geometry.PlacementOffsetTouchLine
+	if math.Abs(location.Y) > maxY {
+		location.Y = math.Copysign(maxY, location.Y)
+	}
 }

@@ -18,6 +18,7 @@ type Engine struct {
 	config        ConfigGame
 	TimeProvider  func() time.Time
 	History       History
+	Geometry      ConfigGeometry
 }
 
 func NewEngine(config ConfigGame) (e Engine) {
@@ -36,6 +37,7 @@ func (e *Engine) ResetGame() {
 	e.State.TeamState[TeamYellow].TimeoutsLeft = e.config.Normal.Timeouts
 	e.RefereeEvents = []RefereeEvent{}
 	e.State.Division = e.config.DefaultDivision
+	e.Geometry = *e.config.DefaultGeometry[e.State.Division]
 }
 
 // Tick updates the times of the state and removes cards, if necessary

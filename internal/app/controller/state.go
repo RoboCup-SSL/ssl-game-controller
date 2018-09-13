@@ -332,6 +332,6 @@ func (s *State) TeamByName(teamName string) Team {
 
 // Location is a two-dimensional coordinate
 type Location struct {
-	X float32
-	Y float32
+	X float64
+	Y float64
 }

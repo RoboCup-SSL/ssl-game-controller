@@ -16,13 +16,25 @@ type ConfigSpecial struct {
 	BreakAfter       time.Duration `yaml:"break-after"`
 }
 
+type ConfigGeometry struct {
+	FieldLength                     float64 `yaml:"field-length"`
+	FieldWidth                      float64 `yaml:"field-width"`
+	PenaltyAreaDepth                float64 `yaml:"penalty-area-depth"`
+	PenaltyAreaWidth                float64 `yaml:"penalty-area-width"`
+	PlacementOffsetTouchLine        float64 `yaml:"placement-offset-touch-line"`
+	PlacementOffsetGoalLine         float64 `yaml:"placement-offset-goal-line"`
+	PlacementOffsetGoalLineGoalKick float64 `yaml:"placement-offset-goal-line-goal-kick"`
+	PlacementOffsetDefenseArea      float64 `yaml:"placement-offset-defense-area"`
+}
+
 // ConfigGame holds configs that are valid for the whole game
 type ConfigGame struct {
-	YellowCardDuration time.Duration `yaml:"yellow-card-duration"`
-	DefaultDivision    Division      `yaml:"default-division"`
-	Normal             ConfigSpecial `yaml:"normal"`
-	Overtime           ConfigSpecial `yaml:"overtime"`
-	TeamChoiceTimeout  time.Duration `yaml:"team-choice-timeout"`
+	YellowCardDuration time.Duration                `yaml:"yellow-card-duration"`
+	DefaultDivision    Division                     `yaml:"default-division"`
+	Normal             ConfigSpecial                `yaml:"normal"`
+	Overtime           ConfigSpecial                `yaml:"overtime"`
+	TeamChoiceTimeout  time.Duration                `yaml:"team-choice-timeout"`
+	DefaultGeometry    map[Division]*ConfigGeometry `yaml:"default-geometry"`
 }
 
 // ConfigPublish holds configs for publishing the state and commands to the teams
@@ -101,6 +113,27 @@ func DefaultConfig() (c Config) {
 	c.Server.AutoRef.TrustedKeysDir = "config/trusted_keys/auto_ref"
 	c.Server.Team.Address = ":10008"
 	c.Server.AutoRef.TrustedKeysDir = "config/trusted_keys/team"
+
+	c.Game.DefaultGeometry = map[Division]*ConfigGeometry{}
+	c.Game.DefaultGeometry[DivA] = new(ConfigGeometry)
+	c.Game.DefaultGeometry[DivA].FieldLength = 12
+	c.Game.DefaultGeometry[DivA].FieldWidth = 9
+	c.Game.DefaultGeometry[DivA].PenaltyAreaDepth = 1.2
+	c.Game.DefaultGeometry[DivA].PenaltyAreaWidth = 2.4
+	c.Game.DefaultGeometry[DivA].PlacementOffsetGoalLine = 0.2
+	c.Game.DefaultGeometry[DivA].PlacementOffsetGoalLineGoalKick = 1.0
+	c.Game.DefaultGeometry[DivA].PlacementOffsetTouchLine = 0.2
+	c.Game.DefaultGeometry[DivA].PlacementOffsetDefenseArea = 1.0
+
+	c.Game.DefaultGeometry[DivB] = new(ConfigGeometry)
+	c.Game.DefaultGeometry[DivB].FieldLength = 9
+	c.Game.DefaultGeometry[DivB].FieldWidth = 6
+	c.Game.DefaultGeometry[DivB].PenaltyAreaDepth = 1
+	c.Game.DefaultGeometry[DivB].PenaltyAreaWidth = 2
+	c.Game.DefaultGeometry[DivB].PlacementOffsetGoalLine = 0.2
+	c.Game.DefaultGeometry[DivB].PlacementOffsetGoalLineGoalKick = 1.0
+	c.Game.DefaultGeometry[DivB].PlacementOffsetTouchLine = 0.2
+	c.Game.DefaultGeometry[DivB].PlacementOffsetDefenseArea = 1.0
 
 	return
 }

@@ -253,5 +253,7 @@ func mapLocation(location *Location) *refproto.Referee_Point {
 	if location == nil {
 		return nil
 	}
-	return &refproto.Referee_Point{X: &location.X, Y: &location.Y}
+	x := float32(location.X)
+	y := float32(location.Y)
+	return &refproto.Referee_Point{X: &x, Y: &y}
 }
