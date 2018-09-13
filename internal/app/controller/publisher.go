@@ -74,43 +74,24 @@ func (p *Publisher) Publish(state *State) {
 		return
 	}
 
-	republish := updateMessage(&p.message, state)
+	p.setState(state)
+	p.sendCommands(state)
+}
+
+func (p *Publisher) send() {
 	bytes, err := proto.Marshal(&p.message)
 	if err != nil {
-		log.Printf("Could not marshal referee message: %v\nError: %v", state, err)
+		log.Printf("Could not marshal referee message: %v\nError: %v", p.message, err)
 		return
 	}
 	_, err = p.conn.Write(bytes)
 	if err != nil {
 		log.Printf("Could not write message: %v", err)
 	}
-
-	if republish {
-		// immediately publish again to send another command
-		p.Publish(state)
-	}
 }
 
-func updateMessage(r *refproto.Referee, state *State) (republish bool) {
-	republish = false
-
-	newCommand := mapCommand(state.Command, state.CommandFor)
-
-	// send the GOAL command based on the team score
-	// a STOP command will automatically be send in the next update cycle
-	if state.TeamState[TeamYellow].Goals > int(*r.Yellow.Score) {
-		updateCommand(r, refproto.Referee_GOAL_YELLOW)
-		republish = true
-	} else if state.TeamState[TeamBlue].Goals > int(*r.Blue.Score) {
-		updateCommand(r, refproto.Referee_GOAL_BLUE)
-		republish = true
-	} else if state.Command == CommandBallPlacement && *r.Command != refproto.Referee_STOP && *r.Command != refproto.Referee_BALL_PLACEMENT_BLUE && *r.Command != refproto.Referee_BALL_PLACEMENT_YELLOW {
-		// send a STOP before the ball placement command to be compatible with earlier behavior
-		updateCommand(r, refproto.Referee_STOP)
-		republish = true
-	} else if *r.Command != newCommand {
-		updateCommand(r, newCommand)
-	}
+func (p *Publisher) setState(state *State) (republish bool) {
+	r := &p.message
 
 	r.GameEvents = mapGameEvents(state.GameEvents)
 	r.DesignatedPosition = mapLocation(state.PlacementPos)
@@ -123,6 +104,38 @@ func updateMessage(r *refproto.Referee, state *State) (republish bool) {
 	updateTeam(r.Blue, state.TeamState[TeamBlue])
 	return
 }
+
+func (p *Publisher) sendCommands(state *State) {
+	newCommand := mapCommand(state.Command, state.CommandFor)
+
+	// send the GOAL command based on the team score for compatibility with old behavior
+	if state.TeamState[TeamYellow].Goals > int(*p.message.Yellow.Score) {
+		p.updateCommand(refproto.Referee_GOAL_YELLOW)
+		p.send()
+		p.updateCommand(newCommand)
+	} else if state.TeamState[TeamBlue].Goals > int(*p.message.Blue.Score) {
+		p.updateCommand(refproto.Referee_GOAL_BLUE)
+		p.send()
+		p.updateCommand(newCommand)
+	} else if *p.message.Command != newCommand {
+		switch state.Command {
+		case CommandBallPlacement,
+			CommandDirect,
+			CommandIndirect,
+			CommandKickoff,
+			CommandPenalty:
+			if *p.message.Command != refproto.Referee_STOP {
+				// send a STOP right before the actual command to be compatible with old behavior
+				p.updateCommand(refproto.Referee_STOP)
+				p.send()
+			}
+		}
+		p.updateCommand(newCommand)
+	}
+
+	p.send()
+}
+
 func mapGameEvents(events []*GameEvent) []*refproto.GameEvent {
 	mappedEvents := make([]*refproto.GameEvent, len(events))
 	for i, e := range events {
@@ -131,10 +144,10 @@ func mapGameEvents(events []*GameEvent) []*refproto.GameEvent {
 	return mappedEvents
 }
 
-func updateCommand(r *refproto.Referee, newCommand refproto.Referee_Command) {
-	*r.Command = newCommand
-	*r.CommandCounter++
-	*r.CommandTimestamp = uint64(time.Now().UnixNano() / 1000)
+func (p *Publisher) updateCommand(newCommand refproto.Referee_Command) {
+	*p.message.Command = newCommand
+	*p.message.CommandCounter++
+	*p.message.CommandTimestamp = uint64(time.Now().UnixNano() / 1000)
 }
 
 func mapCommand(command RefCommand, team Team) refproto.Referee_Command {
