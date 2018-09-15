@@ -1,21 +1,17 @@
 package main
 
 import (
-	"crypto"
-	"crypto/rand"
 	"crypto/rsa"
-	"crypto/sha256"
-	"crypto/x509"
-	"encoding/pem"
 	"flag"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/client"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
 	"github.com/RoboCup-SSL/ssl-go-tools/pkg/sslconn"
-	"github.com/golang/protobuf/proto"
-	"io/ioutil"
 	"log"
 	"net"
 )
 
+var udpAddress = flag.String("udpAddress", "224.5.23.1:10003", "The multicast address of ssl-game-controller")
+var autoDetectAddress = flag.Bool("autoDetectHost", true, "Automatically detect the game-controller host and replace it with the host given in address")
 var refBoxAddr = flag.String("address", "localhost:10007", "Address to connect to")
 var privateKeyLocation = flag.String("privateKey", "", "A private key to be used to sign messages")
 var clientIdentifier = flag.String("identifier", "test", "The identifier of the client")
@@ -30,7 +26,15 @@ type Client struct {
 func main() {
 	flag.Parse()
 
-	loadPrivateKey()
+	client.LoadPrivateKey(*privateKeyLocation)
+
+	if *autoDetectAddress {
+		host := client.DetectHost(*udpAddress)
+		if host != "" {
+			log.Print("Detected game-controller host: ", host)
+			*refBoxAddr = client.SetHost(*refBoxAddr, host)
+		}
+	}
 
 	conn, err := net.Dial("tcp", *refBoxAddr)
 	if err != nil {
@@ -38,39 +42,12 @@ func main() {
 	}
 	defer conn.Close()
 	log.Printf("Connected to game-controller at %v", *refBoxAddr)
-	client := Client{}
-	client.conn = conn
+	c := Client{}
+	c.conn = conn
 
-	client.register()
-	client.sendGameEvent()
-	client.sendAutoRefMessage("Hello World")
-}
-
-func loadPrivateKey() {
-	if *privateKeyLocation != "" {
-		privateKey = readPrivateKey()
-		if privateKey != nil {
-			log.Print("Found private key")
-		} else {
-			log.Print("No private key available")
-		}
-	}
-}
-
-func readPrivateKey() *rsa.PrivateKey {
-	b, err := ioutil.ReadFile(*privateKeyLocation)
-	if err != nil {
-		log.Fatal("Could not find private key at ", *privateKeyLocation)
-	}
-	p, _ := pem.Decode(b)
-	if p.Type != "RSA PRIVATE KEY" {
-		log.Fatal("Private key type is wrong: ", p.Type)
-	}
-	privateKey, err := x509.ParsePKCS1PrivateKey(p.Bytes)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return privateKey
+	c.register()
+	c.sendGameEvent()
+	c.sendAutoRefMessage("Hello World")
 }
 
 func (c *Client) register() {
@@ -86,7 +63,7 @@ func (c *Client) register() {
 	registration.Identifier = clientIdentifier
 	if privateKey != nil {
 		registration.Signature = &refproto.Signature{Token: controllerReply.NextToken, Pkcs1V15: []byte{}}
-		registration.Signature.Pkcs1V15 = sign(privateKey, &registration)
+		registration.Signature.Pkcs1V15 = client.Sign(privateKey, &registration)
 	}
 	log.Print("Sending registration")
 	if err := sslconn.SendMessage(c.conn, &registration); err != nil {
@@ -136,7 +113,7 @@ func (c *Client) sendAutoRefMessage(msg string) {
 func (c *Client) sendRequest(request *refproto.AutoRefToControllerRequest) {
 	if privateKey != nil {
 		request.Signature = &refproto.Signature{Token: &c.token, Pkcs1V15: []byte{}}
-		request.Signature.Pkcs1V15 = sign(privateKey, request)
+		request.Signature.Pkcs1V15 = client.Sign(privateKey, request)
 	}
 
 	log.Print("Sending ", request)
@@ -159,19 +136,4 @@ func (c *Client) sendRequest(request *refproto.AutoRefToControllerRequest) {
 	} else {
 		c.token = ""
 	}
-}
-
-func sign(privateKey *rsa.PrivateKey, message proto.Message) []byte {
-	messageBytes, err := proto.Marshal(message)
-	if err != nil {
-		log.Fatal(err)
-	}
-	hash := sha256.New()
-	hash.Write(messageBytes)
-	d := hash.Sum(nil)
-	signature, err := rsa.SignPKCS1v15(rand.Reader, privateKey, crypto.SHA256, d)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return signature
 }

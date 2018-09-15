@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-var address = flag.String("address", "localhost:8081", "The address on which the UI and API is served, default: localhost:8081")
+var address = flag.String("address", "localhost:8081", "The address on which the UI and API is served")
 
 func main() {
 	flag.Parse()

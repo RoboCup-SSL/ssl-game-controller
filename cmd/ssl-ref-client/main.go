@@ -14,7 +14,7 @@ import (
 
 const maxDatagramSize = 8192
 
-var refereeAddress = flag.String("address", "224.5.23.1:10003", "The multicast address of ssl-game-controller, default: 224.5.23.1:10003")
+var refereeAddress = flag.String("address", "224.5.23.1:10003", "The multicast address of ssl-game-controller")
 var fullScreen = flag.Bool("fullScreen", false, "Print the formatted message to the console, clearing the screen during print")
 
 var history []refproto.Referee_Command
