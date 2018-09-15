@@ -29,12 +29,15 @@ type ConfigGeometry struct {
 
 // ConfigGame holds configs that are valid for the whole game
 type ConfigGame struct {
-	YellowCardDuration time.Duration                `yaml:"yellow-card-duration"`
-	DefaultDivision    Division                     `yaml:"default-division"`
-	Normal             ConfigSpecial                `yaml:"normal"`
-	Overtime           ConfigSpecial                `yaml:"overtime"`
-	TeamChoiceTimeout  time.Duration                `yaml:"team-choice-timeout"`
-	DefaultGeometry    map[Division]*ConfigGeometry `yaml:"default-geometry"`
+	YellowCardDuration        time.Duration                `yaml:"yellow-card-duration"`
+	DefaultDivision           Division                     `yaml:"default-division"`
+	Normal                    ConfigSpecial                `yaml:"normal"`
+	Overtime                  ConfigSpecial                `yaml:"overtime"`
+	TeamChoiceTimeout         time.Duration                `yaml:"team-choice-timeout"`
+	DefaultGeometry           map[Division]*ConfigGeometry `yaml:"default-geometry"`
+	MultipleCardStep          int                          `yaml:"multiple-card-step"`
+	MultipleFoulStep          int                          `yaml:"multiple-foul-step"`
+	MultiplePlacementFailures int                          `yaml:"multiple-placement-failures"`
 }
 
 // ConfigPublish holds configs for publishing the state and commands to the teams
@@ -94,6 +97,9 @@ func LoadConfig(fileName string) (config Config, err error) {
 func DefaultConfig() (c Config) {
 	c.Publish.Address = "224.5.23.1:10003"
 	c.Game.YellowCardDuration = 2 * time.Minute
+	c.Game.MultipleCardStep = 3
+	c.Game.MultipleFoulStep = 3
+	c.Game.MultiplePlacementFailures = 5
 
 	c.Game.Normal.HalfDuration = 5 * time.Minute
 	c.Game.Normal.HalfTimeDuration = 5 * time.Minute

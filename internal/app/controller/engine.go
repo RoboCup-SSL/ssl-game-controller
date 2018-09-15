@@ -590,7 +590,7 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 }
 
 func (e *Engine) FoulCounterIncremented(team Team) {
-	if e.State.TeamState[team].FoulCounter%3 == 0 {
+	if e.State.TeamState[team].FoulCounter%e.config.MultipleFoulStep == 0 {
 		teamProto := team.toProto()
 		event := GameEvent{Type: GameEventMultipleFouls,
 			Details: GameEventDetails{MultipleFouls: &refproto.GameEvent_MultipleFouls{ByTeam: &teamProto}}}
@@ -602,7 +602,7 @@ func (e *Engine) FoulCounterIncremented(team Team) {
 
 func (e *Engine) CardNumberIncremented(team Team) {
 	cards := e.State.TeamState[team].YellowCards + e.State.TeamState[team].RedCards
-	if cards%3 == 0 {
+	if cards%e.config.MultipleCardStep == 0 {
 		teamProto := team.toProto()
 		event := GameEvent{Type: GameEventMultipleCards,
 			Details: GameEventDetails{MultipleCards: &refproto.GameEvent_MultipleCards{ByTeam: &teamProto}}}
@@ -613,7 +613,7 @@ func (e *Engine) CardNumberIncremented(team Team) {
 }
 
 func (e *Engine) PlacementFailuresIncremented(team Team) {
-	if e.State.TeamState[team].BallPlacementFailures >= 5 {
+	if e.State.TeamState[team].BallPlacementFailures >= e.config.MultiplePlacementFailures {
 		teamProto := team.toProto()
 		event := GameEvent{Type: GameEventMultiplePlacementFailures,
 			Details: GameEventDetails{MultiplePlacementFailures: &refproto.GameEvent_MultiplePlacementFailures{ByTeam: &teamProto}}}

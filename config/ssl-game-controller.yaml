@@ -9,6 +9,9 @@ server:
     trusted-keys-dir: config/trusted_keys/team
 game:
   yellow-card-duration: 2m
+  multiple-card-step: 3
+  multiple-foul-step: 3
+  multiple-placement-failures: 5
   default-division: DivA
   normal:
     half-duration: 5m
