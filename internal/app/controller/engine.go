@@ -366,7 +366,11 @@ func (e *Engine) processModify(m *EventModifyValue) error {
 			e.FoulCounterIncremented(m.ForTeam)
 		}
 	} else if m.BallPlacementFailures != nil {
+		incremented := *m.BallPlacementFailures > teamState.BallPlacementFailures
 		teamState.BallPlacementFailures = *m.BallPlacementFailures
+		if incremented {
+			e.PlacementFailuresIncremented(m.ForTeam)
+		}
 	} else if m.YellowCardTime != nil {
 		cardId := m.YellowCardTime.CardID
 		if cardId < 0 || cardId >= len(teamState.YellowCardTimes) {
@@ -593,6 +597,17 @@ func (e *Engine) CardNumberIncremented(team Team) {
 		teamProto := team.toProto()
 		event := GameEvent{Type: GameEventMultipleCards,
 			Details: GameEventDetails{MultipleCards: &refproto.GameEvent_MultipleCards{ByTeam: &teamProto}}}
+		if err := e.processGameEvent(&event); err != nil {
+			log.Print("Could not process new secondary game event: ", err)
+		}
+	}
+}
+
+func (e *Engine) PlacementFailuresIncremented(team Team) {
+	if e.State.TeamState[team].BallPlacementFailures >= 5 {
+		teamProto := team.toProto()
+		event := GameEvent{Type: GameEventMultiplePlacementFailures,
+			Details: GameEventDetails{MultiplePlacementFailures: &refproto.GameEvent_MultiplePlacementFailures{ByTeam: &teamProto}}}
 		if err := e.processGameEvent(&event); err != nil {
 			log.Print("Could not process new secondary game event: ", err)
 		}

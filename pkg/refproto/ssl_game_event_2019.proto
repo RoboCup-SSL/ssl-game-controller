@@ -44,6 +44,7 @@ message GameEvent {
         UnsportiveBehaviorMajor unsportive_behavior_major = 26;
         MultipleFouls multiple_fouls = 27;
         MultipleCards multiple_cards = 28;
+        MultiplePlacementFailures multiple_placement_failures = 34;
 
         NoProgressInGame no_progress_in_game = 29;
         PlacementFailedByTeamInFavor placement_failed_by_team_in_favor = 30;
@@ -299,6 +300,11 @@ message GameEvent {
     // a team collected multiple fouls, which results in a yellow card
     message MultipleFouls {
         // the team that collected multiple fouls
+        required Team by_team = 1;
+    }
+    // a team failed to place the ball multiple times in a row
+    message MultiplePlacementFailures {
+        // the team that failed multiple times
         required Team by_team = 1;
     }
     // timeout waiting for the attacking team to perform the free kick

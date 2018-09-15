@@ -40,6 +40,7 @@ const (
 	GameEventUnsportiveBehaviorMajor        GameEventType = "unsportiveBehaviorMajor"
 	GameEventMultipleCards                  GameEventType = "multipleCards"
 	GameEventMultipleFouls                  GameEventType = "multipleFouls"
+	GameEventMultiplePlacementFailures      GameEventType = "multiplePlacementFailures"
 	GameEventKickTimeout                    GameEventType = "kickTimeout"
 	GameEventNoProgressInGame               GameEventType = "noProgressInGame"
 	GameEventPlacementFailedByTeamInFavor   GameEventType = "placementFailedByTeamInFavor"
@@ -193,6 +194,8 @@ func (e GameEvent) ToProto() *refproto.GameEvent {
 		protoEvent.Event = &refproto.GameEvent_MultipleCards_{MultipleCards: e.Details.MultipleCards}
 	case GameEventMultipleFouls:
 		protoEvent.Event = &refproto.GameEvent_MultipleFouls_{MultipleFouls: e.Details.MultipleFouls}
+	case GameEventMultiplePlacementFailures:
+		protoEvent.Event = &refproto.GameEvent_MultiplePlacementFailures_{MultiplePlacementFailures: e.Details.MultiplePlacementFailures}
 	case GameEventKickTimeout:
 		protoEvent.Event = &refproto.GameEvent_KickTimeout_{KickTimeout: e.Details.KickTimeout}
 	case GameEventNoProgressInGame:
@@ -239,6 +242,7 @@ type GameEventDetails struct {
 	UnsportiveBehaviorMajor        *refproto.GameEvent_UnsportiveBehaviorMajor        `json:"unsportiveBehaviorMajor,omitempty"`
 	MultipleCards                  *refproto.GameEvent_MultipleCards                  `json:"multiple,omitempty"`
 	MultipleFouls                  *refproto.GameEvent_MultipleFouls                  `json:"multipleFouls,omitempty"`
+	MultiplePlacementFailures      *refproto.GameEvent_MultiplePlacementFailures      `json:"multiplePlacementFailures,omitempty"`
 	KickTimeout                    *refproto.GameEvent_KickTimeout                    `json:"kickTimeout,omitempty"`
 	NoProgressInGame               *refproto.GameEvent_NoProgressInGame               `json:"noProgressInGame,omitempty"`
 	PlacementFailedByTeamInFavor   *refproto.GameEvent_PlacementFailedByTeamInFavor   `json:"placementFailedByTeamInFavor,omitempty"`
