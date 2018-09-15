@@ -617,6 +617,7 @@ func (e *Engine) CardNumberIncremented(team Team) {
 func (e *Engine) PlacementFailuresIncremented(team Team) {
 	if e.State.TeamState[team].BallPlacementFailures == e.config.MultiplePlacementFailures {
 		teamProto := team.toProto()
+		e.State.TeamState[team].CanPlaceBall = false
 		event := GameEvent{Type: GameEventMultiplePlacementFailures,
 			Details: GameEventDetails{MultiplePlacementFailures: &refproto.GameEvent_MultiplePlacementFailures{ByTeam: &teamProto}}}
 		if err := e.processGameEvent(&event); err != nil {
