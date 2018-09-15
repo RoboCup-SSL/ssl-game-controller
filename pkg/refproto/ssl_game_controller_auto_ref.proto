@@ -31,6 +31,8 @@ message AutoRefToControllerRequest {
         WAIT_FOR_PLACEMENT = 2;
         // waiting for the bots to move to valid positions
         WAIT_FOR_VALID_POSITIONS = 3;
+        // wait for the ball to move after the game was continued (free kick, kickoff, penalty)
+        WAIT_FOR_BALL_TO_MOVE = 4;
     }
 }
 
