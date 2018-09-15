@@ -256,6 +256,7 @@ type State struct {
 	TeamState        map[Team]*TeamInfo `json:"teamState"`
 	Division         Division           `json:"division"`
 	PlacementPos     *Location          `json:"placementPos"`
+	AutoContinue     bool               `json:"autoContinue"`
 }
 
 // NewState creates a new state, initialized for the start of a new game
@@ -278,6 +279,7 @@ func NewState() (s *State) {
 	s.TeamState[TeamBlue].OnPositiveHalf = !s.TeamState[TeamYellow].OnPositiveHalf
 
 	s.Division = DivA
+	s.AutoContinue = true
 
 	return
 }

@@ -20,60 +20,6 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
-type AutoRefToControllerRequest_State int32
-
-const (
-	// unknown or not set
-	AutoRefToControllerRequest_UNKNOWN AutoRefToControllerRequest_State = 0
-	// the game can continue (all conditions met: Ball is placed and bots are located at legal positions)
-	AutoRefToControllerRequest_READY_TO_CONTINUE AutoRefToControllerRequest_State = 1
-	// waiting for the ball to be placed
-	AutoRefToControllerRequest_WAIT_FOR_PLACEMENT AutoRefToControllerRequest_State = 2
-	// waiting for the bots to move to valid positions
-	AutoRefToControllerRequest_WAIT_FOR_VALID_POSITIONS AutoRefToControllerRequest_State = 3
-	// wait for the ball to move after the game was continued (free kick, kickoff, penalty)
-	AutoRefToControllerRequest_WAIT_FOR_BALL_TO_MOVE AutoRefToControllerRequest_State = 4
-)
-
-var AutoRefToControllerRequest_State_name = map[int32]string{
-	0: "UNKNOWN",
-	1: "READY_TO_CONTINUE",
-	2: "WAIT_FOR_PLACEMENT",
-	3: "WAIT_FOR_VALID_POSITIONS",
-	4: "WAIT_FOR_BALL_TO_MOVE",
-}
-
-var AutoRefToControllerRequest_State_value = map[string]int32{
-	"UNKNOWN":                  0,
-	"READY_TO_CONTINUE":        1,
-	"WAIT_FOR_PLACEMENT":       2,
-	"WAIT_FOR_VALID_POSITIONS": 3,
-	"WAIT_FOR_BALL_TO_MOVE":    4,
-}
-
-func (x AutoRefToControllerRequest_State) Enum() *AutoRefToControllerRequest_State {
-	p := new(AutoRefToControllerRequest_State)
-	*p = x
-	return p
-}
-
-func (x AutoRefToControllerRequest_State) String() string {
-	return proto.EnumName(AutoRefToControllerRequest_State_name, int32(x))
-}
-
-func (x *AutoRefToControllerRequest_State) UnmarshalJSON(data []byte) error {
-	value, err := proto.UnmarshalJSONEnum(AutoRefToControllerRequest_State_value, data, "AutoRefToControllerRequest_State")
-	if err != nil {
-		return err
-	}
-	*x = AutoRefToControllerRequest_State(value)
-	return nil
-}
-
-func (AutoRefToControllerRequest_State) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_2fbb3ba3bab9727c, []int{1, 0}
-}
-
 // AutoRefRegistration is the first message that a client must send to the controller to identify itself
 type AutoRefRegistration struct {
 	// identifier is a unique name of the client
@@ -125,17 +71,15 @@ func (m *AutoRefRegistration) GetSignature() *Signature {
 
 // AutoRefToControllerRequest is the wrapper message for all subsequent requests from the client to the controller
 type AutoRefToControllerRequest struct {
-	// game_event is an optional event that the autoRef detected during the game
-	GameEvent *GameEvent `protobuf:"bytes,1,opt,name=game_event,json=gameEvent" json:"game_event,omitempty"`
-	// auto_ref_message is an optional message that describes the current state or situation of the game/autoRef
-	AutoRefMessage *AutoRefMessage `protobuf:"bytes,2,opt,name=auto_ref_message,json=autoRefMessage" json:"auto_ref_message,omitempty"`
-	// the current state of the autoRef
-	State *AutoRefToControllerRequest_State `protobuf:"varint,3,opt,name=state,enum=AutoRefToControllerRequest_State" json:"state,omitempty"`
 	// signature can optionally be specified to enable secure communication
-	Signature            *Signature `protobuf:"bytes,4,opt,name=signature" json:"signature,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
-	XXX_unrecognized     []byte     `json:"-"`
-	XXX_sizecache        int32      `json:"-"`
+	Signature *Signature `protobuf:"bytes,1,opt,name=signature" json:"signature,omitempty"`
+	// game_event is an optional event that the autoRef detected during the game
+	GameEvent *GameEvent `protobuf:"bytes,2,opt,name=game_event,json=gameEvent" json:"game_event,omitempty"`
+	// auto_ref_message is an optional message that describes the current state or situation of the game/autoRef
+	AutoRefMessage       *AutoRefMessage `protobuf:"bytes,3,opt,name=auto_ref_message,json=autoRefMessage" json:"auto_ref_message,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
+	XXX_unrecognized     []byte          `json:"-"`
+	XXX_sizecache        int32           `json:"-"`
 }
 
 func (m *AutoRefToControllerRequest) Reset()         { *m = AutoRefToControllerRequest{} }
@@ -162,6 +106,13 @@ func (m *AutoRefToControllerRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_AutoRefToControllerRequest proto.InternalMessageInfo
 
+func (m *AutoRefToControllerRequest) GetSignature() *Signature {
+	if m != nil {
+		return m.Signature
+	}
+	return nil
+}
+
 func (m *AutoRefToControllerRequest) GetGameEvent() *GameEvent {
 	if m != nil {
 		return m.GameEvent
@@ -176,25 +127,10 @@ func (m *AutoRefToControllerRequest) GetAutoRefMessage() *AutoRefMessage {
 	return nil
 }
 
-func (m *AutoRefToControllerRequest) GetState() AutoRefToControllerRequest_State {
-	if m != nil && m.State != nil {
-		return *m.State
-	}
-	return AutoRefToControllerRequest_UNKNOWN
-}
-
-func (m *AutoRefToControllerRequest) GetSignature() *Signature {
-	if m != nil {
-		return m.Signature
-	}
-	return nil
-}
-
 // a message from autoRef, describing the current state or situation
 type AutoRefMessage struct {
 	// Types that are valid to be assigned to Message:
 	//	*AutoRefMessage_Custom
-	//	*AutoRefMessage_BallPlaced_
 	//	*AutoRefMessage_WaitForBots_
 	Message              isAutoRefMessage_Message `protobuf_oneof:"message"`
 	XXX_NoUnkeyedLiteral struct{}                 `json:"-"`
@@ -234,17 +170,11 @@ type AutoRefMessage_Custom struct {
 	Custom string `protobuf:"bytes,1,opt,name=custom,oneof"`
 }
 
-type AutoRefMessage_BallPlaced_ struct {
-	BallPlaced *AutoRefMessage_BallPlaced `protobuf:"bytes,2,opt,name=ball_placed,json=ballPlaced,oneof"`
-}
-
 type AutoRefMessage_WaitForBots_ struct {
-	WaitForBots *AutoRefMessage_WaitForBots `protobuf:"bytes,3,opt,name=wait_for_bots,json=waitForBots,oneof"`
+	WaitForBots *AutoRefMessage_WaitForBots `protobuf:"bytes,2,opt,name=wait_for_bots,json=waitForBots,oneof"`
 }
 
 func (*AutoRefMessage_Custom) isAutoRefMessage_Message() {}
-
-func (*AutoRefMessage_BallPlaced_) isAutoRefMessage_Message() {}
 
 func (*AutoRefMessage_WaitForBots_) isAutoRefMessage_Message() {}
 
@@ -262,13 +192,6 @@ func (m *AutoRefMessage) GetCustom() string {
 	return ""
 }
 
-func (m *AutoRefMessage) GetBallPlaced() *AutoRefMessage_BallPlaced {
-	if x, ok := m.GetMessage().(*AutoRefMessage_BallPlaced_); ok {
-		return x.BallPlaced
-	}
-	return nil
-}
-
 func (m *AutoRefMessage) GetWaitForBots() *AutoRefMessage_WaitForBots {
 	if x, ok := m.GetMessage().(*AutoRefMessage_WaitForBots_); ok {
 		return x.WaitForBots
@@ -280,7 +203,6 @@ func (m *AutoRefMessage) GetWaitForBots() *AutoRefMessage_WaitForBots {
 func (*AutoRefMessage) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
 	return _AutoRefMessage_OneofMarshaler, _AutoRefMessage_OneofUnmarshaler, _AutoRefMessage_OneofSizer, []interface{}{
 		(*AutoRefMessage_Custom)(nil),
-		(*AutoRefMessage_BallPlaced_)(nil),
 		(*AutoRefMessage_WaitForBots_)(nil),
 	}
 }
@@ -292,13 +214,8 @@ func _AutoRefMessage_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
 	case *AutoRefMessage_Custom:
 		b.EncodeVarint(1<<3 | proto.WireBytes)
 		b.EncodeStringBytes(x.Custom)
-	case *AutoRefMessage_BallPlaced_:
-		b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.BallPlaced); err != nil {
-			return err
-		}
 	case *AutoRefMessage_WaitForBots_:
-		b.EncodeVarint(3<<3 | proto.WireBytes)
+		b.EncodeVarint(2<<3 | proto.WireBytes)
 		if err := b.EncodeMessage(x.WaitForBots); err != nil {
 			return err
 		}
@@ -319,15 +236,7 @@ func _AutoRefMessage_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto
 		x, err := b.DecodeStringBytes()
 		m.Message = &AutoRefMessage_Custom{x}
 		return true, err
-	case 2: // message.ball_placed
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(AutoRefMessage_BallPlaced)
-		err := b.DecodeMessage(msg)
-		m.Message = &AutoRefMessage_BallPlaced_{msg}
-		return true, err
-	case 3: // message.wait_for_bots
+	case 2: // message.wait_for_bots
 		if wire != proto.WireBytes {
 			return true, proto.ErrInternalBadWireType
 		}
@@ -348,11 +257,6 @@ func _AutoRefMessage_OneofSizer(msg proto.Message) (n int) {
 		n += 1 // tag and wire
 		n += proto.SizeVarint(uint64(len(x.Custom)))
 		n += len(x.Custom)
-	case *AutoRefMessage_BallPlaced_:
-		s := proto.Size(x.BallPlaced)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
 	case *AutoRefMessage_WaitForBots_:
 		s := proto.Size(x.WaitForBots)
 		n += 1 // tag and wire
@@ -363,64 +267,6 @@ func _AutoRefMessage_OneofSizer(msg proto.Message) (n int) {
 		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
 	}
 	return n
-}
-
-// the result of the ball placement
-type AutoRefMessage_BallPlaced struct {
-	// the time taken for placing the ball
-	TimeTaken *float32 `protobuf:"fixed32,1,req,name=time_taken,json=timeTaken" json:"time_taken,omitempty"`
-	// the distance between placement location and actual ball position
-	Precision *float32 `protobuf:"fixed32,2,req,name=precision" json:"precision,omitempty"`
-	// the distance between the initial ball location and the placement position
-	Distance             *float32 `protobuf:"fixed32,3,req,name=distance" json:"distance,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *AutoRefMessage_BallPlaced) Reset()         { *m = AutoRefMessage_BallPlaced{} }
-func (m *AutoRefMessage_BallPlaced) String() string { return proto.CompactTextString(m) }
-func (*AutoRefMessage_BallPlaced) ProtoMessage()    {}
-func (*AutoRefMessage_BallPlaced) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2fbb3ba3bab9727c, []int{2, 0}
-}
-func (m *AutoRefMessage_BallPlaced) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_AutoRefMessage_BallPlaced.Unmarshal(m, b)
-}
-func (m *AutoRefMessage_BallPlaced) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_AutoRefMessage_BallPlaced.Marshal(b, m, deterministic)
-}
-func (m *AutoRefMessage_BallPlaced) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AutoRefMessage_BallPlaced.Merge(m, src)
-}
-func (m *AutoRefMessage_BallPlaced) XXX_Size() int {
-	return xxx_messageInfo_AutoRefMessage_BallPlaced.Size(m)
-}
-func (m *AutoRefMessage_BallPlaced) XXX_DiscardUnknown() {
-	xxx_messageInfo_AutoRefMessage_BallPlaced.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_AutoRefMessage_BallPlaced proto.InternalMessageInfo
-
-func (m *AutoRefMessage_BallPlaced) GetTimeTaken() float32 {
-	if m != nil && m.TimeTaken != nil {
-		return *m.TimeTaken
-	}
-	return 0
-}
-
-func (m *AutoRefMessage_BallPlaced) GetPrecision() float32 {
-	if m != nil && m.Precision != nil {
-		return *m.Precision
-	}
-	return 0
-}
-
-func (m *AutoRefMessage_BallPlaced) GetDistance() float32 {
-	if m != nil && m.Distance != nil {
-		return *m.Distance
-	}
-	return 0
 }
 
 // the bots that is waited for
@@ -436,7 +282,7 @@ func (m *AutoRefMessage_WaitForBots) Reset()         { *m = AutoRefMessage_WaitF
 func (m *AutoRefMessage_WaitForBots) String() string { return proto.CompactTextString(m) }
 func (*AutoRefMessage_WaitForBots) ProtoMessage()    {}
 func (*AutoRefMessage_WaitForBots) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2fbb3ba3bab9727c, []int{2, 1}
+	return fileDescriptor_2fbb3ba3bab9727c, []int{2, 0}
 }
 func (m *AutoRefMessage_WaitForBots) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AutoRefMessage_WaitForBots.Unmarshal(m, b)
@@ -477,7 +323,7 @@ func (m *AutoRefMessage_WaitForBots_Violator) Reset()         { *m = AutoRefMess
 func (m *AutoRefMessage_WaitForBots_Violator) String() string { return proto.CompactTextString(m) }
 func (*AutoRefMessage_WaitForBots_Violator) ProtoMessage()    {}
 func (*AutoRefMessage_WaitForBots_Violator) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2fbb3ba3bab9727c, []int{2, 1, 0}
+	return fileDescriptor_2fbb3ba3bab9727c, []int{2, 0, 0}
 }
 func (m *AutoRefMessage_WaitForBots_Violator) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AutoRefMessage_WaitForBots_Violator.Unmarshal(m, b)
@@ -515,49 +361,35 @@ func init() {
 	proto.RegisterType((*AutoRefRegistration)(nil), "AutoRefRegistration")
 	proto.RegisterType((*AutoRefToControllerRequest)(nil), "AutoRefToControllerRequest")
 	proto.RegisterType((*AutoRefMessage)(nil), "AutoRefMessage")
-	proto.RegisterType((*AutoRefMessage_BallPlaced)(nil), "AutoRefMessage.BallPlaced")
 	proto.RegisterType((*AutoRefMessage_WaitForBots)(nil), "AutoRefMessage.WaitForBots")
 	proto.RegisterType((*AutoRefMessage_WaitForBots_Violator)(nil), "AutoRefMessage.WaitForBots.Violator")
-	proto.RegisterEnum("AutoRefToControllerRequest_State", AutoRefToControllerRequest_State_name, AutoRefToControllerRequest_State_value)
 }
 
 func init() { proto.RegisterFile("ssl_game_controller_auto_ref.proto", fileDescriptor_2fbb3ba3bab9727c) }
 
 var fileDescriptor_2fbb3ba3bab9727c = []byte{
-	// 560 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x52, 0x4d, 0x6f, 0xd3, 0x40,
-	0x10, 0x8d, 0x9d, 0x7e, 0x79, 0x2c, 0x4a, 0x58, 0x54, 0xe4, 0x9a, 0x16, 0x85, 0x88, 0x43, 0xb8,
-	0x58, 0x90, 0x0b, 0xea, 0x81, 0x83, 0xdd, 0xba, 0xd4, 0x22, 0xb5, 0xab, 0x8d, 0xdb, 0x8a, 0xd3,
-	0x6a, 0xe3, 0x6c, 0xa2, 0x15, 0xb6, 0x37, 0x78, 0x37, 0xed, 0x85, 0x1f, 0xc2, 0x5f, 0xe1, 0xf7,
-	0xf0, 0x47, 0x90, 0x1d, 0xc7, 0x69, 0x2a, 0xe8, 0xc9, 0x9e, 0xf7, 0xde, 0xce, 0xbc, 0x79, 0xbb,
-	0xd0, 0x93, 0x32, 0x25, 0x33, 0x9a, 0x31, 0x92, 0x88, 0x5c, 0x15, 0x22, 0x4d, 0x59, 0x41, 0xe8,
-	0x42, 0x09, 0x52, 0xb0, 0xa9, 0x33, 0x2f, 0x84, 0x12, 0x76, 0xf7, 0x5f, 0x9a, 0x44, 0x64, 0x99,
-	0xc8, 0x6b, 0xc5, 0x61, 0xa3, 0x60, 0x77, 0x2c, 0x57, 0x64, 0xf0, 0xe1, 0xe3, 0xc9, 0x92, 0xea,
-	0x11, 0x78, 0xe9, 0x2e, 0x94, 0xc0, 0x6c, 0x8a, 0xd9, 0x8c, 0x4b, 0x55, 0x50, 0xc5, 0x45, 0x8e,
-	0xde, 0x00, 0xf0, 0x09, 0xcb, 0x15, 0x9f, 0x72, 0x56, 0x58, 0x5a, 0x57, 0xef, 0x1b, 0xf8, 0x01,
-	0x82, 0xfa, 0x60, 0x48, 0x3e, 0xcb, 0xa9, 0x5a, 0x14, 0xcc, 0xd2, 0xbb, 0x5a, 0xdf, 0x1c, 0x80,
-	0x33, 0x5a, 0x21, 0x78, 0x4d, 0xf6, 0xfe, 0xe8, 0x60, 0xd7, 0x13, 0x62, 0x71, 0xda, 0x18, 0xc4,
-	0xec, 0xc7, 0x82, 0x49, 0x85, 0xde, 0x03, 0xac, 0x8d, 0x59, 0x5a, 0xdd, 0xe9, 0x0b, 0xcd, 0x98,
-	0x5f, 0x22, 0xd8, 0x98, 0xad, 0x7e, 0xd1, 0x09, 0x74, 0x56, 0x9b, 0x93, 0x8c, 0x49, 0x49, 0x67,
-	0xab, 0xd1, 0xcf, 0x9d, 0x7a, 0xc2, 0xe5, 0x12, 0xc6, 0xfb, 0x74, 0xa3, 0x46, 0x9f, 0x60, 0x5b,
-	0x2a, 0xaa, 0x98, 0xd5, 0xee, 0x6a, 0xfd, 0xfd, 0xc1, 0x5b, 0xe7, 0xff, 0x8e, 0x9c, 0x51, 0x29,
-	0xc4, 0x4b, 0xfd, 0xe6, 0x9e, 0x5b, 0x4f, 0xed, 0xf9, 0x13, 0xb6, 0xab, 0x93, 0xc8, 0x84, 0xdd,
-	0xeb, 0xf0, 0x6b, 0x18, 0xdd, 0x86, 0x9d, 0x16, 0x3a, 0x80, 0x17, 0xd8, 0x77, 0xcf, 0xbe, 0x91,
-	0x38, 0x22, 0xa7, 0x51, 0x18, 0x07, 0xe1, 0xb5, 0xdf, 0xd1, 0xd0, 0x2b, 0x40, 0xb7, 0x6e, 0x10,
-	0x93, 0xf3, 0x08, 0x93, 0xab, 0xa1, 0x7b, 0xea, 0x5f, 0xfa, 0x61, 0xdc, 0xd1, 0xd1, 0x11, 0x58,
-	0x0d, 0x7e, 0xe3, 0x0e, 0x83, 0x33, 0x72, 0x15, 0x8d, 0x82, 0x38, 0x88, 0xc2, 0x51, 0xa7, 0x8d,
-	0x0e, 0xe1, 0xa0, 0x61, 0x3d, 0x77, 0x38, 0x2c, 0x9b, 0x5e, 0x46, 0x37, 0x7e, 0x67, 0xab, 0xf7,
-	0xbb, 0x0d, 0xfb, 0x9b, 0x19, 0x20, 0x0b, 0x76, 0x92, 0x85, 0x54, 0x22, 0xab, 0x52, 0x35, 0x2e,
-	0x5a, 0xb8, 0xae, 0xd1, 0x67, 0x30, 0xc7, 0x34, 0x4d, 0xc9, 0x3c, 0xa5, 0x09, 0x9b, 0xd4, 0x19,
-	0xda, 0x8f, 0x32, 0x74, 0x3c, 0x9a, 0xa6, 0x57, 0x95, 0xe2, 0xa2, 0x85, 0x61, 0xdc, 0x54, 0xc8,
-	0x85, 0x67, 0xf7, 0x94, 0x2b, 0x32, 0x15, 0x05, 0x19, 0x0b, 0x25, 0xab, 0x50, 0xcd, 0xc1, 0xeb,
-	0xc7, 0x0d, 0x6e, 0x29, 0x57, 0xe7, 0xa2, 0xf0, 0x84, 0x92, 0x17, 0x2d, 0x6c, 0xde, 0xaf, 0x4b,
-	0x9b, 0x01, 0xac, 0xdb, 0xa3, 0x63, 0x00, 0xc5, 0x33, 0x46, 0x14, 0xfd, 0xce, 0xf2, 0xea, 0xb1,
-	0xe9, 0xd8, 0x28, 0x91, 0xb8, 0x04, 0xd0, 0x11, 0x18, 0xf3, 0x82, 0x25, 0x5c, 0x72, 0x91, 0x5b,
-	0xfa, 0x92, 0x6d, 0x00, 0x64, 0xc3, 0xde, 0x84, 0x4b, 0x45, 0xf3, 0xa4, 0xbc, 0xdd, 0x92, 0x6c,
-	0x6a, 0xfb, 0x97, 0x06, 0xe6, 0x03, 0x17, 0xc8, 0x03, 0xe3, 0x8e, 0x8b, 0x94, 0x2a, 0x51, 0x48,
-	0x4b, 0xeb, 0xb6, 0xfb, 0xe6, 0xe0, 0xdd, 0x13, 0xae, 0x9d, 0x9b, 0x5a, 0x8c, 0xd7, 0xc7, 0x6c,
-	0x1f, 0xf6, 0x56, 0x30, 0x3a, 0x86, 0x9d, 0xb1, 0x50, 0x84, 0x4f, 0x2a, 0xd3, 0xe6, 0x60, 0xc7,
-	0xf1, 0x84, 0x0a, 0x26, 0x78, 0x7b, 0x5c, 0x7e, 0x36, 0xac, 0xe9, 0x9b, 0xd6, 0x3c, 0x03, 0x76,
-	0xeb, 0x37, 0xfc, 0x37, 0x00, 0x00, 0xff, 0xff, 0x29, 0xbf, 0x9f, 0x45, 0xe4, 0x03, 0x00, 0x00,
+	// 366 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x51, 0x4d, 0xaf, 0x93, 0x40,
+	0x14, 0x7d, 0xf0, 0x62, 0x7d, 0x5c, 0xe2, 0xd3, 0x8c, 0x1b, 0xc4, 0x68, 0x08, 0x71, 0x81, 0x1b,
+	0xa2, 0xec, 0xba, 0x2c, 0xa6, 0x5a, 0x17, 0x6e, 0x46, 0xa3, 0xcb, 0xc9, 0x14, 0x06, 0x32, 0x09,
+	0x70, 0x75, 0xe6, 0xd2, 0xfe, 0x10, 0x37, 0xfe, 0x08, 0x7f, 0xa4, 0x69, 0xcb, 0x47, 0x6b, 0x5e,
+	0xba, 0x82, 0x73, 0xee, 0xb9, 0xf7, 0x9c, 0xb9, 0x17, 0x62, 0x6b, 0x1b, 0x51, 0xcb, 0x56, 0x89,
+	0x02, 0x3b, 0x32, 0xd8, 0x34, 0xca, 0x08, 0xd9, 0x13, 0x0a, 0xa3, 0xaa, 0xf4, 0xa7, 0x41, 0xc2,
+	0x30, 0x7a, 0x48, 0x53, 0x60, 0xdb, 0x62, 0x37, 0x28, 0x5e, 0x4c, 0x0a, 0xb5, 0x53, 0x1d, 0x89,
+	0xec, 0xdd, 0xfb, 0xe5, 0xa9, 0x14, 0x0b, 0x78, 0xbe, 0xea, 0x09, 0xb9, 0xaa, 0xb8, 0xaa, 0xb5,
+	0x25, 0x23, 0x49, 0x63, 0xc7, 0x5e, 0x03, 0xe8, 0x52, 0x75, 0xa4, 0x2b, 0xad, 0x4c, 0xe0, 0x44,
+	0x6e, 0xe2, 0xf1, 0x33, 0x86, 0x25, 0xe0, 0x59, 0x5d, 0x77, 0x92, 0x7a, 0xa3, 0x02, 0x37, 0x72,
+	0x12, 0x3f, 0x83, 0xf4, 0xeb, 0xc8, 0xf0, 0xb9, 0x18, 0xff, 0x75, 0x20, 0x1c, 0x1c, 0xbe, 0xe1,
+	0x87, 0x29, 0x20, 0x57, 0xbf, 0x7a, 0x65, 0xe9, 0x72, 0x90, 0x73, 0x65, 0x10, 0x7b, 0x0b, 0x30,
+	0x3f, 0x61, 0xf2, 0xfc, 0x24, 0x5b, 0xb5, 0x3e, 0x30, 0xdc, 0xab, 0xc7, 0x5f, 0xb6, 0x84, 0x67,
+	0xe3, 0x8e, 0x44, 0xab, 0xac, 0x95, 0xb5, 0x0a, 0x6e, 0x8f, 0x0d, 0x4f, 0xd3, 0x21, 0xcb, 0x97,
+	0x13, 0xcd, 0xef, 0xe5, 0x05, 0x8e, 0x7f, 0xbb, 0x70, 0x7f, 0x29, 0x61, 0x01, 0x2c, 0x8a, 0xde,
+	0x12, 0xb6, 0xc7, 0x7c, 0xde, 0xe6, 0x86, 0x0f, 0x98, 0xad, 0xe0, 0xc9, 0x5e, 0x6a, 0x12, 0x15,
+	0x1a, 0xb1, 0x45, 0xb2, 0x43, 0xaa, 0x97, 0xff, 0x99, 0xa4, 0x3f, 0xa4, 0xa6, 0x8f, 0x68, 0x72,
+	0x24, 0xbb, 0xb9, 0xe1, 0xfe, 0x7e, 0x86, 0xe1, 0x1f, 0x07, 0xfc, 0xb3, 0x32, 0xcb, 0xc1, 0xdb,
+	0x69, 0x6c, 0x24, 0xa1, 0xb1, 0x81, 0x13, 0xdd, 0x26, 0x7e, 0xf6, 0xe6, 0xca, 0xb8, 0xf4, 0xfb,
+	0x20, 0xe6, 0x73, 0x5b, 0xb8, 0x86, 0xbb, 0x91, 0x66, 0xaf, 0x60, 0xb1, 0x45, 0x12, 0xba, 0x3c,
+	0x1e, 0xd1, 0xcf, 0x16, 0x69, 0x8e, 0xf4, 0xb9, 0xe4, 0x8f, 0xb6, 0x87, 0x0f, 0x0b, 0xe1, 0xae,
+	0xd4, 0x96, 0x64, 0x57, 0x1c, 0xce, 0xe8, 0x26, 0x2e, 0x9f, 0x70, 0xee, 0xc1, 0xe3, 0x61, 0x79,
+	0xff, 0x02, 0x00, 0x00, 0xff, 0xff, 0xfc, 0x94, 0x94, 0x88, 0x87, 0x02, 0x00, 0x00,
 }

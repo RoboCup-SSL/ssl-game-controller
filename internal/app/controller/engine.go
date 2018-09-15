@@ -332,14 +332,23 @@ func (e *Engine) processModify(m *EventModifyValue) error {
 	if m.Division != nil {
 		if *m.Division == DivA || *m.Division == DivB {
 			e.State.Division = *m.Division
-			log.Printf("Processed modification %v", m)
-			return nil
 		} else {
-			return errors.Errorf("Invalid divsion: %v", *m.Division)
+			return errors.Errorf("Invalid division: %v", *m.Division)
 		}
+	} else if m.AutoContinue != nil {
+		e.State.AutoContinue = *m.AutoContinue
+		if e.State.AutoContinue {
+			e.Continue()
+		}
+	} else if err := e.processTeamModify(m); err != nil {
+		return err
 	}
 
-	// process team-dependent modifies
+	log.Printf("Processed %v", m)
+	return nil
+}
+
+func (e *Engine) processTeamModify(m *EventModifyValue) error {
 	if m.ForTeam.Unknown() {
 		return errors.Errorf("Unknown team: %v", m.ForTeam)
 	}
@@ -390,7 +399,6 @@ func (e *Engine) processModify(m *EventModifyValue) error {
 	} else {
 		return errors.Errorf("Unknown modify: %v", m)
 	}
-	log.Printf("Processed %v", m)
 	return nil
 }
 
@@ -593,6 +601,8 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 		} else if e.State.GameState() != GameStateStopped {
 			e.SendCommand(CommandStop, "")
 		}
+	} else if e.State.AutoContinue && event.IsContinueGame() {
+		e.Continue()
 	}
 
 	log.Printf("Processed game event %v", event)

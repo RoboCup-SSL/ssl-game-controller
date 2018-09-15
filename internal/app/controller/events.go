@@ -105,10 +105,16 @@ type EventModifyValue struct {
 	BallPlacementFailures *int                 `json:"ballPlacementFailures"`
 	CanPlaceBall          *bool                `json:"canPlaceBall"`
 	Division              *Division            `json:"division"`
+	AutoContinue          *bool                `json:"autoContinue"`
 }
 
 func (m EventModifyValue) String() string {
-	str := fmt.Sprintf("modify for %v:", m.ForTeam)
+	str := "modify"
+	if m.ForTeam != TeamUnknown {
+		str += fmt.Sprintf(" for team %v:", m.ForTeam)
+	} else {
+		str += ":"
+	}
 	if m.Goals != nil {
 		return fmt.Sprintf("%v Goals=%v", str, *m.Goals)
 	}
@@ -147,6 +153,9 @@ func (m EventModifyValue) String() string {
 	}
 	if m.Division != nil {
 		return fmt.Sprintf("%v Division=%v", str, *m.Division)
+	}
+	if m.AutoContinue != nil {
+		return fmt.Sprintf("%v AutoContinue=%v", str, *m.AutoContinue)
 	}
 	return fmt.Sprintf("%v undefined", str)
 }

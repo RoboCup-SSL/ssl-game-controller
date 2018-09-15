@@ -45,6 +45,20 @@
                 Continue
             </b-button>
         </span>
+        <div class="btn-group-toggle btn-group">
+            <label v-b-tooltip.hover
+                   title="Enable automatic continuation by based on game events"
+                   :class="{btn:true, 'btn-secondary': true, active: autoContinue}"
+                   @click="setAutoContinue(true)">
+                Auto
+            </label>
+            <label v-b-tooltip.hover
+                   title="Disable automatic continuation by based on game events"
+                   :class="{btn:true, 'btn-secondary': true, active: !autoContinue}"
+                   @click="setAutoContinue(false)">
+                Manual
+            </label>
+        </div>
     </span>
 </template>
 
@@ -59,7 +73,12 @@
             },
             triggerContinue() {
                 this.$socket.sendObj({trigger: {triggerType: 'continue'}})
-            }
+            },
+            setAutoContinue(enabled) {
+                this.$socket.sendObj({
+                    'modify': {'autoContinue': enabled}
+                })
+            },
         },
         computed: {
             keymapHalt() {
@@ -131,13 +150,16 @@
             },
             gameEventPresent() {
                 return this.state.gameEvents.length > 0;
+            },
+            autoContinue() {
+                return this.state.autoContinue;
             }
         }
     }
 </script>
 
 <style scoped>
-    button {
+    button, .btn-group {
         margin-right: 0.5em;
         margin-bottom: 0.5em;
     }

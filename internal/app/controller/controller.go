@@ -70,11 +70,6 @@ func (c *GameController) ProcessAutoRefRequests(request refproto.AutoRefToContro
 		event := Event{GameEvent: &GameEvent{Type: gameEventType, Details: details}}
 		c.OnNewEvent(event)
 	}
-	if request.State != nil {
-		if *request.State == refproto.AutoRefToControllerRequest_READY_TO_CONTINUE {
-			c.Engine.Continue()
-		}
-	}
 
 	return nil
 }

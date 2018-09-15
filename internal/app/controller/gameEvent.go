@@ -144,6 +144,16 @@ func (e GameEvent) IsContinued() bool {
 	return false
 }
 
+// IsContinueGame checks if the game event should trigger continuing the game based on the current primary event
+func (e GameEvent) IsContinueGame() bool {
+	switch e.Type {
+	case GameEventPlacementSucceeded,
+		GameEventPrepared:
+		return true
+	}
+	return false
+}
+
 func (e GameEvent) ToProto() *refproto.GameEvent {
 	protoEvent := new(refproto.GameEvent)
 	switch e.Type {

@@ -28,6 +28,7 @@ export class RefBoxState {
     matchDuration = 0;
     teamState = {'Yellow': new TeamState(), 'Blue': new TeamState()};
     division = 'DivA';
+    autoContinue = true;
 }
 
 export default new Vuex.Store({

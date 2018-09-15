@@ -13,27 +13,12 @@ message AutoRefRegistration {
 
 // AutoRefToControllerRequest is the wrapper message for all subsequent requests from the client to the controller
 message AutoRefToControllerRequest {
-    // game_event is an optional event that the autoRef detected during the game
-    optional GameEvent game_event = 1;
-    // auto_ref_message is an optional message that describes the current state or situation of the game/autoRef
-    optional AutoRefMessage auto_ref_message = 2;
-    // the current state of the autoRef
-    optional State state = 3;
     // signature can optionally be specified to enable secure communication
-    optional Signature signature = 4;
-
-    enum State {
-        // unknown or not set
-        UNKNOWN = 0;
-        // the game can continue (all conditions met: Ball is placed and bots are located at legal positions)
-        READY_TO_CONTINUE = 1;
-        // waiting for the ball to be placed
-        WAIT_FOR_PLACEMENT = 2;
-        // waiting for the bots to move to valid positions
-        WAIT_FOR_VALID_POSITIONS = 3;
-        // wait for the ball to move after the game was continued (free kick, kickoff, penalty)
-        WAIT_FOR_BALL_TO_MOVE = 4;
-    }
+    optional Signature signature = 1;
+    // game_event is an optional event that the autoRef detected during the game
+    optional GameEvent game_event = 2;
+    // auto_ref_message is an optional message that describes the current state or situation of the game/autoRef
+    optional AutoRefMessage auto_ref_message = 3;
 }
 
 // a message from autoRef, describing the current state or situation
@@ -42,20 +27,8 @@ message AutoRefMessage {
         // a custom message
         // an empty string indicates that there is no message
         string custom = 1;
-        // the ball has been placed successfully
-        BallPlaced ball_placed = 2;
         // one or more bots are at invalid locations and need to move
-        WaitForBots wait_for_bots = 3;
-    }
-
-    // the result of the ball placement
-    message BallPlaced {
-        // the time taken for placing the ball
-        required float time_taken = 1;
-        // the distance between placement location and actual ball position
-        required float precision = 2;
-        // the distance between the initial ball location and the placement position
-        required float distance = 3;
+        WaitForBots wait_for_bots = 2;
     }
 
     // the bots that is waited for
