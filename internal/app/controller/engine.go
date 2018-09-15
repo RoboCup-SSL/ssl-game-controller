@@ -401,6 +401,8 @@ func (e *Engine) processStage(s *EventStage) error {
 
 	if s.StageOperation == StageNext {
 		e.updateStage(e.State.Stage.Next())
+		e.State.TeamState[TeamYellow].BallPlacementFailures = 0
+		e.State.TeamState[TeamBlue].BallPlacementFailures = 0
 	} else if s.StageOperation == StagePrevious {
 		e.updateStage(e.State.Stage.Previous())
 	} else if s.StageOperation == StageEndGame {
