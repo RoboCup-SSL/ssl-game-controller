@@ -105,6 +105,15 @@ func (e GameEvent) AddsRedCard() bool {
 	return false
 }
 
+func (e GameEvent) IncrementsBallPlacementFailureCounter() bool {
+	switch e.Type {
+	case GameEventPlacementFailedByTeamInFavor,
+		GameEventPlacementFailedByOpponent:
+		return true
+	}
+	return false
+}
+
 // IsSecondary checks if this game event is a secondary one that does not influence the next referee command
 func (e GameEvent) IsSecondary() bool {
 	switch e.Type {
