@@ -43,7 +43,7 @@
     import KeeperHeldBall from "./inputs/KeeperHeldBall"
     import KickTimeout from "./inputs/KickTimeout"
     import MultipleFouls from "./inputs/MultipleFouls"
-    import MultipleYellowCards from "./inputs/MultipleYellowCards"
+    import MultipleCards from "./inputs/MultipleCards"
     import NoProgressInGame from "./inputs/NoProgressInGame"
     import PlacementFailedByOpponent from "./inputs/PlacementFailedByOpponent"
     import PlacementFailedByTeamInFavor from "./inputs/PlacementFailedByTeamInFavor"
@@ -80,7 +80,7 @@
             KeeperHeldBall,
             KickTimeout,
             MultipleFouls,
-            MultipleYellowCards,
+            MultipleCards,
             NoProgressInGame,
             PlacementFailedByOpponent,
             PlacementFailedByTeamInFavor,

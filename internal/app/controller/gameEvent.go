@@ -38,7 +38,7 @@ const (
 	GameEventKeeperHeldBall                 GameEventType = "keeperHeldBall"
 	GameEventUnsportiveBehaviorMinor        GameEventType = "unsportiveBehaviorMinor"
 	GameEventUnsportiveBehaviorMajor        GameEventType = "unsportiveBehaviorMajor"
-	GameEventMultipleYellowCards            GameEventType = "multipleYellowCards"
+	GameEventMultipleCards                  GameEventType = "multipleCards"
 	GameEventMultipleFouls                  GameEventType = "multipleFouls"
 	GameEventKickTimeout                    GameEventType = "kickTimeout"
 	GameEventNoProgressInGame               GameEventType = "noProgressInGame"
@@ -189,8 +189,8 @@ func (e GameEvent) ToProto() *refproto.GameEvent {
 		protoEvent.Event = &refproto.GameEvent_UnsportiveBehaviorMinor_{UnsportiveBehaviorMinor: e.Details.UnsportiveBehaviorMinor}
 	case GameEventUnsportiveBehaviorMajor:
 		protoEvent.Event = &refproto.GameEvent_UnsportiveBehaviorMajor_{UnsportiveBehaviorMajor: e.Details.UnsportiveBehaviorMajor}
-	case GameEventMultipleYellowCards:
-		protoEvent.Event = &refproto.GameEvent_MultipleYellowCards_{MultipleYellowCards: e.Details.MultipleYellowCards}
+	case GameEventMultipleCards:
+		protoEvent.Event = &refproto.GameEvent_MultipleCards_{MultipleCards: e.Details.MultipleCards}
 	case GameEventMultipleFouls:
 		protoEvent.Event = &refproto.GameEvent_MultipleFouls_{MultipleFouls: e.Details.MultipleFouls}
 	case GameEventKickTimeout:
@@ -237,7 +237,7 @@ type GameEventDetails struct {
 	KeeperHeldBall                 *refproto.GameEvent_KeeperHeldBall                 `json:"keeperHeldBall,omitempty"`
 	UnsportiveBehaviorMinor        *refproto.GameEvent_UnsportiveBehaviorMinor        `json:"unsportiveBehaviorMinor,omitempty"`
 	UnsportiveBehaviorMajor        *refproto.GameEvent_UnsportiveBehaviorMajor        `json:"unsportiveBehaviorMajor,omitempty"`
-	MultipleYellowCards            *refproto.GameEvent_MultipleYellowCards            `json:"multipleYellowCards,omitempty"`
+	MultipleCards                  *refproto.GameEvent_MultipleCards                  `json:"multiple,omitempty"`
 	MultipleFouls                  *refproto.GameEvent_MultipleFouls                  `json:"multipleFouls,omitempty"`
 	KickTimeout                    *refproto.GameEvent_KickTimeout                    `json:"kickTimeout,omitempty"`
 	NoProgressInGame               *refproto.GameEvent_NoProgressInGame               `json:"noProgressInGame,omitempty"`
@@ -327,8 +327,8 @@ func (d GameEventDetails) EventType() GameEventType {
 	if d.UnsportiveBehaviorMajor != nil {
 		return GameEventUnsportiveBehaviorMajor
 	}
-	if d.MultipleYellowCards != nil {
-		return GameEventMultipleYellowCards
+	if d.MultipleCards != nil {
+		return GameEventMultipleCards
 	}
 	if d.MultipleFouls != nil {
 		return GameEventMultipleFouls
@@ -514,7 +514,7 @@ func (d GameEventDetails) Description() string {
 		}
 		return ""
 	}
-	if d.MultipleYellowCards != nil {
+	if d.MultipleCards != nil {
 		return ""
 	}
 	if d.MultipleFouls != nil {
@@ -563,7 +563,7 @@ func NewGameEventDetails(event refproto.GameEvent) (d GameEventDetails) {
 	d.KeeperHeldBall = event.GetKeeperHeldBall()
 	d.UnsportiveBehaviorMinor = event.GetUnsportiveBehaviorMinor()
 	d.UnsportiveBehaviorMajor = event.GetUnsportiveBehaviorMajor()
-	d.MultipleYellowCards = event.GetMultipleYellowCards()
+	d.MultipleCards = event.GetMultipleCards()
 	d.MultipleFouls = event.GetMultipleFouls()
 	d.KickTimeout = event.GetKickTimeout()
 	d.NoProgressInGame = event.GetNoProgressInGame()

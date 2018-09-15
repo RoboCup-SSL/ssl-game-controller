@@ -118,7 +118,7 @@
                     {name: 'Minor unsportive behavior', component: 'UnsportiveBehaviorMinor'},
                     {name: 'Major unsportive behavior', component: 'UnsportiveBehaviorMajor'},
                     {name: 'Multiple fouls', component: 'MultipleFouls'},
-                    {name: 'Multiple yellow cards', component: 'MultipleYellowCards'},
+                    {name: 'Multiple cards', component: 'MultipleCards'},
                 ],
                 matchProceedingEvents: [
                     {name: 'No progress in game', component: 'NoProgressInGame'},

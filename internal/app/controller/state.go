@@ -234,7 +234,6 @@ type TeamInfo struct {
 	TimeoutTimeLeft       time.Duration   `json:"timeoutTimeLeft"`
 	OnPositiveHalf        bool            `json:"onPositiveHalf"`
 	FoulCounter           int             `json:"foulCounter"`
-	FoulCounterPunished   int             `json:"foulCounterPunished"`
 	BallPlacementFailures int             `json:"ballPlacementFailures"`
 	CanPlaceBall          bool            `json:"canPlaceBall"`
 }

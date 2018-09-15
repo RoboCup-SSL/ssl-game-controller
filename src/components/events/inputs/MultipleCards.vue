@@ -13,7 +13,7 @@
     import TeamSelection from "../../common/TeamSelection";
 
     export default {
-        name: "MultipleYellowCards",
+        name: "MultipleCards",
         components: {TeamSelection},
         data() {
             return {
@@ -26,9 +26,9 @@
             sendEvent: function () {
                 this.$socket.sendObj({
                     gameEvent: {
-                        type: 'multipleYellowCards',
+                        type: 'multipleCards',
                         details: {
-                            ['multipleYellowCards']: {
+                            ['multipleCards']: {
                                 by_team: this.model.team.toLocaleUpperCase(),
                             }
                         }

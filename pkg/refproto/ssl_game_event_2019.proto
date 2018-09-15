@@ -43,7 +43,7 @@ message GameEvent {
         UnsportiveBehaviorMinor unsportive_behavior_minor = 25;
         UnsportiveBehaviorMajor unsportive_behavior_major = 26;
         MultipleFouls multiple_fouls = 27;
-        MultipleYellowCards multiple_yellow_cards = 28;
+        MultipleCards multiple_cards = 28;
 
         NoProgressInGame no_progress_in_game = 29;
         PlacementFailedByTeamInFavor placement_failed_by_team_in_favor = 30;
@@ -291,8 +291,8 @@ message GameEvent {
         // the location of the bot
         optional Location location = 3;
     }
-    // a team collected multiple yellow cards, which results in a penalty kick
-    message MultipleYellowCards {
+    // a team collected multiple cards (yellow and red), which results in a penalty kick
+    message MultipleCards {
         // the team that received multiple yellow cards
         required Team by_team = 1;
     }
