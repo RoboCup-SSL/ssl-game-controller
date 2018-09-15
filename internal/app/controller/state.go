@@ -193,9 +193,14 @@ const (
 	CommandBallPlacement RefCommand = "ballPlacement"
 )
 
-func (c RefCommand) RunningState() bool {
+func (c RefCommand) ContinuesGame() bool {
 	switch c {
-	case CommandNormalStart, CommandForceStart, CommandDirect, CommandIndirect:
+	case CommandNormalStart,
+		CommandForceStart,
+		CommandDirect,
+		CommandIndirect,
+		CommandPenalty,
+		CommandKickoff:
 		return true
 	default:
 		return false

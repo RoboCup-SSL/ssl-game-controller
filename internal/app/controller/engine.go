@@ -55,7 +55,7 @@ func (e *Engine) SendCommand(command RefCommand, forTeam Team) {
 	e.State.CommandFor = forTeam
 	e.LogCommand()
 
-	if command.RunningState() && len(e.State.GameEvents) > 0 {
+	if command.ContinuesGame() && len(e.State.GameEvents) > 0 {
 		e.State.GameEvents = []*GameEvent{}
 	}
 }
