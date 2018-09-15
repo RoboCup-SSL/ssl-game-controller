@@ -91,7 +91,7 @@ type EventModifyCardTime struct {
 
 // EventModifyValue is an event that can be applied
 type EventModifyValue struct {
-	ForTeam Team `json:"forTeam"`
+	ForTeam Team `json:"forTeam,omitempty"`
 
 	Goals                 *int                 `json:"goals,omitempty"`
 	Goalie                *int                 `json:"goalie,omitempty"`

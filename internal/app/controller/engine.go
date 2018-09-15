@@ -243,6 +243,20 @@ func (e *Engine) LogStage(stage Stage) {
 	e.RefereeEvents = append(e.RefereeEvents, refereeEvent)
 }
 
+func (e *Engine) LogModify(m EventModifyValue) {
+	team := m.ForTeam
+	m.ForTeam = TeamUnknown
+	refereeEvent := RefereeEvent{
+		Timestamp:   e.TimeProvider().UnixNano(),
+		StageTime:   e.State.StageTimeElapsed,
+		Type:        RefereeEventModify,
+		Name:        "modify",
+		Team:        team,
+		Description: m.String(),
+	}
+	e.RefereeEvents = append(e.RefereeEvents, refereeEvent)
+}
+
 func (e *Engine) loadStages() {
 	e.StageTimes = map[Stage]time.Duration{}
 	for _, stage := range Stages {
@@ -344,6 +358,7 @@ func (e *Engine) processModify(m *EventModifyValue) error {
 		return err
 	}
 
+	e.LogModify(*m)
 	log.Printf("Processed %v", m)
 	return nil
 }

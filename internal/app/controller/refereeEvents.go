@@ -12,6 +12,7 @@ const (
 	RefereeEventCard      RefereeEventType = "card"
 	RefereeEventTime      RefereeEventType = "time"
 	RefereeEventGameEvent RefereeEventType = "gameEvent"
+	RefereeEventModify    RefereeEventType = "modify"
 )
 
 type RefereeEvent struct {
