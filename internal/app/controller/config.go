@@ -19,8 +19,8 @@ type ConfigSpecial struct {
 type ConfigGeometry struct {
 	FieldLength                     float64 `yaml:"field-length"`
 	FieldWidth                      float64 `yaml:"field-width"`
-	PenaltyAreaDepth                float64 `yaml:"penalty-area-depth"`
-	PenaltyAreaWidth                float64 `yaml:"penalty-area-width"`
+	DefenseAreaDepth                float64 `yaml:"defense-area-depth"`
+	DefenseAreaWidth                float64 `yaml:"defense-area-width"`
 	PlacementOffsetTouchLine        float64 `yaml:"placement-offset-touch-line"`
 	PlacementOffsetGoalLine         float64 `yaml:"placement-offset-goal-line"`
 	PlacementOffsetGoalLineGoalKick float64 `yaml:"placement-offset-goal-line-goal-kick"`
@@ -40,9 +40,10 @@ type ConfigGame struct {
 	MultiplePlacementFailures int                          `yaml:"multiple-placement-failures"`
 }
 
-// ConfigPublish holds configs for publishing the state and commands to the teams
-type ConfigPublish struct {
-	Address string `yaml:"address"`
+// ConfigNetwork holds configs for network communication
+type ConfigNetwork struct {
+	PublishAddress string `yaml:"publish-address"`
+	VisionAddress  string `yaml:"vision-address"`
 }
 
 // ConfigServer holds configs for the available server services
@@ -65,7 +66,7 @@ type ConfigServerTeam struct {
 
 // Config structure for the game controller
 type Config struct {
-	Publish ConfigPublish `yaml:"publish"`
+	Network ConfigNetwork `yaml:"network"`
 	Game    ConfigGame    `yaml:"game"`
 	Server  ConfigServer  `yaml:"server"`
 }
@@ -95,7 +96,8 @@ func LoadConfig(fileName string) (config Config, err error) {
 
 // DefaultConfig creates a config with default values
 func DefaultConfig() (c Config) {
-	c.Publish.Address = "224.5.23.1:10003"
+	c.Network.PublishAddress = "224.5.23.1:10003"
+	c.Network.VisionAddress = "224.5.23.2:10006"
 	c.Game.YellowCardDuration = 2 * time.Minute
 	c.Game.MultipleCardStep = 3
 	c.Game.MultipleFoulStep = 3
@@ -124,8 +126,8 @@ func DefaultConfig() (c Config) {
 	c.Game.DefaultGeometry[DivA] = new(ConfigGeometry)
 	c.Game.DefaultGeometry[DivA].FieldLength = 12
 	c.Game.DefaultGeometry[DivA].FieldWidth = 9
-	c.Game.DefaultGeometry[DivA].PenaltyAreaDepth = 1.2
-	c.Game.DefaultGeometry[DivA].PenaltyAreaWidth = 2.4
+	c.Game.DefaultGeometry[DivA].DefenseAreaDepth = 1.2
+	c.Game.DefaultGeometry[DivA].DefenseAreaWidth = 2.4
 	c.Game.DefaultGeometry[DivA].PlacementOffsetGoalLine = 0.2
 	c.Game.DefaultGeometry[DivA].PlacementOffsetGoalLineGoalKick = 1.0
 	c.Game.DefaultGeometry[DivA].PlacementOffsetTouchLine = 0.2
@@ -134,8 +136,8 @@ func DefaultConfig() (c Config) {
 	c.Game.DefaultGeometry[DivB] = new(ConfigGeometry)
 	c.Game.DefaultGeometry[DivB].FieldLength = 9
 	c.Game.DefaultGeometry[DivB].FieldWidth = 6
-	c.Game.DefaultGeometry[DivB].PenaltyAreaDepth = 1
-	c.Game.DefaultGeometry[DivB].PenaltyAreaWidth = 2
+	c.Game.DefaultGeometry[DivB].DefenseAreaDepth = 1
+	c.Game.DefaultGeometry[DivB].DefenseAreaWidth = 2
 	c.Game.DefaultGeometry[DivB].PlacementOffsetGoalLine = 0.2
 	c.Game.DefaultGeometry[DivB].PlacementOffsetGoalLineGoalKick = 1.0
 	c.Game.DefaultGeometry[DivB].PlacementOffsetTouchLine = 0.2

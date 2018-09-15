@@ -1,5 +1,6 @@
-publish:
-  address: 224.5.23.1:10003
+network:
+  publish-address: 224.5.23.1:10003
+  vision-address: 224.5.23.2:10006
 server:
   auto-ref:
     address: :10007
@@ -30,8 +31,8 @@ game:
     DivA:
       field-length: 12.0
       field-width: 9.0
-      penalty-area-depth: 1.2
-      penalty-area-width: 2.4
+      defense-area-depth: 1.2
+      defense-area-width: 2.4
       placement-offset-touch-line: 0.2
       placement-offset-goal-line: 0.2
       placement-offset-goal-line-goal-kick: 1.0
@@ -39,8 +40,8 @@ game:
     DivB:
       field-length: 9.0
       field-width: 6.0
-      penalty-area-depth: 1.0
-      penalty-area-width: 2.0
+      defense-area-depth: 1.0
+      defense-area-width: 2.0
       placement-offset-touch-line: 0.2
       placement-offset-goal-line: 0.2
       placement-offset-goal-line-goal-kick: 1.0

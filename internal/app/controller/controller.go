@@ -4,8 +4,10 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/rcon"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/timer"
+	"github.com/RoboCup-SSL/ssl-go-tools/pkg/sslproto"
 	"github.com/pkg/errors"
 	"log"
+	"math"
 	"sync"
 	"time"
 )
@@ -25,6 +27,7 @@ type GameController struct {
 	numRefereeEventsLastPublish int
 	outstandingTeamChoice       *TeamChoice
 	Mutex                       sync.Mutex
+	VisionReceiver              *VisionReceiver
 }
 
 type TeamChoice struct {
@@ -42,6 +45,9 @@ func NewGameController() (c *GameController) {
 	c.ApiServer = ApiServer{}
 	c.ApiServer.Consumer = c
 
+	c.VisionReceiver = NewVisionReceiver(c.Config.Network.VisionAddress)
+	c.VisionReceiver.GeometryCallback = c.ProcessGeometry
+
 	c.AutoRefServer = rcon.NewAutoRefServer()
 	c.AutoRefServer.LoadTrustedKeys(c.Config.Server.AutoRef.TrustedKeysDir)
 	c.AutoRefServer.ProcessRequest = c.ProcessAutoRefRequests
@@ -57,6 +63,34 @@ func NewGameController() (c *GameController) {
 	c.timer.Start()
 
 	return
+}
+
+func (c *GameController) ProcessGeometry(data *sslproto.SSL_GeometryData) {
+	if int32(math.Round(c.Engine.Geometry.FieldWidth*1000.0)) != *data.Field.FieldWidth {
+		newFieldWidth := float64(*data.Field.FieldWidth) / 1000.0
+		log.Printf("FieldWidth changed from %v to %v", c.Engine.Geometry.FieldWidth, newFieldWidth)
+		c.Engine.Geometry.FieldWidth = newFieldWidth
+	}
+	if int32(math.Round(c.Engine.Geometry.FieldLength*1000)) != *data.Field.FieldLength {
+		newFieldLength := float64(*data.Field.FieldLength) / 1000.0
+		log.Printf("FieldLength changed from %v to %v", c.Engine.Geometry.FieldLength, newFieldLength)
+		c.Engine.Geometry.FieldLength = newFieldLength
+	}
+	for _, line := range data.Field.FieldLines {
+		if *line.Name == "LeftFieldLeftPenaltyStretch" {
+			defenseAreaDepth := math.Abs(float64(*line.P1.X-*line.P2.X)) / 1000.0
+			if math.Abs(defenseAreaDepth-c.Engine.Geometry.DefenseAreaDepth) > 1e-3 {
+				log.Printf("DefenseAreaDepth changed from %v to %v", c.Engine.Geometry.DefenseAreaDepth, defenseAreaDepth)
+				c.Engine.Geometry.DefenseAreaDepth = defenseAreaDepth
+			}
+		} else if *line.Name == "LeftPenaltyStretch" {
+			defenseAreaWidth := math.Abs(float64(*line.P1.Y-*line.P2.Y)) / 1000.0
+			if math.Abs(defenseAreaWidth-c.Engine.Geometry.DefenseAreaWidth) > 1e-3 {
+				log.Printf("DefenseAreaDepth changed from %v to %v", c.Engine.Geometry.DefenseAreaWidth, defenseAreaWidth)
+				c.Engine.Geometry.DefenseAreaWidth = defenseAreaWidth
+			}
+		}
+	}
 }
 
 func (c *GameController) ProcessAutoRefRequests(request refproto.AutoRefToControllerRequest) error {
@@ -211,9 +245,9 @@ func (c *GameController) timeoutTeamChoice() {
 }
 
 func loadPublisher(config Config) Publisher {
-	publisher, err := NewPublisher(config.Publish.Address)
+	publisher, err := NewPublisher(config.Network.PublishAddress)
 	if err != nil {
-		log.Printf("Could not start publisher on %v. %v", config.Publish.Address, err)
+		log.Printf("Could not start publisher on %v. %v", config.Network.PublishAddress, err)
 	}
 	return publisher
 }

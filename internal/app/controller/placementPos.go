@@ -72,7 +72,7 @@ func (e *Engine) BallPlacementPos() *Location {
 	case GameEventDefenderInDefenseArea:
 		teamInFavor := event.ByTeam().Opposite()
 		location := Location{}
-		location.X = (e.Geometry.FieldLength / 2.0) - e.Geometry.PenaltyAreaDepth
+		location.X = (e.Geometry.FieldLength / 2.0) - e.Geometry.DefenseAreaDepth
 		if e.State.TeamState[teamInFavor].OnPositiveHalf {
 			location.X *= -1
 		}
@@ -128,8 +128,8 @@ func (e *Engine) validateLocation(location *Location) *Location {
 }
 
 func (e *Engine) movePositionOutOfDefenseArea(location *Location) {
-	maxX := e.Geometry.FieldLength/2 - e.Geometry.PenaltyAreaDepth - e.Geometry.PlacementOffsetDefenseArea
-	minY := e.Geometry.PenaltyAreaWidth + e.Geometry.PlacementOffsetDefenseArea
+	maxX := e.Geometry.FieldLength/2 - e.Geometry.DefenseAreaDepth - e.Geometry.PlacementOffsetDefenseArea
+	minY := e.Geometry.DefenseAreaWidth + e.Geometry.PlacementOffsetDefenseArea
 	if math.Abs(location.X) > maxX && math.Abs(location.Y) < minY {
 		if math.Abs(maxX-math.Abs(location.X)) < math.Abs(minY-math.Abs(location.Y)) {
 			location.X = math.Copysign(maxX, location.X)
