@@ -49,6 +49,9 @@ message GameEvent {
         NoProgressInGame no_progress_in_game = 29;
         PlacementFailedByTeamInFavor placement_failed_by_team_in_favor = 30;
         PlacementFailedByOpponent placement_failed_by_opponent = 31;
+
+        PlacementSucceeded placement_succeeded = 35;
+        Prepared prepared = 36;
     }
 
     // the ball left the field normally
@@ -357,5 +360,21 @@ message GameEvent {
         optional Location location = 2;
         // the duration [s] that the keeper hold the ball
         optional double duration = 3;
+    }
+    // a team successfully placed the ball
+    message PlacementSucceeded {
+        // the team that did the placement
+        required Team by_team = 1;
+        // the time taken for placing the ball
+        optional float time_taken = 2;
+        // the distance between placement location and actual ball position
+        optional float precision = 3;
+        // the distance between the initial ball location and the placement position
+        optional float distance = 4;
+    }
+    // both teams are prepared - all conditions are met to continue (with kickoff or penalty kick)
+    message Prepared {
+        // the time taken for preparing
+        optional float time_taken = 1;
     }
 }

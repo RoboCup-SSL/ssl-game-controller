@@ -44,11 +44,14 @@
     import KickTimeout from "./inputs/KickTimeout"
     import MultipleFouls from "./inputs/MultipleFouls"
     import MultipleCards from "./inputs/MultipleCards"
+    import MultiplePlacementFailures from "./inputs/MultiplePlacementFailures"
     import NoProgressInGame from "./inputs/NoProgressInGame"
     import PlacementFailedByOpponent from "./inputs/PlacementFailedByOpponent"
     import PlacementFailedByTeamInFavor from "./inputs/PlacementFailedByTeamInFavor"
     import UnsportiveBehaviorMajor from "./inputs/UnsportiveBehaviorMajor"
     import UnsportiveBehaviorMinor from "./inputs/UnsportiveBehaviorMinor"
+    import PlacementSucceeded from "./inputs/PlacementSucceeded"
+    import Prepared from "./inputs/Prepared"
 
     export default {
         name: "EventAccordion",
@@ -81,11 +84,14 @@
             KickTimeout,
             MultipleFouls,
             MultipleCards,
+            MultiplePlacementFailures,
             NoProgressInGame,
             PlacementFailedByOpponent,
             PlacementFailedByTeamInFavor,
             UnsportiveBehaviorMajor,
             UnsportiveBehaviorMinor,
+            PlacementSucceeded,
+            Prepared,
         },
         props: {
             accordionName: {

@@ -119,11 +119,14 @@
                     {name: 'Major unsportive behavior', component: 'UnsportiveBehaviorMajor'},
                     {name: 'Multiple fouls', component: 'MultipleFouls'},
                     {name: 'Multiple cards', component: 'MultipleCards'},
+                    {name: 'Multiple placement failures', component: 'MultiplePlacementFailures'},
                 ],
                 matchProceedingEvents: [
                     {name: 'No progress in game', component: 'NoProgressInGame'},
                     {name: 'Placement failed by the team in favor', component: 'PlacementFailedByTeamInFavor'},
                     {name: 'Placement failed by the opponent team', component: 'PlacementFailedByOpponent'},
+                    {name: 'Placement succeeded', component: 'PlacementSucceeded'},
+                    {name: 'Prepared for kickoff or penalty kick', component: 'Prepared'},
                 ]
             }
         }

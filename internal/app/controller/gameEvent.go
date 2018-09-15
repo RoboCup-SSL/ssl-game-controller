@@ -45,6 +45,8 @@ const (
 	GameEventNoProgressInGame               GameEventType = "noProgressInGame"
 	GameEventPlacementFailedByTeamInFavor   GameEventType = "placementFailedByTeamInFavor"
 	GameEventPlacementFailedByOpponent      GameEventType = "placementFailedByOpponent"
+	GameEventPlacementSucceeded             GameEventType = "placementSucceeded"
+	GameEventPrepared                       GameEventType = "prepared"
 )
 
 // GameEvent combines the type of a game event with the corresponding detail structures
@@ -124,7 +126,9 @@ func (e GameEvent) IsSecondary() bool {
 		GameEventBotCrashUniqueContinue,
 		GameEventBotPushedBotContinue,
 		GameEventPlacementFailedByTeamInFavor,
-		GameEventPlacementFailedByOpponent:
+		GameEventPlacementFailedByOpponent,
+		GameEventPlacementSucceeded,
+		GameEventPrepared:
 		return true
 	}
 	return false
@@ -213,6 +217,10 @@ func (e GameEvent) ToProto() *refproto.GameEvent {
 		protoEvent.Event = &refproto.GameEvent_PlacementFailedByTeamInFavor_{PlacementFailedByTeamInFavor: e.Details.PlacementFailedByTeamInFavor}
 	case GameEventPlacementFailedByOpponent:
 		protoEvent.Event = &refproto.GameEvent_PlacementFailedByOpponent_{PlacementFailedByOpponent: e.Details.PlacementFailedByOpponent}
+	case GameEventPlacementSucceeded:
+		protoEvent.Event = &refproto.GameEvent_PlacementSucceeded_{PlacementSucceeded: e.Details.PlacementSucceeded}
+	case GameEventPrepared:
+		protoEvent.Event = &refproto.GameEvent_Prepared_{Prepared: e.Details.Prepared}
 	default:
 		log.Printf("Warn: Could not map game e %v", e.Type)
 		return nil
@@ -256,6 +264,8 @@ type GameEventDetails struct {
 	NoProgressInGame               *refproto.GameEvent_NoProgressInGame               `json:"noProgressInGame,omitempty"`
 	PlacementFailedByTeamInFavor   *refproto.GameEvent_PlacementFailedByTeamInFavor   `json:"placementFailedByTeamInFavor,omitempty"`
 	PlacementFailedByOpponent      *refproto.GameEvent_PlacementFailedByOpponent      `json:"placementFailedByOpponent,omitempty"`
+	PlacementSucceeded             *refproto.GameEvent_PlacementSucceeded             `json:"placementSucceeded,omitempty"`
+	Prepared                       *refproto.GameEvent_Prepared                       `json:"prepared,omitempty"`
 }
 
 func (d GameEventDetails) EventType() GameEventType {
@@ -346,6 +356,9 @@ func (d GameEventDetails) EventType() GameEventType {
 	if d.MultipleFouls != nil {
 		return GameEventMultipleFouls
 	}
+	if d.MultiplePlacementFailures != nil {
+		return GameEventMultiplePlacementFailures
+	}
 	if d.KickTimeout != nil {
 		return GameEventKickTimeout
 	}
@@ -357,6 +370,12 @@ func (d GameEventDetails) EventType() GameEventType {
 	}
 	if d.PlacementFailedByOpponent != nil {
 		return GameEventPlacementFailedByOpponent
+	}
+	if d.PlacementSucceeded != nil {
+		return GameEventPlacementSucceeded
+	}
+	if d.Prepared != nil {
+		return GameEventPrepared
 	}
 	return GameEventNone
 }
@@ -533,6 +552,9 @@ func (d GameEventDetails) Description() string {
 	if d.MultipleFouls != nil {
 		return ""
 	}
+	if d.MultiplePlacementFailures != nil {
+		return ""
+	}
 	if d.KickTimeout != nil {
 		return ""
 	}
@@ -543,6 +565,12 @@ func (d GameEventDetails) Description() string {
 		return ""
 	}
 	if d.PlacementFailedByOpponent != nil {
+		return ""
+	}
+	if d.PlacementSucceeded != nil {
+		return ""
+	}
+	if d.Prepared != nil {
 		return ""
 	}
 	return ""
@@ -578,9 +606,12 @@ func NewGameEventDetails(event refproto.GameEvent) (d GameEventDetails) {
 	d.UnsportiveBehaviorMajor = event.GetUnsportiveBehaviorMajor()
 	d.MultipleCards = event.GetMultipleCards()
 	d.MultipleFouls = event.GetMultipleFouls()
+	d.MultiplePlacementFailures = event.GetMultiplePlacementFailures()
 	d.KickTimeout = event.GetKickTimeout()
 	d.NoProgressInGame = event.GetNoProgressInGame()
 	d.PlacementFailedByTeamInFavor = event.GetPlacementFailedByTeamInFavor()
 	d.PlacementFailedByOpponent = event.GetPlacementFailedByOpponent()
+	d.PlacementSucceeded = event.GetPlacementSucceeded()
+	d.Prepared = event.GetPrepared()
 	return
 }
