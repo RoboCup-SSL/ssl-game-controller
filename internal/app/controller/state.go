@@ -40,6 +40,15 @@ func (t Team) Known() bool {
 	return !t.Unknown()
 }
 
+func (t Team) toProto() refproto.Team {
+	if t == TeamYellow {
+		return refproto.Team_YELLOW
+	} else if t == TeamBlue {
+		return refproto.Team_BLUE
+	}
+	return refproto.Team_UNKNOWN
+}
+
 // NewTeam creates a team from a protobuf team
 func NewTeam(team refproto.Team) Team {
 	if team == refproto.Team_YELLOW {
@@ -225,6 +234,7 @@ type TeamInfo struct {
 	TimeoutTimeLeft       time.Duration   `json:"timeoutTimeLeft"`
 	OnPositiveHalf        bool            `json:"onPositiveHalf"`
 	FoulCounter           int             `json:"foulCounter"`
+	FoulCounterPunished   int             `json:"foulCounterPunished"`
 	BallPlacementFailures int             `json:"ballPlacementFailures"`
 	CanPlaceBall          bool            `json:"canPlaceBall"`
 }

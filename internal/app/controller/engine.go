@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
 	"github.com/pkg/errors"
 	"log"
 	"strconv"
@@ -547,7 +548,7 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 	e.AddGameEvent(*event)
 	e.State.PlacementPos = e.BallPlacementPos()
 
-	if e.State.GameState() != GameStateHalted && !event.IsContinued() {
+	if e.State.GameState() != GameStateHalted && !event.IsContinued() && !event.IsSecondary() {
 		teamInFavor := event.ByTeam().Opposite()
 		if e.State.PlacementPos != nil {
 			if e.State.TeamState[teamInFavor].CanPlaceBall {
@@ -563,6 +564,18 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 	}
 
 	log.Printf("Processed game event %v", event)
+
+	for _, team := range []Team{TeamBlue, TeamYellow} {
+		counter := e.State.TeamState[team].FoulCounter
+		counterPunished := e.State.TeamState[team].FoulCounterPunished
+		if counter > 0 && counter%3 == 0 && counter != counterPunished {
+			e.State.TeamState[team].FoulCounterPunished = counter
+			teamProto := team.toProto()
+			return e.processGameEvent(&GameEvent{Type: GameEventMultipleFouls,
+				Details: GameEventDetails{MultipleFouls: &refproto.GameEvent_MultipleFouls{ByTeam: &teamProto}}})
+		}
+	}
+
 	return nil
 }
 
