@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
 	"log"
@@ -53,6 +54,11 @@ const (
 type GameEvent struct {
 	Type    GameEventType    `json:"type"`
 	Details GameEventDetails `json:"details"`
+}
+
+func (m GameEvent) String() string {
+	b, _ := json.Marshal(&m)
+	return string(b)
 }
 
 // ByTeam extracts the `ByTeam` attribute from the game event details

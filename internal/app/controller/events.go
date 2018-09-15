@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
 )
@@ -92,72 +93,25 @@ type EventModifyCardTime struct {
 type EventModifyValue struct {
 	ForTeam Team `json:"forTeam"`
 
-	Goals                 *int                 `json:"goals"`
-	Goalie                *int                 `json:"goalie"`
-	YellowCards           *int                 `json:"yellowCards"`
-	YellowCardTime        *EventModifyCardTime `json:"yellowCardTime"`
-	RedCards              *int                 `json:"redCards"`
-	TimeoutsLeft          *int                 `json:"timeoutsLeft"`
-	TimeoutTimeLeft       *string              `json:"timeoutTimeLeft"`
-	OnPositiveHalf        *bool                `json:"onPositiveHalf"`
-	TeamName              *string              `json:"teamName"`
-	FoulCounter           *int                 `json:"foulCounter"`
-	BallPlacementFailures *int                 `json:"ballPlacementFailures"`
-	CanPlaceBall          *bool                `json:"canPlaceBall"`
-	Division              *Division            `json:"division"`
-	AutoContinue          *bool                `json:"autoContinue"`
+	Goals                 *int                 `json:"goals,omitempty"`
+	Goalie                *int                 `json:"goalie,omitempty"`
+	YellowCards           *int                 `json:"yellowCards,omitempty"`
+	YellowCardTime        *EventModifyCardTime `json:"yellowCardTime,omitempty"`
+	RedCards              *int                 `json:"redCards,omitempty"`
+	TimeoutsLeft          *int                 `json:"timeoutsLeft,omitempty"`
+	TimeoutTimeLeft       *string              `json:"timeoutTimeLeft,omitempty"`
+	OnPositiveHalf        *bool                `json:"onPositiveHalf,omitempty"`
+	TeamName              *string              `json:"teamName,omitempty"`
+	FoulCounter           *int                 `json:"foulCounter,omitempty"`
+	BallPlacementFailures *int                 `json:"ballPlacementFailures,omitempty"`
+	CanPlaceBall          *bool                `json:"canPlaceBall,omitempty"`
+	Division              *Division            `json:"division,omitempty"`
+	AutoContinue          *bool                `json:"autoContinue,omitempty"`
 }
 
 func (m EventModifyValue) String() string {
-	str := "modify"
-	if m.ForTeam != TeamUnknown {
-		str += fmt.Sprintf(" for team %v:", m.ForTeam)
-	} else {
-		str += ":"
-	}
-	if m.Goals != nil {
-		return fmt.Sprintf("%v Goals=%v", str, *m.Goals)
-	}
-	if m.Goalie != nil {
-		return fmt.Sprintf("%v Goalie=%v", str, *m.Goalie)
-	}
-	if m.YellowCards != nil {
-		return fmt.Sprintf("%v YellowCards=%v", str, *m.YellowCards)
-	}
-	if m.YellowCardTime != nil {
-		return fmt.Sprintf("%v YellowCardTime=%v", str, *m.YellowCardTime)
-	}
-	if m.RedCards != nil {
-		return fmt.Sprintf("%v RedCards=%v", str, *m.RedCards)
-	}
-	if m.TimeoutsLeft != nil {
-		return fmt.Sprintf("%v TimeoutsLeft=%v", str, *m.TimeoutsLeft)
-	}
-	if m.TimeoutTimeLeft != nil {
-		return fmt.Sprintf("%v TimeoutTimeLeft=%v", str, *m.TimeoutTimeLeft)
-	}
-	if m.OnPositiveHalf != nil {
-		return fmt.Sprintf("%v OnPositiveHalf=%v", str, *m.OnPositiveHalf)
-	}
-	if m.TeamName != nil {
-		return fmt.Sprintf("%v TeamName=%v", str, *m.TeamName)
-	}
-	if m.FoulCounter != nil {
-		return fmt.Sprintf("%v FoulCounter=%v", str, *m.FoulCounter)
-	}
-	if m.BallPlacementFailures != nil {
-		return fmt.Sprintf("%v BallPlacementFailures=%v", str, *m.BallPlacementFailures)
-	}
-	if m.CanPlaceBall != nil {
-		return fmt.Sprintf("%v CanPlaceBall=%v", str, *m.CanPlaceBall)
-	}
-	if m.Division != nil {
-		return fmt.Sprintf("%v Division=%v", str, *m.Division)
-	}
-	if m.AutoContinue != nil {
-		return fmt.Sprintf("%v AutoContinue=%v", str, *m.AutoContinue)
-	}
-	return fmt.Sprintf("%v undefined", str)
+	b, _ := json.Marshal(&m)
+	return string(b)
 }
 
 // EventTrigger is an event that can be applied
