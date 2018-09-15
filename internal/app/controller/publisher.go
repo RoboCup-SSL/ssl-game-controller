@@ -17,7 +17,7 @@ type Publisher struct {
 }
 
 type RefMessage struct {
-	referee refproto.Referee
+	referee *refproto.Referee
 	send    func()
 }
 
@@ -39,9 +39,9 @@ func NewPublisher(address string) (publisher Publisher, err error) {
 	log.Println("Publishing to", address)
 
 	publisher.conn = conn
-	publisher.message = RefMessage{send: publisher.send}
+	publisher.message = RefMessage{send: publisher.send, referee: new(refproto.Referee)}
 
-	initRefereeMessage(&publisher.message.referee)
+	initRefereeMessage(publisher.message.referee)
 
 	return
 }
@@ -89,7 +89,7 @@ func (p *Publisher) send() {
 		return
 	}
 
-	bytes, err := proto.Marshal(&p.message.referee)
+	bytes, err := proto.Marshal(p.message.referee)
 	if err != nil {
 		log.Printf("Could not marshal referee message: %v\nError: %v", p.message, err)
 		return
@@ -101,17 +101,15 @@ func (p *Publisher) send() {
 }
 
 func (p *RefMessage) setState(state *State) (republish bool) {
-	r := &p.referee
+	p.referee.GameEvents = mapGameEvents(state.GameEvents)
+	p.referee.DesignatedPosition = mapLocation(state.PlacementPos)
 
-	r.GameEvents = mapGameEvents(state.GameEvents)
-	r.DesignatedPosition = mapLocation(state.PlacementPos)
-
-	*r.PacketTimestamp = uint64(time.Now().UnixNano() / 1000)
-	*r.Stage = mapStage(state.Stage)
-	*r.StageTimeLeft = int32(state.StageTimeLeft.Nanoseconds() / 1000)
-	*r.BlueTeamOnPositiveHalf = state.TeamState[TeamBlue].OnPositiveHalf
-	updateTeam(r.Yellow, state.TeamState[TeamYellow])
-	updateTeam(r.Blue, state.TeamState[TeamBlue])
+	*p.referee.PacketTimestamp = uint64(time.Now().UnixNano() / 1000)
+	*p.referee.Stage = mapStage(state.Stage)
+	*p.referee.StageTimeLeft = int32(state.StageTimeLeft.Nanoseconds() / 1000)
+	*p.referee.BlueTeamOnPositiveHalf = state.TeamState[TeamBlue].OnPositiveHalf
+	updateTeam(p.referee.Yellow, state.TeamState[TeamYellow])
+	updateTeam(p.referee.Blue, state.TeamState[TeamBlue])
 	return
 }
 
