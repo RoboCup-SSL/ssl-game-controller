@@ -16,6 +16,7 @@ export class TeamState {
     foulCounter = 0;
     ballPlacementFailures = 0;
     canPlaceBall = true;
+    maxAllowedBots = 0;
 }
 
 export class RefBoxState {

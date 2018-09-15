@@ -46,3 +46,6 @@ game:
       placement-offset-goal-line: 0.2
       placement-offset-goal-line-goal-kick: 1.0
       placement-offset-defense-area: 1.0
+  max-bots:
+    DivA: 8
+    DivB: 6

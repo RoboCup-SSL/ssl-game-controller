@@ -38,6 +38,7 @@ type ConfigGame struct {
 	MultipleCardStep          int                          `yaml:"multiple-card-step"`
 	MultipleFoulStep          int                          `yaml:"multiple-foul-step"`
 	MultiplePlacementFailures int                          `yaml:"multiple-placement-failures"`
+	MaxBots                   map[Division]int             `yaml:"max-bots"`
 }
 
 // ConfigNetwork holds configs for network communication
@@ -143,6 +144,10 @@ func DefaultConfig() (c Config) {
 	c.Game.DefaultGeometry[DivB].PlacementOffsetGoalLineGoalKick = 1.0
 	c.Game.DefaultGeometry[DivB].PlacementOffsetTouchLine = 0.2
 	c.Game.DefaultGeometry[DivB].PlacementOffsetDefenseArea = 1.0
+
+	c.Game.MaxBots = map[Division]int{}
+	c.Game.MaxBots[DivA] = 8
+	c.Game.MaxBots[DivB] = 6
 
 	return
 }

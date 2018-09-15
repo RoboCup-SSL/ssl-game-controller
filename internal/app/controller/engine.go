@@ -32,10 +32,12 @@ func NewEngine(config ConfigGame) (e Engine) {
 
 func (e *Engine) ResetGame() {
 	e.State = NewState()
-	e.State.TeamState[TeamBlue].TimeoutTimeLeft = e.config.Normal.TimeoutDuration
-	e.State.TeamState[TeamYellow].TimeoutTimeLeft = e.config.Normal.TimeoutDuration
-	e.State.TeamState[TeamBlue].TimeoutsLeft = e.config.Normal.Timeouts
-	e.State.TeamState[TeamYellow].TimeoutsLeft = e.config.Normal.Timeouts
+	for _, team := range []Team{TeamBlue, TeamYellow} {
+		e.State.TeamState[team].TimeoutTimeLeft = e.config.Normal.TimeoutDuration
+		e.State.TeamState[team].TimeoutsLeft = e.config.Normal.Timeouts
+		e.State.TeamState[team].MaxAllowedBots = e.config.MaxBots[e.State.Division]
+	}
+
 	e.RefereeEvents = []RefereeEvent{}
 	e.State.Division = e.config.DefaultDivision
 	e.Geometry = *e.config.DefaultGeometry[e.State.Division]
@@ -177,8 +179,18 @@ func (e *Engine) Process(event Event) error {
 	if err != nil {
 		return err
 	}
+	e.updateMaxBots()
 	e.appendHistory()
 	return nil
+}
+
+func (e *Engine) updateMaxBots() {
+	for _, team := range []Team{TeamBlue, TeamYellow} {
+		max := e.config.MaxBots[e.State.Division]
+		yellowCards := len(e.State.TeamState[team].YellowCardTimes)
+		redCards := e.State.TeamState[team].RedCards
+		e.State.TeamState[team].MaxAllowedBots = max - yellowCards - redCards
+	}
 }
 
 func (e *Engine) appendHistory() {
@@ -288,6 +300,7 @@ func (e *Engine) updateTimes(delta time.Duration) {
 		for team, teamState := range e.State.TeamState {
 			reduceYellowCardTimes(teamState, delta)
 			e.removeElapsedYellowCards(team, teamState)
+			e.updateMaxBots()
 		}
 	}
 

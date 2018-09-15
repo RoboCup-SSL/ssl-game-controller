@@ -44,6 +44,9 @@
                 <TeamBallPlacement
                         :team-color="teamColor"/>
             </div>
+            <div>
+                Max <b>{{maxAllowedBots}}</b> bots allowed on the field
+            </div>
         </div>
     </div>
 </template>
@@ -78,9 +81,12 @@
             teamColor: String
         },
         computed: {
-            team: function () {
+            team() {
                 return this.$store.state.refBoxState.teamState[this.teamColor]
             },
+            maxAllowedBots() {
+                return this.team.maxAllowedBots;
+            }
         }
     }
 </script>

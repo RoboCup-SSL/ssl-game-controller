@@ -145,6 +145,8 @@ message Referee {
         optional uint32 ball_placement_failures = 10;
         // Indicate if the team is able and allowed to place the ball
         optional bool can_place_ball = 12;
+        // The maximum number of bots allowed on the field based on division and cards
+        optional uint32 max_allowed_bots = 13;
     }
 
     // Information about the two teams.

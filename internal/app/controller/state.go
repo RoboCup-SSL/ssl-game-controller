@@ -241,6 +241,7 @@ type TeamInfo struct {
 	FoulCounter           int             `json:"foulCounter"`
 	BallPlacementFailures int             `json:"ballPlacementFailures"`
 	CanPlaceBall          bool            `json:"canPlaceBall"`
+	MaxAllowedBots        int             `json:"maxAllowedBots"`
 }
 
 // State of the game
@@ -317,6 +318,7 @@ func newTeamInfo() (t TeamInfo) {
 	t.FoulCounter = 0
 	t.BallPlacementFailures = 0
 	t.CanPlaceBall = true
+	t.MaxAllowedBots = 0
 	return
 }
 
