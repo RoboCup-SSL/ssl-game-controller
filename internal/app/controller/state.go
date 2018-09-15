@@ -357,3 +357,12 @@ type Location struct {
 	X float64
 	Y float64
 }
+
+func (l Location) toProto() (p *refproto.Location) {
+	p = new(refproto.Location)
+	p.X = new(float32)
+	p.Y = new(float32)
+	*p.X = float32(l.X)
+	*p.Y = float32(l.Y)
+	return
+}

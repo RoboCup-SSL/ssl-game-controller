@@ -18,17 +18,32 @@ func (e *Engine) BallPlacementPos() *Location {
 
 	switch event.Type {
 	case GameEventBallLeftFieldTouchLine:
-		return e.validateProtoLocation(event.Details.BallLeftFieldTouchLine.Location)
-	case GameEventBallLeftFieldGoalLine:
-		if event.Details.BallLeftFieldGoalLine.Location != nil && e.isGoalKick(event) {
-			location := mapProtoLocation(event.Details.BallLeftFieldGoalLine.Location)
-			maxX := e.Geometry.FieldLength/2 - e.Geometry.PlacementOffsetGoalLineGoalKick
-			if math.Abs(location.X) > maxX {
-				location.X = math.Copysign(maxX, location.X)
+		if event.Details.BallLeftFieldTouchLine.Location != nil {
+			location := mapProtoLocation(event.Details.BallLeftFieldTouchLine.Location)
+			x := e.Geometry.FieldLength/2 - e.Geometry.PlacementOffsetGoalLine
+			if math.Abs(location.X) > x {
+				location.X = math.Copysign(x, location.X)
 			}
+			y := e.Geometry.FieldWidth/2 - e.Geometry.PlacementOffsetTouchLine
+			location.Y = math.Copysign(y, location.Y)
 			return e.validateLocation(location)
 		}
-		return e.validateProtoLocation(event.Details.BallLeftFieldGoalLine.Location)
+		return nil
+	case GameEventBallLeftFieldGoalLine:
+		if event.Details.BallLeftFieldGoalLine.Location != nil {
+			location := mapProtoLocation(event.Details.BallLeftFieldGoalLine.Location)
+			var x float64
+			if e.isGoalKick(event) {
+				x = e.Geometry.FieldLength/2 - e.Geometry.PlacementOffsetGoalLineGoalKick
+			} else {
+				x = e.Geometry.FieldLength/2 - e.Geometry.PlacementOffsetGoalLine
+			}
+			location.X = math.Copysign(x, location.X)
+			y := e.Geometry.FieldWidth/2 - e.Geometry.PlacementOffsetTouchLine
+			location.Y = math.Copysign(y, location.Y)
+			return e.validateLocation(location)
+		}
+		return nil
 	case GameEventIcing:
 		return e.validateProtoLocation(event.Details.Icing.KickLocation)
 	case GameEventGoal:
@@ -129,9 +144,11 @@ func (e *Engine) validateLocation(location *Location) *Location {
 
 func (e *Engine) movePositionOutOfDefenseArea(location *Location) {
 	maxX := e.Geometry.FieldLength/2 - e.Geometry.DefenseAreaDepth - e.Geometry.PlacementOffsetDefenseArea
-	minY := e.Geometry.DefenseAreaWidth + e.Geometry.PlacementOffsetDefenseArea
+	minY := e.Geometry.DefenseAreaWidth/2 + e.Geometry.PlacementOffsetDefenseArea
 	if math.Abs(location.X) > maxX && math.Abs(location.Y) < minY {
-		if math.Abs(maxX-math.Abs(location.X)) < math.Abs(minY-math.Abs(location.Y)) {
+		diffX := math.Abs(maxX - math.Abs(location.X))
+		diffY := math.Abs(minY - math.Abs(location.Y))
+		if diffX < diffY {
 			location.X = math.Copysign(maxX, location.X)
 		} else {
 			location.Y = math.Copysign(minY, location.Y)
