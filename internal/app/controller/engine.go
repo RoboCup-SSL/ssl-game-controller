@@ -62,6 +62,8 @@ func (e *Engine) SendCommand(command RefCommand, forTeam Team) {
 			e.State.GameEvents = []*GameEvent{}
 		}
 		e.State.PlacementPos = nil
+		e.State.NextCommand = CommandUnknown
+		e.State.NextCommandFor = TeamUnknown
 	}
 }
 
@@ -80,17 +82,37 @@ func (e *Engine) UndoLastAction() {
 	}
 }
 
-func (e *Engine) Continue() error {
+func (e *Engine) Continue() {
+	if e.State.NextCommand != CommandUnknown {
+		e.SendCommand(e.State.NextCommand, e.State.NextCommandFor)
+	}
+}
+
+func (e *Engine) updateNextCommand() {
 	if len(e.State.GameEvents) == 0 {
-		return errors.New("No game events available to determine next action")
+		return
 	}
 	primaryEvent := e.State.GameEvents[0]
-	teamInFavor := primaryEvent.ByTeam().Opposite()
+	command, forTeam, err := e.CommandForEvent(primaryEvent)
+	if err != nil {
+		log.Print("Warn: ", err)
+		return
+	}
+	e.State.NextCommand = command
+	e.State.NextCommandFor = forTeam
+}
+
+func (e *Engine) CommandForEvent(event *GameEvent) (command RefCommand, forTeam Team, err error) {
+	if event.IsSecondary() {
+		return
+	}
+
+	forTeam = event.ByTeam().Opposite()
 
 	if e.State.Division == DivA {
 		for _, event := range e.State.GameEvents {
 			if event.Type == GameEventPlacementFailedByTeamInFavor {
-				switch primaryEvent.Type {
+				switch event.Type {
 				case
 					GameEventGoal,
 					GameEventDefenderInDefenseArea,
@@ -98,14 +120,15 @@ func (e *Engine) Continue() error {
 				default:
 					// the placement failed by team in favor
 					// the game is continued by the other team
-					e.SendCommand(CommandIndirect, teamInFavor.Opposite())
+					command = CommandIndirect
+					forTeam = forTeam.Opposite()
 				}
-				return nil
+				return
 			}
 		}
 	}
 
-	switch primaryEvent.Type {
+	switch event.Type {
 	case
 		GameEventBallLeftFieldTouchLine,
 		GameEventIcing,
@@ -118,7 +141,7 @@ func (e *Engine) Continue() error {
 		GameEventDefenderInDefenseAreaPartially,
 		GameEventKickTimeout,
 		GameEventKeeperHeldBall:
-		e.SendCommand(CommandIndirect, teamInFavor)
+		command = CommandIndirect
 	case
 		GameEventBallLeftFieldGoalLine,
 		GameEventIndirectGoal,
@@ -127,40 +150,26 @@ func (e *Engine) Continue() error {
 		GameEventBotCrashUnique,
 		GameEventBotPushedBot,
 		GameEventBotHeldBallDeliberately:
-		e.SendCommand(CommandDirect, teamInFavor)
+		command = CommandDirect
 	case
 		GameEventGoal:
-		e.SendCommand(CommandKickoff, teamInFavor)
+		command = CommandKickoff
 	case
 		GameEventBotCrashDrawn,
 		GameEventNoProgressInGame:
-		e.SendCommand(CommandForceStart, TeamUnknown)
+		command = CommandForceStart
 	case
 		GameEventDefenderInDefenseArea,
 		GameEventMultipleCards:
-		e.SendCommand(CommandPenalty, teamInFavor)
+		command = CommandPenalty
 	case
 		GameEventBotInterferedPlacement,
 		GameEventDefenderTooCloseToKickPoint:
-		if cmd, err := e.LastGameStartCommand(); err != nil {
-			log.Print("Warn: ", err)
-		} else {
-			e.SendCommand(cmd, teamInFavor)
-		}
-	case
-		GameEventBotTooFastInStop,
-		GameEventUnsportiveBehaviorMinor,
-		GameEventUnsportiveBehaviorMajor,
-		GameEventBotCrashUniqueContinue,
-		GameEventBotPushedBotContinue,
-		GameEventMultipleFouls,
-		GameEventPlacementFailedByTeamInFavor,
-		GameEventPlacementFailedByOpponent:
-		// no command
+		command, err = e.LastGameStartCommand()
 	default:
-		return errors.Errorf("Unknown game event: %v", e.State.GameEvents)
+		err = errors.Errorf("Unhandled game event: %v", e.State.GameEvents)
 	}
-	return nil
+	return
 }
 
 func (e *Engine) LastGameStartCommand() (RefCommand, error) {
@@ -183,6 +192,7 @@ func (e *Engine) Process(event Event) error {
 		return err
 	}
 	e.updateMaxBots()
+	e.updateNextCommand()
 	e.appendHistory()
 	return nil
 }
@@ -555,7 +565,7 @@ func (e *Engine) processTrigger(t *EventTrigger) (err error) {
 	} else if t.Type == TriggerUndo {
 		e.UndoLastAction()
 	} else if t.Type == TriggerContinue {
-		err = e.Continue()
+		e.Continue()
 	} else {
 		return errors.Errorf("Unknown trigger: %v", t.Type)
 	}

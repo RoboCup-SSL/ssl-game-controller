@@ -58,6 +58,7 @@ func initRefereeMessage(m *refproto.Referee) {
 	m.Blue = new(refproto.Referee_TeamInfo)
 	initTeamInfo(m.Blue)
 	m.BlueTeamOnPositiveHalf = new(bool)
+	m.NextCommand = new(refproto.Referee_Command)
 }
 
 func initTeamInfo(t *refproto.Referee_TeamInfo) {
@@ -109,6 +110,8 @@ func (p *RefMessage) setState(state *State) (republish bool) {
 	*p.referee.Stage = mapStage(state.Stage)
 	*p.referee.StageTimeLeft = int32(state.StageTimeLeft.Nanoseconds() / 1000)
 	*p.referee.BlueTeamOnPositiveHalf = state.TeamState[TeamBlue].OnPositiveHalf
+	*p.referee.NextCommand = mapCommand(state.NextCommand, state.NextCommandFor)
+
 	updateTeam(p.referee.Yellow, state.TeamState[TeamYellow])
 	updateTeam(p.referee.Blue, state.TeamState[TeamBlue])
 	return

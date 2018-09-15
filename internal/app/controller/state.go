@@ -171,6 +171,8 @@ func (s Stage) IsPausedStage() bool {
 type RefCommand string
 
 const (
+	// CommandUnknown not set
+	CommandUnknown RefCommand = ""
 	// CommandHalt HALT
 	CommandHalt RefCommand = "halt"
 	// CommandStop STOP
@@ -258,6 +260,8 @@ type State struct {
 	Division         Division           `json:"division"`
 	PlacementPos     *Location          `json:"placementPos"`
 	AutoContinue     bool               `json:"autoContinue"`
+	NextCommand      RefCommand         `json:"nextCommand"`
+	NextCommandFor   Team               `json:"nextCommandFor"`
 }
 
 // NewState creates a new state, initialized for the start of a new game

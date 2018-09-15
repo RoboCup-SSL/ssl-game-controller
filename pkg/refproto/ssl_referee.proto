@@ -173,12 +173,15 @@ message Referee {
     // deprecated in favor of current_game_event
     optional Game_Event game_event = 11 [deprecated = true];
 
+    // The command that will be issued after the current stoppage and ball placement to continue the game
+    optional Command next_command = 12;
+
     // all game events that were detected since the last RUNNING state
     // will be cleared as soon as the game is continued
-    repeated GameEvent game_events = 12;
+    repeated GameEvent game_events = 13;
 
     // all non-finished proposed game events that may be processed next
-    repeated ProposedGameEvent proposed_game_events = 13;
+    repeated ProposedGameEvent proposed_game_events = 14;
 }
 
 message ProposedGameEvent {

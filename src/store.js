@@ -21,7 +21,7 @@ export class TeamState {
 
 export class RefBoxState {
     stage = 'unknown';
-    command = 'unknown';
+    command = '';
     commandForTeam = '';
     gameEvents = [{type: '', details: {}}];
     stageTimeElapsed = 0;
@@ -30,6 +30,8 @@ export class RefBoxState {
     teamState = {'Yellow': new TeamState(), 'Blue': new TeamState()};
     division = 'DivA';
     autoContinue = true;
+    nextCommand = '';
+    nextCommandFor = '';
 }
 
 export default new Vuex.Store({
