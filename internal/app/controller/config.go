@@ -99,6 +99,7 @@ func DefaultConfig() (c Config) {
 	c.Network.PublishAddress = "224.5.23.1:10003"
 	c.Network.VisionAddress = "224.5.23.2:10006"
 	c.Game.YellowCardDuration = 2 * time.Minute
+	c.Game.TeamChoiceTimeout = 200 * time.Millisecond
 	c.Game.MultipleCardStep = 3
 	c.Game.MultipleFoulStep = 3
 	c.Game.MultiplePlacementFailures = 5
@@ -120,7 +121,7 @@ func DefaultConfig() (c Config) {
 	c.Server.AutoRef.Address = ":10007"
 	c.Server.AutoRef.TrustedKeysDir = "config/trusted_keys/auto_ref"
 	c.Server.Team.Address = ":10008"
-	c.Server.AutoRef.TrustedKeysDir = "config/trusted_keys/team"
+	c.Server.Team.TrustedKeysDir = "config/trusted_keys/team"
 
 	c.Game.DefaultGeometry = map[Division]*ConfigGeometry{}
 	c.Game.DefaultGeometry[DivA] = new(ConfigGeometry)
