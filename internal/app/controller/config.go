@@ -39,6 +39,7 @@ type ConfigGame struct {
 	MultipleFoulStep          int                          `yaml:"multiple-foul-step"`
 	MultiplePlacementFailures int                          `yaml:"multiple-placement-failures"`
 	MaxBots                   map[Division]int             `yaml:"max-bots"`
+	AutoRefProposalTimeout    time.Duration                `yaml:"auto-ref-proposal-timeout"`
 }
 
 // ConfigNetwork holds configs for network communication
@@ -104,6 +105,7 @@ func DefaultConfig() (c Config) {
 	c.Game.MultipleCardStep = 3
 	c.Game.MultipleFoulStep = 3
 	c.Game.MultiplePlacementFailures = 5
+	c.Game.AutoRefProposalTimeout = 5 * time.Second
 
 	c.Game.Normal.HalfDuration = 5 * time.Minute
 	c.Game.Normal.HalfTimeDuration = 5 * time.Minute

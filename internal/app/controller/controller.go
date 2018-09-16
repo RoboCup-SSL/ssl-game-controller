@@ -93,16 +93,34 @@ func (c *GameController) ProcessGeometry(data *sslproto.SSL_GeometryData) {
 	}
 }
 
-func (c *GameController) ProcessAutoRefRequests(request refproto.AutoRefToControllerRequest) error {
+func (c *GameController) ProcessAutoRefRequests(id string, request refproto.AutoRefToControllerRequest) error {
 	c.Mutex.Lock()
 	defer c.Mutex.Unlock()
-	log.Print("Received request from autoRef: ", request)
+	log.Printf("Received request from autoRef '%v': %v", id, request)
 
 	if request.GameEvent != nil {
 		details := NewGameEventDetails(*request.GameEvent)
 		gameEventType := details.EventType()
 		event := Event{GameEvent: &GameEvent{Type: gameEventType, Details: details}}
-		c.OnNewEvent(event)
+
+		if c.Engine.State.GameEventBehavior[event.GameEvent.Type] == GameEventBehaviorMajority {
+			validUntil := c.Engine.TimeProvider().Add(c.Config.Game.AutoRefProposalTimeout)
+			newProposal := GameEventProposal{GameEvent: *event.GameEvent, ProposerId: id, ValidUntil: validUntil}
+			c.Engine.State.GameEventProposals = append(c.Engine.State.GameEventProposals, &newProposal)
+
+			totalProposals := 0
+			for _, proposal := range c.Engine.State.GameEventProposals {
+				if proposal.GameEvent.Type == event.GameEvent.Type && proposal.ValidUntil.After(c.Engine.TimeProvider()) {
+					totalProposals++
+				}
+			}
+			majority := int(math.Floor(float64(len(c.AutoRefServer.Clients)) / 2.0))
+			if totalProposals > majority {
+				c.OnNewEvent(event)
+			}
+		} else {
+			c.OnNewEvent(event)
+		}
 	}
 
 	return nil
@@ -218,7 +236,23 @@ func (c *GameController) publishNetwork() {
 }
 
 func (c *GameController) OnNewEvent(event Event) {
-	if c.outstandingTeamChoice == nil && event.GameEvent != nil {
+
+	if event.GameEvent != nil && !c.Engine.disabledGameEvent(event.GameEvent.Type) && c.askForTeamDecisionIfRequired(event) {
+		return
+	}
+
+	err := c.Engine.Process(event)
+	if err != nil {
+		log.Println("Could not process event:", event, err)
+	} else {
+		c.historyPreserver.Save(c.Engine.History)
+		c.publish()
+	}
+}
+
+func (c *GameController) askForTeamDecisionIfRequired(event Event) (handled bool) {
+	handled = false
+	if c.outstandingTeamChoice == nil {
 		var byTeamProto refproto.Team
 		var choiceType refproto.ControllerToTeamRequest_AdvantageChoice_Foul
 		if event.GameEvent.Details.BotCrashUnique != nil {
@@ -241,18 +275,11 @@ func (c *GameController) OnNewEvent(event Event) {
 			} else {
 				c.outstandingTeamChoice = &TeamChoice{Team: forTeam, Event: event, IssueTime: c.Engine.TimeProvider()}
 				go c.timeoutTeamChoice()
-				return
+				handled = true
 			}
 		}
 	}
-
-	err := c.Engine.Process(event)
-	if err != nil {
-		log.Println("Could not process event:", event, err)
-	} else {
-		c.historyPreserver.Save(c.Engine.History)
-		c.publish()
-	}
+	return
 }
 
 func (c *GameController) timeoutTeamChoice() {

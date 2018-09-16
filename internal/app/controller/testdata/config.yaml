@@ -13,6 +13,7 @@ game:
   multiple-card-step: 3
   multiple-foul-step: 3
   multiple-placement-failures: 5
+  auto-ref-proposal-timeout: 5s
   default-division: DivA
   normal:
     half-duration: 5m

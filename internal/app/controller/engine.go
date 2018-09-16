@@ -61,6 +61,9 @@ func (e *Engine) SendCommand(command RefCommand, forTeam Team) {
 		if len(e.State.GameEvents) > 0 {
 			e.State.GameEvents = []*GameEvent{}
 		}
+		if len(e.State.GameEventProposals) > 0 {
+			e.State.GameEventProposals = []*GameEventProposal{}
+		}
 		e.State.PlacementPos = nil
 		e.State.NextCommand = CommandUnknown
 		e.State.NextCommandFor = TeamUnknown

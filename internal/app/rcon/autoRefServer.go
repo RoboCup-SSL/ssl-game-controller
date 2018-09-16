@@ -11,7 +11,7 @@ import (
 )
 
 type AutoRefServer struct {
-	ProcessRequest func(refproto.AutoRefToControllerRequest) error
+	ProcessRequest func(string, refproto.AutoRefToControllerRequest) error
 	*Server
 }
 
@@ -21,7 +21,7 @@ type AutoRefClient struct {
 
 func NewAutoRefServer() (s *AutoRefServer) {
 	s = new(AutoRefServer)
-	s.ProcessRequest = func(refproto.AutoRefToControllerRequest) error { return nil }
+	s.ProcessRequest = func(string, refproto.AutoRefToControllerRequest) error { return nil }
 	s.Server = NewServer()
 	s.ConnectionHandler = s.handleClientConnection
 	return
@@ -128,7 +128,7 @@ func (s *AutoRefServer) handleClientConnection(conn net.Conn) {
 				continue
 			}
 		}
-		if err := s.ProcessRequest(req); err != nil {
+		if err := s.ProcessRequest(client.Id, req); err != nil {
 			client.Reject(err.Error())
 		} else {
 			client.Ok()
