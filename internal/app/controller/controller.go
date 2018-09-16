@@ -106,7 +106,18 @@ func (c *GameController) ProcessAutoRefRequests(id string, request refproto.Auto
 		if c.Engine.State.GameEventBehavior[event.GameEvent.Type] == GameEventBehaviorMajority {
 			validUntil := c.Engine.TimeProvider().Add(c.Config.Game.AutoRefProposalTimeout)
 			newProposal := GameEventProposal{GameEvent: *event.GameEvent, ProposerId: id, ValidUntil: validUntil}
-			c.Engine.State.GameEventProposals = append(c.Engine.State.GameEventProposals, &newProposal)
+
+			eventPresent := false
+			for _, proposal := range c.Engine.State.GameEventProposals {
+				if proposal.GameEvent.Type == event.GameEvent.Type && proposal.ProposerId == newProposal.ProposerId {
+					// update proposal
+					*proposal = newProposal
+					eventPresent = true
+				}
+			}
+			if !eventPresent {
+				c.Engine.State.GameEventProposals = append(c.Engine.State.GameEventProposals, &newProposal)
+			}
 
 			totalProposals := 0
 			for _, proposal := range c.Engine.State.GameEventProposals {
@@ -114,6 +125,7 @@ func (c *GameController) ProcessAutoRefRequests(id string, request refproto.Auto
 					totalProposals++
 				}
 			}
+
 			majority := int(math.Floor(float64(len(c.AutoRefServer.Clients)) / 2.0))
 			if totalProposals > majority {
 				c.OnNewEvent(event)
