@@ -49,9 +49,10 @@ func main() {
 	c.register()
 	c.sendGameEvent()
 
+	c.sendAutoRefMessage("Hello World")
+
 	for {
 		time.Sleep(1 * time.Second)
-		c.sendAutoRefMessage("Hello World")
 	}
 }
 
