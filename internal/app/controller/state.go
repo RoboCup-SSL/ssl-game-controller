@@ -257,9 +257,9 @@ const (
 
 // GameEventProposal holds a proposal for a game event from an autoRef
 type GameEventProposal struct {
-	ProposerId string
-	GameEvent  GameEvent
-	ValidUntil time.Time
+	ProposerId string    `json:"proposerId"`
+	GameEvent  GameEvent `json:"gameEvent"`
+	ValidUntil time.Time `json:"validUntil"`
 }
 
 // State of the game

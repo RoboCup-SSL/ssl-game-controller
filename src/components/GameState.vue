@@ -55,11 +55,4 @@
 </script>
 
 <style scoped>
-    .team-yellow {
-        color: gold;
-    }
-
-    .team-blue {
-        color: blue;
-    }
 </style>

@@ -26,6 +26,7 @@
             <div class="team-container">
                 <TeamOverview class="team-views" team-color="Blue"/>
                 <ControlTeam class="team-views" team-color="Blue"/>
+                <EventProposals class="team-views event-proposals"/>
             </div>
         </div>
         <ControlMatch id="match-controls"/>
@@ -39,10 +40,12 @@
     import ControlTeam from "./components/control/ControlTeam";
     import ControlMatch from "./components/control/ControlMatch";
     import Events from "./components/events/Events";
+    import EventProposals from "./components/events/EventProposals";
 
     export default {
         name: 'app',
         components: {
+            EventProposals,
             Events,
             ControlMatch,
             ControlTeam,
@@ -149,6 +152,7 @@
     .team-container {
         display: flex;
         flex-direction: column;
+        align-items: stretch;
     }
 
     #match-controls {
@@ -167,5 +171,13 @@
         border: 0;
         width: 100%;
         height: 100%
+    }
+
+    .team-yellow {
+        color: gold;
+    }
+
+    .team-blue {
+        color: blue;
     }
 </style>

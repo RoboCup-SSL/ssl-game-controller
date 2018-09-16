@@ -1,7 +1,7 @@
 <template>
     <div>
         <table>
-            <tr v-for="eventType in eventTypes">
+            <tr v-for="eventType in eventTypes" :key="eventType">
                 <td align="left">{{eventType}}</td>
                 <td>
                     <div class="btn-group-toggle btn-group">
