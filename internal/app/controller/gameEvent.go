@@ -61,6 +61,47 @@ func (m GameEvent) String() string {
 	return string(b)
 }
 
+func AllGameEvents() []GameEventType {
+	return []GameEventType{
+		GameEventBallLeftFieldTouchLine,
+		GameEventBallLeftFieldGoalLine,
+		GameEventIcing,
+		GameEventGoal,
+		GameEventIndirectGoal,
+		GameEventChippedGoal,
+		GameEventBotTooFastInStop,
+		GameEventBotTippedOver,
+		GameEventBotInterferedPlacement,
+		GameEventBotCrashDrawn,
+		GameEventBotKickedBallTooFast,
+		GameEventBotDribbledBallTooFar,
+		GameEventBotCrashUnique,
+		GameEventBotCrashUniqueContinue,
+		GameEventBotPushedBot,
+		GameEventBotPushedBotContinue,
+		GameEventBotHeldBallDeliberately,
+		GameEventAttackerDoubleTouchedBall,
+		GameEventAttackerTooCloseToDefenseArea,
+		GameEventAttackerInDefenseArea,
+		GameEventAttackerTouchedKeeper,
+		GameEventDefenderTooCloseToKickPoint,
+		GameEventDefenderInDefenseAreaPartially,
+		GameEventDefenderInDefenseArea,
+		GameEventKeeperHeldBall,
+		GameEventUnsportiveBehaviorMinor,
+		GameEventUnsportiveBehaviorMajor,
+		GameEventMultipleCards,
+		GameEventMultipleFouls,
+		GameEventMultiplePlacementFailures,
+		GameEventKickTimeout,
+		GameEventNoProgressInGame,
+		GameEventPlacementFailedByTeamInFavor,
+		GameEventPlacementFailedByOpponent,
+		GameEventPlacementSucceeded,
+		GameEventPrepared,
+	}
+}
+
 // ByTeam extracts the `ByTeam` attribute from the game event details
 func (e GameEvent) ByTeam() Team {
 	v := reflect.ValueOf(e.Details)

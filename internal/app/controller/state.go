@@ -249,22 +249,31 @@ type TeamInfo struct {
 
 // State of the game
 type State struct {
-	Stage             Stage              `json:"stage"`
-	Command           RefCommand         `json:"command"`
-	CommandFor        Team               `json:"commandForTeam"`
-	GameEvents        []*GameEvent       `json:"gameEvents"`
-	StageTimeElapsed  time.Duration      `json:"stageTimeElapsed"`
-	StageTimeLeft     time.Duration      `json:"stageTimeLeft"`
-	MatchTimeStart    time.Time          `json:"matchTimeStart"`
-	MatchDuration     time.Duration      `json:"matchDuration"`
-	TeamState         map[Team]*TeamInfo `json:"teamState"`
-	Division          Division           `json:"division"`
-	PlacementPos      *Location          `json:"placementPos"`
-	AutoContinue      bool               `json:"autoContinue"`
-	NextCommand       RefCommand         `json:"nextCommand"`
-	NextCommandFor    Team               `json:"nextCommandFor"`
-	AutoRefsConnected []string           `json:"autoRefsConnected"`
+	Stage             Stage                               `json:"stage"`
+	Command           RefCommand                          `json:"command"`
+	CommandFor        Team                                `json:"commandForTeam"`
+	GameEvents        []*GameEvent                        `json:"gameEvents"`
+	StageTimeElapsed  time.Duration                       `json:"stageTimeElapsed"`
+	StageTimeLeft     time.Duration                       `json:"stageTimeLeft"`
+	MatchTimeStart    time.Time                           `json:"matchTimeStart"`
+	MatchDuration     time.Duration                       `json:"matchDuration"`
+	TeamState         map[Team]*TeamInfo                  `json:"teamState"`
+	Division          Division                            `json:"division"`
+	PlacementPos      *Location                           `json:"placementPos"`
+	AutoContinue      bool                                `json:"autoContinue"`
+	NextCommand       RefCommand                          `json:"nextCommand"`
+	NextCommandFor    Team                                `json:"nextCommandFor"`
+	AutoRefsConnected []string                            `json:"autoRefsConnected"`
+	GameEventBehavior map[GameEventType]GameEventBehavior `json:"gameEventBehavior"`
 }
+
+type GameEventBehavior string
+
+const (
+	GameEventBehaviorOn       GameEventBehavior = "on"
+	GameEventBehaviorMajority GameEventBehavior = "majority"
+	GameEventBehaviorOff      GameEventBehavior = "off"
+)
 
 // NewState creates a new state, initialized for the start of a new game
 func NewState() (s *State) {
@@ -287,6 +296,11 @@ func NewState() (s *State) {
 
 	s.Division = DivA
 	s.AutoContinue = true
+
+	s.GameEventBehavior = map[GameEventType]GameEventBehavior{}
+	for _, event := range AllGameEvents() {
+		s.GameEventBehavior[event] = GameEventBehaviorOn
+	}
 
 	return
 }

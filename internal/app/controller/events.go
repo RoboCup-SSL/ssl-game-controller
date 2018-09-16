@@ -89,24 +89,31 @@ type EventModifyCardTime struct {
 	Duration string `json:"duration"`
 }
 
+// EventModifyGameEventBehavior holds the type to behavior mapping
+type EventModifyGameEventBehavior struct {
+	GameEventType     GameEventType     `json:"gameEventType"`
+	GameEventBehavior GameEventBehavior `json:"gameEventBehavior"`
+}
+
 // EventModifyValue is an event that can be applied
 type EventModifyValue struct {
 	ForTeam Team `json:"forTeam,omitempty"`
 
-	Goals                 *int                 `json:"goals,omitempty"`
-	Goalie                *int                 `json:"goalie,omitempty"`
-	YellowCards           *int                 `json:"yellowCards,omitempty"`
-	YellowCardTime        *EventModifyCardTime `json:"yellowCardTime,omitempty"`
-	RedCards              *int                 `json:"redCards,omitempty"`
-	TimeoutsLeft          *int                 `json:"timeoutsLeft,omitempty"`
-	TimeoutTimeLeft       *string              `json:"timeoutTimeLeft,omitempty"`
-	OnPositiveHalf        *bool                `json:"onPositiveHalf,omitempty"`
-	TeamName              *string              `json:"teamName,omitempty"`
-	FoulCounter           *int                 `json:"foulCounter,omitempty"`
-	BallPlacementFailures *int                 `json:"ballPlacementFailures,omitempty"`
-	CanPlaceBall          *bool                `json:"canPlaceBall,omitempty"`
-	Division              *Division            `json:"division,omitempty"`
-	AutoContinue          *bool                `json:"autoContinue,omitempty"`
+	Goals                 *int                          `json:"goals,omitempty"`
+	Goalie                *int                          `json:"goalie,omitempty"`
+	YellowCards           *int                          `json:"yellowCards,omitempty"`
+	YellowCardTime        *EventModifyCardTime          `json:"yellowCardTime,omitempty"`
+	RedCards              *int                          `json:"redCards,omitempty"`
+	TimeoutsLeft          *int                          `json:"timeoutsLeft,omitempty"`
+	TimeoutTimeLeft       *string                       `json:"timeoutTimeLeft,omitempty"`
+	OnPositiveHalf        *bool                         `json:"onPositiveHalf,omitempty"`
+	TeamName              *string                       `json:"teamName,omitempty"`
+	FoulCounter           *int                          `json:"foulCounter,omitempty"`
+	BallPlacementFailures *int                          `json:"ballPlacementFailures,omitempty"`
+	CanPlaceBall          *bool                         `json:"canPlaceBall,omitempty"`
+	Division              *Division                     `json:"division,omitempty"`
+	AutoContinue          *bool                         `json:"autoContinue,omitempty"`
+	GameEventBehavior     *EventModifyGameEventBehavior `json:"gameEventBehavior,omitempty"`
 }
 
 func (m EventModifyValue) String() string {

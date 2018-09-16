@@ -225,6 +225,18 @@ func (e *Engine) LogGameEvent(event GameEvent) {
 	e.RefereeEvents = append(e.RefereeEvents, gameEvent)
 }
 
+func (e *Engine) LogIgnoredGameEvent(event GameEvent) {
+	gameEvent := RefereeEvent{
+		Timestamp:   e.TimeProvider().UnixNano(),
+		StageTime:   e.State.StageTimeElapsed,
+		Type:        RefereeEventGameEventIgnored,
+		Name:        string(event.Type),
+		Team:        event.ByTeam(),
+		Description: event.Details.Description(),
+	}
+	e.RefereeEvents = append(e.RefereeEvents, gameEvent)
+}
+
 func (e *Engine) LogCommand() {
 	refereeEvent := RefereeEvent{
 		Timestamp: e.TimeProvider().UnixNano(),
@@ -380,6 +392,8 @@ func (e *Engine) processModify(m *EventModifyValue) error {
 		if e.State.AutoContinue {
 			e.Continue()
 		}
+	} else if m.GameEventBehavior != nil {
+		e.State.GameEventBehavior[m.GameEventBehavior.GameEventType] = m.GameEventBehavior.GameEventBehavior
 	} else if err := e.processTeamModify(m); err != nil {
 		return err
 	}
@@ -573,12 +587,25 @@ func (e *Engine) processTrigger(t *EventTrigger) (err error) {
 	return err
 }
 
+func (e *Engine) disabledGameEvent(event GameEventType) bool {
+	for eventType, behavior := range e.State.GameEventBehavior {
+		if event == eventType {
+			return behavior == GameEventBehaviorOff
+		}
+	}
+	return false
+}
+
 func (e *Engine) processGameEvent(event *GameEvent) error {
 
 	if event.Details.EventType() == GameEventNone {
 		return errors.Errorf("Incomplete game event: %v", event)
 	}
 
+	if e.disabledGameEvent(event.Type) {
+		e.LogIgnoredGameEvent(*event)
+		return nil
+	}
 	e.AddGameEvent(*event)
 
 	if event.IncrementsFoulCounter() {

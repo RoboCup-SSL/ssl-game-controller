@@ -34,6 +34,7 @@ export class RefBoxState {
     nextCommand = '';
     nextCommandFor = '';
     autoRefsConnected = [];
+    gameEventBehavior = {};
 }
 
 export default new Vuex.Store({

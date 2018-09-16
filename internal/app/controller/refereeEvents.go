@@ -7,12 +7,13 @@ import (
 type RefereeEventType string
 
 const (
-	RefereeEventCommand   RefereeEventType = "command"
-	RefereeEventStage     RefereeEventType = "stage"
-	RefereeEventCard      RefereeEventType = "card"
-	RefereeEventTime      RefereeEventType = "time"
-	RefereeEventGameEvent RefereeEventType = "gameEvent"
-	RefereeEventModify    RefereeEventType = "modify"
+	RefereeEventCommand          RefereeEventType = "command"
+	RefereeEventStage            RefereeEventType = "stage"
+	RefereeEventCard             RefereeEventType = "card"
+	RefereeEventTime             RefereeEventType = "time"
+	RefereeEventGameEvent        RefereeEventType = "gameEvent"
+	RefereeEventGameEventIgnored RefereeEventType = "ignoredGameEvent"
+	RefereeEventModify           RefereeEventType = "modify"
 )
 
 type RefereeEvent struct {

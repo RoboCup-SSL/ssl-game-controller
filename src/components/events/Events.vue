@@ -19,6 +19,16 @@
                     <!-- hide modal buttons -->
                 </div>
             </b-modal>
+
+            <b-btn v-b-modal.event-behavior-modal size="sm" variant="primary">Behaviors</b-btn>
+            <b-modal id="event-behavior-modal"
+                     title="Game Event Behaviors"
+                     :lazy="true">
+                <EventBehavior/>
+                <div slot="modal-footer">
+                    <!-- hide modal buttons -->
+                </div>
+            </b-modal>
         </div>
     </div>
 </template>
@@ -26,10 +36,11 @@
 <script>
     import EventTable from "./EventTable";
     import NewEvent from "./NewEvent";
+    import EventBehavior from "./EventBehavior";
 
     export default {
         name: "Events",
-        components: {EventTable, NewEvent},
+        components: {EventBehavior, EventTable, NewEvent},
         data() {
             return {
                 currentPage: 1,
