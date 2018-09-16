@@ -8,6 +8,7 @@ import (
 	"github.com/RoboCup-SSL/ssl-go-tools/pkg/sslconn"
 	"log"
 	"net"
+	"time"
 )
 
 var udpAddress = flag.String("udpAddress", "224.5.23.1:10003", "The multicast address of ssl-game-controller")
@@ -26,7 +27,7 @@ type Client struct {
 func main() {
 	flag.Parse()
 
-	client.LoadPrivateKey(*privateKeyLocation)
+	privateKey = client.LoadPrivateKey(*privateKeyLocation)
 
 	if *autoDetectAddress {
 		host := client.DetectHost(*udpAddress)
@@ -47,7 +48,11 @@ func main() {
 
 	c.register()
 	c.sendGameEvent()
-	c.sendAutoRefMessage("Hello World")
+
+	for {
+		time.Sleep(1 * time.Second)
+		c.sendAutoRefMessage("Hello World")
+	}
 }
 
 func (c *Client) register() {

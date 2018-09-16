@@ -26,7 +26,7 @@ type Client struct {
 func main() {
 	flag.Parse()
 
-	client.LoadPrivateKey(*privateKeyLocation)
+	privateKey = client.LoadPrivateKey(*privateKeyLocation)
 
 	if *autoDetectAddress {
 		host := client.DetectHost(*udpAddress)

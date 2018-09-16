@@ -36,15 +36,17 @@ func SetHost(address string, host string) string {
 	return host + ":" + parts[1]
 }
 
-func LoadPrivateKey(privateKeyLocation string) {
+func LoadPrivateKey(privateKeyLocation string) *rsa.PrivateKey {
 	if privateKeyLocation != "" {
 		privateKey := ReadPrivateKey(privateKeyLocation)
 		if privateKey != nil {
 			log.Print("Found private key")
+			return privateKey
 		} else {
 			log.Print("No private key available")
 		}
 	}
+	return nil
 }
 
 func ReadPrivateKey(privateKeyLocation string) *rsa.PrivateKey {
