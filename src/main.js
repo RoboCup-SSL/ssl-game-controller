@@ -14,6 +14,7 @@ import {library} from '@fortawesome/fontawesome-svg-core'
 import {
     faCaretSquareDown,
     faCaretSquareUp,
+    faCheckCircle,
     faEdit,
     faSignal,
     faToggleOff,
@@ -35,6 +36,7 @@ library.add(faCaretSquareUp);
 library.add(faToggleOn);
 library.add(faToggleOff);
 library.add(faSignal);
+library.add(faCheckCircle);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 let wsAddress;

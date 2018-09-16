@@ -3,17 +3,25 @@
         <h2>Proposed Game Events</h2>
         <div class="content">
             <span v-if="!eventProposalsPresent">None</span>
-            <div v-if="eventProposalsPresent" v-for="(proposal, index) in eventProposals"
+            <div class="proposal-item"
+                 v-if="eventProposalsPresent"
+                 v-for="(proposal, index) in eventProposals"
                  :key="index">
-            <span :class="{'team-blue': byTeam(proposal) === 2, 'team-yellow': byTeam(proposal) === 1}">
-                {{proposal.gameEvent.type}}
-            </span>
+                <span :class="{'team-blue': byTeam(proposal) === 2, 'team-yellow': byTeam(proposal) === 1}">
+                    {{proposal.gameEvent.type}}
+                </span>
                 <span>by {{proposal.proposerId}}</span>
                 (<span v-format-ns-duration="proposalTimeout(proposal.validUntil)"></span>):
                 <p>
                 <span v-for="detail in detailsList(proposal)"
                       :key="detail.key">{{detail.key}}: {{detail.value}}<br/></span>
                 </p>
+                <a class="btn-accept"
+                   v-b-tooltip.hover
+                   title="Accept this game event"
+                   @click="accept(proposal.gameEvent)">
+                    <font-awesome-icon icon="check-circle" class="fa-lg"></font-awesome-icon>
+                </a>
             </div>
         </div>
     </div>
@@ -38,17 +46,14 @@
                 let key = Object.keys(proposal.gameEvent.details)[0];
                 return proposal.gameEvent.details[key];
             },
-            detailsStr(proposal) {
-                let p = this.details(proposal);
-                delete p.by_team;
-                return p;
-            },
             detailsList(proposal) {
                 let list = [];
                 let details = this.details(proposal);
-                delete details.by_team;
-                Object.keys(details).forEach(function (key, i) {
-                    list[i] = {key: key, value: details[key]}
+                let i = 0;
+                Object.keys(details).forEach(function (key) {
+                    if (key !== 'by_team') {
+                        list[i++] = {key: key, value: details[key]};
+                    }
                 });
                 return list;
             },
@@ -68,6 +73,11 @@
                 }
                 return remaining * 1e6;
             },
+            accept(gameEvent) {
+                this.$socket.sendObj({
+                    gameEvent: gameEvent
+                });
+            },
         }
     }
 </script>
@@ -77,5 +87,16 @@
         text-align: left;
         overflow-y: auto;
         max-height: 15em;
+    }
+
+    .proposal-item {
+        position: relative;
+    }
+
+    .btn-accept {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        margin: 0.3em;
     }
 </style>
