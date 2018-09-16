@@ -164,31 +164,31 @@ message Referee {
     optional Point designated_position = 9;
 
     // Information about the direction of play.
-    // True, if the blue team will have it's goal on the positive x-axis of the ssl-vision coordinate system
-    // Obviously, the yellow team will play on the opposide half
-    // For compatibility, this field is optional
+    // True, if the blue team will have it's goal on the positive x-axis of the ssl-vision coordinate system.
+    // Obviously, the yellow team will play on the opposide half.
+    // For compatibility, this field is optional.
     optional bool blue_team_on_positive_half = 10;
 
-    // The game event that caused the referee command
-    // deprecated in favor of current_game_event
+    // The game event that caused the referee command.
+    // deprecated in favor of current_game_event.
     optional Game_Event game_event = 11 [deprecated = true];
 
-    // The command that will be issued after the current stoppage and ball placement to continue the game
+    // The command that will be issued after the current stoppage and ball placement to continue the game.
     optional Command next_command = 12;
 
-    // all game events that were detected since the last RUNNING state
-    // will be cleared as soon as the game is continued
+    // All game events that were detected since the last RUNNING state.
+    // Will be cleared as soon as the game is continued.
     repeated GameEvent game_events = 13;
 
-    // all non-finished proposed game events that may be processed next
+    // All non-finished proposed game events that may be processed next.
     repeated ProposedGameEvent proposed_game_events = 14;
 }
 
 message ProposedGameEvent {
-    // the UNIX timestamp when the game event was proposed
-    required uint64 timestamp = 1;
-    // the identifier of the proposer
+    // The UNIX timestamp when the game event proposal will time out, in microseconds.
+    required uint64 valid_until = 1;
+    // The identifier of the proposer.
     required string proposer_id = 2;
-    // the actual game event
+    // The proposed game event.
     required GameEvent game_event = 3;
 }

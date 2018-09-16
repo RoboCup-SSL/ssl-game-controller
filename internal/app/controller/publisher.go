@@ -105,6 +105,7 @@ func (p *Publisher) send() {
 func (p *RefMessage) setState(state *State) (republish bool) {
 	p.referee.GameEvents = mapGameEvents(state.GameEvents)
 	p.referee.DesignatedPosition = mapLocation(state.PlacementPos)
+	p.referee.ProposedGameEvents = mapProposals(state.GameEventProposals)
 
 	*p.referee.PacketTimestamp = uint64(time.Now().UnixNano() / 1000)
 	*p.referee.Stage = mapStage(state.Stage)
@@ -115,6 +116,18 @@ func (p *RefMessage) setState(state *State) (republish bool) {
 	updateTeam(p.referee.Yellow, state.TeamState[TeamYellow])
 	updateTeam(p.referee.Blue, state.TeamState[TeamBlue])
 	return
+}
+
+func mapProposals(proposals []*GameEventProposal) []*refproto.ProposedGameEvent {
+	mappedProposals := make([]*refproto.ProposedGameEvent, len(proposals))
+	for i, proposal := range proposals {
+		mappedProposals[i] = new(refproto.ProposedGameEvent)
+		mappedProposals[i].ProposerId = &proposal.ProposerId
+		mappedProposals[i].ValidUntil = new(uint64)
+		*mappedProposals[i].ValidUntil = uint64(proposal.ValidUntil.UnixNano() / 1000)
+		mappedProposals[i].GameEvent = proposal.GameEvent.ToProto()
+	}
+	return mappedProposals
 }
 
 func (p *RefMessage) sendCommands(state *State) {
