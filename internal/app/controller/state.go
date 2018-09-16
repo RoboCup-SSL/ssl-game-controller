@@ -244,24 +244,26 @@ type TeamInfo struct {
 	BallPlacementFailures int             `json:"ballPlacementFailures"`
 	CanPlaceBall          bool            `json:"canPlaceBall"`
 	MaxAllowedBots        int             `json:"maxAllowedBots"`
+	Connected             bool            `json:"connected"`
 }
 
 // State of the game
 type State struct {
-	Stage            Stage              `json:"stage"`
-	Command          RefCommand         `json:"command"`
-	CommandFor       Team               `json:"commandForTeam"`
-	GameEvents       []*GameEvent       `json:"gameEvents"`
-	StageTimeElapsed time.Duration      `json:"stageTimeElapsed"`
-	StageTimeLeft    time.Duration      `json:"stageTimeLeft"`
-	MatchTimeStart   time.Time          `json:"matchTimeStart"`
-	MatchDuration    time.Duration      `json:"matchDuration"`
-	TeamState        map[Team]*TeamInfo `json:"teamState"`
-	Division         Division           `json:"division"`
-	PlacementPos     *Location          `json:"placementPos"`
-	AutoContinue     bool               `json:"autoContinue"`
-	NextCommand      RefCommand         `json:"nextCommand"`
-	NextCommandFor   Team               `json:"nextCommandFor"`
+	Stage             Stage              `json:"stage"`
+	Command           RefCommand         `json:"command"`
+	CommandFor        Team               `json:"commandForTeam"`
+	GameEvents        []*GameEvent       `json:"gameEvents"`
+	StageTimeElapsed  time.Duration      `json:"stageTimeElapsed"`
+	StageTimeLeft     time.Duration      `json:"stageTimeLeft"`
+	MatchTimeStart    time.Time          `json:"matchTimeStart"`
+	MatchDuration     time.Duration      `json:"matchDuration"`
+	TeamState         map[Team]*TeamInfo `json:"teamState"`
+	Division          Division           `json:"division"`
+	PlacementPos      *Location          `json:"placementPos"`
+	AutoContinue      bool               `json:"autoContinue"`
+	NextCommand       RefCommand         `json:"nextCommand"`
+	NextCommandFor    Team               `json:"nextCommandFor"`
+	AutoRefsConnected []string           `json:"autoRefsConnected"`
 }
 
 // NewState creates a new state, initialized for the start of a new game

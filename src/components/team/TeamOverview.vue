@@ -1,5 +1,14 @@
 <template>
     <div>
+        <h2>{{teamColor}} Team
+            <span v-b-tooltip.hover
+                  title="Team connected"
+                  v-if="team.connected">
+                <font-awesome-icon
+                        class="fa-xs"
+                        icon="signal"/>
+            </span>
+        </h2>
         <div class="content">
             <div>
                 <TeamName

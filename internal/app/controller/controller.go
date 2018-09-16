@@ -184,10 +184,30 @@ func (c *GameController) publishApi() {
 	defer c.historyPreserver.Close()
 	for {
 		c.timer.WaitTillNextFullSecond()
+		c.updateOnlineStates()
 		c.Engine.Tick(c.timer.Delta())
 		c.historyPreserver.Save(c.Engine.History)
 		c.publish()
 	}
+}
+
+func (c *GameController) updateOnlineStates() {
+	for _, team := range []Team{TeamYellow, TeamBlue} {
+		c.Engine.State.TeamState[team].Connected = c.teamConnected(team)
+	}
+	var autoRefs []string
+	for _, autoRef := range c.AutoRefServer.Clients {
+		autoRefs = append(autoRefs, autoRef.Id)
+	}
+	c.Engine.State.AutoRefsConnected = autoRefs
+}
+
+func (c *GameController) teamConnected(team Team) bool {
+	teamName := c.Engine.State.TeamState[team].Name
+	if _, ok := c.TeamServer.Clients[teamName]; ok {
+		return true
+	}
+	return false
 }
 
 func (c *GameController) publishNetwork() {

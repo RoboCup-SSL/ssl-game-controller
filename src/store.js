@@ -17,6 +17,7 @@ export class TeamState {
     ballPlacementFailures = 0;
     canPlaceBall = true;
     maxAllowedBots = 0;
+    connected = false;
 }
 
 export class RefBoxState {
@@ -32,6 +33,7 @@ export class RefBoxState {
     autoContinue = true;
     nextCommand = '';
     nextCommandFor = '';
+    autoRefsConnected = [];
 }
 
 export default new Vuex.Store({

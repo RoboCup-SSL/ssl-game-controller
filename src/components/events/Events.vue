@@ -2,6 +2,8 @@
     <div>
         <EventTable :current-page="currentPage" :per-page="perPage" :events="events"/>
         <div class="event-controls-container">
+            <span class="auto-refs-connected" v-b-tooltip.hover :title="autoRefs"><b>{{autoRefsConnected}}</b> autoRefs connected. </span>
+
             <b-pagination size="sm"
                           :total-rows="events.length"
                           v-model="currentPage"
@@ -40,7 +42,25 @@
             },
             state() {
                 return this.$store.state.refBoxState
-            }
+            },
+            autoRefsConnected() {
+                if (this.state.autoRefsConnected != null) {
+                    return this.state.autoRefsConnected.length;
+                }
+                return 0;
+            },
+            autoRefs() {
+                if (this.autoRefsConnected) {
+                    let autoRefs = 'Connected AutoRefs: ';
+                    for (let i = 0; i < this.state.autoRefsConnected.length; i++) {
+                        autoRefs += this.state.autoRefsConnected[i];
+                        if (i !== (this.state.autoRefsConnected.length - 1)) {
+                            autoRefs += ', '
+                        }
+                    }
+                    return autoRefs;
+                }
+            },
         },
     }
 </script>
@@ -55,5 +75,10 @@
     .event-controls-container button {
         margin-bottom: 1rem;
         margin-left: 1rem;
+    }
+
+    .auto-refs-connected {
+        margin-top: 0.2rem;
+        margin-right: 1rem;
     }
 </style>
