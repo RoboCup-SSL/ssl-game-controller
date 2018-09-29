@@ -168,6 +168,7 @@ func (e GameEvent) IncrementsBallPlacementFailureCounter() bool {
 func (e GameEvent) IsSecondary() bool {
 	switch e.Type {
 	case GameEventBotTooFastInStop,
+		GameEventBotCrashDrawn,
 		GameEventUnsportiveBehaviorMinor,
 		GameEventUnsportiveBehaviorMajor,
 		GameEventMultipleFouls,
