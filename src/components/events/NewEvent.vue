@@ -88,10 +88,6 @@
                     {name: 'Ball was kicked too fast', component: 'BotKickedBallTooFast'},
                     {name: 'Ball was dribbled too far', component: 'BotDribbledBallTooFar'},
                     {name: 'Attacker double touched ball', component: 'AttackerDoubleTouchedBall'},
-                    {
-                        name: 'Attacker was too close to defense area during free kick',
-                        component: 'AttackerTooCloseToDefenseArea'
-                    },
                     {name: 'Attacker was in opponent defense area', component: 'AttackerInDefenseArea'},
                     {name: 'Attacker touched keeper', component: 'AttackerTouchedKeeper'},
                     {
@@ -103,6 +99,10 @@
                 ],
                 foulEvents: [
                     {name: 'Two bots crashed with similar speeds', component: 'BotCrashDrawn'},
+                    {
+                        name: 'Attacker was too close to defense area during free kick',
+                        component: 'AttackerTooCloseToDefenseArea'
+                    },
                     {name: 'Opponent bot interfered ball placement procedure', component: 'BotInterferedPlacement'},
                     {name: 'A bot tipped over', component: 'BotTippedOver'},
                     {name: 'Bot crashed into another bot', component: 'BotCrashUnique'},

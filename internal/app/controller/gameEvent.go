@@ -122,6 +122,7 @@ func (e GameEvent) IncrementsFoulCounter() bool {
 	case GameEventBotCrashDrawn,
 		GameEventBotInterferedPlacement,
 		GameEventBotTippedOver,
+		GameEventAttackerTooCloseToDefenseArea,
 		GameEventBotCrashUnique,
 		GameEventBotCrashUniqueContinue,
 		GameEventBotPushedBot,
