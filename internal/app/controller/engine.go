@@ -140,7 +140,6 @@ func (e *Engine) CommandForEvent(event *GameEvent) (command RefCommand, forTeam 
 		GameEventAttackerDoubleTouchedBall,
 		GameEventAttackerInDefenseArea,
 		GameEventAttackerTouchedKeeper,
-		GameEventDefenderInDefenseAreaPartially,
 		GameEventKickTimeout,
 		GameEventKeeperHeldBall:
 		command = CommandIndirect
@@ -148,6 +147,7 @@ func (e *Engine) CommandForEvent(event *GameEvent) (command RefCommand, forTeam 
 		GameEventBallLeftFieldGoalLine,
 		GameEventIndirectGoal,
 		GameEventChippedGoal,
+		GameEventDefenderInDefenseAreaPartially,
 		GameEventAttackerTooCloseToDefenseArea,
 		GameEventBotTippedOver,
 		GameEventBotCrashUnique,
