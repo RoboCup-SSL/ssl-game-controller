@@ -13,7 +13,7 @@ message GameEvent {
     oneof event {
         BallLeftFieldEvent ball_left_field_touch_line = 1;
         BallLeftFieldEvent ball_left_field_goal_line = 2;
-        Icing icing = 3;
+        AimlessKick aimless_kick = 3;
         Goal goal = 4;
         IndirectGoal indirect_goal = 5;
         ChippedGoal chipped_goal = 6;
@@ -63,8 +63,8 @@ message GameEvent {
         // the location where the ball left the field
         optional Location location = 3;
     }
-    // the ball left the field via goal line and a team committed icing
-    message Icing {
+    // the ball left the field via goal line and a team committed an aimless kick
+    message AimlessKick {
         // the team that last touched the ball
         required Team by_team = 1;
         // the bot that last touched the ball

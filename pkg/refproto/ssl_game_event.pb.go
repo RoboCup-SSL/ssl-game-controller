@@ -211,6 +211,7 @@ func (*Game_Event) ProtoMessage()    {}
 func (*Game_Event) Descriptor() ([]byte, []int) {
 	return fileDescriptor_9d7737834ddab500, []int{0}
 }
+
 func (m *Game_Event) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Game_Event.Unmarshal(m, b)
 }
@@ -265,6 +266,7 @@ func (*Game_Event_Originator) ProtoMessage()    {}
 func (*Game_Event_Originator) Descriptor() ([]byte, []int) {
 	return fileDescriptor_9d7737834ddab500, []int{0, 0}
 }
+
 func (m *Game_Event_Originator) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Game_Event_Originator.Unmarshal(m, b)
 }
@@ -298,10 +300,10 @@ func (m *Game_Event_Originator) GetBotId() uint32 {
 }
 
 func init() {
-	proto.RegisterType((*Game_Event)(nil), "Game_Event")
-	proto.RegisterType((*Game_Event_Originator)(nil), "Game_Event.Originator")
 	proto.RegisterEnum("Game_Event_GameEventType", Game_Event_GameEventType_name, Game_Event_GameEventType_value)
 	proto.RegisterEnum("Game_Event_Team", Game_Event_Team_name, Game_Event_Team_value)
+	proto.RegisterType((*Game_Event)(nil), "Game_Event")
+	proto.RegisterType((*Game_Event_Originator)(nil), "Game_Event.Originator")
 }
 
 func init() { proto.RegisterFile("ssl_game_event.proto", fileDescriptor_9d7737834ddab500) }

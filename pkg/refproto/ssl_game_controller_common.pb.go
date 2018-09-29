@@ -170,6 +170,7 @@ func (*BotId) ProtoMessage()    {}
 func (*BotId) Descriptor() ([]byte, []int) {
 	return fileDescriptor_3d09d87af007c4fe, []int{0}
 }
+
 func (m *BotId) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BotId.Unmarshal(m, b)
 }
@@ -219,6 +220,7 @@ func (*Location) ProtoMessage()    {}
 func (*Location) Descriptor() ([]byte, []int) {
 	return fileDescriptor_3d09d87af007c4fe, []int{1}
 }
+
 func (m *Location) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Location.Unmarshal(m, b)
 }
@@ -275,6 +277,7 @@ func (*ControllerReply) ProtoMessage()    {}
 func (*ControllerReply) Descriptor() ([]byte, []int) {
 	return fileDescriptor_3d09d87af007c4fe, []int{2}
 }
+
 func (m *ControllerReply) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ControllerReply.Unmarshal(m, b)
 }
@@ -338,6 +341,7 @@ func (*Signature) ProtoMessage()    {}
 func (*Signature) Descriptor() ([]byte, []int) {
 	return fileDescriptor_3d09d87af007c4fe, []int{3}
 }
+
 func (m *Signature) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Signature.Unmarshal(m, b)
 }
@@ -371,13 +375,13 @@ func (m *Signature) GetPkcs1V15() []byte {
 }
 
 func init() {
+	proto.RegisterEnum("Team", Team_name, Team_value)
+	proto.RegisterEnum("ControllerReply_StatusCode", ControllerReply_StatusCode_name, ControllerReply_StatusCode_value)
+	proto.RegisterEnum("ControllerReply_Verification", ControllerReply_Verification_name, ControllerReply_Verification_value)
 	proto.RegisterType((*BotId)(nil), "BotId")
 	proto.RegisterType((*Location)(nil), "Location")
 	proto.RegisterType((*ControllerReply)(nil), "ControllerReply")
 	proto.RegisterType((*Signature)(nil), "Signature")
-	proto.RegisterEnum("Team", Team_name, Team_value)
-	proto.RegisterEnum("ControllerReply_StatusCode", ControllerReply_StatusCode_name, ControllerReply_StatusCode_value)
-	proto.RegisterEnum("ControllerReply_Verification", ControllerReply_Verification_name, ControllerReply_Verification_value)
 }
 
 func init() { proto.RegisterFile("ssl_game_controller_common.proto", fileDescriptor_3d09d87af007c4fe) }

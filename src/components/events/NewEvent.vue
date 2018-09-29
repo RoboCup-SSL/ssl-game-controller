@@ -79,7 +79,7 @@
                 ballLeftFieldEvents: [
                     {name: 'via goal line', component: 'BallLeftFieldGoalLine'},
                     {name: 'via touch line', component: 'BallLeftFieldTouchLine'},
-                    {name: 'Icing', component: 'Icing'},
+                    {name: 'AimlessKick', component: 'AimlessKick'},
                     {name: 'Goal', component: 'Goal'},
                     {name: 'Indirect Goal', component: 'IndirectGoal'},
                     {name: 'Chipped Goal', component: 'ChippedGoal'},

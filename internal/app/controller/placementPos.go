@@ -44,8 +44,8 @@ func (e *Engine) BallPlacementPos() *Location {
 			return e.validateLocation(location)
 		}
 		return nil
-	case GameEventIcing:
-		return e.validateProtoLocation(event.Details.Icing.KickLocation)
+	case GameEventAimlessKick:
+		return e.validateProtoLocation(event.Details.AimlessKick.KickLocation)
 	case GameEventGoal:
 		return &Location{X: 0.0, Y: 0.0}
 	case GameEventIndirectGoal:

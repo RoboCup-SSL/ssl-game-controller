@@ -37,6 +37,7 @@ func (*AutoRefRegistration) ProtoMessage()    {}
 func (*AutoRefRegistration) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2fbb3ba3bab9727c, []int{0}
 }
+
 func (m *AutoRefRegistration) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AutoRefRegistration.Unmarshal(m, b)
 }
@@ -88,6 +89,7 @@ func (*AutoRefToControllerRequest) ProtoMessage()    {}
 func (*AutoRefToControllerRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2fbb3ba3bab9727c, []int{1}
 }
+
 func (m *AutoRefToControllerRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AutoRefToControllerRequest.Unmarshal(m, b)
 }
@@ -144,6 +146,7 @@ func (*AutoRefMessage) ProtoMessage()    {}
 func (*AutoRefMessage) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2fbb3ba3bab9727c, []int{2}
 }
+
 func (m *AutoRefMessage) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AutoRefMessage.Unmarshal(m, b)
 }
@@ -284,6 +287,7 @@ func (*AutoRefMessage_WaitForBots) ProtoMessage()    {}
 func (*AutoRefMessage_WaitForBots) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2fbb3ba3bab9727c, []int{2, 0}
 }
+
 func (m *AutoRefMessage_WaitForBots) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AutoRefMessage_WaitForBots.Unmarshal(m, b)
 }
@@ -325,6 +329,7 @@ func (*AutoRefMessage_WaitForBots_Violator) ProtoMessage()    {}
 func (*AutoRefMessage_WaitForBots_Violator) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2fbb3ba3bab9727c, []int{2, 0, 0}
 }
+
 func (m *AutoRefMessage_WaitForBots_Violator) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AutoRefMessage_WaitForBots_Violator.Unmarshal(m, b)
 }

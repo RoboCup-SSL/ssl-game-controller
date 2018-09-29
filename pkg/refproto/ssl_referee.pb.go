@@ -287,6 +287,7 @@ func (*Referee) ProtoMessage()    {}
 func (*Referee) Descriptor() ([]byte, []int) {
 	return fileDescriptor_f003bb08adc02ebb, []int{0}
 }
+
 func (m *Referee) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Referee.Unmarshal(m, b)
 }
@@ -444,6 +445,7 @@ func (*Referee_TeamInfo) ProtoMessage()    {}
 func (*Referee_TeamInfo) Descriptor() ([]byte, []int) {
 	return fileDescriptor_f003bb08adc02ebb, []int{0, 0}
 }
+
 func (m *Referee_TeamInfo) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Referee_TeamInfo.Unmarshal(m, b)
 }
@@ -564,6 +566,7 @@ func (*Referee_Point) ProtoMessage()    {}
 func (*Referee_Point) Descriptor() ([]byte, []int) {
 	return fileDescriptor_f003bb08adc02ebb, []int{0, 1}
 }
+
 func (m *Referee_Point) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Referee_Point.Unmarshal(m, b)
 }
@@ -614,6 +617,7 @@ func (*ProposedGameEvent) ProtoMessage()    {}
 func (*ProposedGameEvent) Descriptor() ([]byte, []int) {
 	return fileDescriptor_f003bb08adc02ebb, []int{1}
 }
+
 func (m *ProposedGameEvent) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ProposedGameEvent.Unmarshal(m, b)
 }
@@ -654,12 +658,12 @@ func (m *ProposedGameEvent) GetGameEvent() *GameEvent {
 }
 
 func init() {
+	proto.RegisterEnum("Referee_Stage", Referee_Stage_name, Referee_Stage_value)
+	proto.RegisterEnum("Referee_Command", Referee_Command_name, Referee_Command_value)
 	proto.RegisterType((*Referee)(nil), "Referee")
 	proto.RegisterType((*Referee_TeamInfo)(nil), "Referee.TeamInfo")
 	proto.RegisterType((*Referee_Point)(nil), "Referee.Point")
 	proto.RegisterType((*ProposedGameEvent)(nil), "ProposedGameEvent")
-	proto.RegisterEnum("Referee_Stage", Referee_Stage_name, Referee_Stage_value)
-	proto.RegisterEnum("Referee_Command", Referee_Command_name, Referee_Command_value)
 }
 
 func init() { proto.RegisterFile("ssl_referee.proto", fileDescriptor_f003bb08adc02ebb) }

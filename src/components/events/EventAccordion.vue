@@ -38,7 +38,7 @@
     import DefenderInDefenseAreaPartially from "./inputs/DefenderInDefenseAreaPartially"
     import DefenderTooCloseToKickPoint from "./inputs/DefenderTooCloseToKickPoint"
     import Goal from "./inputs/Goal"
-    import Icing from "./inputs/Icing"
+    import AimlessKick from "./inputs/AimlessKick"
     import IndirectGoal from "./inputs/IndirectGoal"
     import KeeperHeldBall from "./inputs/KeeperHeldBall"
     import KickTimeout from "./inputs/KickTimeout"
@@ -78,7 +78,7 @@
             DefenderInDefenseAreaPartially,
             DefenderTooCloseToKickPoint,
             Goal,
-            Icing,
+            AimlessKick,
             IndirectGoal,
             KeeperHeldBall,
             KickTimeout,

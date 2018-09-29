@@ -134,7 +134,7 @@ func (e *Engine) CommandForEvent(event *GameEvent) (command RefCommand, forTeam 
 	switch event.Type {
 	case
 		GameEventBallLeftFieldTouchLine,
-		GameEventIcing,
+		GameEventAimlessKick,
 		GameEventBotKickedBallTooFast,
 		GameEventBotDribbledBallTooFar,
 		GameEventAttackerDoubleTouchedBall,

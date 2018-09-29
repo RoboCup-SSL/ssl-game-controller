@@ -129,6 +129,7 @@ func (*TeamRegistration) ProtoMessage()    {}
 func (*TeamRegistration) Descriptor() ([]byte, []int) {
 	return fileDescriptor_96c0c3d07dcb3676, []int{0}
 }
+
 func (m *TeamRegistration) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TeamRegistration.Unmarshal(m, b)
 }
@@ -180,6 +181,7 @@ func (*TeamToControllerRequest) ProtoMessage()    {}
 func (*TeamToControllerRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_96c0c3d07dcb3676, []int{1}
 }
+
 func (m *TeamToControllerRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TeamToControllerRequest.Unmarshal(m, b)
 }
@@ -322,6 +324,7 @@ func (*ControllerToTeamRequest) ProtoMessage()    {}
 func (*ControllerToTeamRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_96c0c3d07dcb3676, []int{2}
 }
+
 func (m *ControllerToTeamRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ControllerToTeamRequest.Unmarshal(m, b)
 }
@@ -435,6 +438,7 @@ func (*ControllerToTeamRequest_AdvantageChoice) ProtoMessage()    {}
 func (*ControllerToTeamRequest_AdvantageChoice) Descriptor() ([]byte, []int) {
 	return fileDescriptor_96c0c3d07dcb3676, []int{2, 0}
 }
+
 func (m *ControllerToTeamRequest_AdvantageChoice) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ControllerToTeamRequest_AdvantageChoice.Unmarshal(m, b)
 }
@@ -461,12 +465,12 @@ func (m *ControllerToTeamRequest_AdvantageChoice) GetFoul() ControllerToTeamRequ
 }
 
 func init() {
+	proto.RegisterEnum("TeamToControllerRequest_AdvantageResponse", TeamToControllerRequest_AdvantageResponse_name, TeamToControllerRequest_AdvantageResponse_value)
+	proto.RegisterEnum("ControllerToTeamRequest_AdvantageChoice_Foul", ControllerToTeamRequest_AdvantageChoice_Foul_name, ControllerToTeamRequest_AdvantageChoice_Foul_value)
 	proto.RegisterType((*TeamRegistration)(nil), "TeamRegistration")
 	proto.RegisterType((*TeamToControllerRequest)(nil), "TeamToControllerRequest")
 	proto.RegisterType((*ControllerToTeamRequest)(nil), "ControllerToTeamRequest")
 	proto.RegisterType((*ControllerToTeamRequest_AdvantageChoice)(nil), "ControllerToTeamRequest.AdvantageChoice")
-	proto.RegisterEnum("TeamToControllerRequest_AdvantageResponse", TeamToControllerRequest_AdvantageResponse_name, TeamToControllerRequest_AdvantageResponse_value)
-	proto.RegisterEnum("ControllerToTeamRequest_AdvantageChoice_Foul", ControllerToTeamRequest_AdvantageChoice_Foul_name, ControllerToTeamRequest_AdvantageChoice_Foul_value)
 }
 
 func init() { proto.RegisterFile("ssl_game_controller_team.proto", fileDescriptor_96c0c3d07dcb3676) }
