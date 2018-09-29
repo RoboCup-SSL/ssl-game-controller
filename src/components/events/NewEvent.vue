@@ -7,6 +7,19 @@
         </p>
         <b-card no-body class="mb-1">
             <b-card-header header-tag="header" class="p-1" role="tab">
+                <b-btn block href="#" v-b-toggle.accordion-event-match-proceeding variant="primary">Match proceeding
+                </b-btn>
+            </b-card-header>
+            <b-collapse id="accordion-event-match-proceeding" accordion="accordion-event-category" role="tabpanel">
+                <b-card-body>
+                    <p class="card-text">
+                        <EventAccordion accordion-name="match-proceeding" :categories="matchProceedingEvents"/>
+                    </p>
+                </b-card-body>
+            </b-collapse>
+        </b-card>
+        <b-card no-body class="mb-1">
+            <b-card-header header-tag="header" class="p-1" role="tab">
                 <b-btn block href="#" v-b-toggle.accordion-event-ball-left-field variant="primary">Ball left field
                 </b-btn>
             </b-card-header>
@@ -42,25 +55,24 @@
         </b-card>
         <b-card no-body class="mb-1">
             <b-card-header header-tag="header" class="p-1" role="tab">
-                <b-btn block href="#" v-b-toggle.accordion-event-repeated-foul variant="primary">Repeated Foul</b-btn>
+                <b-btn block href="#" v-b-toggle.accordion-event-repeated-foul variant="primary">Repeated Events</b-btn>
             </b-card-header>
             <b-collapse id="accordion-event-repeated-foul" accordion="accordion-event-category" role="tabpanel">
                 <b-card-body>
                     <p class="card-text">
-                        <EventAccordion accordion-name="repeated-foul" :categories="secondaryEvents"/>
+                        <EventAccordion accordion-name="repeated-foul" :categories="repeatedEvents"/>
                     </p>
                 </b-card-body>
             </b-collapse>
         </b-card>
         <b-card no-body class="mb-1">
             <b-card-header header-tag="header" class="p-1" role="tab">
-                <b-btn block href="#" v-b-toggle.accordion-event-match-proceeding variant="primary">Match proceeding
-                </b-btn>
+                <b-btn block href="#" v-b-toggle.accordion-event-unsportive-behavior variant="primary">Unsportive Behavior</b-btn>
             </b-card-header>
-            <b-collapse id="accordion-event-match-proceeding" accordion="accordion-event-category" role="tabpanel">
+            <b-collapse id="accordion-event-unsportive-behavior" accordion="accordion-event-category" role="tabpanel">
                 <b-card-body>
                     <p class="card-text">
-                        <EventAccordion accordion-name="match-proceeding" :categories="matchProceedingEvents"/>
+                        <EventAccordion accordion-name="unsportive-behavior" :categories="unsportiveBehaviorEvents"/>
                     </p>
                 </b-card-body>
             </b-collapse>
@@ -76,57 +88,59 @@
         components: {EventAccordion},
         data() {
             return {
+                matchProceedingEvents: [
+                    {name: 'Prepared for kickoff or penalty kick', component: 'Prepared'},
+                    {name: 'No progress in game', component: 'NoProgressInGame'},
+                    {name: 'Placement failed by the team in favor', component: 'PlacementFailedByTeamInFavor'},
+                    {name: 'Placement failed by the opponent team', component: 'PlacementFailedByOpponent'},
+                    {name: 'Placement succeeded', component: 'PlacementSucceeded'},
+                ],
                 ballLeftFieldEvents: [
-                    {name: 'via goal line', component: 'BallLeftFieldGoalLine'},
                     {name: 'via touch line', component: 'BallLeftFieldTouchLine'},
-                    {name: 'AimlessKick', component: 'AimlessKick'},
+                    {name: 'via goal line', component: 'BallLeftFieldGoalLine'},
                     {name: 'Goal', component: 'Goal'},
                     {name: 'Indirect Goal', component: 'IndirectGoal'},
                     {name: 'Chipped Goal', component: 'ChippedGoal'},
                 ],
                 minorOffenseEvents: [
-                    {name: 'Ball was kicked too fast', component: 'BotKickedBallTooFast'},
-                    {name: 'Ball was dribbled too far', component: 'BotDribbledBallTooFar'},
+                    {name: 'Ball was kicked aimlessly', component: 'AimlessKick'},
+                    {name: 'Attacker failed to kick ball in time', component: 'KickTimeout'},
+                    {name: 'Keeper held the ball too long', component: 'KeeperHeldBall'},
                     {name: 'Attacker double touched ball', component: 'AttackerDoubleTouchedBall'},
                     {name: 'Attacker was in opponent defense area', component: 'AttackerInDefenseArea'},
                     {name: 'Attacker touched keeper', component: 'AttackerTouchedKeeper'},
-                    {
-                        name: 'Defender touched ball while partially inside defense area',
-                        component: 'DefenderInDefenseAreaPartially'
-                    },
-                    {name: 'Attacker failed to kick ball in time', component: 'KickTimeout'},
-                    {name: 'Keeper held the ball too long', component: 'KeeperHeldBall'},
+                    {name: 'Ball was dribbled too far', component: 'BotDribbledBallTooFar'},
+                    {name: 'Ball was kicked too fast', component: 'BotKickedBallTooFast'},
                 ],
                 foulEvents: [
-                    {name: 'Two bots crashed with similar speeds', component: 'BotCrashDrawn'},
                     {
                         name: 'Attacker was too close to defense area during free kick',
                         component: 'AttackerTooCloseToDefenseArea'
                     },
                     {name: 'Opponent bot interfered ball placement procedure', component: 'BotInterferedPlacement'},
-                    {name: 'A bot tipped over', component: 'BotTippedOver'},
+                    {name: 'Two bots crashed with similar speeds', component: 'BotCrashDrawn'},
                     {name: 'Bot crashed into another bot', component: 'BotCrashUnique'},
+                    {name: 'Bot crashed into another bot - decided to continue', component: 'BotCrashUniqueContinue'},
                     {name: 'One bot pushed another one', component: 'BotPushedBot'},
+                    {name: 'One bot pushed another one - decided to continue', component: 'BotPushedBotContinue'},
                     {name: 'Bot held ball deliberately', component: 'BotHeldBallDeliberately'},
+                    {name: 'A bot tipped over', component: 'BotTippedOver'},
+                    {name: 'Robot too fast during stop', component: 'BotTooFastInStop'},
                     {name: 'Defender was too close to kick point', component: 'DefenderTooCloseToKickPoint'},
+                    {
+                        name: 'Defender touched ball while partially inside defense area',
+                        component: 'DefenderInDefenseAreaPartially'
+                    },
                     {name: 'Defender touched ball in defense area', component: 'DefenderInDefenseArea'},
                 ],
-                secondaryEvents: [
-                    {name: 'Bot crashed into another bot - decided to continue', component: 'BotCrashUniqueContinue'},
-                    {name: 'One bot pushed another one - decided to continue', component: 'BotPushedBotContinue'},
-                    {name: 'Robot too fast during stop', component: 'BotTooFastInStop'},
-                    {name: 'Minor unsportive behavior', component: 'UnsportiveBehaviorMinor'},
-                    {name: 'Major unsportive behavior', component: 'UnsportiveBehaviorMajor'},
-                    {name: 'Multiple fouls', component: 'MultipleFouls'},
+                repeatedEvents: [
                     {name: 'Multiple cards', component: 'MultipleCards'},
                     {name: 'Multiple placement failures', component: 'MultiplePlacementFailures'},
+                    {name: 'Multiple fouls', component: 'MultipleFouls'},
                 ],
-                matchProceedingEvents: [
-                    {name: 'No progress in game', component: 'NoProgressInGame'},
-                    {name: 'Placement failed by the team in favor', component: 'PlacementFailedByTeamInFavor'},
-                    {name: 'Placement failed by the opponent team', component: 'PlacementFailedByOpponent'},
-                    {name: 'Placement succeeded', component: 'PlacementSucceeded'},
-                    {name: 'Prepared for kickoff or penalty kick', component: 'Prepared'},
+                unsportiveBehaviorEvents: [
+                    {name: 'Minor unsportive behavior', component: 'UnsportiveBehaviorMinor'},
+                    {name: 'Major unsportive behavior', component: 'UnsportiveBehaviorMajor'},
                 ]
             }
         }
