@@ -47,13 +47,13 @@
         </span>
         <div class="btn-group-toggle btn-group">
             <label v-b-tooltip.hover
-                   title="Enable automatic continuation by based on game events"
+                   title="Enable automatic continuation based on game events"
                    :class="{btn:true, 'btn-secondary': true, active: autoContinue}"
                    @click="setAutoContinue(true)">
                 Auto
             </label>
             <label v-b-tooltip.hover
-                   title="Disable automatic continuation by based on game events"
+                   title="Disable automatic continuation based on game events"
                    :class="{btn:true, 'btn-secondary': true, active: !autoContinue}"
                    @click="setAutoContinue(false)">
                 Manual
