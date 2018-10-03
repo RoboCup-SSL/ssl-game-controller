@@ -245,6 +245,7 @@ type TeamInfo struct {
 	CanPlaceBall          bool            `json:"canPlaceBall"`
 	MaxAllowedBots        int             `json:"maxAllowedBots"`
 	Connected             bool            `json:"connected"`
+	BotInterchangeIntend  bool            `json:"botInterchangeIntend"`
 }
 
 type GameEventBehavior string

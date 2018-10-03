@@ -54,6 +54,10 @@
                         :team-color="teamColor"/>
             </div>
             <div>
+                <TeamBotInterchange
+                        :team-color="teamColor"/>
+            </div>
+            <div>
                 Max <b>{{maxAllowedBots}}</b> bots allowed on the field
             </div>
         </div>
@@ -71,10 +75,12 @@
     import TeamRedCards from "./TeamRedCards";
     import TeamCounters from "./TeamCounters";
     import TeamBallPlacement from "./TeamBallPlacement";
+    import TeamBotInterchange from "./TeamBotInterchange";
 
     export default {
         name: "TeamOverview",
         components: {
+            TeamBotInterchange,
             TeamBallPlacement,
             TeamCounters,
             TeamRedCards,

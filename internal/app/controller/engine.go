@@ -454,6 +454,8 @@ func (e *Engine) processTeamModify(m *EventModifyValue) error {
 		}
 	} else if m.CanPlaceBall != nil {
 		teamState.CanPlaceBall = *m.CanPlaceBall
+	} else if m.BotInterchangeIntend != nil {
+		teamState.BotInterchangeIntend = *m.BotInterchangeIntend
 	} else {
 		return errors.Errorf("Unknown modify: %v", m)
 	}
