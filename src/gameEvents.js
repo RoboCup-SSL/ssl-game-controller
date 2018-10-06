@@ -117,7 +117,7 @@ export const foulEvents = [
     },
     {
         name: 'Bot crashed into another bot - decided to continue',
-        component: 'BotCrashUniqueContinue',
+        component: 'BotCrashUniqueSkipped',
         type: 'auto'
     },
     {
@@ -127,7 +127,7 @@ export const foulEvents = [
     },
     {
         name: 'One bot pushed another one - decided to continue',
-        component: 'BotPushedBotContinue',
+        component: 'BotPushedBotSkipped',
         type: 'auto'
     },
     {

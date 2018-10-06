@@ -19,7 +19,7 @@
     import {convertStringLocation} from "../../../refereeState";
 
     export default {
-        name: "BotCrashUniqueContinue",
+        name: "BotCrashUniqueSkipped",
         components: {BotSelection, TeamSelection, LocationSelection},
         data() {
             return {
@@ -35,9 +35,9 @@
             sendEvent: function () {
                 this.$socket.sendObj({
                     gameEvent: {
-                        type: 'botCrashUniqueContinue',
+                        type: 'botCrashUniqueSkipped',
                         details: {
-                            ['botCrashUniqueContinue']: {
+                            ['botCrashUniqueSkipped']: {
                                 by_team: this.model.team.toLocaleUpperCase(),
                                 violator: parseInt(this.model.violator.id),
                                 victim: parseInt(this.model.victim.id),
