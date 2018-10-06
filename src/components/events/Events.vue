@@ -10,7 +10,7 @@
                           :per-page="perPage">
             </b-pagination>
 
-            <b-btn v-b-modal.new-event-modal size="sm" variant="primary">New</b-btn>
+            <b-btn v-b-modal.new-event-modal size="sm" variant="primary">New Event</b-btn>
             <b-modal id="new-event-modal"
                      title="New Game Event"
                      :lazy="true">
@@ -20,7 +20,7 @@
                 </div>
             </b-modal>
 
-            <b-btn v-b-modal.event-behavior-modal size="sm" variant="primary">Behaviors</b-btn>
+            <b-btn v-b-modal.event-behavior-modal size="sm" variant="primary">Configure Behaviors</b-btn>
             <b-modal id="event-behavior-modal"
                      title="Game Event Behaviors"
                      :lazy="true">
