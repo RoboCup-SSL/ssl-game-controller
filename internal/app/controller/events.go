@@ -114,7 +114,7 @@ type EventModifyValue struct {
 	Division              *Division                     `json:"division,omitempty"`
 	AutoContinue          *bool                         `json:"autoContinue,omitempty"`
 	GameEventBehavior     *EventModifyGameEventBehavior `json:"gameEventBehavior,omitempty"`
-	BotInterchangeIntend  *bool                         `json:"botInterchangeIntend,omitempty"`
+	BotSubstitutionIntend *bool                         `json:"botSubstitutionIntend,omitempty"`
 }
 
 func (m EventModifyValue) String() string {
