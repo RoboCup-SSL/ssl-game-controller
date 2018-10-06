@@ -86,9 +86,15 @@ func (e *Engine) UndoLastAction() {
 }
 
 func (e *Engine) Continue() {
-	if e.State.BotSubstitutionIntend() {
+	substitutionIntend := e.State.BotSubstitutionIntend()
+	if substitutionIntend != TeamUnknown {
 		e.State.TeamState[TeamBlue].BotSubstitutionIntend = false
 		e.State.TeamState[TeamYellow].BotSubstitutionIntend = false
+		teamProto := substitutionIntend.toProto()
+		e.AddGameEvent(GameEvent{
+			Type: GameEventBotSubstitution,
+			Details: GameEventDetails{
+				BotSubstitution: &refproto.GameEvent_BotSubstitution{ByTeam: &teamProto}}})
 		e.SendCommand(CommandHalt, "")
 	} else if e.State.NextCommand != CommandUnknown {
 		e.SendCommand(e.State.NextCommand, e.State.NextCommandFor)

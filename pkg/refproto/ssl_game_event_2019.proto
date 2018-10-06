@@ -20,6 +20,7 @@ message GameEvent {
         PlacementFailedByTeamInFavor placement_failed_by_team_in_favor = 3;
         PlacementFailedByOpponent placement_failed_by_opponent = 4;
         PlacementSucceeded placement_succeeded = 5;
+        BotSubstitution bot_substitution = 37;
 
         // Ball out of field events
 
@@ -390,5 +391,10 @@ message GameEvent {
     message Prepared {
         // the time taken for preparing
         optional float time_taken = 1;
+    }
+    // bots are being substituted by at least one team
+    message BotSubstitution {
+        // the team that did the placement
+        required Team by_team = 1;
     }
 }

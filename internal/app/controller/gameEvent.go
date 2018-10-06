@@ -18,6 +18,7 @@ const (
 	GameEventPlacementFailedByTeamInFavor GameEventType = "placementFailedByTeamInFavor"
 	GameEventPlacementFailedByOpponent    GameEventType = "placementFailedByOpponent"
 	GameEventPlacementSucceeded           GameEventType = "placementSucceeded"
+	GameEventBotSubstitution              GameEventType = "gameEventBotSubstitution"
 
 	GameEventBallLeftFieldTouchLine GameEventType = "ballLeftFieldTouchLine"
 	GameEventBallLeftFieldGoalLine  GameEventType = "ballLeftFieldGoalLine"
@@ -286,6 +287,8 @@ func (e GameEvent) ToProto() *refproto.GameEvent {
 		protoEvent.Event = &refproto.GameEvent_PlacementSucceeded_{PlacementSucceeded: e.Details.PlacementSucceeded}
 	case GameEventPrepared:
 		protoEvent.Event = &refproto.GameEvent_Prepared_{Prepared: e.Details.Prepared}
+	case GameEventBotSubstitution:
+		protoEvent.Event = &refproto.GameEvent_BotSubstitution_{BotSubstitution: e.Details.BotSubstitution}
 	default:
 		log.Printf("Warn: Could not map game e %v", e.Type)
 		return nil
@@ -331,6 +334,7 @@ type GameEventDetails struct {
 	PlacementFailedByOpponent      *refproto.GameEvent_PlacementFailedByOpponent      `json:"placementFailedByOpponent,omitempty"`
 	PlacementSucceeded             *refproto.GameEvent_PlacementSucceeded             `json:"placementSucceeded,omitempty"`
 	Prepared                       *refproto.GameEvent_Prepared                       `json:"prepared,omitempty"`
+	BotSubstitution                *refproto.GameEvent_BotSubstitution                `json:"botSubstitution,omitempty"`
 }
 
 func (d GameEventDetails) EventType() GameEventType {
@@ -441,6 +445,9 @@ func (d GameEventDetails) EventType() GameEventType {
 	}
 	if d.Prepared != nil {
 		return GameEventPrepared
+	}
+	if d.BotSubstitution != nil {
+		return GameEventBotSubstitution
 	}
 	return GameEventNone
 }
@@ -638,6 +645,9 @@ func (d GameEventDetails) Description() string {
 	if d.Prepared != nil {
 		return ""
 	}
+	if d.BotSubstitution != nil {
+		return ""
+	}
 	return ""
 }
 
@@ -678,5 +688,6 @@ func NewGameEventDetails(event refproto.GameEvent) (d GameEventDetails) {
 	d.PlacementFailedByOpponent = event.GetPlacementFailedByOpponent()
 	d.PlacementSucceeded = event.GetPlacementSucceeded()
 	d.Prepared = event.GetPrepared()
+	d.BotSubstitution = event.GetBotSubstitution()
 	return
 }
