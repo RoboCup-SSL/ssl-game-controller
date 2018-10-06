@@ -54,7 +54,7 @@
                         :team-color="teamColor"/>
             </div>
             <div>
-                <TeamBotInterchange
+                <TeamBotSubstitution
                         :team-color="teamColor"/>
             </div>
             <div>
@@ -75,12 +75,12 @@
     import TeamRedCards from "./TeamRedCards";
     import TeamCounters from "./TeamCounters";
     import TeamBallPlacement from "./TeamBallPlacement";
-    import TeamBotInterchange from "./TeamBotInterchange";
+    import TeamBotSubstitution from "./TeamBotSubstitution";
 
     export default {
         name: "TeamOverview",
         components: {
-            TeamBotInterchange,
+            TeamBotSubstitution,
             TeamBallPlacement,
             TeamCounters,
             TeamRedCards,
