@@ -39,9 +39,9 @@ const (
 	GameEventBotInterferedPlacement         GameEventType = "botInterferedPlacement"
 	GameEventBotCrashDrawn                  GameEventType = "botCrashDrawn"
 	GameEventBotCrashUnique                 GameEventType = "botCrashUnique"
-	GameEventBotCrashUniqueSkipped          GameEventType = "botCrashUniqueContinue"
+	GameEventBotCrashUniqueSkipped          GameEventType = "botCrashUniqueSkipped"
 	GameEventBotPushedBot                   GameEventType = "botPushedBot"
-	GameEventBotPushedBotSkipped            GameEventType = "botPushedBotContinue"
+	GameEventBotPushedBotSkipped            GameEventType = "botPushedBotSkipped"
 	GameEventBotHeldBallDeliberately        GameEventType = "botHeldBallDeliberately"
 	GameEventBotTippedOver                  GameEventType = "botTippedOver"
 	GameEventBotTooFastInStop               GameEventType = "botTooFastInStop"
@@ -312,9 +312,9 @@ type GameEventDetails struct {
 	BotKickedBallTooFast           *refproto.GameEvent_BotKickedBallTooFast           `json:"botKickedBallTooFast,omitempty"`
 	BotDribbledBallTooFar          *refproto.GameEvent_BotDribbledBallTooFar          `json:"botDribbledBallTooFar,omitempty"`
 	BotCrashUnique                 *refproto.GameEvent_BotCrashUnique                 `json:"botCrashUnique,omitempty"`
-	BotCrashUniqueSkipped          *refproto.GameEvent_BotCrashUnique                 `json:"botCrashUniqueContinue,omitempty"`
+	BotCrashUniqueSkipped          *refproto.GameEvent_BotCrashUnique                 `json:"botCrashUniqueSkipped,omitempty"`
 	BotPushedBot                   *refproto.GameEvent_BotPushedBot                   `json:"botPushedBot,omitempty"`
-	BotPushedBotSkipped            *refproto.GameEvent_BotPushedBot                   `json:"botPushedBotContinue,omitempty"`
+	BotPushedBotSkipped            *refproto.GameEvent_BotPushedBot                   `json:"botPushedBotSkipped,omitempty"`
 	BotHeldBallDeliberately        *refproto.GameEvent_BotHeldBallDeliberately        `json:"botHeldBallDeliberately,omitempty"`
 	AttackerDoubleTouchedBall      *refproto.GameEvent_AttackerDoubleTouchedBall      `json:"attackerDoubleTouchedBall,omitempty"`
 	AttackerTooCloseToDefenseArea  *refproto.GameEvent_AttackerTooCloseToDefenseArea  `json:"attackerTooCloseToDefenseArea,omitempty"`
