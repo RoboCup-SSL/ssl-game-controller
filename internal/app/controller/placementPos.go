@@ -12,7 +12,7 @@ func (e *Engine) BallPlacementPos() *Location {
 		return nil
 	}
 	event := e.State.GameEvents[0]
-	if event.IsSecondary() || event.IsContinued() {
+	if event.IsSecondary() || event.IsSkipped() {
 		return nil
 	}
 

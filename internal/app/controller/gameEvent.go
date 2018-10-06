@@ -190,8 +190,8 @@ func (e GameEvent) IsSecondary() bool {
 	return false
 }
 
-// IsContinued checks if the game event is was continued (not stopped) based on the decision of a team
-func (e GameEvent) IsContinued() bool {
+// IsSkipped checks if the game event is was continued (not stopped) based on the decision of a team
+func (e GameEvent) IsSkipped() bool {
 	switch e.Type {
 	case GameEventBotPushedBotSkipped,
 		GameEventBotCrashUniqueSkipped:
