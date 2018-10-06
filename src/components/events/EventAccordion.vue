@@ -48,8 +48,8 @@
     import NoProgressInGame from "./inputs/NoProgressInGame"
     import PlacementFailedByOpponent from "./inputs/PlacementFailedByOpponent"
     import PlacementFailedByTeamInFavor from "./inputs/PlacementFailedByTeamInFavor"
-    import UnsportiveBehaviorMajor from "./inputs/UnsportiveBehaviorMajor"
-    import UnsportiveBehaviorMinor from "./inputs/UnsportiveBehaviorMinor"
+    import UnsportingBehaviorMajor from "./inputs/UnsportingBehaviorMajor"
+    import UnsportingBehaviorMinor from "./inputs/UnsportingBehaviorMinor"
     import PlacementSucceeded from "./inputs/PlacementSucceeded"
     import Prepared from "./inputs/Prepared"
 
@@ -88,8 +88,8 @@
             NoProgressInGame,
             PlacementFailedByOpponent,
             PlacementFailedByTeamInFavor,
-            UnsportiveBehaviorMajor,
-            UnsportiveBehaviorMinor,
+            UnsportingBehaviorMajor,
+            UnsportingBehaviorMinor,
             PlacementSucceeded,
             Prepared,
         },

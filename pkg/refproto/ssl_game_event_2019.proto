@@ -40,8 +40,8 @@ message GameEvent {
         BotCrashUnique bot_crash_unique_continue = 32;
         BotPushedBot bot_pushed_bot_continue = 33;
         BotTooFastInStop bot_too_fast_in_stop = 24;
-        UnsportiveBehaviorMinor unsportive_behavior_minor = 25;
-        UnsportiveBehaviorMajor unsportive_behavior_major = 26;
+        UnsportingBehaviorMinor unsporting_behavior_minor = 25;
+        UnsportingBehaviorMajor unsporting_behavior_major = 26;
         MultipleFouls multiple_fouls = 27;
         MultipleCards multiple_cards = 28;
         MultiplePlacementFailures multiple_placement_failures = 34;
@@ -338,15 +338,15 @@ message GameEvent {
         // the remaining distance from ball to placement position
         optional float remaining_distance = 2;
     }
-    // a team was found guilty for minor unsportive behavior
-    message UnsportiveBehaviorMinor {
+    // a team was found guilty for minor unsporting behavior
+    message UnsportingBehaviorMinor {
         // the team that found guilty
         required Team by_team = 1;
         // an explanation of the situation and decision
         required string reason = 2;
     }
-    // a team was found guilty for major unsportive behavior
-    message UnsportiveBehaviorMajor {
+    // a team was found guilty for major unsporting behavior
+    message UnsportingBehaviorMajor {
         // the team that found guilty
         required Team by_team = 1;
         // an explanation of the situation and decision

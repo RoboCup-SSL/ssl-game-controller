@@ -67,12 +67,12 @@
         </b-card>
         <b-card no-body class="mb-1">
             <b-card-header header-tag="header" class="p-1" role="tab">
-                <b-btn block href="#" v-b-toggle.accordion-event-unsportive-behavior variant="primary">Unsportive Behavior</b-btn>
+                <b-btn block href="#" v-b-toggle.accordion-event-unsporting-behavior variant="primary">Unsporting Behavior</b-btn>
             </b-card-header>
-            <b-collapse id="accordion-event-unsportive-behavior" accordion="accordion-event-category" role="tabpanel">
+            <b-collapse id="accordion-event-unsporting-behavior" accordion="accordion-event-category" role="tabpanel">
                 <b-card-body>
                     <p class="card-text">
-                        <EventAccordion accordion-name="unsportive-behavior" :categories="unsportiveBehaviorEvents"/>
+                        <EventAccordion accordion-name="unsporting-behavior" :categories="unsportingBehaviorEvents"/>
                     </p>
                 </b-card-body>
             </b-collapse>
@@ -138,9 +138,9 @@
                     {name: 'Multiple placement failures', component: 'MultiplePlacementFailures'},
                     {name: 'Multiple fouls', component: 'MultipleFouls'},
                 ],
-                unsportiveBehaviorEvents: [
-                    {name: 'Minor unsportive behavior', component: 'UnsportiveBehaviorMinor'},
-                    {name: 'Major unsportive behavior', component: 'UnsportiveBehaviorMajor'},
+                unsportingBehaviorEvents: [
+                    {name: 'Minor unsporting behavior', component: 'UnsportingBehaviorMinor'},
+                    {name: 'Major unsporting behavior', component: 'UnsportingBehaviorMajor'},
                 ]
             }
         }
