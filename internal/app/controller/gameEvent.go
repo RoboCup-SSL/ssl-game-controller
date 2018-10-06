@@ -37,8 +37,8 @@ const (
 	GameEventDefenderInDefenseAreaPartially GameEventType = "defenderInDefenseAreaPartially"
 	GameEventDefenderInDefenseArea          GameEventType = "defenderInDefenseArea"
 	GameEventKeeperHeldBall                 GameEventType = "keeperHeldBall"
-	GameEventUnsportiveBehaviorMinor        GameEventType = "unsportiveBehaviorMinor"
-	GameEventUnsportiveBehaviorMajor        GameEventType = "unsportiveBehaviorMajor"
+	GameEventUnsportingBehaviorMinor        GameEventType = "unsportingBehaviorMinor"
+	GameEventUnsportingBehaviorMajor        GameEventType = "unsportingBehaviorMajor"
 	GameEventMultipleCards                  GameEventType = "multipleCards"
 	GameEventMultipleFouls                  GameEventType = "multipleFouls"
 	GameEventMultiplePlacementFailures      GameEventType = "multiplePlacementFailures"
@@ -88,8 +88,8 @@ func AllGameEvents() []GameEventType {
 		GameEventDefenderInDefenseAreaPartially,
 		GameEventDefenderInDefenseArea,
 		GameEventKeeperHeldBall,
-		GameEventUnsportiveBehaviorMinor,
-		GameEventUnsportiveBehaviorMajor,
+		GameEventUnsportingBehaviorMinor,
+		GameEventUnsportingBehaviorMajor,
 		GameEventMultipleCards,
 		GameEventMultipleFouls,
 		GameEventMultiplePlacementFailures,
@@ -138,7 +138,7 @@ func (e GameEvent) IncrementsFoulCounter() bool {
 // AddsYellowCard checks if this game event causes a yellow card
 func (e GameEvent) AddsYellowCard() bool {
 	switch e.Type {
-	case GameEventUnsportiveBehaviorMinor,
+	case GameEventUnsportingBehaviorMinor,
 		GameEventMultipleFouls,
 		GameEventDefenderInDefenseAreaPartially:
 		return true
@@ -149,7 +149,7 @@ func (e GameEvent) AddsYellowCard() bool {
 // AddsRedCard checks if this game event causes a red card
 func (e GameEvent) AddsRedCard() bool {
 	switch e.Type {
-	case GameEventUnsportiveBehaviorMajor:
+	case GameEventUnsportingBehaviorMajor:
 		return true
 	}
 	return false
@@ -169,8 +169,8 @@ func (e GameEvent) IsSecondary() bool {
 	switch e.Type {
 	case GameEventBotTooFastInStop,
 		GameEventBotCrashDrawn,
-		GameEventUnsportiveBehaviorMinor,
-		GameEventUnsportiveBehaviorMajor,
+		GameEventUnsportingBehaviorMinor,
+		GameEventUnsportingBehaviorMajor,
 		GameEventMultipleFouls,
 		GameEventBotCrashUniqueContinue,
 		GameEventBotPushedBotContinue,
@@ -258,10 +258,10 @@ func (e GameEvent) ToProto() *refproto.GameEvent {
 		protoEvent.Event = &refproto.GameEvent_DefenderInDefenseArea_{DefenderInDefenseArea: e.Details.DefenderInDefenseArea}
 	case GameEventKeeperHeldBall:
 		protoEvent.Event = &refproto.GameEvent_KeeperHeldBall_{KeeperHeldBall: e.Details.KeeperHeldBall}
-	case GameEventUnsportiveBehaviorMinor:
-		protoEvent.Event = &refproto.GameEvent_UnsportiveBehaviorMinor_{UnsportiveBehaviorMinor: e.Details.UnsportiveBehaviorMinor}
-	case GameEventUnsportiveBehaviorMajor:
-		protoEvent.Event = &refproto.GameEvent_UnsportiveBehaviorMajor_{UnsportiveBehaviorMajor: e.Details.UnsportiveBehaviorMajor}
+	case GameEventUnsportingBehaviorMinor:
+		protoEvent.Event = &refproto.GameEvent_UnsportingBehaviorMinor_{UnsportingBehaviorMinor: e.Details.UnsportingBehaviorMinor}
+	case GameEventUnsportingBehaviorMajor:
+		protoEvent.Event = &refproto.GameEvent_UnsportingBehaviorMajor_{UnsportingBehaviorMajor: e.Details.UnsportingBehaviorMajor}
 	case GameEventMultipleCards:
 		protoEvent.Event = &refproto.GameEvent_MultipleCards_{MultipleCards: e.Details.MultipleCards}
 	case GameEventMultipleFouls:
@@ -314,8 +314,8 @@ type GameEventDetails struct {
 	DefenderInDefenseAreaPartially *refproto.GameEvent_DefenderInDefenseAreaPartially `json:"defenderInDefenseAreaPartially,omitempty"`
 	DefenderInDefenseArea          *refproto.GameEvent_DefenderInDefenseArea          `json:"defenderInDefenseArea,omitempty"`
 	KeeperHeldBall                 *refproto.GameEvent_KeeperHeldBall                 `json:"keeperHeldBall,omitempty"`
-	UnsportiveBehaviorMinor        *refproto.GameEvent_UnsportiveBehaviorMinor        `json:"unsportiveBehaviorMinor,omitempty"`
-	UnsportiveBehaviorMajor        *refproto.GameEvent_UnsportiveBehaviorMajor        `json:"unsportiveBehaviorMajor,omitempty"`
+	UnsportingBehaviorMinor        *refproto.GameEvent_UnsportingBehaviorMinor        `json:"unsportingBehaviorMinor,omitempty"`
+	UnsportingBehaviorMajor        *refproto.GameEvent_UnsportingBehaviorMajor        `json:"unsportingBehaviorMajor,omitempty"`
 	MultipleCards                  *refproto.GameEvent_MultipleCards                  `json:"multiple,omitempty"`
 	MultipleFouls                  *refproto.GameEvent_MultipleFouls                  `json:"multipleFouls,omitempty"`
 	MultiplePlacementFailures      *refproto.GameEvent_MultiplePlacementFailures      `json:"multiplePlacementFailures,omitempty"`
@@ -403,11 +403,11 @@ func (d GameEventDetails) EventType() GameEventType {
 	if d.KeeperHeldBall != nil {
 		return GameEventKeeperHeldBall
 	}
-	if d.UnsportiveBehaviorMinor != nil {
-		return GameEventUnsportiveBehaviorMinor
+	if d.UnsportingBehaviorMinor != nil {
+		return GameEventUnsportingBehaviorMinor
 	}
-	if d.UnsportiveBehaviorMajor != nil {
-		return GameEventUnsportiveBehaviorMajor
+	if d.UnsportingBehaviorMajor != nil {
+		return GameEventUnsportingBehaviorMajor
 	}
 	if d.MultipleCards != nil {
 		return GameEventMultipleCards
@@ -593,15 +593,15 @@ func (d GameEventDetails) Description() string {
 	if d.KeeperHeldBall != nil {
 		return ""
 	}
-	if d.UnsportiveBehaviorMinor != nil {
-		if d.UnsportiveBehaviorMinor.Reason != nil {
-			return fmt.Sprintf("%v", *d.UnsportiveBehaviorMinor.Reason)
+	if d.UnsportingBehaviorMinor != nil {
+		if d.UnsportingBehaviorMinor.Reason != nil {
+			return fmt.Sprintf("%v", *d.UnsportingBehaviorMinor.Reason)
 		}
 		return ""
 	}
-	if d.UnsportiveBehaviorMajor != nil {
-		if d.UnsportiveBehaviorMajor.Reason != nil {
-			return fmt.Sprintf("%v", *d.UnsportiveBehaviorMajor.Reason)
+	if d.UnsportingBehaviorMajor != nil {
+		if d.UnsportingBehaviorMajor.Reason != nil {
+			return fmt.Sprintf("%v", *d.UnsportingBehaviorMajor.Reason)
 		}
 		return ""
 	}
@@ -661,8 +661,8 @@ func NewGameEventDetails(event refproto.GameEvent) (d GameEventDetails) {
 	d.DefenderInDefenseAreaPartially = event.GetDefenderInDefenseAreaPartially()
 	d.DefenderInDefenseArea = event.GetDefenderInDefenseArea()
 	d.KeeperHeldBall = event.GetKeeperHeldBall()
-	d.UnsportiveBehaviorMinor = event.GetUnsportiveBehaviorMinor()
-	d.UnsportiveBehaviorMajor = event.GetUnsportiveBehaviorMajor()
+	d.UnsportingBehaviorMinor = event.GetUnsportingBehaviorMinor()
+	d.UnsportingBehaviorMajor = event.GetUnsportingBehaviorMajor()
 	d.MultipleCards = event.GetMultipleCards()
 	d.MultipleFouls = event.GetMultipleFouls()
 	d.MultiplePlacementFailures = event.GetMultiplePlacementFailures()

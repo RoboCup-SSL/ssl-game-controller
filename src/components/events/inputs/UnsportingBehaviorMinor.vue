@@ -17,7 +17,7 @@
     import TeamSelection from "../../common/TeamSelection";
 
     export default {
-        name: "UnsportiveBehaviorMajor",
+        name: "UnsportingBehaviorMinor",
         components: {TeamSelection},
         data() {
             return {
@@ -31,9 +31,9 @@
             sendEvent: function () {
                 this.$socket.sendObj({
                     gameEvent: {
-                        type: 'unsportiveBehaviorMajor',
+                        type: 'unsportingBehaviorMinor',
                         details: {
-                            ['unsportiveBehaviorMajor']: {
+                            ['unsportingBehaviorMinor']: {
                                 by_team: this.model.team.toLocaleUpperCase(),
                                 reason: this.model.reason
                             }

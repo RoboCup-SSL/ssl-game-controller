@@ -56,8 +56,8 @@ type GameEvent struct {
 	//	*GameEvent_BotCrashUniqueContinue
 	//	*GameEvent_BotPushedBotContinue
 	//	*GameEvent_BotTooFastInStop_
-	//	*GameEvent_UnsportiveBehaviorMinor_
-	//	*GameEvent_UnsportiveBehaviorMajor_
+	//	*GameEvent_UnsportingBehaviorMinor_
+	//	*GameEvent_UnsportingBehaviorMajor_
 	//	*GameEvent_MultipleFouls_
 	//	*GameEvent_MultipleCards_
 	//	*GameEvent_MultiplePlacementFailures_
@@ -205,12 +205,12 @@ type GameEvent_BotTooFastInStop_ struct {
 	BotTooFastInStop *GameEvent_BotTooFastInStop `protobuf:"bytes,24,opt,name=bot_too_fast_in_stop,json=botTooFastInStop,oneof"`
 }
 
-type GameEvent_UnsportiveBehaviorMinor_ struct {
-	UnsportiveBehaviorMinor *GameEvent_UnsportiveBehaviorMinor `protobuf:"bytes,25,opt,name=unsportive_behavior_minor,json=unsportiveBehaviorMinor,oneof"`
+type GameEvent_UnsportingBehaviorMinor_ struct {
+	UnsportingBehaviorMinor *GameEvent_UnsportingBehaviorMinor `protobuf:"bytes,25,opt,name=unsporting_behavior_minor,json=unsportingBehaviorMinor,oneof"`
 }
 
-type GameEvent_UnsportiveBehaviorMajor_ struct {
-	UnsportiveBehaviorMajor *GameEvent_UnsportiveBehaviorMajor `protobuf:"bytes,26,opt,name=unsportive_behavior_major,json=unsportiveBehaviorMajor,oneof"`
+type GameEvent_UnsportingBehaviorMajor_ struct {
+	UnsportingBehaviorMajor *GameEvent_UnsportingBehaviorMajor `protobuf:"bytes,26,opt,name=unsporting_behavior_major,json=unsportingBehaviorMajor,oneof"`
 }
 
 type GameEvent_MultipleFouls_ struct {
@@ -297,9 +297,9 @@ func (*GameEvent_BotPushedBotContinue) isGameEvent_Event() {}
 
 func (*GameEvent_BotTooFastInStop_) isGameEvent_Event() {}
 
-func (*GameEvent_UnsportiveBehaviorMinor_) isGameEvent_Event() {}
+func (*GameEvent_UnsportingBehaviorMinor_) isGameEvent_Event() {}
 
-func (*GameEvent_UnsportiveBehaviorMajor_) isGameEvent_Event() {}
+func (*GameEvent_UnsportingBehaviorMajor_) isGameEvent_Event() {}
 
 func (*GameEvent_MultipleFouls_) isGameEvent_Event() {}
 
@@ -506,16 +506,16 @@ func (m *GameEvent) GetBotTooFastInStop() *GameEvent_BotTooFastInStop {
 	return nil
 }
 
-func (m *GameEvent) GetUnsportiveBehaviorMinor() *GameEvent_UnsportiveBehaviorMinor {
-	if x, ok := m.GetEvent().(*GameEvent_UnsportiveBehaviorMinor_); ok {
-		return x.UnsportiveBehaviorMinor
+func (m *GameEvent) GetUnsportingBehaviorMinor() *GameEvent_UnsportingBehaviorMinor {
+	if x, ok := m.GetEvent().(*GameEvent_UnsportingBehaviorMinor_); ok {
+		return x.UnsportingBehaviorMinor
 	}
 	return nil
 }
 
-func (m *GameEvent) GetUnsportiveBehaviorMajor() *GameEvent_UnsportiveBehaviorMajor {
-	if x, ok := m.GetEvent().(*GameEvent_UnsportiveBehaviorMajor_); ok {
-		return x.UnsportiveBehaviorMajor
+func (m *GameEvent) GetUnsportingBehaviorMajor() *GameEvent_UnsportingBehaviorMajor {
+	if x, ok := m.GetEvent().(*GameEvent_UnsportingBehaviorMajor_); ok {
+		return x.UnsportingBehaviorMajor
 	}
 	return nil
 }
@@ -605,8 +605,8 @@ func (*GameEvent) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) err
 		(*GameEvent_BotCrashUniqueContinue)(nil),
 		(*GameEvent_BotPushedBotContinue)(nil),
 		(*GameEvent_BotTooFastInStop_)(nil),
-		(*GameEvent_UnsportiveBehaviorMinor_)(nil),
-		(*GameEvent_UnsportiveBehaviorMajor_)(nil),
+		(*GameEvent_UnsportingBehaviorMinor_)(nil),
+		(*GameEvent_UnsportingBehaviorMajor_)(nil),
 		(*GameEvent_MultipleFouls_)(nil),
 		(*GameEvent_MultipleCards_)(nil),
 		(*GameEvent_MultiplePlacementFailures_)(nil),
@@ -752,14 +752,14 @@ func _GameEvent_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
 		if err := b.EncodeMessage(x.BotTooFastInStop); err != nil {
 			return err
 		}
-	case *GameEvent_UnsportiveBehaviorMinor_:
+	case *GameEvent_UnsportingBehaviorMinor_:
 		b.EncodeVarint(25<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.UnsportiveBehaviorMinor); err != nil {
+		if err := b.EncodeMessage(x.UnsportingBehaviorMinor); err != nil {
 			return err
 		}
-	case *GameEvent_UnsportiveBehaviorMajor_:
+	case *GameEvent_UnsportingBehaviorMajor_:
 		b.EncodeVarint(26<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.UnsportiveBehaviorMajor); err != nil {
+		if err := b.EncodeMessage(x.UnsportingBehaviorMajor); err != nil {
 			return err
 		}
 	case *GameEvent_MultipleFouls_:
@@ -1020,21 +1020,21 @@ func _GameEvent_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buff
 		err := b.DecodeMessage(msg)
 		m.Event = &GameEvent_BotTooFastInStop_{msg}
 		return true, err
-	case 25: // event.unsportive_behavior_minor
+	case 25: // event.unsporting_behavior_minor
 		if wire != proto.WireBytes {
 			return true, proto.ErrInternalBadWireType
 		}
-		msg := new(GameEvent_UnsportiveBehaviorMinor)
+		msg := new(GameEvent_UnsportingBehaviorMinor)
 		err := b.DecodeMessage(msg)
-		m.Event = &GameEvent_UnsportiveBehaviorMinor_{msg}
+		m.Event = &GameEvent_UnsportingBehaviorMinor_{msg}
 		return true, err
-	case 26: // event.unsportive_behavior_major
+	case 26: // event.unsporting_behavior_major
 		if wire != proto.WireBytes {
 			return true, proto.ErrInternalBadWireType
 		}
-		msg := new(GameEvent_UnsportiveBehaviorMajor)
+		msg := new(GameEvent_UnsportingBehaviorMajor)
 		err := b.DecodeMessage(msg)
-		m.Event = &GameEvent_UnsportiveBehaviorMajor_{msg}
+		m.Event = &GameEvent_UnsportingBehaviorMajor_{msg}
 		return true, err
 	case 27: // event.multiple_fouls
 		if wire != proto.WireBytes {
@@ -1239,13 +1239,13 @@ func _GameEvent_OneofSizer(msg proto.Message) (n int) {
 		n += 2 // tag and wire
 		n += proto.SizeVarint(uint64(s))
 		n += s
-	case *GameEvent_UnsportiveBehaviorMinor_:
-		s := proto.Size(x.UnsportiveBehaviorMinor)
+	case *GameEvent_UnsportingBehaviorMinor_:
+		s := proto.Size(x.UnsportingBehaviorMinor)
 		n += 2 // tag and wire
 		n += proto.SizeVarint(uint64(s))
 		n += s
-	case *GameEvent_UnsportiveBehaviorMajor_:
-		s := proto.Size(x.UnsportiveBehaviorMajor)
+	case *GameEvent_UnsportingBehaviorMajor_:
+		s := proto.Size(x.UnsportingBehaviorMajor)
 		n += 2 // tag and wire
 		n += proto.SizeVarint(uint64(s))
 		n += s
@@ -3084,8 +3084,8 @@ func (m *GameEvent_PlacementFailedByOpponent) GetRemainingDistance() float32 {
 	return 0
 }
 
-// a team was found guilty for minor unsportive behavior
-type GameEvent_UnsportiveBehaviorMinor struct {
+// a team was found guilty for minor unsporting behavior
+type GameEvent_UnsportingBehaviorMinor struct {
 	// the team that found guilty
 	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// an explanation of the situation and decision
@@ -3095,47 +3095,47 @@ type GameEvent_UnsportiveBehaviorMinor struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *GameEvent_UnsportiveBehaviorMinor) Reset()         { *m = GameEvent_UnsportiveBehaviorMinor{} }
-func (m *GameEvent_UnsportiveBehaviorMinor) String() string { return proto.CompactTextString(m) }
-func (*GameEvent_UnsportiveBehaviorMinor) ProtoMessage()    {}
-func (*GameEvent_UnsportiveBehaviorMinor) Descriptor() ([]byte, []int) {
+func (m *GameEvent_UnsportingBehaviorMinor) Reset()         { *m = GameEvent_UnsportingBehaviorMinor{} }
+func (m *GameEvent_UnsportingBehaviorMinor) String() string { return proto.CompactTextString(m) }
+func (*GameEvent_UnsportingBehaviorMinor) ProtoMessage()    {}
+func (*GameEvent_UnsportingBehaviorMinor) Descriptor() ([]byte, []int) {
 	return fileDescriptor_ca1dc6d9da8fefa7, []int{0, 28}
 }
 
-func (m *GameEvent_UnsportiveBehaviorMinor) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_GameEvent_UnsportiveBehaviorMinor.Unmarshal(m, b)
+func (m *GameEvent_UnsportingBehaviorMinor) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GameEvent_UnsportingBehaviorMinor.Unmarshal(m, b)
 }
-func (m *GameEvent_UnsportiveBehaviorMinor) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_GameEvent_UnsportiveBehaviorMinor.Marshal(b, m, deterministic)
+func (m *GameEvent_UnsportingBehaviorMinor) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GameEvent_UnsportingBehaviorMinor.Marshal(b, m, deterministic)
 }
-func (m *GameEvent_UnsportiveBehaviorMinor) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_UnsportiveBehaviorMinor.Merge(m, src)
+func (m *GameEvent_UnsportingBehaviorMinor) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_UnsportingBehaviorMinor.Merge(m, src)
 }
-func (m *GameEvent_UnsportiveBehaviorMinor) XXX_Size() int {
-	return xxx_messageInfo_GameEvent_UnsportiveBehaviorMinor.Size(m)
+func (m *GameEvent_UnsportingBehaviorMinor) XXX_Size() int {
+	return xxx_messageInfo_GameEvent_UnsportingBehaviorMinor.Size(m)
 }
-func (m *GameEvent_UnsportiveBehaviorMinor) XXX_DiscardUnknown() {
-	xxx_messageInfo_GameEvent_UnsportiveBehaviorMinor.DiscardUnknown(m)
+func (m *GameEvent_UnsportingBehaviorMinor) XXX_DiscardUnknown() {
+	xxx_messageInfo_GameEvent_UnsportingBehaviorMinor.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_GameEvent_UnsportiveBehaviorMinor proto.InternalMessageInfo
+var xxx_messageInfo_GameEvent_UnsportingBehaviorMinor proto.InternalMessageInfo
 
-func (m *GameEvent_UnsportiveBehaviorMinor) GetByTeam() Team {
+func (m *GameEvent_UnsportingBehaviorMinor) GetByTeam() Team {
 	if m != nil && m.ByTeam != nil {
 		return *m.ByTeam
 	}
 	return Team_UNKNOWN
 }
 
-func (m *GameEvent_UnsportiveBehaviorMinor) GetReason() string {
+func (m *GameEvent_UnsportingBehaviorMinor) GetReason() string {
 	if m != nil && m.Reason != nil {
 		return *m.Reason
 	}
 	return ""
 }
 
-// a team was found guilty for major unsportive behavior
-type GameEvent_UnsportiveBehaviorMajor struct {
+// a team was found guilty for major unsporting behavior
+type GameEvent_UnsportingBehaviorMajor struct {
 	// the team that found guilty
 	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// an explanation of the situation and decision
@@ -3145,39 +3145,39 @@ type GameEvent_UnsportiveBehaviorMajor struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *GameEvent_UnsportiveBehaviorMajor) Reset()         { *m = GameEvent_UnsportiveBehaviorMajor{} }
-func (m *GameEvent_UnsportiveBehaviorMajor) String() string { return proto.CompactTextString(m) }
-func (*GameEvent_UnsportiveBehaviorMajor) ProtoMessage()    {}
-func (*GameEvent_UnsportiveBehaviorMajor) Descriptor() ([]byte, []int) {
+func (m *GameEvent_UnsportingBehaviorMajor) Reset()         { *m = GameEvent_UnsportingBehaviorMajor{} }
+func (m *GameEvent_UnsportingBehaviorMajor) String() string { return proto.CompactTextString(m) }
+func (*GameEvent_UnsportingBehaviorMajor) ProtoMessage()    {}
+func (*GameEvent_UnsportingBehaviorMajor) Descriptor() ([]byte, []int) {
 	return fileDescriptor_ca1dc6d9da8fefa7, []int{0, 29}
 }
 
-func (m *GameEvent_UnsportiveBehaviorMajor) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_GameEvent_UnsportiveBehaviorMajor.Unmarshal(m, b)
+func (m *GameEvent_UnsportingBehaviorMajor) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GameEvent_UnsportingBehaviorMajor.Unmarshal(m, b)
 }
-func (m *GameEvent_UnsportiveBehaviorMajor) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_GameEvent_UnsportiveBehaviorMajor.Marshal(b, m, deterministic)
+func (m *GameEvent_UnsportingBehaviorMajor) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GameEvent_UnsportingBehaviorMajor.Marshal(b, m, deterministic)
 }
-func (m *GameEvent_UnsportiveBehaviorMajor) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GameEvent_UnsportiveBehaviorMajor.Merge(m, src)
+func (m *GameEvent_UnsportingBehaviorMajor) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GameEvent_UnsportingBehaviorMajor.Merge(m, src)
 }
-func (m *GameEvent_UnsportiveBehaviorMajor) XXX_Size() int {
-	return xxx_messageInfo_GameEvent_UnsportiveBehaviorMajor.Size(m)
+func (m *GameEvent_UnsportingBehaviorMajor) XXX_Size() int {
+	return xxx_messageInfo_GameEvent_UnsportingBehaviorMajor.Size(m)
 }
-func (m *GameEvent_UnsportiveBehaviorMajor) XXX_DiscardUnknown() {
-	xxx_messageInfo_GameEvent_UnsportiveBehaviorMajor.DiscardUnknown(m)
+func (m *GameEvent_UnsportingBehaviorMajor) XXX_DiscardUnknown() {
+	xxx_messageInfo_GameEvent_UnsportingBehaviorMajor.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_GameEvent_UnsportiveBehaviorMajor proto.InternalMessageInfo
+var xxx_messageInfo_GameEvent_UnsportingBehaviorMajor proto.InternalMessageInfo
 
-func (m *GameEvent_UnsportiveBehaviorMajor) GetByTeam() Team {
+func (m *GameEvent_UnsportingBehaviorMajor) GetByTeam() Team {
 	if m != nil && m.ByTeam != nil {
 		return *m.ByTeam
 	}
 	return Team_UNKNOWN
 }
 
-func (m *GameEvent_UnsportiveBehaviorMajor) GetReason() string {
+func (m *GameEvent_UnsportingBehaviorMajor) GetReason() string {
 	if m != nil && m.Reason != nil {
 		return *m.Reason
 	}
@@ -3382,8 +3382,8 @@ func init() {
 	proto.RegisterType((*GameEvent_NoProgressInGame)(nil), "GameEvent.NoProgressInGame")
 	proto.RegisterType((*GameEvent_PlacementFailedByTeamInFavor)(nil), "GameEvent.PlacementFailedByTeamInFavor")
 	proto.RegisterType((*GameEvent_PlacementFailedByOpponent)(nil), "GameEvent.PlacementFailedByOpponent")
-	proto.RegisterType((*GameEvent_UnsportiveBehaviorMinor)(nil), "GameEvent.UnsportiveBehaviorMinor")
-	proto.RegisterType((*GameEvent_UnsportiveBehaviorMajor)(nil), "GameEvent.UnsportiveBehaviorMajor")
+	proto.RegisterType((*GameEvent_UnsportingBehaviorMinor)(nil), "GameEvent.UnsportingBehaviorMinor")
+	proto.RegisterType((*GameEvent_UnsportingBehaviorMajor)(nil), "GameEvent.UnsportingBehaviorMajor")
 	proto.RegisterType((*GameEvent_KeeperHeldBall)(nil), "GameEvent.KeeperHeldBall")
 	proto.RegisterType((*GameEvent_PlacementSucceeded)(nil), "GameEvent.PlacementSucceeded")
 	proto.RegisterType((*GameEvent_Prepared)(nil), "GameEvent.Prepared")
