@@ -17,6 +17,8 @@ const (
 	TeamBlue Team = "Blue"
 	// TeamUnknown is an unknown team
 	TeamUnknown Team = ""
+	// TeamBoth are both teams
+	TeamBoth = "Both"
 )
 
 // Opposite returns the other team
@@ -45,6 +47,8 @@ func (t Team) toProto() refproto.Team {
 		return refproto.Team_YELLOW
 	} else if t == TeamBlue {
 		return refproto.Team_BLUE
+	} else if t == TeamBoth {
+		return refproto.Team_BOTH
 	}
 	return refproto.Team_UNKNOWN
 }
@@ -334,8 +338,17 @@ func (s State) GameState() GameState {
 	return ""
 }
 
-func (s State) BotSubstitutionIntend() bool {
-	return s.TeamState[TeamYellow].BotSubstitutionIntend || s.TeamState[TeamBlue].BotSubstitutionIntend
+func (s State) BotSubstitutionIntend() Team {
+	if s.TeamState[TeamYellow].BotSubstitutionIntend && s.TeamState[TeamBlue].BotSubstitutionIntend {
+		return TeamBoth
+	}
+	if s.TeamState[TeamYellow].BotSubstitutionIntend {
+		return TeamYellow
+	}
+	if s.TeamState[TeamBlue].BotSubstitutionIntend {
+		return TeamBlue
+	}
+	return TeamUnknown
 }
 
 func newTeamInfo() (t TeamInfo) {
