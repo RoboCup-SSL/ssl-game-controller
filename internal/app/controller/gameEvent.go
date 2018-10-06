@@ -11,43 +11,49 @@ import (
 type GameEventType string
 
 const (
-	GameEventNone                           GameEventType = ""
-	GameEventBallLeftFieldTouchLine         GameEventType = "ballLeftFieldTouchLine"
-	GameEventBallLeftFieldGoalLine          GameEventType = "ballLeftFieldGoalLine"
-	GameEventAimlessKick                    GameEventType = "aimlessKick"
-	GameEventGoal                           GameEventType = "goal"
-	GameEventIndirectGoal                   GameEventType = "indirectGoal"
-	GameEventChippedGoal                    GameEventType = "chippedGoal"
-	GameEventBotTooFastInStop               GameEventType = "botTooFastInStop"
-	GameEventBotTippedOver                  GameEventType = "botTippedOver"
+	GameEventNone GameEventType = ""
+
+	GameEventPrepared                     GameEventType = "prepared"
+	GameEventNoProgressInGame             GameEventType = "noProgressInGame"
+	GameEventPlacementFailedByTeamInFavor GameEventType = "placementFailedByTeamInFavor"
+	GameEventPlacementFailedByOpponent    GameEventType = "placementFailedByOpponent"
+	GameEventPlacementSucceeded           GameEventType = "placementSucceeded"
+
+	GameEventBallLeftFieldTouchLine GameEventType = "ballLeftFieldTouchLine"
+	GameEventBallLeftFieldGoalLine  GameEventType = "ballLeftFieldGoalLine"
+	GameEventGoal                   GameEventType = "goal"
+	GameEventIndirectGoal           GameEventType = "indirectGoal"
+	GameEventChippedGoal            GameEventType = "chippedGoal"
+
+	GameEventAimlessKick               GameEventType = "aimlessKick"
+	GameEventKickTimeout               GameEventType = "kickTimeout"
+	GameEventKeeperHeldBall            GameEventType = "keeperHeldBall"
+	GameEventAttackerDoubleTouchedBall GameEventType = "attackerDoubleTouchedBall"
+	GameEventAttackerInDefenseArea     GameEventType = "attackerInDefenseArea"
+	GameEventAttackerTouchedKeeper     GameEventType = "attackerTouchedKeeper"
+	GameEventBotDribbledBallTooFar     GameEventType = "botDribbledBallTooFar"
+	GameEventBotKickedBallTooFast      GameEventType = "botKickedBallTooFast"
+
+	GameEventAttackerTooCloseToDefenseArea  GameEventType = "attackerTooCloseToDefenseArea"
 	GameEventBotInterferedPlacement         GameEventType = "botInterferedPlacement"
 	GameEventBotCrashDrawn                  GameEventType = "botCrashDrawn"
-	GameEventBotKickedBallTooFast           GameEventType = "botKickedBallTooFast"
-	GameEventBotDribbledBallTooFar          GameEventType = "botDribbledBallTooFar"
 	GameEventBotCrashUnique                 GameEventType = "botCrashUnique"
-	GameEventBotCrashUniqueContinue         GameEventType = "botCrashUniqueContinue"
+	GameEventBotCrashUniqueSkipped          GameEventType = "botCrashUniqueContinue"
 	GameEventBotPushedBot                   GameEventType = "botPushedBot"
-	GameEventBotPushedBotContinue           GameEventType = "botPushedBotContinue"
+	GameEventBotPushedBotSkipped            GameEventType = "botPushedBotContinue"
 	GameEventBotHeldBallDeliberately        GameEventType = "botHeldBallDeliberately"
-	GameEventAttackerDoubleTouchedBall      GameEventType = "attackerDoubleTouchedBall"
-	GameEventAttackerTooCloseToDefenseArea  GameEventType = "attackerTooCloseToDefenseArea"
-	GameEventAttackerInDefenseArea          GameEventType = "attackerInDefenseArea"
-	GameEventAttackerTouchedKeeper          GameEventType = "attackerTouchedKeeper"
+	GameEventBotTippedOver                  GameEventType = "botTippedOver"
+	GameEventBotTooFastInStop               GameEventType = "botTooFastInStop"
 	GameEventDefenderTooCloseToKickPoint    GameEventType = "defenderTooCloseToKickPoint"
 	GameEventDefenderInDefenseAreaPartially GameEventType = "defenderInDefenseAreaPartially"
 	GameEventDefenderInDefenseArea          GameEventType = "defenderInDefenseArea"
-	GameEventKeeperHeldBall                 GameEventType = "keeperHeldBall"
-	GameEventUnsportingBehaviorMinor        GameEventType = "unsportingBehaviorMinor"
-	GameEventUnsportingBehaviorMajor        GameEventType = "unsportingBehaviorMajor"
-	GameEventMultipleCards                  GameEventType = "multipleCards"
-	GameEventMultipleFouls                  GameEventType = "multipleFouls"
-	GameEventMultiplePlacementFailures      GameEventType = "multiplePlacementFailures"
-	GameEventKickTimeout                    GameEventType = "kickTimeout"
-	GameEventNoProgressInGame               GameEventType = "noProgressInGame"
-	GameEventPlacementFailedByTeamInFavor   GameEventType = "placementFailedByTeamInFavor"
-	GameEventPlacementFailedByOpponent      GameEventType = "placementFailedByOpponent"
-	GameEventPlacementSucceeded             GameEventType = "placementSucceeded"
-	GameEventPrepared                       GameEventType = "prepared"
+
+	GameEventMultipleCards             GameEventType = "multipleCards"
+	GameEventMultiplePlacementFailures GameEventType = "multiplePlacementFailures"
+	GameEventMultipleFouls             GameEventType = "multipleFouls"
+
+	GameEventUnsportingBehaviorMinor GameEventType = "unsportingBehaviorMinor"
+	GameEventUnsportingBehaviorMajor GameEventType = "unsportingBehaviorMajor"
 )
 
 // GameEvent combines the type of a game event with the corresponding detail structures
@@ -76,9 +82,9 @@ func AllGameEvents() []GameEventType {
 		GameEventBotKickedBallTooFast,
 		GameEventBotDribbledBallTooFar,
 		GameEventBotCrashUnique,
-		GameEventBotCrashUniqueContinue,
+		GameEventBotCrashUniqueSkipped,
 		GameEventBotPushedBot,
-		GameEventBotPushedBotContinue,
+		GameEventBotPushedBotSkipped,
 		GameEventBotHeldBallDeliberately,
 		GameEventAttackerDoubleTouchedBall,
 		GameEventAttackerTooCloseToDefenseArea,
@@ -124,9 +130,9 @@ func (e GameEvent) IncrementsFoulCounter() bool {
 		GameEventBotTippedOver,
 		GameEventAttackerTooCloseToDefenseArea,
 		GameEventBotCrashUnique,
-		GameEventBotCrashUniqueContinue,
+		GameEventBotCrashUniqueSkipped,
 		GameEventBotPushedBot,
-		GameEventBotPushedBotContinue,
+		GameEventBotPushedBotSkipped,
 		GameEventBotHeldBallDeliberately,
 		GameEventDefenderTooCloseToKickPoint,
 		GameEventBotTooFastInStop:
@@ -172,8 +178,8 @@ func (e GameEvent) IsSecondary() bool {
 		GameEventUnsportingBehaviorMinor,
 		GameEventUnsportingBehaviorMajor,
 		GameEventMultipleFouls,
-		GameEventBotCrashUniqueContinue,
-		GameEventBotPushedBotContinue,
+		GameEventBotCrashUniqueSkipped,
+		GameEventBotPushedBotSkipped,
 		GameEventPlacementFailedByTeamInFavor,
 		GameEventPlacementFailedByOpponent,
 		GameEventPlacementSucceeded,
@@ -186,8 +192,8 @@ func (e GameEvent) IsSecondary() bool {
 // IsContinued checks if the game event is was continued (not stopped) based on the decision of a team
 func (e GameEvent) IsContinued() bool {
 	switch e.Type {
-	case GameEventBotPushedBotContinue,
-		GameEventBotCrashUniqueContinue:
+	case GameEventBotPushedBotSkipped,
+		GameEventBotCrashUniqueSkipped:
 		return true
 	}
 	return false
@@ -234,12 +240,12 @@ func (e GameEvent) ToProto() *refproto.GameEvent {
 		protoEvent.Event = &refproto.GameEvent_BotDribbledBallTooFar_{BotDribbledBallTooFar: e.Details.BotDribbledBallTooFar}
 	case GameEventBotCrashUnique:
 		protoEvent.Event = &refproto.GameEvent_BotCrashUnique_{BotCrashUnique: e.Details.BotCrashUnique}
-	case GameEventBotCrashUniqueContinue:
-		protoEvent.Event = &refproto.GameEvent_BotCrashUniqueContinue{BotCrashUniqueContinue: e.Details.BotCrashUniqueContinue}
+	case GameEventBotCrashUniqueSkipped:
+		protoEvent.Event = &refproto.GameEvent_BotCrashUniqueSkipped{BotCrashUniqueSkipped: e.Details.BotCrashUniqueSkipped}
 	case GameEventBotPushedBot:
 		protoEvent.Event = &refproto.GameEvent_BotPushedBot_{BotPushedBot: e.Details.BotPushedBot}
-	case GameEventBotPushedBotContinue:
-		protoEvent.Event = &refproto.GameEvent_BotPushedBotContinue{BotPushedBotContinue: e.Details.BotPushedBotContinue}
+	case GameEventBotPushedBotSkipped:
+		protoEvent.Event = &refproto.GameEvent_BotPushedBotSkipped{BotPushedBotSkipped: e.Details.BotPushedBotSkipped}
 	case GameEventBotHeldBallDeliberately:
 		protoEvent.Event = &refproto.GameEvent_BotHeldBallDeliberately_{BotHeldBallDeliberately: e.Details.BotHeldBallDeliberately}
 	case GameEventAttackerDoubleTouchedBall:
@@ -302,9 +308,9 @@ type GameEventDetails struct {
 	BotKickedBallTooFast           *refproto.GameEvent_BotKickedBallTooFast           `json:"botKickedBallTooFast,omitempty"`
 	BotDribbledBallTooFar          *refproto.GameEvent_BotDribbledBallTooFar          `json:"botDribbledBallTooFar,omitempty"`
 	BotCrashUnique                 *refproto.GameEvent_BotCrashUnique                 `json:"botCrashUnique,omitempty"`
-	BotCrashUniqueContinue         *refproto.GameEvent_BotCrashUnique                 `json:"botCrashUniqueContinue,omitempty"`
+	BotCrashUniqueSkipped          *refproto.GameEvent_BotCrashUnique                 `json:"botCrashUniqueContinue,omitempty"`
 	BotPushedBot                   *refproto.GameEvent_BotPushedBot                   `json:"botPushedBot,omitempty"`
-	BotPushedBotContinue           *refproto.GameEvent_BotPushedBot                   `json:"botPushedBotContinue,omitempty"`
+	BotPushedBotSkipped            *refproto.GameEvent_BotPushedBot                   `json:"botPushedBotContinue,omitempty"`
 	BotHeldBallDeliberately        *refproto.GameEvent_BotHeldBallDeliberately        `json:"botHeldBallDeliberately,omitempty"`
 	AttackerDoubleTouchedBall      *refproto.GameEvent_AttackerDoubleTouchedBall      `json:"attackerDoubleTouchedBall,omitempty"`
 	AttackerTooCloseToDefenseArea  *refproto.GameEvent_AttackerTooCloseToDefenseArea  `json:"attackerTooCloseToDefenseArea,omitempty"`
@@ -367,14 +373,14 @@ func (d GameEventDetails) EventType() GameEventType {
 	if d.BotCrashUnique != nil {
 		return GameEventBotCrashUnique
 	}
-	if d.BotCrashUniqueContinue != nil {
-		return GameEventBotCrashUniqueContinue
+	if d.BotCrashUniqueSkipped != nil {
+		return GameEventBotCrashUniqueSkipped
 	}
 	if d.BotPushedBot != nil {
 		return GameEventBotPushedBot
 	}
-	if d.BotPushedBotContinue != nil {
-		return GameEventBotPushedBotContinue
+	if d.BotPushedBotSkipped != nil {
+		return GameEventBotPushedBotSkipped
 	}
 	if d.BotHeldBallDeliberately != nil {
 		return GameEventBotHeldBallDeliberately
@@ -524,9 +530,9 @@ func (d GameEventDetails) Description() string {
 		}
 		return ""
 	}
-	if d.BotCrashUniqueContinue != nil {
-		if d.BotCrashUniqueContinue.Violator != nil && d.BotCrashUniqueContinue.Victim != nil {
-			return fmt.Sprintf("Bot %v by %v", *d.BotCrashUniqueContinue.Victim, *d.BotCrashUniqueContinue.Violator)
+	if d.BotCrashUniqueSkipped != nil {
+		if d.BotCrashUniqueSkipped.Violator != nil && d.BotCrashUniqueSkipped.Victim != nil {
+			return fmt.Sprintf("Bot %v by %v", *d.BotCrashUniqueSkipped.Victim, *d.BotCrashUniqueSkipped.Violator)
 		}
 		return ""
 	}
@@ -536,9 +542,9 @@ func (d GameEventDetails) Description() string {
 		}
 		return ""
 	}
-	if d.BotPushedBotContinue != nil {
-		if d.BotPushedBotContinue.Violator != nil && d.BotPushedBotContinue.Victim != nil {
-			return fmt.Sprintf("Bot %v by %v", *d.BotPushedBotContinue.Victim, *d.BotPushedBotContinue.Violator)
+	if d.BotPushedBotSkipped != nil {
+		if d.BotPushedBotSkipped.Violator != nil && d.BotPushedBotSkipped.Victim != nil {
+			return fmt.Sprintf("Bot %v by %v", *d.BotPushedBotSkipped.Victim, *d.BotPushedBotSkipped.Violator)
 		}
 		return ""
 	}
@@ -649,9 +655,9 @@ func NewGameEventDetails(event refproto.GameEvent) (d GameEventDetails) {
 	d.BotKickedBallTooFast = event.GetBotKickedBallTooFast()
 	d.BotDribbledBallTooFar = event.GetBotDribbledBallTooFar()
 	d.BotCrashUnique = event.GetBotCrashUnique()
-	d.BotCrashUniqueContinue = event.GetBotCrashUniqueContinue()
+	d.BotCrashUniqueSkipped = event.GetBotCrashUniqueSkipped()
 	d.BotPushedBot = event.GetBotPushedBot()
-	d.BotPushedBotContinue = event.GetBotPushedBotContinue()
+	d.BotPushedBotSkipped = event.GetBotPushedBotSkipped()
 	d.BotHeldBallDeliberately = event.GetBotHeldBallDeliberately()
 	d.AttackerDoubleTouchedBall = event.GetAttackerDoubleTouchedBall()
 	d.AttackerTooCloseToDefenseArea = event.GetAttackerTooCloseToDefenseArea()
