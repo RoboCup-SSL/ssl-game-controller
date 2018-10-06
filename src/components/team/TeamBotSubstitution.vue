@@ -1,6 +1,6 @@
 <template>
     <div>
-        <label>Intends to interchange a bot: </label>
+        <label>Intends to substitute a bot: </label>
         <a class="btn-edit" v-on:click="edit()">
             <font-awesome-icon icon="toggle-on" v-if="botSubstitutionIntend"/>
             <font-awesome-icon icon="toggle-off" v-if="!botSubstitutionIntend"/>
@@ -10,7 +10,7 @@
 
 <script>
     export default {
-        name: "TeamBotInterchange",
+        name: "TeamBotSubstitution",
         props: {
             teamColor: String
         },
