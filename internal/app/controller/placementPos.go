@@ -64,12 +64,12 @@ func (e *Engine) BallPlacementPos() *Location {
 		return e.validateProtoLocation(event.Details.BotDribbledBallTooFar.Start)
 	case GameEventBotCrashUnique:
 		return e.validateProtoLocation(event.Details.BotCrashUnique.Location)
-	case GameEventBotCrashUniqueContinue:
-		return e.validateProtoLocation(event.Details.BotCrashUniqueContinue.Location)
+	case GameEventBotCrashUniqueSkipped:
+		return e.validateProtoLocation(event.Details.BotCrashUniqueSkipped.Location)
 	case GameEventBotPushedBot:
 		return e.validateProtoLocation(event.Details.BotPushedBot.Location)
-	case GameEventBotPushedBotContinue:
-		return e.validateProtoLocation(event.Details.BotPushedBotContinue.Location)
+	case GameEventBotPushedBotSkipped:
+		return e.validateProtoLocation(event.Details.BotPushedBotSkipped.Location)
 	case GameEventBotHeldBallDeliberately:
 		return e.validateProtoLocation(event.Details.BotHeldBallDeliberately.Location)
 	case GameEventAttackerDoubleTouchedBall:

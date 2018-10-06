@@ -9,49 +9,63 @@ import "ssl_game_controller_common.proto";
 // Fields are marked optional to make testing and extending of the protocol easier.
 // An autoRef should ideally set all fields, except if there are good reasons to not do so.
 message GameEvent {
+
     // the event that occurred
     oneof event {
-        BallLeftFieldEvent ball_left_field_touch_line = 1;
-        BallLeftFieldEvent ball_left_field_goal_line = 2;
-        AimlessKick aimless_kick = 3;
-        Goal goal = 4;
-        IndirectGoal indirect_goal = 5;
-        ChippedGoal chipped_goal = 6;
 
-        BotKickedBallTooFast bot_kicked_ball_too_fast = 7;
-        BotDribbledBallTooFar bot_dribbled_ball_too_far = 8;
-        AttackerDoubleTouchedBall attacker_double_touched_ball = 9;
-        AttackerTooCloseToDefenseArea attacker_too_close_to_defense_area = 10;
-        AttackerInDefenseArea attacker_in_defense_area = 11;
-        AttackerTouchedKeeper attacker_touched_keeper = 12;
-        DefenderInDefenseAreaPartially defender_in_defense_area_partially = 13;
-        KickTimeout kick_timeout = 14;
-        KeeperHeldBall keeper_held_ball = 15;
+        // Match proceeding events
 
-        BotCrashDrawn bot_crash_drawn = 16;
-        BotInterferedPlacement bot_interfered_placement = 17;
-        BotTippedOver bot_tipped_over = 18;
-        BotCrashUnique bot_crash_unique = 19;
-        BotPushedBot bot_pushed_bot = 20;
-        BotHeldBallDeliberately bot_held_ball_deliberately = 21;
-        DefenderTooCloseToKickPoint defender_too_close_to_kick_point = 22;
-        DefenderInDefenseArea defender_in_defense_area = 23;
+        Prepared prepared = 1;
+        NoProgressInGame no_progress_in_game = 2;
+        PlacementFailedByTeamInFavor placement_failed_by_team_in_favor = 3;
+        PlacementFailedByOpponent placement_failed_by_opponent = 4;
+        PlacementSucceeded placement_succeeded = 5;
 
-        BotCrashUnique bot_crash_unique_continue = 32;
-        BotPushedBot bot_pushed_bot_continue = 33;
-        BotTooFastInStop bot_too_fast_in_stop = 24;
-        UnsportingBehaviorMinor unsporting_behavior_minor = 25;
-        UnsportingBehaviorMajor unsporting_behavior_major = 26;
-        MultipleFouls multiple_fouls = 27;
-        MultipleCards multiple_cards = 28;
-        MultiplePlacementFailures multiple_placement_failures = 34;
+        // Ball out of field events
 
-        NoProgressInGame no_progress_in_game = 29;
-        PlacementFailedByTeamInFavor placement_failed_by_team_in_favor = 30;
-        PlacementFailedByOpponent placement_failed_by_opponent = 31;
+        BallLeftFieldEvent ball_left_field_touch_line = 6;
+        BallLeftFieldEvent ball_left_field_goal_line = 7;
+        Goal goal = 8;
+        IndirectGoal indirect_goal = 9;
+        ChippedGoal chipped_goal = 10;
 
-        PlacementSucceeded placement_succeeded = 35;
-        Prepared prepared = 36;
+        // Minor offense events
+
+        AimlessKick aimless_kick = 11;
+        KickTimeout kick_timeout = 12;
+        KeeperHeldBall keeper_held_ball = 13;
+        AttackerDoubleTouchedBall attacker_double_touched_ball = 14;
+        AttackerInDefenseArea attacker_in_defense_area = 15;
+        AttackerTouchedKeeper attacker_touched_keeper = 16;
+        BotDribbledBallTooFar bot_dribbled_ball_too_far = 17;
+        BotKickedBallTooFast bot_kicked_ball_too_fast = 18;
+
+        // Foul events
+
+        AttackerTooCloseToDefenseArea attacker_too_close_to_defense_area = 19;
+        BotInterferedPlacement bot_interfered_placement = 20;
+        BotCrashDrawn bot_crash_drawn = 21;
+        BotCrashUnique bot_crash_unique = 22;
+        BotCrashUnique bot_crash_unique_skipped = 23;
+        BotPushedBot bot_pushed_bot = 24;
+        BotPushedBot bot_pushed_bot_skipped = 25;
+        BotHeldBallDeliberately bot_held_ball_deliberately = 26;
+        BotTippedOver bot_tipped_over = 27;
+        BotTooFastInStop bot_too_fast_in_stop = 28;
+        DefenderTooCloseToKickPoint defender_too_close_to_kick_point = 29;
+        DefenderInDefenseAreaPartially defender_in_defense_area_partially = 30;
+        DefenderInDefenseArea defender_in_defense_area = 31;
+
+        // Repeated events
+
+        MultipleCards multiple_cards = 32;
+        MultiplePlacementFailures multiple_placement_failures = 33;
+        MultipleFouls multiple_fouls = 34;
+
+        // Unsporting behavior events
+
+        UnsportingBehaviorMinor unsporting_behavior_minor = 35;
+        UnsportingBehaviorMajor unsporting_behavior_major = 36;
     }
 
     // the ball left the field normally

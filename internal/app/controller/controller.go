@@ -152,13 +152,13 @@ func (c *GameController) ProcessTeamRequests(teamName string, request refproto.T
 			log.Printf("Team %v decided to continue the game within %v", c.outstandingTeamChoice.Team, responseTime)
 			switch c.outstandingTeamChoice.Event.GameEvent.Type {
 			case GameEventBotCrashUnique:
-				c.outstandingTeamChoice.Event.GameEvent.Details.BotCrashUniqueContinue = c.outstandingTeamChoice.Event.GameEvent.Details.BotCrashUnique
+				c.outstandingTeamChoice.Event.GameEvent.Details.BotCrashUniqueSkipped = c.outstandingTeamChoice.Event.GameEvent.Details.BotCrashUnique
 				c.outstandingTeamChoice.Event.GameEvent.Details.BotCrashUnique = nil
-				c.outstandingTeamChoice.Event.GameEvent.Type = GameEventBotCrashUniqueContinue
+				c.outstandingTeamChoice.Event.GameEvent.Type = GameEventBotCrashUniqueSkipped
 			case GameEventBotPushedBot:
-				c.outstandingTeamChoice.Event.GameEvent.Details.BotPushedBotContinue = c.outstandingTeamChoice.Event.GameEvent.Details.BotPushedBot
+				c.outstandingTeamChoice.Event.GameEvent.Details.BotPushedBotSkipped = c.outstandingTeamChoice.Event.GameEvent.Details.BotPushedBot
 				c.outstandingTeamChoice.Event.GameEvent.Details.BotPushedBot = nil
-				c.outstandingTeamChoice.Event.GameEvent.Type = GameEventBotPushedBotContinue
+				c.outstandingTeamChoice.Event.GameEvent.Type = GameEventBotPushedBotSkipped
 			default:
 				return errors.Errorf("Unsupported advantage choice game event: %v", c.outstandingTeamChoice.Event.GameEvent.Type)
 			}
