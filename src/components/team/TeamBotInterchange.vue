@@ -2,8 +2,8 @@
     <div>
         <label>Intends to interchange a bot: </label>
         <a class="btn-edit" v-on:click="edit()">
-            <font-awesome-icon icon="toggle-on" v-if="botInterchangeIntend"/>
-            <font-awesome-icon icon="toggle-off" v-if="!botInterchangeIntend"/>
+            <font-awesome-icon icon="toggle-on" v-if="botSubstitutionIntend"/>
+            <font-awesome-icon icon="toggle-off" v-if="!botSubstitutionIntend"/>
         </a>
     </div>
 </template>
@@ -19,7 +19,7 @@
                 this.$socket.sendObj({
                     'modify': {
                         'forTeam': this.teamColor,
-                        'botInterchangeIntend': !this.botInterchangeIntend
+                        'botSubstitutionIntend': !this.botSubstitutionIntend
                     }
                 })
             }
@@ -28,8 +28,8 @@
             teamState: function () {
                 return this.$store.state.refBoxState.teamState[this.teamColor]
             },
-            botInterchangeIntend() {
-                return this.teamState.botInterchangeIntend;
+            botSubstitutionIntend() {
+                return this.teamState.botSubstitutionIntend;
             },
         }
     }

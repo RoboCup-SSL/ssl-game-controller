@@ -245,7 +245,7 @@ type TeamInfo struct {
 	CanPlaceBall          bool            `json:"canPlaceBall"`
 	MaxAllowedBots        int             `json:"maxAllowedBots"`
 	Connected             bool            `json:"connected"`
-	BotInterchangeIntend  bool            `json:"botInterchangeIntend"`
+	BotSubstitutionIntend bool            `json:"botSubstitutionIntend"`
 }
 
 type GameEventBehavior string
@@ -332,6 +332,10 @@ func (s State) GameState() GameState {
 		return GameStateBallPlacement
 	}
 	return ""
+}
+
+func (s State) BotSubstitutionIntend() bool {
+	return s.TeamState[TeamYellow].BotSubstitutionIntend || s.TeamState[TeamBlue].BotSubstitutionIntend
 }
 
 func newTeamInfo() (t TeamInfo) {

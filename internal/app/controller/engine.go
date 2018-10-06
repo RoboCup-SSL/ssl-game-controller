@@ -86,7 +86,11 @@ func (e *Engine) UndoLastAction() {
 }
 
 func (e *Engine) Continue() {
-	if e.State.NextCommand != CommandUnknown {
+	if e.State.BotSubstitutionIntend() {
+		e.State.TeamState[TeamBlue].BotSubstitutionIntend = false
+		e.State.TeamState[TeamYellow].BotSubstitutionIntend = false
+		e.SendCommand(CommandHalt, "")
+	} else if e.State.NextCommand != CommandUnknown {
 		e.SendCommand(e.State.NextCommand, e.State.NextCommandFor)
 	}
 }
@@ -454,8 +458,8 @@ func (e *Engine) processTeamModify(m *EventModifyValue) error {
 		}
 	} else if m.CanPlaceBall != nil {
 		teamState.CanPlaceBall = *m.CanPlaceBall
-	} else if m.BotInterchangeIntend != nil {
-		teamState.BotInterchangeIntend = *m.BotInterchangeIntend
+	} else if m.BotSubstitutionIntend != nil {
+		teamState.BotSubstitutionIntend = *m.BotSubstitutionIntend
 	} else {
 		return errors.Errorf("Unknown modify: %v", m)
 	}
