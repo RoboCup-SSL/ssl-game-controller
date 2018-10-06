@@ -671,7 +671,7 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 
 	e.State.PlacementPos = e.BallPlacementPos()
 
-	if e.State.GameState() != GameStateHalted && !event.IsContinued() && !event.IsSecondary() {
+	if e.State.GameState() != GameStateHalted && !event.IsSkipped() && !event.IsSecondary() {
 		teamInFavor := event.ByTeam().Opposite()
 		if e.State.PlacementPos != nil {
 			if e.State.TeamState[teamInFavor].CanPlaceBall {
