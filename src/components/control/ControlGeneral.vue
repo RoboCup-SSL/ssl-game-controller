@@ -41,7 +41,7 @@
             <b-button v-hotkey="keymapContinue"
                       ref="btnContinue"
                       v-on:click="triggerContinue"
-                      v-bind:disabled="!gameEventPresent || !stopped">
+                      v-bind:disabled="!gameEventPresent || (!stopped && !ballPlacement)">
                 Continue
             </b-button>
         </span>
@@ -134,6 +134,9 @@
             },
             stopped() {
                 return this.state.command === 'stop';
+            },
+            ballPlacement() {
+                return this.state.command === 'ballPlacement';
             },
             prepareSth() {
                 return this.state.command === 'kickoff' || this.state.command === 'penalty';
