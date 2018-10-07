@@ -1,5 +1,5 @@
 <template>
-    <span class="control-general">
+    <div class="control-general">
         <span v-b-tooltip.hover
               :title="'Immediately stop all robots (' + Object.keys(keymapHalt)[0] + ')'">
             <b-button v-hotkey="keymapHalt"
@@ -59,7 +59,7 @@
                 Manual
             </label>
         </div>
-    </span>
+    </div>
 </template>
 
 <script>

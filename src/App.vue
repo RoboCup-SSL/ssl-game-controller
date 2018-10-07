@@ -100,7 +100,7 @@
     #app-header {
         display: flex;
         flex-direction: row;
-        flex-wrap: wrap-reverse;
+        flex-wrap: wrap;
         justify-content: space-between;
         align-items: baseline;
         align-content: flex-start;
@@ -133,6 +133,12 @@
         align-content: stretch;
         align-items: stretch;
         flex-grow: 1;
+    }
+
+    @media only screen and (max-width: 1600px) {
+        .main-middle-container {
+            order: 10;
+        }
     }
 
     @-moz-document url-prefix() {

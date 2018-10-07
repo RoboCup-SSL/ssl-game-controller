@@ -300,9 +300,9 @@ func (e *Engine) LogModify(m EventModifyValue) {
 		Timestamp:   e.TimeProvider().UnixNano(),
 		StageTime:   e.State.StageTimeElapsed,
 		Type:        RefereeEventModify,
-		Name:        "modify",
+		Name:        m.Type(),
 		Team:        team,
-		Description: m.String(),
+		Description: m.Value(),
 	}
 	e.RefereeEvents = append(e.RefereeEvents, refereeEvent)
 }

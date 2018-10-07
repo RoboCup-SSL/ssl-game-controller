@@ -3,6 +3,8 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
+	"log"
+	"reflect"
 	"time"
 )
 
@@ -120,6 +122,31 @@ type EventModifyValue struct {
 func (m EventModifyValue) String() string {
 	b, _ := json.Marshal(&m)
 	return string(b)
+}
+
+func (m EventModifyValue) Type() string {
+	v := reflect.ValueOf(m)
+	for i := 0; i < v.NumField(); i++ {
+		fieldName := v.Type().Field(i).Name
+		log.Print(fieldName, " ", v.Field(i))
+		if fieldName != "ForTeam" && !v.Field(i).IsNil() {
+			return fieldName
+		}
+	}
+	return "unknown"
+}
+
+func (m EventModifyValue) Value() string {
+	v := reflect.ValueOf(m)
+	for i := 0; i < v.NumField(); i++ {
+		fieldName := v.Type().Field(i).Name
+		log.Print(fieldName, " ", v.Field(i))
+		if fieldName != "ForTeam" && !v.Field(i).IsNil() {
+			b, _ := json.Marshal(v.Field(i).Interface())
+			return string(b)
+		}
+	}
+	return "unknown"
 }
 
 // EventTrigger is an event that can be applied
