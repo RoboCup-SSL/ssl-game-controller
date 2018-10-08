@@ -21,6 +21,8 @@ message TeamToControllerRequest {
         int32 desired_keeper = 2;
         // response to an advantage choice request
         AdvantageResponse advantage_response = 3;
+        // request to substitute a robot at the next possibility
+        bool substitute_bot = 4;
     }
 
     enum AdvantageResponse {

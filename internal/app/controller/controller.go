@@ -170,13 +170,18 @@ func (c *GameController) ProcessTeamRequests(teamName string, request refproto.T
 		return nil
 	}
 
-	if c.Engine.State.GameState() != GameStateStopped {
-		return errors.New("Game is not stopped.")
+	team := c.Engine.State.TeamByName(teamName)
+	if team == TeamUnknown {
+		return errors.New("Your team is not playing?!")
 	}
 
-	team := c.Engine.State.TeamByName(teamName)
-	if team == "" {
-		return errors.New("Your team is not playing?!")
+	if x, ok := request.GetRequest().(*refproto.TeamToControllerRequest_SubstituteBot); ok {
+		log.Printf("Team %v updated bot substituation intend to %v", team, x.SubstituteBot)
+		c.Engine.State.TeamState[team].BotSubstitutionIntend = x.SubstituteBot
+	}
+
+	if c.Engine.State.GameState() != GameStateStopped {
+		return errors.New("Game is not stopped.")
 	}
 
 	if x, ok := request.GetRequest().(*refproto.TeamToControllerRequest_DesiredKeeper); ok {
