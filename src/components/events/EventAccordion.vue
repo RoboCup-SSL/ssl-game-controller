@@ -52,6 +52,7 @@
     import UnsportingBehaviorMinor from "./inputs/UnsportingBehaviorMinor"
     import PlacementSucceeded from "./inputs/PlacementSucceeded"
     import Prepared from "./inputs/Prepared"
+    import TooManyRobots from "./inputs/TooManyRobots"
 
     export default {
         name: "EventAccordion",
@@ -92,6 +93,7 @@
             UnsportingBehaviorMinor,
             PlacementSucceeded,
             Prepared,
+            TooManyRobots,
         },
         props: {
             accordionName: {

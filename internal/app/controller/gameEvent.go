@@ -18,7 +18,8 @@ const (
 	GameEventPlacementFailedByTeamInFavor GameEventType = "placementFailedByTeamInFavor"
 	GameEventPlacementFailedByOpponent    GameEventType = "placementFailedByOpponent"
 	GameEventPlacementSucceeded           GameEventType = "placementSucceeded"
-	GameEventBotSubstitution              GameEventType = "gameEventBotSubstitution"
+	GameEventBotSubstitution              GameEventType = "botSubstitution"
+	GameEventTooManyRobots                GameEventType = "tooManyRobots"
 
 	GameEventBallLeftFieldTouchLine GameEventType = "ballLeftFieldTouchLine"
 	GameEventBallLeftFieldGoalLine  GameEventType = "ballLeftFieldGoalLine"
@@ -63,8 +64,8 @@ type GameEvent struct {
 	Details GameEventDetails `json:"details"`
 }
 
-func (m GameEvent) String() string {
-	b, _ := json.Marshal(&m)
+func (e GameEvent) String() string {
+	b, _ := json.Marshal(&e)
 	return string(b)
 }
 
@@ -106,6 +107,8 @@ func AllGameEvents() []GameEventType {
 		GameEventPlacementFailedByOpponent,
 		GameEventPlacementSucceeded,
 		GameEventPrepared,
+		GameEventBotSubstitution,
+		GameEventTooManyRobots,
 	}
 }
 
@@ -185,7 +188,8 @@ func (e GameEvent) IsSecondary() bool {
 		GameEventPlacementFailedByOpponent,
 		GameEventPlacementSucceeded,
 		GameEventPrepared,
-		GameEventBotSubstitution:
+		GameEventBotSubstitution,
+		GameEventTooManyRobots:
 		return true
 	}
 	return false
@@ -290,8 +294,10 @@ func (e GameEvent) ToProto() *refproto.GameEvent {
 		protoEvent.Event = &refproto.GameEvent_Prepared_{Prepared: e.Details.Prepared}
 	case GameEventBotSubstitution:
 		protoEvent.Event = &refproto.GameEvent_BotSubstitution_{BotSubstitution: e.Details.BotSubstitution}
+	case GameEventTooManyRobots:
+		protoEvent.Event = &refproto.GameEvent_TooManyRobots_{TooManyRobots: e.Details.TooManyRobots}
 	default:
-		log.Printf("Warn: Could not map game e %v", e.Type)
+		log.Printf("Warn: Could not map game event %v", e.Type)
 		return nil
 	}
 	return protoEvent
@@ -336,6 +342,7 @@ type GameEventDetails struct {
 	PlacementSucceeded             *refproto.GameEvent_PlacementSucceeded             `json:"placementSucceeded,omitempty"`
 	Prepared                       *refproto.GameEvent_Prepared                       `json:"prepared,omitempty"`
 	BotSubstitution                *refproto.GameEvent_BotSubstitution                `json:"botSubstitution,omitempty"`
+	TooManyRobots                  *refproto.GameEvent_TooManyRobots                  `json:"tooManyRobots,omitempty"`
 }
 
 func (d GameEventDetails) EventType() GameEventType {
@@ -449,6 +456,9 @@ func (d GameEventDetails) EventType() GameEventType {
 	}
 	if d.BotSubstitution != nil {
 		return GameEventBotSubstitution
+	}
+	if d.TooManyRobots != nil {
+		return GameEventTooManyRobots
 	}
 	return GameEventNone
 }
@@ -649,6 +659,9 @@ func (d GameEventDetails) Description() string {
 	if d.BotSubstitution != nil {
 		return ""
 	}
+	if d.TooManyRobots != nil {
+		return ""
+	}
 	return ""
 }
 
@@ -690,5 +703,6 @@ func NewGameEventDetails(event refproto.GameEvent) (d GameEventDetails) {
 	d.PlacementSucceeded = event.GetPlacementSucceeded()
 	d.Prepared = event.GetPrepared()
 	d.BotSubstitution = event.GetBotSubstitution()
+	d.TooManyRobots = event.GetTooManyRobots()
 	return
 }

@@ -21,6 +21,7 @@ message GameEvent {
         PlacementFailedByOpponent placement_failed_by_opponent = 4;
         PlacementSucceeded placement_succeeded = 5;
         BotSubstitution bot_substitution = 37;
+        TooManyRobots too_many_robots = 38;
 
         // Ball out of field events
 
@@ -394,7 +395,12 @@ message GameEvent {
     }
     // bots are being substituted by at least one team
     message BotSubstitution {
-        // the team that did the placement
+        // the team that substitutes robots
+        required Team by_team = 1;
+    }
+    // a team has too many robots on the field
+    message TooManyRobots {
+        // the team that has too many robots
         required Team by_team = 1;
     }
 }

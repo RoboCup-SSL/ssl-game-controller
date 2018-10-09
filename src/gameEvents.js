@@ -24,6 +24,11 @@ export const matchProceedingEvents = [
         component: 'PlacementSucceeded',
         type: 'auto'
     },
+    {
+        name: 'Too many robots',
+        component: 'TooManyRobots',
+        type: 'auto'
+    },
 ];
 export const ballLeftFieldEvents = [
     {

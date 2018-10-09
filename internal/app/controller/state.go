@@ -339,13 +339,26 @@ func (s State) GameState() GameState {
 }
 
 func (s State) BotSubstitutionIntend() Team {
-	if s.TeamState[TeamYellow].BotSubstitutionIntend && s.TeamState[TeamBlue].BotSubstitutionIntend {
+	blue := false
+	yellow := false
+	for _, event := range s.GameEvents {
+		if event.Type == GameEventTooManyRobots {
+			blue = blue || event.ByTeam() == TeamBlue
+			yellow = yellow || event.ByTeam() == TeamYellow
+			break
+		}
+	}
+
+	yellow = yellow || s.TeamState[TeamYellow].BotSubstitutionIntend
+	blue = blue || s.TeamState[TeamBlue].BotSubstitutionIntend
+
+	if yellow && blue {
 		return TeamBoth
 	}
-	if s.TeamState[TeamYellow].BotSubstitutionIntend {
+	if yellow {
 		return TeamYellow
 	}
-	if s.TeamState[TeamBlue].BotSubstitutionIntend {
+	if blue {
 		return TeamBlue
 	}
 	return TeamUnknown
