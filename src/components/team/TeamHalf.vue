@@ -1,7 +1,7 @@
 <template>
     <span>
-        <label v-show="teamState.onPositiveHalf">On positive half</label>
-        <label v-show="!teamState.onPositiveHalf">On negative half</label>
+        <label v-show="teamState.onPositiveHalf">Goal is on positive half.</label>
+        <label v-show="!teamState.onPositiveHalf">Goal is on negative half.</label>
     </span>
 </template>
 

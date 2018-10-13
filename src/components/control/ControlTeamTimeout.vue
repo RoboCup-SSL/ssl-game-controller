@@ -44,5 +44,7 @@
 </script>
 
 <style scoped>
-
+    button {
+        margin: 0.25em;
+    }
 </style>

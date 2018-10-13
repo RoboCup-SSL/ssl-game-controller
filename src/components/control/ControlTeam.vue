@@ -38,14 +38,6 @@
         <br/>
 
         <ControlTeamTimeout :team-color="teamColor"/>
-        <b-button v-on:click="addGoal">
-            Goal
-        </b-button>
-        <b-button v-on:click="addYellowCard">
-            Yellow Card
-        </b-button>
-
-        <br/>
 
         <b-button v-on:click="revokeYellowCard"
                   v-bind:disabled="teamState.yellowCardTimes.length===0">
@@ -70,14 +62,8 @@
                     'command': {'forTeam': this.teamColor, 'commandType': command}
                 })
             },
-            addYellowCard: function () {
-                this.$socket.sendObj({'card': {'forTeam': this.teamColor, 'cardType': 'yellow', 'operation': 'add'}})
-            },
             revokeYellowCard: function () {
                 this.$socket.sendObj({'card': {'forTeam': this.teamColor, 'cardType': 'yellow', 'operation': 'revoke'}})
-            },
-            addGoal: function () {
-                this.$socket.sendObj({'modify': {'forTeam': this.teamColor, 'goals': this.teamState.goals + 1}})
             },
             sendKickoff() {
                 if (!this.$refs.btnKickoff.disabled) {
@@ -147,6 +133,6 @@
 
 <style scoped>
     button {
-        margin: 0.5em;
+        margin: 0.25em;
     }
 </style>

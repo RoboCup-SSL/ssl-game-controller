@@ -25,10 +25,6 @@
                         :goalie="team.goalie"/>
             </div>
             <div>
-                <TeamHalf
-                        :team-color="teamColor"/>
-            </div>
-            <div>
                 <TeamTimeouts
                         :team-color="teamColor"
                         :timeouts-left="team.timeoutsLeft"
@@ -58,7 +54,11 @@
                         :team-color="teamColor"/>
             </div>
             <div>
-                Max <b>{{maxAllowedBots}}</b> bots allowed on the field
+                <TeamHalf
+                        :team-color="teamColor"/>
+            </div>
+            <div>
+                At most <b>{{maxAllowedBots}}</b> bots allowed on the field.
             </div>
         </div>
     </div>
