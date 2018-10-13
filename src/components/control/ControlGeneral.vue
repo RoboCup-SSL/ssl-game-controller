@@ -41,7 +41,7 @@
             <b-button v-hotkey="keymapContinue"
                       ref="btnContinue"
                       v-on:click="triggerContinue"
-                      v-bind:disabled="!gameEventPresent || (!stopped && !ballPlacement)">
+                      v-bind:disabled="!continuePossible">
                 Continue
             </b-button>
         </span>
@@ -156,6 +156,9 @@
             },
             autoContinue() {
                 return this.state.autoContinue;
+            },
+            continuePossible() {
+                return (this.gameEventPresent && (this.stopped || this.ballPlacement)) || this.prepareSth;
             }
         }
     }

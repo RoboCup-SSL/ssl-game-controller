@@ -57,6 +57,12 @@ func (e *Engine) SendCommand(command RefCommand, forTeam Team) {
 	e.State.CommandFor = forTeam
 	e.LogCommand()
 
+	if command == CommandTimeout {
+		e.State.TeamState[forTeam].TimeoutsLeft--
+	} else if command == CommandNormalStart {
+		e.updatePreStages()
+	}
+
 	if command.ContinuesGame() {
 		if len(e.State.GameEvents) > 0 {
 			e.State.GameEvents = []*GameEvent{}
@@ -98,6 +104,8 @@ func (e *Engine) Continue() {
 		e.SendCommand(CommandHalt, "")
 	} else if e.State.NextCommand != CommandUnknown {
 		e.SendCommand(e.State.NextCommand, e.State.NextCommandFor)
+	} else if e.State.Command == CommandPenalty || e.State.Command == CommandKickoff {
+		e.SendCommand(CommandNormalStart, "")
 	}
 }
 
@@ -370,12 +378,6 @@ func (e *Engine) processEvent(event Event) error {
 }
 
 func (e *Engine) processCommand(c *EventCommand) error {
-
-	if c.Type == CommandTimeout {
-		e.State.TeamState[*c.ForTeam].TimeoutsLeft--
-	} else if c.Type == CommandNormalStart {
-		e.updatePreStages()
-	}
 	switch c.Type {
 	case CommandDirect, CommandIndirect, CommandKickoff, CommandPenalty, CommandTimeout, CommandBallPlacement:
 		if c.ForTeam == nil {
