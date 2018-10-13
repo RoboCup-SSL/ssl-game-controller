@@ -110,10 +110,10 @@ func (e *Engine) Continue() {
 }
 
 func (e *Engine) updateNextCommand() {
-	if len(e.State.GameEvents) == 0 {
+	primaryEvent := e.State.PrimaryGameEvent()
+	if primaryEvent == nil {
 		return
 	}
-	primaryEvent := e.State.GameEvents[0]
 	command, forTeam, err := e.CommandForEvent(primaryEvent)
 	if err != nil {
 		log.Print("Warn: ", err)

@@ -364,6 +364,15 @@ func (s State) BotSubstitutionIntend() Team {
 	return TeamUnknown
 }
 
+func (s State) PrimaryGameEvent() *GameEvent {
+	for i := len(s.GameEvents) - 1; i >= 0; i-- {
+		if !s.GameEvents[i].IsSecondary() {
+			return s.GameEvents[i]
+		}
+	}
+	return nil
+}
+
 func newTeamInfo() (t TeamInfo) {
 	t.Name = ""
 	t.Goals = 0
