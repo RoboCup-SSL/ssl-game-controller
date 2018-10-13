@@ -4,6 +4,8 @@
       "stage": "First Half",
       "command": "stop",
       "commandForTeam": null,
+      "nextCommand": "",
+      "nextCommandFor": "",
       "gameEvent": {
         "type": "",
         "forTeam": "",
@@ -50,6 +52,8 @@
       "stage": "First Half",
       "command": "penalty",
       "commandForTeam": "Yellow",
+      "nextCommand": "normalStart",
+      "nextCommandFor": "",
       "gameEvent": {
         "type": "",
         "forTeam": "",
@@ -95,6 +99,8 @@
       "stage": "First Half",
       "command": "normalStart",
       "commandForTeam": null,
+      "nextCommand": "",
+      "nextCommandFor": "",
       "gameEvent": {
         "type": "",
         "forTeam": "",

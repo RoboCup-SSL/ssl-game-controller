@@ -4,6 +4,8 @@
       "stage": "First Half",
       "command": "halt",
       "commandForTeam": null,
+      "nextCommand": "",
+      "nextCommandFor": "",
       "gameEvent": {
         "type": "",
         "forTeam": "",
@@ -49,6 +51,8 @@
       "stage": "First Half",
       "command": "stop",
       "commandForTeam": null,
+      "nextCommand": "",
+      "nextCommandFor": "",
       "gameEvent": {
         "type": "",
         "forTeam": "",
@@ -95,6 +99,8 @@
       "stage": "First Half",
       "command": "kickoff",
       "commandForTeam": "Yellow",
+      "nextCommand": "normalStart",
+      "nextCommandFor": "",
       "gameEvent": {
         "type": "",
         "forTeam": "",
@@ -140,6 +146,8 @@
       "stage": "First Half",
       "command": "normalStart",
       "commandForTeam": null,
+      "nextCommand": "",
+      "nextCommandFor": "",
       "gameEvent": {
         "type": "",
         "forTeam": "",
@@ -185,6 +193,8 @@
       "stage": "First Half",
       "command": "stop",
       "commandForTeam": null,
+      "nextCommand": "",
+      "nextCommandFor": "",
       "gameEvent": {
         "type": "",
         "forTeam": "",
@@ -231,6 +241,8 @@
       "stage": "First Half",
       "command": "direct",
       "commandForTeam": "Blue",
+      "nextCommand": "",
+      "nextCommandFor": "",
       "gameEvent": {
         "type": "",
         "forTeam": "",
@@ -276,6 +288,8 @@
       "stage": "First Half",
       "command": "stop",
       "commandForTeam": null,
+      "nextCommand": "",
+      "nextCommandFor": "",
       "gameEvent": {
         "type": "",
         "forTeam": "",
@@ -322,6 +336,8 @@
       "stage": "First Half",
       "command": "indirect",
       "commandForTeam": "Yellow",
+      "nextCommand": "",
+      "nextCommandFor": "",
       "gameEvent": {
         "type": "",
         "forTeam": "",
