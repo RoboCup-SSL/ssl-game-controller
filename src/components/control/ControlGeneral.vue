@@ -135,9 +135,6 @@
             stopped() {
                 return this.state.command === 'stop';
             },
-            ballPlacement() {
-                return this.state.command === 'ballPlacement';
-            },
             prepareSth() {
                 return this.state.command === 'kickoff' || this.state.command === 'penalty';
             },
@@ -151,14 +148,11 @@
                 return isNonPausedStage(this.$store.state.refBoxState)
                     || isPreStage(this.$store.state.refBoxState);
             },
-            gameEventPresent() {
-                return this.state.gameEvents.length > 0;
-            },
             autoContinue() {
                 return this.state.autoContinue;
             },
             continuePossible() {
-                return (this.gameEventPresent && (this.stopped || this.ballPlacement)) || this.prepareSth;
+                return this.state.nextCommand !== '';
             }
         }
     }

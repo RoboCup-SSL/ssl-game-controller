@@ -104,12 +104,15 @@ func (e *Engine) Continue() {
 		e.SendCommand(CommandHalt, "")
 	} else if e.State.NextCommand != CommandUnknown {
 		e.SendCommand(e.State.NextCommand, e.State.NextCommandFor)
-	} else if e.State.Command == CommandPenalty || e.State.Command == CommandKickoff {
-		e.SendCommand(CommandNormalStart, "")
 	}
 }
 
 func (e *Engine) updateNextCommand() {
+	if e.State.Command == CommandPenalty || e.State.Command == CommandKickoff {
+		e.State.NextCommand = CommandNormalStart
+		e.State.NextCommandFor = ""
+		return
+	}
 	primaryEvent := e.State.PrimaryGameEvent()
 	if primaryEvent == nil {
 		return
