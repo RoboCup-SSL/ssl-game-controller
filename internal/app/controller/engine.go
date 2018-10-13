@@ -85,9 +85,20 @@ func (e *Engine) AddGameEvent(gameEvent GameEvent) {
 func (e *Engine) UndoLastAction() {
 	lastIndex := len(e.History) - 2
 	if lastIndex >= 0 {
-		*e.State = e.History[lastIndex].State
-		e.RefereeEvents = e.History[lastIndex].RefereeEvents
+		*e.State = e.History[lastIndex].State.DeepCopy()
+		e.RefereeEvents = append(e.History[lastIndex].RefereeEvents[:0:0],
+			e.History[lastIndex].RefereeEvents...)
 		e.History = e.History[0:lastIndex]
+	}
+}
+
+func (e *Engine) appendHistory() {
+	var entry HistoryEntry
+	entry.State = e.State.DeepCopy()
+	entry.RefereeEvents = append(e.RefereeEvents[:0:0], e.RefereeEvents...)
+	e.History = append(e.History, entry)
+	if len(e.History) > maxHistorySize {
+		e.History = e.History[1:]
 	}
 }
 
@@ -227,13 +238,6 @@ func (e *Engine) updateMaxBots() {
 		yellowCards := len(e.State.TeamState[team].YellowCardTimes)
 		redCards := e.State.TeamState[team].RedCards
 		e.State.TeamState[team].MaxAllowedBots = max - yellowCards - redCards
-	}
-}
-
-func (e *Engine) appendHistory() {
-	e.History = append(e.History, HistoryEntry{*e.State, e.RefereeEvents})
-	if len(e.History) > maxHistorySize {
-		e.History = e.History[1:]
 	}
 }
 

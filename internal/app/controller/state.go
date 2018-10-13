@@ -252,6 +252,12 @@ type TeamInfo struct {
 	BotSubstitutionIntend bool            `json:"botSubstitutionIntend"`
 }
 
+func (t TeamInfo) DeepCopy() (c TeamInfo) {
+	c = t
+	copy(c.YellowCardTimes, t.YellowCardTimes)
+	return
+}
+
 type GameEventBehavior string
 
 const (
@@ -315,6 +321,30 @@ func NewState() (s *State) {
 		s.GameEventBehavior[event] = GameEventBehaviorOn
 	}
 
+	return
+}
+
+func (s State) DeepCopy() (c State) {
+	c = s
+	c.GameEvents = []*GameEvent{}
+	copy(c.GameEvents, s.GameEvents)
+	c.AutoRefsConnected = []string{}
+	copy(c.AutoRefsConnected, s.AutoRefsConnected)
+	c.GameEventProposals = []*GameEventProposal{}
+	copy(c.GameEventProposals, s.GameEventProposals)
+	if s.PlacementPos != nil {
+		c.PlacementPos = new(Location)
+		*c.PlacementPos = *s.PlacementPos
+	}
+	c.TeamState = make(map[Team]*TeamInfo)
+	for k, v := range s.TeamState {
+		c.TeamState[k] = new(TeamInfo)
+		*c.TeamState[k] = v.DeepCopy()
+	}
+	c.GameEventBehavior = make(map[GameEventType]GameEventBehavior)
+	for k, v := range s.GameEventBehavior {
+		c.GameEventBehavior[k] = v
+	}
 	return
 }
 
