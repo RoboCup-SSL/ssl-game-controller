@@ -42,6 +42,52 @@ List of new features:
  * New interfaces for autoRefs and teams
  * A graphical client can be integrated
  
+### FAQ
+#### How to start a new game?
+* Reset match (button)
+* Select team names
+* Switch sides, if necessary (button)
+* Select division (button switch)
+* Set goalie id
+* divB: set ball placement capability
+
+#### How to end a game?
+Press 'End of Game' button during stop.  
+Purpose: Notify team AI about end of game and log it in log files.
+
+#### How to give a goal?
+New Event (button) -> Select Goal -> Insert parameters
+
+#### How to correct the current state of a team?
+Most of the state can be changed with the edit buttons.
+This should only be used in case of misbehavior! Goals, yellow cards, etc. should be given through the respective events ('New event' button)
+
+#### How does the undo button work?
+With every interaction in the UI and every new game event from an autoRef, the current state will be copied. The last ~20 states will be saved. Undo rolls the state back to the previous state.  
+The state will be persisted with each change. After a crash or restart, the whole history will be restored.
+
+#### How to disable certain game events?
+Go to 'Configure Behaviors' (button) and select the game event in the dialog.  
+A game event can be set to be:
+* Always accepted
+* Only accepted when there is a majority between all connected autoRefs
+* Ignored (logged as an ignored event in the table)
+
+#### How does the continue button work?
+Based on the current game events, the next command will be determined.
+This command is sent, when the continue button is pressed.
+The next command is also shown in the top right corner.
+
+#### How can I see if my team is connected?
+Open connections to teams are shown as an icon next to 'Team Yellow' and 'Team Blue'.
+If there is no connection, no icon is shown.
+
+#### How to override/cancel a game event from an autoRef?
+TODO
+
+#### The controller crashes on start. What can I do?
+Try deleting the history.json file in the working directory. It may got corrupted.
+ 
 ## Development
 
 ### Requirements
