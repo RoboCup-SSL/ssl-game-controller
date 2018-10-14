@@ -45,15 +45,15 @@
                 Continue
             </b-button>
         </span>
-        <div class="btn-group-toggle btn-group">
+        <div class="btn-group-toggle btn-group" v-hotkey="keymapToggleAutoRef">
             <label v-b-tooltip.hover
-                   title="Enable automatic continuation based on game events"
+                   :title="'Enable automatic continuation based on game events (' + Object.keys(keymapToggleAutoRef)[0] + ')'"
                    :class="{btn:true, 'btn-secondary': true, active: autoContinue}"
                    @click="setAutoContinue(true)">
                 Auto
             </label>
             <label v-b-tooltip.hover
-                   title="Disable automatic continuation based on game events"
+                   :title="'Disable automatic continuation based on game events (' + Object.keys(keymapToggleAutoRef)[0] + ')'"
                    :class="{btn:true, 'btn-secondary': true, active: !autoContinue}"
                    @click="setAutoContinue(false)">
                 Manual
@@ -92,7 +92,7 @@
             },
             keymapStop() {
                 return {
-                    'numpad 0': () => {
+                    'ctrl+alt+numpad 0': () => {
                         if (!this.$refs.btnStop.disabled) {
                             this.send('stop')
                         }
@@ -101,7 +101,7 @@
             },
             keymapForceStart() {
                 return {
-                    'numpad 5': () => {
+                    'ctrl+alt+numpad 5': () => {
                         if (!this.$refs.btnForceStart.disabled) {
                             this.send('forceStart')
                         }
@@ -110,7 +110,7 @@
             },
             keymapNormalStart() {
                 return {
-                    'numpad -': () => {
+                    'ctrl+alt+numpad 8': () => {
                         if (!this.$refs.btnNormalStart.disabled) {
                             this.send('normalStart')
                         }
@@ -119,10 +119,17 @@
             },
             keymapContinue() {
                 return {
-                    'numpad +': () => {
+                    'ctrl+alt+space': () => {
                         if (!this.$refs.btnContinue.disabled) {
                             this.triggerContinue()
                         }
+                    }
+                }
+            },
+            keymapToggleAutoRef() {
+                return {
+                    'ctrl+alt+numpad 2': () => {
+                        this.setAutoContinue(!this.autoContinue)
                     }
                 }
             },

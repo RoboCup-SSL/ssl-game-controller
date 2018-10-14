@@ -90,23 +90,23 @@
             },
             keymapKickoff() {
                 if (this.teamColor === 'Yellow') {
-                    return {'numpad 1': this.sendKickoff};
+                    return {'ctrl+alt+numpad 1': this.sendKickoff};
                 } else if (this.teamColor === 'Blue') {
-                    return {'numpad 3': this.sendKickoff};
+                    return {'ctrl+alt+numpad 3': this.sendKickoff};
                 }
             },
             keymapDirect() {
                 if (this.teamColor === 'Yellow') {
-                    return {'numpad 7': this.sendDirect};
+                    return {'ctrl+alt+numpad 7': this.sendDirect};
                 } else if (this.teamColor === 'Blue') {
-                    return {'numpad 9': this.sendDirect};
+                    return {'ctrl+alt+numpad 9': this.sendDirect};
                 }
             },
             keymapIndirect() {
                 if (this.teamColor === 'Yellow') {
-                    return {'numpad 4': this.sendIndirect};
+                    return {'ctrl+alt+numpad 4': this.sendIndirect};
                 } else if (this.teamColor === 'Blue') {
-                    return {'numpad 6': this.sendIndirect};
+                    return {'ctrl+alt+numpad 6': this.sendIndirect};
                 }
             },
             state() {
