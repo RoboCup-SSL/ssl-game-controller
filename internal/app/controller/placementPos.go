@@ -6,7 +6,7 @@ import (
 	"math"
 )
 
-// BallPlacementPos determines the ball placement position based on the game event
+// BallPlacementPos determines the ball placement position based on the primary game event
 func (e *Engine) BallPlacementPos() *Location {
 	event := e.State.PrimaryGameEvent()
 	if event == nil {

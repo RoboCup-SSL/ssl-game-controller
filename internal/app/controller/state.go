@@ -394,13 +394,16 @@ func (s State) BotSubstitutionIntend() Team {
 	return TeamUnknown
 }
 
-func (s State) PrimaryGameEvent() *GameEvent {
+func (s State) PrimaryGameEvent() (e *GameEvent) {
+	e = nil
 	for i := len(s.GameEvents) - 1; i >= 0; i-- {
-		if !s.GameEvents[i].IsSecondary() {
-			return s.GameEvents[i]
+		e = s.GameEvents[i]
+		if e.Type == GameEventMultipleCards {
+			// only this event causes a penalty kick and must be prioritized.
+			return
 		}
 	}
-	return nil
+	return
 }
 
 func newTeamInfo() (t TeamInfo) {
