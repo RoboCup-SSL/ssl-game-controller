@@ -269,7 +269,7 @@ func (c *GameController) OnNewEvent(event Event) {
 
 func (c *GameController) askForTeamDecisionIfRequired(event Event) (handled bool) {
 	handled = false
-	if c.outstandingTeamChoice == nil {
+	if c.outstandingTeamChoice == nil && c.Engine.State.GameState() == GameStateRunning {
 		var byTeamProto refproto.Team
 		var choiceType refproto.ControllerToTeamRequest_AdvantageChoice_Foul
 		if event.GameEvent.Details.BotCrashUnique != nil {
