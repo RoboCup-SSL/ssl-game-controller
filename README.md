@@ -14,8 +14,8 @@ If you just want to use this app, simply download the latest [release binary](ht
 
 ### Runtime Requirements
  * No software dependencies (except for development, see below)
- * 64bit Linux, Windows, OSX (32bit would be possible too, but we are in 2018...)
- * Display Resolution of at least 1440x720 (unless better scaling is implemented)
+ * 64bit Linux, Windows, OSX (32bit would be possible too, but come on, we are in 2018...)
+ * Display Resolution of 1920x1080 is recommended
  * A reasonable Web-Browser (mostly tested on Chrome, please do not try IE...)
 
 ### Reference Clients
