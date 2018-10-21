@@ -23,6 +23,7 @@ const (
 
 	GameEventBallLeftFieldTouchLine GameEventType = "ballLeftFieldTouchLine"
 	GameEventBallLeftFieldGoalLine  GameEventType = "ballLeftFieldGoalLine"
+	GameEventPossibleGoal           GameEventType = "possibleGoal"
 	GameEventGoal                   GameEventType = "goal"
 	GameEventIndirectGoal           GameEventType = "indirectGoal"
 	GameEventChippedGoal            GameEventType = "chippedGoal"
@@ -74,6 +75,7 @@ func AllGameEvents() []GameEventType {
 		GameEventBallLeftFieldTouchLine,
 		GameEventBallLeftFieldGoalLine,
 		GameEventAimlessKick,
+		GameEventPossibleGoal,
 		GameEventGoal,
 		GameEventIndirectGoal,
 		GameEventChippedGoal,
@@ -229,6 +231,8 @@ func (e GameEvent) ToProto() *refproto.GameEvent {
 		protoEvent.Event = &refproto.GameEvent_AimlessKick_{AimlessKick: e.Details.AimlessKick}
 	case GameEventGoal:
 		protoEvent.Event = &refproto.GameEvent_Goal_{Goal: e.Details.Goal}
+	case GameEventPossibleGoal:
+		protoEvent.Event = &refproto.GameEvent_PossibleGoal{PossibleGoal: e.Details.PossibleGoal}
 	case GameEventIndirectGoal:
 		protoEvent.Event = &refproto.GameEvent_IndirectGoal_{IndirectGoal: e.Details.IndirectGoal}
 	case GameEventChippedGoal:
@@ -309,6 +313,7 @@ type GameEventDetails struct {
 	BallLeftFieldTouchLine         *refproto.GameEvent_BallLeftFieldEvent             `json:"ballLeftFieldTouchLine,omitempty"`
 	BallLeftFieldGoalLine          *refproto.GameEvent_BallLeftFieldEvent             `json:"ballLeftFieldGoalLine,omitempty"`
 	AimlessKick                    *refproto.GameEvent_AimlessKick                    `json:"aimlessKick,omitempty"`
+	PossibleGoal                   *refproto.GameEvent_Goal                           `json:"possibleGoal,omitempty"`
 	Goal                           *refproto.GameEvent_Goal                           `json:"goal,omitempty"`
 	IndirectGoal                   *refproto.GameEvent_IndirectGoal                   `json:"indirectGoal,omitempty"`
 	ChippedGoal                    *refproto.GameEvent_ChippedGoal                    `json:"chippedGoal,omitempty"`
@@ -358,6 +363,9 @@ func (d GameEventDetails) EventType() GameEventType {
 	}
 	if d.Goal != nil {
 		return GameEventGoal
+	}
+	if d.PossibleGoal != nil {
+		return GameEventPossibleGoal
 	}
 	if d.IndirectGoal != nil {
 		return GameEventIndirectGoal
@@ -486,6 +494,12 @@ func (d GameEventDetails) Description() string {
 	if d.Goal != nil {
 		if d.Goal.ByBot != nil {
 			return fmt.Sprintf("By bot %v", *d.Goal.ByBot)
+		}
+		return ""
+	}
+	if d.PossibleGoal != nil {
+		if d.PossibleGoal.ByBot != nil {
+			return fmt.Sprintf("By bot %v", *d.PossibleGoal.ByBot)
 		}
 		return ""
 	}
@@ -670,6 +684,7 @@ func NewGameEventDetails(event refproto.GameEvent) (d GameEventDetails) {
 	d.BallLeftFieldTouchLine = event.GetBallLeftFieldTouchLine()
 	d.BallLeftFieldGoalLine = event.GetBallLeftFieldGoalLine()
 	d.AimlessKick = event.GetAimlessKick()
+	d.PossibleGoal = event.GetPossibleGoal()
 	d.Goal = event.GetGoal()
 	d.IndirectGoal = event.GetIndirectGoal()
 	d.ChippedGoal = event.GetChippedGoal()

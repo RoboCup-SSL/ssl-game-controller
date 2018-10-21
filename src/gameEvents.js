@@ -42,7 +42,12 @@ export const ballLeftFieldEvents = [
         type: 'auto'
     },
     {
-        name: 'Goal',
+        name: 'Possible Goal (autoRef detection)',
+        component: 'PossibleGoal',
+        type: 'auto'
+    },
+    {
+        name: 'Goal (valid goal, approved by referee)',
         component: 'Goal',
         type: 'manual'
     },

@@ -144,22 +144,20 @@ func (e *Engine) CommandForEvent(event *GameEvent) (command RefCommand, forTeam 
 
 	forTeam = event.ByTeam().Opposite()
 
-	if e.State.Division == DivA {
-		for _, event := range e.State.GameEvents {
-			if event.Type == GameEventPlacementFailedByTeamInFavor {
-				switch event.Type {
-				case
-					GameEventGoal,
-					GameEventDefenderInDefenseArea,
-					GameEventMultipleCards:
-				default:
-					// the placement failed by team in favor
-					// the game is continued by the other team
-					command = CommandIndirect
-					forTeam = forTeam.Opposite()
-				}
-				return
+	if e.State.Division == DivA && event.Type == GameEventPlacementFailedByTeamInFavor {
+		for _, e := range e.State.GameEvents {
+			switch e.Type {
+			case
+				GameEventGoal,
+				GameEventDefenderInDefenseArea,
+				GameEventMultipleCards:
+			default:
+				// the placement failed by team in favor
+				// the game is continued by the other team
+				command = CommandIndirect
+				forTeam = forTeam.Opposite()
 			}
+			return
 		}
 	}
 
@@ -178,6 +176,7 @@ func (e *Engine) CommandForEvent(event *GameEvent) (command RefCommand, forTeam 
 	case
 		GameEventBallLeftFieldGoalLine,
 		GameEventIndirectGoal,
+		GameEventPossibleGoal,
 		GameEventChippedGoal,
 		GameEventDefenderInDefenseAreaPartially,
 		GameEventAttackerTooCloseToDefenseArea,
@@ -682,7 +681,9 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 
 	if e.State.GameState() != GameStateHalted && !event.IsSkipped() && !event.IsSecondary() {
 		teamInFavor := event.ByTeam().Opposite()
-		if e.State.PlacementPos != nil {
+		if event.Type == GameEventPossibleGoal {
+			e.SendCommand(CommandHalt, "")
+		} else if e.State.PlacementPos != nil {
 			if e.State.TeamState[teamInFavor].CanPlaceBall {
 				e.SendCommand(CommandBallPlacement, teamInFavor)
 			} else if e.State.TeamState[teamInFavor.Opposite()].CanPlaceBall {

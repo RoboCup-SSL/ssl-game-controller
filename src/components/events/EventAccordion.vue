@@ -37,6 +37,7 @@
     import DefenderInDefenseArea from "./inputs/DefenderInDefenseArea"
     import DefenderInDefenseAreaPartially from "./inputs/DefenderInDefenseAreaPartially"
     import DefenderTooCloseToKickPoint from "./inputs/DefenderTooCloseToKickPoint"
+    import PossibleGoal from "./inputs/PossibleGoal"
     import Goal from "./inputs/Goal"
     import AimlessKick from "./inputs/AimlessKick"
     import IndirectGoal from "./inputs/IndirectGoal"
@@ -79,6 +80,7 @@
             DefenderInDefenseAreaPartially,
             DefenderTooCloseToKickPoint,
             Goal,
+            PossibleGoal,
             AimlessKick,
             IndirectGoal,
             KeeperHeldBall,

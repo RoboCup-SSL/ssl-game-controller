@@ -398,8 +398,12 @@ func (s State) PrimaryGameEvent() (e *GameEvent) {
 	e = nil
 	for i := len(s.GameEvents) - 1; i >= 0; i-- {
 		e = s.GameEvents[i]
-		if e.Type == GameEventMultipleCards {
+		switch e.Type {
+		case GameEventMultipleCards:
 			// only this event causes a penalty kick and must be prioritized.
+			return
+		case GameEventGoal:
+			// Goal overrides everything else
 			return
 		}
 	}

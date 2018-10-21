@@ -27,6 +27,7 @@ message GameEvent {
 
         BallLeftFieldEvent ball_left_field_touch_line = 6;
         BallLeftFieldEvent ball_left_field_goal_line = 7;
+        Goal possible_goal = 39;
         Goal goal = 8;
         IndirectGoal indirect_goal = 9;
         ChippedGoal chipped_goal = 10;
@@ -90,7 +91,7 @@ message GameEvent {
         // the location where the ball was last touched
         optional Location kick_location = 4;
     }
-    // a team shot a valid goal
+    // a team shot a goal
     message Goal {
         // the team that shot the goal
         required Team by_team = 1;

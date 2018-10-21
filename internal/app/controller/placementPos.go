@@ -32,16 +32,13 @@ func (e *Engine) BallPlacementPos() *Location {
 	case GameEventBallLeftFieldGoalLine:
 		if event.Details.BallLeftFieldGoalLine.Location != nil {
 			location := mapProtoLocation(event.Details.BallLeftFieldGoalLine.Location)
-			var x float64
-			if e.isGoalKick(event) {
-				x = e.Geometry.FieldLength/2 - e.Geometry.PlacementOffsetGoalLineGoalKick
-			} else {
-				x = e.Geometry.FieldLength/2 - e.Geometry.PlacementOffsetGoalLine
-			}
-			location.X = math.Copysign(x, location.X)
-			y := e.Geometry.FieldWidth/2 - e.Geometry.PlacementOffsetTouchLine
-			location.Y = math.Copysign(y, location.Y)
-			return e.validateLocation(location)
+			return e.ballPlacementLocationGoalLine(event, location)
+		}
+		return nil
+	case GameEventPossibleGoal:
+		if event.Details.PossibleGoal.Location != nil {
+			location := mapProtoLocation(event.Details.PossibleGoal.Location)
+			return e.ballPlacementLocationGoalLine(event, location)
 		}
 		return nil
 	case GameEventAimlessKick:
@@ -108,7 +105,25 @@ func (e *Engine) BallPlacementPos() *Location {
 	}
 }
 
+func (e *Engine) ballPlacementLocationGoalLine(event *GameEvent, lastBallLocation *Location) *Location {
+	var x float64
+	if e.isGoalKick(event) {
+		x = e.Geometry.FieldLength/2 - e.Geometry.PlacementOffsetGoalLineGoalKick
+	} else {
+		x = e.Geometry.FieldLength/2 - e.Geometry.PlacementOffsetGoalLine
+	}
+	var placementLocation Location
+	placementLocation.X = math.Copysign(x, lastBallLocation.X)
+	y := e.Geometry.FieldWidth/2 - e.Geometry.PlacementOffsetTouchLine
+	placementLocation.Y = math.Copysign(y, lastBallLocation.Y)
+	return e.validateLocation(&placementLocation)
+}
+
 func (e *Engine) isGoalKick(event *GameEvent) bool {
+	if event.Details.BallLeftFieldGoalLine == nil {
+		// failed goal shot -> goal kick
+		return true
+	}
 	teamInFavor := event.ByTeam().Opposite()
 	location := mapProtoLocation(event.Details.BallLeftFieldGoalLine.Location)
 	if e.State.TeamState[teamInFavor].OnPositiveHalf && location.X > 0 {
