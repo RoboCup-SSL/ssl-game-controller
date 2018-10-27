@@ -54,6 +54,8 @@ func (c *TeamClient) receiveRegistration(server *TeamServer) error {
 
 	c.Ok()
 
+	log.Printf("Team %v connected.", *registration.TeamName)
+
 	return nil
 }
 
