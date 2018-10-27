@@ -135,7 +135,7 @@ func (c *Client) sendRequest(request *refproto.AutoRefToControllerRequest) {
 	}
 	log.Print("Received reply: ", controllerReply)
 	if controllerReply.StatusCode == nil || *controllerReply.StatusCode != refproto.ControllerReply_OK {
-		log.Fatal("Message rejected: ", controllerReply.Reason)
+		log.Fatal("Message rejected: ", *controllerReply.Reason)
 	}
 	if controllerReply.NextToken != nil {
 		c.token = *controllerReply.NextToken
