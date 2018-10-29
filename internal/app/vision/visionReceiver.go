@@ -1,4 +1,4 @@
-package controller
+package vision
 
 import (
 	"github.com/RoboCup-SSL/ssl-go-tools/pkg/sslproto"
@@ -8,13 +8,15 @@ import (
 	"time"
 )
 
-type VisionReceiver struct {
+const maxDatagramSize = 8192
+
+type Receiver struct {
 	DetectionCallback func(*sslproto.SSL_DetectionFrame)
 	GeometryCallback  func(*sslproto.SSL_GeometryData)
 }
 
-func NewVisionReceiver(address string) (v *VisionReceiver) {
-	v = new(VisionReceiver)
+func NewReceiver(address string) (v *Receiver) {
+	v = new(Receiver)
 	v.DetectionCallback = func(*sslproto.SSL_DetectionFrame) {}
 	v.GeometryCallback = func(data *sslproto.SSL_GeometryData) {}
 
@@ -38,7 +40,7 @@ func NewVisionReceiver(address string) (v *VisionReceiver) {
 	return
 }
 
-func (v *VisionReceiver) receive(conn *net.UDPConn) {
+func (v *Receiver) receive(conn *net.UDPConn) {
 	b := make([]byte, maxDatagramSize)
 	for {
 		n, err := conn.Read(b)

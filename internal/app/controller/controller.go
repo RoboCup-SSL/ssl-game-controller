@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/rcon"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/vision"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/timer"
 	"github.com/RoboCup-SSL/ssl-go-tools/pkg/sslproto"
@@ -27,7 +28,7 @@ type GameController struct {
 	numRefereeEventsLastPublish int
 	outstandingTeamChoice       *TeamChoice
 	Mutex                       sync.Mutex
-	VisionReceiver              *VisionReceiver
+	VisionReceiver              *vision.Receiver
 }
 
 type TeamChoice struct {
@@ -45,7 +46,7 @@ func NewGameController() (c *GameController) {
 	c.ApiServer = ApiServer{}
 	c.ApiServer.Consumer = c
 
-	c.VisionReceiver = NewVisionReceiver(c.Config.Network.VisionAddress)
+	c.VisionReceiver = vision.NewReceiver(c.Config.Network.VisionAddress)
 	c.VisionReceiver.GeometryCallback = c.ProcessGeometry
 
 	c.AutoRefServer = rcon.NewAutoRefServer()
