@@ -3,6 +3,7 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"log"
 	"reflect"
 	"time"
@@ -113,7 +114,7 @@ type EventModifyValue struct {
 	FoulCounter           *int                          `json:"foulCounter,omitempty"`
 	BallPlacementFailures *int                          `json:"ballPlacementFailures,omitempty"`
 	CanPlaceBall          *bool                         `json:"canPlaceBall,omitempty"`
-	Division              *Division                     `json:"division,omitempty"`
+	Division              *config.Division              `json:"division,omitempty"`
 	AutoContinue          *bool                         `json:"autoContinue,omitempty"`
 	GameEventBehavior     *EventModifyGameEventBehavior `json:"gameEventBehavior,omitempty"`
 	BotSubstitutionIntend *bool                         `json:"botSubstitutionIntend,omitempty"`

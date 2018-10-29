@@ -1,4 +1,4 @@
-package controller
+package config
 
 import (
 	"reflect"
@@ -6,8 +6,8 @@ import (
 )
 
 func Test_LoadConfig(t *testing.T) {
-	defConfig := DefaultConfig()
-	loadedConfig, err := LoadConfig("testdata/config.yaml")
+	defConfig := DefaultControllerConfig()
+	loadedConfig, err := LoadControllerConfig("testdata/config.yaml")
 
 	if err != nil {
 		t.Fatal(err)

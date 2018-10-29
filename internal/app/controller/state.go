@@ -2,6 +2,7 @@ package controller
 
 import (
 	"encoding/json"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
 	"github.com/pkg/errors"
 	"time"
@@ -62,13 +63,6 @@ func NewTeam(team refproto.Team) Team {
 	}
 	return TeamUnknown
 }
-
-type Division string
-
-const (
-	DivA Division = "DivA"
-	DivB Division = "DivB"
-)
 
 // Stage represents the different stages of a game
 type Stage string
@@ -284,7 +278,7 @@ type State struct {
 	MatchTimeStart     time.Time                           `json:"matchTimeStart"`
 	MatchDuration      time.Duration                       `json:"matchDuration"`
 	TeamState          map[Team]*TeamInfo                  `json:"teamState"`
-	Division           Division                            `json:"division"`
+	Division           config.Division                     `json:"division"`
 	PlacementPos       *Location                           `json:"placementPos"`
 	AutoContinue       bool                                `json:"autoContinue"`
 	NextCommand        RefCommand                          `json:"nextCommand"`
@@ -313,7 +307,7 @@ func NewState() (s *State) {
 	*s.TeamState[TeamBlue] = newTeamInfo()
 	s.TeamState[TeamBlue].OnPositiveHalf = !s.TeamState[TeamYellow].OnPositiveHalf
 
-	s.Division = DivA
+	s.Division = config.DivA
 	s.AutoContinue = true
 
 	s.GameEventBehavior = map[GameEventType]GameEventBehavior{}

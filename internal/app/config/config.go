@@ -1,4 +1,4 @@
-package controller
+package config
 
 import (
 	"github.com/pkg/errors"
@@ -7,8 +7,8 @@ import (
 	"time"
 )
 
-// ConfigSpecial holds configs that are different between normal and overtime halves
-type ConfigSpecial struct {
+// Special holds configs that are different between normal and overtime halves
+type Special struct {
 	HalfDuration     time.Duration `yaml:"half-duration"`
 	HalfTimeDuration time.Duration `yaml:"half-time-duration"`
 	TimeoutDuration  time.Duration `yaml:"timeout-duration"`
@@ -16,7 +16,8 @@ type ConfigSpecial struct {
 	BreakAfter       time.Duration `yaml:"break-after"`
 }
 
-type ConfigGeometry struct {
+// Geometry holds sizes of the field and distance for certain rules
+type Geometry struct {
 	FieldLength                     float64 `yaml:"field-length"`
 	FieldWidth                      float64 `yaml:"field-width"`
 	DefenseAreaDepth                float64 `yaml:"defense-area-depth"`
@@ -27,56 +28,56 @@ type ConfigGeometry struct {
 	PlacementOffsetDefenseArea      float64 `yaml:"placement-offset-defense-area"`
 }
 
-// ConfigGame holds configs that are valid for the whole game
-type ConfigGame struct {
-	YellowCardDuration        time.Duration                `yaml:"yellow-card-duration"`
-	DefaultDivision           Division                     `yaml:"default-division"`
-	Normal                    ConfigSpecial                `yaml:"normal"`
-	Overtime                  ConfigSpecial                `yaml:"overtime"`
-	TeamChoiceTimeout         time.Duration                `yaml:"team-choice-timeout"`
-	DefaultGeometry           map[Division]*ConfigGeometry `yaml:"default-geometry"`
-	MultipleCardStep          int                          `yaml:"multiple-card-step"`
-	MultipleFoulStep          int                          `yaml:"multiple-foul-step"`
-	MultiplePlacementFailures int                          `yaml:"multiple-placement-failures"`
-	MaxBots                   map[Division]int             `yaml:"max-bots"`
-	AutoRefProposalTimeout    time.Duration                `yaml:"auto-ref-proposal-timeout"`
+// Game holds configs that are valid for the whole game
+type Game struct {
+	YellowCardDuration        time.Duration          `yaml:"yellow-card-duration"`
+	DefaultDivision           Division               `yaml:"default-division"`
+	Normal                    Special                `yaml:"normal"`
+	Overtime                  Special                `yaml:"overtime"`
+	TeamChoiceTimeout         time.Duration          `yaml:"team-choice-timeout"`
+	DefaultGeometry           map[Division]*Geometry `yaml:"default-geometry"`
+	MultipleCardStep          int                    `yaml:"multiple-card-step"`
+	MultipleFoulStep          int                    `yaml:"multiple-foul-step"`
+	MultiplePlacementFailures int                    `yaml:"multiple-placement-failures"`
+	MaxBots                   map[Division]int       `yaml:"max-bots"`
+	AutoRefProposalTimeout    time.Duration          `yaml:"auto-ref-proposal-timeout"`
 }
 
-// ConfigNetwork holds configs for network communication
-type ConfigNetwork struct {
+// Network holds configs for network communication
+type Network struct {
 	PublishAddress string `yaml:"publish-address"`
 	VisionAddress  string `yaml:"vision-address"`
 }
 
-// ConfigServer holds configs for the available server services
-type ConfigServer struct {
-	AutoRef ConfigServerAutoRef `yaml:"auto-ref"`
-	Team    ConfigServerTeam    `yaml:"team"`
+// Server holds configs for the available server services
+type Server struct {
+	AutoRef ServerAutoRef `yaml:"auto-ref"`
+	Team    ServerTeam    `yaml:"team"`
 }
 
-// ConfigServerAutoRef holds configs for the autoRef server
-type ConfigServerAutoRef struct {
+// ServerAutoRef holds configs for the autoRef server
+type ServerAutoRef struct {
 	Address        string `yaml:"address"`
 	TrustedKeysDir string `yaml:"trusted-keys-dir"`
 }
 
-// ConfigServerTeam holds configs for the team server
-type ConfigServerTeam struct {
+// ServerTeam holds configs for the team server
+type ServerTeam struct {
 	Address        string `yaml:"address"`
 	TrustedKeysDir string `yaml:"trusted-keys-dir"`
 }
 
-// Config structure for the game controller
-type Config struct {
-	Network ConfigNetwork `yaml:"network"`
-	Game    ConfigGame    `yaml:"game"`
-	Server  ConfigServer  `yaml:"server"`
+// Controller structure for the game controller
+type Controller struct {
+	Network Network `yaml:"network"`
+	Game    Game    `yaml:"game"`
+	Server  Server  `yaml:"server"`
 }
 
-// LoadConfig loads a config from given file
-func LoadConfig(fileName string) (config Config, err error) {
+// LoadControllerConfig loads a config from given file
+func LoadControllerConfig(fileName string) (config Controller, err error) {
 
-	config = DefaultConfig()
+	config = DefaultControllerConfig()
 
 	f, err := os.OpenFile(fileName, os.O_RDONLY, 0600)
 	if err != nil {
@@ -96,8 +97,8 @@ func LoadConfig(fileName string) (config Config, err error) {
 	return
 }
 
-// DefaultConfig creates a config with default values
-func DefaultConfig() (c Config) {
+// DefaultControllerConfig creates a config with default values
+func DefaultControllerConfig() (c Controller) {
 	c.Network.PublishAddress = "224.5.23.1:10003"
 	c.Network.VisionAddress = "224.5.23.2:10006"
 	c.Game.YellowCardDuration = 2 * time.Minute
@@ -126,8 +127,8 @@ func DefaultConfig() (c Config) {
 	c.Server.Team.Address = ":10008"
 	c.Server.Team.TrustedKeysDir = "config/trusted_keys/team"
 
-	c.Game.DefaultGeometry = map[Division]*ConfigGeometry{}
-	c.Game.DefaultGeometry[DivA] = new(ConfigGeometry)
+	c.Game.DefaultGeometry = map[Division]*Geometry{}
+	c.Game.DefaultGeometry[DivA] = new(Geometry)
 	c.Game.DefaultGeometry[DivA].FieldLength = 12
 	c.Game.DefaultGeometry[DivA].FieldWidth = 9
 	c.Game.DefaultGeometry[DivA].DefenseAreaDepth = 1.2
@@ -137,7 +138,7 @@ func DefaultConfig() (c Config) {
 	c.Game.DefaultGeometry[DivA].PlacementOffsetTouchLine = 0.2
 	c.Game.DefaultGeometry[DivA].PlacementOffsetDefenseArea = 1.0
 
-	c.Game.DefaultGeometry[DivB] = new(ConfigGeometry)
+	c.Game.DefaultGeometry[DivB] = new(Geometry)
 	c.Game.DefaultGeometry[DivB].FieldLength = 9
 	c.Game.DefaultGeometry[DivB].FieldWidth = 6
 	c.Game.DefaultGeometry[DivB].DefenseAreaDepth = 1

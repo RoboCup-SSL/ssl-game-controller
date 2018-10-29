@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/rcon"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/vision"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
@@ -17,7 +18,7 @@ const configFileName = "config/ssl-game-controller.yaml"
 
 // GameController controls a game
 type GameController struct {
-	Config                      Config
+	Config                      config.Controller
 	Publisher                   Publisher
 	ApiServer                   ApiServer
 	AutoRefServer               *rcon.AutoRefServer
@@ -309,7 +310,7 @@ func (c *GameController) timeoutTeamChoice() {
 	}
 }
 
-func loadPublisher(config Config) Publisher {
+func loadPublisher(config config.Controller) Publisher {
 	publisher, err := NewPublisher(config.Network.PublishAddress)
 	if err != nil {
 		log.Printf("Could not start publisher on %v. %v", config.Network.PublishAddress, err)
@@ -317,12 +318,12 @@ func loadPublisher(config Config) Publisher {
 	return publisher
 }
 
-func loadConfig() Config {
-	config, err := LoadConfig(configFileName)
+func loadConfig() config.Controller {
+	cfg, err := config.LoadControllerConfig(configFileName)
 	if err != nil {
 		log.Printf("Could not load config: %v", err)
 	}
-	return config
+	return cfg
 }
 
 // publish publishes the state to the UI and the teams

@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
 	"github.com/pkg/errors"
 	"log"
@@ -16,13 +17,13 @@ type Engine struct {
 	State         *State
 	RefereeEvents []RefereeEvent
 	StageTimes    map[Stage]time.Duration
-	config        ConfigGame
+	config        config.Game
 	TimeProvider  func() time.Time
 	History       History
-	Geometry      ConfigGeometry
+	Geometry      config.Geometry
 }
 
-func NewEngine(config ConfigGame) (e Engine) {
+func NewEngine(config config.Game) (e Engine) {
 	e.config = config
 	e.loadStages()
 	e.ResetGame()
@@ -144,7 +145,7 @@ func (e *Engine) CommandForEvent(event *GameEvent) (command RefCommand, forTeam 
 
 	forTeam = event.ByTeam().Opposite()
 
-	if e.State.Division == DivA && event.Type == GameEventPlacementFailedByTeamInFavor {
+	if e.State.Division == config.DivA && event.Type == GameEventPlacementFailedByTeamInFavor {
 		for _, e := range e.State.GameEvents {
 			switch e.Type {
 			case
@@ -403,7 +404,7 @@ func (e *Engine) processCommand(c *EventCommand) error {
 func (e *Engine) processModify(m *EventModifyValue) error {
 	// process team-independent modifies
 	if m.Division != nil {
-		if *m.Division == DivA || *m.Division == DivB {
+		if *m.Division == config.DivA || *m.Division == config.DivB {
 			e.State.Division = *m.Division
 		} else {
 			return errors.Errorf("Invalid division: %v", *m.Division)
