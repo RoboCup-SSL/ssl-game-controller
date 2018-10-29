@@ -14,6 +14,8 @@ import (
 	"strings"
 )
 
+// DetectHost reads the network address from a multicast message by joining the given multicast group and waiting for
+// some data before reading the source IP and returning it.
 func DetectHost(address string) string {
 	addr, err := net.ResolveUDPAddr("udp", address)
 	if err != nil {
@@ -31,11 +33,14 @@ func DetectHost(address string) string {
 	return udpAddr.IP.String()
 }
 
-func SetHost(address string, host string) string {
+// GetConnectionString extracts the port from the given address and constructs a new connection string with the host
+// The resulting format is "host:port".
+func GetConnectionString(address string, host string) string {
 	parts := strings.Split(address, ":")
 	return host + ":" + parts[1]
 }
 
+// LoadPrivateKey loads a private RSA key from the given location
 func LoadPrivateKey(privateKeyLocation string) *rsa.PrivateKey {
 	if privateKeyLocation != "" {
 		privateKey := ReadPrivateKey(privateKeyLocation)
@@ -49,6 +54,7 @@ func LoadPrivateKey(privateKeyLocation string) *rsa.PrivateKey {
 	return nil
 }
 
+// ReadPrivateKey reads a private RSA key from the given location, exiting on errors
 func ReadPrivateKey(privateKeyLocation string) *rsa.PrivateKey {
 	b, err := ioutil.ReadFile(privateKeyLocation)
 	if err != nil {
@@ -65,6 +71,7 @@ func ReadPrivateKey(privateKeyLocation string) *rsa.PrivateKey {
 	return privateKey
 }
 
+// Sign creates a signature of the given message with the given key
 func Sign(privateKey *rsa.PrivateKey, message proto.Message) []byte {
 	messageBytes, err := proto.Marshal(message)
 	if err != nil {

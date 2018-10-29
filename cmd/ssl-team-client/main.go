@@ -32,7 +32,7 @@ func main() {
 		host := client.DetectHost(*udpAddress)
 		if host != "" {
 			log.Print("Detected game-controller host: ", host)
-			*refBoxAddr = client.SetHost(*refBoxAddr, host)
+			*refBoxAddr = client.GetConnectionString(*refBoxAddr, host)
 		}
 	}
 
