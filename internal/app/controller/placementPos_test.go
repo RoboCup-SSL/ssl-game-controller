@@ -1,14 +1,15 @@
 package controller
 
 import (
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
 	"math"
 	"testing"
 )
 
 func TestEngine_BallPlacementPos(t *testing.T) {
-	config := DefaultConfig()
-	engine := NewEngine(config.Game)
+	cfg := config.DefaultControllerConfig().Game
+	engine := NewEngine(cfg)
 	engine.State.TeamState[TeamYellow].OnPositiveHalf = true
 	engine.State.TeamState[TeamBlue].OnPositiveHalf = false
 	engine.Geometry.PlacementOffsetTouchLine = 0.2

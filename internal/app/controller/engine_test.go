@@ -2,6 +2,7 @@ package controller
 
 import (
 	"encoding/json"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"io/ioutil"
 	"log"
 	"path/filepath"
@@ -39,8 +40,8 @@ func processTransitionFile(t *testing.T, fileName string) {
 	if err := json.Unmarshal(bytes, &stateTransitions); err != nil {
 		t.Fatal("Could not unmarshal state transitions:", err)
 	}
-	config := DefaultConfig().Game
-	e := NewEngine(config)
+	cfg := config.DefaultControllerConfig().Game
+	e := NewEngine(cfg)
 	e.TimeProvider = func() time.Time {
 		ts, err := time.Parse("2006-01-02T15:04:05Z", "2006-01-02T15:04:05Z")
 		if err != nil {
