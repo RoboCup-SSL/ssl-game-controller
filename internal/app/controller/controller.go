@@ -18,18 +18,18 @@ const configFileName = "config/ssl-game-controller.yaml"
 
 // GameController controls a game
 type GameController struct {
-	Config                      config.Controller
-	Publisher                   Publisher
-	ApiServer                   ApiServer
-	AutoRefServer               *rcon.AutoRefServer
-	TeamServer                  *rcon.TeamServer
-	Engine                      Engine
-	timer                       timer.Timer
-	historyPreserver            HistoryPreserver
-	numRefereeEventsLastPublish int
-	outstandingTeamChoice       *TeamChoice
-	Mutex                       sync.Mutex
-	VisionReceiver              *vision.Receiver
+	Config                    config.Controller
+	Publisher                 Publisher
+	ApiServer                 ApiServer
+	AutoRefServer             *rcon.AutoRefServer
+	TeamServer                *rcon.TeamServer
+	Engine                    Engine
+	timer                     timer.Timer
+	historyPreserver          HistoryPreserver
+	numUiProtocolsLastPublish int
+	outstandingTeamChoice     *TeamChoice
+	Mutex                     sync.Mutex
+	VisionReceiver            *vision.Receiver
 }
 
 type TeamChoice struct {
@@ -76,12 +76,12 @@ func (c *GameController) Run() {
 		} else if len(*history) > 0 {
 			c.Engine.History = *history
 			*c.Engine.State = c.Engine.History[len(c.Engine.History)-1].State
-			c.Engine.RefereeEvents = c.Engine.History[len(c.Engine.History)-1].RefereeEvents
+			c.Engine.UiProtocol = c.Engine.History[len(c.Engine.History)-1].UiProtocol
 		}
 	}
 
 	c.ApiServer.PublishState(*c.Engine.State)
-	c.ApiServer.PublishRefereeEvents(c.Engine.RefereeEvents)
+	c.ApiServer.PublishUiProtocol(c.Engine.UiProtocol)
 	c.TeamServer.AllowedTeamNames = []string{c.Engine.State.TeamState[TeamYellow].Name,
 		c.Engine.State.TeamState[TeamBlue].Name}
 
@@ -330,9 +330,9 @@ func loadConfig() config.Controller {
 
 // publish publishes the state to the UI and the teams
 func (c *GameController) publish() {
-	if len(c.Engine.RefereeEvents) != c.numRefereeEventsLastPublish {
-		c.ApiServer.PublishRefereeEvents(c.Engine.RefereeEvents)
-		c.numRefereeEventsLastPublish = len(c.Engine.RefereeEvents)
+	if len(c.Engine.UiProtocol) != c.numUiProtocolsLastPublish {
+		c.ApiServer.PublishUiProtocol(c.Engine.UiProtocol)
+		c.numUiProtocolsLastPublish = len(c.Engine.UiProtocol)
 	}
 
 	c.TeamServer.AllowedTeamNames = []string{c.Engine.State.TeamState[TeamYellow].Name,

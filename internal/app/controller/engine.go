@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
 	"github.com/pkg/errors"
@@ -14,13 +13,13 @@ import (
 const maxHistorySize = 10
 
 type Engine struct {
-	State         *State
-	RefereeEvents []RefereeEvent
-	StageTimes    map[Stage]time.Duration
-	config        config.Game
-	TimeProvider  func() time.Time
-	History       History
-	Geometry      config.Geometry
+	State        *State
+	UiProtocol   []UiProtocolEntry
+	StageTimes   map[Stage]time.Duration
+	config       config.Game
+	TimeProvider func() time.Time
+	History      History
+	Geometry     config.Geometry
 }
 
 func NewEngine(config config.Game) (e Engine) {
@@ -39,7 +38,7 @@ func (e *Engine) ResetGame() {
 		e.State.TeamState[team].MaxAllowedBots = e.config.MaxBots[e.State.Division]
 	}
 
-	e.RefereeEvents = []RefereeEvent{}
+	e.UiProtocol = []UiProtocolEntry{}
 	e.State.Division = e.config.DefaultDivision
 	e.Geometry = *e.config.DefaultGeometry[e.State.Division]
 }
@@ -87,8 +86,8 @@ func (e *Engine) UndoLastAction() {
 	lastIndex := len(e.History) - 2
 	if lastIndex >= 0 {
 		*e.State = e.History[lastIndex].State.DeepCopy()
-		e.RefereeEvents = append(e.History[lastIndex].RefereeEvents[:0:0],
-			e.History[lastIndex].RefereeEvents...)
+		e.UiProtocol = append(e.History[lastIndex].UiProtocol[:0:0],
+			e.History[lastIndex].UiProtocol...)
 		e.History = e.History[0:lastIndex]
 	}
 }
@@ -96,7 +95,7 @@ func (e *Engine) UndoLastAction() {
 func (e *Engine) appendHistory() {
 	var entry HistoryEntry
 	entry.State = e.State.DeepCopy()
-	entry.RefereeEvents = append(e.RefereeEvents[:0:0], e.RefereeEvents...)
+	entry.UiProtocol = append(e.UiProtocol[:0:0], e.UiProtocol...)
 	e.History = append(e.History, entry)
 	if len(e.History) > maxHistorySize {
 		e.History = e.History[1:]
@@ -208,9 +207,9 @@ func (e *Engine) CommandForEvent(event *GameEvent) (command RefCommand, forTeam 
 }
 
 func (e *Engine) LastGameStartCommand() (RefCommand, error) {
-	for i := len(e.RefereeEvents) - 1; i >= 0; i-- {
-		event := e.RefereeEvents[i]
-		if event.Type == RefereeEventCommand {
+	for i := len(e.UiProtocol) - 1; i >= 0; i-- {
+		event := e.UiProtocol[i]
+		if event.Type == UiProtocolCommand {
 			cmd := RefCommand(event.Name)
 			switch cmd {
 			case CommandPenalty, CommandKickoff, CommandIndirect, CommandDirect:
@@ -239,87 +238,6 @@ func (e *Engine) updateMaxBots() {
 		redCards := e.State.TeamState[team].RedCards
 		e.State.TeamState[team].MaxAllowedBots = max - yellowCards - redCards
 	}
-}
-
-func (e *Engine) LogGameEvent(event GameEvent) {
-	gameEvent := RefereeEvent{
-		Timestamp:   e.TimeProvider().UnixNano(),
-		StageTime:   e.State.StageTimeElapsed,
-		Type:        RefereeEventGameEvent,
-		Name:        string(event.Type),
-		Team:        event.ByTeam(),
-		Description: event.Details.String(),
-	}
-	e.RefereeEvents = append(e.RefereeEvents, gameEvent)
-}
-
-func (e *Engine) LogIgnoredGameEvent(event GameEvent) {
-	gameEvent := RefereeEvent{
-		Timestamp:   e.TimeProvider().UnixNano(),
-		StageTime:   e.State.StageTimeElapsed,
-		Type:        RefereeEventGameEventIgnored,
-		Name:        string(event.Type),
-		Team:        event.ByTeam(),
-		Description: event.Details.String(),
-	}
-	e.RefereeEvents = append(e.RefereeEvents, gameEvent)
-}
-
-func (e *Engine) LogCommand() {
-	refereeEvent := RefereeEvent{
-		Timestamp: e.TimeProvider().UnixNano(),
-		StageTime: e.State.StageTimeElapsed,
-		Type:      RefereeEventCommand,
-		Name:      string(e.State.Command),
-		Team:      e.State.CommandFor,
-	}
-	e.RefereeEvents = append(e.RefereeEvents, refereeEvent)
-}
-
-func (e *Engine) LogCard(card *EventCard) {
-	refereeEvent := RefereeEvent{
-		Timestamp: e.TimeProvider().UnixNano(),
-		StageTime: e.State.StageTimeElapsed,
-		Type:      RefereeEventCard,
-		Name:      fmt.Sprintf("%v %v card", card.Operation, card.Type),
-		Team:      card.ForTeam,
-	}
-	e.RefereeEvents = append(e.RefereeEvents, refereeEvent)
-}
-
-func (e *Engine) LogTime(description string, forTeam Team) {
-	refereeEvent := RefereeEvent{
-		Timestamp: e.TimeProvider().UnixNano(),
-		StageTime: e.State.StageTimeElapsed,
-		Type:      RefereeEventTime,
-		Name:      description,
-		Team:      forTeam,
-	}
-	e.RefereeEvents = append(e.RefereeEvents, refereeEvent)
-}
-
-func (e *Engine) LogStage(stage Stage) {
-	refereeEvent := RefereeEvent{
-		Timestamp: e.TimeProvider().UnixNano(),
-		StageTime: e.State.StageTimeElapsed,
-		Type:      RefereeEventStage,
-		Name:      string(stage),
-	}
-	e.RefereeEvents = append(e.RefereeEvents, refereeEvent)
-}
-
-func (e *Engine) LogModify(m EventModifyValue) {
-	team := m.ForTeam
-	m.ForTeam = TeamUnknown
-	refereeEvent := RefereeEvent{
-		Timestamp:   e.TimeProvider().UnixNano(),
-		StageTime:   e.State.StageTimeElapsed,
-		Type:        RefereeEventModify,
-		Name:        m.Type(),
-		Team:        team,
-		Description: m.Value(),
-	}
-	e.RefereeEvents = append(e.RefereeEvents, refereeEvent)
 }
 
 func (e *Engine) loadStages() {

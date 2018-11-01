@@ -15,8 +15,8 @@ type HistoryPreserver struct {
 }
 
 type HistoryEntry struct {
-	State         State
-	RefereeEvents []RefereeEvent
+	State      State
+	UiProtocol []UiProtocolEntry
 }
 
 type History []HistoryEntry
