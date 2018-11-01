@@ -248,7 +248,7 @@ func (e *Engine) LogGameEvent(event GameEvent) {
 		Type:        RefereeEventGameEvent,
 		Name:        string(event.Type),
 		Team:        event.ByTeam(),
-		Description: event.Details.Description(),
+		Description: event.Details.String(),
 	}
 	e.RefereeEvents = append(e.RefereeEvents, gameEvent)
 }
@@ -260,7 +260,7 @@ func (e *Engine) LogIgnoredGameEvent(event GameEvent) {
 		Type:        RefereeEventGameEventIgnored,
 		Name:        string(event.Type),
 		Team:        event.ByTeam(),
-		Description: event.Details.Description(),
+		Description: event.Details.String(),
 	}
 	e.RefereeEvents = append(e.RefereeEvents, gameEvent)
 }

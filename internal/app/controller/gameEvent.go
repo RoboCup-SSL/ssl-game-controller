@@ -65,11 +65,13 @@ type GameEvent struct {
 	Details GameEventDetails `json:"details"`
 }
 
+// String converts the game event into a string
 func (e GameEvent) String() string {
 	b, _ := json.Marshal(&e)
 	return string(b)
 }
 
+// AllGameEvents returns a list of all known game events
 func AllGameEvents() []GameEventType {
 	return []GameEventType{
 		GameEventBallLeftFieldTouchLine,
@@ -198,7 +200,7 @@ func (e GameEvent) IsSecondary() bool {
 	return false
 }
 
-// IsSkipped checks if the game event is was continued (not stopped) based on the decision of a team
+// IsSkipped checks if the game event is a skipped one (one for which the game was not stopped based on the decision of a team)
 func (e GameEvent) IsSkipped() bool {
 	switch e.Type {
 	case GameEventBotPushedBotSkipped,
@@ -218,6 +220,7 @@ func (e GameEvent) IsContinueGame() bool {
 	return false
 }
 
+// ToProto converts the internal game event into a protobuf game event
 func (e GameEvent) ToProto() *refproto.GameEvent {
 	protoEvent := new(refproto.GameEvent)
 	switch e.Type {
@@ -351,6 +354,7 @@ type GameEventDetails struct {
 	TooManyRobots                  *refproto.GameEvent_TooManyRobots                  `json:"tooManyRobots,omitempty"`
 }
 
+// EventType returns the internal game event type of game event details
 func (d GameEventDetails) EventType() GameEventType {
 	if d.BallLeftFieldTouchLine != nil {
 		return GameEventBallLeftFieldTouchLine
@@ -472,7 +476,8 @@ func (d GameEventDetails) EventType() GameEventType {
 	return GameEventNone
 }
 
-func (d GameEventDetails) Description() string {
+// String converts the game event details to a string
+func (d GameEventDetails) String() string {
 	if d.BallLeftFieldTouchLine != nil {
 		if d.BallLeftFieldTouchLine.ByBot != nil {
 			return fmt.Sprintf("By bot %v", *d.BallLeftFieldTouchLine.ByBot)
@@ -680,7 +685,8 @@ func (d GameEventDetails) Description() string {
 	return ""
 }
 
-func NewGameEventDetails(event refproto.GameEvent) (d GameEventDetails) {
+// GameEventDetailsFromProto converts a protobuf game event into internal details
+func GameEventDetailsFromProto(event refproto.GameEvent) (d GameEventDetails) {
 	d.BallLeftFieldTouchLine = event.GetBallLeftFieldTouchLine()
 	d.BallLeftFieldGoalLine = event.GetBallLeftFieldGoalLine()
 	d.AimlessKick = event.GetAimlessKick()

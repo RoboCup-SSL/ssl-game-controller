@@ -126,7 +126,7 @@ func (c *GameController) ProcessAutoRefRequests(id string, request refproto.Auto
 	log.Printf("Received request from autoRef '%v': %v", id, request)
 
 	if request.GameEvent != nil {
-		details := NewGameEventDetails(*request.GameEvent)
+		details := GameEventDetailsFromProto(*request.GameEvent)
 		gameEventType := details.EventType()
 		event := Event{GameEvent: &GameEvent{Type: gameEventType, Details: details}}
 
