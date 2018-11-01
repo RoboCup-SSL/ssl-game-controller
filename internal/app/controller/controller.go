@@ -53,18 +53,43 @@ func NewGameController() (c *GameController) {
 	c.AutoRefServer = rcon.NewAutoRefServer()
 	c.AutoRefServer.LoadTrustedKeys(c.Config.Server.AutoRef.TrustedKeysDir)
 	c.AutoRefServer.ProcessRequest = c.ProcessAutoRefRequests
-	go c.AutoRefServer.Listen(c.Config.Server.AutoRef.Address)
 
 	c.TeamServer = rcon.NewTeamServer()
 	c.TeamServer.LoadTrustedKeys(c.Config.Server.Team.TrustedKeysDir)
 	c.TeamServer.ProcessTeamRequest = c.ProcessTeamRequests
-	go c.TeamServer.Listen(c.Config.Server.Team.Address)
 
 	c.Engine = NewEngine(c.Config.Game)
 	c.timer = timer.NewTimer()
-	c.timer.Start()
 
 	return
+}
+
+// Run the GameController by starting several go-routines. This method will not block.
+func (c *GameController) Run() {
+
+	if err := c.historyPreserver.Open(); err != nil {
+		log.Print("Could not open history", err)
+	} else {
+		history, err := c.historyPreserver.Load()
+		if err != nil {
+			log.Print("Could not load history", err)
+		} else if len(*history) > 0 {
+			c.Engine.History = *history
+			*c.Engine.State = c.Engine.History[len(c.Engine.History)-1].State
+			c.Engine.RefereeEvents = c.Engine.History[len(c.Engine.History)-1].RefereeEvents
+		}
+	}
+
+	c.ApiServer.PublishState(*c.Engine.State)
+	c.ApiServer.PublishRefereeEvents(c.Engine.RefereeEvents)
+	c.TeamServer.AllowedTeamNames = []string{c.Engine.State.TeamState[TeamYellow].Name,
+		c.Engine.State.TeamState[TeamBlue].Name}
+
+	c.timer.Start()
+	go c.publishApi()
+	go c.publishNetwork()
+	go c.AutoRefServer.Listen(c.Config.Server.AutoRef.Address)
+	go c.TeamServer.Listen(c.Config.Server.Team.Address)
 }
 
 func (c *GameController) ProcessGeometry(data *sslproto.SSL_GeometryData) {
@@ -192,29 +217,6 @@ func (c *GameController) ProcessTeamRequests(teamName string, request refproto.T
 	}
 
 	return nil
-}
-
-// Run the GameController by starting an endless loop in the background
-func (c *GameController) Run() {
-
-	if err := c.historyPreserver.Open(); err != nil {
-		log.Print("Could not open history", err)
-	} else {
-		history, err := c.historyPreserver.Load()
-		if err != nil {
-			log.Print("Could not load history", err)
-		} else if len(*history) > 0 {
-			c.Engine.History = *history
-			*c.Engine.State = c.Engine.History[len(c.Engine.History)-1].State
-			c.Engine.RefereeEvents = c.Engine.History[len(c.Engine.History)-1].RefereeEvents
-		}
-	}
-
-	c.ApiServer.PublishState(*c.Engine.State)
-	c.ApiServer.PublishRefereeEvents(c.Engine.RefereeEvents)
-
-	go c.publishApi()
-	go c.publishNetwork()
 }
 
 func (c *GameController) publishApi() {
