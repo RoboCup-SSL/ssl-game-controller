@@ -10,8 +10,6 @@ import (
 	"time"
 )
 
-const maxHistorySize = 10
-
 type Engine struct {
 	State        *State
 	UiProtocol   []UiProtocolEntry
@@ -79,27 +77,6 @@ func (e *Engine) SendCommand(command RefCommand, forTeam Team) {
 func (e *Engine) AddGameEvent(gameEvent GameEvent) {
 	e.State.GameEvents = append(e.State.GameEvents, &gameEvent)
 	e.LogGameEvent(gameEvent)
-}
-
-// UndoLastAction restores the last state from internal history
-func (e *Engine) UndoLastAction() {
-	lastIndex := len(e.History) - 2
-	if lastIndex >= 0 {
-		*e.State = e.History[lastIndex].State.DeepCopy()
-		e.UiProtocol = append(e.History[lastIndex].UiProtocol[:0:0],
-			e.History[lastIndex].UiProtocol...)
-		e.History = e.History[0:lastIndex]
-	}
-}
-
-func (e *Engine) appendHistory() {
-	var entry HistoryEntry
-	entry.State = e.State.DeepCopy()
-	entry.UiProtocol = append(e.UiProtocol[:0:0], e.UiProtocol...)
-	e.History = append(e.History, entry)
-	if len(e.History) > maxHistorySize {
-		e.History = e.History[1:]
-	}
 }
 
 func (e *Engine) Continue() {
