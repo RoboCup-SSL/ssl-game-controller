@@ -28,6 +28,21 @@ func NewEngine(config config.Game) (e Engine) {
 	return
 }
 
+func (e *Engine) loadStages() {
+	e.StageTimes = map[Stage]time.Duration{}
+	for _, stage := range Stages {
+		e.StageTimes[stage] = 0
+	}
+	e.StageTimes[StageFirstHalf] = e.config.Normal.HalfDuration
+	e.StageTimes[StageHalfTime] = e.config.Normal.HalfTimeDuration
+	e.StageTimes[StageSecondHalf] = e.config.Normal.HalfDuration
+	e.StageTimes[StageOvertimeBreak] = e.config.Normal.BreakAfter
+	e.StageTimes[StageOvertimeFirstHalf] = e.config.Overtime.HalfDuration
+	e.StageTimes[StageOvertimeHalfTime] = e.config.Overtime.HalfTimeDuration
+	e.StageTimes[StageOvertimeSecondHalf] = e.config.Overtime.HalfDuration
+	e.StageTimes[StageShootoutBreak] = e.config.Overtime.BreakAfter
+}
+
 func (e *Engine) ResetGame() {
 	e.State = NewState()
 	for _, team := range []Team{TeamBlue, TeamYellow} {
@@ -48,6 +63,36 @@ func (e *Engine) Tick(delta time.Duration) {
 	if e.State.MatchTimeStart.After(time.Unix(0, 0)) {
 		e.State.MatchDuration = e.TimeProvider().Sub(e.State.MatchTimeStart)
 	}
+}
+
+func (e *Engine) updateTimes(delta time.Duration) {
+	if e.countStageTime() {
+		e.State.StageTimeElapsed += delta
+		e.State.StageTimeLeft -= delta
+
+		if e.State.StageTimeLeft+delta > 0 && e.State.StageTimeLeft <= 0 {
+			e.LogTime("Stage time elapsed", "")
+		}
+
+		for team, teamState := range e.State.TeamState {
+			reduceYellowCardTimes(teamState, delta)
+			e.removeElapsedYellowCards(team, teamState)
+			e.updateMaxBots()
+		}
+	}
+
+	if e.State.GameState() == GameStateTimeout && e.State.CommandFor.Known() {
+		e.State.TeamState[e.State.CommandFor].TimeoutTimeLeft -= delta
+
+		timeLeft := e.State.TeamState[e.State.CommandFor].TimeoutTimeLeft
+		if timeLeft+delta > 0 && timeLeft <= 0 {
+			e.LogTime("Timeout time elapsed", e.State.CommandFor)
+		}
+	}
+}
+
+func (e *Engine) countStageTime() bool {
+	return e.State.Stage.IsPausedStage() || e.State.GameState() == GameStateRunning
 }
 
 func (e *Engine) SendCommand(command RefCommand, forTeam Team) {
@@ -93,25 +138,6 @@ func (e *Engine) Continue() {
 	} else if e.State.NextCommand != CommandUnknown {
 		e.SendCommand(e.State.NextCommand, e.State.NextCommandFor)
 	}
-}
-
-func (e *Engine) updateNextCommand() {
-	if e.State.Command == CommandPenalty || e.State.Command == CommandKickoff {
-		e.State.NextCommand = CommandNormalStart
-		e.State.NextCommandFor = ""
-		return
-	}
-	primaryEvent := e.State.PrimaryGameEvent()
-	if primaryEvent == nil {
-		return
-	}
-	command, forTeam, err := e.CommandForEvent(primaryEvent)
-	if err != nil {
-		log.Print("Warn: ", err)
-		return
-	}
-	e.State.NextCommand = command
-	e.State.NextCommandFor = forTeam
 }
 
 func (e *Engine) CommandForEvent(event *GameEvent) (command RefCommand, forTeam Team, err error) {
@@ -217,49 +243,23 @@ func (e *Engine) updateMaxBots() {
 	}
 }
 
-func (e *Engine) loadStages() {
-	e.StageTimes = map[Stage]time.Duration{}
-	for _, stage := range Stages {
-		e.StageTimes[stage] = 0
+func (e *Engine) updateNextCommand() {
+	if e.State.Command == CommandPenalty || e.State.Command == CommandKickoff {
+		e.State.NextCommand = CommandNormalStart
+		e.State.NextCommandFor = ""
+		return
 	}
-	e.StageTimes[StageFirstHalf] = e.config.Normal.HalfDuration
-	e.StageTimes[StageHalfTime] = e.config.Normal.HalfTimeDuration
-	e.StageTimes[StageSecondHalf] = e.config.Normal.HalfDuration
-	e.StageTimes[StageOvertimeBreak] = e.config.Normal.BreakAfter
-	e.StageTimes[StageOvertimeFirstHalf] = e.config.Overtime.HalfDuration
-	e.StageTimes[StageOvertimeHalfTime] = e.config.Overtime.HalfTimeDuration
-	e.StageTimes[StageOvertimeSecondHalf] = e.config.Overtime.HalfDuration
-	e.StageTimes[StageShootoutBreak] = e.config.Overtime.BreakAfter
-}
-
-func (e *Engine) countStageTime() bool {
-	return e.State.Stage.IsPausedStage() || e.State.GameState() == GameStateRunning
-}
-
-func (e *Engine) updateTimes(delta time.Duration) {
-	if e.countStageTime() {
-		e.State.StageTimeElapsed += delta
-		e.State.StageTimeLeft -= delta
-
-		if e.State.StageTimeLeft+delta > 0 && e.State.StageTimeLeft <= 0 {
-			e.LogTime("Stage time elapsed", "")
-		}
-
-		for team, teamState := range e.State.TeamState {
-			reduceYellowCardTimes(teamState, delta)
-			e.removeElapsedYellowCards(team, teamState)
-			e.updateMaxBots()
-		}
+	primaryEvent := e.State.PrimaryGameEvent()
+	if primaryEvent == nil {
+		return
 	}
-
-	if e.State.GameState() == GameStateTimeout && e.State.CommandFor.Known() {
-		e.State.TeamState[e.State.CommandFor].TimeoutTimeLeft -= delta
-
-		timeLeft := e.State.TeamState[e.State.CommandFor].TimeoutTimeLeft
-		if timeLeft+delta > 0 && timeLeft <= 0 {
-			e.LogTime("Timeout time elapsed", e.State.CommandFor)
-		}
+	command, forTeam, err := e.CommandForEvent(primaryEvent)
+	if err != nil {
+		log.Print("Warn: ", err)
+		return
 	}
+	e.State.NextCommand = command
+	e.State.NextCommandFor = forTeam
 }
 
 func (e *Engine) processEvent(event Event) error {
