@@ -4,12 +4,8 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/rcon"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/vision"
-	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/timer"
-	"github.com/RoboCup-SSL/ssl-go-tools/pkg/sslproto"
-	"github.com/pkg/errors"
 	"log"
-	"math"
 	"sync"
 	"time"
 )
@@ -30,12 +26,6 @@ type GameController struct {
 	outstandingTeamChoice     *TeamChoice
 	Mutex                     sync.Mutex
 	VisionReceiver            *vision.Receiver
-}
-
-type TeamChoice struct {
-	Team      Team
-	Event     Event
-	IssueTime time.Time
 }
 
 // NewGameController creates a new RefBox
@@ -86,150 +76,45 @@ func (c *GameController) Run() {
 		c.Engine.State.TeamState[TeamBlue].Name}
 
 	c.timer.Start()
-	go c.publishApi()
-	go c.publishNetwork()
+	go c.mainLoop()
+	go c.publishToNetwork()
 	go c.AutoRefServer.Listen(c.Config.Server.AutoRef.Address)
 	go c.TeamServer.Listen(c.Config.Server.Team.Address)
 }
 
-func (c *GameController) ProcessGeometry(data *sslproto.SSL_GeometryData) {
-	if int32(math.Round(c.Engine.Geometry.FieldWidth*1000.0)) != *data.Field.FieldWidth {
-		newFieldWidth := float64(*data.Field.FieldWidth) / 1000.0
-		log.Printf("FieldWidth changed from %v to %v", c.Engine.Geometry.FieldWidth, newFieldWidth)
-		c.Engine.Geometry.FieldWidth = newFieldWidth
-	}
-	if int32(math.Round(c.Engine.Geometry.FieldLength*1000)) != *data.Field.FieldLength {
-		newFieldLength := float64(*data.Field.FieldLength) / 1000.0
-		log.Printf("FieldLength changed from %v to %v", c.Engine.Geometry.FieldLength, newFieldLength)
-		c.Engine.Geometry.FieldLength = newFieldLength
-	}
-	for _, line := range data.Field.FieldLines {
-		if *line.Name == "LeftFieldLeftPenaltyStretch" {
-			defenseAreaDepth := math.Abs(float64(*line.P1.X-*line.P2.X)) / 1000.0
-			if math.Abs(defenseAreaDepth-c.Engine.Geometry.DefenseAreaDepth) > 1e-3 {
-				log.Printf("DefenseAreaDepth changed from %v to %v", c.Engine.Geometry.DefenseAreaDepth, defenseAreaDepth)
-				c.Engine.Geometry.DefenseAreaDepth = defenseAreaDepth
-			}
-		} else if *line.Name == "LeftPenaltyStretch" {
-			defenseAreaWidth := math.Abs(float64(*line.P1.Y-*line.P2.Y)) / 1000.0
-			if math.Abs(defenseAreaWidth-c.Engine.Geometry.DefenseAreaWidth) > 1e-3 {
-				log.Printf("DefenseAreaDepth changed from %v to %v", c.Engine.Geometry.DefenseAreaWidth, defenseAreaWidth)
-				c.Engine.Geometry.DefenseAreaWidth = defenseAreaWidth
-			}
-		}
-	}
-}
-
-func (c *GameController) ProcessAutoRefRequests(id string, request refproto.AutoRefToControllerRequest) error {
-	c.Mutex.Lock()
-	defer c.Mutex.Unlock()
-	log.Printf("Received request from autoRef '%v': %v", id, request)
-
-	if request.GameEvent != nil {
-		details := GameEventDetailsFromProto(*request.GameEvent)
-		gameEventType := details.EventType()
-		event := Event{GameEvent: &GameEvent{Type: gameEventType, Details: details}}
-
-		if c.Engine.State.GameEventBehavior[event.GameEvent.Type] == GameEventBehaviorMajority {
-			validUntil := c.Engine.TimeProvider().Add(c.Config.Game.AutoRefProposalTimeout)
-			newProposal := GameEventProposal{GameEvent: *event.GameEvent, ProposerId: id, ValidUntil: validUntil}
-
-			eventPresent := false
-			for _, proposal := range c.Engine.State.GameEventProposals {
-				if proposal.GameEvent.Type == event.GameEvent.Type && proposal.ProposerId == newProposal.ProposerId {
-					// update proposal
-					*proposal = newProposal
-					eventPresent = true
-				}
-			}
-			if !eventPresent {
-				c.Engine.State.GameEventProposals = append(c.Engine.State.GameEventProposals, &newProposal)
-			}
-
-			totalProposals := 0
-			for _, proposal := range c.Engine.State.GameEventProposals {
-				if proposal.GameEvent.Type == event.GameEvent.Type && proposal.ValidUntil.After(c.Engine.TimeProvider()) {
-					totalProposals++
-				}
-			}
-
-			majority := int(math.Floor(float64(len(c.AutoRefServer.Clients)) / 2.0))
-			if totalProposals > majority {
-				c.OnNewEvent(event)
-			}
-		} else {
-			c.OnNewEvent(event)
-		}
-	}
-
-	return nil
-}
-
-func (c *GameController) ProcessTeamRequests(teamName string, request refproto.TeamToControllerRequest) error {
-	c.Mutex.Lock()
-	defer c.Mutex.Unlock()
-	log.Print("Received request from team: ", request)
-
-	if x, ok := request.GetRequest().(*refproto.TeamToControllerRequest_AdvantageResponse_); ok {
-		if c.outstandingTeamChoice == nil {
-			return errors.New("No outstanding choice available. You are probably too late.")
-		}
-		responseTime := c.Engine.TimeProvider().Sub(c.outstandingTeamChoice.IssueTime)
-		if x.AdvantageResponse == refproto.TeamToControllerRequest_CONTINUE {
-			log.Printf("Team %v decided to continue the game within %v", c.outstandingTeamChoice.Team, responseTime)
-			switch c.outstandingTeamChoice.Event.GameEvent.Type {
-			case GameEventBotCrashUnique:
-				c.outstandingTeamChoice.Event.GameEvent.Details.BotCrashUniqueSkipped = c.outstandingTeamChoice.Event.GameEvent.Details.BotCrashUnique
-				c.outstandingTeamChoice.Event.GameEvent.Details.BotCrashUnique = nil
-				c.outstandingTeamChoice.Event.GameEvent.Type = GameEventBotCrashUniqueSkipped
-			case GameEventBotPushedBot:
-				c.outstandingTeamChoice.Event.GameEvent.Details.BotPushedBotSkipped = c.outstandingTeamChoice.Event.GameEvent.Details.BotPushedBot
-				c.outstandingTeamChoice.Event.GameEvent.Details.BotPushedBot = nil
-				c.outstandingTeamChoice.Event.GameEvent.Type = GameEventBotPushedBotSkipped
-			default:
-				return errors.Errorf("Unsupported advantage choice game event: %v", c.outstandingTeamChoice.Event.GameEvent.Type)
-			}
-		} else {
-			log.Printf("Team %v decided to stop the game within %v", c.outstandingTeamChoice.Team, responseTime)
-		}
-		c.OnNewEvent(c.outstandingTeamChoice.Event)
-		c.outstandingTeamChoice = nil
-		return nil
-	}
-
-	team := c.Engine.State.TeamByName(teamName)
-	if team == TeamUnknown {
-		return errors.New("Your team is not playing?!")
-	}
-
-	if x, ok := request.GetRequest().(*refproto.TeamToControllerRequest_SubstituteBot); ok {
-		log.Printf("Team %v updated bot substituation intend to %v", team, x.SubstituteBot)
-		c.Engine.State.TeamState[team].BotSubstitutionIntend = x.SubstituteBot
-	}
-
-	if c.Engine.State.GameState() != GameStateStopped {
-		return errors.New("Game is not stopped.")
-	}
-
-	if x, ok := request.GetRequest().(*refproto.TeamToControllerRequest_DesiredKeeper); ok {
-		log.Printf("Changing goalie for team %v to %v", team, x.DesiredKeeper)
-		c.Engine.State.TeamState[team].Goalie = int(x.DesiredKeeper)
-	}
-
-	return nil
-}
-
-func (c *GameController) publishApi() {
+// mainLoop updates several states every full second and publishes the new state
+func (c *GameController) mainLoop() {
 	defer c.historyPreserver.Close()
 	for {
 		c.timer.WaitTillNextFullSecond()
-		c.updateOnlineStates()
 		c.Engine.Tick(c.timer.Delta())
-		c.historyPreserver.Save(c.Engine.History)
+
 		c.publish()
 	}
 }
 
+// publish publishes the state to the UI and the teams
+func (c *GameController) publish() {
+	c.updateOnlineStates()
+	c.historyPreserver.Save(c.Engine.History)
+
+	c.TeamServer.AllowedTeamNames = []string{
+		c.Engine.State.TeamState[TeamYellow].Name,
+		c.Engine.State.TeamState[TeamBlue].Name}
+
+	c.publishUiProtocol()
+	c.ApiServer.PublishState(*c.Engine.State)
+}
+
+// publishUiProtocol publishes the UI protocol, if it has changed
+func (c *GameController) publishUiProtocol() {
+	if len(c.Engine.UiProtocol) != c.numUiProtocolsLastPublish {
+		c.ApiServer.PublishUiProtocol(c.Engine.UiProtocol)
+		c.numUiProtocolsLastPublish = len(c.Engine.UiProtocol)
+	}
+}
+
+// updateOnlineStates checks if teams and autoRefs are online and writes this into the state
 func (c *GameController) updateOnlineStates() {
 	for _, team := range []Team{TeamYellow, TeamBlue} {
 		c.Engine.State.TeamState[team].Connected = c.teamConnected(team)
@@ -241,21 +126,15 @@ func (c *GameController) updateOnlineStates() {
 	c.Engine.State.AutoRefsConnected = autoRefs
 }
 
-func (c *GameController) teamConnected(team Team) bool {
-	teamName := c.Engine.State.TeamState[team].Name
-	if _, ok := c.TeamServer.Clients[teamName]; ok {
-		return true
-	}
-	return false
-}
-
-func (c *GameController) publishNetwork() {
+// publishToNetwork publishes the current state to the network (multicast) every 100ms
+func (c *GameController) publishToNetwork() {
 	for {
 		c.timer.WaitTillNextFull(100 * time.Millisecond)
 		c.Publisher.Publish(c.Engine.State)
 	}
 }
 
+// OnNewEvent processes the given event
 func (c *GameController) OnNewEvent(event Event) {
 
 	if event.GameEvent != nil && !c.Engine.disabledGameEvent(event.GameEvent.Type) && c.askForTeamDecisionIfRequired(event) {
@@ -266,52 +145,11 @@ func (c *GameController) OnNewEvent(event Event) {
 	if err != nil {
 		log.Println("Could not process event:", event, err)
 	} else {
-		c.historyPreserver.Save(c.Engine.History)
 		c.publish()
 	}
 }
 
-func (c *GameController) askForTeamDecisionIfRequired(event Event) (handled bool) {
-	handled = false
-	if c.outstandingTeamChoice == nil && c.Engine.State.GameState() == GameStateRunning {
-		var byTeamProto refproto.Team
-		var choiceType refproto.ControllerToTeamRequest_AdvantageChoice_Foul
-		if event.GameEvent.Details.BotCrashUnique != nil {
-			byTeamProto = *event.GameEvent.Details.BotCrashUnique.ByTeam
-			choiceType = refproto.ControllerToTeamRequest_AdvantageChoice_COLLISION
-		} else if event.GameEvent.Details.BotPushedBot != nil {
-			byTeamProto = *event.GameEvent.Details.BotPushedBot.ByTeam
-			choiceType = refproto.ControllerToTeamRequest_AdvantageChoice_PUSHING
-		}
-
-		forTeam := NewTeam(byTeamProto).Opposite()
-		if forTeam != "" {
-			teamName := c.Engine.State.TeamState[forTeam].Name
-			choice := refproto.ControllerToTeamRequest_AdvantageChoice{Foul: &choiceType}
-			requestPayload := refproto.ControllerToTeamRequest_AdvantageChoice_{AdvantageChoice: &choice}
-			request := refproto.ControllerToTeamRequest{Request: &requestPayload}
-			err := c.TeamServer.SendRequest(teamName, request)
-			if err != nil {
-				log.Print("Failed to ask for advantage choice: ", err)
-			} else {
-				c.outstandingTeamChoice = &TeamChoice{Team: forTeam, Event: event, IssueTime: c.Engine.TimeProvider()}
-				go c.timeoutTeamChoice()
-				handled = true
-			}
-		}
-	}
-	return
-}
-
-func (c *GameController) timeoutTeamChoice() {
-	time.Sleep(c.Config.Game.TeamChoiceTimeout)
-	c.Mutex.Lock()
-	defer c.Mutex.Unlock()
-	if c.outstandingTeamChoice != nil {
-		c.OnNewEvent(c.outstandingTeamChoice.Event)
-	}
-}
-
+// loadPublisher creates a new publisher for multicast
 func loadPublisher(config config.Controller) Publisher {
 	publisher, err := NewPublisher(config.Network.PublishAddress)
 	if err != nil {
@@ -320,22 +158,11 @@ func loadPublisher(config config.Controller) Publisher {
 	return publisher
 }
 
+// loadConfig loads the controller config
 func loadConfig() config.Controller {
 	cfg, err := config.LoadControllerConfig(configFileName)
 	if err != nil {
 		log.Printf("Could not load config: %v", err)
 	}
 	return cfg
-}
-
-// publish publishes the state to the UI and the teams
-func (c *GameController) publish() {
-	if len(c.Engine.UiProtocol) != c.numUiProtocolsLastPublish {
-		c.ApiServer.PublishUiProtocol(c.Engine.UiProtocol)
-		c.numUiProtocolsLastPublish = len(c.Engine.UiProtocol)
-	}
-
-	c.TeamServer.AllowedTeamNames = []string{c.Engine.State.TeamState[TeamYellow].Name,
-		c.Engine.State.TeamState[TeamBlue].Name}
-	c.ApiServer.PublishState(*c.Engine.State)
 }
