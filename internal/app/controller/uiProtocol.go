@@ -5,18 +5,27 @@ import (
 	"time"
 )
 
+// UiProtocolType represents the type of a protocol entry
 type UiProtocolType string
 
 const (
-	UiProtocolCommand          UiProtocolType = "command"
-	UiProtocolStage            UiProtocolType = "stage"
-	UiProtocolCard             UiProtocolType = "card"
-	UiProtocolTime             UiProtocolType = "time"
-	UiProtocolGameEvent        UiProtocolType = "gameEvent"
+	// UiProtocolCommand represents an issued referee command
+	UiProtocolCommand UiProtocolType = "command"
+	// UiProtocolStage represents a changed stage
+	UiProtocolStage UiProtocolType = "stage"
+	// UiProtocolCard represents an issued card
+	UiProtocolCard UiProtocolType = "card"
+	// UiProtocolTime represents an elapsed time, like stage time or card time
+	UiProtocolTime UiProtocolType = "time"
+	// UiProtocolGameEvent represents an issued game event
+	UiProtocolGameEvent UiProtocolType = "gameEvent"
+	// UiProtocolGameEventIgnored represents a detected game event that was not issued
 	UiProtocolGameEventIgnored UiProtocolType = "ignoredGameEvent"
-	UiProtocolModify           UiProtocolType = "modify"
+	// UiProtocolModify represents a manual modification on the state
+	UiProtocolModify UiProtocolType = "modify"
 )
 
+// UiProtocolEntry represents a single protocol entry as should be displayed in the UI table
 type UiProtocolEntry struct {
 	Timestamp   int64          `json:"timestamp"`
 	StageTime   time.Duration  `json:"stageTime"`
@@ -26,6 +35,7 @@ type UiProtocolEntry struct {
 	Description string         `json:"description"`
 }
 
+// LogGameEvent adds a game event to the protocol
 func (e *Engine) LogGameEvent(event GameEvent) {
 	entry := UiProtocolEntry{
 		Timestamp:   e.TimeProvider().UnixNano(),
@@ -38,6 +48,7 @@ func (e *Engine) LogGameEvent(event GameEvent) {
 	e.UiProtocol = append(e.UiProtocol, entry)
 }
 
+// LogIgnoredGameEvent adds an ignored game event to the protocol
 func (e *Engine) LogIgnoredGameEvent(event GameEvent) {
 	entry := UiProtocolEntry{
 		Timestamp:   e.TimeProvider().UnixNano(),
@@ -50,6 +61,7 @@ func (e *Engine) LogIgnoredGameEvent(event GameEvent) {
 	e.UiProtocol = append(e.UiProtocol, entry)
 }
 
+// LogCommand adds a command to the protocol
 func (e *Engine) LogCommand() {
 	entry := UiProtocolEntry{
 		Timestamp: e.TimeProvider().UnixNano(),
@@ -61,6 +73,7 @@ func (e *Engine) LogCommand() {
 	e.UiProtocol = append(e.UiProtocol, entry)
 }
 
+// LogCard adds a card to the protocol
 func (e *Engine) LogCard(card *EventCard) {
 	entry := UiProtocolEntry{
 		Timestamp: e.TimeProvider().UnixNano(),
@@ -72,6 +85,7 @@ func (e *Engine) LogCard(card *EventCard) {
 	e.UiProtocol = append(e.UiProtocol, entry)
 }
 
+// LogTime adds a time event (like stage time ends or card time ends) to the protocol
 func (e *Engine) LogTime(description string, forTeam Team) {
 	entry := UiProtocolEntry{
 		Timestamp: e.TimeProvider().UnixNano(),
@@ -83,6 +97,7 @@ func (e *Engine) LogTime(description string, forTeam Team) {
 	e.UiProtocol = append(e.UiProtocol, entry)
 }
 
+// LogStage adds a stage change to the protocol
 func (e *Engine) LogStage(stage Stage) {
 	entry := UiProtocolEntry{
 		Timestamp: e.TimeProvider().UnixNano(),
@@ -93,6 +108,7 @@ func (e *Engine) LogStage(stage Stage) {
 	e.UiProtocol = append(e.UiProtocol, entry)
 }
 
+// LogModify adds a modification to the protocol
 func (e *Engine) LogModify(m EventModifyValue) {
 	entry := UiProtocolEntry{
 		Timestamp:   e.TimeProvider().UnixNano(),
