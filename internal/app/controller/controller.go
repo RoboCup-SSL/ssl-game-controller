@@ -5,6 +5,7 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/rcon"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/vision"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/timer"
+	"github.com/RoboCup-SSL/ssl-go-tools/pkg/sslproto"
 	"log"
 	"sync"
 	"time"
@@ -51,6 +52,8 @@ func NewGameController() (c *GameController) {
 	c.Engine = NewEngine(c.Config.Game)
 	c.timer = timer.NewTimer()
 
+	c.setupTimeProvider()
+
 	return
 }
 
@@ -80,6 +83,24 @@ func (c *GameController) Run() {
 	go c.publishToNetwork()
 	go c.AutoRefServer.Listen(c.Config.Server.AutoRef.Address)
 	go c.TeamServer.Listen(c.Config.Server.Team.Address)
+}
+
+// setupTimeProvider changes the time provider to the vision receiver, if configured
+func (c *GameController) setupTimeProvider() {
+	if c.Config.TimeFromVision {
+		c.timer.TimeProvider = func() time.Time {
+			return time.Unix(0, 0)
+		}
+		c.Engine.TimeProvider = c.timer.TimeProvider
+		c.VisionReceiver.DetectionCallback = func(frame *sslproto.SSL_DetectionFrame) {
+			sec := int64(*frame.TCapture)
+			nsec := int64((*frame.TCapture - float64(sec)) * 1e9)
+			c.timer.TimeProvider = func() time.Time {
+				return time.Unix(sec, nsec)
+			}
+			c.Engine.TimeProvider = c.timer.TimeProvider
+		}
+	}
 }
 
 // mainLoop updates several states every full second and publishes the new state

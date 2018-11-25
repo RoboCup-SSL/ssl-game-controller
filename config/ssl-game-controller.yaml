@@ -1,3 +1,4 @@
+timeFromVision: false
 network:
   publish-address: 224.5.23.1:10003
   vision-address: 224.5.23.2:10006

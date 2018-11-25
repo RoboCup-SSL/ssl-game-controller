@@ -69,9 +69,10 @@ type ServerTeam struct {
 
 // Controller structure for the game controller
 type Controller struct {
-	Network Network `yaml:"network"`
-	Game    Game    `yaml:"game"`
-	Server  Server  `yaml:"server"`
+	Network        Network `yaml:"network"`
+	Game           Game    `yaml:"game"`
+	Server         Server  `yaml:"server"`
+	TimeFromVision bool    `yaml:"timeFromVision"`
 }
 
 // LoadControllerConfig loads a config from given file
@@ -151,6 +152,8 @@ func DefaultControllerConfig() (c Controller) {
 	c.Game.MaxBots = map[Division]int{}
 	c.Game.MaxBots[DivA] = 8
 	c.Game.MaxBots[DivB] = 6
+
+	c.TimeFromVision = false
 
 	return
 }
