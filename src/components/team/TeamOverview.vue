@@ -15,14 +15,14 @@
                         :team-color="teamColor"/>
             </div>
             <div>
-                <TeamScore
-                        :team-color="teamColor"
-                        :score="team.goals"/>
-            </div>
-            <div>
                 <TeamGoalkeeper
                         :team-color="teamColor"
                         :goalkeeper="team.goalkeeper"/>
+            </div>
+            <div>
+                <TeamScore
+                        :team-color="teamColor"
+                        :score="team.goals"/>
             </div>
             <div>
                 <TeamTimeouts
