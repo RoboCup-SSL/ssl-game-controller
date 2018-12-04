@@ -20,6 +20,16 @@
                 </div>
             </b-modal>
 
+            <b-btn v-b-modal.place-ball-modal size="sm" variant="primary">Place ball</b-btn>
+            <b-modal id="place-ball-modal"
+                     title="Place ball"
+                     :lazy="true">
+                <PlaceBall/>
+                <div slot="modal-footer">
+                    <!-- hide modal buttons -->
+                </div>
+            </b-modal>
+
             <b-btn v-b-modal.event-behavior-modal size="sm" variant="primary">Configure Behaviors</b-btn>
             <b-modal id="event-behavior-modal"
                      title="Game Event Behaviors"
@@ -37,10 +47,11 @@
     import EventTable from "./EventTable";
     import NewEvent from "./NewEvent";
     import EventBehavior from "./EventBehavior";
+    import PlaceBall from "./PlaceBall";
 
     export default {
         name: "Events",
-        components: {EventBehavior, EventTable, NewEvent},
+        components: {PlaceBall, EventBehavior, EventTable, NewEvent},
         data() {
             return {
                 currentPage: 1,

@@ -280,6 +280,7 @@ func (e *Engine) processEvent(event Event) error {
 }
 
 func (e *Engine) processCommand(c *EventCommand) error {
+	e.State.PlacementPos = c.Location
 	switch c.Type {
 	case CommandDirect, CommandIndirect, CommandKickoff, CommandPenalty, CommandTimeout, CommandBallPlacement:
 		if c.ForTeam == nil {

@@ -63,12 +63,17 @@ func (e *Engine) LogIgnoredGameEvent(event GameEvent) {
 
 // LogCommand adds a command to the protocol
 func (e *Engine) LogCommand() {
+	description := ""
+	if e.State.PlacementPos != nil {
+		description = e.State.PlacementPos.String()
+	}
 	entry := UiProtocolEntry{
-		Timestamp: e.TimeProvider().UnixNano(),
-		StageTime: e.State.StageTimeElapsed,
-		Type:      UiProtocolCommand,
-		Name:      string(e.State.Command),
-		Team:      e.State.CommandFor,
+		Timestamp:   e.TimeProvider().UnixNano(),
+		StageTime:   e.State.StageTimeElapsed,
+		Type:        UiProtocolCommand,
+		Name:        string(e.State.Command),
+		Team:        e.State.CommandFor,
+		Description: description,
 	}
 	e.UiProtocol = append(e.UiProtocol, entry)
 }

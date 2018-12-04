@@ -75,15 +75,19 @@ type EventCard struct {
 
 // EventCommand is an event that can be applied
 type EventCommand struct {
-	ForTeam *Team      `json:"forTeam"`
-	Type    RefCommand `json:"commandType"`
+	ForTeam  *Team      `json:"forTeam"`
+	Type     RefCommand `json:"commandType"`
+	Location *Location  `json:"location"`
 }
 
 func (c EventCommand) String() string {
 	if c.ForTeam == nil {
 		return string(c.Type)
 	}
-	return fmt.Sprintf("%v for %v", c.Type, *c.ForTeam)
+	if c.Location == nil {
+		return fmt.Sprintf("%v for %v", c.Type, *c.ForTeam)
+	}
+	return fmt.Sprintf("%v for %v at %v", c.Type, *c.ForTeam, *c.Location)
 }
 
 // EventModifyCardTime holds the duration for a certain yellow card duration

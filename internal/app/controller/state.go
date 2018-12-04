@@ -2,6 +2,7 @@ package controller
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
 	"github.com/pkg/errors"
@@ -449,8 +450,8 @@ func (s *State) TeamByName(teamName string) Team {
 
 // Location is a two-dimensional coordinate
 type Location struct {
-	X float64
-	Y float64
+	X float64 `json:"x"`
+	Y float64 `json:"y"`
 }
 
 func (l Location) toProto() (p *refproto.Location) {
@@ -460,4 +461,8 @@ func (l Location) toProto() (p *refproto.Location) {
 	*p.X = float32(l.X)
 	*p.Y = float32(l.Y)
 	return
+}
+
+func (l Location) String() string {
+	return fmt.Sprintf("%.3fm | %.3fm", l.X, l.Y)
 }

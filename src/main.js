@@ -39,6 +39,11 @@ library.add(faSignal);
 library.add(faCheckCircle);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
+
+export let isNumeric = function (n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+};
+
 let wsAddress;
 if (process.env.NODE_ENV === 'development') {
     // use the default backend port
