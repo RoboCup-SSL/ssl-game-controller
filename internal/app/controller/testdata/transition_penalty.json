@@ -19,7 +19,7 @@
         "Blue": {
           "name": "",
           "goals": 0,
-          "goalie": 0,
+          "goalkeeper": 0,
           "yellowCards": 0,
           "yellowCardTimes": [],
           "redCards": 0,
@@ -30,7 +30,7 @@
         "Yellow": {
           "name": "",
           "goals": 0,
-          "goalie": 0,
+          "goalkeeper": 0,
           "yellowCards": 0,
           "yellowCardTimes": [],
           "redCards": 0,
@@ -67,7 +67,7 @@
         "Blue": {
           "name": "",
           "goals": 0,
-          "goalie": 0,
+          "goalkeeper": 0,
           "yellowCards": 0,
           "yellowCardTimes": [],
           "redCards": 0,
@@ -78,7 +78,7 @@
         "Yellow": {
           "name": "",
           "goals": 0,
-          "goalie": 0,
+          "goalkeeper": 0,
           "yellowCards": 0,
           "yellowCardTimes": [],
           "redCards": 0,
@@ -114,7 +114,7 @@
         "Blue": {
           "name": "",
           "goals": 0,
-          "goalie": 0,
+          "goalkeeper": 0,
           "yellowCards": 0,
           "yellowCardTimes": [],
           "redCards": 0,
@@ -125,7 +125,7 @@
         "Yellow": {
           "name": "",
           "goals": 0,
-          "goalie": 0,
+          "goalkeeper": 0,
           "yellowCards": 0,
           "yellowCardTimes": [],
           "redCards": 0,

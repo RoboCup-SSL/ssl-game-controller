@@ -6,7 +6,7 @@ Vue.use(Vuex);
 export class TeamState {
     name = 'someone';
     goals = 0;
-    goalie = 0;
+    goalkeeper = 0;
     yellowCards = 0;
     yellowCardTimes = [];
     redCards = 0;

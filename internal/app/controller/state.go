@@ -232,7 +232,7 @@ const (
 type TeamInfo struct {
 	Name                  string          `json:"name"`
 	Goals                 int             `json:"goals"`
-	Goalie                int             `json:"goalie"`
+	Goalkeeper            int             `json:"goalkeeper"`
 	YellowCards           int             `json:"yellowCards"`
 	YellowCardTimes       []time.Duration `json:"yellowCardTimes"`
 	RedCards              int             `json:"redCards"`
@@ -408,7 +408,7 @@ func (s State) PrimaryGameEvent() (e *GameEvent) {
 func newTeamInfo() (t TeamInfo) {
 	t.Name = ""
 	t.Goals = 0
-	t.Goalie = 0
+	t.Goalkeeper = 0
 	t.YellowCards = 0
 	t.YellowCardTimes = []time.Duration{}
 	t.RedCards = 0

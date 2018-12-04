@@ -424,8 +424,8 @@ type Referee_TeamInfo struct {
 	Timeouts *uint32 `protobuf:"varint,6,req,name=timeouts" json:"timeouts,omitempty"`
 	// The number of microseconds of timeout this team can use.
 	TimeoutTime *uint32 `protobuf:"varint,7,req,name=timeout_time,json=timeoutTime" json:"timeout_time,omitempty"`
-	// The pattern number of this team's goalie.
-	Goalie *uint32 `protobuf:"varint,8,req,name=goalie" json:"goalie,omitempty"`
+	// The pattern number of this team's goalkeeper.
+	Goalkeeper *uint32 `protobuf:"varint,8,req,name=goalkeeper" json:"goalkeeper,omitempty"`
 	// The total number of countable fouls that act towards yellow cards
 	FoulCounter *uint32 `protobuf:"varint,9,opt,name=foul_counter,json=foulCounter" json:"foul_counter,omitempty"`
 	// The number of consecutive ball placement failures of this team
@@ -513,9 +513,9 @@ func (m *Referee_TeamInfo) GetTimeoutTime() uint32 {
 	return 0
 }
 
-func (m *Referee_TeamInfo) GetGoalie() uint32 {
-	if m != nil && m.Goalie != nil {
-		return *m.Goalie
+func (m *Referee_TeamInfo) GetGoalkeeper() uint32 {
+	if m != nil && m.Goalkeeper != nil {
+		return *m.Goalkeeper
 	}
 	return 0
 }

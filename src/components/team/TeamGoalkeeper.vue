@@ -1,9 +1,9 @@
 <template>
     <EditableLabelNumber
-            label="Goalie: "
-            title="The goalie number"
-            :value="goalie"
-            :callback="updateGoalie"
+            label="Goalkeeper: "
+            title="The goalkeeper number"
+            :value="goalkeeper"
+            :callback="updateGoalkeeper"
             :min="0"
             :max="15"/>
 </template>
@@ -12,18 +12,18 @@
     import EditableLabelNumber from "../common/EditableLabelNumber";
 
     export default {
-        name: "TeamGoalie",
+        name: "TeamGoalkeeper",
         components: {EditableLabelNumber},
         props: {
             teamColor: String,
-            goalie: Number
+            goalkeeper: Number
         },
         methods: {
-            updateGoalie: function (v) {
+            updateGoalkeeper: function (v) {
                 this.$socket.sendObj({
                     'modify': {
                         'forTeam': this.teamColor,
-                        'goalie': Number(v)
+                        'goalkeeper': Number(v)
                     }
                 })
             },

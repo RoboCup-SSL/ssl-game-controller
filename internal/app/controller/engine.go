@@ -328,8 +328,8 @@ func (e *Engine) processTeamModify(m *EventModifyValue) error {
 	teamState := e.State.TeamState[m.ForTeam]
 	if m.Goals != nil {
 		teamState.Goals = *m.Goals
-	} else if m.Goalie != nil {
-		teamState.Goalie = *m.Goalie
+	} else if m.Goalkeeper != nil {
+		teamState.Goalkeeper = *m.Goalkeeper
 	} else if m.YellowCards != nil {
 		teamState.YellowCards = *m.YellowCards
 	} else if m.RedCards != nil {

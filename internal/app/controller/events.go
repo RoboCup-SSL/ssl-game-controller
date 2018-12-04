@@ -107,7 +107,7 @@ type EventModifyValue struct {
 	ForTeam Team `json:"forTeam,omitempty"`
 
 	Goals                 *int                          `json:"goals,omitempty"`
-	Goalie                *int                          `json:"goalie,omitempty"`
+	Goalkeeper            *int                          `json:"goalkeeper,omitempty"`
 	YellowCards           *int                          `json:"yellowCards,omitempty"`
 	YellowCardTime        *EventModifyCardTime          `json:"yellowCardTime,omitempty"`
 	RedCards              *int                          `json:"redCards,omitempty"`

@@ -29,7 +29,7 @@ The ssl-game-controller replaces the ssl-refbox. With the introduction of automa
 
 The referee message, that is send to the teams, has no breaking changes. Teams do not need to change their systems. Additional data will be send with the referee messages though. To read those changes, teams can update their `.proto` files from this repository to take advantage of it.
 
-Teams will also have the possibility to connect to a new interface, where they can change their goalie number during Stoppage. Additionally, there will be an advantage rule, where teams can decide to let the game continue on certain fouls.
+Teams will also have the possibility to connect to a new interface, where they can change their goalkeeper number during Stoppage. Additionally, there will be an advantage rule, where teams can decide to let the game continue on certain fouls.
 
 List of new features:
  * Modern, scalable Web-UI
@@ -48,7 +48,7 @@ List of new features:
 * Select team names
 * Switch sides, if necessary (button)
 * Select division (button switch)
-* Set goalie id
+* Set goalkeeper id
 * divB: set ball placement capability
 
 #### How to end a game?

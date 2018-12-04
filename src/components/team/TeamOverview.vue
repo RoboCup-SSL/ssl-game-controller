@@ -20,9 +20,9 @@
                         :score="team.goals"/>
             </div>
             <div>
-                <TeamGoalie
+                <TeamGoalkeeper
                         :team-color="teamColor"
-                        :goalie="team.goalie"/>
+                        :goalkeeper="team.goalkeeper"/>
             </div>
             <div>
                 <TeamTimeouts
@@ -67,7 +67,7 @@
 <script>
     import TeamScore from "./TeamScore";
     import TeamTimeouts from "./TeamTimeouts";
-    import TeamGoalie from "./TeamGoalie";
+    import TeamGoalkeeper from "./TeamGoalkeeper";
     import EditableLabelText from "../common/EditableLabelText";
     import TeamHalf from "./TeamHalf";
     import TeamName from "./TeamName";
@@ -88,7 +88,7 @@
             TeamName,
             TeamHalf,
             EditableLabelText,
-            TeamGoalie,
+            TeamGoalkeeper,
             TeamTimeouts,
             TeamScore
         },
