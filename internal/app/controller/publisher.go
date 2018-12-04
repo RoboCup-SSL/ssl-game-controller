@@ -12,6 +12,7 @@ const maxDatagramSize = 8192
 
 // Publisher can publish state and commands to the teams
 type Publisher struct {
+	address string
 	conn    *net.UDPConn
 	message RefMessage
 }
@@ -23,7 +24,22 @@ type RefMessage struct {
 
 // NewPublisher creates a new publisher that publishes referee messages via UDP to the teams
 func NewPublisher(address string) (publisher Publisher, err error) {
-	addr, err := net.ResolveUDPAddr("udp", address)
+
+	publisher.address = address
+
+	// initialize default referee message
+	publisher.message = RefMessage{send: publisher.send, referee: new(refproto.Referee)}
+	initRefereeMessage(publisher.message.referee)
+
+	err = publisher.connect()
+
+	return
+}
+
+func (p *Publisher) connect() (err error) {
+	p.conn = nil
+
+	addr, err := net.ResolveUDPAddr("udp", p.address)
 	if err != nil {
 		return
 	}
@@ -36,14 +52,14 @@ func NewPublisher(address string) (publisher Publisher, err error) {
 	if err := conn.SetWriteBuffer(maxDatagramSize); err != nil {
 		log.Printf("Could not set write buffer to %v.", maxDatagramSize)
 	}
-	log.Println("Publishing to", address)
+	log.Println("Publishing to", p.address)
 
-	publisher.conn = conn
-	publisher.message = RefMessage{send: publisher.send, referee: new(refproto.Referee)}
-
-	initRefereeMessage(publisher.message.referee)
-
+	p.conn = conn
 	return
+}
+
+func (p *Publisher) disconnect() {
+	p.conn = nil
 }
 
 func initRefereeMessage(m *refproto.Referee) {
@@ -88,6 +104,7 @@ func (p *RefMessage) Publish(state *State) {
 
 func (p *Publisher) send() {
 	if p.conn == nil {
+		go p.connect()
 		return
 	}
 
@@ -99,6 +116,7 @@ func (p *Publisher) send() {
 	_, err = p.conn.Write(bytes)
 	if err != nil {
 		log.Printf("Could not write message: %v", err)
+		p.disconnect()
 	}
 }
 
