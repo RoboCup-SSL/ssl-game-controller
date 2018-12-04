@@ -60,8 +60,12 @@ func (c *GameController) ProcessTeamRequests(teamName string, request refproto.T
 	}
 
 	if x, ok := request.GetRequest().(*refproto.TeamToControllerRequest_SubstituteBot); ok {
-		log.Printf("Team %v updated bot substituation intend to %v", team, x.SubstituteBot)
-		c.Engine.State.TeamState[team].BotSubstitutionIntend = x.SubstituteBot
+		if c.Engine.State.TeamState[team].BotSubstitutionIntend != x.SubstituteBot {
+			log.Printf("Team %v updated bot substituation intend to %v", team, x.SubstituteBot)
+			c.Engine.State.TeamState[team].BotSubstitutionIntend = x.SubstituteBot
+			c.Engine.LogTeamBotSubstitutionChange(team, x.SubstituteBot)
+		}
+		return nil
 	}
 
 	if c.Engine.State.GameState() != GameStateStopped {
@@ -73,6 +77,7 @@ func (c *GameController) ProcessTeamRequests(teamName string, request refproto.T
 			return errors.Errorf("Goalkeeper id is invalid: %v", x.DesiredKeeper)
 		}
 		log.Printf("Changing keeper for team %v to %v", team, x.DesiredKeeper)
+		c.Engine.LogTeamGoalkeeperChange(team, c.Engine.State.TeamState[team].Goalkeeper, int(x.DesiredKeeper))
 		c.Engine.State.TeamState[team].Goalkeeper = int(x.DesiredKeeper)
 	}
 

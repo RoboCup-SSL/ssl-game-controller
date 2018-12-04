@@ -23,6 +23,8 @@ const (
 	UiProtocolGameEventIgnored UiProtocolType = "ignoredGameEvent"
 	// UiProtocolModify represents a manual modification on the state
 	UiProtocolModify UiProtocolType = "modify"
+	// UiProtocolTeamAction represents an action from a team
+	UiProtocolTeamAction UiProtocolType = "teamAction"
 )
 
 // UiProtocolEntry represents a single protocol entry as should be displayed in the UI table
@@ -122,6 +124,34 @@ func (e *Engine) LogModify(m EventModifyValue) {
 		Name:        m.Type(),
 		Team:        m.ForTeam,
 		Description: m.Value(),
+	}
+	e.UiProtocol = append(e.UiProtocol, entry)
+}
+
+// LogTeamGoalkeeperChange adds a goalkeeper change from a team to the protocol
+func (e *Engine) LogTeamGoalkeeperChange(forTeam Team, oldGoalkeeperId int, newGoalkeeperId int) {
+	description := fmt.Sprintf("%v -> %v", oldGoalkeeperId, newGoalkeeperId)
+	entry := UiProtocolEntry{
+		Timestamp:   e.TimeProvider().UnixNano(),
+		StageTime:   e.State.StageTimeElapsed,
+		Type:        UiProtocolTeamAction,
+		Name:        "Goalkeeper",
+		Team:        forTeam,
+		Description: description,
+	}
+	e.UiProtocol = append(e.UiProtocol, entry)
+}
+
+// LogTeamBotSubstitutionChange adds a bot substitution intend change from a team to the protocol
+func (e *Engine) LogTeamBotSubstitutionChange(forTeam Team, substituteBot bool) {
+	description := fmt.Sprintf("%v", substituteBot)
+	entry := UiProtocolEntry{
+		Timestamp:   e.TimeProvider().UnixNano(),
+		StageTime:   e.State.StageTimeElapsed,
+		Type:        UiProtocolTeamAction,
+		Name:        "BotSubstitutionIntend",
+		Team:        forTeam,
+		Description: description,
 	}
 	e.UiProtocol = append(e.UiProtocol, entry)
 }
