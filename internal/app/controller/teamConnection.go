@@ -69,6 +69,9 @@ func (c *GameController) ProcessTeamRequests(teamName string, request refproto.T
 	}
 
 	if x, ok := request.GetRequest().(*refproto.TeamToControllerRequest_DesiredKeeper); ok {
+		if x.DesiredKeeper < 0 || x.DesiredKeeper > 15 {
+			return errors.Errorf("Keeper id is invalid: %v", x.DesiredKeeper)
+		}
 		log.Printf("Changing goalie for team %v to %v", team, x.DesiredKeeper)
 		c.Engine.State.TeamState[team].Goalie = int(x.DesiredKeeper)
 	}
