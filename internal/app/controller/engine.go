@@ -576,6 +576,14 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 		e.State.TeamState[team].BallPlacementFailures = 0
 	}
 
+	if event.Type == GameEventGoal {
+		team := event.ByTeam()
+		if team.Unknown() {
+			return errors.New("Missing team in game event")
+		}
+		e.State.TeamState[team].Goals++
+	}
+
 	e.State.PlacementPos = e.BallPlacementPos()
 
 	if e.State.GameState() != GameStateHalted && !event.IsSkipped() && !event.IsSecondary() {
