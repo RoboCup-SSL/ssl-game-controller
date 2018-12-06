@@ -13,8 +13,9 @@ func (c *GameController) ProcessAutoRefRequests(id string, request refproto.Auto
 
 	if request.GameEvent != nil {
 		details := GameEventDetailsFromProto(*request.GameEvent)
-		gameEventType := details.EventType()
-		event := Event{GameEvent: &GameEvent{Type: gameEventType, Details: details}}
+		event := Event{GameEvent: &GameEvent{Type: details.EventType(), Details: details}}
+
+		c.Engine.filterAimlessKickForDivA(event.GameEvent)
 
 		if c.Engine.State.GameEventBehavior[event.GameEvent.Type] == GameEventBehaviorMajority {
 			validUntil := c.Engine.TimeProvider().Add(c.Config.Game.AutoRefProposalTimeout)

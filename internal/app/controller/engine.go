@@ -522,6 +522,8 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 		return errors.Errorf("Incomplete game event: %v", event)
 	}
 
+	e.filterAimlessKickForDivA(event)
+
 	if e.disabledGameEvent(event.Type) {
 		e.LogIgnoredGameEvent(*event)
 		return nil
@@ -597,6 +599,21 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 
 	log.Printf("Processed game event %v", event)
 	return nil
+}
+
+func (e *Engine) filterAimlessKickForDivA(gameEvent *GameEvent) {
+	details := gameEvent.Details
+	if e.State.Division == config.DivA && gameEvent.Type == GameEventAimlessKick {
+		// there is no aimless kick in division A. Map it to a ball left field event
+		gameEvent.Type = GameEventBallLeftFieldGoalLine
+		aimlessKickDetails := details.AimlessKick
+		gameEvent.Details = GameEventDetails{
+			BallLeftFieldGoalLine: &refproto.GameEvent_BallLeftFieldEvent{
+				ByBot:    aimlessKickDetails.ByBot,
+				ByTeam:   aimlessKickDetails.ByTeam,
+				Location: aimlessKickDetails.Location,
+			}}
+	}
 }
 
 func (e *Engine) FoulCounterIncremented(team Team) {
