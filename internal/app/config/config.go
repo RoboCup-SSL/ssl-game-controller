@@ -30,17 +30,19 @@ type Geometry struct {
 
 // Game holds configs that are valid for the whole game
 type Game struct {
-	YellowCardDuration        time.Duration          `yaml:"yellow-card-duration"`
-	DefaultDivision           Division               `yaml:"default-division"`
-	Normal                    Special                `yaml:"normal"`
-	Overtime                  Special                `yaml:"overtime"`
-	TeamChoiceTimeout         time.Duration          `yaml:"team-choice-timeout"`
-	DefaultGeometry           map[Division]*Geometry `yaml:"default-geometry"`
-	MultipleCardStep          int                    `yaml:"multiple-card-step"`
-	MultipleFoulStep          int                    `yaml:"multiple-foul-step"`
-	MultiplePlacementFailures int                    `yaml:"multiple-placement-failures"`
-	MaxBots                   map[Division]int       `yaml:"max-bots"`
-	AutoRefProposalTimeout    time.Duration          `yaml:"auto-ref-proposal-timeout"`
+	YellowCardDuration            time.Duration              `yaml:"yellow-card-duration"`
+	DefaultDivision               Division                   `yaml:"default-division"`
+	Normal                        Special                    `yaml:"normal"`
+	Overtime                      Special                    `yaml:"overtime"`
+	TeamChoiceTimeout             time.Duration              `yaml:"team-choice-timeout"`
+	DefaultGeometry               map[Division]*Geometry     `yaml:"default-geometry"`
+	MultipleCardStep              int                        `yaml:"multiple-card-step"`
+	MultipleFoulStep              int                        `yaml:"multiple-foul-step"`
+	MultiplePlacementFailures     int                        `yaml:"multiple-placement-failures"`
+	MaxBots                       map[Division]int           `yaml:"max-bots"`
+	AutoRefProposalTimeout        time.Duration              `yaml:"auto-ref-proposal-timeout"`
+	LackOfProgressFreeKickTimeout map[Division]time.Duration `yaml:"lack-of-progress-free-kick-timeout"`
+	LackOfProgressTimeout         time.Duration              `yaml:"lack-of-progress-timeout"`
 }
 
 // Network holds configs for network communication
@@ -108,6 +110,8 @@ func DefaultControllerConfig() (c Controller) {
 	c.Game.MultipleFoulStep = 3
 	c.Game.MultiplePlacementFailures = 5
 	c.Game.AutoRefProposalTimeout = 5 * time.Second
+	c.Game.LackOfProgressTimeout = time.Second * 10
+	c.Game.LackOfProgressFreeKickTimeout = map[Division]time.Duration{DivA: time.Second * 5, DivB: time.Second * 10}
 
 	c.Game.Normal.HalfDuration = 5 * time.Minute
 	c.Game.Normal.HalfTimeDuration = 5 * time.Minute
@@ -149,9 +153,7 @@ func DefaultControllerConfig() (c Controller) {
 	c.Game.DefaultGeometry[DivB].PlacementOffsetTouchLine = 0.2
 	c.Game.DefaultGeometry[DivB].PlacementOffsetDefenseArea = 1.0
 
-	c.Game.MaxBots = map[Division]int{}
-	c.Game.MaxBots[DivA] = 8
-	c.Game.MaxBots[DivB] = 6
+	c.Game.MaxBots = map[Division]int{DivA: 8, DivB: 6}
 
 	c.TimeFromVision = false
 

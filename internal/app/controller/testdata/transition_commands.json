@@ -6,6 +6,7 @@
       "commandForTeam": null,
       "nextCommand": "",
       "nextCommandFor": "",
+      "division": "DivA",
       "gameEvent": {
         "type": "",
         "forTeam": "",
@@ -15,6 +16,8 @@
       "stageTimeLeft": 300000000000,
       "matchDuration": 0,
       "matchTimeStart": "2006-01-02T15:04:05Z",
+      "lackOfProgressTimeRemaining": 0,
+      "lackOfProgressDeadline": "2006-01-02T15:04:05Z",
       "teamState": {
         "Blue": {
           "name": "",
@@ -25,6 +28,7 @@
           "redCards": 0,
           "timeoutsLeft": 4,
           "timeoutTimeLeft": 300000000000,
+          "maxAllowedBots": 8,
           "onPositiveHalf": false
         },
         "Yellow": {
@@ -36,6 +40,7 @@
           "redCards": 0,
           "timeoutsLeft": 4,
           "timeoutTimeLeft": 300000000000,
+          "maxAllowedBots": 8,
           "onPositiveHalf": true
         }
       }
@@ -53,6 +58,7 @@
       "commandForTeam": null,
       "nextCommand": "",
       "nextCommandFor": "",
+      "division": "DivA",
       "gameEvent": {
         "type": "",
         "forTeam": "",
@@ -62,6 +68,8 @@
       "stageTimeLeft": 300000000000,
       "matchDuration": 0,
       "matchTimeStart": "2006-01-02T15:04:05Z",
+      "lackOfProgressTimeRemaining": 0,
+      "lackOfProgressDeadline": "2006-01-02T15:04:05Z",
       "teamState": {
         "Blue": {
           "name": "",
@@ -72,6 +80,7 @@
           "redCards": 0,
           "timeoutsLeft": 4,
           "timeoutTimeLeft": 300000000000,
+          "maxAllowedBots": 8,
           "onPositiveHalf": false
         },
         "Yellow": {
@@ -83,6 +92,7 @@
           "redCards": 0,
           "timeoutsLeft": 4,
           "timeoutTimeLeft": 300000000000,
+          "maxAllowedBots": 8,
           "onPositiveHalf": true
         }
       }
@@ -101,6 +111,7 @@
       "commandForTeam": "Yellow",
       "nextCommand": "normalStart",
       "nextCommandFor": "",
+      "division": "DivA",
       "gameEvent": {
         "type": "",
         "forTeam": "",
@@ -110,6 +121,8 @@
       "stageTimeLeft": 300000000000,
       "matchDuration": 0,
       "matchTimeStart": "2006-01-02T15:04:05Z",
+      "lackOfProgressTimeRemaining": 0,
+      "lackOfProgressDeadline": "2006-01-02T15:04:05Z",
       "teamState": {
         "Blue": {
           "name": "",
@@ -120,6 +133,7 @@
           "redCards": 0,
           "timeoutsLeft": 4,
           "timeoutTimeLeft": 300000000000,
+          "maxAllowedBots": 8,
           "onPositiveHalf": false
         },
         "Yellow": {
@@ -131,6 +145,7 @@
           "redCards": 0,
           "timeoutsLeft": 4,
           "timeoutTimeLeft": 300000000000,
+          "maxAllowedBots": 8,
           "onPositiveHalf": true
         }
       }
@@ -148,6 +163,7 @@
       "commandForTeam": null,
       "nextCommand": "",
       "nextCommandFor": "",
+      "division": "DivA",
       "gameEvent": {
         "type": "",
         "forTeam": "",
@@ -157,6 +173,8 @@
       "stageTimeLeft": 300000000000,
       "matchDuration": 0,
       "matchTimeStart": "2006-01-02T15:04:05Z",
+      "lackOfProgressTimeRemaining": 10000000000,
+      "lackOfProgressDeadline": "2006-01-02T15:04:15Z",
       "teamState": {
         "Blue": {
           "name": "",
@@ -167,6 +185,7 @@
           "redCards": 0,
           "timeoutsLeft": 4,
           "timeoutTimeLeft": 300000000000,
+          "maxAllowedBots": 8,
           "onPositiveHalf": false
         },
         "Yellow": {
@@ -178,6 +197,7 @@
           "redCards": 0,
           "timeoutsLeft": 4,
           "timeoutTimeLeft": 300000000000,
+          "maxAllowedBots": 8,
           "onPositiveHalf": true
         }
       }
@@ -195,6 +215,7 @@
       "commandForTeam": null,
       "nextCommand": "",
       "nextCommandFor": "",
+      "division": "DivA",
       "gameEvent": {
         "type": "",
         "forTeam": "",
@@ -204,6 +225,8 @@
       "stageTimeLeft": 300000000000,
       "matchDuration": 0,
       "matchTimeStart": "2006-01-02T15:04:05Z",
+      "lackOfProgressTimeRemaining": 10000000000,
+      "lackOfProgressDeadline": "2006-01-02T15:04:15Z",
       "teamState": {
         "Blue": {
           "name": "",
@@ -214,6 +237,7 @@
           "redCards": 0,
           "timeoutsLeft": 4,
           "timeoutTimeLeft": 300000000000,
+          "maxAllowedBots": 8,
           "onPositiveHalf": false
         },
         "Yellow": {
@@ -225,6 +249,7 @@
           "redCards": 0,
           "timeoutsLeft": 4,
           "timeoutTimeLeft": 300000000000,
+          "maxAllowedBots": 8,
           "onPositiveHalf": true
         }
       }
@@ -243,6 +268,7 @@
       "commandForTeam": "Blue",
       "nextCommand": "",
       "nextCommandFor": "",
+      "division": "DivA",
       "gameEvent": {
         "type": "",
         "forTeam": "",
@@ -252,6 +278,8 @@
       "stageTimeLeft": 300000000000,
       "matchDuration": 0,
       "matchTimeStart": "2006-01-02T15:04:05Z",
+      "lackOfProgressTimeRemaining": 5000000000,
+      "lackOfProgressDeadline": "2006-01-02T15:04:10Z",
       "teamState": {
         "Blue": {
           "name": "",
@@ -262,6 +290,7 @@
           "redCards": 0,
           "timeoutsLeft": 4,
           "timeoutTimeLeft": 300000000000,
+          "maxAllowedBots": 8,
           "onPositiveHalf": false
         },
         "Yellow": {
@@ -273,6 +302,7 @@
           "redCards": 0,
           "timeoutsLeft": 4,
           "timeoutTimeLeft": 300000000000,
+          "maxAllowedBots": 8,
           "onPositiveHalf": true
         }
       }
@@ -290,6 +320,7 @@
       "commandForTeam": null,
       "nextCommand": "",
       "nextCommandFor": "",
+      "division": "DivA",
       "gameEvent": {
         "type": "",
         "forTeam": "",
@@ -299,6 +330,8 @@
       "stageTimeLeft": 300000000000,
       "matchDuration": 0,
       "matchTimeStart": "2006-01-02T15:04:05Z",
+      "lackOfProgressTimeRemaining": 5000000000,
+      "lackOfProgressDeadline": "2006-01-02T15:04:10Z",
       "teamState": {
         "Blue": {
           "name": "",
@@ -309,6 +342,7 @@
           "redCards": 0,
           "timeoutsLeft": 4,
           "timeoutTimeLeft": 300000000000,
+          "maxAllowedBots": 8,
           "onPositiveHalf": false
         },
         "Yellow": {
@@ -320,6 +354,7 @@
           "redCards": 0,
           "timeoutsLeft": 4,
           "timeoutTimeLeft": 300000000000,
+          "maxAllowedBots": 8,
           "onPositiveHalf": true
         }
       }
@@ -338,6 +373,7 @@
       "commandForTeam": "Yellow",
       "nextCommand": "",
       "nextCommandFor": "",
+      "division": "DivA",
       "gameEvent": {
         "type": "",
         "forTeam": "",
@@ -347,6 +383,8 @@
       "stageTimeLeft": 300000000000,
       "matchDuration": 0,
       "matchTimeStart": "2006-01-02T15:04:05Z",
+      "lackOfProgressTimeRemaining": 5000000000,
+      "lackOfProgressDeadline": "2006-01-02T15:04:10Z",
       "teamState": {
         "Blue": {
           "name": "",
@@ -357,6 +395,7 @@
           "redCards": 0,
           "timeoutsLeft": 4,
           "timeoutTimeLeft": 300000000000,
+          "maxAllowedBots": 8,
           "onPositiveHalf": false
         },
         "Yellow": {
@@ -368,6 +407,7 @@
           "redCards": 0,
           "timeoutsLeft": 4,
           "timeoutTimeLeft": 300000000000,
+          "maxAllowedBots": 8,
           "onPositiveHalf": true
         }
       }

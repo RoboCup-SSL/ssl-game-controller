@@ -270,23 +270,25 @@ type GameEventProposal struct {
 
 // State of the game
 type State struct {
-	Stage              Stage                               `json:"stage"`
-	Command            RefCommand                          `json:"command"`
-	CommandFor         Team                                `json:"commandForTeam"`
-	GameEvents         []*GameEvent                        `json:"gameEvents"`
-	StageTimeElapsed   time.Duration                       `json:"stageTimeElapsed"`
-	StageTimeLeft      time.Duration                       `json:"stageTimeLeft"`
-	MatchTimeStart     time.Time                           `json:"matchTimeStart"`
-	MatchDuration      time.Duration                       `json:"matchDuration"`
-	TeamState          map[Team]*TeamInfo                  `json:"teamState"`
-	Division           config.Division                     `json:"division"`
-	PlacementPos       *Location                           `json:"placementPos"`
-	AutoContinue       bool                                `json:"autoContinue"`
-	NextCommand        RefCommand                          `json:"nextCommand"`
-	NextCommandFor     Team                                `json:"nextCommandFor"`
-	AutoRefsConnected  []string                            `json:"autoRefsConnected"`
-	GameEventBehavior  map[GameEventType]GameEventBehavior `json:"gameEventBehavior"`
-	GameEventProposals []*GameEventProposal                `json:"gameEventProposals"`
+	Stage                       Stage                               `json:"stage"`
+	Command                     RefCommand                          `json:"command"`
+	CommandFor                  Team                                `json:"commandForTeam"`
+	GameEvents                  []*GameEvent                        `json:"gameEvents"`
+	StageTimeElapsed            time.Duration                       `json:"stageTimeElapsed"`
+	StageTimeLeft               time.Duration                       `json:"stageTimeLeft"`
+	MatchTimeStart              time.Time                           `json:"matchTimeStart"`
+	MatchDuration               time.Duration                       `json:"matchDuration"` // MatchDuration contains the updated match duration based on MatchTimeStart for the UI
+	TeamState                   map[Team]*TeamInfo                  `json:"teamState"`
+	Division                    config.Division                     `json:"division"`
+	PlacementPos                *Location                           `json:"placementPos"`
+	AutoContinue                bool                                `json:"autoContinue"`
+	NextCommand                 RefCommand                          `json:"nextCommand"`
+	NextCommandFor              Team                                `json:"nextCommandFor"`
+	AutoRefsConnected           []string                            `json:"autoRefsConnected"`
+	GameEventBehavior           map[GameEventType]GameEventBehavior `json:"gameEventBehavior"`
+	GameEventProposals          []*GameEventProposal                `json:"gameEventProposals"`
+	LackOfProgressDeadline      time.Time                           `json:"lackOfProgressDeadline"`
+	LackOfProgressTimeRemaining time.Duration                       `json:"lackOfProgressTimeRemaining"` // LackOfProgressTimeRemaining contains the updated remaining lack of progress time for the UI
 }
 
 // NewState creates a new state, initialized for the start of a new game
@@ -300,6 +302,7 @@ func NewState() (s *State) {
 	s.StageTimeElapsed = 0
 	s.MatchDuration = 0
 	s.MatchTimeStart = time.Unix(0, 0)
+	s.LackOfProgressDeadline = time.Unix(0, 0)
 
 	s.TeamState = map[Team]*TeamInfo{}
 	s.TeamState[TeamYellow] = new(TeamInfo)

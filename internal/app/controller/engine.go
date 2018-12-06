@@ -63,6 +63,13 @@ func (e *Engine) Tick(delta time.Duration) {
 	if e.State.MatchTimeStart.After(time.Unix(0, 0)) {
 		e.State.MatchDuration = e.TimeProvider().Sub(e.State.MatchTimeStart)
 	}
+	if e.State.LackOfProgressDeadline.After(time.Unix(0, 0)) {
+		e.State.LackOfProgressTimeRemaining = e.RemainingLackOfProgressTime()
+	}
+}
+
+func (e *Engine) RemainingLackOfProgressTime() time.Duration {
+	return e.State.LackOfProgressDeadline.Sub(e.TimeProvider())
 }
 
 func (e *Engine) updateTimes(delta time.Duration) {
@@ -116,6 +123,14 @@ func (e *Engine) SendCommand(command RefCommand, forTeam Team) {
 		e.State.PlacementPos = nil
 		e.State.NextCommand = CommandUnknown
 		e.State.NextCommandFor = TeamUnknown
+
+		if command != CommandKickoff && command != CommandPenalty {
+			e.State.LackOfProgressTimeRemaining = e.config.LackOfProgressTimeout
+			if command == CommandIndirect || command == CommandDirect {
+				e.State.LackOfProgressTimeRemaining = e.config.LackOfProgressFreeKickTimeout[e.State.Division]
+			}
+			e.State.LackOfProgressDeadline = e.TimeProvider().Add(e.State.LackOfProgressTimeRemaining)
+		}
 	}
 }
 
