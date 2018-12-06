@@ -18,7 +18,7 @@ var _ = math.Inf
 // is compatible with the proto package it is being compiled against.
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
-const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
+const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
 type TeamToControllerRequest_AdvantageResponse int32
 
@@ -258,86 +258,13 @@ func (m *TeamToControllerRequest) GetSubstituteBot() bool {
 	return false
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*TeamToControllerRequest) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _TeamToControllerRequest_OneofMarshaler, _TeamToControllerRequest_OneofUnmarshaler, _TeamToControllerRequest_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*TeamToControllerRequest) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*TeamToControllerRequest_DesiredKeeper)(nil),
 		(*TeamToControllerRequest_AdvantageResponse_)(nil),
 		(*TeamToControllerRequest_SubstituteBot)(nil),
 	}
-}
-
-func _TeamToControllerRequest_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*TeamToControllerRequest)
-	// request
-	switch x := m.Request.(type) {
-	case *TeamToControllerRequest_DesiredKeeper:
-		b.EncodeVarint(2<<3 | proto.WireVarint)
-		b.EncodeVarint(uint64(x.DesiredKeeper))
-	case *TeamToControllerRequest_AdvantageResponse_:
-		b.EncodeVarint(3<<3 | proto.WireVarint)
-		b.EncodeVarint(uint64(x.AdvantageResponse))
-	case *TeamToControllerRequest_SubstituteBot:
-		t := uint64(0)
-		if x.SubstituteBot {
-			t = 1
-		}
-		b.EncodeVarint(4<<3 | proto.WireVarint)
-		b.EncodeVarint(t)
-	case nil:
-	default:
-		return fmt.Errorf("TeamToControllerRequest.Request has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _TeamToControllerRequest_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*TeamToControllerRequest)
-	switch tag {
-	case 2: // request.desired_keeper
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Request = &TeamToControllerRequest_DesiredKeeper{int32(x)}
-		return true, err
-	case 3: // request.advantage_response
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Request = &TeamToControllerRequest_AdvantageResponse_{TeamToControllerRequest_AdvantageResponse(x)}
-		return true, err
-	case 4: // request.substitute_bot
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Request = &TeamToControllerRequest_SubstituteBot{x != 0}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _TeamToControllerRequest_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*TeamToControllerRequest)
-	// request
-	switch x := m.Request.(type) {
-	case *TeamToControllerRequest_DesiredKeeper:
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(x.DesiredKeeper))
-	case *TeamToControllerRequest_AdvantageResponse_:
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(x.AdvantageResponse))
-	case *TeamToControllerRequest_SubstituteBot:
-		n += 1 // tag and wire
-		n += 1
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // wrapper for all requests from controller to a team's computer
@@ -399,59 +326,11 @@ func (m *ControllerToTeamRequest) GetAdvantageChoice() *ControllerToTeamRequest_
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*ControllerToTeamRequest) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _ControllerToTeamRequest_OneofMarshaler, _ControllerToTeamRequest_OneofUnmarshaler, _ControllerToTeamRequest_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ControllerToTeamRequest) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*ControllerToTeamRequest_AdvantageChoice_)(nil),
 	}
-}
-
-func _ControllerToTeamRequest_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*ControllerToTeamRequest)
-	// request
-	switch x := m.Request.(type) {
-	case *ControllerToTeamRequest_AdvantageChoice_:
-		b.EncodeVarint(1<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AdvantageChoice); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ControllerToTeamRequest.Request has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _ControllerToTeamRequest_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*ControllerToTeamRequest)
-	switch tag {
-	case 1: // request.advantage_choice
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ControllerToTeamRequest_AdvantageChoice)
-		err := b.DecodeMessage(msg)
-		m.Request = &ControllerToTeamRequest_AdvantageChoice_{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _ControllerToTeamRequest_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*ControllerToTeamRequest)
-	// request
-	switch x := m.Request.(type) {
-	case *ControllerToTeamRequest_AdvantageChoice_:
-		s := proto.Size(x.AdvantageChoice)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 type ControllerToTeamRequest_AdvantageChoice struct {
