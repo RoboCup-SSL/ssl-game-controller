@@ -1,7 +1,7 @@
 <template>
     <div>
         <TeamSelection :model="model" label="By: " :allow-unknown-team="false"/>
-        <LocationSelection :model="model.location" label="Location [mm]: "/>
+        <LocationSelection :model="model.location" label="Location [m]: "/>
         <b-button variant="primary"
                   @click="sendEvent()"
                   :disabled="model.team === null">

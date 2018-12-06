@@ -36,7 +36,7 @@
             callback: Function
         },
         data: function () {
-            return {g: {edit: false, value: 0, focused: false}}
+            return {g: {edit: false, value: 0.0, focused: false}}
         },
         methods: {
             updateValue: function () {

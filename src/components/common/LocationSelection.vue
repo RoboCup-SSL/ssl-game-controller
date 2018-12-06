@@ -2,12 +2,12 @@
     <b-form-group :label="label" horizontal>
         <input type="number"
                v-model="model.x"
-               :min="-99000"
-               :max="99000"/>
+               :min="-99000.0"
+               :max="99000.0"/>
         <input type="number"
                v-model="model.y"
-               :min="-99000"
-               :max="99000"/>
+               :min="-99000.0"
+               :max="99000.0"/>
     </b-form-group>
 </template>
 

@@ -2,8 +2,8 @@
     <div>
         <TeamSelection :model="model" label="By: " :allow-unknown-team="false"/>
         <BotSelection :model="model" label="By Bot: "/>
-        <LocationSelection :model="model.location" label="Location [mm]: "/>
-        <LocationSelection :model="model.kickLocation" label="Kick Location [mm]: "/>
+        <LocationSelection :model="model.location" label="Location [m]: "/>
+        <LocationSelection :model="model.kickLocation" label="Kick Location [m]: "/>
         <b-button variant="primary"
                   @click="sendEvent()"
                   :disabled="model.team === null">

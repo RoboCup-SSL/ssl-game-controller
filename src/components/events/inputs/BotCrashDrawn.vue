@@ -2,7 +2,7 @@
     <div>
         <BotSelection :model="model.botYellow" label="Yellow Bot: "/>
         <BotSelection :model="model.botBlue" label="Blue Bot: "/>
-        <LocationSelection :model="model.location" label="Location [mm]: "/>
+        <LocationSelection :model="model.location" label="Location [m]: "/>
         <b-button variant="primary"
                   @click="sendEvent()"
                   :disabled="model.team === null">
