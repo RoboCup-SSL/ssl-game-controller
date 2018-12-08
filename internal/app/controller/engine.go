@@ -537,7 +537,7 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 		return errors.Errorf("Incomplete game event: %v", event)
 	}
 
-	e.filterAimlessKickForDivA(event)
+	e.applyGameEventFilters(event)
 
 	if e.disabledGameEvent(event.Type) {
 		e.LogIgnoredGameEvent(*event)
@@ -637,6 +637,10 @@ func (e *Engine) filterAimlessKickForDivA(gameEvent *GameEvent) {
 				Location: aimlessKickDetails.Location,
 			}}
 	}
+}
+
+func (e *Engine) applyGameEventFilters(gameEvent *GameEvent) {
+	e.filterAimlessKickForDivA(gameEvent)
 }
 
 func (e *Engine) FoulCounterIncremented(team Team) {
