@@ -67,7 +67,7 @@ func (e *Engine) LogIgnoredGameEvent(event GameEvent) {
 func (e *Engine) LogCommand() {
 	description := ""
 	if e.State.PlacementPos != nil {
-		description = e.State.PlacementPos.String()
+		description = fmt.Sprintf("place pos: %v", e.State.PlacementPos)
 	}
 	entry := UiProtocolEntry{
 		Timestamp:   e.TimeProvider().UnixNano(),
