@@ -174,24 +174,6 @@ func (e *Engine) CommandForEvent(event *GameEvent) (command RefCommand, forTeam 
 
 	forTeam = event.ByTeam().Opposite()
 
-	if e.State.Division == config.DivA && event.Type == GameEventPlacementFailedByTeamInFavor {
-		for _, e := range e.State.GameEvents {
-			switch e.Type {
-			case
-				GameEventGoal,
-				GameEventDefenderInDefenseArea,
-				GameEventMultipleCards:
-				// do nothing
-			default:
-				// the placement failed by team in favor
-				// the game is continued by the other team
-				command = CommandIndirect
-				forTeam = forTeam.Opposite()
-			}
-			return
-		}
-	}
-
 	switch event.Type {
 	case
 		GameEventBallLeftFieldTouchLine,
@@ -202,7 +184,8 @@ func (e *Engine) CommandForEvent(event *GameEvent) (command RefCommand, forTeam 
 		GameEventAttackerInDefenseArea,
 		GameEventAttackerTouchedKeeper,
 		GameEventKickTimeout,
-		GameEventKeeperHeldBall:
+		GameEventKeeperHeldBall,
+		GameEventPlacementFailedByTeamInFavor:
 		command = CommandIndirect
 	case
 		GameEventBallLeftFieldGoalLine,
@@ -229,7 +212,8 @@ func (e *Engine) CommandForEvent(event *GameEvent) (command RefCommand, forTeam 
 		command = CommandPenalty
 	case
 		GameEventBotInterferedPlacement,
-		GameEventDefenderTooCloseToKickPoint:
+		GameEventDefenderTooCloseToKickPoint,
+		GameEventPlacementFailedByOpponent:
 		command, err = e.LastGameStartCommand()
 	default:
 		err = errors.Errorf("Unhandled game event: %v", e.State.GameEvents)
@@ -626,7 +610,7 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 	e.State.PlacementPos = e.BallPlacementPos()
 
 	if e.State.GameState() != GameStateHalted && !event.IsSkipped() && !event.IsSecondary() {
-		if event.Type == GameEventPossibleGoal {
+		if event.Type == GameEventPossibleGoal || event.Type == GameEventPlacementFailedByOpponent || e.placementFailedTwice() {
 			e.SendCommand(CommandHalt, "")
 		} else if e.State.PlacementPos != nil && (event.ByTeam() == TeamBlue || event.ByTeam() == TeamYellow) {
 			teamInFavor := event.ByTeam().Opposite()
@@ -646,6 +630,19 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 
 	log.Printf("Processed game event %v", event)
 	return nil
+}
+
+func (e *Engine) placementFailedTwice() bool {
+	failures := 0
+	for _, e := range e.State.GameEvents {
+		if e.Type == GameEventPlacementFailedByTeamInFavor {
+			failures++
+			if failures >= 2 {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 func (e *Engine) filterAimlessKickForDivA(gameEvent *GameEvent) {

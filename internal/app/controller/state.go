@@ -412,6 +412,9 @@ func (s State) PrimaryGameEvent() (e *GameEvent) {
 		case GameEventGoal:
 			// Goal overrides everything else
 			return
+		case GameEventPlacementFailedByTeamInFavor:
+			// if team in favor fails to place the ball, the other team gets an indirect freekick -> override previous event
+			return
 		}
 	}
 	return
