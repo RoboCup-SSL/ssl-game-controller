@@ -348,7 +348,7 @@ message GameEvent {
         // the remaining distance from ball to placement position
         optional float remaining_distance = 2;
     }
-    // placement failed by the team other team
+    // placement failed by the other team (which did the placement, because the team in favor could not do ball placement (did NOT fail before))
     message PlacementFailedByOpponent {
         // the team that failed
         required Team by_team = 1;
