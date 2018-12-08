@@ -105,6 +105,15 @@ func (e *Engine) countStageTime() bool {
 func (e *Engine) SendCommand(command RefCommand, forTeam Team) {
 	e.State.Command = command
 	e.State.CommandFor = forTeam
+
+	switch command {
+	case CommandHalt, CommandStop, CommandBallPlacement, CommandTimeout, CommandUnknown:
+		// nothing to do
+	default:
+		// reset placement pos
+		e.State.PlacementPos = nil
+	}
+
 	e.LogCommand()
 
 	if command == CommandTimeout {
@@ -156,6 +165,9 @@ func (e *Engine) Continue() {
 }
 
 func (e *Engine) CommandForEvent(event *GameEvent) (command RefCommand, forTeam Team, err error) {
+	command = CommandUnknown
+	forTeam = TeamUnknown
+
 	if event.IsSecondary() {
 		return
 	}
@@ -169,6 +181,7 @@ func (e *Engine) CommandForEvent(event *GameEvent) (command RefCommand, forTeam 
 				GameEventGoal,
 				GameEventDefenderInDefenseArea,
 				GameEventMultipleCards:
+				// do nothing
 			default:
 				// the placement failed by team in favor
 				// the game is continued by the other team
@@ -221,6 +234,13 @@ func (e *Engine) CommandForEvent(event *GameEvent) (command RefCommand, forTeam 
 	default:
 		err = errors.Errorf("Unhandled game event: %v", e.State.GameEvents)
 	}
+
+	if command.NeedsTeam() && forTeam.Unknown() {
+		// if the command needs a team and there is no unique team available, reset command
+		command = CommandUnknown
+		forTeam = TeamUnknown
+	}
+
 	return
 }
 
@@ -295,7 +315,11 @@ func (e *Engine) processEvent(event Event) error {
 }
 
 func (e *Engine) processCommand(c *EventCommand) error {
-	e.State.PlacementPos = c.Location
+
+	if c.Location != nil {
+		e.State.PlacementPos = c.Location
+	}
+
 	switch c.Type {
 	case CommandDirect, CommandIndirect, CommandKickoff, CommandPenalty, CommandTimeout, CommandBallPlacement:
 		if c.ForTeam == nil {
@@ -602,10 +626,10 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 	e.State.PlacementPos = e.BallPlacementPos()
 
 	if e.State.GameState() != GameStateHalted && !event.IsSkipped() && !event.IsSecondary() {
-		teamInFavor := event.ByTeam().Opposite()
 		if event.Type == GameEventPossibleGoal {
 			e.SendCommand(CommandHalt, "")
-		} else if e.State.PlacementPos != nil {
+		} else if e.State.PlacementPos != nil && (event.ByTeam() == TeamBlue || event.ByTeam() == TeamYellow) {
+			teamInFavor := event.ByTeam().Opposite()
 			if e.State.TeamState[teamInFavor].CanPlaceBall {
 				e.SendCommand(CommandBallPlacement, teamInFavor)
 			} else if e.State.TeamState[teamInFavor.Opposite()].CanPlaceBall {

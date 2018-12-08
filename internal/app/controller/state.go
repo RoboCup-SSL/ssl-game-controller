@@ -55,7 +55,7 @@ func (t Team) toProto() refproto.Team {
 	return refproto.Team_UNKNOWN
 }
 
-// NewTeam creates a team from a protobuf team
+// NewTeam creates a team from a protobuf team. Its either a single team or unknown. Not both.
 func NewTeam(team refproto.Team) Team {
 	if team == refproto.Team_YELLOW {
 		return TeamYellow
@@ -205,6 +205,15 @@ func (c RefCommand) ContinuesGame() bool {
 		return true
 	default:
 		return false
+	}
+}
+
+func (c RefCommand) NeedsTeam() bool {
+	switch c {
+	case CommandUnknown, CommandHalt, CommandStop, CommandNormalStart, CommandForceStart:
+		return false
+	default:
+		return true
 	}
 }
 
