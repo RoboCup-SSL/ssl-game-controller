@@ -25,7 +25,8 @@ type GameController struct {
 	historyPreserver          HistoryPreserver
 	numUiProtocolsLastPublish int
 	outstandingTeamChoice     *TeamChoice
-	Mutex                     sync.Mutex
+	ConnectionMutex           sync.Mutex
+	PublishMutex              sync.Mutex
 	VisionReceiver            *vision.Receiver
 }
 
@@ -116,6 +117,9 @@ func (c *GameController) mainLoop() {
 
 // publish publishes the state to the UI and the teams
 func (c *GameController) publish() {
+	c.PublishMutex.Lock()
+	defer c.PublishMutex.Unlock()
+
 	c.updateOnlineStates()
 	c.historyPreserver.Save(c.Engine.History)
 

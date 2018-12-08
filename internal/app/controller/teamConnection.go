@@ -23,8 +23,8 @@ func (c *GameController) teamConnected(team Team) bool {
 }
 
 func (c *GameController) ProcessTeamRequests(teamName string, request refproto.TeamToControllerRequest) error {
-	c.Mutex.Lock()
-	defer c.Mutex.Unlock()
+	c.ConnectionMutex.Lock()
+	defer c.ConnectionMutex.Unlock()
 	log.Print("Received request from team: ", request)
 
 	if x, ok := request.GetRequest().(*refproto.TeamToControllerRequest_AdvantageResponse_); ok {
@@ -118,8 +118,8 @@ func (c *GameController) askForTeamDecisionIfRequired(event Event) (handled bool
 
 func (c *GameController) timeoutTeamChoice() {
 	time.Sleep(c.Config.Game.TeamChoiceTimeout)
-	c.Mutex.Lock()
-	defer c.Mutex.Unlock()
+	c.ConnectionMutex.Lock()
+	defer c.ConnectionMutex.Unlock()
 	if c.outstandingTeamChoice != nil {
 		c.OnNewEvent(c.outstandingTeamChoice.Event)
 	}
