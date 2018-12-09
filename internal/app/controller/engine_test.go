@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/go-test/deep"
+	"github.com/pkg/errors"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
@@ -69,7 +70,9 @@ func Test_engine(t *testing.T) {
 	}
 	for _, f := range files {
 		if !f.IsDir() && strings.HasPrefix(f.Name(), "engine_test_") {
-			processTransitionFile(t, f.Name())
+			t.Run(f.Name(), func(t *testing.T) {
+				processTransitionFile(t, f.Name())
+			})
 		}
 	}
 }
@@ -98,6 +101,9 @@ func processTransitionFile(t *testing.T, fileName string) {
 	}
 
 	// apply the initial state to the engine
+	if err := stateTransitions.InitialState.valid(); err != nil {
+		t.Fatal(err)
+	}
 	stateTransitions.InitialState.applyTo(e.State)
 	// initialize the expected state with the current engine state
 	expectedState := e.State.DeepCopy()
@@ -105,6 +111,9 @@ func processTransitionFile(t *testing.T, fileName string) {
 	for i, s := range stateTransitions.Transitions {
 
 		if s.Event != nil {
+			if err := s.Event.valid(); err != nil {
+				t.Fatal(err)
+			}
 			if err := e.Process(*s.Event); err != nil {
 				t.Fatalf("Could not process event '%v': %v", *s.Event, err)
 			}
@@ -116,6 +125,9 @@ func processTransitionFile(t *testing.T, fileName string) {
 		}
 
 		if s.ExpectedStateDiff != nil {
+			if err := s.ExpectedStateDiff.valid(); err != nil {
+				t.Fatal(err)
+			}
 			// apply the expected state diff to the expected state
 			s.ExpectedStateDiff.applyTo(&expectedState)
 		}
@@ -134,6 +146,71 @@ func initialTime() time.Time {
 		panic("Could not parse time")
 	}
 	return ts
+}
+
+func (e *Event) valid() error {
+	if e.Card != nil && !e.Card.ForTeam.Valid() {
+		return errors.Errorf("Event.Card.ForTeam has an invalid value: %v", e.Card.ForTeam)
+	}
+	if e.Command != nil {
+		if e.Command.ForTeam != nil && !e.Command.ForTeam.Valid() {
+			return errors.Errorf("Event.Command.ForTeam has an invalid value: %v", e.Command.ForTeam)
+		}
+		if !e.Command.Type.Valid() {
+			return errors.Errorf("Event.Command.Type has an invalid value: %v", e.Command.Type)
+		}
+	}
+	if e.GameEvent != nil && !e.GameEvent.Type.Valid() {
+		return errors.Errorf("Event.GameEvent.Type has an invalid value: %v", e.GameEvent.Type)
+	}
+	return nil
+}
+
+func (t *TestState) valid() error {
+	if t.Stage != nil && !t.Stage.Valid() {
+		return errors.Errorf("TestState.Stage has an invalid value: %v", t.Stage)
+	}
+	if t.Command != nil && !t.Command.Valid() {
+		return errors.Errorf("TestState.Command has an invalid value: %v", t.Command)
+	}
+	if t.CommandFor != nil && !t.CommandFor.Valid() {
+		return errors.Errorf("TestState.CommandFor has an invalid value: %v", t.CommandFor)
+	}
+	for i, gameEvent := range t.GameEvents {
+		if !gameEvent.Type.Valid() {
+			return errors.Errorf("TestState.GameEvents[%v].Type has an invalid value: %v", i, gameEvent.Type)
+		}
+	}
+	for team := range t.TeamState {
+		if !team.Valid() {
+			return errors.Errorf("TestState.TeamState has an invalid key: %v", team)
+		}
+	}
+	if t.Division != nil && !t.Division.Valid() {
+		return errors.Errorf("TestState.Division has an invalid value: %v", t.Division)
+	}
+	if t.NextCommand != nil && !t.NextCommand.Valid() {
+		return errors.Errorf("TestState.NextCommand has an invalid value: %v", t.NextCommand)
+	}
+	if t.NextCommandFor != nil && !t.NextCommandFor.Valid() {
+		return errors.Errorf("TestState.NextCommandFor has an invalid value: %v", t.NextCommandFor)
+	}
+	if t.GameEventBehavior != nil {
+		for gameEventType, gameEventBehavior := range *t.GameEventBehavior {
+			if !gameEventType.Valid() {
+				return errors.Errorf("TestState.GameEventBehavior has an invalid key: %v", gameEventType)
+			}
+			if !gameEventBehavior.Valid() {
+				return errors.Errorf("TestState.GameEventBehavior[%v] has an invalid value: %v", gameEventType, gameEventBehavior)
+			}
+		}
+	}
+	for _, proposal := range t.GameEventProposals {
+		if !proposal.GameEvent.Type.Valid() {
+			return errors.Errorf("TestState.GameEventProposals.GameEvent.Type has an invalid value: %v", proposal.GameEvent.Type)
+		}
+	}
+	return nil
 }
 
 func (t *TestState) applyTo(s *State) {
@@ -170,9 +247,8 @@ func (t *TestState) applyTo(s *State) {
 	if t.Division != nil {
 		s.Division = *t.Division
 	}
-	if t.PlacementPos != nil {
-		s.PlacementPos = t.PlacementPos
-	}
+	// special case: always apply placement pos in order to make it resettable
+	s.PlacementPos = t.PlacementPos
 	if t.AutoContinue != nil {
 		s.AutoContinue = *t.AutoContinue
 	}

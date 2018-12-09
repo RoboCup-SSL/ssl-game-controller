@@ -59,6 +59,60 @@ const (
 	GameEventUnsportingBehaviorMajor GameEventType = "unsportingBehaviorMajor"
 )
 
+// GameStates contain all known command enum constants
+var GameEventTypes = []GameEventType{
+	GameEventNone,
+	GameEventPrepared,
+	GameEventNoProgressInGame,
+	GameEventPlacementFailedByTeamInFavor,
+	GameEventPlacementFailedByOpponent,
+	GameEventPlacementSucceeded,
+	GameEventBotSubstitution,
+	GameEventTooManyRobots,
+	GameEventBallLeftFieldTouchLine,
+	GameEventBallLeftFieldGoalLine,
+	GameEventPossibleGoal,
+	GameEventGoal,
+	GameEventIndirectGoal,
+	GameEventChippedGoal,
+	GameEventAimlessKick,
+	GameEventKickTimeout,
+	GameEventKeeperHeldBall,
+	GameEventAttackerDoubleTouchedBall,
+	GameEventAttackerInDefenseArea,
+	GameEventAttackerTouchedKeeper,
+	GameEventBotDribbledBallTooFar,
+	GameEventBotKickedBallTooFast,
+	GameEventAttackerTooCloseToDefenseArea,
+	GameEventBotInterferedPlacement,
+	GameEventBotCrashDrawn,
+	GameEventBotCrashUnique,
+	GameEventBotCrashUniqueSkipped,
+	GameEventBotPushedBot,
+	GameEventBotPushedBotSkipped,
+	GameEventBotHeldBallDeliberately,
+	GameEventBotTippedOver,
+	GameEventBotTooFastInStop,
+	GameEventDefenderTooCloseToKickPoint,
+	GameEventDefenderInDefenseAreaPartially,
+	GameEventDefenderInDefenseArea,
+	GameEventMultipleCards,
+	GameEventMultiplePlacementFailures,
+	GameEventMultipleFouls,
+	GameEventUnsportingBehaviorMinor,
+	GameEventUnsportingBehaviorMajor,
+}
+
+// Valid checks if the GameEventType enum value is among the known values
+func (g GameEventType) Valid() bool {
+	for _, gameState := range GameEventTypes {
+		if gameState == g {
+			return true
+		}
+	}
+	return false
+}
+
 // GameEvent combines the type of a game event with the corresponding detail structures
 type GameEvent struct {
 	Type    GameEventType    `json:"type"`

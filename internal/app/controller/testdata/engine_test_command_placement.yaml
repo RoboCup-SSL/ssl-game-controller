@@ -1,0 +1,21 @@
+initialState:
+  stage: First Half
+  command: stop
+  division: DivA
+  stageTimeLeft: 5m
+transitions:
+  - event:
+      command:
+        type: ballPlacement
+        forTeam: Yellow
+        location:
+          x: 4.2
+          y: -1.5
+    expectedStateDiff:
+      command: ballPlacement
+      commandFor: Yellow
+      placementPos:
+        x: 4.2
+        y: -1.5
+  - tick: 1s # make sure that the stage time is not proceeded
+

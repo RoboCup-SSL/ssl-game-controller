@@ -65,6 +65,19 @@ func NewTeam(team refproto.Team) Team {
 	return TeamUnknown
 }
 
+// Teams contain all known team enum constants
+var Teams = []Team{TeamYellow, TeamBlue, TeamBoth, TeamUnknown}
+
+// Valid checks if the Team enum value is among the known values
+func (t Team) Valid() bool {
+	for _, team := range Teams {
+		if team == t {
+			return true
+		}
+	}
+	return false
+}
+
 // Stage represents the different stages of a game
 type Stage string
 
@@ -115,6 +128,16 @@ var Stages = []Stage{
 	StageShootoutBreak,
 	StageShootout,
 	StagePostGame,
+}
+
+// Valid checks if the Stage enum value is among the known values
+func (s Stage) Valid() bool {
+	for _, stage := range Stages {
+		if stage == s {
+			return true
+		}
+	}
+	return false
 }
 
 func (s Stage) index() (int, error) {
@@ -194,6 +217,31 @@ const (
 	CommandBallPlacement RefCommand = "ballPlacement"
 )
 
+// Commands contain all known command enum constants
+var RefCommands = []RefCommand{
+	CommandUnknown,
+	CommandHalt,
+	CommandStop,
+	CommandNormalStart,
+	CommandForceStart,
+	CommandDirect,
+	CommandIndirect,
+	CommandKickoff,
+	CommandPenalty,
+	CommandTimeout,
+	CommandBallPlacement,
+}
+
+// Valid checks if the RefCommand enum value is among the known values
+func (c RefCommand) Valid() bool {
+	for _, command := range RefCommands {
+		if command == c {
+			return true
+		}
+	}
+	return false
+}
+
 func (c RefCommand) ContinuesGame() bool {
 	switch c {
 	case CommandNormalStart,
@@ -217,6 +265,10 @@ func (c RefCommand) NeedsTeam() bool {
 	}
 }
 
+func (c RefCommand) IsFreeKick() bool {
+	return c == CommandDirect || c == CommandIndirect
+}
+
 // GameState of a game
 type GameState string
 
@@ -236,6 +288,27 @@ const (
 	// GameStateBallPlacement ball placement
 	GameStateBallPlacement GameState = "Ball Placement"
 )
+
+// GameStates contain all known command enum constants
+var GameStates = []GameState{
+	GameStateHalted,
+	GameStateStopped,
+	GameStateRunning,
+	GameStatePreKickoff,
+	GameStatePrePenalty,
+	GameStateTimeout,
+	GameStateBallPlacement,
+}
+
+// Valid checks if the GameState enum value is among the known values
+func (g GameState) Valid() bool {
+	for _, gameState := range GameStates {
+		if gameState == g {
+			return true
+		}
+	}
+	return false
+}
 
 // TeamInfo about a team
 type TeamInfo struct {
@@ -269,6 +342,19 @@ const (
 	GameEventBehaviorMajority GameEventBehavior = "majority"
 	GameEventBehaviorOff      GameEventBehavior = "off"
 )
+
+// GameEventBehaviors contain all known command enum constants
+var GameEventBehaviors = []GameEventBehavior{GameEventBehaviorOn, GameEventBehaviorMajority, GameEventBehaviorOff}
+
+// Valid checks if the GameEventBehavior enum value is among the known values
+func (b GameEventBehavior) Valid() bool {
+	for _, behavior := range GameEventBehaviors {
+		if behavior == b {
+			return true
+		}
+	}
+	return false
+}
 
 // GameEventProposal holds a proposal for a game event from an autoRef
 type GameEventProposal struct {

@@ -1,0 +1,72 @@
+# Situation:
+# Division: A
+# Who can place: both teams
+# Who succeeds: First team
+# What happened: ball left field on goal line -> direct
+#
+# Setup:
+# ball left field by: Yellow
+# team in favor: Blue
+#
+# Expectation:
+# Blue is awarded a direct free kick, places the ball successfully and performs the direct free kick.
+#
+initialState:
+  stage: First Half
+  command: forceStart
+  division: DivA
+  stageTimeLeft: 5m
+  teamState:
+    Yellow:
+      ballPlacementFailures: 2
+    Blue:
+      ballPlacementFailures: 3
+transitions:
+  - event:
+      gameEvent:
+        type: ballLeftFieldGoalLine
+        details:
+          ballleftfieldgoalline:
+            byteam: 1 # Yellow
+            bybot: 0
+            location:
+              x: 6.0
+              y: 4.0
+    expectedStateDiff:
+      command: ballPlacement
+      commandFor: Blue
+      nextCommand: direct
+      nextCommandFor: Blue
+      placementPos:
+        x: 5.8
+        y: 4.3
+      gameEvents:
+        - type: ballLeftFieldGoalLine
+          details:
+            ballleftfieldgoalline:
+              byteam: 1 # Yellow
+              bybot: 0
+              location:
+                x: 6.0
+                y: 4.0
+  - tick: 1s # make sure that the stage time is not proceeded
+  - event:
+      gameEvent:
+        type: placementSucceeded
+        details:
+          placementsucceeded:
+            byteam: 2 # Blue
+            timetaken: 1.0
+            precision: 0.01
+    expectedStateDiff:
+      command: direct
+      commandFor: Blue
+      nextCommand: ""
+      nextCommandFor: ""
+      lackOfProgressDeadline: "2010-01-01T00:00:06Z"
+      lackOfProgressTimeRemaining: 5s
+      gameEvents: []
+      teamState:
+        Blue:
+          ballPlacementFailures: 0
+
