@@ -11,11 +11,11 @@ transitions:
     expectedStateDiff:
       command: indirect
       commandFor: Yellow
-      lackOfProgressDeadline: "2010-01-01T00:00:05Z"
-      lackOfProgressTimeRemaining: 5s
+      currentActionDeadline: "2010-01-01T00:00:05Z"
+      currentActionTimeRemaining: 5s
   - tick: 1s
     expectedStateDiff:
-      lackOfProgressTimeRemaining: 4s
+      currentActionTimeRemaining: 4s
       stageTimeElapsed: 1s
       stageTimeLeft: 4m59s
   - event:
@@ -31,6 +31,6 @@ transitions:
     expectedStateDiff:
       command: indirect
       commandFor: Blue
-      lackOfProgressDeadline: "2010-01-01T00:00:06Z"
-      lackOfProgressTimeRemaining: 5s
+      currentActionDeadline: "2010-01-01T00:00:06Z"
+      currentActionTimeRemaining: 5s
 

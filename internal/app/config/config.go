@@ -30,19 +30,20 @@ type Geometry struct {
 
 // Game holds configs that are valid for the whole game
 type Game struct {
-	YellowCardDuration            time.Duration              `yaml:"yellow-card-duration"`
-	DefaultDivision               Division                   `yaml:"default-division"`
-	Normal                        Special                    `yaml:"normal"`
-	Overtime                      Special                    `yaml:"overtime"`
-	TeamChoiceTimeout             time.Duration              `yaml:"team-choice-timeout"`
-	DefaultGeometry               map[Division]*Geometry     `yaml:"default-geometry"`
-	MultipleCardStep              int                        `yaml:"multiple-card-step"`
-	MultipleFoulStep              int                        `yaml:"multiple-foul-step"`
-	MultiplePlacementFailures     int                        `yaml:"multiple-placement-failures"`
-	MaxBots                       map[Division]int           `yaml:"max-bots"`
-	AutoRefProposalTimeout        time.Duration              `yaml:"auto-ref-proposal-timeout"`
-	LackOfProgressFreeKickTimeout map[Division]time.Duration `yaml:"lack-of-progress-free-kick-timeout"`
-	LackOfProgressTimeout         time.Duration              `yaml:"lack-of-progress-timeout"`
+	YellowCardDuration        time.Duration              `yaml:"yellow-card-duration"`
+	DefaultDivision           Division                   `yaml:"default-division"`
+	Normal                    Special                    `yaml:"normal"`
+	Overtime                  Special                    `yaml:"overtime"`
+	TeamChoiceTimeout         time.Duration              `yaml:"team-choice-timeout"`
+	DefaultGeometry           map[Division]*Geometry     `yaml:"default-geometry"`
+	MultipleCardStep          int                        `yaml:"multiple-card-step"`
+	MultipleFoulStep          int                        `yaml:"multiple-foul-step"`
+	MultiplePlacementFailures int                        `yaml:"multiple-placement-failures"`
+	MaxBots                   map[Division]int           `yaml:"max-bots"`
+	AutoRefProposalTimeout    time.Duration              `yaml:"auto-ref-proposal-timeout"`
+	FreeKickTime              map[Division]time.Duration `yaml:"free-kick-time"`
+	GeneralTime               time.Duration              `yaml:"general-time"`
+	BallPlacementTime         time.Duration              `yaml:"ball-placement-time"`
 }
 
 // Network holds configs for network communication
@@ -110,8 +111,9 @@ func DefaultControllerConfig() (c Controller) {
 	c.Game.MultipleFoulStep = 3
 	c.Game.MultiplePlacementFailures = 5
 	c.Game.AutoRefProposalTimeout = 5 * time.Second
-	c.Game.LackOfProgressTimeout = time.Second * 10
-	c.Game.LackOfProgressFreeKickTimeout = map[Division]time.Duration{DivA: time.Second * 5, DivB: time.Second * 10}
+	c.Game.GeneralTime = time.Second * 10
+	c.Game.FreeKickTime = map[Division]time.Duration{DivA: time.Second * 5, DivB: time.Second * 10}
+	c.Game.BallPlacementTime = time.Second * 30
 
 	c.Game.Normal.HalfDuration = 5 * time.Minute
 	c.Game.Normal.HalfTimeDuration = 5 * time.Minute

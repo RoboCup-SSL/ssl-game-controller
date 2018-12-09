@@ -1,7 +1,7 @@
 <template>
     <div>
-        <span v-if="state.lackOfProgressTimeRemaining >= 0">
-            <span v-format-ns-duration="state.lackOfProgressTimeRemaining"
+        <span v-if="state.currentActionTimeRemaining >= 0">
+            <span v-format-ns-duration="state.currentActionTimeRemaining"
                   v-b-tooltip.hover
                   title="Remaining time until lack of progress">
             </span>

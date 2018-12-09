@@ -182,10 +182,14 @@ message Referee {
     // All non-finished proposed game events that may be processed next.
     repeated ProposedGameEvent proposed_game_events = 14;
 
-    // The time in microseconds that is remaining until a lack of progress will be called, if the ball has not moved
-    // The time will not be reset, if the ball has moved. It can get negative.
-    // An autoRef would raise an appropriate event, if the time gets negative and the ball has not moved.
-    optional int32 lack_of_progress_time_remaining = 15;
+    // The time in microseconds that is remaining until the current action times out
+    // The time will not be reset. It can get negative.
+    // An autoRef would raise an appropriate event, if the time gets negative.
+    // Possible actions where this time is relevant:
+    //  * free kicks
+    //  * kickoff, penalty kick, force start
+    //  * ball placement
+    optional int32 current_action_time_remaining = 15;
 }
 
 message ProposedGameEvent {

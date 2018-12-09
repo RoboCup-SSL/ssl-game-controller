@@ -36,6 +36,8 @@ transitions:
       commandFor: Blue
       nextCommand: direct
       nextCommandFor: Blue
+      currentActionDeadline: "2010-01-01T00:00:30Z"
+      currentActionTimeRemaining: 30s
       placementPos:
         x: 5.8
         y: 4.3
@@ -49,6 +51,11 @@ transitions:
                 x: 6.0
                 y: 4.0
   - tick: 1s # make sure that the stage time is not proceeded
+    expectedStateDiff:
+      currentActionTimeRemaining: 29s
+      placementPos:
+        x: 5.8
+        y: 4.3
   - event:
       gameEvent:
         type: placementSucceeded
@@ -62,6 +69,6 @@ transitions:
       commandFor: Blue
       nextCommand: ""
       nextCommandFor: ""
-      lackOfProgressDeadline: "2010-01-01T00:00:06Z"
-      lackOfProgressTimeRemaining: 5s
+      currentActionDeadline: "2010-01-01T00:00:06Z"
+      currentActionTimeRemaining: 5s
       gameEvents: []

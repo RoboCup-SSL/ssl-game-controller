@@ -365,25 +365,25 @@ type GameEventProposal struct {
 
 // State of the game
 type State struct {
-	Stage                       Stage                               `json:"stage" yaml:"stage"`
-	Command                     RefCommand                          `json:"command" yaml:"command"`
-	CommandFor                  Team                                `json:"commandForTeam" yaml:"commandForTeam"`
-	GameEvents                  []*GameEvent                        `json:"gameEvents" yaml:"gameEvents"`
-	StageTimeElapsed            time.Duration                       `json:"stageTimeElapsed" yaml:"stageTimeElapsed"`
-	StageTimeLeft               time.Duration                       `json:"stageTimeLeft" yaml:"stageTimeLeft"`
-	MatchTimeStart              time.Time                           `json:"matchTimeStart" yaml:"matchTimeStart"`
-	MatchDuration               time.Duration                       `json:"matchDuration" yaml:"matchDuration"` // MatchDuration contains the updated match duration based on MatchTimeStart for the UI
-	TeamState                   map[Team]*TeamInfo                  `json:"teamState" yaml:"teamState"`
-	Division                    config.Division                     `json:"division" yaml:"division"`
-	PlacementPos                *Location                           `json:"placementPos" yaml:"placementPos"`
-	AutoContinue                bool                                `json:"autoContinue" yaml:"autoContinue"`
-	NextCommand                 RefCommand                          `json:"nextCommand" yaml:"nextCommand"`
-	NextCommandFor              Team                                `json:"nextCommandFor" yaml:"nextCommandFor"`
-	AutoRefsConnected           []string                            `json:"autoRefsConnected" yaml:"autoRefsConnected"`
-	GameEventBehavior           map[GameEventType]GameEventBehavior `json:"gameEventBehavior" yaml:"gameEventBehavior"`
-	GameEventProposals          []*GameEventProposal                `json:"gameEventProposals" yaml:"gameEventProposals"`
-	LackOfProgressDeadline      time.Time                           `json:"lackOfProgressDeadline" yaml:"lackOfProgressDeadline"`
-	LackOfProgressTimeRemaining time.Duration                       `json:"lackOfProgressTimeRemaining" yaml:"lackOfProgressTimeRemaining"` // LackOfProgressTimeRemaining contains the updated remaining lack of progress time for the UI
+	Stage                      Stage                               `json:"stage" yaml:"stage"`
+	Command                    RefCommand                          `json:"command" yaml:"command"`
+	CommandFor                 Team                                `json:"commandForTeam" yaml:"commandForTeam"`
+	GameEvents                 []*GameEvent                        `json:"gameEvents" yaml:"gameEvents"`
+	StageTimeElapsed           time.Duration                       `json:"stageTimeElapsed" yaml:"stageTimeElapsed"`
+	StageTimeLeft              time.Duration                       `json:"stageTimeLeft" yaml:"stageTimeLeft"`
+	MatchTimeStart             time.Time                           `json:"matchTimeStart" yaml:"matchTimeStart"`
+	MatchDuration              time.Duration                       `json:"matchDuration" yaml:"matchDuration"` // MatchDuration contains the updated match duration based on MatchTimeStart for the UI
+	TeamState                  map[Team]*TeamInfo                  `json:"teamState" yaml:"teamState"`
+	Division                   config.Division                     `json:"division" yaml:"division"`
+	PlacementPos               *Location                           `json:"placementPos" yaml:"placementPos"`
+	AutoContinue               bool                                `json:"autoContinue" yaml:"autoContinue"`
+	NextCommand                RefCommand                          `json:"nextCommand" yaml:"nextCommand"`
+	NextCommandFor             Team                                `json:"nextCommandFor" yaml:"nextCommandFor"`
+	AutoRefsConnected          []string                            `json:"autoRefsConnected" yaml:"autoRefsConnected"`
+	GameEventBehavior          map[GameEventType]GameEventBehavior `json:"gameEventBehavior" yaml:"gameEventBehavior"`
+	GameEventProposals         []*GameEventProposal                `json:"gameEventProposals" yaml:"gameEventProposals"`
+	CurrentActionDeadline      time.Time                           `json:"currentActionDeadline" yaml:"currentActionDeadline"`
+	CurrentActionTimeRemaining time.Duration                       `json:"currentActionTimeRemaining" yaml:"currentActionTimeRemaining"` // CurrentActionTimeRemaining contains the updated remaining lack of progress time for the UI
 }
 
 // NewState creates a new state, initialized for the start of a new game
@@ -397,7 +397,7 @@ func NewState() (s *State) {
 	s.StageTimeElapsed = 0
 	s.MatchDuration = 0
 	s.MatchTimeStart = time.Unix(0, 0)
-	s.LackOfProgressDeadline = time.Unix(0, 0)
+	s.CurrentActionDeadline = time.Unix(0, 0)
 
 	s.TeamState = map[Team]*TeamInfo{}
 	s.TeamState[TeamYellow] = new(TeamInfo)
@@ -490,23 +490,21 @@ func (s State) BotSubstitutionIntend() Team {
 	return TeamUnknown
 }
 
-func (s State) PrimaryGameEvent() (e *GameEvent) {
-	e = nil
-	for i := len(s.GameEvents) - 1; i >= 0; i-- {
-		e = s.GameEvents[i]
-		switch e.Type {
-		case GameEventMultipleCards:
-			// only this event causes a penalty kick and must be prioritized.
-			return
-		case GameEventGoal:
-			// Goal overrides everything else
-			return
-		case GameEventPlacementFailedByTeamInFavor:
-			// if team in favor fails to place the ball, the other team gets an indirect freekick -> override previous event
-			return
-		}
+func (s *State) PrimaryGameEvent() *GameEvent {
+	if len(s.GameEvents) == 0 {
+		return nil
 	}
-	return
+
+	if event := s.GetFirstGameEvent(GameEventMultipleCards); event != nil {
+		// only this event causes a penalty kick and must be prioritized.
+		return event
+	}
+
+	if event := s.GetFirstGameEvent(GameEventGoal); event != nil {
+		// Goal overrides everything else
+		return event
+	}
+	return s.GameEvents[len(s.GameEvents)-1]
 }
 
 func newTeamInfo() (t TeamInfo) {
@@ -550,6 +548,16 @@ func (s *State) TeamByName(teamName string) Team {
 		return TeamYellow
 	}
 	return ""
+}
+
+func (s *State) GetFirstGameEvent(gameEventType GameEventType) *GameEvent {
+	for i := len(s.GameEvents) - 1; i >= 0; i-- {
+		gameEvent := s.GameEvents[i]
+		if gameEvent.Type == gameEventType {
+			return gameEvent
+		}
+	}
+	return nil
 }
 
 // Location is a two-dimensional coordinate

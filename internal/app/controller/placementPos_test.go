@@ -96,7 +96,9 @@ func TestEngine_BallPlacementPos(t *testing.T) {
 
 func assertSimilar(t *testing.T, engine *Engine, expected Location) {
 	placementPos := engine.BallPlacementPos()
-	if !similar(expected, *placementPos) {
+	if placementPos == nil {
+		t.Fatalf("Expected placement pos to be %v, but was nil", expected)
+	} else if !similar(expected, *placementPos) {
 		t.Fatalf("Expected placement pos to be %v, but was %v", expected, *placementPos)
 	}
 }

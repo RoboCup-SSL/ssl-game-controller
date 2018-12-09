@@ -36,7 +36,7 @@ export class RefBoxState {
     autoRefsConnected = [];
     gameEventBehavior = {};
     gameEventProposals = [{proposerId: '', gameEvent: {type: '', details: {foo: 'bar'}}, validUntil: 0}];
-    lackOfProgressTimeRemaining = 0;
+    currentActionTimeRemaining = 0;
 }
 
 export default new Vuex.Store({

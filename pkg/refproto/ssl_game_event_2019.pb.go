@@ -2401,7 +2401,7 @@ func (m *GameEvent_PlacementFailedByTeamInFavor) GetRemainingDistance() float32 
 	return 0
 }
 
-// placement failed by the team other team
+// placement failed by the other team (which did the placement, because the team in favor could not do ball placement (did NOT fail before))
 type GameEvent_PlacementFailedByOpponent struct {
 	// the team that failed
 	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`

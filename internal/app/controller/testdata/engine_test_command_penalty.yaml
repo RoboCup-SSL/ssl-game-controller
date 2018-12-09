@@ -20,11 +20,11 @@ transitions:
       command: normalStart
       commandFor: ""
       nextCommand: ""
-      lackOfProgressDeadline: "2010-01-01T00:00:11Z"
-      lackOfProgressTimeRemaining: 10s
+      currentActionDeadline: "2010-01-01T00:00:11Z"
+      currentActionTimeRemaining: 10s
   - tick: 1s
     expectedStateDiff:
-      lackOfProgressTimeRemaining: 9s
+      currentActionTimeRemaining: 9s
       stageTimeElapsed: 1s
       stageTimeLeft: 4m59s
 

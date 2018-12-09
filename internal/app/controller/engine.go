@@ -63,13 +63,9 @@ func (e *Engine) Tick(delta time.Duration) {
 	if e.State.MatchTimeStart.After(time.Unix(0, 0)) {
 		e.State.MatchDuration = e.TimeProvider().Sub(e.State.MatchTimeStart)
 	}
-	if e.State.LackOfProgressDeadline.After(time.Unix(0, 0)) {
-		e.State.LackOfProgressTimeRemaining = e.RemainingLackOfProgressTime()
+	if e.State.CurrentActionDeadline.After(time.Unix(0, 0)) {
+		e.State.CurrentActionTimeRemaining = e.State.CurrentActionDeadline.Sub(e.TimeProvider())
 	}
-}
-
-func (e *Engine) RemainingLackOfProgressTime() time.Duration {
-	return e.State.LackOfProgressDeadline.Sub(e.TimeProvider())
 }
 
 func (e *Engine) updateTimes(delta time.Duration) {
@@ -123,24 +119,31 @@ func (e *Engine) SendCommand(command RefCommand, forTeam Team) {
 	}
 
 	if command.ContinuesGame() {
+		// reset game events
 		if len(e.State.GameEvents) > 0 {
 			e.State.GameEvents = []*GameEvent{}
 		}
+		// reset game event proposals
 		if len(e.State.GameEventProposals) > 0 {
 			e.State.GameEventProposals = []*GameEventProposal{}
 		}
+		// reset ball placement pos and follow ups
 		e.State.PlacementPos = nil
 		e.State.NextCommand = CommandUnknown
 		e.State.NextCommandFor = TeamUnknown
 
-		if command != CommandKickoff && command != CommandPenalty {
-			e.State.LackOfProgressTimeRemaining = e.config.LackOfProgressTimeout
-			if command == CommandIndirect || command == CommandDirect {
-				e.State.LackOfProgressTimeRemaining = e.config.LackOfProgressFreeKickTimeout[e.State.Division]
-			}
-			e.State.LackOfProgressDeadline = e.TimeProvider().Add(e.State.LackOfProgressTimeRemaining)
+		// update current action timeout
+		if command == CommandIndirect || command == CommandDirect {
+			e.setCurrentActionTimeout(e.config.FreeKickTime[e.State.Division])
+		} else if command != CommandKickoff && command != CommandPenalty {
+			e.setCurrentActionTimeout(e.config.GeneralTime)
 		}
 	}
+}
+
+func (e *Engine) setCurrentActionTimeout(timeout time.Duration) {
+	e.State.CurrentActionTimeRemaining = timeout
+	e.State.CurrentActionDeadline = e.TimeProvider().Add(e.State.CurrentActionTimeRemaining)
 }
 
 func (e *Engine) AddGameEvent(gameEvent GameEvent) {
@@ -172,57 +175,57 @@ func (e *Engine) CommandForEvent(event *GameEvent) (command RefCommand, forTeam 
 		return
 	}
 
-	forTeam = event.ByTeam().Opposite()
-
-	switch event.Type {
-	case
-		GameEventBallLeftFieldTouchLine,
-		GameEventAimlessKick,
-		GameEventBotKickedBallTooFast,
-		GameEventBotDribbledBallTooFar,
-		GameEventAttackerDoubleTouchedBall,
-		GameEventAttackerInDefenseArea,
-		GameEventAttackerTouchedKeeper,
-		GameEventKickTimeout,
-		GameEventKeeperHeldBall,
-		GameEventPlacementFailedByTeamInFavor:
+	if e.State.bothTeamsCanPlaceBall() && e.State.ballPlacementFailedBefore() && event.Type.resultsFromBallLeavingField() {
+		// A failed placement will result in an indirect free kick for the opposing team.
 		command = CommandIndirect
-	case
-		GameEventBallLeftFieldGoalLine,
-		GameEventIndirectGoal,
-		GameEventPossibleGoal,
-		GameEventChippedGoal,
-		GameEventDefenderInDefenseAreaPartially,
-		GameEventAttackerTooCloseToDefenseArea,
-		GameEventBotTippedOver,
-		GameEventBotCrashUnique,
-		GameEventBotPushedBot,
-		GameEventBotHeldBallDeliberately:
-		command = CommandDirect
-	case
-		GameEventGoal:
-		command = CommandKickoff
-	case
-		GameEventBotCrashDrawn,
-		GameEventNoProgressInGame:
-		command = CommandForceStart
-	case
-		GameEventDefenderInDefenseArea,
-		GameEventMultipleCards:
-		command = CommandPenalty
-	case
-		GameEventBotInterferedPlacement,
-		GameEventDefenderTooCloseToKickPoint,
-		GameEventPlacementFailedByOpponent:
-		command, err = e.LastGameStartCommand()
-	default:
-		err = errors.Errorf("Unhandled game event: %v", e.State.GameEvents)
-	}
+		forTeam = event.ByTeam()
+	} else {
+		forTeam = event.ByTeam().Opposite()
+		switch event.Type {
+		case
+			GameEventBallLeftFieldTouchLine,
+			GameEventAimlessKick,
+			GameEventBotKickedBallTooFast,
+			GameEventBotDribbledBallTooFar,
+			GameEventAttackerDoubleTouchedBall,
+			GameEventAttackerInDefenseArea,
+			GameEventAttackerTouchedKeeper,
+			GameEventKickTimeout,
+			GameEventKeeperHeldBall:
+			command = CommandIndirect
+		case
+			GameEventBallLeftFieldGoalLine,
+			GameEventIndirectGoal,
+			GameEventPossibleGoal,
+			GameEventChippedGoal,
+			GameEventDefenderInDefenseAreaPartially,
+			GameEventAttackerTooCloseToDefenseArea,
+			GameEventBotTippedOver,
+			GameEventBotCrashUnique,
+			GameEventBotPushedBot,
+			GameEventBotHeldBallDeliberately:
+			command = CommandDirect
+		case
+			GameEventGoal:
+			command = CommandKickoff
+		case
+			GameEventBotCrashDrawn,
+			GameEventNoProgressInGame:
+			command = CommandForceStart
+		case
+			GameEventDefenderInDefenseArea,
+			GameEventMultipleCards:
+			command = CommandPenalty
+		default:
+			err = errors.Errorf("Unhandled game event: %v", e.State.GameEvents)
+		}
 
-	if e.State.Division == config.DivA && command.IsFreeKick() && !e.State.TeamState[forTeam].CanPlaceBall {
-		// in division A, if the team in favor can not place the ball (because of too many failures), free kicks are awarded to the other team
-		forTeam = forTeam.Opposite()
-		command = CommandIndirect
+		if e.State.Division == config.DivA && // For division A
+			!e.State.TeamState[forTeam].CanPlaceBall && // If team in favor can not place the ball
+			event.Type.resultsFromBallLeavingField() { // event is caused by the ball leaving the field
+			// All free kicks that were a result of the ball leaving the field, are awarded to the opposing team.
+			forTeam = forTeam.Opposite()
+		}
 	}
 
 	if command.NeedsTeam() && forTeam.Unknown() {
@@ -234,18 +237,35 @@ func (e *Engine) CommandForEvent(event *GameEvent) (command RefCommand, forTeam 
 	return
 }
 
-func (e *Engine) LastGameStartCommand() (RefCommand, error) {
-	for i := len(e.UiProtocol) - 1; i >= 0; i-- {
-		event := e.UiProtocol[i]
-		if event.Type == UiProtocolCommand {
-			cmd := RefCommand(event.Name)
-			switch cmd {
-			case CommandPenalty, CommandKickoff, CommandIndirect, CommandDirect:
-				return cmd, nil
-			}
+func (g GameEventType) resultsFromBallLeavingField() bool {
+	switch g {
+	case
+		GameEventBallLeftFieldTouchLine,
+		GameEventBallLeftFieldGoalLine,
+		GameEventAimlessKick,
+		GameEventIndirectGoal,
+		GameEventPossibleGoal,
+		GameEventChippedGoal:
+		return true
+	}
+	return false
+}
+
+func (s *State) bothTeamsCanPlaceBall() bool {
+	return s.TeamState[TeamYellow].CanPlaceBall && s.TeamState[TeamBlue].CanPlaceBall
+}
+
+func (s *State) noTeamCanPlaceBall() bool {
+	return !s.TeamState[TeamYellow].CanPlaceBall && !s.TeamState[TeamBlue].CanPlaceBall
+}
+
+func (s *State) ballPlacementFailedBefore() bool {
+	for _, gameEvent := range s.GameEvents {
+		if gameEvent.Type == GameEventPlacementFailedByTeamInFavor {
+			return true
 		}
 	}
-	return "", errors.New("No last game start command found.")
+	return false
 }
 
 func (e *Engine) Process(event Event) error {
@@ -613,29 +633,50 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 		e.State.TeamState[team].Goals++
 	}
 
+	if event.Type == GameEventBotInterferedPlacement {
+		// reset ball placement timer
+		e.setCurrentActionTimeout(e.config.BallPlacementTime)
+	}
+
 	e.State.PlacementPos = e.BallPlacementPos()
 
-	if e.State.GameState() != GameStateHalted && !event.IsSkipped() && !event.IsSecondary() {
-		if event.Type == GameEventPossibleGoal || event.Type == GameEventPlacementFailedByOpponent || e.allTeamsFailedPlacement() {
-			e.SendCommand(CommandHalt, "")
-		} else if e.State.PlacementPos != nil && (event.ByTeam() == TeamBlue || event.ByTeam() == TeamYellow) {
-			teamInFavor := event.ByTeam().Opposite()
-			if e.State.TeamState[teamInFavor].CanPlaceBall {
-				e.SendCommand(CommandBallPlacement, teamInFavor)
-			} else if e.State.TeamState[teamInFavor.Opposite()].CanPlaceBall {
-				e.SendCommand(CommandBallPlacement, teamInFavor.Opposite())
-			} else if e.State.GameState() != GameStateStopped {
-				e.SendCommand(CommandStop, "")
-			}
-		} else if e.State.GameState() != GameStateStopped {
-			e.SendCommand(CommandStop, "")
-		}
+	if e.State.GameState() == GameStateHalted {
+		log.Printf("Warn: Received a game event while halted: %v", event)
+	} else if event.Type == GameEventDefenderTooCloseToKickPoint {
+		// stop the game and let bots move away from the ball first. The autoRef will continue the game afterwards
+		e.SendCommand(CommandStop, "")
+	} else if !event.IsSkipped() && !event.IsSecondary() {
+		e.placeBall(event)
 	} else if e.State.AutoContinue && event.IsContinueGame() {
 		e.Continue()
 	}
 
 	log.Printf("Processed game event %v", event)
 	return nil
+}
+
+func (e *Engine) placeBall(event *GameEvent) {
+	teamInFavor := event.ByTeam().Opposite()
+	if e.State.PlacementPos == nil || teamInFavor.Unknown() || e.State.noTeamCanPlaceBall() {
+		// placement not possible, human ref must help out
+		e.SendCommand(CommandHalt, "")
+		return
+	} else if e.State.Division == config.DivB && // For division B
+		!e.State.TeamState[teamInFavor].CanPlaceBall { // If team in favor can not place the ball
+		// Rule: [...] the team is allowed to bring the ball into play, after the ball was placed by the opposing team.
+		e.SendCommand(CommandBallPlacement, teamInFavor.Opposite())
+	} else if e.State.bothTeamsCanPlaceBall() && e.State.ballPlacementFailedBefore() && event.Type.resultsFromBallLeavingField() {
+		// Rule: A failed placement will result in an indirect free kick for the opposing team.
+		e.SendCommand(CommandBallPlacement, teamInFavor.Opposite())
+	} else if e.State.Division == config.DivA && // For division A
+		!e.State.TeamState[teamInFavor].CanPlaceBall && // If team in favor can not place the ball
+		event.Type.resultsFromBallLeavingField() {
+		// Rule: All free kicks that were a result of the ball leaving the field, are awarded to the opposing team.
+		e.SendCommand(CommandBallPlacement, teamInFavor.Opposite())
+	} else {
+		e.SendCommand(CommandBallPlacement, teamInFavor)
+	}
+	e.setCurrentActionTimeout(e.config.BallPlacementTime)
 }
 
 func (e *Engine) allTeamsFailedPlacement() bool {

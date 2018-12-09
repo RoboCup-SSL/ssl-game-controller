@@ -26,8 +26,8 @@ transitions:
       commandFor: ""
       nextCommand: ""
       matchTimeStart: "2010-01-01T00:00:00Z"
-      lackOfProgressDeadline: "2010-01-01T00:00:10Z"
-      lackOfProgressTimeRemaining: 10000000000
+      currentActionDeadline: "2010-01-01T00:00:10Z"
+      currentActionTimeRemaining: 10000000000
   - event:
       command:
         type: stop
