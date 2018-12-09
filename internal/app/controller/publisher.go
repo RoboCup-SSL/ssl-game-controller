@@ -23,7 +23,7 @@ type RefMessage struct {
 }
 
 // NewPublisher creates a new publisher that publishes referee messages via UDP to the teams
-func NewPublisher(address string) (publisher Publisher, err error) {
+func NewPublisher(address string) (publisher Publisher) {
 
 	publisher.address = address
 
@@ -31,21 +31,23 @@ func NewPublisher(address string) (publisher Publisher, err error) {
 	publisher.message = RefMessage{send: publisher.send, referee: new(refproto.Referee)}
 	initRefereeMessage(publisher.message.referee)
 
-	err = publisher.connect()
+	publisher.connect()
 
 	return
 }
 
-func (p *Publisher) connect() (err error) {
+func (p *Publisher) connect() {
 	p.conn = nil
 
 	addr, err := net.ResolveUDPAddr("udp", p.address)
 	if err != nil {
+		log.Printf("Could not resolve address '%v': %v", p.address, err)
 		return
 	}
 
 	conn, err := net.DialUDP("udp", nil, addr)
 	if err != nil {
+		log.Printf("Could not connect to '%v': %v", addr, err)
 		return
 	}
 

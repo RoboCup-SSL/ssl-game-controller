@@ -35,7 +35,7 @@ func NewGameController() (c *GameController) {
 
 	c = new(GameController)
 	c.Config = loadConfig()
-	c.Publisher = loadPublisher(c.Config)
+	c.Publisher = NewPublisher(c.Config.Network.PublishAddress)
 	c.ApiServer = ApiServer{}
 	c.ApiServer.Consumer = c
 
@@ -172,15 +172,6 @@ func (c *GameController) OnNewEvent(event Event) {
 	} else {
 		c.publish()
 	}
-}
-
-// loadPublisher creates a new publisher for multicast
-func loadPublisher(config config.Controller) Publisher {
-	publisher, err := NewPublisher(config.Network.PublishAddress)
-	if err != nil {
-		log.Printf("Could not start publisher on %v. %v", config.Network.PublishAddress, err)
-	}
-	return publisher
 }
 
 // loadConfig loads the controller config
