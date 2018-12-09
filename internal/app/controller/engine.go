@@ -610,7 +610,7 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 	e.State.PlacementPos = e.BallPlacementPos()
 
 	if e.State.GameState() != GameStateHalted && !event.IsSkipped() && !event.IsSecondary() {
-		if event.Type == GameEventPossibleGoal || event.Type == GameEventPlacementFailedByOpponent || e.placementFailedTwice() {
+		if event.Type == GameEventPossibleGoal || event.Type == GameEventPlacementFailedByOpponent || e.allTeamsFailedPlacement() {
 			e.SendCommand(CommandHalt, "")
 		} else if e.State.PlacementPos != nil && (event.ByTeam() == TeamBlue || event.ByTeam() == TeamYellow) {
 			teamInFavor := event.ByTeam().Opposite()
@@ -632,12 +632,19 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 	return nil
 }
 
-func (e *Engine) placementFailedTwice() bool {
+func (e *Engine) allTeamsFailedPlacement() bool {
+	possibleFailures := 0
+	if e.State.TeamState[TeamYellow].CanPlaceBall {
+		possibleFailures++
+	}
+	if e.State.TeamState[TeamBlue].CanPlaceBall {
+		possibleFailures++
+	}
 	failures := 0
 	for _, e := range e.State.GameEvents {
 		if e.Type == GameEventPlacementFailedByTeamInFavor {
 			failures++
-			if failures >= 2 {
+			if failures >= possibleFailures {
 				return true
 			}
 		}
