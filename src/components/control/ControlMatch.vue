@@ -30,10 +30,15 @@
             End of Game
         </b-button>
         <div class="divisions btn-group-toggle btn-group">
-            <label :class="{btn:true, 'btn-secondary': true, active: isDivA}" @click="switchDivision('DivA')">Div
-                A</label>
-            <label :class="{btn:true, 'btn-secondary': true, active: !isDivA}" @click="switchDivision('DivB')">Div
-                B</label>
+            <label :class="{btn:true, 'btn-secondary': true, active: isDivA, disabled: forbidMatchControls}"
+                   @click="switchDivision('DivA')"
+                   :disabled="forbidMatchControls">
+                Div A
+            </label>
+            <label :class="{btn:true, 'btn-secondary': true, active: !isDivA, disabled: forbidMatchControls}"
+                   @click="switchDivision('DivB')">
+                Div B
+            </label>
         </div>
     </div>
 </template>
