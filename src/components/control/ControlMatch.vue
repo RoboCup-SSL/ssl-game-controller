@@ -19,11 +19,6 @@
                   :disabled="forbidMatchControls">
             Switch sides
         </b-button>
-        <b-button v-b-tooltip.hover title="Change back to the previous stage (if something went wrong)"
-                  v-on:click="previousStage"
-                  :disabled="forbidMatchControls || noPreviousStage">
-            Previous Stage
-        </b-button>
         <b-button v-b-tooltip.hover title="Proceed to the next stage"
                   v-on:click="nextStage"
                   :disabled="forbidMatchControls || noNextStage">
