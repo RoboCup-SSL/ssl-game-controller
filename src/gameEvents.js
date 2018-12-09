@@ -10,13 +10,8 @@ export const matchProceedingEvents = [
         type: 'auto'
     },
     {
-        name: 'Placement failed by the team in favor',
-        component: 'PlacementFailedByTeamInFavor',
-        type: 'auto'
-    },
-    {
-        name: 'Placement failed by the opponent team',
-        component: 'PlacementFailedByOpponent',
+        name: 'Placement failed',
+        component: 'PlacementFailed',
         type: 'auto'
     },
     {

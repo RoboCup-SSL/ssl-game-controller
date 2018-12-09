@@ -13,7 +13,7 @@
     import TeamSelection from "../../common/TeamSelection";
 
     export default {
-        name: "PlacementFailedByOpponent",
+        name: "PlacementFailed",
         components: {TeamSelection},
         data() {
             return {
@@ -26,9 +26,9 @@
             sendEvent: function () {
                 this.$socket.sendObj({
                     gameEvent: {
-                        type: 'placementFailedByOpponent',
+                        type: 'placementFailed',
                         details: {
-                            ['placementFailedByOpponent']: {
+                            ['placementFailed']: {
                                 by_team: this.model.team.toLocaleUpperCase(),
                             }
                         }

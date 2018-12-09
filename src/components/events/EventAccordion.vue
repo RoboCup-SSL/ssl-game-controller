@@ -47,8 +47,7 @@
     import MultipleCards from "./inputs/MultipleCards"
     import MultiplePlacementFailures from "./inputs/MultiplePlacementFailures"
     import NoProgressInGame from "./inputs/NoProgressInGame"
-    import PlacementFailedByOpponent from "./inputs/PlacementFailedByOpponent"
-    import PlacementFailedByTeamInFavor from "./inputs/PlacementFailedByTeamInFavor"
+    import PlacementFailed from "./inputs/PlacementFailed"
     import UnsportingBehaviorMajor from "./inputs/UnsportingBehaviorMajor"
     import UnsportingBehaviorMinor from "./inputs/UnsportingBehaviorMinor"
     import PlacementSucceeded from "./inputs/PlacementSucceeded"
@@ -89,8 +88,7 @@
             MultipleCards,
             MultiplePlacementFailures,
             NoProgressInGame,
-            PlacementFailedByOpponent,
-            PlacementFailedByTeamInFavor,
+            PlacementFailed,
             UnsportingBehaviorMajor,
             UnsportingBehaviorMinor,
             PlacementSucceeded,

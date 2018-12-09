@@ -261,7 +261,7 @@ func (s *State) noTeamCanPlaceBall() bool {
 
 func (s *State) ballPlacementFailedBefore() bool {
 	for _, gameEvent := range s.GameEvents {
-		if gameEvent.Type == GameEventPlacementFailedByTeamInFavor {
+		if gameEvent.Type == GameEventPlacementFailed {
 			return true
 		}
 	}
@@ -608,7 +608,7 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 		e.addCard(&EventCard{Type: CardTypeRed, ForTeam: team, Operation: CardOperationAdd}, team, 0)
 	}
 
-	if event.IncrementsBallPlacementFailureCounter() {
+	if event.Type == GameEventPlacementFailed {
 		team := event.ByTeam()
 		if team.Unknown() {
 			return errors.New("Missing team in game event")
@@ -689,7 +689,7 @@ func (e *Engine) allTeamsFailedPlacement() bool {
 	}
 	failures := 0
 	for _, e := range e.State.GameEvents {
-		if e.Type == GameEventPlacementFailedByTeamInFavor {
+		if e.Type == GameEventPlacementFailed {
 			failures++
 			if failures >= possibleFailures {
 				return true

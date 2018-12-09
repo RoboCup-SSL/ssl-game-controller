@@ -17,8 +17,7 @@ message GameEvent {
 
         Prepared prepared = 1;
         NoProgressInGame no_progress_in_game = 2;
-        PlacementFailedByTeamInFavor placement_failed_by_team_in_favor = 3;
-        PlacementFailedByOpponent placement_failed_by_opponent = 4;
+        PlacementFailed placement_failed = 3;
         PlacementSucceeded placement_succeeded = 5;
         BotSubstitution bot_substitution = 37;
         TooManyRobots too_many_robots = 38;
@@ -341,15 +340,8 @@ message GameEvent {
         // the time [s] that was waited
         optional float time = 2;
     }
-    // placement failed by the team that should bring the ball into play next
-    message PlacementFailedByTeamInFavor {
-        // the team that failed
-        required Team by_team = 1;
-        // the remaining distance from ball to placement position
-        optional float remaining_distance = 2;
-    }
-    // placement failed by the other team (which did the placement, because the team in favor could not do ball placement (did NOT fail before))
-    message PlacementFailedByOpponent {
+    // ball placement failed
+    message PlacementFailed {
         // the team that failed
         required Team by_team = 1;
         // the remaining distance from ball to placement position

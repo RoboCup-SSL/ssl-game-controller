@@ -95,9 +95,7 @@ func (e *Engine) BallPlacementPos() *Location {
 		return e.validateLocation(e.State.PlacementPos)
 	case GameEventNoProgressInGame:
 		return e.validateProtoLocation(event.Details.NoProgressInGame.Location)
-	case GameEventPlacementFailedByTeamInFavor:
-		return e.validateLocation(e.State.PlacementPos)
-	case GameEventPlacementFailedByOpponent:
+	case GameEventPlacementFailed:
 		return e.validateLocation(e.State.PlacementPos)
 	default:
 		log.Print("Warn: Unknown game event: ", event.Type)
