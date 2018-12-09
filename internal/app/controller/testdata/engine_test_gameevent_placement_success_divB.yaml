@@ -1,6 +1,6 @@
 # Situation:
-# Division: A
-# Who can place: team *not* in favor only
+# Division: B
+# Who can place: both teams
 # Who succeeds: First team
 # What happened: ball left field on goal line -> direct
 #
@@ -9,17 +9,18 @@
 # team in favor: Blue
 #
 # Expectation:
-# Blue can't place the ball, so Yellow should get an indirect free kick and should place the ball.
-# It will succeed and should get the indirect free kick afterwards.
+# Blue is awarded a direct free kick, places the ball successfully and performs the direct free kick.
 #
 initialState:
   stage: First Half
   command: forceStart
-  division: DivA
+  division: DivB
   stageTimeLeft: 5m
   teamState:
+    Yellow:
+      ballPlacementFailures: 2
     Blue:
-      canPlaceBall: false
+      ballPlacementFailures: 3
 transitions:
   - event:
       gameEvent:
@@ -29,16 +30,16 @@ transitions:
             byteam: 1 # Yellow
             bybot: 0
             location:
-              x: 6.0
-              y: 4.0
+              x: 4.5
+              y: 3.0
     expectedStateDiff:
       command: ballPlacement
-      commandFor: Yellow
-      nextCommand: indirect
-      nextCommandFor: Yellow
+      commandFor: Blue
+      nextCommand: direct
+      nextCommandFor: Blue
       placementPos:
-        x: 5.8
-        y: 4.3
+        x: 4.3
+        y: 2.8
       gameEvents:
         - type: ballLeftFieldGoalLine
           details:
@@ -46,22 +47,26 @@ transitions:
               byteam: 1 # Yellow
               bybot: 0
               location:
-                x: 6.0
-                y: 4.0
+                x: 4.5
+                y: 3.0
   - tick: 1s # make sure that the stage time is not proceeded
   - event:
       gameEvent:
         type: placementSucceeded
         details:
           placementsucceeded:
-            byteam: 1 # Yellow
+            byteam: 2 # Blue
             timetaken: 1.0
             precision: 0.01
     expectedStateDiff:
-      command: indirect
-      commandFor: Yellow
+      command: direct
+      commandFor: Blue
       nextCommand: ""
       nextCommandFor: ""
-      lackOfProgressDeadline: "2010-01-01T00:00:06Z"
-      lackOfProgressTimeRemaining: 5s
+      lackOfProgressDeadline: "2010-01-01T00:00:11Z"
+      lackOfProgressTimeRemaining: 10s
       gameEvents: []
+      teamState:
+        Blue:
+          ballPlacementFailures: 0
+

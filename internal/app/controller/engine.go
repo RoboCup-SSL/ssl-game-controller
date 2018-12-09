@@ -45,15 +45,15 @@ func (e *Engine) loadStages() {
 
 func (e *Engine) ResetGame() {
 	e.State = NewState()
+	e.UiProtocol = []UiProtocolEntry{}
+	e.State.Division = e.config.DefaultDivision
+	e.Geometry = *e.config.DefaultGeometry[e.State.Division]
+
 	for _, team := range []Team{TeamBlue, TeamYellow} {
 		e.State.TeamState[team].TimeoutTimeLeft = e.config.Normal.TimeoutDuration
 		e.State.TeamState[team].TimeoutsLeft = e.config.Normal.Timeouts
 		e.State.TeamState[team].MaxAllowedBots = e.config.MaxBots[e.State.Division]
 	}
-
-	e.UiProtocol = []UiProtocolEntry{}
-	e.State.Division = e.config.DefaultDivision
-	e.Geometry = *e.config.DefaultGeometry[e.State.Division]
 }
 
 // Tick updates the times of the state and removes cards, if necessary

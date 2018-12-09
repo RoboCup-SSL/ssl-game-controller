@@ -84,20 +84,26 @@ func processTransitionFile(t *testing.T, fileName string) {
 	if err != nil {
 		t.Fatal(err)
 	}
+
 	stateTransitions := new(StateTransitions)
 	if err := yaml.UnmarshalStrict(bytes, &stateTransitions); err != nil {
 		t.Fatal("Could not unmarshal state transitions:", err)
 	}
+
+	if stateTransitions.InitialState == nil {
+		t.Fatalf("No initial state given: %v", stateTransitions)
+	}
+
 	cfg := config.DefaultControllerConfig().Game
+	if stateTransitions.InitialState.Division != nil {
+		cfg.DefaultDivision = *stateTransitions.InitialState.Division
+	}
+
 	e := NewEngine(cfg)
 	initialTime := initialTime()
 	elapsedTime := time.Duration(0)
 	e.TimeProvider = func() time.Time {
 		return initialTime.Add(elapsedTime)
-	}
-
-	if stateTransitions.InitialState == nil {
-		t.Fatalf("No initial state given: %v", stateTransitions)
 	}
 
 	// apply the initial state to the engine
