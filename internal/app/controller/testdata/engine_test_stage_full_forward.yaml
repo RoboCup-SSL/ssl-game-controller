@@ -1,0 +1,90 @@
+initialState:
+  stage: Pre-First Half
+  command: halt
+  division: DivA
+transitions:
+  - event:
+      stage:
+        stageOperation: next
+    expectedStateDiff:
+      stage: First Half
+      stageTimeLeft: 5m
+      matchTimeStart: "2010-01-01T00:00:00Z"
+  - event:
+      stage:
+        stageOperation: next
+    expectedStateDiff:
+      stage: Half Time
+      stageTimeLeft: 5m
+  - event:
+      stage:
+        stageOperation: next
+    expectedStateDiff:
+      stage: Pre-Second Half
+      stageTimeLeft: 0
+  - event:
+      stage:
+        stageOperation: next
+    expectedStateDiff:
+      stage: Second Half
+      stageTimeLeft: 5m
+  - event:
+      stage:
+        stageOperation: next
+    expectedStateDiff:
+      stage: Overtime Break
+      stageTimeLeft: 5m
+  - event:
+      stage:
+        stageOperation: next
+    expectedStateDiff:
+      stage: Pre-Overtime First Half
+      stageTimeLeft: 0
+      teamState:
+        Blue:
+          timeoutsLeft: 2
+        Yellow:
+          timeoutsLeft: 2
+  - event:
+      stage:
+        stageOperation: next
+    expectedStateDiff:
+      stage: Overtime First Half
+      stageTimeLeft: 2m30s
+  - event:
+      stage:
+        stageOperation: next
+    expectedStateDiff:
+      stage: Overtime Half Time
+      stageTimeLeft: 2m
+  - event:
+      stage:
+        stageOperation: next
+    expectedStateDiff:
+      stage: Pre-Overtime Second Half
+      stageTimeLeft: 0
+  - event:
+      stage:
+        stageOperation: next
+    expectedStateDiff:
+      stage: Overtime Second Half
+      stageTimeLeft: 2m30s
+  - event:
+      stage:
+        stageOperation: next
+    expectedStateDiff:
+      stage: Shootout Break
+      stageTimeLeft: 2m
+  - event:
+      stage:
+        stageOperation: next
+    expectedStateDiff:
+      stage: Shootout
+      stageTimeLeft: 0
+  - event:
+      stage:
+        stageOperation: next
+    expectedStateDiff:
+      stage: End of Game
+      stageTimeLeft: 0
+

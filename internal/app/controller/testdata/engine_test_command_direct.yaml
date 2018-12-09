@@ -1,0 +1,36 @@
+initialState:
+  stage: First Half
+  command: stop
+  division: DivA
+  stageTimeLeft: 5m
+transitions:
+  - event:
+      command:
+        type: direct
+        forTeam: Yellow
+    expectedStateDiff:
+      command: direct
+      commandFor: Yellow
+      lackOfProgressDeadline: "2010-01-01T00:00:05Z"
+      lackOfProgressTimeRemaining: 5s
+  - tick: 1s
+    expectedStateDiff:
+      lackOfProgressTimeRemaining: 4s
+      stageTimeElapsed: 1s
+      stageTimeLeft: 4m59s
+  - event:
+      command:
+        type: stop
+    expectedStateDiff:
+      command: stop
+      commandFor: ""
+  - event:
+      command:
+        type: direct
+        forTeam: Blue
+    expectedStateDiff:
+      command: direct
+      commandFor: Blue
+      lackOfProgressDeadline: "2010-01-01T00:00:06Z"
+      lackOfProgressTimeRemaining: 5s
+

@@ -239,21 +239,21 @@ const (
 
 // TeamInfo about a team
 type TeamInfo struct {
-	Name                  string          `json:"name"`
-	Goals                 int             `json:"goals"`
-	Goalkeeper            int             `json:"goalkeeper"`
-	YellowCards           int             `json:"yellowCards"`
-	YellowCardTimes       []time.Duration `json:"yellowCardTimes"`
-	RedCards              int             `json:"redCards"`
-	TimeoutsLeft          int             `json:"timeoutsLeft"`
-	TimeoutTimeLeft       time.Duration   `json:"timeoutTimeLeft"`
-	OnPositiveHalf        bool            `json:"onPositiveHalf"`
-	FoulCounter           int             `json:"foulCounter"`
-	BallPlacementFailures int             `json:"ballPlacementFailures"`
-	CanPlaceBall          bool            `json:"canPlaceBall"`
-	MaxAllowedBots        int             `json:"maxAllowedBots"`
-	Connected             bool            `json:"connected"`
-	BotSubstitutionIntend bool            `json:"botSubstitutionIntend"`
+	Name                  string          `json:"name" yaml:"name"`
+	Goals                 int             `json:"goals" yaml:"goals"`
+	Goalkeeper            int             `json:"goalkeeper" yaml:"goalkeeper"`
+	YellowCards           int             `json:"yellowCards" yaml:"yellowCards"`
+	YellowCardTimes       []time.Duration `json:"yellowCardTimes" yaml:"yellowCardTimes"`
+	RedCards              int             `json:"redCards" yaml:"redCards"`
+	TimeoutsLeft          int             `json:"timeoutsLeft" yaml:"timeoutsLeft"`
+	TimeoutTimeLeft       time.Duration   `json:"timeoutTimeLeft" yaml:"timeoutTimeLeft"`
+	OnPositiveHalf        bool            `json:"onPositiveHalf" yaml:"onPositiveHalf"`
+	FoulCounter           int             `json:"foulCounter" yaml:"foulCounter"`
+	BallPlacementFailures int             `json:"ballPlacementFailures" yaml:"ballPlacementFailures"`
+	CanPlaceBall          bool            `json:"canPlaceBall" yaml:"canPlaceBall"`
+	MaxAllowedBots        int             `json:"maxAllowedBots" yaml:"maxAllowedBots"`
+	Connected             bool            `json:"connected" yaml:"connected"`
+	BotSubstitutionIntend bool            `json:"botSubstitutionIntend" yaml:"botSubstitutionIntend"`
 }
 
 func (t TeamInfo) DeepCopy() (c TeamInfo) {
@@ -279,25 +279,25 @@ type GameEventProposal struct {
 
 // State of the game
 type State struct {
-	Stage                       Stage                               `json:"stage"`
-	Command                     RefCommand                          `json:"command"`
-	CommandFor                  Team                                `json:"commandForTeam"`
-	GameEvents                  []*GameEvent                        `json:"gameEvents"`
-	StageTimeElapsed            time.Duration                       `json:"stageTimeElapsed"`
-	StageTimeLeft               time.Duration                       `json:"stageTimeLeft"`
-	MatchTimeStart              time.Time                           `json:"matchTimeStart"`
-	MatchDuration               time.Duration                       `json:"matchDuration"` // MatchDuration contains the updated match duration based on MatchTimeStart for the UI
-	TeamState                   map[Team]*TeamInfo                  `json:"teamState"`
-	Division                    config.Division                     `json:"division"`
-	PlacementPos                *Location                           `json:"placementPos"`
-	AutoContinue                bool                                `json:"autoContinue"`
-	NextCommand                 RefCommand                          `json:"nextCommand"`
-	NextCommandFor              Team                                `json:"nextCommandFor"`
-	AutoRefsConnected           []string                            `json:"autoRefsConnected"`
-	GameEventBehavior           map[GameEventType]GameEventBehavior `json:"gameEventBehavior"`
-	GameEventProposals          []*GameEventProposal                `json:"gameEventProposals"`
-	LackOfProgressDeadline      time.Time                           `json:"lackOfProgressDeadline"`
-	LackOfProgressTimeRemaining time.Duration                       `json:"lackOfProgressTimeRemaining"` // LackOfProgressTimeRemaining contains the updated remaining lack of progress time for the UI
+	Stage                       Stage                               `json:"stage" yaml:"stage"`
+	Command                     RefCommand                          `json:"command" yaml:"command"`
+	CommandFor                  Team                                `json:"commandForTeam" yaml:"commandForTeam"`
+	GameEvents                  []*GameEvent                        `json:"gameEvents" yaml:"gameEvents"`
+	StageTimeElapsed            time.Duration                       `json:"stageTimeElapsed" yaml:"stageTimeElapsed"`
+	StageTimeLeft               time.Duration                       `json:"stageTimeLeft" yaml:"stageTimeLeft"`
+	MatchTimeStart              time.Time                           `json:"matchTimeStart" yaml:"matchTimeStart"`
+	MatchDuration               time.Duration                       `json:"matchDuration" yaml:"matchDuration"` // MatchDuration contains the updated match duration based on MatchTimeStart for the UI
+	TeamState                   map[Team]*TeamInfo                  `json:"teamState" yaml:"teamState"`
+	Division                    config.Division                     `json:"division" yaml:"division"`
+	PlacementPos                *Location                           `json:"placementPos" yaml:"placementPos"`
+	AutoContinue                bool                                `json:"autoContinue" yaml:"autoContinue"`
+	NextCommand                 RefCommand                          `json:"nextCommand" yaml:"nextCommand"`
+	NextCommandFor              Team                                `json:"nextCommandFor" yaml:"nextCommandFor"`
+	AutoRefsConnected           []string                            `json:"autoRefsConnected" yaml:"autoRefsConnected"`
+	GameEventBehavior           map[GameEventType]GameEventBehavior `json:"gameEventBehavior" yaml:"gameEventBehavior"`
+	GameEventProposals          []*GameEventProposal                `json:"gameEventProposals" yaml:"gameEventProposals"`
+	LackOfProgressDeadline      time.Time                           `json:"lackOfProgressDeadline" yaml:"lackOfProgressDeadline"`
+	LackOfProgressTimeRemaining time.Duration                       `json:"lackOfProgressTimeRemaining" yaml:"lackOfProgressTimeRemaining"` // LackOfProgressTimeRemaining contains the updated remaining lack of progress time for the UI
 }
 
 // NewState creates a new state, initialized for the start of a new game
@@ -327,6 +327,9 @@ func NewState() (s *State) {
 	for _, event := range AllGameEvents() {
 		s.GameEventBehavior[event] = GameEventBehaviorOn
 	}
+
+	s.AutoRefsConnected = []string{}
+	s.GameEventProposals = []*GameEventProposal{}
 
 	return
 }

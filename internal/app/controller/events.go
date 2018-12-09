@@ -61,23 +61,23 @@ const (
 
 // CardModification to apply to a card
 type CardModification struct {
-	CardID   int           `json:"cardId"`
-	TimeLeft time.Duration `json:"timeLeft"`
+	CardID   int           `json:"cardId" yaml:"cardId"`
+	TimeLeft time.Duration `json:"timeLeft" yaml:"timeLeft"`
 }
 
 // EventCard is an event that can be applied
 type EventCard struct {
-	ForTeam      Team             `json:"forTeam"`
-	Type         CardType         `json:"cardType"`
-	Operation    CardOperation    `json:"operation"`
-	Modification CardModification `json:"modification"`
+	ForTeam      Team             `json:"forTeam" yaml:"forTeam"`
+	Type         CardType         `json:"cardType" yaml:"type"`
+	Operation    CardOperation    `json:"operation" yaml:"operation"`
+	Modification CardModification `json:"modification" yaml:"modification"`
 }
 
 // EventCommand is an event that can be applied
 type EventCommand struct {
-	ForTeam  *Team      `json:"forTeam"`
-	Type     RefCommand `json:"commandType"`
-	Location *Location  `json:"location"`
+	ForTeam  *Team      `json:"forTeam" yaml:"forTeam"`
+	Type     RefCommand `json:"commandType" yaml:"type"`
+	Location *Location  `json:"location" yaml:"location"`
 }
 
 func (c EventCommand) String() string {
@@ -92,36 +92,36 @@ func (c EventCommand) String() string {
 
 // EventModifyCardTime holds the duration for a certain yellow card duration
 type EventModifyCardTime struct {
-	CardID   int    `json:"cardId"`
-	Duration string `json:"duration"`
+	CardID   int    `json:"cardId" yaml:"cardId"`
+	Duration string `json:"duration" yaml:"duration"`
 }
 
 // EventModifyGameEventBehavior holds the type to behavior mapping
 type EventModifyGameEventBehavior struct {
-	GameEventType     GameEventType     `json:"gameEventType"`
-	GameEventBehavior GameEventBehavior `json:"gameEventBehavior"`
+	GameEventType     GameEventType     `json:"gameEventType" yaml:"gameEventType"`
+	GameEventBehavior GameEventBehavior `json:"gameEventBehavior" yaml:"gameEventBehavior"`
 }
 
 // EventModifyValue is an event that can be applied
 type EventModifyValue struct {
 	ForTeam Team `json:"forTeam,omitempty"`
 
-	Goals                 *int                          `json:"goals,omitempty"`
-	Goalkeeper            *int                          `json:"goalkeeper,omitempty"`
-	YellowCards           *int                          `json:"yellowCards,omitempty"`
-	YellowCardTime        *EventModifyCardTime          `json:"yellowCardTime,omitempty"`
-	RedCards              *int                          `json:"redCards,omitempty"`
-	TimeoutsLeft          *int                          `json:"timeoutsLeft,omitempty"`
-	TimeoutTimeLeft       *string                       `json:"timeoutTimeLeft,omitempty"`
-	OnPositiveHalf        *bool                         `json:"onPositiveHalf,omitempty"`
-	TeamName              *string                       `json:"teamName,omitempty"`
-	FoulCounter           *int                          `json:"foulCounter,omitempty"`
-	BallPlacementFailures *int                          `json:"ballPlacementFailures,omitempty"`
-	CanPlaceBall          *bool                         `json:"canPlaceBall,omitempty"`
-	Division              *config.Division              `json:"division,omitempty"`
-	AutoContinue          *bool                         `json:"autoContinue,omitempty"`
-	GameEventBehavior     *EventModifyGameEventBehavior `json:"gameEventBehavior,omitempty"`
-	BotSubstitutionIntend *bool                         `json:"botSubstitutionIntend,omitempty"`
+	Goals                 *int                          `json:"goals,omitempty" yaml:"goals"`
+	Goalkeeper            *int                          `json:"goalkeeper,omitempty" yaml:"goalkeeper"`
+	YellowCards           *int                          `json:"yellowCards,omitempty" yaml:"yellowCards"`
+	YellowCardTime        *EventModifyCardTime          `json:"yellowCardTime,omitempty" yaml:"yellowCardTime"`
+	RedCards              *int                          `json:"redCards,omitempty" yaml:"redCards"`
+	TimeoutsLeft          *int                          `json:"timeoutsLeft,omitempty" yaml:"timeoutsLeft"`
+	TimeoutTimeLeft       *string                       `json:"timeoutTimeLeft,omitempty" yaml:"timeoutTimeLeft"`
+	OnPositiveHalf        *bool                         `json:"onPositiveHalf,omitempty" yaml:"onPositiveHalf"`
+	TeamName              *string                       `json:"teamName,omitempty" yaml:"teamName"`
+	FoulCounter           *int                          `json:"foulCounter,omitempty" yaml:"foulCounter"`
+	BallPlacementFailures *int                          `json:"ballPlacementFailures,omitempty" yaml:"ballPlacementFailures"`
+	CanPlaceBall          *bool                         `json:"canPlaceBall,omitempty" yaml:"canPlaceBall"`
+	Division              *config.Division              `json:"division,omitempty" yaml:"division"`
+	AutoContinue          *bool                         `json:"autoContinue,omitempty" yaml:"autoContinue"`
+	GameEventBehavior     *EventModifyGameEventBehavior `json:"gameEventBehavior,omitempty" yaml:"gameEventBehavior"`
+	BotSubstitutionIntend *bool                         `json:"botSubstitutionIntend,omitempty" yaml:"botSubstitutionIntend"`
 }
 
 func (m EventModifyValue) String() string {
@@ -156,22 +156,22 @@ func (m EventModifyValue) Value() string {
 
 // EventTrigger is an event that can be applied
 type EventTrigger struct {
-	Type TriggerType `json:"triggerType"`
+	Type TriggerType `json:"triggerType" yaml:"type"`
 }
 
 // EventStage is an event that can be applied
 type EventStage struct {
-	StageOperation StageOperation `json:"stageOperation"`
+	StageOperation StageOperation `json:"stageOperation" yaml:"stageOperation"`
 }
 
 // Event holds all possible events. Only one at a time can be applied
 type Event struct {
-	Card      *EventCard        `json:"card"`
-	Command   *EventCommand     `json:"command"`
-	Modify    *EventModifyValue `json:"modify"`
-	Stage     *EventStage       `json:"stage"`
-	Trigger   *EventTrigger     `json:"trigger"`
-	GameEvent *GameEvent        `json:"gameEvent"`
+	Card      *EventCard        `json:"card" yaml:"card"`
+	Command   *EventCommand     `json:"command" yaml:"command"`
+	Modify    *EventModifyValue `json:"modify" yaml:"modify"`
+	Stage     *EventStage       `json:"stage" yaml:"stage"`
+	Trigger   *EventTrigger     `json:"trigger" yaml:"trigger"`
+	GameEvent *GameEvent        `json:"gameEvent" yaml:"gameEvent"`
 }
 
 func (e Event) String() string {
