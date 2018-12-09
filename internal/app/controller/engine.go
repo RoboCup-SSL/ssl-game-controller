@@ -219,6 +219,12 @@ func (e *Engine) CommandForEvent(event *GameEvent) (command RefCommand, forTeam 
 		err = errors.Errorf("Unhandled game event: %v", e.State.GameEvents)
 	}
 
+	if e.State.Division == config.DivA && command.IsFreeKick() && !e.State.TeamState[forTeam].CanPlaceBall {
+		// in division A, if the team in favor can not place the ball (because of too many failures), free kicks are awarded to the other team
+		forTeam = forTeam.Opposite()
+		command = CommandIndirect
+	}
+
 	if command.NeedsTeam() && forTeam.Unknown() {
 		// if the command needs a team and there is no unique team available, reset command
 		command = CommandUnknown
