@@ -1,68 +1,65 @@
 # Situation:
-# Ball left field by Yellow
+# Unique collision by yellow
 #
-# Division: B
+# Division: A
 #
 # Who can place?
-# opponent team only (yellow)
+# team in favor only (blue)
 #
 # Ball left field?
-# yes
+# no
 #
 # Who succeeds?
-# Opponent team (yellow) (no failure)
+# Team in favor (blue) (no failure)
 #
 # Special case?
-# Yes
-# Opponent (yellow) places the ball for the team in favor (blue), which should proceed with the original command afterwards.
+# No
 #
 initialState:
   stage: First Half
   command: forceStart
-  division: DivB
+  division: DivA
   stageTimeLeft: 5m
   teamState:
     Yellow:
-      ballPlacementFailures: 2
-    Blue:
-      ballPlacementFailures: 5
       canPlaceBall: false
 transitions:
   - event:
       gameEvent:
-        type: ballLeftFieldGoalLine
+        type: botCrashUnique
         details:
-          ballleftfieldgoalline:
+          botcrashunique:
             byteam: 1 # Yellow
-            bybot: 0
             location:
-              x: 4.5
-              y: 3.0
+              x: 2.0
+              y: 1.0
     expectedStateDiff:
       command: ballPlacement
-      commandFor: Yellow
+      commandFor: Blue
       nextCommand: direct
       nextCommandFor: Blue
       currentActionDeadline: "2010-01-01T00:00:30Z"
       currentActionTimeRemaining: 30s
       placementPos:
-        x: 4.3
-        y: 2.8
+        x: 2.0
+        y: 1.0
+      teamState:
+        Yellow:
+          foulCounter: 1
       gameEvents:
-        - type: ballLeftFieldGoalLine
+        - type: botCrashUnique
           details:
-            ballleftfieldgoalline:
+            botcrashunique:
               byteam: 1 # Yellow
-              bybot: 0
               location:
-                x: 4.5
-                y: 3.0
+                x: 2.0
+                y: 1.0
   - tick: 1s # make sure that the stage time is not proceeded
     expectedStateDiff:
       currentActionTimeRemaining: 29s
       placementPos:
-        x: 4.3
-        y: 2.8
+        x: 2.0
+        y: 1.0
   - event:
       gameEvent:
         type: placementSucceeded
@@ -76,9 +73,10 @@ transitions:
       commandFor: Blue
       nextCommand: ""
       nextCommandFor: ""
-      currentActionDeadline: "2010-01-01T00:00:11Z"
-      currentActionTimeRemaining: 10s
+      currentActionDeadline: "2010-01-01T00:00:06Z"
+      currentActionTimeRemaining: 5s
+      gameEvents: []
       teamState:
         Blue:
           ballPlacementFailures: 0
-      gameEvents: []
+

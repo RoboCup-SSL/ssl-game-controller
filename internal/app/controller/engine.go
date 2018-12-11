@@ -178,8 +178,7 @@ func (e *Engine) CommandForEvent(event *GameEvent) (command RefCommand, forTeam 
 
 	if e.State.bothTeamsCanPlaceBall() &&
 		e.State.ballPlacementFailedBefore() &&
-		!e.allTeamsFailedPlacement() &&
-		primaryGameEvent.Type.resultsFromBallLeavingField() {
+		!e.allTeamsFailedPlacement() {
 		// A failed placement will result in an indirect free kick for the opposing team.
 		command = CommandIndirect
 		forTeam = event.ByTeam()
@@ -226,6 +225,7 @@ func (e *Engine) CommandForEvent(event *GameEvent) (command RefCommand, forTeam 
 
 		if e.State.Division == config.DivA && // For division A
 			!e.State.TeamState[forTeam].CanPlaceBall && // If team in favor can not place the ball
+			e.State.TeamState[forTeam.Opposite()].CanPlaceBall && // If opponent team can place the ball
 			primaryGameEvent.Type.resultsFromBallLeavingField() { // event is caused by the ball leaving the field
 			// All free kicks that were a result of the ball leaving the field, are awarded to the opposing team.
 			forTeam = forTeam.Opposite()

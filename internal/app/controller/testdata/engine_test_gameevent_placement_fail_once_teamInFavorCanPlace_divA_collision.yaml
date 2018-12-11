@@ -1,75 +1,74 @@
 # Situation:
-# Ball left field by Yellow
+# Unique collision by yellow
 #
-# Division: B
+# Division: A
 #
 # Who can place?
-# opponent only (yellow)
+# team in favor only (blue)
 #
 # Ball left field?
-# yes
+# no
 #
 # Who succeeds?
 # No team (one failure)
 #
 # Special case?
-# Yes
-# Opponent (yellow) places the ball for the team in favor (blue), which should proceed with the original command afterwards.
-# Opponent (yellow) fails ball placement, game is continued with the original command by human ref.
+# No
 #
 initialState:
   stage: First Half
   command: forceStart
-  division: DivB
+  division: DivA
   stageTimeLeft: 5m
   teamState:
     Yellow:
-      ballPlacementFailures: 2
-    Blue:
       ballPlacementFailures: 5
       canPlaceBall: false
+    Blue:
+      ballPlacementFailures: 2
 transitions:
   - event:
       gameEvent:
-        type: ballLeftFieldGoalLine
+        type: botCrashUnique
         details:
-          ballleftfieldgoalline:
+          botcrashunique:
             byteam: 1 # Yellow
-            bybot: 0
             location:
-              x: 4.5
-              y: 3.0
+              x: 2.0
+              y: 1.0
     expectedStateDiff:
       command: ballPlacement
-      commandFor: Yellow
+      commandFor: Blue
       nextCommand: direct
       nextCommandFor: Blue
       currentActionDeadline: "2010-01-01T00:00:30Z"
       currentActionTimeRemaining: 30s
       placementPos:
-        x: 4.3
-        y: 2.8
+        x: 2.0
+        y: 1.0
+      teamState:
+        Yellow:
+          foulCounter: 1
       gameEvents:
-        - type: ballLeftFieldGoalLine
+        - type: botCrashUnique
           details:
-            ballleftfieldgoalline:
+            botcrashunique:
               byteam: 1 # Yellow
-              bybot: 0
               location:
-                x: 4.5
-                y: 3.0
+                x: 2.0
+                y: 1.0
   - tick: 1s # make sure that the stage time is not proceeded
     expectedStateDiff:
       currentActionTimeRemaining: 29s
       placementPos:
-        x: 4.3
-        y: 2.8
+        x: 2.0
+        y: 1.0
   - event:
       gameEvent:
         type: placementFailed
         details:
           placementfailed:
-            byteam: 1 # Yellow
+            byteam: 2 # Blue
             remainingdistance: 1.0
     expectedStateDiff:
       command: halt
@@ -77,22 +76,21 @@ transitions:
       nextCommand: direct
       nextCommandFor: Blue
       placementPos:
-        x: 4.3
-        y: 2.8
+        x: 2.0
+        y: 1.0
+      teamState:
+        Blue:
+          ballPlacementFailures: 3
       gameEvents:
-        - type: ballLeftFieldGoalLine
+        - type: botCrashUnique
           details:
-            ballleftfieldgoalline:
+            botcrashunique:
               byteam: 1 # Yellow
-              bybot: 0
               location:
-                x: 4.5
-                y: 3.0
+                x: 2.0
+                y: 1.0
         - type: placementFailed
           details:
             placementfailed:
-              byteam: 1 # Yellow
+              byteam: 2 # Blue
               remainingdistance: 1.0
-      teamState:
-        Yellow:
-          ballPlacementFailures: 3
