@@ -1,0 +1,98 @@
+# Situation:
+# Ball left field by Yellow
+#
+# Division: B
+#
+# Who can place?
+# team in favor only (blue)
+#
+# Ball left field?
+# yes
+#
+# Who succeeds?
+# No team (one failure)
+#
+# Special case?
+# No
+#
+initialState:
+  stage: First Half
+  command: forceStart
+  division: DivB
+  stageTimeLeft: 5m
+  teamState:
+    Yellow:
+      ballPlacementFailures: 5
+      canPlaceBall: false
+    Blue:
+      ballPlacementFailures: 2
+transitions:
+  - event:
+      gameEvent:
+        type: ballLeftFieldGoalLine
+        details:
+          ballleftfieldgoalline:
+            byteam: 1 # Yellow
+            bybot: 0
+            location:
+              x: 4.5
+              y: 3.0
+    expectedStateDiff:
+      command: ballPlacement
+      commandFor: Blue
+      nextCommand: direct
+      nextCommandFor: Blue
+      currentActionDeadline: "2010-01-01T00:00:30Z"
+      currentActionTimeRemaining: 30s
+      placementPos:
+        x: 4.3
+        y: 2.8
+      gameEvents:
+        - type: ballLeftFieldGoalLine
+          details:
+            ballleftfieldgoalline:
+              byteam: 1 # Yellow
+              bybot: 0
+              location:
+                x: 4.5
+                y: 3.0
+  - tick: 1s # make sure that the stage time is not proceeded
+    expectedStateDiff:
+      currentActionTimeRemaining: 29s
+      placementPos:
+        x: 4.3
+        y: 2.8
+  - event:
+      gameEvent:
+        type: placementFailed
+        details:
+          placementfailed:
+            byteam: 2 # Blue
+            remainingdistance: 1.0
+    expectedStateDiff:
+      command: halt
+      commandFor: ""
+      nextCommand: direct
+      nextCommandFor: Blue
+      currentActionDeadline: "2010-01-01T00:00:30Z"
+      currentActionTimeRemaining: 29s
+      placementPos:
+        x: 4.3
+        y: 2.8
+      gameEvents:
+        - type: ballLeftFieldGoalLine
+          details:
+            ballleftfieldgoalline:
+              byteam: 1 # Yellow
+              bybot: 0
+              location:
+                x: 4.5
+                y: 3.0
+        - type: placementFailed
+          details:
+            placementfailed:
+              byteam: 2 # Blue
+              remainingdistance: 1.0
+      teamState:
+        Blue:
+          ballPlacementFailures: 3

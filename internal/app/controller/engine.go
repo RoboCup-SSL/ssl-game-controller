@@ -171,11 +171,15 @@ func (e *Engine) CommandForEvent(event *GameEvent) (command RefCommand, forTeam 
 	command = CommandUnknown
 	forTeam = TeamUnknown
 
-	if event.IsSecondary() {
+	primaryGameEvent := e.State.PrimaryGameEvent()
+	if (event.IsSecondary() && event.Type != GameEventPlacementFailed) || primaryGameEvent == nil {
 		return
 	}
 
-	if e.State.bothTeamsCanPlaceBall() && e.State.ballPlacementFailedBefore() && event.Type.resultsFromBallLeavingField() {
+	if e.State.bothTeamsCanPlaceBall() &&
+		e.State.ballPlacementFailedBefore() &&
+		!e.allTeamsFailedPlacement() &&
+		primaryGameEvent.Type.resultsFromBallLeavingField() {
 		// A failed placement will result in an indirect free kick for the opposing team.
 		command = CommandIndirect
 		forTeam = event.ByTeam()
@@ -222,7 +226,7 @@ func (e *Engine) CommandForEvent(event *GameEvent) (command RefCommand, forTeam 
 
 		if e.State.Division == config.DivA && // For division A
 			!e.State.TeamState[forTeam].CanPlaceBall && // If team in favor can not place the ball
-			event.Type.resultsFromBallLeavingField() { // event is caused by the ball leaving the field
+			primaryGameEvent.Type.resultsFromBallLeavingField() { // event is caused by the ball leaving the field
 			// All free kicks that were a result of the ball leaving the field, are awarded to the opposing team.
 			forTeam = forTeam.Opposite()
 		}
@@ -661,20 +665,28 @@ func (e *Engine) placeBall(event *GameEvent) {
 		// placement not possible, human ref must help out
 		e.SendCommand(CommandHalt, "")
 		return
-	} else if e.State.Division == config.DivB && // For division B
-		!e.State.TeamState[teamInFavor].CanPlaceBall { // If team in favor can not place the ball
-		// Rule: [...] the team is allowed to bring the ball into play, after the ball was placed by the opposing team.
-		e.SendCommand(CommandBallPlacement, teamInFavor.Opposite())
-	} else if e.State.bothTeamsCanPlaceBall() && e.State.ballPlacementFailedBefore() && event.Type.resultsFromBallLeavingField() {
-		// Rule: A failed placement will result in an indirect free kick for the opposing team.
-		e.SendCommand(CommandBallPlacement, teamInFavor.Opposite())
-	} else if e.State.Division == config.DivA && // For division A
+	}
+
+	if e.State.Division == config.DivA && // For division A
 		!e.State.TeamState[teamInFavor].CanPlaceBall && // If team in favor can not place the ball
+		e.State.TeamState[teamInFavor.Opposite()].CanPlaceBall && // If opponent team can place the ball
 		event.Type.resultsFromBallLeavingField() {
 		// Rule: All free kicks that were a result of the ball leaving the field, are awarded to the opposing team.
 		e.SendCommand(CommandBallPlacement, teamInFavor.Opposite())
-	} else {
+	} else if e.State.Division == config.DivB && // For division B
+		!e.State.TeamState[teamInFavor].CanPlaceBall && // If team in favor can not place the ball
+		e.State.TeamState[teamInFavor.Opposite()].CanPlaceBall && // If opponent team can place the ball
+		event.Type != GameEventPlacementFailed { // opponent team has not failed recently
+		// Rule: [...] the team is allowed to bring the ball into play, after the ball was placed by the opposing team.
+		e.SendCommand(CommandBallPlacement, teamInFavor.Opposite())
+	} else if e.State.TeamState[teamInFavor].CanPlaceBall &&
+		!e.allTeamsFailedPlacement() {
+		// If team can place ball, let it place
 		e.SendCommand(CommandBallPlacement, teamInFavor)
+	} else {
+		// If team can not place ball, human ref has to help out
+		e.SendCommand(CommandHalt, "")
+		return
 	}
 	e.setCurrentActionTimeout(e.config.BallPlacementTime)
 }

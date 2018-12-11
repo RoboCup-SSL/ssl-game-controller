@@ -1,26 +1,29 @@
 # Situation:
-# Division: A
-# Who can place: both teams
-# Who succeeds: First team
-# What happened: ball left field on goal line -> direct
+# Ball left field by Yellow
 #
-# Setup:
-# ball left field by: Yellow
-# team in favor: Blue
+# Division: B
 #
-# Expectation:
-# Blue is awarded a direct free kick, places the ball successfully and performs the direct free kick.
+# Who can place?
+# opponent team only (yellow)
+#
+# Ball left field?
+# yes
+#
+# Who succeeds?
+# Opponent team (yellow) (no failure)
+#
+# Special case?
+# Yes
+# Opponent (yellow) places the ball for the team in favor (blue), which should proceed with the original command afterwards.
 #
 initialState:
   stage: First Half
   command: forceStart
-  division: DivA
+  division: DivB
   stageTimeLeft: 5m
   teamState:
-    Yellow:
-      ballPlacementFailures: 2
     Blue:
-      ballPlacementFailures: 3
+      canPlaceBall: false
 transitions:
   - event:
       gameEvent:
@@ -30,18 +33,18 @@ transitions:
             byteam: 1 # Yellow
             bybot: 0
             location:
-              x: 6.0
-              y: 4.0
+              x: 4.5
+              y: 3.0
     expectedStateDiff:
       command: ballPlacement
-      commandFor: Blue
+      commandFor: Yellow
       nextCommand: direct
       nextCommandFor: Blue
       currentActionDeadline: "2010-01-01T00:00:30Z"
       currentActionTimeRemaining: 30s
       placementPos:
-        x: 5.8
-        y: 4.3
+        x: 4.3
+        y: 2.8
       gameEvents:
         - type: ballLeftFieldGoalLine
           details:
@@ -49,14 +52,14 @@ transitions:
               byteam: 1 # Yellow
               bybot: 0
               location:
-                x: 6.0
-                y: 4.0
+                x: 4.5
+                y: 3.0
   - tick: 1s # make sure that the stage time is not proceeded
     expectedStateDiff:
       currentActionTimeRemaining: 29s
       placementPos:
-        x: 5.8
-        y: 4.3
+        x: 4.3
+        y: 2.8
   - event:
       gameEvent:
         type: placementSucceeded
@@ -70,10 +73,6 @@ transitions:
       commandFor: Blue
       nextCommand: ""
       nextCommandFor: ""
-      currentActionDeadline: "2010-01-01T00:00:06Z"
-      currentActionTimeRemaining: 5s
+      currentActionDeadline: "2010-01-01T00:00:11Z"
+      currentActionTimeRemaining: 10s
       gameEvents: []
-      teamState:
-        Blue:
-          ballPlacementFailures: 0
-

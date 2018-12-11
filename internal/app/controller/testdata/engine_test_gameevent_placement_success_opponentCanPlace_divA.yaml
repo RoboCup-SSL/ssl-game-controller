@@ -1,20 +1,25 @@
 # Situation:
-# Division: B
-# Who can place: team *not* in favor only
-# Who succeeds: First team
-# What happened: ball left field on goal line -> direct
+# Ball left field by Yellow
 #
-# Setup:
-# ball left field by: Yellow
-# team in favor: Blue
+# Division: A
 #
-# Expectation:
-# Blue can't place the ball, so Yellow should do the ball placement, but Blue should do the direct kick afterwards.
+# Who can place?
+# opponent team only (yellow)
+#
+# Ball left field?
+# yes
+#
+# Who succeeds?
+# Opponent team (yellow) (no failure)
+#
+# Special case?
+# Yes
+# Opponent (yellow) is awarded the free kick of the team in favor (blue), because the team in favor (blue) can not place the ball.
 #
 initialState:
   stage: First Half
   command: forceStart
-  division: DivB
+  division: DivA
   stageTimeLeft: 5m
   teamState:
     Blue:
@@ -28,18 +33,18 @@ transitions:
             byteam: 1 # Yellow
             bybot: 0
             location:
-              x: 4.5
-              y: 3.0
+              x: 6.0
+              y: 4.0
     expectedStateDiff:
       command: ballPlacement
       commandFor: Yellow
       nextCommand: direct
-      nextCommandFor: Blue
+      nextCommandFor: Yellow
       currentActionDeadline: "2010-01-01T00:00:30Z"
       currentActionTimeRemaining: 30s
       placementPos:
-        x: 4.3
-        y: 2.8
+        x: 5.8
+        y: 4.3
       gameEvents:
         - type: ballLeftFieldGoalLine
           details:
@@ -47,27 +52,27 @@ transitions:
               byteam: 1 # Yellow
               bybot: 0
               location:
-                x: 4.5
-                y: 3.0
+                x: 6.0
+                y: 4.0
   - tick: 1s # make sure that the stage time is not proceeded
     expectedStateDiff:
       currentActionTimeRemaining: 29s
       placementPos:
-        x: 4.3
-        y: 2.8
+        x: 5.8
+        y: 4.3
   - event:
       gameEvent:
         type: placementSucceeded
         details:
           placementsucceeded:
-            byteam: 2 # Blue
+            byteam: 1 # Yellow
             timetaken: 1.0
             precision: 0.01
     expectedStateDiff:
       command: direct
-      commandFor: Blue
+      commandFor: Yellow
       nextCommand: ""
       nextCommandFor: ""
-      currentActionDeadline: "2010-01-01T00:00:11Z"
-      currentActionTimeRemaining: 10s
+      currentActionDeadline: "2010-01-01T00:00:06Z"
+      currentActionTimeRemaining: 5s
       gameEvents: []

@@ -1,0 +1,141 @@
+# Situation:
+# Ball left field by Yellow
+#
+# Division: A
+#
+# Who can place?
+# both teams
+#
+# Ball left field?
+# yes
+#
+# Who succeeds?
+# No team (two failures)
+#
+# Special case?
+# Yes (second try, both teams can place, ball left field before)
+# Opponent (yellow) is awarded an indirect free kick, because the first team has failed.
+#
+initialState:
+  stage: First Half
+  command: forceStart
+  division: DivA
+  stageTimeLeft: 5m
+  teamState:
+    Yellow:
+      ballPlacementFailures: 2
+    Blue:
+      ballPlacementFailures: 3
+transitions:
+  - event:
+      gameEvent:
+        type: ballLeftFieldGoalLine
+        details:
+          ballleftfieldgoalline:
+            byteam: 1 # Yellow
+            bybot: 0
+            location:
+              x: 6.0
+              y: 4.0
+    expectedStateDiff:
+      command: ballPlacement
+      commandFor: Blue
+      nextCommand: direct
+      nextCommandFor: Blue
+      currentActionDeadline: "2010-01-01T00:00:30Z"
+      currentActionTimeRemaining: 30s
+      placementPos:
+        x: 5.8
+        y: 4.3
+      gameEvents:
+        - type: ballLeftFieldGoalLine
+          details:
+            ballleftfieldgoalline:
+              byteam: 1 # Yellow
+              bybot: 0
+              location:
+                x: 6.0
+                y: 4.0
+  - tick: 1s # make sure that the stage time is not proceeded
+    expectedStateDiff:
+      currentActionTimeRemaining: 29s
+      placementPos:
+        x: 5.8
+        y: 4.3
+  - event:
+      gameEvent:
+        type: placementFailed
+        details:
+          placementfailed:
+            byteam: 2 # Blue
+            remainingdistance: 1.0
+    expectedStateDiff:
+      command: ballPlacement
+      commandFor: Yellow
+      nextCommand: indirect
+      nextCommandFor: Yellow
+      currentActionDeadline: "2010-01-01T00:00:31Z"
+      currentActionTimeRemaining: 30s
+      placementPos:
+        x: 5.8
+        y: 4.3
+      gameEvents:
+        - type: ballLeftFieldGoalLine
+          details:
+            ballleftfieldgoalline:
+              byteam: 1 # Yellow
+              bybot: 0
+              location:
+                x: 6.0
+                y: 4.0
+        - type: placementFailed
+          details:
+            placementfailed:
+              byteam: 2 # Blue
+              remainingdistance: 1.0
+      teamState:
+        Blue:
+          ballPlacementFailures: 4
+  - tick: 1s # make sure that the stage time is not proceeded
+    expectedStateDiff:
+      currentActionTimeRemaining: 29s
+      placementPos:
+        x: 5.8
+        y: 4.3
+  - event:
+      gameEvent:
+        type: placementFailed
+        details:
+          placementfailed:
+            byteam: 1 # Yellow
+            remainingdistance: 1.0
+    expectedStateDiff:
+      command: halt
+      commandFor: ""
+      nextCommand: direct
+      nextCommandFor: Blue
+      placementPos:
+        x: 5.8
+        y: 4.3
+      teamState:
+        Yellow:
+          ballPlacementFailures: 3
+      gameEvents:
+        - type: ballLeftFieldGoalLine
+          details:
+            ballleftfieldgoalline:
+              byteam: 1 # Yellow
+              bybot: 0
+              location:
+                x: 6.0
+                y: 4.0
+        - type: placementFailed
+          details:
+            placementfailed:
+              byteam: 2 # Blue
+              remainingdistance: 1.0
+        - type: placementFailed
+          details:
+            placementfailed:
+              byteam: 1 # Yellow
+              remainingdistance: 1.0

@@ -491,10 +491,6 @@ func (s State) BotSubstitutionIntend() Team {
 }
 
 func (s *State) PrimaryGameEvent() *GameEvent {
-	if len(s.GameEvents) == 0 {
-		return nil
-	}
-
 	if event := s.GetFirstGameEvent(GameEventMultipleCards); event != nil {
 		// only this event causes a penalty kick and must be prioritized.
 		return event
@@ -504,7 +500,14 @@ func (s *State) PrimaryGameEvent() *GameEvent {
 		// Goal overrides everything else
 		return event
 	}
-	return s.GameEvents[len(s.GameEvents)-1]
+
+	for i := len(s.GameEvents) - 1; i >= 0; i-- {
+		gameEvent := s.GameEvents[i]
+		if !gameEvent.IsSecondary() && gameEvent.Type != GameEventPlacementFailed {
+			return gameEvent
+		}
+	}
+	return nil
 }
 
 func newTeamInfo() (t TeamInfo) {

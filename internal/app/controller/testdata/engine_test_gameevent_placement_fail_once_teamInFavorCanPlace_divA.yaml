@@ -1,16 +1,19 @@
 # Situation:
+# Ball left field by Yellow
+#
 # Division: A
-# Who can place: team in favor only
-# Who succeeds: First team
-# What happened: ball left field on goal line -> direct
 #
-# Setup:
-# ball left field by: Yellow
-# team in favor: Blue
+# Who can place?
+# team in favor only (blue)
 #
-# Expectation:
-# Blue can place the ball, so Blue should get the direct free kick and should place the ball.
-# It will succeed and should get the direct free kick afterwards.
+# Ball left field?
+# yes
+#
+# Who succeeds?
+# No team (one failure)
+#
+# Special case?
+# No
 #
 initialState:
   stage: First Half
@@ -19,7 +22,10 @@ initialState:
   stageTimeLeft: 5m
   teamState:
     Yellow:
+      ballPlacementFailures: 5
       canPlaceBall: false
+    Blue:
+      ballPlacementFailures: 2
 transitions:
   - event:
       gameEvent:
@@ -58,17 +64,35 @@ transitions:
         y: 4.3
   - event:
       gameEvent:
-        type: placementSucceeded
+        type: placementFailed
         details:
-          placementsucceeded:
+          placementfailed:
             byteam: 2 # Blue
-            timetaken: 1.0
-            precision: 0.01
+            remainingdistance: 1.0
     expectedStateDiff:
-      command: direct
-      commandFor: Blue
-      nextCommand: ""
-      nextCommandFor: ""
-      currentActionDeadline: "2010-01-01T00:00:06Z"
-      currentActionTimeRemaining: 5s
-      gameEvents: []
+      command: halt
+      commandFor: ""
+      nextCommand: direct
+      nextCommandFor: Blue
+      currentActionDeadline: "2010-01-01T00:00:30Z"
+      currentActionTimeRemaining: 29s
+      placementPos:
+        x: 5.8
+        y: 4.3
+      gameEvents:
+        - type: ballLeftFieldGoalLine
+          details:
+            ballleftfieldgoalline:
+              byteam: 1 # Yellow
+              bybot: 0
+              location:
+                x: 6.0
+                y: 4.0
+        - type: placementFailed
+          details:
+            placementfailed:
+              byteam: 2 # Blue
+              remainingdistance: 1.0
+      teamState:
+        Blue:
+          ballPlacementFailures: 3
