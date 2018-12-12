@@ -99,7 +99,7 @@ func processTransitionFile(t *testing.T, fileName string) {
 		cfg.DefaultDivision = *stateTransitions.InitialState.Division
 	}
 
-	e := NewEngine(cfg)
+	e := NewEngine(cfg, 0)
 	initialTime := initialTime()
 	elapsedTime := time.Duration(0)
 	e.TimeProvider = func() time.Time {

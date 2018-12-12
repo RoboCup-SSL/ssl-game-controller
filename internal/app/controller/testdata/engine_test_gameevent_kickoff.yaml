@@ -8,28 +8,33 @@ transitions:
         type: stop
     expectedStateDiff:
       command: stop
+  - tick: 1s # make sure that the stage time is not proceeded
   - event:
       command:
         type: kickoff
-        forTeam: Yellow
+        forTeam: Blue
     expectedStateDiff:
       command: kickoff
-      commandFor: Yellow
+      commandFor: Blue
       nextCommand: normalStart
   - event:
-      command:
-        type: normalStart
+      gameEvent:
+        type: prepared
+        details:
+          prepared:
+            timetaken: 1.0
     expectedStateDiff:
       command: normalStart
       commandFor: ""
       nextCommand: ""
       stage: First Half
       stageTimeLeft: 5m
-      matchTimeStart: "2010-01-01T00:00:00Z"
-      currentActionDeadline: "2010-01-01T00:00:10Z"
+      matchTimeStart: "2010-01-01T00:00:01Z"
+      currentActionDeadline: "2010-01-01T00:00:11Z"
       currentActionTimeRemaining: 10s
-  - event:
-      command:
-        type: stop
+  - tick: 1s # make sure that the stage time is not proceeded
     expectedStateDiff:
-      command: stop
+      currentActionTimeRemaining: 9s
+      stageTimeElapsed: 1s
+      stageTimeLeft: 4m59s
+      matchDuration: 1s

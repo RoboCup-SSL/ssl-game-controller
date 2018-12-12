@@ -330,8 +330,10 @@ message GameEvent {
     message KickTimeout {
         // the team that that should have kicked
         required Team by_team = 1;
+        // the location of the ball
+        optional Location location = 2;
         // the time [s] that was waited
-        optional float time = 2;
+        optional float time = 3;
     }
     // game was stuck
     message NoProgressInGame {

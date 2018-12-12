@@ -9,7 +9,7 @@ import (
 
 func TestEngine_BallPlacementPos(t *testing.T) {
 	cfg := config.DefaultControllerConfig().Game
-	engine := NewEngine(cfg)
+	engine := NewEngine(cfg, 0)
 	engine.State.TeamState[TeamYellow].OnPositiveHalf = true
 	engine.State.TeamState[TeamBlue].OnPositiveHalf = false
 	engine.Geometry.PlacementOffsetTouchLine = 0.2

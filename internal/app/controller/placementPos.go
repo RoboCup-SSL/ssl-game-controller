@@ -92,7 +92,7 @@ func (e *Engine) BallPlacementPos() *Location {
 	case GameEventKeeperHeldBall:
 		return e.validateProtoLocation(event.Details.KeeperHeldBall.Location)
 	case GameEventKickTimeout:
-		return e.validateLocation(e.State.PlacementPos)
+		return e.validateProtoLocation(event.Details.KickTimeout.Location)
 	case GameEventNoProgressInGame:
 		return e.validateProtoLocation(event.Details.NoProgressInGame.Location)
 	case GameEventPlacementFailed:

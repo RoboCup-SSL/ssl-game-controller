@@ -1,0 +1,35 @@
+initialState:
+  stage: First Half
+  command: direct
+  commandFor: Yellow
+  division: DivA
+transitions:
+  - event:
+      gameEvent:
+        type: kickTimeout
+        details:
+          kicktimeout:
+            byteam: 1 # Yellow
+            time: 10.0
+            location:
+              x: 1.0
+              y: 2.0
+    expectedStateDiff:
+      command: ballPlacement
+      commandFor: Blue
+      nextCommand: indirect
+      nextCommandFor: Blue
+      placementPos:
+        x: 1.0
+        y: 2.0
+      currentActionDeadline: "2010-01-01T00:00:30Z"
+      currentActionTimeRemaining: 30s
+      gameEvents:
+        - type: kickTimeout
+          details:
+            kicktimeout:
+              byteam: 1 # Yellow
+              time: 10.0
+              location:
+                x: 1.0
+                y: 2.0

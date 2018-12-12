@@ -50,7 +50,7 @@ func NewGameController() (c *GameController) {
 	c.TeamServer.LoadTrustedKeys(c.Config.Server.Team.TrustedKeysDir)
 	c.TeamServer.ProcessTeamRequest = c.ProcessTeamRequests
 
-	c.Engine = NewEngine(c.Config.Game)
+	c.Engine = NewEngine(c.Config.Game, time.Now().Unix())
 	c.timer = timer.NewTimer()
 
 	c.setupTimeProvider()

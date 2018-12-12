@@ -5,6 +5,7 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
 	"github.com/pkg/errors"
 	"log"
+	"math/rand"
 	"strconv"
 	"strings"
 	"time"
@@ -18,13 +19,15 @@ type Engine struct {
 	TimeProvider func() time.Time
 	History      History
 	Geometry     config.Geometry
+	Rand         *rand.Rand
 }
 
-func NewEngine(config config.Game) (e Engine) {
+func NewEngine(config config.Game, seed int64) (e Engine) {
 	e.config = config
 	e.loadStages()
 	e.ResetGame()
 	e.TimeProvider = func() time.Time { return time.Now() }
+	e.Rand = rand.New(rand.NewSource(seed))
 	return
 }
 
@@ -223,7 +226,8 @@ func (e *Engine) CommandForEvent(event *GameEvent) (command RefCommand, forTeam 
 			err = errors.Errorf("Unhandled game event: %v", e.State.GameEvents)
 		}
 
-		if e.State.Division == config.DivA && // For division A
+		if forTeam.Known() &&
+			e.State.Division == config.DivA && // For division A
 			!e.State.TeamState[forTeam].CanPlaceBall && // If team in favor can not place the ball
 			e.State.TeamState[forTeam.Opposite()].CanPlaceBall && // If opponent team can place the ball
 			primaryGameEvent.Type.resultsFromBallLeavingField() { // event is caused by the ball leaving the field
@@ -239,6 +243,13 @@ func (e *Engine) CommandForEvent(event *GameEvent) (command RefCommand, forTeam 
 	}
 
 	return
+}
+
+func (e *Engine) randomTeam() Team {
+	if e.Rand.Intn(2) == 0 {
+		return TeamYellow
+	}
+	return TeamBlue
 }
 
 func (g GameEventType) resultsFromBallLeavingField() bool {
@@ -661,7 +672,13 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 
 func (e *Engine) placeBall(event *GameEvent) {
 	teamInFavor := event.ByTeam().Opposite()
-	if e.State.PlacementPos == nil || teamInFavor.Unknown() || e.State.noTeamCanPlaceBall() {
+
+	if teamInFavor.Unknown() {
+		// select a team by 50% chance
+		teamInFavor = e.randomTeam()
+	}
+
+	if e.State.PlacementPos == nil || e.State.noTeamCanPlaceBall() {
 		// placement not possible, human ref must help out
 		e.SendCommand(CommandHalt, "")
 		return
