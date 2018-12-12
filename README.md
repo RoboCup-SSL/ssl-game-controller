@@ -92,7 +92,7 @@ Try deleting the history.json file in the working directory. It may got corrupte
 
 ### Requirements
 You need to install following dependencies first: 
- * Go >= 1.9
+ * Go >= 1.10
  * NPM
 
 ### Prepare
