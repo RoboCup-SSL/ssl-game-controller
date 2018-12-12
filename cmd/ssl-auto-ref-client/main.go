@@ -97,7 +97,7 @@ func (c *Client) register() {
 
 func (c *Client) sendGameEvent() {
 	event := refproto.GameEvent_BallLeftFieldTouchLine{}
-	event.BallLeftFieldTouchLine = new(refproto.GameEvent_BallLeftFieldEvent)
+	event.BallLeftFieldTouchLine = new(refproto.GameEvent_BallLeftField)
 	event.BallLeftFieldTouchLine.ByBot = new(uint32)
 	*event.BallLeftFieldTouchLine.ByBot = 2
 	event.BallLeftFieldTouchLine.ByTeam = new(refproto.Team)

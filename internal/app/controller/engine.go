@@ -735,7 +735,7 @@ func (e *Engine) filterAimlessKickForDivA(gameEvent *GameEvent) {
 		gameEvent.Type = GameEventBallLeftFieldGoalLine
 		aimlessKickDetails := details.AimlessKick
 		gameEvent.Details = GameEventDetails{
-			BallLeftFieldGoalLine: &refproto.GameEvent_BallLeftFieldEvent{
+			BallLeftFieldGoalLine: &refproto.GameEvent_BallLeftField{
 				ByBot:    aimlessKickDetails.ByBot,
 				ByTeam:   aimlessKickDetails.ByTeam,
 				Location: aimlessKickDetails.Location,

@@ -353,8 +353,8 @@ func (e GameEvent) ToProto() *refproto.GameEvent {
 
 // GameEventDetails holds details of a game event. Only one field should be non-nil
 type GameEventDetails struct {
-	BallLeftFieldTouchLine         *refproto.GameEvent_BallLeftFieldEvent             `json:"ballLeftFieldTouchLine,omitempty"`
-	BallLeftFieldGoalLine          *refproto.GameEvent_BallLeftFieldEvent             `json:"ballLeftFieldGoalLine,omitempty"`
+	BallLeftFieldTouchLine         *refproto.GameEvent_BallLeftField                  `json:"ballLeftFieldTouchLine,omitempty"`
+	BallLeftFieldGoalLine          *refproto.GameEvent_BallLeftField                  `json:"ballLeftFieldGoalLine,omitempty"`
 	AimlessKick                    *refproto.GameEvent_AimlessKick                    `json:"aimlessKick,omitempty"`
 	PossibleGoal                   *refproto.GameEvent_Goal                           `json:"possibleGoal,omitempty"`
 	Goal                           *refproto.GameEvent_Goal                           `json:"goal,omitempty"`
