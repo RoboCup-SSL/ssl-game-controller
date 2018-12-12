@@ -108,7 +108,7 @@ func setBallLeftFieldTouchLine(engine *Engine, eventLocation *refproto.Location)
 	engine.State.GameEvents = []*GameEvent{{
 		Type: GameEventBallLeftFieldTouchLine,
 		Details: GameEventDetails{
-			BallLeftFieldTouchLine: &refproto.GameEvent_BallLeftFieldEvent{
+			BallLeftFieldTouchLine: &refproto.GameEvent_BallLeftField{
 				ByTeam:   &byTeam,
 				Location: eventLocation}}}}
 }
@@ -118,7 +118,7 @@ func setBallLeftFieldGoalLine(engine *Engine, eventLocation *refproto.Location, 
 	engine.State.GameEvents = []*GameEvent{{
 		Type: GameEventBallLeftFieldGoalLine,
 		Details: GameEventDetails{
-			BallLeftFieldGoalLine: &refproto.GameEvent_BallLeftFieldEvent{
+			BallLeftFieldGoalLine: &refproto.GameEvent_BallLeftField{
 				ByTeam:   &byTeam,
 				Location: eventLocation}}}}
 }
