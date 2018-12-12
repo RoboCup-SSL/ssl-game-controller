@@ -19,6 +19,8 @@ message AutoRefToControllerRequest {
     optional GameEvent game_event = 2;
     // auto_ref_message is an optional message that describes the current state or situation of the game/autoRef
     optional AutoRefMessage auto_ref_message = 3;
+    // ball_speed_measurement contains a list of ball speed measurements
+    repeated BallSpeedMeasurement ball_speed_measurement = 4;
 }
 
 // a message from autoRef, describing the current state or situation
@@ -43,4 +45,14 @@ message AutoRefMessage {
             required float distance = 2;
         }
     }
+}
+
+// BallSpeedMeasurement is a single measurement sample of the ball speed
+message BallSpeedMeasurement {
+    // The UNIX timestamp [μs] when the measurement was taken.
+    required uint64 timestamp = 1;
+    // the ball speed measurement [m/s]
+    required float ball_speed = 2;
+    // the estimated initial ball speed (kick speed) [m/s]
+    optional float initial_ball_speed = 3;
 }
