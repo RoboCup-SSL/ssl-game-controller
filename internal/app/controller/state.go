@@ -49,8 +49,6 @@ func (t Team) toProto() refproto.Team {
 		return refproto.Team_YELLOW
 	} else if t == TeamBlue {
 		return refproto.Team_BLUE
-	} else if t == TeamBoth {
-		return refproto.Team_BOTH
 	}
 	return refproto.Team_UNKNOWN
 }
