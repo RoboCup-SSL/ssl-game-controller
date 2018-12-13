@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
+	"github.com/golang/protobuf/proto"
 	"github.com/pkg/errors"
 	"log"
 	"time"
@@ -14,18 +15,22 @@ type TeamChoice struct {
 	IssueTime time.Time
 }
 
-func (c *GameController) teamConnected(team Team) bool {
+func (c *GameController) teamConnected(team Team) (connected bool, verified bool) {
 	teamName := c.Engine.State.TeamState[team].Name
-	if _, ok := c.TeamServer.Clients[teamName]; ok {
-		return true
+	if client, ok := c.TeamServer.Clients[teamName]; ok {
+		connected = true
+		verified = client.VerifiedConnection
+		return
 	}
-	return false
+	connected = false
+	verified = false
+	return
 }
 
 func (c *GameController) ProcessTeamRequests(teamName string, request refproto.TeamToController) error {
 	c.ConnectionMutex.Lock()
 	defer c.ConnectionMutex.Unlock()
-	log.Print("Received request from team: ", request)
+	log.Print("Received request from team: ", proto.MarshalTextString(&request))
 
 	if x, ok := request.GetMsg().(*refproto.TeamToController_AdvantageResponse_); ok {
 		if c.outstandingTeamChoice == nil {

@@ -18,7 +18,8 @@ import {
     faEdit,
     faSignal,
     faToggleOff,
-    faToggleOn
+    faToggleOn,
+    faShieldAlt
 } from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 // Connect to the backend with a single websocket that communicates with JSON format and is attached to the store
@@ -37,6 +38,7 @@ library.add(faToggleOn);
 library.add(faToggleOff);
 library.add(faSignal);
 library.add(faCheckCircle);
+library.add(faShieldAlt);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 

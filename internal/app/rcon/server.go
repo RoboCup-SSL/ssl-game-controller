@@ -21,10 +21,11 @@ type Server struct {
 }
 
 type Client struct {
-	Id     string
-	Conn   net.Conn
-	Token  string
-	PubKey *rsa.PublicKey
+	Id                 string
+	Conn               net.Conn
+	Token              string
+	PubKey             *rsa.PublicKey
+	VerifiedConnection bool
 }
 
 func NewServer() (s *Server) {
@@ -34,12 +35,12 @@ func NewServer() (s *Server) {
 	return
 }
 
-func (s *Server) Listen(address string) error {
+func (s *Server) Listen(address string) {
 	listener, err := net.Listen("tcp", address)
 	if err != nil {
-		return err
+		log.Print("Failed to listen on ", address)
+		return
 	}
-	defer listener.Close()
 	log.Print("Listening on ", address)
 
 	for {
@@ -49,7 +50,6 @@ func (s *Server) Listen(address string) error {
 		} else {
 			go s.ConnectionHandler(conn)
 		}
-
 	}
 }
 
@@ -61,15 +61,21 @@ func (s *Server) CloseConnection(conn net.Conn, id string) {
 func (c *Client) Ok() (reply refproto.ControllerReply) {
 	reply.StatusCode = new(refproto.ControllerReply_StatusCode)
 	*reply.StatusCode = refproto.ControllerReply_OK
+	c.addVerification(&reply)
+	return
+}
+
+func (c *Client) addVerification(reply *refproto.ControllerReply) {
 	reply.Verification = new(refproto.ControllerReply_Verification)
 	if c.Token != "" {
 		reply.NextToken = new(string)
 		*reply.NextToken = c.Token
 		*reply.Verification = refproto.ControllerReply_VERIFIED
+		c.VerifiedConnection = true
 	} else {
 		*reply.Verification = refproto.ControllerReply_UNVERIFIED
+		c.VerifiedConnection = false
 	}
-	return
 }
 
 func (c *Client) Reject(reason string) (reply refproto.ControllerReply) {

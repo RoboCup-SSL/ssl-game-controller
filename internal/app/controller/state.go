@@ -326,6 +326,7 @@ type TeamInfo struct {
 	CanPlaceBall          bool            `json:"canPlaceBall" yaml:"canPlaceBall"`
 	MaxAllowedBots        int             `json:"maxAllowedBots" yaml:"maxAllowedBots"`
 	Connected             bool            `json:"connected" yaml:"connected"`
+	ConnectionVerified    bool            `json:"connectionVerified" yaml:"connectionVerified"`
 	BotSubstitutionIntend bool            `json:"botSubstitutionIntend" yaml:"botSubstitutionIntend"`
 }
 

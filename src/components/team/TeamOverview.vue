@@ -8,6 +8,13 @@
                         class="fa-xs"
                         icon="signal"/>
             </span>
+            <span v-b-tooltip.hover
+                  title="connection verified"
+                  v-if="team.connectionVerified">
+                <font-awesome-icon
+                        class="fa-xs"
+                        icon="shield-alt"/>
+            </span>
         </h2>
         <div class="content">
             <div>

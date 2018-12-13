@@ -142,7 +142,7 @@ func (c *GameController) publishUiProtocol() {
 // updateOnlineStates checks if teams and autoRefs are online and writes this into the state
 func (c *GameController) updateOnlineStates() {
 	for _, team := range []Team{TeamYellow, TeamBlue} {
-		c.Engine.State.TeamState[team].Connected = c.teamConnected(team)
+		c.Engine.State.TeamState[team].Connected, c.Engine.State.TeamState[team].ConnectionVerified = c.teamConnected(team)
 	}
 	var autoRefs []string
 	for _, autoRef := range c.AutoRefServer.Clients {

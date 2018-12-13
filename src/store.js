@@ -18,6 +18,7 @@ export class TeamState {
     canPlaceBall = true;
     maxAllowedBots = 0;
     connected = false;
+    connectionVerified = false;
 }
 
 export class RefBoxState {
