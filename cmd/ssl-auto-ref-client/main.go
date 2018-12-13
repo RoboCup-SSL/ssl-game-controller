@@ -57,18 +57,18 @@ func main() {
 }
 
 func (c *Client) register() {
-	controllerReply := refproto.ControllerReply{}
-	if err := sslconn.ReceiveMessage(c.conn, &controllerReply); err != nil {
+	reply := refproto.ControllerToAutoRef{}
+	if err := sslconn.ReceiveMessage(c.conn, &reply); err != nil {
 		log.Fatal("Failed receiving controller reply: ", err)
 	}
-	if controllerReply.NextToken == nil {
+	if reply.GetControllerReply() == nil || reply.GetControllerReply().NextToken == nil {
 		log.Fatal("Missing next token")
 	}
 
 	registration := refproto.AutoRefRegistration{}
 	registration.Identifier = clientIdentifier
 	if privateKey != nil {
-		registration.Signature = &refproto.Signature{Token: controllerReply.NextToken, Pkcs1V15: []byte{}}
+		registration.Signature = &refproto.Signature{Token: reply.GetControllerReply().NextToken, Pkcs1V15: []byte{}}
 		registration.Signature.Pkcs1V15 = client.Sign(privateKey, &registration)
 	}
 	log.Print("Sending registration")
@@ -76,20 +76,20 @@ func (c *Client) register() {
 		log.Fatal("Failed sending registration: ", err)
 	}
 	log.Print("Sent registration, waiting for reply")
-	controllerReply = refproto.ControllerReply{}
-	if err := sslconn.ReceiveMessage(c.conn, &controllerReply); err != nil {
+	reply = refproto.ControllerToAutoRef{}
+	if err := sslconn.ReceiveMessage(c.conn, &reply); err != nil {
 		log.Fatal("Failed receiving controller reply: ", err)
 	}
-	if controllerReply.StatusCode == nil || *controllerReply.StatusCode != refproto.ControllerReply_OK {
+	if reply.GetControllerReply().StatusCode == nil || *reply.GetControllerReply().StatusCode != refproto.ControllerReply_OK {
 		reason := ""
-		if controllerReply.Reason != nil {
-			reason = *controllerReply.Reason
+		if reply.GetControllerReply().Reason != nil {
+			reason = *reply.GetControllerReply().Reason
 		}
 		log.Fatal("Registration rejected: ", reason)
 	}
 	log.Printf("Successfully registered as %v", *clientIdentifier)
-	if controllerReply.NextToken != nil {
-		c.token = *controllerReply.NextToken
+	if reply.GetControllerReply().NextToken != nil {
+		c.token = *reply.GetControllerReply().NextToken
 	} else {
 		c.token = ""
 	}
@@ -106,17 +106,17 @@ func (c *Client) sendGameEvent() {
 	*event.BallLeftFieldTouchLine.Location.X = 1
 	*event.BallLeftFieldTouchLine.Location.Y = 4.5
 	gameEvent := refproto.GameEvent{Event: &event}
-	request := refproto.AutoRefToControllerRequest{GameEvent: &gameEvent}
+	request := refproto.AutoRefToController{GameEvent: &gameEvent}
 	c.sendRequest(&request)
 }
 
 func (c *Client) sendAutoRefMessage(msg string) {
 	message := refproto.AutoRefMessage{Message: &refproto.AutoRefMessage_Custom{Custom: msg}}
-	request := refproto.AutoRefToControllerRequest{AutoRefMessage: &message}
+	request := refproto.AutoRefToController{AutoRefMessage: &message}
 	c.sendRequest(&request)
 }
 
-func (c *Client) sendRequest(request *refproto.AutoRefToControllerRequest) {
+func (c *Client) sendRequest(request *refproto.AutoRefToController) {
 	if privateKey != nil {
 		request.Signature = &refproto.Signature{Token: &c.token, Pkcs1V15: []byte{}}
 		request.Signature.Pkcs1V15 = client.Sign(privateKey, request)
@@ -129,16 +129,16 @@ func (c *Client) sendRequest(request *refproto.AutoRefToControllerRequest) {
 	}
 
 	log.Print("Waiting for reply...")
-	controllerReply := refproto.ControllerReply{}
-	if err := sslconn.ReceiveMessage(c.conn, &controllerReply); err != nil {
+	reply := refproto.ControllerToAutoRef{}
+	if err := sslconn.ReceiveMessage(c.conn, &reply); err != nil {
 		log.Fatal("Failed receiving controller reply: ", err)
 	}
-	log.Print("Received reply: ", controllerReply)
-	if controllerReply.StatusCode == nil || *controllerReply.StatusCode != refproto.ControllerReply_OK {
-		log.Fatal("Message rejected: ", *controllerReply.Reason)
+	log.Print("Received reply: ", reply)
+	if reply.GetControllerReply() == nil || reply.GetControllerReply().StatusCode == nil || *reply.GetControllerReply().StatusCode != refproto.ControllerReply_OK {
+		log.Fatal("Message rejected: ", *reply.GetControllerReply().Reason)
 	}
-	if controllerReply.NextToken != nil {
-		c.token = *controllerReply.NextToken
+	if reply.GetControllerReply().NextToken != nil {
+		c.token = *reply.GetControllerReply().NextToken
 	} else {
 		c.token = ""
 	}

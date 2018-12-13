@@ -7,7 +7,6 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
-	"github.com/RoboCup-SSL/ssl-go-tools/pkg/sslconn"
 	"github.com/golang/protobuf/proto"
 	"io/ioutil"
 	"log"
@@ -59,8 +58,7 @@ func (s *Server) CloseConnection(conn net.Conn, id string) {
 	log.Printf("Connection to %v closed", id)
 }
 
-func (c *Client) Ok() {
-	reply := refproto.ControllerReply{}
+func (c *Client) Ok() (reply refproto.ControllerReply) {
 	reply.StatusCode = new(refproto.ControllerReply_StatusCode)
 	*reply.StatusCode = refproto.ControllerReply_OK
 	reply.Verification = new(refproto.ControllerReply_Verification)
@@ -71,21 +69,16 @@ func (c *Client) Ok() {
 	} else {
 		*reply.Verification = refproto.ControllerReply_UNVERIFIED
 	}
-	if err := sslconn.SendMessage(c.Conn, &reply); err != nil {
-		log.Print("Failed to send reply: ", err)
-	}
+	return
 }
 
-func (c *Client) Reject(reason string) {
+func (c *Client) Reject(reason string) (reply refproto.ControllerReply) {
 	log.Print("Reject connection: " + reason)
-	reply := refproto.ControllerReply{}
 	reply.StatusCode = new(refproto.ControllerReply_StatusCode)
 	*reply.StatusCode = refproto.ControllerReply_REJECTED
 	reply.Reason = new(string)
 	*reply.Reason = reason
-	if err := sslconn.SendMessage(c.Conn, &reply); err != nil {
-		log.Print("Failed to send reply: ", err)
-	}
+	return
 }
 
 func (s *Server) LoadTrustedKeys(trustedKeysDir string) {

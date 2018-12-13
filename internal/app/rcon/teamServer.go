@@ -11,7 +11,7 @@ import (
 )
 
 type TeamServer struct {
-	ProcessTeamRequest func(teamName string, request refproto.TeamToControllerRequest) error
+	ProcessTeamRequest func(teamName string, request refproto.TeamToController) error
 	AllowedTeamNames   []string
 	*Server
 }
@@ -22,7 +22,7 @@ type TeamClient struct {
 
 func NewTeamServer() (s *TeamServer) {
 	s = new(TeamServer)
-	s.ProcessTeamRequest = func(string, refproto.TeamToControllerRequest) error { return nil }
+	s.ProcessTeamRequest = func(string, refproto.TeamToController) error { return nil }
 	s.Server = NewServer()
 	s.ConnectionHandler = s.handleClientConnection
 	return
@@ -30,7 +30,9 @@ func NewTeamServer() (s *TeamServer) {
 
 func (c *TeamClient) receiveRegistration(server *TeamServer) error {
 	registration := refproto.TeamRegistration{}
-	sslconn.ReceiveMessage(c.Conn, &registration)
+	if err := sslconn.ReceiveMessage(c.Conn, &registration); err != nil {
+		return err
+	}
 
 	if registration.TeamName == nil {
 		return errors.New("No team name specified")
@@ -52,7 +54,7 @@ func (c *TeamClient) receiveRegistration(server *TeamServer) error {
 		c.Token = ""
 	}
 
-	c.Ok()
+	c.reply(c.Ok())
 
 	log.Printf("Team %v connected.", *registration.TeamName)
 
@@ -90,7 +92,7 @@ func (c *TeamClient) verifyRegistration(registration refproto.TeamRegistration) 
 	return nil
 }
 
-func (c *TeamClient) verifyRequest(req refproto.TeamToControllerRequest) error {
+func (c *TeamClient) verifyRequest(req refproto.TeamToController) error {
 	if req.Signature == nil {
 		return errors.New("Missing signature")
 	}
@@ -116,11 +118,11 @@ func (s *TeamServer) handleClientConnection(conn net.Conn) {
 	defer conn.Close()
 
 	client := TeamClient{Client: &Client{Conn: conn, Token: uuid.New()}}
-	client.Ok()
+	client.reply(client.Ok())
 
 	err := client.receiveRegistration(s)
 	if err != nil {
-		client.Reject(err.Error())
+		client.reply(client.Reject(err.Error()))
 		return
 	}
 
@@ -129,7 +131,7 @@ func (s *TeamServer) handleClientConnection(conn net.Conn) {
 	log.Printf("Client %v connected", client.Id)
 
 	for {
-		req := refproto.TeamToControllerRequest{}
+		req := refproto.TeamToController{}
 		if err := sslconn.ReceiveMessage(conn, &req); err != nil {
 			if err == io.EOF {
 				return
@@ -139,25 +141,33 @@ func (s *TeamServer) handleClientConnection(conn net.Conn) {
 		}
 		if client.PubKey != nil {
 			if err := client.verifyRequest(req); err != nil {
-				client.Reject(err.Error())
+				client.reply(client.Reject(err.Error()))
 				continue
 			}
 		}
 		if err := s.ProcessTeamRequest(client.Id, req); err != nil {
-			client.Reject(err.Error())
+			client.reply(client.Reject(err.Error()))
 		} else {
-			client.Ok()
+			client.reply(client.Ok())
 		}
 	}
 }
 
-func (s *TeamServer) SendRequest(teamName string, request refproto.ControllerToTeamRequest) error {
+func (s *TeamServer) SendRequest(teamName string, request refproto.ControllerToTeam) error {
 	if client, ok := s.Clients[teamName]; ok {
 		return client.SendRequest(request)
 	}
 	return errors.Errorf("Client '%v' not connected", teamName)
 }
 
-func (c *Client) SendRequest(request refproto.ControllerToTeamRequest) error {
+func (c *Client) SendRequest(request refproto.ControllerToTeam) error {
 	return sslconn.SendMessage(c.Conn, &request)
+}
+
+func (c *Client) reply(reply refproto.ControllerReply) {
+	msg := refproto.ControllerToTeam_ControllerReply{ControllerReply: &reply}
+	response := refproto.ControllerToTeam{Msg: &msg}
+	if err := sslconn.SendMessage(c.Conn, &response); err != nil {
+		log.Print("Failed to send reply: ", err)
+	}
 }

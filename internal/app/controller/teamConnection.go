@@ -22,17 +22,17 @@ func (c *GameController) teamConnected(team Team) bool {
 	return false
 }
 
-func (c *GameController) ProcessTeamRequests(teamName string, request refproto.TeamToControllerRequest) error {
+func (c *GameController) ProcessTeamRequests(teamName string, request refproto.TeamToController) error {
 	c.ConnectionMutex.Lock()
 	defer c.ConnectionMutex.Unlock()
 	log.Print("Received request from team: ", request)
 
-	if x, ok := request.GetRequest().(*refproto.TeamToControllerRequest_AdvantageResponse_); ok {
+	if x, ok := request.GetMsg().(*refproto.TeamToController_AdvantageResponse_); ok {
 		if c.outstandingTeamChoice == nil {
 			return errors.New("No outstanding choice available. You are probably too late.")
 		}
 		responseTime := c.Engine.TimeProvider().Sub(c.outstandingTeamChoice.IssueTime)
-		if x.AdvantageResponse == refproto.TeamToControllerRequest_CONTINUE {
+		if x.AdvantageResponse == refproto.TeamToController_CONTINUE {
 			log.Printf("Team %v decided to continue the game within %v", c.outstandingTeamChoice.Team, responseTime)
 			switch c.outstandingTeamChoice.Event.GameEvent.Type {
 			case GameEventBotCrashUnique:
@@ -59,7 +59,7 @@ func (c *GameController) ProcessTeamRequests(teamName string, request refproto.T
 		return errors.New("Your team is not playing?!")
 	}
 
-	if x, ok := request.GetRequest().(*refproto.TeamToControllerRequest_SubstituteBot); ok {
+	if x, ok := request.GetMsg().(*refproto.TeamToController_SubstituteBot); ok {
 		if c.Engine.State.TeamState[team].BotSubstitutionIntend != x.SubstituteBot {
 			log.Printf("Team %v updated bot substituation intend to %v", team, x.SubstituteBot)
 			c.Engine.State.TeamState[team].BotSubstitutionIntend = x.SubstituteBot
@@ -72,7 +72,7 @@ func (c *GameController) ProcessTeamRequests(teamName string, request refproto.T
 		return errors.New("Game is not stopped.")
 	}
 
-	if x, ok := request.GetRequest().(*refproto.TeamToControllerRequest_DesiredKeeper); ok {
+	if x, ok := request.GetMsg().(*refproto.TeamToController_DesiredKeeper); ok {
 		if x.DesiredKeeper < 0 || x.DesiredKeeper > 15 {
 			return errors.Errorf("Goalkeeper id is invalid: %v", x.DesiredKeeper)
 		}
@@ -88,21 +88,21 @@ func (c *GameController) askForTeamDecisionIfRequired(event Event) (handled bool
 	handled = false
 	if c.outstandingTeamChoice == nil && c.Engine.State.GameState() == GameStateRunning {
 		var byTeamProto refproto.Team
-		var choiceType refproto.ControllerToTeamRequest_AdvantageChoice_Foul
+		var choiceType refproto.AdvantageChoice_Foul
 		if event.GameEvent.Details.BotCrashUnique != nil {
 			byTeamProto = *event.GameEvent.Details.BotCrashUnique.ByTeam
-			choiceType = refproto.ControllerToTeamRequest_AdvantageChoice_COLLISION
+			choiceType = refproto.AdvantageChoice_COLLISION
 		} else if event.GameEvent.Details.BotPushedBot != nil {
 			byTeamProto = *event.GameEvent.Details.BotPushedBot.ByTeam
-			choiceType = refproto.ControllerToTeamRequest_AdvantageChoice_PUSHING
+			choiceType = refproto.AdvantageChoice_PUSHING
 		}
 
 		forTeam := NewTeam(byTeamProto).Opposite()
 		if forTeam != "" {
 			teamName := c.Engine.State.TeamState[forTeam].Name
-			choice := refproto.ControllerToTeamRequest_AdvantageChoice{Foul: &choiceType}
-			requestPayload := refproto.ControllerToTeamRequest_AdvantageChoice_{AdvantageChoice: &choice}
-			request := refproto.ControllerToTeamRequest{Request: &requestPayload}
+			choice := refproto.AdvantageChoice{Foul: &choiceType}
+			requestPayload := refproto.ControllerToTeam_AdvantageChoice{AdvantageChoice: &choice}
+			request := refproto.ControllerToTeam{Msg: &requestPayload}
 			err := c.TeamServer.SendRequest(teamName, request)
 			if err != nil {
 				log.Print("Failed to ask for advantage choice: ", err)

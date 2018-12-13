@@ -10,11 +10,11 @@ Controller->Team: ControllerReply ( ok | reject )
 
 loop
 alt team requests a change
-Team->Controller: TeamToControllerRequest
+Team->Controller: TeamToController
 Controller->Team: ControllerReply ( ok | reject )
 else controller requests a decision
-Controller->Team: ControllerToTeamRequest
-Team->Controller: TeamToControllerRequest
+Controller->Team: ControllerToTeam
+Team->Controller: TeamToController
 Controller->Team: ControllerReply ( ok | reject )
 end
 end

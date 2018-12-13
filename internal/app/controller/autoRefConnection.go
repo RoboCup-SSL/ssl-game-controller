@@ -6,7 +6,7 @@ import (
 	"math"
 )
 
-func (c *GameController) ProcessAutoRefRequests(id string, request refproto.AutoRefToControllerRequest) error {
+func (c *GameController) ProcessAutoRefRequests(id string, request refproto.AutoRefToController) error {
 	c.ConnectionMutex.Lock()
 	defer c.ConnectionMutex.Unlock()
 	log.Printf("Received request from autoRef '%v': %v", id, request)

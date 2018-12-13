@@ -10,12 +10,12 @@ message TeamRegistration {
     optional Signature signature = 2;
 }
 
-// wrapper for all requests from a team's computer to the controller
-message TeamToControllerRequest {
+// wrapper for all messages from a team's computer to the controller
+message TeamToController {
     // signature can optionally be specified to enable secure communication
     optional Signature signature = 1;
 
-    oneof request {
+    oneof msg {
         // request a new desired keeper id
         // this is only allowed during STOP and will be rejected otherwise
         int32 desired_keeper = 2;
@@ -36,24 +36,27 @@ message TeamToControllerRequest {
     }
 }
 
-// wrapper for all requests from controller to a team's computer
-message ControllerToTeamRequest {
-    oneof request {
+// wrapper for all messages from controller to a team's computer
+message ControllerToTeam {
+    oneof msg {
+        // a reply from the controller
+        ControllerReply controller_reply = 1;
         // the team is offered an advantage choice
-        AdvantageChoice advantage_choice = 1;
+        AdvantageChoice advantage_choice = 2;
     }
+}
 
-    message AdvantageChoice {
-        // the type of foul that occurred
-        required Foul foul = 1;
+// information about the advantage choice that is offered to a team
+message AdvantageChoice {
+    // the type of foul that occurred
+    required Foul foul = 1;
 
-        enum Foul {
-            // default value when not set
-            UNKNOWN = 0;
-            // an opponent bot has crashed with one of your bots
-            COLLISION = 1;
-            // an opponent bot has pushed one of your bots
-            PUSHING = 2;
-        }
+    enum Foul {
+        // default value when not set
+        UNKNOWN = 0;
+        // an opponent bot has crashed with one of your bots
+        COLLISION = 1;
+        // an opponent bot has pushed one of your bots
+        PUSHING = 2;
     }
 }
