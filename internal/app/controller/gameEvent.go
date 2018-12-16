@@ -265,84 +265,123 @@ func (e GameEvent) IsContinueGame() bool {
 // ToProto converts the internal game event into a protobuf game event
 func (e GameEvent) ToProto() *refproto.GameEvent {
 	protoEvent := new(refproto.GameEvent)
+	protoEvent.Type = new(refproto.GameEventType)
 	switch e.Type {
 	case GameEventNone:
 		return nil
 	case GameEventBallLeftFieldGoalLine:
+		*protoEvent.Type = refproto.GameEventType_BALL_LEFT_FIELD_GOAL_LINE
 		protoEvent.Event = &refproto.GameEvent_BallLeftFieldGoalLine{BallLeftFieldGoalLine: e.Details.BallLeftFieldGoalLine}
 	case GameEventBallLeftFieldTouchLine:
+		*protoEvent.Type = refproto.GameEventType_BALL_LEFT_FIELD_TOUCH_LINE
 		protoEvent.Event = &refproto.GameEvent_BallLeftFieldTouchLine{BallLeftFieldTouchLine: e.Details.BallLeftFieldTouchLine}
 	case GameEventAimlessKick:
+		*protoEvent.Type = refproto.GameEventType_AIMLESS_KICK
 		protoEvent.Event = &refproto.GameEvent_AimlessKick_{AimlessKick: e.Details.AimlessKick}
 	case GameEventGoal:
+		*protoEvent.Type = refproto.GameEventType_GOAL
 		protoEvent.Event = &refproto.GameEvent_Goal_{Goal: e.Details.Goal}
 	case GameEventPossibleGoal:
+		*protoEvent.Type = refproto.GameEventType_POSSIBLE_GOAL
 		protoEvent.Event = &refproto.GameEvent_PossibleGoal{PossibleGoal: e.Details.PossibleGoal}
 	case GameEventIndirectGoal:
+		*protoEvent.Type = refproto.GameEventType_INDIRECT_GOAL
 		protoEvent.Event = &refproto.GameEvent_IndirectGoal_{IndirectGoal: e.Details.IndirectGoal}
 	case GameEventChippedGoal:
+		*protoEvent.Type = refproto.GameEventType_CHIPPED_GOAL
 		protoEvent.Event = &refproto.GameEvent_ChippedGoal_{ChippedGoal: e.Details.ChippedGoal}
 	case GameEventBotTooFastInStop:
+		*protoEvent.Type = refproto.GameEventType_BOT_TOO_FAST_IN_STOP
 		protoEvent.Event = &refproto.GameEvent_BotTooFastInStop_{BotTooFastInStop: e.Details.BotTooFastInStop}
 	case GameEventBotTippedOver:
+		*protoEvent.Type = refproto.GameEventType_BOT_TIPPED_OVER
 		protoEvent.Event = &refproto.GameEvent_BotTippedOver_{BotTippedOver: e.Details.BotTippedOver}
 	case GameEventBotInterferedPlacement:
+		*protoEvent.Type = refproto.GameEventType_BOT_INTERFERED_PLACEMENT
 		protoEvent.Event = &refproto.GameEvent_BotInterferedPlacement_{BotInterferedPlacement: e.Details.BotInterferedPlacement}
 	case GameEventBotCrashDrawn:
+		*protoEvent.Type = refproto.GameEventType_BOT_CRASH_DRAWN
 		protoEvent.Event = &refproto.GameEvent_BotCrashDrawn_{BotCrashDrawn: e.Details.BotCrashDrawn}
 	case GameEventBotKickedBallTooFast:
+		*protoEvent.Type = refproto.GameEventType_BOT_KICKED_BALL_TOO_FAST
 		protoEvent.Event = &refproto.GameEvent_BotKickedBallTooFast_{BotKickedBallTooFast: e.Details.BotKickedBallTooFast}
 	case GameEventBotDribbledBallTooFar:
+		*protoEvent.Type = refproto.GameEventType_BOT_DRIBBLED_BALL_TOO_FAR
 		protoEvent.Event = &refproto.GameEvent_BotDribbledBallTooFar_{BotDribbledBallTooFar: e.Details.BotDribbledBallTooFar}
 	case GameEventBotCrashUnique:
+		*protoEvent.Type = refproto.GameEventType_BOT_CRASH_UNIQUE
 		protoEvent.Event = &refproto.GameEvent_BotCrashUnique_{BotCrashUnique: e.Details.BotCrashUnique}
 	case GameEventBotCrashUniqueSkipped:
+		*protoEvent.Type = refproto.GameEventType_BOT_CRASH_UNIQUE_SKIPPED
 		protoEvent.Event = &refproto.GameEvent_BotCrashUniqueSkipped{BotCrashUniqueSkipped: e.Details.BotCrashUniqueSkipped}
 	case GameEventBotPushedBot:
+		*protoEvent.Type = refproto.GameEventType_BOT_PUSHED_BOT
 		protoEvent.Event = &refproto.GameEvent_BotPushedBot_{BotPushedBot: e.Details.BotPushedBot}
 	case GameEventBotPushedBotSkipped:
+		*protoEvent.Type = refproto.GameEventType_BOT_PUSHED_BOT_SKIPPED
 		protoEvent.Event = &refproto.GameEvent_BotPushedBotSkipped{BotPushedBotSkipped: e.Details.BotPushedBotSkipped}
 	case GameEventBotHeldBallDeliberately:
+		*protoEvent.Type = refproto.GameEventType_BOT_HELD_BALL_DELIBERATELY
 		protoEvent.Event = &refproto.GameEvent_BotHeldBallDeliberately_{BotHeldBallDeliberately: e.Details.BotHeldBallDeliberately}
 	case GameEventAttackerDoubleTouchedBall:
+		*protoEvent.Type = refproto.GameEventType_ATTACKER_DOUBLE_TOUCHED_BALL
 		protoEvent.Event = &refproto.GameEvent_AttackerDoubleTouchedBall_{AttackerDoubleTouchedBall: e.Details.AttackerDoubleTouchedBall}
 	case GameEventAttackerTooCloseToDefenseArea:
+		*protoEvent.Type = refproto.GameEventType_ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA
 		protoEvent.Event = &refproto.GameEvent_AttackerTooCloseToDefenseArea_{AttackerTooCloseToDefenseArea: e.Details.AttackerTooCloseToDefenseArea}
 	case GameEventAttackerInDefenseArea:
+		*protoEvent.Type = refproto.GameEventType_ATTACKER_IN_DEFENSE_AREA
 		protoEvent.Event = &refproto.GameEvent_AttackerInDefenseArea_{AttackerInDefenseArea: e.Details.AttackerInDefenseArea}
 	case GameEventAttackerTouchedKeeper:
+		*protoEvent.Type = refproto.GameEventType_ATTACKER_TOUCHED_KEEPER
 		protoEvent.Event = &refproto.GameEvent_AttackerTouchedKeeper_{AttackerTouchedKeeper: e.Details.AttackerTouchedKeeper}
 	case GameEventDefenderTooCloseToKickPoint:
+		*protoEvent.Type = refproto.GameEventType_DEFENDER_TOO_CLOSE_TO_KICK_POINT
 		protoEvent.Event = &refproto.GameEvent_DefenderTooCloseToKickPoint_{DefenderTooCloseToKickPoint: e.Details.DefenderTooCloseToKickPoint}
 	case GameEventDefenderInDefenseAreaPartially:
+		*protoEvent.Type = refproto.GameEventType_DEFENDER_IN_DEFENSE_AREA_PARTIALLY
 		protoEvent.Event = &refproto.GameEvent_DefenderInDefenseAreaPartially_{DefenderInDefenseAreaPartially: e.Details.DefenderInDefenseAreaPartially}
 	case GameEventDefenderInDefenseArea:
+		*protoEvent.Type = refproto.GameEventType_DEFENDER_IN_DEFENSE_AREA
 		protoEvent.Event = &refproto.GameEvent_DefenderInDefenseArea_{DefenderInDefenseArea: e.Details.DefenderInDefenseArea}
 	case GameEventKeeperHeldBall:
+		*protoEvent.Type = refproto.GameEventType_KEEPER_HELD_BALL
 		protoEvent.Event = &refproto.GameEvent_KeeperHeldBall_{KeeperHeldBall: e.Details.KeeperHeldBall}
 	case GameEventUnsportingBehaviorMinor:
+		*protoEvent.Type = refproto.GameEventType_UNSPORTING_BEHAVIOR_MINOR
 		protoEvent.Event = &refproto.GameEvent_UnsportingBehaviorMinor_{UnsportingBehaviorMinor: e.Details.UnsportingBehaviorMinor}
 	case GameEventUnsportingBehaviorMajor:
+		*protoEvent.Type = refproto.GameEventType_UNSPORTING_BEHAVIOR_MAJOR
 		protoEvent.Event = &refproto.GameEvent_UnsportingBehaviorMajor_{UnsportingBehaviorMajor: e.Details.UnsportingBehaviorMajor}
 	case GameEventMultipleCards:
+		*protoEvent.Type = refproto.GameEventType_MULTIPLE_CARDS
 		protoEvent.Event = &refproto.GameEvent_MultipleCards_{MultipleCards: e.Details.MultipleCards}
 	case GameEventMultipleFouls:
+		*protoEvent.Type = refproto.GameEventType_MULTIPLE_FOULS
 		protoEvent.Event = &refproto.GameEvent_MultipleFouls_{MultipleFouls: e.Details.MultipleFouls}
 	case GameEventMultiplePlacementFailures:
+		*protoEvent.Type = refproto.GameEventType_MULTIPLE_PLACEMENT_FAILURES
 		protoEvent.Event = &refproto.GameEvent_MultiplePlacementFailures_{MultiplePlacementFailures: e.Details.MultiplePlacementFailures}
 	case GameEventKickTimeout:
+		*protoEvent.Type = refproto.GameEventType_KICK_TIMEOUT
 		protoEvent.Event = &refproto.GameEvent_KickTimeout_{KickTimeout: e.Details.KickTimeout}
 	case GameEventNoProgressInGame:
+		*protoEvent.Type = refproto.GameEventType_NO_PROGRESS_IN_GAME
 		protoEvent.Event = &refproto.GameEvent_NoProgressInGame_{NoProgressInGame: e.Details.NoProgressInGame}
 	case GameEventPlacementFailed:
+		*protoEvent.Type = refproto.GameEventType_PLACEMENT_FAILED
 		protoEvent.Event = &refproto.GameEvent_PlacementFailed_{PlacementFailed: e.Details.PlacementFailed}
 	case GameEventPlacementSucceeded:
+		*protoEvent.Type = refproto.GameEventType_PLACEMENT_SUCCEEDED
 		protoEvent.Event = &refproto.GameEvent_PlacementSucceeded_{PlacementSucceeded: e.Details.PlacementSucceeded}
 	case GameEventPrepared:
+		*protoEvent.Type = refproto.GameEventType_PREPARED
 		protoEvent.Event = &refproto.GameEvent_Prepared_{Prepared: e.Details.Prepared}
 	case GameEventBotSubstitution:
+		*protoEvent.Type = refproto.GameEventType_BOT_SUBSTITUTION
 		protoEvent.Event = &refproto.GameEvent_BotSubstitution_{BotSubstitution: e.Details.BotSubstitution}
 	case GameEventTooManyRobots:
+		*protoEvent.Type = refproto.GameEventType_TOO_MANY_ROBOTS
 		protoEvent.Event = &refproto.GameEvent_TooManyRobots_{TooManyRobots: e.Details.TooManyRobots}
 	default:
 		log.Printf("Warn: Could not map game event %v", e.Type)
