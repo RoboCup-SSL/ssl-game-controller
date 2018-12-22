@@ -25,6 +25,8 @@ import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 // Connect to the backend with a single websocket that communicates with JSON format and is attached to the store
 import VueNativeSock from 'vue-native-websocket'
 
+import './assets/css/style.css'
+
 Vue.use(TimestampFormatter);
 
 Vue.use(VueHotkey);

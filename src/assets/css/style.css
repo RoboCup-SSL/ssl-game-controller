@@ -1,0 +1,9 @@
+.btn-primary:disabled {
+    background-color: white;
+    color: #007bff;
+}
+
+.btn-secondary:disabled {
+    background-color: white;
+    color: #6c757d;
+}
