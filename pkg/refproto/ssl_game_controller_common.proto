@@ -60,3 +60,13 @@ message Signature {
     // the PKCS1v15 signature of this message
     required bytes pkcs1v15 = 2;
 }
+
+// BallSpeedMeasurement is a single measurement sample of the ball speed
+message BallSpeedMeasurement {
+    // The UNIX timestamp [μs] when the measurement was taken.
+    required uint64 timestamp = 1;
+    // the ball speed measurement [m/s]
+    required float ball_speed = 2;
+    // the estimated initial ball speed (kick speed) [m/s]
+    optional float initial_ball_speed = 3;
+}
