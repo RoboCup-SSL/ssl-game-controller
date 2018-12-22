@@ -83,7 +83,9 @@ func (c *GameController) Run() {
 	go c.mainLoop()
 	go c.publishToNetwork()
 	go c.AutoRefServer.Listen(c.Config.Server.AutoRef.Address)
+	go c.AutoRefServer.ListenTls(c.Config.Server.AutoRef.AddressTls)
 	go c.TeamServer.Listen(c.Config.Server.Team.Address)
+	go c.TeamServer.ListenTls(c.Config.Server.Team.AddressTls)
 }
 
 // setupTimeProvider changes the time provider to the vision receiver, if configured

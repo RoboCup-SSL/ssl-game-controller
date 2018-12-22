@@ -5,9 +5,11 @@ network:
 server:
   auto-ref:
     address: :10007
+    address-tls: :10107
     trusted-keys-dir: config/trusted_keys/auto_ref
   team:
     address: :10008
+    address-tls: :10108
     trusted-keys-dir: config/trusted_keys/team
 game:
   yellow-card-duration: 2m

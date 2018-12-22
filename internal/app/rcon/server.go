@@ -4,6 +4,7 @@ import (
 	"crypto"
 	"crypto/rsa"
 	"crypto/sha256"
+	"crypto/tls"
 	"crypto/x509"
 	"encoding/pem"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
@@ -11,6 +12,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net"
+	"os"
 	"strings"
 )
 
@@ -39,6 +41,41 @@ func (s *Server) Listen(address string) {
 	listener, err := net.Listen("tcp", address)
 	if err != nil {
 		log.Print("Failed to listen on ", address)
+		return
+	}
+	log.Print("Listening on ", address)
+
+	for {
+		conn, err := listener.Accept()
+		if err != nil {
+			log.Print("Could not accept connection: ", err)
+		} else {
+			go s.ConnectionHandler(conn)
+		}
+	}
+}
+
+func (s *Server) ListenTls(address string) {
+
+	if _, err := os.Stat("server.crt"); os.IsNotExist(err) {
+		log.Println("Missing certificate for TLS endpoint. Put a server.crt in the working dir.")
+		return
+	}
+	if _, err := os.Stat("server.key"); os.IsNotExist(err) {
+		log.Println("Missing certificate key for TLS endpoint. Put a server.key in the working dir.")
+		return
+	}
+
+	cer, err := tls.LoadX509KeyPair("server.crt", "server.key")
+	if err != nil {
+		log.Printf("Could not load X509 key pair: %v", err)
+		return
+	}
+
+	config := &tls.Config{Certificates: []tls.Certificate{cer}}
+	listener, err := tls.Listen("tcp", address, config)
+	if err != nil {
+		log.Printf("Failed to listen on %v: %v", address, err)
 		return
 	}
 	log.Print("Listening on ", address)
