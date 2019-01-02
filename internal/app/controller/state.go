@@ -417,9 +417,9 @@ func NewState() (s *State) {
 
 func (s State) DeepCopy() (c State) {
 	c = s
-	c.GameEvents = []*GameEvent{}
+	c.GameEvents = make([]*GameEvent, len(s.GameEvents))
 	copy(c.GameEvents, s.GameEvents)
-	c.GameEventProposals = []*GameEventProposal{}
+	c.GameEventProposals = make([]*GameEventProposal, len(s.GameEventProposals))
 	copy(c.GameEventProposals, s.GameEventProposals)
 	if s.PlacementPos != nil {
 		c.PlacementPos = new(Location)
