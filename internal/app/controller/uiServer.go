@@ -8,10 +8,11 @@ import (
 )
 
 type ApiServer struct {
-	Consumer         EventConsumer
-	connections      []*websocket.Conn
-	latestState      State
-	latestUiProtocol []UiProtocolEntry
+	Consumer          EventConsumer
+	connections       []*websocket.Conn
+	latestState       State
+	latestUiProtocol  []UiProtocolEntry
+	latestEngineState EngineState
 }
 
 type EventConsumer interface {
@@ -19,8 +20,9 @@ type EventConsumer interface {
 }
 
 type MessageWrapper struct {
-	State      *State             `json:"state"`
-	UiProtocol *[]UiProtocolEntry `json:"gameEvents"`
+	State       *State             `json:"state"`
+	UiProtocol  *[]UiProtocolEntry `json:"gameEvents"`
+	EngineState *EngineState       `json:"engineState"`
 }
 
 // WsHandler handles incoming web socket connections
@@ -62,7 +64,7 @@ func (a *ApiServer) PublishWrapper(wrapper MessageWrapper) {
 }
 
 func (a *ApiServer) publishFullWrapper(conn *websocket.Conn) {
-	wrapper := MessageWrapper{&a.latestState, &a.latestUiProtocol}
+	wrapper := MessageWrapper{&a.latestState, &a.latestUiProtocol, &a.latestEngineState}
 	b, err := json.Marshal(wrapper)
 	if err != nil {
 		log.Println("Marshal error:", err)
@@ -73,9 +75,10 @@ func (a *ApiServer) publishFullWrapper(conn *websocket.Conn) {
 	}
 }
 
-func (a *ApiServer) PublishState(state State) {
+func (a *ApiServer) PublishState(state State, engineState EngineState) {
 	a.latestState = state
-	wrapper := MessageWrapper{State: &state}
+	a.latestEngineState = engineState
+	wrapper := MessageWrapper{State: &state, EngineState: &engineState}
 	a.PublishWrapper(wrapper)
 }
 

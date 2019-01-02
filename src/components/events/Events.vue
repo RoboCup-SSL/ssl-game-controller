@@ -65,18 +65,21 @@
             state() {
                 return this.$store.state.refBoxState
             },
+            engineState() {
+                return this.$store.state.engineState
+            },
             autoRefsConnected() {
-                if (this.state.autoRefsConnected != null) {
-                    return this.state.autoRefsConnected.length;
+                if (this.engineState.autoRefsConnected != null) {
+                    return this.engineState.autoRefsConnected.length;
                 }
                 return 0;
             },
             autoRefs() {
                 if (this.autoRefsConnected) {
                     let autoRefs = 'Connected AutoRefs: ';
-                    for (let i = 0; i < this.state.autoRefsConnected.length; i++) {
-                        autoRefs += this.state.autoRefsConnected[i];
-                        if (i !== (this.state.autoRefsConnected.length - 1)) {
+                    for (let i = 0; i < this.engineState.autoRefsConnected.length; i++) {
+                        autoRefs += this.engineState.autoRefsConnected[i];
+                        if (i !== (this.engineState.autoRefsConnected.length - 1)) {
                             autoRefs += ', '
                         }
                     }

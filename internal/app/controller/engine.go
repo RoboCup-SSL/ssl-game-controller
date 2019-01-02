@@ -11,9 +11,27 @@ import (
 	"time"
 )
 
+type EngineState struct {
+	AutoRefsConnected      []string      `json:"autoRefsConnected" yaml:"autoRefsConnected"`
+	TeamConnected          map[Team]bool `json:"teamConnected" yaml:"teamConnected"`
+	TeamConnectionVerified map[Team]bool `json:"teamConnectionVerified" yaml:"teamConnectionVerified"`
+}
+
+func NewEngineState() (e EngineState) {
+	e.AutoRefsConnected = []string{}
+	e.TeamConnected = map[Team]bool{}
+	e.TeamConnected[TeamYellow] = false
+	e.TeamConnected[TeamBlue] = false
+	e.TeamConnectionVerified = map[Team]bool{}
+	e.TeamConnectionVerified[TeamYellow] = false
+	e.TeamConnectionVerified[TeamBlue] = false
+	return
+}
+
 type Engine struct {
 	State        *State
 	UiProtocol   []UiProtocolEntry
+	EngineState  EngineState
 	StageTimes   map[Stage]time.Duration
 	config       config.Game
 	TimeProvider func() time.Time
@@ -24,6 +42,7 @@ type Engine struct {
 
 func NewEngine(config config.Game, seed int64) (e Engine) {
 	e.config = config
+	e.EngineState = NewEngineState()
 	e.loadStages()
 	e.ResetGame()
 	e.TimeProvider = func() time.Time { return time.Now() }

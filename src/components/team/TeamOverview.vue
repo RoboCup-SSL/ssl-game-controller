@@ -3,14 +3,14 @@
         <h2>{{teamColor}} Team
             <span v-b-tooltip.hover
                   title="Team connected"
-                  v-if="team.connected">
+                  v-if="teamConnected">
                 <font-awesome-icon
                         class="fa-xs"
                         icon="signal"/>
             </span>
             <span v-b-tooltip.hover
                   title="connection verified"
-                  v-if="team.connectionVerified">
+                  v-if="teamConnectionVerified">
                 <font-awesome-icon
                         class="fa-xs"
                         icon="shield-alt"/>
@@ -108,6 +108,12 @@
             },
             maxAllowedBots() {
                 return this.team.maxAllowedBots;
+            },
+            teamConnected() {
+                return this.$store.state.engineState.teamConnected[this.teamColor]
+            },
+            teamConnectionVerified() {
+                return this.$store.state.engineState.teamConnectionVerified[this.teamColor]
             }
         }
     }

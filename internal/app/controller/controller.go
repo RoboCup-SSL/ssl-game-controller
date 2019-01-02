@@ -74,7 +74,7 @@ func (c *GameController) Run() {
 		}
 	}
 
-	c.ApiServer.PublishState(*c.Engine.State)
+	c.ApiServer.PublishState(*c.Engine.State, c.Engine.EngineState)
 	c.ApiServer.PublishUiProtocol(c.Engine.UiProtocol)
 	c.TeamServer.AllowedTeamNames = []string{c.Engine.State.TeamState[TeamYellow].Name,
 		c.Engine.State.TeamState[TeamBlue].Name}
@@ -130,7 +130,7 @@ func (c *GameController) publish() {
 		c.Engine.State.TeamState[TeamBlue].Name}
 
 	c.publishUiProtocol()
-	c.ApiServer.PublishState(*c.Engine.State)
+	c.ApiServer.PublishState(*c.Engine.State, c.Engine.EngineState)
 }
 
 // publishUiProtocol publishes the UI protocol, if it has changed
@@ -144,13 +144,13 @@ func (c *GameController) publishUiProtocol() {
 // updateOnlineStates checks if teams and autoRefs are online and writes this into the state
 func (c *GameController) updateOnlineStates() {
 	for _, team := range []Team{TeamYellow, TeamBlue} {
-		c.Engine.State.TeamState[team].Connected, c.Engine.State.TeamState[team].ConnectionVerified = c.teamConnected(team)
+		c.Engine.EngineState.TeamConnected[team], c.Engine.EngineState.TeamConnectionVerified[team] = c.teamConnected(team)
 	}
 	var autoRefs []string
 	for _, autoRef := range c.AutoRefServer.Clients {
 		autoRefs = append(autoRefs, autoRef.Id)
 	}
-	c.Engine.State.AutoRefsConnected = autoRefs
+	c.Engine.EngineState.AutoRefsConnected = autoRefs
 }
 
 // publishToNetwork publishes the current state to the network (multicast) every 100ms

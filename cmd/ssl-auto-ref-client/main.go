@@ -105,7 +105,8 @@ func (c *Client) sendGameEvent() {
 	event.BallLeftFieldTouchLine.Location = &refproto.Location{X: new(float32), Y: new(float32)}
 	*event.BallLeftFieldTouchLine.Location.X = 1
 	*event.BallLeftFieldTouchLine.Location.Y = 4.5
-	gameEvent := refproto.GameEvent{Event: &event}
+	gameEvent := refproto.GameEvent{Event: &event, Type: new(refproto.GameEventType)}
+	*gameEvent.Type = refproto.GameEventType_BALL_LEFT_FIELD_TOUCH_LINE
 	request := refproto.AutoRefToController{GameEvent: &gameEvent}
 	c.sendRequest(&request)
 }

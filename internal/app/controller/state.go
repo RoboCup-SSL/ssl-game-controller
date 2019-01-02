@@ -323,8 +323,6 @@ type TeamInfo struct {
 	BallPlacementFailures int             `json:"ballPlacementFailures" yaml:"ballPlacementFailures"`
 	CanPlaceBall          bool            `json:"canPlaceBall" yaml:"canPlaceBall"`
 	MaxAllowedBots        int             `json:"maxAllowedBots" yaml:"maxAllowedBots"`
-	Connected             bool            `json:"connected" yaml:"connected"`
-	ConnectionVerified    bool            `json:"connectionVerified" yaml:"connectionVerified"`
 	BotSubstitutionIntend bool            `json:"botSubstitutionIntend" yaml:"botSubstitutionIntend"`
 }
 
@@ -378,7 +376,6 @@ type State struct {
 	AutoContinue               bool                                `json:"autoContinue" yaml:"autoContinue"`
 	NextCommand                RefCommand                          `json:"nextCommand" yaml:"nextCommand"`
 	NextCommandFor             Team                                `json:"nextCommandFor" yaml:"nextCommandFor"`
-	AutoRefsConnected          []string                            `json:"autoRefsConnected" yaml:"autoRefsConnected"`
 	GameEventBehavior          map[GameEventType]GameEventBehavior `json:"gameEventBehavior" yaml:"gameEventBehavior"`
 	GameEventProposals         []*GameEventProposal                `json:"gameEventProposals" yaml:"gameEventProposals"`
 	CurrentActionDeadline      time.Time                           `json:"currentActionDeadline" yaml:"currentActionDeadline"`
@@ -413,7 +410,6 @@ func NewState() (s *State) {
 		s.GameEventBehavior[event] = GameEventBehaviorOn
 	}
 
-	s.AutoRefsConnected = []string{}
 	s.GameEventProposals = []*GameEventProposal{}
 
 	return
@@ -423,8 +419,6 @@ func (s State) DeepCopy() (c State) {
 	c = s
 	c.GameEvents = []*GameEvent{}
 	copy(c.GameEvents, s.GameEvents)
-	c.AutoRefsConnected = []string{}
-	copy(c.AutoRefsConnected, s.AutoRefsConnected)
 	c.GameEventProposals = []*GameEventProposal{}
 	copy(c.GameEventProposals, s.GameEventProposals)
 	if s.PlacementPos != nil {

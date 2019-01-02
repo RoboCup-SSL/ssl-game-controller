@@ -17,8 +17,6 @@ export class TeamState {
     ballPlacementFailures = 0;
     canPlaceBall = true;
     maxAllowedBots = 0;
-    connected = false;
-    connectionVerified = false;
 }
 
 export class RefBoxState {
@@ -34,16 +32,22 @@ export class RefBoxState {
     autoContinue = true;
     nextCommand = '';
     nextCommandFor = '';
-    autoRefsConnected = [];
     gameEventBehavior = {};
     gameEventProposals = [{proposerId: '', gameEvent: {type: '', details: {foo: 'bar'}}, validUntil: 0}];
     currentActionTimeRemaining = 0;
 }
 
+export class EngineState {
+    autoRefsConnected = [];
+    teamConnected = {'Yellow': false, 'Blue': false};
+    teamConnectionVerified = {'Yellow': false, 'Blue': false};
+}
+
 export default new Vuex.Store({
     state: {
         refBoxState: new RefBoxState(),
-        gameEvents: []
+        gameEvents: [],
+        engineState: new EngineState()
     },
     mutations: {
         SOCKET_ONOPEN() {
@@ -58,6 +62,9 @@ export default new Vuex.Store({
             }
             if (message.gameEvents) {
                 state.gameEvents = message.gameEvents;
+            }
+            if (message.engineState) {
+                state.engineState = message.engineState;
             }
         },
         SOCKET_RECONNECT() {
