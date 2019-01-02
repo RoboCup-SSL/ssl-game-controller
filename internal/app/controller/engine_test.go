@@ -318,9 +318,6 @@ func (t *TestTeamInfo) applyTo(info *TeamInfo) {
 	if t.MaxAllowedBots != nil {
 		info.MaxAllowedBots = *t.MaxAllowedBots
 	}
-	if t.Connected != nil {
-		info.Connected = *t.Connected
-	}
 	if t.BotSubstitutionIntend != nil {
 		info.BotSubstitutionIntend = *t.BotSubstitutionIntend
 	}
