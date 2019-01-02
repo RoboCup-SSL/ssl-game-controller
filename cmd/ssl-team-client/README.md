@@ -7,7 +7,7 @@ The communication is established with a bidirectional TCP connection. Messages a
 
 The .proto files can be found [here](../../pkg/refproto).
 
-The default port is `10008`. The IP to connect to can be determined using the multicast referee messages.
+The default port is `10008` for plain connections and 10108 for TLS encrypted connections. The IP to connect to can be determined using the multicast referee messages.
 
 ## Connection Sequence
 The connection is described in the following sequence diagram:
@@ -28,6 +28,17 @@ The [genKey.sh](../../tools/genKey.sh) script can be used to generate a new pair
 The controller sends a token with each reply. It must be included in the next request, when using the signature. The token is required to avoid replay attacks.
 
 If a public key is present for the team name provided during registration, a signature is required. Else, the signature is ignored. The controller reply indicates, if the last request could be verified.
+
+### A note to security
+There are currently two ways to secure the connection. Both are optional. And actually, even if you implement both, the connection is not 100% secure. This is, because the game-controller will be accessible by everyone during a tournament. So putting a private key/secret on the game-controller PC is no solution, as we can not keep it private.
+
+If you provide your public key and keep your private key secret, all messages, sent by you, can be verified by the game-controller. So, only you can change a keeper or reply to an advantage choice.
+However, messages from the game-controller can not be verified. They might even be dropped. Using TLS makes it a bit harder to manipulate the connection with quite little effort (because most languages have libraries for it), but the server key could still be stolen from the game-controller computer.
+
+You have the choice to either skip the security layers completely and trust the community or to implement one or two of the security layers, just to be sure.
+Providing the public key will at least help in avoiding that other teams accidentally connect as a wrong team.
+
+Ideas on how to make the protocol more secure without making it significantly more complex are welcome.
 
 ## Sample client
 The sample client, that is included in this folder, can be used to test the connection. It can be run with 
