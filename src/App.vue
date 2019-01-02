@@ -8,6 +8,7 @@
             <div class="team-container">
                 <TeamOverview class="team-views" team-color="Yellow"/>
                 <ControlTeam class="team-views" team-color="Yellow"/>
+                <CurrentEvents class="team-views"/>
             </div>
             <div class="main-middle-container">
                 <Events/>
@@ -26,7 +27,7 @@
             <div class="team-container">
                 <TeamOverview class="team-views" team-color="Blue"/>
                 <ControlTeam class="team-views" team-color="Blue"/>
-                <EventProposals class="team-views event-proposals"/>
+                <EventProposals class="team-views"/>
             </div>
         </div>
         <ControlMatch id="match-controls"/>
@@ -41,10 +42,12 @@
     import ControlMatch from "./components/control/ControlMatch";
     import Events from "./components/events/Events";
     import EventProposals from "./components/events/EventProposals";
+    import CurrentEvents from "./components/events/CurrentEvents";
 
     export default {
         name: 'app',
         components: {
+            CurrentEvents,
             EventProposals,
             Events,
             ControlMatch,

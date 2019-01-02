@@ -122,6 +122,7 @@ type EventModifyValue struct {
 	AutoContinue          *bool                         `json:"autoContinue,omitempty" yaml:"autoContinue"`
 	GameEventBehavior     *EventModifyGameEventBehavior `json:"gameEventBehavior,omitempty" yaml:"gameEventBehavior"`
 	BotSubstitutionIntend *bool                         `json:"botSubstitutionIntend,omitempty" yaml:"botSubstitutionIntend"`
+	RemoveGameEvent       *int                          `json:"removeGameEvent,omitempty" yaml:"removeGameEvent"`
 }
 
 func (m EventModifyValue) String() string {

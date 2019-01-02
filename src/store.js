@@ -23,7 +23,7 @@ export class RefBoxState {
     stage = 'unknown';
     command = '';
     commandForTeam = '';
-    gameEvents = [{type: '', details: {}}];
+    gameEvents = [];
     stageTimeElapsed = 0;
     stageTimeLeft = 0;
     matchDuration = 0;

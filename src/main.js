@@ -15,6 +15,7 @@ import {
     faCaretSquareDown,
     faCaretSquareUp,
     faCheckCircle,
+    faTimesCircle,
     faEdit,
     faSignal,
     faToggleOff,
@@ -40,6 +41,7 @@ library.add(faToggleOn);
 library.add(faToggleOff);
 library.add(faSignal);
 library.add(faCheckCircle);
+library.add(faTimesCircle);
 library.add(faShieldAlt);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 

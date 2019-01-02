@@ -395,6 +395,12 @@ func (e *Engine) processModify(m *EventModifyValue) error {
 		}
 	} else if m.GameEventBehavior != nil {
 		e.State.GameEventBehavior[m.GameEventBehavior.GameEventType] = m.GameEventBehavior.GameEventBehavior
+	} else if m.RemoveGameEvent != nil {
+		i := *m.RemoveGameEvent
+		if i >= len(e.State.GameEvents) {
+			return errors.Errorf("Game event id %d is too large.", i)
+		}
+		e.State.GameEvents = append(e.State.GameEvents[:i], e.State.GameEvents[i+1:]...)
 	} else if err := e.processTeamModify(m); err != nil {
 		return err
 	}
