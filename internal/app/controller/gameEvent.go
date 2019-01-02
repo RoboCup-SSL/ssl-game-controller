@@ -115,6 +115,7 @@ func (g GameEventType) Valid() bool {
 type GameEvent struct {
 	Type    GameEventType    `json:"type"`
 	Details GameEventDetails `json:"details"`
+	Origins []string         `json:"origins"`
 }
 
 // String converts the game event into a string
@@ -266,6 +267,7 @@ func (e GameEvent) IsContinueGame() bool {
 func (e GameEvent) ToProto() *refproto.GameEvent {
 	protoEvent := new(refproto.GameEvent)
 	protoEvent.Type = new(refproto.GameEventType)
+	protoEvent.Origin = e.Origins
 	switch e.Type {
 	case GameEventNone:
 		return nil

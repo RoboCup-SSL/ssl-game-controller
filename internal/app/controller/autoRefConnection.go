@@ -34,17 +34,21 @@ func (c *GameController) ProcessAutoRefRequests(id string, request refproto.Auto
 			}
 
 			totalProposals := 0
+			var origins []string
 			for _, proposal := range c.Engine.State.GameEventProposals {
 				if proposal.GameEvent.Type == event.GameEvent.Type && proposal.ValidUntil.After(c.Engine.TimeProvider()) {
 					totalProposals++
+					origins = append(origins, proposal.ProposerId)
 				}
 			}
 
 			majority := int(math.Floor(float64(len(c.AutoRefServer.Clients)) / 2.0))
 			if totalProposals > majority {
+				event.GameEvent.Origins = origins
 				c.OnNewEvent(event)
 			}
 		} else {
+			event.GameEvent.Origins = []string{id}
 			c.OnNewEvent(event)
 		}
 	}
