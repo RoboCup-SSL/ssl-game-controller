@@ -83,7 +83,7 @@ Open connections to teams are shown as an icon next to 'Team Yellow' and 'Team B
 If there is no connection, no icon is shown.
 
 #### How to override/cancel a game event from an autoRef?
-TODO
+All game events that happened since the last running state are listed on the left side with a button to remove this game event again.
 
 #### The controller crashes on start. What can I do?
 Try deleting the history.json file in the working directory. It may got corrupted.
