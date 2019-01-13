@@ -44,6 +44,7 @@ func (t Team) Known() bool {
 	return !t.Unknown()
 }
 
+// toProto converts the Team to a protobuf Team
 func (t Team) toProto() refproto.Team {
 	if t == TeamYellow {
 		return refproto.Team_YELLOW
@@ -51,6 +52,17 @@ func (t Team) toProto() refproto.Team {
 		return refproto.Team_BLUE
 	}
 	return refproto.Team_UNKNOWN
+}
+
+// Is returns true, if the team is equal to given team, respecting unknown and both accordingly
+func (t Team) Is(team Team) bool {
+	if team == TeamUnknown {
+		return false
+	}
+	if t == TeamBoth {
+		return true
+	}
+	return t == team
 }
 
 // NewTeam creates a team from a protobuf team. Its either a single team or unknown. Not both.
@@ -464,7 +476,10 @@ func (s State) BotSubstitutionIntend() Team {
 		if event.Type == GameEventTooManyRobots {
 			blue = blue || event.ByTeam() == TeamBlue
 			yellow = yellow || event.ByTeam() == TeamYellow
-			break
+		} else if event.Type == GameEventBotSubstitution {
+			// reset after a sub substitution event
+			blue = false
+			yellow = false
 		}
 	}
 
