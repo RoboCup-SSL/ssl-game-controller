@@ -29,7 +29,8 @@ jobs:
     - attach_workspace:
         at: .
     - run: go get -v -t -d ./...
-    - run: go test -v ./...
+    - run: go test -v -covermode=count -coverprofile=count.out ./...
+    - run: go tool cover -html=count.out -o coverage.html
     - run:
         working_directory: cmd/ssl-game-controller
         command: |
@@ -41,6 +42,9 @@ jobs:
         root: .
         paths:
         - release/*
+    - store_artifacts:
+        path: coverage.html
+        destination: coverage
 
   publish-github-release:
     docker:
