@@ -17,5 +17,13 @@ transitions:
       placementPos:
         x: 4.2
         y: -1.5
+      currentActionDeadline: "2010-01-01T00:00:30Z"
+      currentActionTimeRemaining: 30s
   - tick: 1s # make sure that the stage time is not proceeded
+    expectedStateDiff:
+      currentActionDeadline: "2010-01-01T00:00:30Z"
+      currentActionTimeRemaining: 29s
+      placementPos:
+        x: 4.2
+        y: -1.5
 

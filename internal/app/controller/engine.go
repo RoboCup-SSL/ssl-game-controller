@@ -125,7 +125,9 @@ func (e *Engine) SendCommand(command RefCommand, forTeam Team) {
 	e.State.CommandFor = forTeam
 
 	switch command {
-	case CommandHalt, CommandStop, CommandBallPlacement, CommandTimeout, CommandUnknown:
+	case CommandBallPlacement:
+		e.setCurrentActionTimeout(e.config.BallPlacementTime)
+	case CommandHalt, CommandStop, CommandTimeout, CommandUnknown:
 		// nothing to do
 	default:
 		// reset placement pos
@@ -730,7 +732,6 @@ func (e *Engine) placeBall(event *GameEvent) {
 		e.SendCommand(CommandHalt, "")
 		return
 	}
-	e.setCurrentActionTimeout(e.config.BallPlacementTime)
 }
 
 func (e *Engine) allTeamsFailedPlacement() bool {
