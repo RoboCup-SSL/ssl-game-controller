@@ -38,7 +38,11 @@ func (c *AutoRefClient) receiveRegistration(server *AutoRefServer) error {
 	}
 	c.Id = *registration.Identifier
 	if _, exists := server.Clients[c.Id]; exists {
-		return errors.New("Client with given identifier already registered: " + c.Id)
+		var clients []string
+		for k := range server.Clients {
+			clients = append(clients, k)
+		}
+		return errors.Errorf("Client with given identifier already registered: %v", clients)
 	}
 	c.PubKey = server.TrustedKeys[c.Id]
 	if c.PubKey != nil {

@@ -40,7 +40,7 @@ func (a *ApiServer) WsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer a.disconnect(conn)
 
-	log.Println("Client connected")
+	log.Println("UI Client connected")
 
 	a.connections = append(a.connections, conn)
 
