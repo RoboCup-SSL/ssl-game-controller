@@ -574,14 +574,14 @@ func (d GameEventDetails) String() string {
 		return ""
 	}
 	if d.Goal != nil {
-		if d.Goal.ByBot != nil {
-			return fmt.Sprintf("By bot %v", *d.Goal.ByBot)
+		if d.Goal.KickingBot != nil {
+			return fmt.Sprintf("By bot %v", *d.Goal.KickingBot)
 		}
 		return ""
 	}
 	if d.PossibleGoal != nil {
-		if d.PossibleGoal.ByBot != nil {
-			return fmt.Sprintf("By bot %v", *d.PossibleGoal.ByBot)
+		if d.PossibleGoal.KickingBot != nil {
+			return fmt.Sprintf("By bot %v", *d.PossibleGoal.KickingBot)
 		}
 		return ""
 	}
