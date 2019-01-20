@@ -188,6 +188,9 @@ func (e *Engine) Continue() {
 		e.SendCommand(CommandHalt, "")
 	} else if e.State.NextCommand != CommandUnknown {
 		e.SendCommand(e.State.NextCommand, e.State.NextCommandFor)
+	} else {
+		log.Println("No next command available to continue with. Halting game.")
+		e.SendCommand(CommandHalt, "")
 	}
 }
 
