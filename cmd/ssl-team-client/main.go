@@ -9,6 +9,7 @@ import (
 	"github.com/golang/protobuf/proto"
 	"log"
 	"net"
+	"time"
 )
 
 var udpAddress = flag.String("udpAddress", "224.5.23.1:10003", "The multicast address of ssl-game-controller")
@@ -47,7 +48,9 @@ func main() {
 	c.conn = conn
 
 	c.register()
-	c.sendDesiredKeeper(3)
+	for !c.sendDesiredKeeper(3) {
+		time.Sleep(time.Second)
+	}
 
 	for {
 		c.ReplyToChoices()
@@ -93,10 +96,10 @@ func (c *Client) register() {
 	}
 }
 
-func (c *Client) sendDesiredKeeper(id int32) {
+func (c *Client) sendDesiredKeeper(id int32) (accepted bool) {
 	message := refproto.TeamToController_DesiredKeeper{DesiredKeeper: id}
 	request := refproto.TeamToController{Msg: &message}
-	c.sendRequest(&request)
+	return c.sendRequest(&request)
 }
 
 func (c *Client) ReplyToChoices() {
@@ -112,7 +115,7 @@ func (c *Client) ReplyToChoices() {
 	c.sendRequest(&response)
 }
 
-func (c *Client) sendRequest(request *refproto.TeamToController) {
+func (c *Client) sendRequest(request *refproto.TeamToController) (accepted bool) {
 	if privateKey != nil {
 		request.Signature = &refproto.Signature{Token: &c.token, Pkcs1V15: []byte{}}
 		request.Signature.Pkcs1V15 = client.Sign(privateKey, request)
@@ -132,10 +135,16 @@ func (c *Client) sendRequest(request *refproto.TeamToController) {
 	log.Print("Received reply: ", proto.MarshalTextString(&reply))
 	if reply.GetControllerReply().StatusCode == nil || *reply.GetControllerReply().StatusCode != refproto.ControllerReply_OK {
 		log.Print("Message rejected: ", *reply.GetControllerReply().Reason)
+		accepted = false
+	} else {
+		accepted = true
 	}
+
 	if reply.GetControllerReply().NextToken != nil {
 		c.token = *reply.GetControllerReply().NextToken
 	} else {
 		c.token = ""
 	}
+
+	return
 }

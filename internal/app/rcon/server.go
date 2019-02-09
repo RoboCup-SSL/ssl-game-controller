@@ -121,6 +121,7 @@ func (c *Client) Reject(reason string) (reply refproto.ControllerReply) {
 	*reply.StatusCode = refproto.ControllerReply_REJECTED
 	reply.Reason = new(string)
 	*reply.Reason = reason
+	c.addVerification(&reply)
 	return
 }
 
