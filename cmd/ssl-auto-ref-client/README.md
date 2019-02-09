@@ -16,6 +16,9 @@ The connection is described in the following sequence diagram:
 
 Source to generate the diagram: [communication_autoRef.txt](./communication_autoRef.txt)
 
+## Connection stability
+Clients should deal with connection losts (reconnect). The game-controller may be restarted due to various reasons like crashes or other technical issues. AutoRefs should reconnect automatically after a connection lost without human interaction.
+
 ## Secure Connection
 The connection can optionally be secured by signing each request using a RSA key.
 
