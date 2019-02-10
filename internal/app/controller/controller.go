@@ -156,10 +156,10 @@ func (c *GameController) updateOnlineStates() {
 	c.Engine.EngineState.AutoRefsConnected = autoRefs
 }
 
-// publishToNetwork publishes the current state to the network (multicast) every 100ms
+// publishToNetwork publishes the current state to the network (multicast) every 25ms
 func (c *GameController) publishToNetwork() {
 	for {
-		c.timer.WaitTillNextFull(100 * time.Millisecond)
+		c.timer.SleepConsumer(25 * time.Millisecond)
 		c.Publisher.Publish(c.Engine.State)
 	}
 }
