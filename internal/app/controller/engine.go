@@ -78,42 +78,62 @@ func (e *Engine) ResetGame() {
 	}
 }
 
-// Tick updates the times of the state and removes cards, if necessary
-func (e *Engine) Tick(delta time.Duration) {
-	e.updateTimes(delta)
-
-	if e.State.MatchTimeStart.After(time.Unix(0, 0)) {
-		e.State.MatchDuration = e.TimeProvider().Sub(e.State.MatchTimeStart)
-	}
-	if e.State.CurrentActionDeadline.After(time.Unix(0, 0)) {
-		e.State.CurrentActionTimeRemaining = e.State.CurrentActionDeadline.Sub(e.TimeProvider())
-	}
-}
-
-func (e *Engine) updateTimes(delta time.Duration) {
+// TriggerTimedEvents checks for elapsed stage time, timeouts and cards
+func (e *Engine) TriggerTimedEvents(delta time.Duration) (eventTriggered bool) {
+	eventTriggered = false
 	if e.countStageTime() {
-		e.State.StageTimeElapsed += delta
-		e.State.StageTimeLeft -= delta
-
 		if e.State.StageTimeLeft+delta > 0 && e.State.StageTimeLeft <= 0 {
 			e.LogTime("Stage time elapsed", "")
+			eventTriggered = true
 		}
 
 		for team, teamState := range e.State.TeamState {
-			reduceYellowCardTimes(teamState, delta)
-			e.removeElapsedYellowCards(team, teamState)
+			eventTriggered = e.removeElapsedYellowCards(team, teamState) || eventTriggered
 			e.updateMaxBots()
 		}
 	}
 
 	if e.State.GameState() == GameStateTimeout && e.State.CommandFor.Known() {
-		e.State.TeamState[e.State.CommandFor].TimeoutTimeLeft -= delta
-
 		timeLeft := e.State.TeamState[e.State.CommandFor].TimeoutTimeLeft
 		if timeLeft+delta > 0 && timeLeft <= 0 {
 			e.LogTime("Timeout time elapsed", e.State.CommandFor)
+			eventTriggered = true
 		}
 	}
+	return
+}
+
+// UpdateTimes updates the times of the state
+func (e *Engine) UpdateTimes(delta time.Duration) (newFullSecond bool) {
+	if e.countStageTime() {
+		newFullSecond = newFullSecond || isNewFullSecond(e.State.StageTimeElapsed, delta)
+
+		e.State.StageTimeElapsed += delta
+		e.State.StageTimeLeft -= delta
+
+		for _, teamState := range e.State.TeamState {
+			newFullSecond = reduceYellowCardTimes(teamState, delta) || newFullSecond
+		}
+	}
+
+	if e.State.GameState() == GameStateTimeout && e.State.CommandFor.Known() {
+		newFullSecond = newFullSecond || isNewFullSecond(e.State.TeamState[e.State.CommandFor].TimeoutTimeLeft, delta)
+		e.State.TeamState[e.State.CommandFor].TimeoutTimeLeft -= delta
+	}
+
+	curTime := e.TimeProvider()
+	if e.State.MatchTimeStart.After(time.Unix(0, 0)) {
+		newMatchDuration := curTime.Sub(e.State.MatchTimeStart)
+		newFullSecond = newFullSecond || isNewFullSecond(e.State.MatchDuration, newMatchDuration-e.State.MatchDuration)
+		e.State.MatchDuration = newMatchDuration
+	}
+
+	if e.State.CurrentActionDeadline.After(time.Unix(0, 0)) {
+		newCurrentActionTimeRemaining := e.State.CurrentActionDeadline.Sub(curTime)
+		newFullSecond = newFullSecond || isNewFullSecond(e.State.CurrentActionTimeRemaining, newCurrentActionTimeRemaining-e.State.CurrentActionTimeRemaining)
+		e.State.CurrentActionTimeRemaining = newCurrentActionTimeRemaining
+	}
+	return
 }
 
 func (e *Engine) countStageTime() bool {
@@ -867,20 +887,30 @@ func strToDuration(s string) (duration time.Duration, err error) {
 	return
 }
 
-func reduceYellowCardTimes(teamState *TeamInfo, delta time.Duration) {
+func reduceYellowCardTimes(teamState *TeamInfo, delta time.Duration) (newFullSecond bool) {
+	newFullSecond = false
 	for i := range teamState.YellowCardTimes {
+		newFullSecond = newFullSecond || isNewFullSecond(teamState.YellowCardTimes[i], delta)
 		teamState.YellowCardTimes[i] -= delta
 	}
+	return
 }
 
-func (e *Engine) removeElapsedYellowCards(team Team, teamState *TeamInfo) {
+func isNewFullSecond(t time.Duration, delta time.Duration) bool {
+	return time.Duration(t+delta).Truncate(time.Second) > t.Truncate(time.Second)
+}
+
+func (e *Engine) removeElapsedYellowCards(team Team, teamState *TeamInfo) (removed bool) {
+	removed = false
 	b := teamState.YellowCardTimes[:0]
 	for _, x := range teamState.YellowCardTimes {
 		if x > 0 {
 			b = append(b, x)
 		} else {
 			e.LogTime("Yellow card time elapsed", team)
+			removed = true
 		}
 	}
 	teamState.YellowCardTimes = b
+	return
 }

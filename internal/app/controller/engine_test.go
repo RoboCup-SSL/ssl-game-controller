@@ -127,7 +127,8 @@ func processTransitionFile(t *testing.T, fileName string) {
 
 		if s.Tick != nil {
 			elapsedTime += *s.Tick
-			e.Tick(*s.Tick)
+			e.UpdateTimes(*s.Tick)
+			e.TriggerTimedEvents(*s.Tick)
 		}
 
 		if s.ExpectedStateDiff != nil {

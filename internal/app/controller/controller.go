@@ -110,10 +110,13 @@ func (c *GameController) setupTimeProvider() {
 func (c *GameController) mainLoop() {
 	defer c.historyPreserver.Close()
 	for {
-		c.timer.WaitTillNextFullSecond()
-		c.Engine.Tick(c.timer.Delta())
+		c.timer.WaitTillNextFull(time.Millisecond * 10)
 
-		c.publish()
+		newFullSecond := c.Engine.UpdateTimes(c.timer.Delta())
+		eventTriggered := c.Engine.TriggerTimedEvents(c.timer.Delta())
+		if eventTriggered || newFullSecond {
+			c.publish()
+		}
 	}
 }
 
