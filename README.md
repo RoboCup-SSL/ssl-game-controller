@@ -88,7 +88,14 @@ All game events that happened since the last running state are listed on the lef
 
 #### The controller crashes on start. What can I do?
 Try deleting the history.json file in the working directory. It may got corrupted.
- 
+
+## Integration into your own framework
+The game-controller can easily be integrated into your own AI framework, if you do not want to implement your own controller for testing purposes.
+
+Download the release binary from the Github release and run it from inside your framework. Then, attach to the WebSocket API that is used by the UI as well. The API is defined in [internal/app/controller/events.go](internal/app/controller/events.go).
+
+An example can be found here: https://github.com/TIGERs-Mannheim/AutoReferee/blob/master/modules/moduli-referee/src/main/java/edu/tigers/sumatra/referee/SslGameControllerProcess.java
+
 ## Development
 
 ### Requirements
