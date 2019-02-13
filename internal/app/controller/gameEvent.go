@@ -236,8 +236,7 @@ func (e GameEvent) IsSecondary() bool {
 		GameEventPrepared,
 		GameEventBotSubstitution,
 		GameEventTooManyRobots,
-		GameEventBotInterferedPlacement,
-		GameEventDefenderTooCloseToKickPoint:
+		GameEventBotInterferedPlacement:
 		return true
 	}
 	return false

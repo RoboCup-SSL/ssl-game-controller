@@ -357,13 +357,29 @@ func (e *Engine) updateNextCommand() {
 	if primaryEvent == nil {
 		return
 	}
-	command, forTeam, err := e.CommandForEvent(primaryEvent)
-	if err != nil {
-		log.Print("Warn: ", err)
-		return
+	if primaryEvent.Type == GameEventDefenderTooCloseToKickPoint {
+		e.State.NextCommand, e.State.NextCommandFor =
+			e.lastCommand([]RefCommand{CommandIndirect, CommandDirect, CommandKickoff, CommandPenalty})
+	} else {
+		command, forTeam, err := e.CommandForEvent(primaryEvent)
+		if err != nil {
+			log.Print("Warn: ", err)
+			return
+		}
+		e.State.NextCommand = command
+		e.State.NextCommandFor = forTeam
 	}
-	e.State.NextCommand = command
-	e.State.NextCommandFor = forTeam
+}
+
+func (e *Engine) lastCommand(commands []RefCommand) (RefCommand, Team) {
+	for i := len(e.History) - 1; i >= 0; i-- {
+		for _, cmd := range commands {
+			if e.History[i].State.Command == cmd {
+				return e.History[i].State.Command, e.History[i].State.CommandFor
+			}
+		}
+	}
+	return CommandUnknown, TeamUnknown
 }
 
 func (e *Engine) processEvent(event Event) error {
