@@ -122,6 +122,7 @@ type EventModifyValue struct {
 	GameEventBehavior     *EventModifyGameEventBehavior `json:"gameEventBehavior,omitempty" yaml:"gameEventBehavior"`
 	BotSubstitutionIntend *bool                         `json:"botSubstitutionIntend,omitempty" yaml:"botSubstitutionIntend"`
 	RemoveGameEvent       *int                          `json:"removeGameEvent,omitempty" yaml:"removeGameEvent"`
+	Timestamp             *int64                        `json:"timestamp,omitempty" yaml:"timestamp"`
 }
 
 func (m EventModifyValue) String() string {
