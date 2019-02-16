@@ -21,7 +21,6 @@ type GameController struct {
 	AutoRefServer             *rcon.AutoRefServer
 	TeamServer                *rcon.TeamServer
 	Engine                    Engine
-	timer                     timer.Timer
 	historyPreserver          HistoryPreserver
 	numUiProtocolsLastPublish int
 	outstandingTeamChoice     *TeamChoice
@@ -51,7 +50,6 @@ func NewGameController() (c *GameController) {
 	c.TeamServer.ProcessTeamRequest = c.ProcessTeamRequests
 
 	c.Engine = NewEngine(c.Config.Game, time.Now().Unix())
-	c.timer = timer.NewTimer()
 
 	c.setupTimeProvider()
 
@@ -79,7 +77,6 @@ func (c *GameController) Run() {
 	c.TeamServer.AllowedTeamNames = []string{c.Engine.State.TeamState[TeamYellow].Name,
 		c.Engine.State.TeamState[TeamBlue].Name}
 
-	c.timer.Start()
 	go c.mainLoop()
 	go c.publishToNetwork()
 	go c.AutoRefServer.Listen(c.Config.Server.AutoRef.Address)
@@ -91,17 +88,11 @@ func (c *GameController) Run() {
 // setupTimeProvider changes the time provider to the vision receiver, if configured
 func (c *GameController) setupTimeProvider() {
 	if c.Config.TimeFromVision {
-		c.timer.TimeProvider = func() time.Time {
+		c.Engine.TimeProvider = func() time.Time {
 			return time.Unix(0, 0)
 		}
-		c.Engine.TimeProvider = c.timer.TimeProvider
 		c.VisionReceiver.DetectionCallback = func(frame *sslproto.SSL_DetectionFrame) {
-			sec := int64(*frame.TCapture)
-			nsec := int64((*frame.TCapture - float64(sec)) * 1e9)
-			c.timer.TimeProvider = func() time.Time {
-				return time.Unix(sec, nsec)
-			}
-			c.Engine.TimeProvider = c.timer.TimeProvider
+			c.Engine.TimeProvider = timer.NewFixedTimeProviderFromSeconds(*frame.TCapture)
 		}
 	}
 }
@@ -110,10 +101,9 @@ func (c *GameController) setupTimeProvider() {
 func (c *GameController) mainLoop() {
 	defer c.historyPreserver.Close()
 	for {
-		c.timer.WaitTillNextFull(time.Millisecond * 10)
+		time.Sleep(time.Millisecond * 10)
 
-		newFullSecond := c.Engine.UpdateTimes(c.timer.Delta())
-		eventTriggered := c.Engine.TriggerTimedEvents(c.timer.Delta())
+		newFullSecond, eventTriggered := c.Engine.Update()
 		if eventTriggered || newFullSecond {
 			c.publish()
 		}
@@ -159,7 +149,7 @@ func (c *GameController) updateOnlineStates() {
 // publishToNetwork publishes the current state to the network (multicast) every 25ms
 func (c *GameController) publishToNetwork() {
 	for {
-		c.timer.SleepConsumer(25 * time.Millisecond)
+		time.Sleep(25 * time.Millisecond)
 		c.Publisher.Publish(c.Engine.State)
 	}
 }

@@ -105,6 +105,7 @@ func processTransitionFile(t *testing.T, fileName string) {
 	e.TimeProvider = func() time.Time {
 		return initialTime.Add(elapsedTime)
 	}
+	e.LastTimeUpdate = e.TimeProvider()
 
 	// apply the initial state to the engine
 	if err := stateTransitions.InitialState.valid(); err != nil {
@@ -127,8 +128,7 @@ func processTransitionFile(t *testing.T, fileName string) {
 
 		if s.Tick != nil {
 			elapsedTime += *s.Tick
-			e.UpdateTimes(*s.Tick)
-			e.TriggerTimedEvents(*s.Tick)
+			e.Update()
 		}
 
 		if s.ExpectedStateDiff != nil {

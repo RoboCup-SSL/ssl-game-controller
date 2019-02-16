@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
+	"github.com/RoboCup-SSL/ssl-game-controller/pkg/timer"
 	"github.com/pkg/errors"
 	"log"
 	"math/rand"
@@ -29,15 +30,16 @@ func NewEngineState() (e EngineState) {
 }
 
 type Engine struct {
-	State        *State
-	UiProtocol   []UiProtocolEntry
-	EngineState  EngineState
-	StageTimes   map[Stage]time.Duration
-	config       config.Game
-	TimeProvider func() time.Time
-	History      History
-	Geometry     config.Geometry
-	Rand         *rand.Rand
+	State          *State
+	UiProtocol     []UiProtocolEntry
+	EngineState    EngineState
+	StageTimes     map[Stage]time.Duration
+	config         config.Game
+	TimeProvider   timer.TimeProvider
+	LastTimeUpdate time.Time
+	History        History
+	Geometry       config.Geometry
+	Rand           *rand.Rand
 }
 
 func NewEngine(config config.Game, seed int64) (e Engine) {
@@ -46,6 +48,7 @@ func NewEngine(config config.Game, seed int64) (e Engine) {
 	e.loadStages()
 	e.ResetGame()
 	e.TimeProvider = func() time.Time { return time.Now() }
+	e.LastTimeUpdate = e.TimeProvider()
 	e.Rand = rand.New(rand.NewSource(seed))
 	return
 }
@@ -78,8 +81,20 @@ func (e *Engine) ResetGame() {
 	}
 }
 
-// TriggerTimedEvents checks for elapsed stage time, timeouts and cards
-func (e *Engine) TriggerTimedEvents(delta time.Duration) (eventTriggered bool) {
+// Update updates times and triggers events if needed
+func (e *Engine) Update() (newFullSecond bool, eventTriggered bool) {
+	currentTime := e.TimeProvider()
+	delta := currentTime.Sub(e.LastTimeUpdate)
+	e.LastTimeUpdate = currentTime
+
+	newFullSecond = e.updateTimes(currentTime, delta)
+	eventTriggered = e.triggerTimedEvents(delta)
+
+	return
+}
+
+// triggerTimedEvents checks for elapsed stage time, timeouts and cards
+func (e *Engine) triggerTimedEvents(delta time.Duration) (eventTriggered bool) {
 	eventTriggered = false
 	if e.countStageTime() {
 		if e.State.StageTimeLeft+delta > 0 && e.State.StageTimeLeft <= 0 {
@@ -103,8 +118,9 @@ func (e *Engine) TriggerTimedEvents(delta time.Duration) (eventTriggered bool) {
 	return
 }
 
-// UpdateTimes updates the times of the state
-func (e *Engine) UpdateTimes(delta time.Duration) (newFullSecond bool) {
+// updateTimes updates the times of the state
+func (e *Engine) updateTimes(currentTime time.Time, delta time.Duration) (newFullSecond bool) {
+
 	if e.countStageTime() {
 		newFullSecond = newFullSecond || isNewFullSecond(e.State.StageTimeElapsed, delta)
 
@@ -121,18 +137,18 @@ func (e *Engine) UpdateTimes(delta time.Duration) (newFullSecond bool) {
 		e.State.TeamState[e.State.CommandFor].TimeoutTimeLeft -= delta
 	}
 
-	curTime := e.TimeProvider()
 	if e.State.MatchTimeStart.After(time.Unix(0, 0)) {
-		newMatchDuration := curTime.Sub(e.State.MatchTimeStart)
+		newMatchDuration := currentTime.Sub(e.State.MatchTimeStart)
 		newFullSecond = newFullSecond || isNewFullSecond(e.State.MatchDuration, newMatchDuration-e.State.MatchDuration)
 		e.State.MatchDuration = newMatchDuration
 	}
 
 	if e.State.CurrentActionDeadline.After(time.Unix(0, 0)) {
-		newCurrentActionTimeRemaining := e.State.CurrentActionDeadline.Sub(curTime)
+		newCurrentActionTimeRemaining := e.State.CurrentActionDeadline.Sub(currentTime)
 		newFullSecond = newFullSecond || isNewFullSecond(e.State.CurrentActionTimeRemaining, newCurrentActionTimeRemaining-e.State.CurrentActionTimeRemaining)
 		e.State.CurrentActionTimeRemaining = newCurrentActionTimeRemaining
 	}
+
 	return
 }
 
