@@ -4,20 +4,6 @@ import (
 	"time"
 )
 
-// A TimeProvider returns the current time.
-// This is usually the system time, but can be something else for unit tests.
-type TimeProvider func() time.Time
-
-// SysTimeProvider is the default system time provider
-var SysTimeProvider = func() time.Time { return time.Now() }
-
-// SleepConsumer sleeps the given amount of time.
-// This is usually the time.Sleep method, but can be something else for unit tests.
-type SleepConsumer func(time.Duration)
-
-// SysSleepConsumer is the default system sleep consumer
-var SysSleepConsumer = func(d time.Duration) { time.Sleep(d) }
-
 // A Timer can be started and stopped. It will start at zero and count up, while running.
 // It is event driven, there are now threads that update any state.
 type Timer struct {
