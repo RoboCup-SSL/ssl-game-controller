@@ -89,7 +89,10 @@ func (a *ApiServer) PublishUiProtocol(protocol []UiProtocolEntry) {
 }
 
 func (a *ApiServer) disconnect(conn *websocket.Conn) {
-	conn.Close()
+	err := conn.Close()
+	if err != nil {
+		log.Println("Could not disconnect from websocket conn: ", err)
+	}
 	for i, c := range a.connections {
 		if c == conn {
 			a.connections = append(a.connections[:i], a.connections[i+1:]...)
