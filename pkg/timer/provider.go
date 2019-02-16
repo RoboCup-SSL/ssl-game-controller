@@ -18,8 +18,8 @@ var SysSleepConsumer = func(d time.Duration) { time.Sleep(d) }
 
 // NewFixedTimeProviderFromNanoSeconds creates a time provider from long nano seconds that always returns a fixed time
 func NewFixedTimeProviderFromNanoSeconds(timestamp int64) TimeProvider {
-	sec := timestamp / 1e9
-	nSec := (timestamp - sec) * 1e9
+	sec := int64(timestamp / 1e9)
+	nSec := timestamp - sec*1e9
 	return func() time.Time {
 		return time.Unix(sec, nSec)
 	}
