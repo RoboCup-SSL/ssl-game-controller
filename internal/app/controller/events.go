@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
-	"log"
 	"reflect"
 	"time"
 )
@@ -134,7 +133,6 @@ func (m EventModifyValue) Type() string {
 	v := reflect.ValueOf(m)
 	for i := 0; i < v.NumField(); i++ {
 		fieldName := v.Type().Field(i).Name
-		log.Print(fieldName, " ", v.Field(i))
 		if fieldName != "ForTeam" && !v.Field(i).IsNil() {
 			return fieldName
 		}
@@ -146,7 +144,6 @@ func (m EventModifyValue) Value() string {
 	v := reflect.ValueOf(m)
 	for i := 0; i < v.NumField(); i++ {
 		fieldName := v.Type().Field(i).Name
-		log.Print(fieldName, " ", v.Field(i))
 		if fieldName != "ForTeam" && !v.Field(i).IsNil() {
 			b, _ := json.Marshal(v.Field(i).Interface())
 			return string(b)
