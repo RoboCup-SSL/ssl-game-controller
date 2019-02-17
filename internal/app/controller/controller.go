@@ -4,6 +4,7 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/rcon"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/vision"
+	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/timer"
 	"github.com/RoboCup-SSL/ssl-go-tools/pkg/sslproto"
 	"log"
@@ -20,6 +21,7 @@ type GameController struct {
 	ApiServer                 ApiServer
 	AutoRefServer             *rcon.AutoRefServer
 	TeamServer                *rcon.TeamServer
+	CiServer                  rcon.CiServer
 	Engine                    Engine
 	historyPreserver          HistoryPreserver
 	numUiProtocolsLastPublish int
@@ -48,6 +50,8 @@ func NewGameController() (c *GameController) {
 	c.TeamServer = rcon.NewTeamServer()
 	c.TeamServer.LoadTrustedKeys(c.Config.Server.Team.TrustedKeysDir)
 	c.TeamServer.ProcessTeamRequest = c.ProcessTeamRequests
+
+	c.CiServer = rcon.NewCiServer()
 
 	c.Engine = NewEngine(c.Config.Game, time.Now().Unix())
 
@@ -78,17 +82,29 @@ func (c *GameController) Run() {
 	c.TeamServer.AllowedTeamNames = []string{c.Engine.State.TeamState[TeamYellow].Name,
 		c.Engine.State.TeamState[TeamBlue].Name}
 
-	go c.mainLoop()
-	go c.publishToNetwork()
 	go c.AutoRefServer.Listen(c.Config.Server.AutoRef.Address)
 	go c.AutoRefServer.ListenTls(c.Config.Server.AutoRef.AddressTls)
 	go c.TeamServer.Listen(c.Config.Server.Team.Address)
 	go c.TeamServer.ListenTls(c.Config.Server.Team.AddressTls)
+
+	if c.Config.TimeAcquisitionMode == config.TimeAcquisitionModeSystem ||
+		c.Config.TimeAcquisitionMode == config.TimeAcquisitionModeVision {
+		go c.updateLoop()
+		go c.publishToNetwork()
+	} else if c.Config.TimeAcquisitionMode == config.TimeAcquisitionModeCi {
+		// do not send multicast packages - mainly for network performance issues, because publish will be called
+		// more frequently in the CI mode
+		c.Publisher.Message.Send = func() {}
+		c.CiServer.TimeConsumer = c.updateCi
+		go c.CiServer.Listen(c.Config.Server.Ci.Address)
+	} else {
+		log.Println("Unknown time acquisition mode: ", c.Config.TimeAcquisitionMode)
+	}
 }
 
 // setupTimeProvider changes the time provider to the vision receiver, if configured
 func (c *GameController) setupTimeProvider() {
-	if c.Config.TimeFromVision {
+	if c.Config.TimeAcquisitionMode == config.TimeAcquisitionModeVision {
 		c.Engine.TimeProvider = func() time.Time {
 			return time.Unix(0, 0)
 		}
@@ -98,15 +114,27 @@ func (c *GameController) setupTimeProvider() {
 	}
 }
 
-// mainLoop updates several states every full second and publishes the new state
-func (c *GameController) mainLoop() {
+// updateLoop calls update() regularly
+func (c *GameController) updateLoop() {
 	for {
 		time.Sleep(time.Millisecond * 10)
+		c.update()
+	}
+}
 
-		newFullSecond, eventTriggered := c.Engine.Update()
-		if eventTriggered || newFullSecond {
-			c.publish()
-		}
+// updateCi updates the current time to the given time and returns the updated referee message
+func (c *GameController) updateCi(t time.Time) *refproto.Referee {
+	c.Engine.TimeProvider = func() time.Time { return t }
+	c.update()
+	c.Publisher.Publish(c.Engine.State)
+	return c.Publisher.Message.ProtoMsg
+}
+
+// update updates several states and publishes the new state to the UI every full second or on events
+func (c *GameController) update() {
+	newFullSecond, eventTriggered := c.Engine.Update()
+	if eventTriggered || newFullSecond {
+		c.publish()
 	}
 }
 

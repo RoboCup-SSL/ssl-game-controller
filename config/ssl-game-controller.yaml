@@ -1,4 +1,4 @@
-timeFromVision: false
+timeAcquisitionMode: system
 network:
   publish-address: 224.5.23.1:10003
   vision-address: 224.5.23.2:10006
@@ -11,6 +11,8 @@ server:
     address: :10008
     address-tls: :10108
     trusted-keys-dir: config/trusted_keys/team
+  ci:
+    address: :10009
 game:
   yellow-card-duration: 2m
   multiple-card-step: 3

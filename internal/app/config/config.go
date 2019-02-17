@@ -56,6 +56,7 @@ type Network struct {
 type Server struct {
 	AutoRef ServerAutoRef `yaml:"auto-ref"`
 	Team    ServerTeam    `yaml:"team"`
+	Ci      ServerCi      `yaml:"ci"`
 }
 
 // ServerAutoRef holds configs for the autoRef server
@@ -72,13 +73,26 @@ type ServerTeam struct {
 	TrustedKeysDir string `yaml:"trusted-keys-dir"`
 }
 
+// ServerCi holds configs for the CI server
+type ServerCi struct {
+	Address string `yaml:"address"`
+}
+
 // Controller structure for the game controller
 type Controller struct {
-	Network        Network `yaml:"network"`
-	Game           Game    `yaml:"game"`
-	Server         Server  `yaml:"server"`
-	TimeFromVision bool    `yaml:"timeFromVision"`
+	Network             Network             `yaml:"network"`
+	Game                Game                `yaml:"game"`
+	Server              Server              `yaml:"server"`
+	TimeAcquisitionMode TimeAcquisitionMode `yaml:"timeAcquisitionMode"`
 }
+
+type TimeAcquisitionMode string
+
+const (
+	TimeAcquisitionModeSystem TimeAcquisitionMode = "system"
+	TimeAcquisitionModeVision TimeAcquisitionMode = "vision"
+	TimeAcquisitionModeCi     TimeAcquisitionMode = "ci"
+)
 
 // LoadControllerConfig loads a config from given file
 func LoadControllerConfig(fileName string) (config Controller, err error) {
@@ -137,6 +151,7 @@ func DefaultControllerConfig() (c Controller) {
 	c.Server.Team.Address = ":10008"
 	c.Server.Team.AddressTls = ":10108"
 	c.Server.Team.TrustedKeysDir = "config/trusted_keys/team"
+	c.Server.Ci.Address = ":10009"
 
 	c.Game.DefaultGeometry = map[Division]*Geometry{}
 	c.Game.DefaultGeometry[DivA] = new(Geometry)
@@ -161,7 +176,7 @@ func DefaultControllerConfig() (c Controller) {
 
 	c.Game.MaxBots = map[Division]int{DivA: 8, DivB: 6}
 
-	c.TimeFromVision = false
+	c.TimeAcquisitionMode = TimeAcquisitionModeSystem
 
 	return
 }
