@@ -11,8 +11,8 @@ import (
 func Test_updateMessage(t *testing.T) {
 	state := NewState()
 
-	r := &RefMessage{send: func() {}, referee: new(refproto.Referee)}
-	referee := r.referee
+	r := &RefMessage{Send: func() {}, ProtoMsg: new(refproto.Referee)}
+	referee := r.ProtoMsg
 	initRefereeMessage(referee)
 	r.Publish(state)
 
