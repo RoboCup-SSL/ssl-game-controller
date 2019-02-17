@@ -6,6 +6,8 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"os/signal"
+	"syscall"
 )
 
 const maxHistorySize = 10
@@ -30,6 +32,18 @@ func (r *HistoryPreserver) Open() error {
 	}
 	r.historyFile = f
 	return nil
+}
+
+// CloseOnExit makes sure to close the file when program exists
+func (r *HistoryPreserver) CloseOnExit() {
+	var gracefulStop = make(chan os.Signal)
+	signal.Notify(gracefulStop, syscall.SIGTERM)
+	signal.Notify(gracefulStop, syscall.SIGINT)
+	go func() {
+		<-gracefulStop
+		r.Close()
+		os.Exit(0)
+	}()
 }
 
 // Close closes the history file

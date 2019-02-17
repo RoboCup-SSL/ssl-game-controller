@@ -71,6 +71,7 @@ func (c *GameController) Run() {
 			c.Engine.UiProtocol = c.Engine.History[len(c.Engine.History)-1].UiProtocol
 		}
 	}
+	c.historyPreserver.CloseOnExit()
 
 	c.ApiServer.PublishState(*c.Engine.State, c.Engine.EngineState)
 	c.ApiServer.PublishUiProtocol(c.Engine.UiProtocol)
@@ -99,7 +100,6 @@ func (c *GameController) setupTimeProvider() {
 
 // mainLoop updates several states every full second and publishes the new state
 func (c *GameController) mainLoop() {
-	defer c.historyPreserver.Close()
 	for {
 		time.Sleep(time.Millisecond * 10)
 
