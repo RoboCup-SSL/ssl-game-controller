@@ -6,7 +6,6 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/timer"
 	"github.com/pkg/errors"
 	"log"
-	"math"
 	"math/rand"
 	"strconv"
 	"strings"
@@ -354,12 +353,10 @@ func (e *Engine) Process(event Event) error {
 	if err != nil {
 		return err
 	}
-	if event.Modify == nil || event.Modify.Timestamp == nil {
-		// do not execute this for timestamp updates
-		e.updateMaxBots()
-		e.updateNextCommand()
-		e.appendHistory()
-	}
+	// do not execute this for timestamp updates
+	e.updateMaxBots()
+	e.updateNextCommand()
+	e.appendHistory()
 	return nil
 }
 
@@ -467,21 +464,13 @@ func (e *Engine) processModify(m *EventModifyValue) error {
 			return errors.Errorf("Game event id %d is too large.", i)
 		}
 		e.State.GameEvents = append(e.State.GameEvents[:i], e.State.GameEvents[i+1:]...)
-	} else if m.Timestamp != nil {
-		e.TimeProvider = timer.NewFixedTimeProviderFromNanoSeconds(*m.Timestamp)
-		if math.Abs(e.TimeProvider().Sub(e.LastTimeUpdate).Seconds()) > 1 {
-			// reset last time update - it might be in another time range
-			e.LastTimeUpdate = e.TimeProvider()
-		}
 	} else if err := e.processTeamModify(m); err != nil {
 		return err
 	}
 
-	if m.Timestamp == nil {
-		// do not log timestamp modification - it will be send very often, if sent
-		e.LogModify(*m)
-		log.Printf("Processed %v", m)
-	}
+	// do not log timestamp modification - it will be send very often, if sent
+	e.LogModify(*m)
+	log.Printf("Processed %v", m)
 	return nil
 }
 
