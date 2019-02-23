@@ -112,7 +112,7 @@ func LoadControllerConfig(fileName string) (config Controller, err error) {
 
 	err = yaml.Unmarshal(b, &config)
 	if err != nil {
-		err = errors.Wrapf(err, "Could not unmarshal config file %v. %v", fileName)
+		err = errors.Wrapf(err, "Could not unmarshal config file %v", fileName)
 	}
 
 	return
