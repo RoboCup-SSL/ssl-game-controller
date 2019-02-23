@@ -13,11 +13,14 @@ The [ssl-refbox](https://github.com/RoboCup-SSL/ssl-refbox) replacement that wil
 ## Usage
 If you just want to use this app, simply download the latest [release binary](https://github.com/RoboCup-SSL/ssl-game-controller/releases/latest). The binary is self-contained. No dependencies are required.
 
+The controller will generate a default config file to [config/ssl-game-controller.yaml](config/ssl-game-controller.yaml) on the first start. Afterwards, you can change all settings there.
+
 ### Runtime Requirements
  * No software dependencies (except for development, see below)
  * 64bit Linux, Windows, OSX (32bit would be possible too, but come on, we are in 2018...)
  * Display Resolution of 1920x1080 is recommended
  * A reasonable Web-Browser (mostly tested on Chrome, please do not try IE...)
+ * (optional) To view the field, you need the [ssl-vision-client](https://github.com/RoboCup-SSL/ssl-vision-client)
 
 ### Reference Clients
 There are some reference clients:
