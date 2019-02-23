@@ -3,7 +3,9 @@ package config
 import (
 	"github.com/pkg/errors"
 	"gopkg.in/yaml.v2"
+	"io/ioutil"
 	"os"
+	"path/filepath"
 	"time"
 )
 
@@ -103,17 +105,31 @@ func LoadControllerConfig(fileName string) (config Controller, err error) {
 	if err != nil {
 		return
 	}
-
-	b, err := readAll(f)
+	b, err := ioutil.ReadAll(f)
 	if err != nil {
 		return
 	}
 
 	err = yaml.Unmarshal(b, &config)
 	if err != nil {
-		err = errors.Errorf("Could not unmarshal config file %v. %v", fileName, err)
+		err = errors.Wrapf(err, "Could not unmarshal config file %v. %v", fileName)
 	}
 
+	return
+}
+
+func (c *Controller) WriteTo(fileName string) (err error) {
+	b, err := yaml.Marshal(c)
+	if err != nil {
+		err = errors.Wrapf(err, "Could not marshal config %v", c)
+		return
+	}
+	err = os.MkdirAll(filepath.Dir(fileName), 0755)
+	if err != nil {
+		err = errors.Wrapf(err, "Could not create directly for config file: %v", fileName)
+		return
+	}
+	err = ioutil.WriteFile(fileName, b, 0600)
 	return
 }
 
@@ -179,16 +195,4 @@ func DefaultControllerConfig() (c Controller) {
 	c.TimeAcquisitionMode = TimeAcquisitionModeSystem
 
 	return
-}
-
-func readAll(f *os.File) ([]byte, error) {
-	b := make([]byte, 10000)
-	n, err := f.Read(b)
-	if err != nil {
-		return []byte{}, errors.Errorf("Can not read config files: %v", err)
-	}
-	if n == len(b) {
-		return []byte{}, errors.New("Buffer size for reading config file is too small")
-	}
-	return b[:n], nil
 }

@@ -202,6 +202,12 @@ func loadConfig() config.Controller {
 	cfg, err := config.LoadControllerConfig(configFileName)
 	if err != nil {
 		log.Printf("Could not load config: %v", err)
+		err = cfg.WriteTo(configFileName)
+		if err != nil {
+			log.Printf("Failed to write a default config file to %v: %v", configFileName, err)
+		} else {
+			log.Println("New default config has been written to ", configFileName)
+		}
 	}
 	return cfg
 }
