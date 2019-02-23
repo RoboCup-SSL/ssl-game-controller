@@ -94,7 +94,15 @@ The game-controller can easily be integrated into your own AI framework, if you 
 
 Download the release binary from the Github release and run it from inside your framework. Then, attach to the WebSocket API that is used by the UI as well. The API is defined in [internal/app/controller/events.go](internal/app/controller/events.go).
 
-An example can be found here: https://github.com/TIGERs-Mannheim/AutoReferee/blob/master/modules/moduli-referee/src/main/java/edu/tigers/sumatra/referee/SslGameControllerProcess.java
+If you don't want to run the controller in real time, you can change the time acquisition mode:
+
+1. `system` (default): Use system time
+1. `vision`: Receive messages from ssl-vision and use the timestamps from these messages as the time source. This is mostly useful, when you produce your own ssl-vision frames from simulation. 
+1. `ci`: Connect your software directly with TCP. You can send the current timestamp [ns] and will receive the resulting referee message. This also avoids the use of multicast. This is especially useful, if you run integration tests on your build server in parallel. For details, see: [internal/app/rcon/ciServer.go](internal/app/rcon/ciServer.go)
+
+### Examples
+ * Integration of the binary: https://github.com/TIGERs-Mannheim/AutoReferee/blob/master/modules/moduli-referee/src/main/java/edu/tigers/sumatra/referee/SslGameControllerProcess.java
+ * WebSocket API in Java: https://github.com/TIGERs-Mannheim/AutoReferee/blob/master/modules/moduli-referee/src/main/java/edu/tigers/sumatra/referee/control
 
 ## Development
 
