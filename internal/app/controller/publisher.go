@@ -19,6 +19,7 @@ type Publisher struct {
 
 type RefMessage struct {
 	ProtoMsg *refproto.Referee
+	goal     map[Team]bool
 	Send     func()
 }
 
@@ -28,7 +29,10 @@ func NewPublisher(address string) (publisher Publisher) {
 	publisher.address = address
 
 	// initialize default referee message
-	publisher.Message = RefMessage{Send: publisher.send, ProtoMsg: new(refproto.Referee)}
+	publisher.Message = RefMessage{Send: publisher.send, ProtoMsg: new(refproto.Referee), goal: map[Team]bool{}}
+	publisher.Message.goal[TeamBlue] = false
+	publisher.Message.goal[TeamYellow] = false
+
 	initRefereeMessage(publisher.Message.ProtoMsg)
 
 	publisher.connect()
@@ -135,8 +139,8 @@ func (p *RefMessage) setState(state *State) (republish bool) {
 	*p.ProtoMsg.NextCommand = mapCommand(state.NextCommand, state.NextCommandFor)
 	*p.ProtoMsg.CurrentActionTimeRemaining = int32(state.CurrentActionTimeRemaining.Nanoseconds() / 1000)
 
-	updateTeam(p.ProtoMsg.Yellow, state.TeamState[TeamYellow])
-	updateTeam(p.ProtoMsg.Blue, state.TeamState[TeamBlue])
+	p.updateTeam(p.ProtoMsg.Yellow, state.TeamState[TeamYellow], TeamYellow)
+	p.updateTeam(p.ProtoMsg.Blue, state.TeamState[TeamBlue], TeamBlue)
 	return
 }
 
@@ -156,14 +160,16 @@ func (p *RefMessage) sendCommands(state *State) {
 	newCommand := mapCommand(state.Command, state.CommandFor)
 
 	// send the GOAL command based on the team score for compatibility with old behavior
-	if state.TeamState[TeamYellow].Goals > int(*p.ProtoMsg.Yellow.Score) {
+	if p.goal[TeamYellow] {
 		p.updateCommand(refproto.Referee_GOAL_YELLOW)
 		p.Send()
 		p.updateCommand(newCommand)
-	} else if state.TeamState[TeamBlue].Goals > int(*p.ProtoMsg.Blue.Score) {
+		p.goal[TeamYellow] = false
+	} else if p.goal[TeamBlue] {
 		p.updateCommand(refproto.Referee_GOAL_BLUE)
 		p.Send()
 		p.updateCommand(newCommand)
+		p.goal[TeamBlue] = false
 	} else if *p.ProtoMsg.Command != newCommand {
 		switch state.Command {
 		case CommandBallPlacement,
@@ -230,19 +236,24 @@ func commandByTeam(team Team, blueCommand refproto.Referee_Command, yellowComman
 	return yellowCommand
 }
 
-func updateTeam(team *refproto.Referee_TeamInfo, state *TeamInfo) {
-	*team.Name = state.Name
-	*team.Score = uint32(state.Goals)
-	*team.RedCards = uint32(state.RedCards)
-	team.YellowCardTimes = mapTimes(state.YellowCardTimes)
-	*team.YellowCards = uint32(state.YellowCards)
-	*team.Timeouts = uint32(state.TimeoutsLeft)
-	*team.TimeoutTime = uint32(state.TimeoutTimeLeft.Nanoseconds() / 1000)
-	*team.Goalkeeper = uint32(state.Goalkeeper)
-	*team.FoulCounter = uint32(state.FoulCounter)
-	*team.BallPlacementFailures = uint32(state.BallPlacementFailures)
-	*team.CanPlaceBall = state.CanPlaceBall
-	*team.MaxAllowedBots = uint32(state.MaxAllowedBots)
+func (p *RefMessage) updateTeam(teamInfo *refproto.Referee_TeamInfo, state *TeamInfo, team Team) {
+
+	if state.Goals > int(*teamInfo.Score) {
+		p.goal[team] = true
+	}
+
+	*teamInfo.Name = state.Name
+	*teamInfo.Score = uint32(state.Goals)
+	*teamInfo.RedCards = uint32(state.RedCards)
+	teamInfo.YellowCardTimes = mapTimes(state.YellowCardTimes)
+	*teamInfo.YellowCards = uint32(state.YellowCards)
+	*teamInfo.Timeouts = uint32(state.TimeoutsLeft)
+	*teamInfo.TimeoutTime = uint32(state.TimeoutTimeLeft.Nanoseconds() / 1000)
+	*teamInfo.Goalkeeper = uint32(state.Goalkeeper)
+	*teamInfo.FoulCounter = uint32(state.FoulCounter)
+	*teamInfo.BallPlacementFailures = uint32(state.BallPlacementFailures)
+	*teamInfo.CanPlaceBall = state.CanPlaceBall
+	*teamInfo.MaxAllowedBots = uint32(state.MaxAllowedBots)
 }
 
 func mapTimes(durations []time.Duration) []uint32 {
