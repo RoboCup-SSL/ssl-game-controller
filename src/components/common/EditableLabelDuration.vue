@@ -10,7 +10,9 @@
                size="5"
                ref="input"
         />
-        <a class="btn-edit" v-on:click="edit()" v-show="!g.edit"><font-awesome-icon icon="edit"/></a>
+        <a class="btn-edit" v-on:click="edit()" v-show="!g.edit">
+            <font-awesome-icon icon="edit"/>
+        </a>
     </span>
 </template>
 

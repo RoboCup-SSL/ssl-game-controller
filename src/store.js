@@ -57,7 +57,7 @@ export default new Vuex.Store({
         SOCKET_ONERROR() {
         },
         SOCKET_ONMESSAGE(state, message) {
-            if (message.state != null) {
+            if (message.state) {
                 state.refBoxState = message.state;
             }
             if (message.gameEvents) {
