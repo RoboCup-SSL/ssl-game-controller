@@ -573,8 +573,8 @@ func (s *State) GetFirstGameEvent(gameEventType GameEventType) *GameEvent {
 
 // Location is a two-dimensional coordinate
 type Location struct {
-	X float64 `json:"x"`
-	Y float64 `json:"y"`
+	X float64 `json:"x" yaml:"x"`
+	Y float64 `json:"y" yaml:"y"`
 }
 
 func (l Location) toProto() (p *refproto.Location) {
