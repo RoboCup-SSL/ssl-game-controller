@@ -10,6 +10,13 @@
                           :per-page="perPage">
             </b-pagination>
 
+            <input v-model.number="perPage"
+                   title="Rows per page"
+                   min="1"
+                   max="99"
+                   type="number"
+            />
+
             <b-btn v-b-modal.new-event-modal size="sm" variant="primary">New Event</b-btn>
             <b-modal id="new-event-modal"
                      title="New Game Event"
@@ -87,6 +94,16 @@
                 }
             },
         },
+        mounted() {
+            if (localStorage.gameEventsPerPage) {
+                this.perPage = parseInt(localStorage.gameEventsPerPage);
+            }
+        },
+        watch: {
+            perPage(perPage) {
+                localStorage.gameEventsPerPage = perPage;
+            }
+        }
     }
 </script>
 
@@ -97,7 +114,7 @@
         justify-content: center;
     }
 
-    .event-controls-container button {
+    .event-controls-container button, input {
         margin-bottom: 1rem;
         margin-left: 1rem;
     }
@@ -105,5 +122,9 @@
     .auto-refs-connected {
         margin-top: 0.2rem;
         margin-right: 1rem;
+    }
+
+    input {
+        text-align: center;
     }
 </style>
