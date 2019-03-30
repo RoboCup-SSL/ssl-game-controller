@@ -221,15 +221,16 @@ func (e *Engine) Continue() {
 			Type: GameEventBotSubstitution,
 			Details: GameEventDetails{
 				BotSubstitution: &refproto.GameEvent_BotSubstitution{ByTeam: &teamProto}}})
+		e.LogHint("botSubstitution", "game halted for bot substitution", substitutionIntend)
 		e.SendCommand(CommandHalt, "")
 	} else if e.State.NextCommand != CommandUnknown {
 		e.SendCommand(e.State.NextCommand, e.State.NextCommandFor)
 	} else {
-		log.Println("No next command available to continue with. Halting game.")
 		if e.State.Command != CommandStop {
 			// halt the game, if not in STOP.
 			// Rational: After ball placement and no next command, halt the game to indicate that manual action is required
 			// If in STOP, that was most likely triggered manually already and a suddenly halted game might be confusing and not intended
+			e.LogHint("missingFollowUp", "No next command available", TeamUnknown)
 			e.SendCommand(CommandHalt, "")
 		}
 	}
