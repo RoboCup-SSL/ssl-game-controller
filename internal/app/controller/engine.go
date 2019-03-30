@@ -770,6 +770,7 @@ func (e *Engine) placeBall(event *GameEvent) {
 	if e.State.PlacementPos == nil || e.State.noTeamCanPlaceBall() {
 		// placement not possible, human ref must help out
 		e.SendCommand(CommandHalt, "")
+		e.LogHint("manualPlacement", "placement pos unknown", TeamUnknown)
 		return
 	}
 
@@ -792,6 +793,7 @@ func (e *Engine) placeBall(event *GameEvent) {
 	} else {
 		// If team can not place ball, human ref has to help out
 		e.SendCommand(CommandHalt, "")
+		e.LogHint("manualPlacement", "team can not place ball", teamInFavor)
 		return
 	}
 }

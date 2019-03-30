@@ -25,6 +25,8 @@ const (
 	UiProtocolModify UiProtocolType = "modify"
 	// UiProtocolTeamAction represents an action from a team
 	UiProtocolTeamAction UiProtocolType = "teamAction"
+	// UiProtocolHint represents a hint to the human game-controller operator
+	UiProtocolHint UiProtocolType = "hint"
 )
 
 // UiProtocolEntry represents a single protocol entry as should be displayed in the UI table
@@ -151,6 +153,19 @@ func (e *Engine) LogTeamBotSubstitutionChange(forTeam Team, substituteBot bool) 
 		Type:        UiProtocolTeamAction,
 		Name:        "BotSubstitutionIntend",
 		Team:        forTeam,
+		Description: description,
+	}
+	e.UiProtocol = append(e.UiProtocol, entry)
+}
+
+// LogHint adds a hint for the game-controller operator to the protocol
+func (e *Engine) LogHint(hint string, description string, team Team) {
+	entry := UiProtocolEntry{
+		Timestamp:   e.TimeProvider().UnixNano(),
+		StageTime:   e.State.StageTimeElapsed,
+		Type:        UiProtocolHint,
+		Team:        team,
+		Name:        hint,
 		Description: description,
 	}
 	e.UiProtocol = append(e.UiProtocol, entry)
