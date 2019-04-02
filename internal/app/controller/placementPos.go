@@ -81,7 +81,7 @@ func (e *Engine) BallPlacementPos() *Location {
 		return e.validateLocation(e.State.PlacementPos)
 	case GameEventDefenderInDefenseAreaPartially:
 		return e.validateProtoLocation(event.Details.DefenderInDefenseAreaPartially.Location)
-	case GameEventDefenderInDefenseArea:
+	case GameEventDefenderInDefenseArea, GameEventMultipleCards:
 		teamInFavor := event.ByTeam().Opposite()
 		location := Location{}
 		location.X = (e.Geometry.FieldLength / 2.0) - e.Geometry.DefenseAreaDepth
