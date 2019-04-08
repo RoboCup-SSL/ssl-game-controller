@@ -1,8 +1,6 @@
 <template>
     <b-table striped hover small
              responsive="true"
-             :sort-by.sync="sortBy"
-             :sort-desc.sync="sortDesc"
              :per-page="perPage"
              :current-page="currentPage"
              :items="events"
@@ -36,32 +34,24 @@
         },
         data() {
             return {
-                sortBy: 'timestamp',
-                sortDesc: true,
                 fields: [
                     {
                         key: 'timestamp',
-                        sortable: true
                     },
                     {
                         key: 'stageTime',
-                        sortable: true
                     },
                     {
                         key: 'type',
-                        sortable: true
                     },
                     {
                         key: 'name',
-                        sortable: true
                     },
                     {
                         key: 'team',
-                        sortable: true
                     },
                     {
                         key: 'description',
-                        sortable: true
                     },
                 ],
             }

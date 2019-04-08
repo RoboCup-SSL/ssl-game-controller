@@ -67,7 +67,7 @@
         },
         computed: {
             events() {
-                return this.$store.state.gameEvents;
+                return [...this.$store.state.gameEvents].reverse();
             },
             state() {
                 return this.$store.state.refBoxState
