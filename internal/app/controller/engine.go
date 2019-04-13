@@ -775,7 +775,11 @@ func (e *Engine) placeBall(event *GameEvent) {
 		return
 	}
 
-	if e.State.Division == config.DivA && // For division A
+	nextCommand, _, _ := e.CommandForEvent(event)
+	if nextCommand == CommandPenalty || nextCommand == CommandKickoff {
+		e.SendCommand(CommandHalt, "")
+		e.LogHint("manualPlacement", "manual placement required for kickoff and penalty", teamInFavor)
+	} else if e.State.Division == config.DivA && // For division A
 		!e.State.TeamState[teamInFavor].CanPlaceBall && // If team in favor can not place the ball
 		e.State.TeamState[teamInFavor.Opposite()].CanPlaceBall && // If opponent team can place the ball
 		event.Type.resultsFromBallLeavingField() {
