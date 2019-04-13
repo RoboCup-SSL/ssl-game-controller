@@ -421,7 +421,7 @@ type GameEventDetails struct {
 	KeeperHeldBall                 *refproto.GameEvent_KeeperHeldBall                 `json:"keeperHeldBall,omitempty"`
 	UnsportingBehaviorMinor        *refproto.GameEvent_UnsportingBehaviorMinor        `json:"unsportingBehaviorMinor,omitempty"`
 	UnsportingBehaviorMajor        *refproto.GameEvent_UnsportingBehaviorMajor        `json:"unsportingBehaviorMajor,omitempty"`
-	MultipleCards                  *refproto.GameEvent_MultipleCards                  `json:"multiple,omitempty"`
+	MultipleCards                  *refproto.GameEvent_MultipleCards                  `json:"multipleCards,omitempty"`
 	MultipleFouls                  *refproto.GameEvent_MultipleFouls                  `json:"multipleFouls,omitempty"`
 	MultiplePlacementFailures      *refproto.GameEvent_MultiplePlacementFailures      `json:"multiplePlacementFailures,omitempty"`
 	KickTimeout                    *refproto.GameEvent_KickTimeout                    `json:"kickTimeout,omitempty"`
