@@ -6,6 +6,7 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
 	"log"
 	"reflect"
+	"time"
 )
 
 type GameEventType string
@@ -113,9 +114,18 @@ func (g GameEventType) Valid() bool {
 
 // GameEvent combines the type of a game event with the corresponding detail structures
 type GameEvent struct {
-	Type    GameEventType    `json:"type"`
-	Details GameEventDetails `json:"details"`
-	Origins []string         `json:"origins"`
+	Type     GameEventType    `json:"type"`
+	Details  GameEventDetails `json:"details"`
+	Origins  []string         `json:"origins"`
+	occurred time.Time        `json:"-"`
+}
+
+func (e *GameEvent) SetOccurred(occurred time.Time) {
+	e.occurred = occurred
+}
+
+func (e GameEvent) Occurred() time.Time {
+	return e.occurred
 }
 
 // String converts the game event into a string

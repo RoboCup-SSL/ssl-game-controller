@@ -682,9 +682,9 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 		e.LogIgnoredGameEvent(*event)
 		return nil
 	}
-	e.AddGameEvent(*event)
+	event.SetOccurred(e.TimeProvider())
 
-	if event.IncrementsFoulCounter() {
+	if !e.State.MatchesRecentGameEvent(event) && event.IncrementsFoulCounter() {
 		team := event.ByTeam()
 		if team.Unknown() {
 			e.State.TeamState[TeamYellow].FoulCounter++
@@ -696,6 +696,8 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 			e.FoulCounterIncremented(team)
 		}
 	}
+
+	e.AddGameEvent(*event)
 
 	if event.AddsYellowCard() {
 		team := event.ByTeam()
