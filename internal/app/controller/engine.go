@@ -380,17 +380,26 @@ func (e *Engine) updateNextCommand() {
 	if primaryEvent == nil {
 		return
 	}
+
 	if primaryEvent.Type == GameEventDefenderTooCloseToKickPoint {
 		e.State.NextCommand, e.State.NextCommandFor =
 			e.lastCommand([]RefCommand{CommandIndirect, CommandDirect, CommandKickoff, CommandPenalty})
 	} else {
-		command, forTeam, err := e.CommandForEvent(primaryEvent)
-		if err != nil {
-			log.Print("Warn: ", err)
-			return
+		lastCommand, lastCommandFor :=
+			e.lastCommand([]RefCommand{CommandKickoff, CommandPenalty, CommandNormalStart})
+		if lastCommand.IsPrepare() {
+			// if the last command was a kickoff or penalty, restart with that
+			e.State.NextCommand = lastCommand
+			e.State.NextCommandFor = lastCommandFor
+		} else {
+			command, forTeam, err := e.CommandForEvent(primaryEvent)
+			if err != nil {
+				log.Print("Warn: ", err)
+				return
+			}
+			e.State.NextCommand = command
+			e.State.NextCommandFor = forTeam
 		}
-		e.State.NextCommand = command
-		e.State.NextCommandFor = forTeam
 	}
 }
 
@@ -752,7 +761,7 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 	} else if event.Type == GameEventDefenderTooCloseToKickPoint {
 		// stop the game and let bots move away from the ball first. The autoRef will continue the game afterwards
 		e.SendCommand(CommandStop, "")
-	} else if !event.IsSkipped() && !event.IsSecondary() {
+	} else if !event.IsSkipped() && !event.IsSecondary() && !e.State.Command.IsPrepare() {
 		e.placeBall(event)
 	} else if e.State.AutoContinue && event.IsContinueGame() {
 		e.Continue()

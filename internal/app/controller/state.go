@@ -279,6 +279,10 @@ func (c RefCommand) IsFreeKick() bool {
 	return c == CommandDirect || c == CommandIndirect
 }
 
+func (c RefCommand) IsPrepare() bool {
+	return c == CommandKickoff || c == CommandPenalty
+}
+
 // GameState of a game
 type GameState string
 
