@@ -28,6 +28,7 @@ type GameController struct {
 	outstandingTeamChoice     *TeamChoice
 	ConnectionMutex           sync.Mutex
 	PublishMutex              sync.Mutex
+	StateMutex                sync.Mutex
 	VisionReceiver            *vision.Receiver
 }
 
@@ -118,12 +119,16 @@ func (c *GameController) setupTimeProvider() {
 func (c *GameController) updateLoop() {
 	for {
 		time.Sleep(time.Millisecond * 10)
+		c.StateMutex.Lock()
 		c.update()
+		c.StateMutex.Unlock()
 	}
 }
 
 // updateCi updates the current time to the given time and returns the updated referee message
 func (c *GameController) updateCi(t time.Time) *refproto.Referee {
+	c.StateMutex.Lock()
+	defer c.StateMutex.Unlock()
 	c.Engine.TimeProvider = func() time.Time { return t }
 	c.update()
 	c.Publisher.Publish(c.Engine.State)
@@ -178,13 +183,16 @@ func (c *GameController) updateOnlineStates() {
 func (c *GameController) publishToNetwork() {
 	for {
 		time.Sleep(25 * time.Millisecond)
+		c.StateMutex.Lock()
 		c.Publisher.Publish(c.Engine.State)
+		c.StateMutex.Unlock()
 	}
 }
 
 // OnNewEvent processes the given event
 func (c *GameController) OnNewEvent(event Event) {
-
+	c.StateMutex.Lock()
+	defer c.StateMutex.Unlock()
 	if event.GameEvent != nil && !c.Engine.disabledGameEvent(event.GameEvent.Type) && c.askForTeamDecisionIfRequired(event) {
 		return
 	}
