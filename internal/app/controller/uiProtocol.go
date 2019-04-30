@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+	"log"
 	"time"
 )
 
@@ -41,6 +42,7 @@ type UiProtocolEntry struct {
 
 // LogGameEvent adds a game event to the protocol
 func (e *Engine) LogGameEvent(event GameEvent) {
+	log.Printf("Log game event: %v", event)
 	entry := UiProtocolEntry{
 		Timestamp:   e.TimeProvider().UnixNano(),
 		StageTime:   e.State.StageTimeElapsed,
@@ -54,6 +56,7 @@ func (e *Engine) LogGameEvent(event GameEvent) {
 
 // LogIgnoredGameEvent adds an ignored game event to the protocol
 func (e *Engine) LogIgnoredGameEvent(event GameEvent) {
+	log.Printf("Log ignored game event: %v", event)
 	entry := UiProtocolEntry{
 		Timestamp:   e.TimeProvider().UnixNano(),
 		StageTime:   e.State.StageTimeElapsed,
@@ -71,6 +74,7 @@ func (e *Engine) LogCommand() {
 	if e.State.PlacementPos != nil {
 		description = fmt.Sprintf("place pos: %v", e.State.PlacementPos)
 	}
+	log.Printf("Log command '%v': %v", string(e.State.Command), description)
 	entry := UiProtocolEntry{
 		Timestamp:   e.TimeProvider().UnixNano(),
 		StageTime:   e.State.StageTimeElapsed,
@@ -84,6 +88,7 @@ func (e *Engine) LogCommand() {
 
 // LogCard adds a card to the protocol
 func (e *Engine) LogCard(card *EventCard) {
+	log.Printf("Log card: %v", card)
 	entry := UiProtocolEntry{
 		Timestamp: e.TimeProvider().UnixNano(),
 		StageTime: e.State.StageTimeElapsed,
@@ -96,6 +101,7 @@ func (e *Engine) LogCard(card *EventCard) {
 
 // LogTime adds a time event (like stage time ends or card time ends) to the protocol
 func (e *Engine) LogTime(description string, forTeam Team) {
+	log.Printf("Log time for %v: %v", forTeam, description)
 	entry := UiProtocolEntry{
 		Timestamp: e.TimeProvider().UnixNano(),
 		StageTime: e.State.StageTimeElapsed,
@@ -108,6 +114,7 @@ func (e *Engine) LogTime(description string, forTeam Team) {
 
 // LogStage adds a stage change to the protocol
 func (e *Engine) LogStage(stage Stage) {
+	log.Printf("Log stage: %v", stage)
 	entry := UiProtocolEntry{
 		Timestamp: e.TimeProvider().UnixNano(),
 		StageTime: e.State.StageTimeElapsed,
@@ -119,6 +126,7 @@ func (e *Engine) LogStage(stage Stage) {
 
 // LogModify adds a modification to the protocol
 func (e *Engine) LogModify(m EventModifyValue) {
+	log.Printf("Log modify: %v", m)
 	entry := UiProtocolEntry{
 		Timestamp:   e.TimeProvider().UnixNano(),
 		StageTime:   e.State.StageTimeElapsed,
@@ -133,6 +141,7 @@ func (e *Engine) LogModify(m EventModifyValue) {
 // LogTeamGoalkeeperChange adds a goalkeeper change from a team to the protocol
 func (e *Engine) LogTeamGoalkeeperChange(forTeam Team, oldGoalkeeperId int, newGoalkeeperId int) {
 	description := fmt.Sprintf("%v -> %v", oldGoalkeeperId, newGoalkeeperId)
+	log.Printf("Log goal keeper change for %v: %v", forTeam, description)
 	entry := UiProtocolEntry{
 		Timestamp:   e.TimeProvider().UnixNano(),
 		StageTime:   e.State.StageTimeElapsed,
@@ -146,6 +155,7 @@ func (e *Engine) LogTeamGoalkeeperChange(forTeam Team, oldGoalkeeperId int, newG
 
 // LogTeamBotSubstitutionChange adds a bot substitution intend change from a team to the protocol
 func (e *Engine) LogTeamBotSubstitutionChange(forTeam Team, substituteBot bool) {
+	log.Printf("Log bot substitution for %v: %v", forTeam, substituteBot)
 	description := fmt.Sprintf("%v", substituteBot)
 	entry := UiProtocolEntry{
 		Timestamp:   e.TimeProvider().UnixNano(),
@@ -160,6 +170,7 @@ func (e *Engine) LogTeamBotSubstitutionChange(forTeam Team, substituteBot bool) 
 
 // LogHint adds a hint for the game-controller operator to the protocol
 func (e *Engine) LogHint(hint string, description string, team Team) {
+	log.Printf("Log hint '%v' for %v: %v", hint, team, description)
 	entry := UiProtocolEntry{
 		Timestamp:   e.TimeProvider().UnixNano(),
 		StageTime:   e.State.StageTimeElapsed,

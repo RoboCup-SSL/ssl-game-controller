@@ -212,6 +212,7 @@ func (e *Engine) AddGameEvent(gameEvent GameEvent) {
 }
 
 func (e *Engine) Continue() {
+	log.Println("Continue")
 	substitutionIntend := e.State.BotSubstitutionIntend()
 	if substitutionIntend != TeamUnknown {
 		e.State.TeamState[TeamBlue].BotSubstitutionIntend = false
@@ -224,6 +225,7 @@ func (e *Engine) Continue() {
 		e.LogHint("botSubstitution", "game halted for bot substitution", substitutionIntend)
 		e.SendCommand(CommandHalt, "")
 	} else if e.State.NextCommand != CommandUnknown {
+		log.Printf("Let game continue with next command")
 		e.SendCommand(e.State.NextCommand, e.State.NextCommandFor)
 	} else {
 		if e.State.Command != CommandStop {
@@ -508,13 +510,23 @@ func (e *Engine) processTeamModify(m *EventModifyValue) error {
 		incremented := *m.FoulCounter > teamState.FoulCounter
 		teamState.FoulCounter = *m.FoulCounter
 		if incremented {
-			e.FoulCounterIncremented(m.ForTeam)
+			if aEvent := e.FoulCounterIncremented(m.ForTeam); aEvent != nil {
+				err := e.processGameEvent(aEvent)
+				if err != nil {
+					return err
+				}
+			}
 		}
 	} else if m.BallPlacementFailures != nil {
 		incremented := *m.BallPlacementFailures > teamState.BallPlacementFailures
 		teamState.BallPlacementFailures = *m.BallPlacementFailures
 		if incremented {
-			e.PlacementFailuresIncremented(m.ForTeam)
+			if aEvent := e.PlacementFailuresIncremented(m.ForTeam); aEvent != nil {
+				err := e.processGameEvent(aEvent)
+				if err != nil {
+					return err
+				}
+			}
 		}
 	} else if m.YellowCardTime != nil {
 		cardId := m.YellowCardTime.CardID
@@ -609,7 +621,12 @@ func (e *Engine) processCard(card *EventCard) (err error) {
 	}
 	teamState := e.State.TeamState[card.ForTeam]
 	if card.Operation == CardOperationAdd {
-		e.addCard(card, card.ForTeam, e.config.YellowCardDuration)
+		event := e.addCard(card, card.ForTeam, e.config.YellowCardDuration)
+		if event != nil {
+			if err := e.processGameEvent(event); err != nil {
+				log.Printf("Could not process new additional game event: %v", err)
+			}
+		}
 	} else if card.Operation == CardOperationRevoke {
 		err = revokeCard(card, teamState)
 	} else if card.Operation == CardOperationModify {
@@ -636,7 +653,7 @@ func modifyCard(card *EventCard, teamState *TeamInfo) error {
 	return nil
 }
 
-func (e *Engine) addCard(card *EventCard, team Team, duration time.Duration) {
+func (e *Engine) addCard(card *EventCard, team Team, duration time.Duration) *GameEvent {
 	if card.Type == CardTypeYellow {
 		log.Printf("Add yellow card for team %v", card.ForTeam)
 		e.State.TeamState[team].YellowCards++
@@ -645,7 +662,7 @@ func (e *Engine) addCard(card *EventCard, team Team, duration time.Duration) {
 		log.Printf("Add red card for team %v", card.ForTeam)
 		e.State.TeamState[team].RedCards++
 	}
-	e.CardNumberIncremented(team)
+	return e.CardNumberIncremented(team)
 }
 
 func (e *Engine) processTrigger(t *EventTrigger) (err error) {
@@ -693,16 +710,24 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 	}
 	event.SetOccurred(e.TimeProvider())
 
+	var additionalEvents []*GameEvent
+
 	if !e.State.MatchesRecentGameEvent(event) && event.IncrementsFoulCounter() {
 		team := event.ByTeam()
 		if team.Unknown() {
 			e.State.TeamState[TeamYellow].FoulCounter++
-			e.FoulCounterIncremented(TeamYellow)
+			if aEvent := e.FoulCounterIncremented(TeamYellow); aEvent != nil {
+				additionalEvents = append(additionalEvents, aEvent)
+			}
 			e.State.TeamState[TeamBlue].FoulCounter++
-			e.FoulCounterIncremented(TeamBlue)
+			if aEvent := e.FoulCounterIncremented(TeamBlue); aEvent != nil {
+				additionalEvents = append(additionalEvents, aEvent)
+			}
 		} else {
 			e.State.TeamState[team].FoulCounter++
-			e.FoulCounterIncremented(team)
+			if aEvent := e.FoulCounterIncremented(team); aEvent != nil {
+				additionalEvents = append(additionalEvents, aEvent)
+			}
 		}
 	}
 
@@ -713,7 +738,10 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 		if team.Unknown() {
 			return errors.New("Missing team in game event")
 		}
-		e.addCard(&EventCard{Type: CardTypeYellow, ForTeam: team, Operation: CardOperationAdd}, team, e.config.YellowCardDuration)
+		aEvent := e.addCard(&EventCard{Type: CardTypeYellow, ForTeam: team, Operation: CardOperationAdd}, team, e.config.YellowCardDuration)
+		if aEvent != nil {
+			additionalEvents = append(additionalEvents, aEvent)
+		}
 	}
 
 	if event.AddsRedCard() {
@@ -721,7 +749,10 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 		if team.Unknown() {
 			return errors.New("Missing team in game event")
 		}
-		e.addCard(&EventCard{Type: CardTypeRed, ForTeam: team, Operation: CardOperationAdd}, team, 0)
+		aEvent := e.addCard(&EventCard{Type: CardTypeRed, ForTeam: team, Operation: CardOperationAdd}, team, 0)
+		if aEvent != nil {
+			additionalEvents = append(additionalEvents, aEvent)
+		}
 	}
 
 	if event.Type == GameEventPlacementFailed {
@@ -730,7 +761,10 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 			return errors.New("Missing team in game event")
 		}
 		e.State.TeamState[team].BallPlacementFailures++
-		e.PlacementFailuresIncremented(team)
+		aEvent := e.PlacementFailuresIncremented(team)
+		if aEvent != nil {
+			additionalEvents = append(additionalEvents, aEvent)
+		}
 	}
 
 	if event.Type == GameEventPlacementSucceeded {
@@ -757,7 +791,7 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 	e.State.PlacementPos = e.BallPlacementPos()
 
 	if e.State.GameState() == GameStateHalted {
-		log.Printf("Warn: Received a game event while halted: %v", event)
+		log.Printf("Received a game event while halted: %v", event)
 	} else if event.Type == GameEventDefenderTooCloseToKickPoint {
 		// stop the game and let bots move away from the ball first. The autoRef will continue the game afterwards
 		e.SendCommand(CommandStop, "")
@@ -765,9 +799,18 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 		e.placeBall(event)
 	} else if e.State.AutoContinue && event.IsContinueGame() {
 		e.Continue()
+	} else {
+		log.Printf("No change in game with event %v", event)
 	}
 
 	log.Printf("Processed game event %v", event)
+
+	for _, aEvent := range additionalEvents {
+		if err := e.processGameEvent(aEvent); err != nil {
+			log.Print("Could not process new additional game event: ", err)
+		}
+	}
+
 	return nil
 }
 
@@ -777,6 +820,7 @@ func (e *Engine) placeBall(event *GameEvent) {
 	if teamInFavor.Unknown() {
 		// select a team by 50% chance
 		teamInFavor = e.randomTeam()
+		log.Printf("No team in favor. Choosing randomly: %v", teamInFavor)
 	}
 
 	if e.State.PlacementPos == nil || e.State.noTeamCanPlaceBall() {
@@ -796,16 +840,19 @@ func (e *Engine) placeBall(event *GameEvent) {
 		event.Type.resultsFromBallLeavingField() {
 		// Rule: All free kicks that were a result of the ball leaving the field, are awarded to the opposing team.
 		e.SendCommand(CommandBallPlacement, teamInFavor.Opposite())
+		log.Printf("Let opponent place the ball in DivA")
 	} else if e.State.Division == config.DivB && // For division B
 		!e.State.TeamState[teamInFavor].CanPlaceBall && // If team in favor can not place the ball
 		e.State.TeamState[teamInFavor.Opposite()].CanPlaceBall && // If opponent team can place the ball
 		event.Type != GameEventPlacementFailed { // opponent team has not failed recently
 		// Rule: [...] the team is allowed to bring the ball into play, after the ball was placed by the opposing team.
 		e.SendCommand(CommandBallPlacement, teamInFavor.Opposite())
+		log.Printf("Let opponent place the ball in DivB")
 	} else if e.State.TeamState[teamInFavor].CanPlaceBall &&
 		!e.allTeamsFailedPlacement() {
 		// If team can place ball, let it place
 		e.SendCommand(CommandBallPlacement, teamInFavor)
+		log.Printf("Let team in favor place ball")
 	} else {
 		// If team can not place ball, human ref has to help out
 		e.SendCommand(CommandHalt, "")
@@ -853,39 +900,36 @@ func (e *Engine) applyGameEventFilters(gameEvent *GameEvent) {
 	e.filterAimlessKickForDivA(gameEvent)
 }
 
-func (e *Engine) FoulCounterIncremented(team Team) {
+func (e *Engine) FoulCounterIncremented(team Team) *GameEvent {
 	if e.State.TeamState[team].FoulCounter%e.config.MultipleFoulStep == 0 {
 		teamProto := team.toProto()
 		event := GameEvent{Type: GameEventMultipleFouls,
 			Details: GameEventDetails{MultipleFouls: &refproto.GameEvent_MultipleFouls{ByTeam: &teamProto}}}
-		if err := e.processGameEvent(&event); err != nil {
-			log.Print("Could not process new secondary game event: ", err)
-		}
+		return &event
 	}
+	return nil
 }
 
-func (e *Engine) CardNumberIncremented(team Team) {
+func (e *Engine) CardNumberIncremented(team Team) *GameEvent {
 	cards := e.State.TeamState[team].YellowCards + e.State.TeamState[team].RedCards
 	if cards%e.config.MultipleCardStep == 0 {
 		teamProto := team.toProto()
 		event := GameEvent{Type: GameEventMultipleCards,
 			Details: GameEventDetails{MultipleCards: &refproto.GameEvent_MultipleCards{ByTeam: &teamProto}}}
-		if err := e.processGameEvent(&event); err != nil {
-			log.Print("Could not process new secondary game event: ", err)
-		}
+		return &event
 	}
+	return nil
 }
 
-func (e *Engine) PlacementFailuresIncremented(team Team) {
+func (e *Engine) PlacementFailuresIncremented(team Team) *GameEvent {
 	if e.State.TeamState[team].BallPlacementFailures == e.config.MultiplePlacementFailures {
 		teamProto := team.toProto()
 		e.State.TeamState[team].CanPlaceBall = false
 		event := GameEvent{Type: GameEventMultiplePlacementFailures,
 			Details: GameEventDetails{MultiplePlacementFailures: &refproto.GameEvent_MultiplePlacementFailures{ByTeam: &teamProto}}}
-		if err := e.processGameEvent(&event); err != nil {
-			log.Print("Could not process new secondary game event: ", err)
-		}
+		return &event
 	}
+	return nil
 }
 
 func revokeCard(card *EventCard, teamState *TeamInfo) error {
