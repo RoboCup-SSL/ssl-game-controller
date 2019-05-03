@@ -24,6 +24,9 @@ message TeamToController {
         AdvantageResponse advantage_response = 3;
         // request to substitute a robot at the next possibility
         bool substitute_bot = 4;
+        // send a ping to the GC to test if the connection is still open.
+        // the value is ignored and a reply is sent back
+        bool ping = 5;
     }
 
     enum AdvantageResponse {

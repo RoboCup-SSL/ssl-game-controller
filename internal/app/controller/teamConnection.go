@@ -30,14 +30,19 @@ func (c *GameController) teamConnected(team Team) (connected bool, verified bool
 func (c *GameController) ProcessTeamRequests(teamName string, request refproto.TeamToController) error {
 	c.ConnectionMutex.Lock()
 	defer c.ConnectionMutex.Unlock()
+
+	if _, ok := request.GetMsg().(*refproto.TeamToController_Ping); ok {
+		return nil
+	}
+
 	log.Print("Received request from team: ", proto.MarshalTextString(&request))
 
-	if x, ok := request.GetMsg().(*refproto.TeamToController_AdvantageResponse_); ok {
+	if msg, ok := request.GetMsg().(*refproto.TeamToController_AdvantageResponse_); ok {
 		if c.outstandingTeamChoice == nil {
 			return errors.New("No outstanding choice available. You are probably too late.")
 		}
 		responseTime := c.Engine.TimeProvider().Sub(c.outstandingTeamChoice.IssueTime)
-		if x.AdvantageResponse == refproto.TeamToController_CONTINUE {
+		if msg.AdvantageResponse == refproto.TeamToController_CONTINUE {
 			log.Printf("Team %v decided to continue the game within %v", c.outstandingTeamChoice.Team, responseTime)
 			switch c.outstandingTeamChoice.Event.GameEvent.Type {
 			case GameEventBotCrashUnique:
