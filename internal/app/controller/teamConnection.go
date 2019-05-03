@@ -93,19 +93,23 @@ func (c *GameController) askForTeamDecisionIfRequired(event Event) (handled bool
 	handled = false
 	if c.outstandingTeamChoice == nil && c.Engine.State.GameState() == GameStateRunning {
 		var byTeamProto refproto.Team
-		var choiceType refproto.AdvantageChoice_Foul
+		var choice refproto.AdvantageChoice
+		choice.Foul = new(refproto.AdvantageChoice_Foul)
 		if event.GameEvent.Details.BotCrashUnique != nil {
 			byTeamProto = *event.GameEvent.Details.BotCrashUnique.ByTeam
-			choiceType = refproto.AdvantageChoice_COLLISION
+			*choice.Foul = refproto.AdvantageChoice_COLLISION
+			choice.BotCrashUnique = new(refproto.GameEvent_BotCrashUnique)
+			*choice.BotCrashUnique = *event.GameEvent.Details.BotCrashUnique
 		} else if event.GameEvent.Details.BotPushedBot != nil {
 			byTeamProto = *event.GameEvent.Details.BotPushedBot.ByTeam
-			choiceType = refproto.AdvantageChoice_PUSHING
+			*choice.Foul = refproto.AdvantageChoice_PUSHING
+			choice.BotPushedBot = new(refproto.GameEvent_BotPushedBot)
+			*choice.BotPushedBot = *event.GameEvent.Details.BotPushedBot
 		}
 
 		forTeam := NewTeam(byTeamProto).Opposite()
 		if forTeam != "" {
 			teamName := c.Engine.State.TeamState[forTeam].Name
-			choice := refproto.AdvantageChoice{Foul: &choiceType}
 			requestPayload := refproto.ControllerToTeam_AdvantageChoice{AdvantageChoice: &choice}
 			request := refproto.ControllerToTeam{Msg: &requestPayload}
 			err := c.TeamServer.SendRequest(teamName, request)
