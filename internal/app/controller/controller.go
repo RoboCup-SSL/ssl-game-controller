@@ -137,8 +137,8 @@ func (c *GameController) updateCi(t time.Time) *refproto.Referee {
 
 // update updates several states and publishes the new state to the UI every full second or on events
 func (c *GameController) update() {
-	newFullSecond, eventTriggered := c.Engine.Update()
-	if eventTriggered || newFullSecond {
+	timeChanged, eventTriggered := c.Engine.Update()
+	if eventTriggered || timeChanged {
 		c.publish()
 	}
 }

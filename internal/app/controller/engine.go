@@ -82,12 +82,12 @@ func (e *Engine) ResetGame() {
 }
 
 // Update updates times and triggers events if needed
-func (e *Engine) Update() (newFullSecond bool, eventTriggered bool) {
+func (e *Engine) Update() (timeChanged bool, eventTriggered bool) {
 	currentTime := e.TimeProvider()
 	delta := currentTime.Sub(e.LastTimeUpdate)
 	e.LastTimeUpdate = currentTime
 
-	newFullSecond = e.updateTimes(currentTime, delta)
+	timeChanged = e.updateTimes(currentTime, delta)
 	eventTriggered = e.triggerTimedEvents(delta)
 
 	return
@@ -101,11 +101,13 @@ func (e *Engine) triggerTimedEvents(delta time.Duration) (eventTriggered bool) {
 			e.LogTime("Stage time elapsed", "")
 			eventTriggered = true
 		}
+	}
 
+	if e.countCardTime() {
 		for team, teamState := range e.State.TeamState {
 			eventTriggered = e.removeElapsedYellowCards(team, teamState) || eventTriggered
-			e.updateMaxBots()
 		}
+		e.updateMaxBots()
 	}
 
 	if e.State.GameState() == GameStateTimeout && e.State.CommandFor.Known() {
@@ -119,33 +121,35 @@ func (e *Engine) triggerTimedEvents(delta time.Duration) (eventTriggered bool) {
 }
 
 // updateTimes updates the times of the state
-func (e *Engine) updateTimes(currentTime time.Time, delta time.Duration) (newFullSecond bool) {
+func (e *Engine) updateTimes(currentTime time.Time, delta time.Duration) (timeChanged bool) {
 
 	if e.countStageTime() {
-		newFullSecond = newFullSecond || isNewFullSecond(e.State.StageTimeElapsed, delta)
+		timeChanged = timeChanged || isNewFullSecond(e.State.StageTimeElapsed, delta)
 
 		e.State.StageTimeElapsed += delta
 		e.State.StageTimeLeft -= delta
+	}
 
+	if e.countCardTime() {
 		for _, teamState := range e.State.TeamState {
-			newFullSecond = reduceYellowCardTimes(teamState, delta) || newFullSecond
+			timeChanged = reduceYellowCardTimes(teamState, delta) || timeChanged
 		}
 	}
 
 	if e.State.GameState() == GameStateTimeout && e.State.CommandFor.Known() {
-		newFullSecond = newFullSecond || isNewFullSecond(e.State.TeamState[e.State.CommandFor].TimeoutTimeLeft, delta)
+		timeChanged = timeChanged || isNewFullSecond(e.State.TeamState[e.State.CommandFor].TimeoutTimeLeft, delta)
 		e.State.TeamState[e.State.CommandFor].TimeoutTimeLeft -= delta
 	}
 
 	if e.State.MatchTimeStart.After(time.Unix(0, 0)) {
 		newMatchDuration := currentTime.Sub(e.State.MatchTimeStart)
-		newFullSecond = newFullSecond || isNewFullSecond(e.State.MatchDuration, newMatchDuration-e.State.MatchDuration)
+		timeChanged = timeChanged || isNewFullSecond(e.State.MatchDuration, newMatchDuration-e.State.MatchDuration)
 		e.State.MatchDuration = newMatchDuration
 	}
 
 	if e.State.CurrentActionDeadline.After(time.Unix(0, 0)) {
 		newCurrentActionTimeRemaining := e.State.CurrentActionDeadline.Sub(currentTime)
-		newFullSecond = newFullSecond || isNewFullSecond(e.State.CurrentActionTimeRemaining, newCurrentActionTimeRemaining-e.State.CurrentActionTimeRemaining)
+		timeChanged = timeChanged || isNewFullSecond(e.State.CurrentActionTimeRemaining, newCurrentActionTimeRemaining-e.State.CurrentActionTimeRemaining)
 		e.State.CurrentActionTimeRemaining = newCurrentActionTimeRemaining
 	}
 
@@ -154,6 +158,10 @@ func (e *Engine) updateTimes(currentTime time.Time, delta time.Duration) (newFul
 
 func (e *Engine) countStageTime() bool {
 	return e.State.Stage.IsPausedStage() || e.State.GameState() == GameStateRunning
+}
+
+func (e *Engine) countCardTime() bool {
+	return e.State.GameState() == GameStateRunning
 }
 
 func (e *Engine) SendCommand(command RefCommand, forTeam Team) {
