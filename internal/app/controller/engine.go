@@ -807,6 +807,9 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 	} else if event.Type == GameEventDefenderTooCloseToKickPoint {
 		// stop the game and let bots move away from the ball first. The autoRef will continue the game afterwards
 		e.SendCommand(CommandStop, "")
+	} else if event.Type == GameEventPossibleGoal {
+		// halt the game to let the human referee decide if this was a valid goal
+		e.SendCommand(CommandHalt, "")
 	} else if !event.IsSkipped() && !event.IsSecondary() && !e.State.Command.IsPrepare() {
 		e.placeBall(event)
 	} else if e.State.AutoContinue && event.IsContinueGame() {
