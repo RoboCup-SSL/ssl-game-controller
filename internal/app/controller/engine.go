@@ -473,9 +473,6 @@ func (e *Engine) processModify(m *EventModifyValue) error {
 		}
 	} else if m.AutoContinue != nil {
 		e.State.AutoContinue = *m.AutoContinue
-		if e.State.AutoContinue {
-			e.Continue()
-		}
 	} else if m.GameEventBehavior != nil {
 		e.State.GameEventBehavior[m.GameEventBehavior.GameEventType] = m.GameEventBehavior.GameEventBehavior
 	} else if m.RemoveGameEvent != nil {
