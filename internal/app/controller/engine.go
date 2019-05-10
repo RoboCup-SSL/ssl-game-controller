@@ -684,14 +684,17 @@ func (e *Engine) processTrigger(t *EventTrigger) (err error) {
 		yellow := e.State.TeamState[TeamYellow]
 		e.State.TeamState[TeamYellow] = e.State.TeamState[TeamBlue]
 		e.State.TeamState[TeamBlue] = yellow
+		e.LogHint("switchColors", "", TeamUnknown)
 	} else if t.Type == TriggerSwitchSides {
 		yellowOnPositiveHalf := e.State.TeamState[TeamYellow].OnPositiveHalf
 		e.State.TeamState[TeamYellow].OnPositiveHalf = !yellowOnPositiveHalf
 		e.State.TeamState[TeamBlue].OnPositiveHalf = yellowOnPositiveHalf
+		e.LogHint("switchSides", "", TeamUnknown)
 	} else if t.Type == TriggerUndo {
 		e.UndoLastAction()
 	} else if t.Type == TriggerContinue {
 		e.Continue()
+		e.LogHint("continue", "", TeamUnknown)
 	} else {
 		return errors.Errorf("Unknown trigger: %v", t.Type)
 	}
