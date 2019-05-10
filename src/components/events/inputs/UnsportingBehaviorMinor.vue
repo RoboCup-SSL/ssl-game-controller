@@ -1,5 +1,8 @@
 <template>
     <div>
+        <p>
+            Minor unsporting behavior results in a yellow card.
+        </p>
         <TeamSelection :model="model" label="By: " :allow-unknown-team="false"/>
         <b-form-group label="Reason: " horizontal>
             <input type="text"
