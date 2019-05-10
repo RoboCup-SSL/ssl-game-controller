@@ -596,6 +596,10 @@ func (e *Engine) updateStage(stage Stage) {
 		e.State.MatchTimeStart = e.TimeProvider()
 	}
 
+	if stage.IsPausedStage() {
+		e.State.GameEvents = []*GameEvent{}
+	}
+
 	if stage == StageOvertimeFirstHalfPre {
 		e.State.TeamState[TeamYellow].TimeoutsLeft = e.config.Overtime.Timeouts
 		e.State.TeamState[TeamYellow].TimeoutTimeLeft = e.config.Overtime.TimeoutDuration
