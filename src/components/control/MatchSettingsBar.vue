@@ -19,14 +19,17 @@
             </label>
         </div>
 
-        <b-button v-b-tooltip.hover title="Proceed to the next stage"
+        <b-button v-b-tooltip.hover
+                  title="Proceed to the next stage"
                   v-on:click="nextStage"
                   :disabled="forbidMatchControls || noNextStage">
-            Next Stage
+            Proceed to '{{nextStageText}}'
         </b-button>
 
-        <b-button v-b-tooltip.hover title="Finish the game"
+        <b-button v-b-tooltip.hover
+                  title="Finish the game"
                   v-on:click="endGame"
+                  v-if="showEndGame"
                   :disabled="forbidMatchControls || noNextStage">
             End of Game
         </b-button>
@@ -35,6 +38,7 @@
 
 <script>
     import Settings from "../settings/Settings";
+    import {getNextStage, canEndGameFromStage} from "../../refereeState";
 
     export default {
         name: "MatchSettingsBar",
@@ -81,6 +85,12 @@
                         this.setAutoContinue(!this.autoContinue)
                     }
                 }
+            },
+            nextStageText() {
+                return getNextStage(this.state.stage);
+            },
+            showEndGame() {
+                return canEndGameFromStage(this.state.stage);
             },
         }
     }

@@ -1,3 +1,34 @@
+export const stages = [
+    "Pre-First Half",
+    "First Half",
+    "Half Time",
+    "Pre-Second Half",
+    "Second Half",
+    "Overtime Break",
+    "Pre-Overtime First Half",
+    "Overtime First Half",
+    "Overtime Half Time",
+    "Pre-Overtime Second Half",
+    "Overtime Second Half",
+    "Shootout Break",
+    "Shootout",
+    "End of Game",
+];
+
+export let getNextStage = function (stage) {
+    let i = stages.indexOf(stage);
+    if (i >= 0 && i < stages.length - 1) {
+        return stages[i + 1];
+    }
+    return stage;
+};
+
+export let canEndGameFromStage = function (stage) {
+    return stage === 'Second Half'
+        || stage === 'Overtime Second Half'
+        || stage === 'Shootout';
+};
+
 export let isNonPausedStage = function (state) {
     return state.stage === 'First Half'
         || state.stage === 'Second Half'
