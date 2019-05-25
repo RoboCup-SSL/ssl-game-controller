@@ -15,16 +15,6 @@
                    max="99"
                    type="number"
             />
-
-            <b-btn v-b-modal.new-event-modal size="sm" variant="primary">New Event</b-btn>
-            <b-modal id="new-event-modal"
-                     title="New Game Event"
-                     :lazy="true">
-                <NewEvent/>
-                <div slot="modal-footer">
-                    <!-- hide modal buttons -->
-                </div>
-            </b-modal>
         </div>
     </div>
 </template>

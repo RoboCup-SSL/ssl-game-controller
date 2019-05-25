@@ -33,16 +33,27 @@
                   :disabled="forbidMatchControls || noNextStage">
             End of Game
         </b-button>
+
+        <b-btn v-b-modal.new-event-modal>New Event</b-btn>
+        <b-modal id="new-event-modal"
+                 title="New Game Event"
+                 :lazy="true">
+            <NewEvent/>
+            <div slot="modal-footer">
+                <!-- hide modal buttons -->
+            </div>
+        </b-modal>
     </div>
 </template>
 
 <script>
     import Settings from "../settings/Settings";
     import {getNextStage, canEndGameFromStage} from "../../refereeState";
+    import NewEvent from "../events/NewEvent";
 
     export default {
         name: "MatchSettingsBar",
-        components: {Settings},
+        components: {NewEvent, Settings},
         methods: {
             nextStage: function () {
                 this.$socket.sendObj({
