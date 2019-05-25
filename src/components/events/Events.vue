@@ -26,16 +26,6 @@
                     <!-- hide modal buttons -->
                 </div>
             </b-modal>
-
-            <b-btn v-b-modal.event-behavior-modal size="sm" variant="primary">Configure Behaviors</b-btn>
-            <b-modal id="event-behavior-modal"
-                     title="Game Event Behaviors"
-                     :lazy="true">
-                <EventBehavior/>
-                <div slot="modal-footer">
-                    <!-- hide modal buttons -->
-                </div>
-            </b-modal>
         </div>
     </div>
 </template>

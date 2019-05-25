@@ -1,5 +1,5 @@
 <template>
-    <span>
+    <div>
         <a v-b-modal.settings-modal>
             <font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon>
         </a>
@@ -7,23 +7,27 @@
                  title="Settings"
                  size="lg"
                  :lazy="true">
-            <TeamSettings></TeamSettings>
+            <TeamSettings/>
             <hr>
-            <MatchSettings></MatchSettings>
+            <MatchSettings/>
+            <hr>
+            <AutonomousSettings/>
             <div slot="modal-footer">
                 <!-- hide modal buttons -->
             </div>
         </b-modal>
-    </span>
+    </div>
 </template>
 
 <script>
     import TeamSettings from "./TeamSettings";
     import MatchSettings from "./MatchSettings";
+    import EventBehavior from "../events/EventBehavior";
+    import AutonomousSettings from "./AutonomousSettings";
 
     export default {
         name: "Settings",
-        components: {MatchSettings, TeamSettings}
+        components: {AutonomousSettings, EventBehavior, MatchSettings, TeamSettings}
     }
 </script>
 
