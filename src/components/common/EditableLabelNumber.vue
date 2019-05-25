@@ -20,7 +20,9 @@
                type="number"
                ref="input"
         />
-        <a class="btn-edit" v-on:click="edit" v-show="!g.edit"><font-awesome-icon icon="edit"/></a>
+        <a class="btn-edit" v-on:click="edit" v-show="!g.edit">
+            <font-awesome-icon class="fa-sm" icon="pen"/>
+        </a>
     </span>
 </template>
 
@@ -64,7 +66,7 @@
     }
 
     .btn-edit {
-        margin-left: 0.3em;
+        margin-left: 0.5em;
         margin-right: 0.3em;
     }
 </style>
