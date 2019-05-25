@@ -50,35 +50,13 @@
             </tr>
             <tr>
                 <td>
-                    <TeamYellowCardsActive team-color="Yellow"/>
+                    <TeamYellowCardsActive :edit-mode="editMode" team-color="Yellow"/>
                 </td>
                 <td>
                     Active Yellow Cards
-
-                    <a class="btn-edit"
-                       v-if="!showAllCards"
-                       @click="showAllCards=!showAllCards">
-                        <font-awesome-icon icon="caret-square-down"/>
-                    </a>
-                    <a class="btn-edit"
-                       v-if="showAllCards"
-                       @click="showAllCards=!showAllCards">
-                        <font-awesome-icon icon="caret-square-up"/>
-                    </a>
                 </td>
                 <td>
-                    <TeamYellowCardsActive team-color="Blue"/>
-                </td>
-            </tr>
-            <tr v-if="showAllCards">
-                <td>
-                    <TeamYellowCardTimes :edit-mode="editMode" team-color="Yellow"/>
-                </td>
-                <td>
-                    Yellow Card Times
-                </td>
-                <td>
-                    <TeamYellowCardTimes :edit-mode="editMode" team-color="Blue"/>
+                    <TeamYellowCardsActive :edit-mode="editMode" team-color="Blue"/>
                 </td>
             </tr>
             <tr>
