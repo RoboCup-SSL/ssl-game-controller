@@ -1,43 +1,54 @@
 <template>
-    <div>
-
-        <span v-b-tooltip.hover
-              :title="'Immediately stop all robots (' + Object.keys(keymapHalt)[0] + ')'">
-            <b-button v-hotkey="keymapHalt"
-                      ref="btnHalt"
-                      v-on:click="send('halt')"
-                      v-bind:disabled="halted">
-                Halt
-            </b-button>
-        </span>
-        <span v-b-tooltip.hover
-              :title="'Robots have to keep distance to the ball (' + Object.keys(keymapStop)[0] + ')'">
-            <b-button v-hotkey="keymapStop"
-                      ref="btnStop"
-                      v-on:click="send('stop')"
-                      v-bind:disabled="stopped || !stopAllowed">
-                Stop
-            </b-button>
-        </span>
-        <span v-b-tooltip.hover
-              :title="'Restart the game in draw situations (' + Object.keys(keymapForceStart)[0] + ')'">
-            <b-button v-hotkey="keymapForceStart"
-                      ref="btnForceStart"
-                      v-on:click="send('forceStart')"
-                      v-bind:disabled="!stopped || !forceStartAllowed">
-                Force Start
-            </b-button>
-        </span>
-        <span v-b-tooltip.hover
-              :title="'Continue game after a prepare state (' + Object.keys(keymapNormalStart)[0] + ')'">
-            <b-button v-hotkey="keymapNormalStart"
-                      ref="btnNormalStart"
-                      v-on:click="send('normalStart')"
-                      v-bind:disabled="!prepareSth || !normalStartAllowed">
-                Normal Start
-            </b-button>
-        </span>
-    </div>
+    <table>
+        <tr>
+            <td>
+                <div v-b-tooltip.hover
+                     :title="'Immediately stop all robots (' + Object.keys(keymapHalt)[0] + ')'">
+                    <b-button v-hotkey="keymapHalt"
+                              ref="btnHalt"
+                              v-on:click="send('halt')"
+                              v-bind:disabled="halted">
+                        Halt
+                    </b-button>
+                </div>
+            </td>
+            <td>
+                <div v-b-tooltip.hover
+                     :title="'Robots have to keep distance to the ball (' + Object.keys(keymapStop)[0] + ')'">
+                    <b-button v-hotkey="keymapStop"
+                              ref="btnStop"
+                              v-on:click="send('stop')"
+                              v-bind:disabled="stopped || !stopAllowed">
+                        Stop
+                    </b-button>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div v-b-tooltip.hover
+                     :title="'Restart the game in draw situations (' + Object.keys(keymapForceStart)[0] + ')'">
+                    <b-button v-hotkey="keymapForceStart"
+                              ref="btnForceStart"
+                              v-on:click="send('forceStart')"
+                              v-bind:disabled="!stopped || !forceStartAllowed">
+                        Force Start
+                    </b-button>
+                </div>
+            </td>
+            <td>
+                <div v-b-tooltip.hover
+                     :title="'Continue game after a prepare state (' + Object.keys(keymapNormalStart)[0] + ')'">
+                    <b-button v-hotkey="keymapNormalStart"
+                              ref="btnNormalStart"
+                              v-on:click="send('normalStart')"
+                              v-bind:disabled="!prepareSth || !normalStartAllowed">
+                        Normal Start
+                    </b-button>
+                </div>
+            </td>
+        </tr>
+    </table>
 </template>
 
 <script>
@@ -45,6 +56,11 @@
 
     export default {
         name: "ManualControlCommon",
+        methods: {
+            send: function (command) {
+                this.$socket.sendObj({command: {commandType: command}})
+            },
+        },
         computed: {
             keymapHalt() {
                 return {
@@ -82,6 +98,12 @@
                     }
                 }
             },
+            state() {
+                return this.$store.state.refBoxState
+            },
+            halted() {
+                return this.state.command === 'halt';
+            },
             stopped() {
                 return this.state.command === 'stop';
             },
@@ -103,5 +125,12 @@
 </script>
 
 <style scoped>
+    button {
+        margin: 0.5em;
+        width: 90%;
+    }
 
+    table {
+        width: 100%;
+    }
 </style>

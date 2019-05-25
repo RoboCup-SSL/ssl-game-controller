@@ -27,16 +27,6 @@
                 </div>
             </b-modal>
 
-            <b-btn v-b-modal.place-ball-modal size="sm" variant="primary">Place ball</b-btn>
-            <b-modal id="place-ball-modal"
-                     title="Place ball"
-                     :lazy="true">
-                <PlaceBall/>
-                <div slot="modal-footer">
-                    <!-- hide modal buttons -->
-                </div>
-            </b-modal>
-
             <b-btn v-b-modal.event-behavior-modal size="sm" variant="primary">Configure Behaviors</b-btn>
             <b-modal id="event-behavior-modal"
                      title="Game Event Behaviors"

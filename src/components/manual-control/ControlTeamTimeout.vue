@@ -1,15 +1,8 @@
 <template>
-    <span>
-        <b-button v-show="!timeoutRunning"
-                  v-on:click="startTimeout"
-                  v-bind:disabled="disableTimeoutButton">
-            Start Timeout
-        </b-button>
-        <b-button v-show="timeoutRunning"
-                  v-on:click="stopTimeout">
-            Stop Timeout
-        </b-button>
-    </span>
+    <b-button v-on:click="toggleTimeout"
+              v-bind:disabled="disableTimeoutButton">
+        {{timeoutRunning ? 'Stop' : 'Start'}} Timeout
+    </b-button>
 </template>
 
 <script>
@@ -25,7 +18,7 @@
                 return this.$store.state.refBoxState.command
             },
             timeoutRunning: function () {
-                return this.command === "timeout" && this.$store.state.refBoxState.commandForTeam === this.teamColor
+                return this.command === "timeout" && this.$store.state.refBoxState.commandForTeam === this.teamColor.toString()
             },
             disableTimeoutButton() {
                 return !isNonPausedStage(this.$store.state.refBoxState)
@@ -33,18 +26,16 @@
             },
         },
         methods: {
-            startTimeout: function () {
-                this.$socket.sendObj({'command': {'commandType': 'timeout', 'forTeam': this.teamColor}})
-            },
-            stopTimeout: function () {
-                this.$socket.sendObj({'command': {'commandType': 'stop'}})
-            },
+            toggleTimeout() {
+                if (this.timeoutRunning) {
+                    this.$socket.sendObj({'command': {'commandType': 'stop'}});
+                } else {
+                    this.$socket.sendObj({'command': {'commandType': 'timeout', 'forTeam': this.teamColor}});
+                }
+            }
         }
     }
 </script>
 
 <style scoped>
-    button {
-        margin: 0.25em;
-    }
 </style>

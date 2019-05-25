@@ -1,48 +1,25 @@
 <template>
-    <div class="control-team">
-        <span v-b-tooltip.hover
-              :title="'Prepare for a kickoff (' + Object.keys(keymapKickoff)[0] + ')'">
-        <b-button v-hotkey="keymapKickoff"
-                  ref="btnKickoff"
-                  v-on:click="sendKickoff"
-                  v-bind:disabled="halted || running || preparing">
-            Kickoff
+    <div class="container">
+        <b-button v-on:click="addYellowCard"
+                  v-bind:disabled="running || preparing">
+            Add Yellow Card
         </b-button>
-        </span>
-        <span v-b-tooltip.hover
-              :title="'Perform direct kick (corner and goal kicks) (' + Object.keys(keymapDirect)[0] + ')'">
-        <b-button v-hotkey="keymapDirect"
-                  ref="btnDirect"
-                  v-on:click="sendDirect"
-                  v-bind:disabled="halted || running || preparing || !nonPausedStage">
-            Direct
-        </b-button>
-        </span>
-        <span v-b-tooltip.hover
-              :title="'Perform indirect kick (throw-in) (' + Object.keys(keymapIndirect)[0] + ')'">
-        <b-button v-hotkey="keymapIndirect"
-                  ref="btnIndirect"
-                  v-on:click="sendIndirect"
-                  v-bind:disabled="halted || running || preparing || !nonPausedStage">
-            Indirect
-        </b-button>
-        </span>
-        <span v-b-tooltip.hover
-              title="Prepare for a penalty kick">
-        <b-button v-on:click="sendPenalty"
-                  v-bind:disabled="halted || running || preparing || !nonPausedStage">
-            Penalty
-        </b-button>
-        </span>
-
-        <br/>
-
-        <ControlTeamTimeout :team-color="teamColor"/>
 
         <b-button v-on:click="revokeYellowCard"
                   v-bind:disabled="teamState.yellowCardTimes.length===0">
             Revoke Yellow Card
         </b-button>
+
+        <b-button v-on:click="addRedCard"
+                  v-bind:disabled="running || preparing">
+            Add Red Card
+        </b-button>
+
+        <b-button v-on:click="addGoal">
+            Goal
+        </b-button>
+
+        <ControlTeamTimeout :team-color="teamColor"/>
     </div>
 </template>
 
@@ -51,7 +28,7 @@
     import {isNonPausedStage} from "../../refereeState";
 
     export default {
-        name: "ControlTeam",
+        name: "ManualControlTeam",
         components: {ControlTeamTimeout},
         props: {
             teamColor: String
@@ -65,23 +42,23 @@
             revokeYellowCard: function () {
                 this.$socket.sendObj({'card': {'forTeam': this.teamColor, 'cardType': 'yellow', 'operation': 'revoke'}})
             },
-            sendKickoff() {
-                if (!this.$refs.btnKickoff.disabled) {
-                    this.send('kickoff')
-                }
+            addYellowCard: function () {
+                this.$socket.sendObj({'card': {'forTeam': this.teamColor, 'cardType': 'yellow', 'operation': 'add'}})
             },
-            sendDirect() {
-                if (!this.$refs.btnDirect.disabled) {
-                    this.send('direct')
-                }
+            addRedCard: function () {
+                this.$socket.sendObj({'card': {'forTeam': this.teamColor, 'cardType': 'red', 'operation': 'add'}})
             },
-            sendIndirect() {
-                if (!this.$refs.btnIndirect.disabled) {
-                    this.send('indirect')
-                }
-            },
-            sendPenalty() {
-                this.send('penalty')
+            addGoal: function () {
+                this.$socket.sendObj({
+                    gameEvent: {
+                        type: 'goal',
+                        details: {
+                            ['goal']: {
+                                by_team: this.teamColor.toString().toLocaleUpperCase(),
+                            }
+                        }
+                    }
+                });
             },
         },
         computed: {
@@ -132,7 +109,16 @@
 </script>
 
 <style scoped>
+    .container {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
     button {
-        margin: 0.25em;
+        margin: 0.5em;
+        width: 90%;
     }
 </style>

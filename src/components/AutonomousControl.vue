@@ -1,8 +1,6 @@
 <template>
     <div id="container">
         <TeamOverview class="view"/>
-        <ControlTeam class="view" team-color="Yellow"/>
-        <ControlTeam class="view" team-color="Blue"/>
         <Events/>
         <CurrentEvents class="view"/>
         <EventProposals class="view"/>
