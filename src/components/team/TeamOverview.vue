@@ -1,56 +1,128 @@
 <template>
     <div>
-        <h2>{{teamColor}} Team
-            <span v-b-tooltip.hover
-                  title="Team connected"
-                  v-if="teamConnected">
-                <font-awesome-icon
-                        class="fa-xs"
-                        icon="signal"/>
-            </span>
-            <span v-b-tooltip.hover
-                  title="connection verified"
-                  v-if="teamConnectionVerified">
-                <font-awesome-icon
-                        class="fa-xs"
-                        icon="shield-alt"/>
-            </span>
-        </h2>
-        <div class="content">
-            <div>
-                <TeamGoalkeeper
-                        :team-color="teamColor"
-                        :goalkeeper="team.goalkeeper"/>
-            </div>
-            <div>
-                <TeamTimeouts
-                        :team-color="teamColor"
-                        :timeouts-left="team.timeoutsLeft"
-                        :timeout-time-left="team.timeoutTimeLeft"/>
-            </div>
-            <div>
-                <TeamRedCards
-                        :team-color="teamColor"
-                        :red-cards="team.redCards"/>
-            </div>
-            <div>
-                <TeamYellowCards
-                        :team-color="teamColor"
-                        :yellow-cards="team.yellowCards"
-                        :yellow-card-times="team.yellowCardTimes"/>
-            </div>
-            <div>
-                <TeamCounters
-                        :team-color="teamColor"/>
-            </div>
-            <div>
-                <TeamBotSubstitution
-                        :team-color="teamColor"/>
-            </div>
-            <div>
-                At most <b>{{maxAllowedBots}}</b> bots allowed on the field.
-            </div>
-        </div>
+        <table>
+            <tr>
+                <th class="team-yellow">{{teamYellow.name}}</th>
+                <th>
+                    <a v-b-tooltip.hover
+                       :title="editMode.active ? 'Stop editing' : 'Start editing'"
+                       class="btn-edit"
+                       v-on:click="editMode.active=!editMode.active">
+                        <img alt="pen" src="@/assets/img/icons8-ball-point-pen-16.png">
+                    </a>
+                </th>
+                <th class="team-blue">{{teamBlue.name}}</th>
+            </tr>
+            <tr>
+                <td>
+                    <TeamGoalkeeper :edit-mode="editMode" team-color="Yellow"/>
+                </td>
+                <td>Goal Keeper</td>
+                <td>
+                    <TeamGoalkeeper :edit-mode="editMode" team-color="Blue"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <TeamTimeouts :edit-mode="editMode" team-color="Yellow"/>
+                    |
+                    <TeamTimeoutTime :edit-mode="editMode" team-color="Yellow"/>
+                </td>
+                <td>Timeouts left</td>
+                <td>
+                    <TeamTimeouts :edit-mode="editMode" team-color="Blue"/>
+                    |
+                    <TeamTimeoutTime :edit-mode="editMode" team-color="Blue"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <TeamYellowCards :edit-mode="editMode" team-color="Yellow"/>
+                    |
+                    <TeamRedCards :edit-mode="editMode" team-color="Yellow"/>
+                </td>
+                <td>Yellow / Red Cards</td>
+                <td>
+                    <TeamYellowCards :edit-mode="editMode" team-color="Blue"/>
+                    |
+                    <TeamRedCards :edit-mode="editMode" team-color="Blue"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <TeamYellowCardsActive team-color="Yellow"/>
+                </td>
+                <td>
+                    Active Yellow Cards
+
+                    <a class="btn-edit"
+                       v-if="!showAllCards"
+                       @click="showAllCards=!showAllCards">
+                        <font-awesome-icon icon="caret-square-down"/>
+                    </a>
+                    <a class="btn-edit"
+                       v-if="showAllCards"
+                       @click="showAllCards=!showAllCards">
+                        <font-awesome-icon icon="caret-square-up"/>
+                    </a>
+                </td>
+                <td>
+                    <TeamYellowCardsActive team-color="Blue"/>
+                </td>
+            </tr>
+            <tr v-if="showAllCards">
+                <td>
+                    <TeamYellowCardTimes :edit-mode="editMode" team-color="Yellow"/>
+                </td>
+                <td>
+                    Yellow Card Times
+                </td>
+                <td>
+                    <TeamYellowCardTimes :edit-mode="editMode" team-color="Blue"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <TeamFoulCounter :edit-mode="editMode" team-color="Yellow"/>
+                </td>
+                <td>Foul Counter</td>
+                <td>
+                    <TeamFoulCounter :edit-mode="editMode" team-color="Blue"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <TeamPlacementFailures :edit-mode="editMode" team-color="Yellow"/>
+                </td>
+                <td>Placement Failures</td>
+                <td>
+                    <TeamPlacementFailures :edit-mode="editMode" team-color="Yellow"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <TeamBotSubstitution team-color="Yellow"/>
+                </td>
+                <td>Bot Substitution</td>
+                <td>
+                    <TeamBotSubstitution team-color="Blue"/>
+                </td>
+            </tr>
+            <tr>
+                <td>{{teamYellow.maxAllowedBots}}</td>
+                <td>Max allowed Bots</td>
+                <td>{{teamBlue.maxAllowedBots}}</td>
+            </tr>
+            <tr>
+                <td>
+                    <TeamConnection team-color="Yellow"/>
+                </td>
+                <td>Connected</td>
+                <td>
+                    <TeamConnection team-color="Blue"/>
+                </td>
+            </tr>
+        </table>
     </div>
 </template>
 
@@ -60,42 +132,50 @@
     import EditableLabelText from "../common/EditableLabelText";
     import TeamYellowCards from "./TeamYellowCards";
     import TeamRedCards from "./TeamRedCards";
-    import TeamCounters from "./TeamCounters";
     import TeamBotSubstitution from "./TeamBotSubstitution";
+    import TeamConnection from "./TeamConnection";
+    import TeamBallPlacement from "./TeamBallPlacement";
+    import TeamFoulCounter from "./TeamFoulCounter";
+    import TeamPlacementFailures from "./TeamPlacementFailures";
+    import TeamTimeoutTime from "./TeamTimeoutTime";
+    import TeamYellowCardTimes from "./TeamYellowCardTimes";
+    import TeamYellowCardsActive from "./TeamYellowCardsActive";
 
     export default {
         name: "TeamOverview",
         components: {
+            TeamYellowCardsActive,
+            TeamYellowCardTimes,
+            TeamTimeoutTime,
+            TeamPlacementFailures,
+            TeamFoulCounter,
+            TeamBallPlacement,
+            TeamConnection,
             TeamBotSubstitution,
-            TeamCounters,
             TeamRedCards,
             TeamYellowCards,
             EditableLabelText,
             TeamGoalkeeper,
             TeamTimeouts,
         },
-        props: {
-            teamColor: String
+        data() {
+            return {
+                showAllCards: false,
+                editMode: {
+                    active: false,
+                }
+            }
         },
         computed: {
-            team() {
-                return this.$store.state.refBoxState.teamState[this.teamColor]
+            teamYellow() {
+                return this.$store.state.refBoxState.teamState['Yellow'];
             },
-            maxAllowedBots() {
-                return this.team.maxAllowedBots;
+            teamBlue() {
+                return this.$store.state.refBoxState.teamState['Blue'];
             },
-            teamConnected() {
-                return this.$store.state.engineState.teamConnected[this.teamColor]
-            },
-            teamConnectionVerified() {
-                return this.$store.state.engineState.teamConnectionVerified[this.teamColor]
-            }
         }
     }
 </script>
 
 <style scoped>
-    .content {
-        text-align: left;
-    }
 </style>

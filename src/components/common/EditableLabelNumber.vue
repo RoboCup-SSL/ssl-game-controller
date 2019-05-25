@@ -1,14 +1,14 @@
 <template>
     <span class="editable-label">
-        <label v-show="g.edit === false"
+        <label v-show="!g.edit"
                for="edit-input">
             {{label}} {{value}}
         </label>
-        <label v-show="g.edit === true"
+        <label v-show="g.edit"
                for="edit-input">
             {{label}}
         </label>
-        <input v-show="g.edit === true"
+        <input v-show="g.edit"
                v-model="g.value"
                v-on:focus="g.focused = true"
                v-on:blur="updateValue"
@@ -20,8 +20,8 @@
                type="number"
                ref="input"
         />
-        <a class="btn-edit" v-on:click="edit" v-show="!g.edit">
-            <font-awesome-icon class="fa-sm" icon="pen"/>
+        <a class="btn-edit" v-on:click="edit" v-show="editMode.active && !g.edit">
+            <img alt="pen" src="@/assets/img/icons8-ball-point-pen-16.png">
         </a>
     </span>
 </template>
@@ -35,7 +35,8 @@
             value: Number,
             min: Number,
             max: Number,
-            callback: Function
+            callback: Function,
+            editMode: Object,
         },
         data: function () {
             return {g: {edit: false, value: 0.0, focused: false}}
@@ -56,7 +57,7 @@
                     this.$refs.input.focus();
                 })
             }
-        }
+        },
     }
 </script>
 

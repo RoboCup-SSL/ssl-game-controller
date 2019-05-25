@@ -1,6 +1,5 @@
 <template>
     <div>
-        <label>Intends to substitute a bot: </label>
         <a class="btn-edit" v-on:click="edit()">
             <font-awesome-icon icon="toggle-on" v-if="botSubstitutionIntend"/>
             <font-awesome-icon icon="toggle-off" v-if="!botSubstitutionIntend"/>
@@ -12,7 +11,7 @@
     export default {
         name: "TeamBotSubstitution",
         props: {
-            teamColor: String
+            teamColor: String,
         },
         methods: {
             edit: function () {

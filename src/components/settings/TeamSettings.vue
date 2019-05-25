@@ -8,22 +8,22 @@
             </tr>
             <tr>
                 <td>
-                    <TeamName team-color="Yellow"/>
+                    <TeamName :edit-mode="{active: true}" team-color="Yellow"/>
                 </td>
                 <td class="label-column">
                     Team Name
                 </td>
                 <td>
-                    <TeamName team-color="Blue"/>
+                    <TeamName :edit-mode="{active: true}" team-color="Blue"/>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <TeamScore team-color="Yellow"/>
+                    <TeamScore :edit-mode="{active: true}" team-color="Yellow"/>
                 </td>
                 <td class="label-column">Goals</td>
                 <td>
-                    <TeamScore team-color="Blue"/>
+                    <TeamScore :edit-mode="{active: true}" team-color="Blue"/>
                 </td>
             </tr>
             <tr>

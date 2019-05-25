@@ -1,9 +1,10 @@
 <template>
-        <EditableLabelSelect
-                :value="team.name"
-                :options="teams"
-                :callback="updateTeamName"
-        />
+    <EditableLabelSelect
+            :edit-mode="editMode"
+            :value="team.name"
+            :options="teams"
+            :callback="updateTeamName"
+    />
 </template>
 
 <script>
@@ -41,7 +42,8 @@
         name: "TeamName",
         components: {EditableLabelSelect},
         props: {
-            teamColor: String
+            teamColor: String,
+            editMode: Object,
         },
         computed: {
             team: function () {

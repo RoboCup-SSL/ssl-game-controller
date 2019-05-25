@@ -1,17 +1,17 @@
 <template>
     <span class="label-duration">
-        <span v-show="g.edit === false"
+        <span v-show="!g.edit"
               ref="span-id"
               v-format-ns-duration="value"></span>
-        <input v-show="g.edit === true"
+        <input v-show="g.edit"
                v-model="g.value"
                v-on:blur="updateValue"
                @keyup.enter="updateValue"
                size="5"
                ref="input"
         />
-        <a class="btn-edit" v-on:click="edit()" v-show="!g.edit">
-            <font-awesome-icon icon="edit"/>
+        <a class="btn-edit" v-on:click="edit()" v-show="editMode.active && !g.edit">
+            <img alt="pen" src="@/assets/img/icons8-ball-point-pen-16.png">
         </a>
     </span>
 </template>
@@ -21,7 +21,8 @@
         name: "EditableLabelDuration",
         props: {
             value: Number,
-            callback: Function
+            callback: Function,
+            editMode: Object,
         },
         data: function () {
             return {g: {edit: false, value: 0}}

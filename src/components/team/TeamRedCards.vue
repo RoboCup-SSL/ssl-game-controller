@@ -1,7 +1,7 @@
 <template>
     <EditableLabelNumber
-            label="Red cards: "
-            :value="redCards"
+            :edit-mode="editMode"
+            :value="team.redCards"
             :callback="updateRedCards"
             :min="0"
             :max="99"/>
@@ -16,7 +16,7 @@
         components: {EditableLabelDuration, EditableLabelNumber},
         props: {
             teamColor: String,
-            redCards: Number
+            editMode: Object,
         },
         methods: {
             updateRedCards: function (v) {
@@ -28,6 +28,11 @@
                 })
             },
         },
+        computed: {
+            team() {
+                return this.$store.state.refBoxState.teamState[this.teamColor]
+            },
+        }
     }
 </script>
 

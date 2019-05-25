@@ -16,7 +16,9 @@
                size="10"
                ref="input"
         />
-        <a class="btn-edit" v-on:click="edit()" v-show="!g.edit"><font-awesome-icon icon="edit"/></a>
+        <a class="btn-edit" v-on:click="edit()" v-show="editMode.active && !g.edit">
+            <img alt="pen" src="@/assets/img/icons8-ball-point-pen-16.png">
+        </a>
     </span>
 </template>
 
@@ -26,7 +28,8 @@
         props: {
             label: String,
             value: String,
-            callback: Function
+            callback: Function,
+            editMode: Object,
         },
         data: function () {
             return {g: {edit: false, value: ""}}

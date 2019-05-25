@@ -1,8 +1,8 @@
 <template>
     <EditableLabelNumber
             :edit-mode="editMode"
-            :value="goals"
-            :callback="updateGoals"
+            :value="teamState.ballPlacementFailures"
+            :callback="updateBallPlacementFailures"
             :min="0"
             :max="99"/>
 </template>
@@ -11,29 +11,26 @@
     import EditableLabelNumber from "../common/EditableLabelNumber";
 
     export default {
-        name: "TeamScore",
+        name: "TeamPlacementFailures",
         components: {EditableLabelNumber},
         props: {
             teamColor: String,
             editMode: Object,
         },
+        computed: {
+            teamState: function () {
+                return this.$store.state.refBoxState.teamState[this.teamColor]
+            }
+        },
         methods: {
-            updateGoals: function (v) {
+            updateBallPlacementFailures: function (v) {
                 this.$socket.sendObj({
                     'modify': {
                         'forTeam': this.teamColor,
-                        'goals': Number(v)
+                        'ballPlacementFailures': Number(v)
                     }
                 })
-            }
-        },
-        computed: {
-            team() {
-                return this.$store.state.refBoxState.teamState[this.teamColor]
             },
-            goals() {
-                return this.team.goals;
-            }
         }
     }
 </script>

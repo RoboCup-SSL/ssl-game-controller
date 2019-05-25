@@ -1,39 +1,34 @@
 <template>
-    <EditableLabelNumber
+    <EditableLabelDuration
             :edit-mode="editMode"
-            :value="goals"
-            :callback="updateGoals"
-            :min="0"
-            :max="99"/>
+            :value="team.timeoutTimeLeft"
+            :callback="updateTimeoutTimeLeft"/>
 </template>
 
 <script>
-    import EditableLabelNumber from "../common/EditableLabelNumber";
+    import EditableLabelDuration from "../common/EditableLabelDuration";
 
     export default {
-        name: "TeamScore",
-        components: {EditableLabelNumber},
+        name: "TeamTimeoutTime",
+        components: {EditableLabelDuration},
         props: {
             teamColor: String,
             editMode: Object,
         },
         methods: {
-            updateGoals: function (v) {
+            updateTimeoutTimeLeft: function (v) {
                 this.$socket.sendObj({
                     'modify': {
                         'forTeam': this.teamColor,
-                        'goals': Number(v)
+                        'timeoutTimeLeft': v
                     }
                 })
-            }
+            },
         },
         computed: {
             team() {
                 return this.$store.state.refBoxState.teamState[this.teamColor]
             },
-            goals() {
-                return this.team.goals;
-            }
         }
     }
 </script>

@@ -1,6 +1,6 @@
 <template>
     <EditableLabelNumber
-            label="Goalkeeper: "
+            :edit-mode="editMode"
             title="The goalkeeper number"
             :value="goalkeeper"
             :callback="updateGoalkeeper"
@@ -16,7 +16,7 @@
         components: {EditableLabelNumber},
         props: {
             teamColor: String,
-            goalkeeper: Number
+            editMode: Object,
         },
         methods: {
             updateGoalkeeper: function (v) {
@@ -27,6 +27,14 @@
                     }
                 })
             },
+        },
+        computed: {
+            team() {
+                return this.$store.state.refBoxState.teamState[this.teamColor]
+            },
+            goalkeeper() {
+                return this.team.goalkeeper;
+            }
         }
     }
 </script>

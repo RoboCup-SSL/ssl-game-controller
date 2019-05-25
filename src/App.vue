@@ -6,7 +6,7 @@
         </div>
         <div id="main-elements">
             <div class="team-container">
-                <TeamOverview class="team-views" team-color="Yellow"/>
+                <TeamOverview class="team-views"/>
                 <ControlTeam class="team-views" team-color="Yellow"/>
                 <CurrentEvents class="team-views"/>
             </div>
@@ -25,7 +25,6 @@
                 </div>
             </div>
             <div class="team-container">
-                <TeamOverview class="team-views" team-color="Blue"/>
                 <ControlTeam class="team-views" team-color="Blue"/>
                 <EventProposals class="team-views"/>
             </div>
