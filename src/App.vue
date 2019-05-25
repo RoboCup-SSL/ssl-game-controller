@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <div id="app-header">
-            <ControlGeneral class="app-header-item"/>
+            <MatchSettingsBar class="app-header-item"/>
             <GameState id="game-state" class="app-header-item"/>
         </div>
         <div id="main-elements">
@@ -12,29 +12,31 @@
             <CurrentEvents class="view"/>
             <EventProposals class="view"/>
         </div>
-        <ControlMatch id="match-controls"/>
+        <ControlFlowBar id="match-controls"/>
     </div>
 </template>
 
 <script>
     import GameState from './components/GameState.vue'
     import TeamOverview from "./components/team/TeamOverview";
-    import ControlGeneral from "./components/control/ControlGeneral";
-    import ControlTeam from "./components/control/ControlTeam";
-    import ControlMatch from "./components/control/ControlMatch";
+    import ControlFlowBar from "./components/control/ControlFlowBar";
+    import ControlTeam from "./components/manual-control/ManualControlTeam";
+    import MatchSettingsBar from "./components/control/MatchSettingsBar";
     import Events from "./components/events/Events";
     import EventProposals from "./components/events/EventProposals";
     import CurrentEvents from "./components/events/CurrentEvents";
+    import Settings from "./components/settings/Settings";
 
     export default {
         name: 'app',
         components: {
+            Settings,
             CurrentEvents,
             EventProposals,
             Events,
-            ControlMatch,
+            MatchSettingsBar,
             ControlTeam,
-            ControlGeneral,
+            ControlFlowBar,
             TeamOverview,
             GameState
         },

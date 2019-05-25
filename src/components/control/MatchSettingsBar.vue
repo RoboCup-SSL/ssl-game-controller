@@ -1,0 +1,94 @@
+<template>
+    <div>
+        <div class="btn-group">
+            <Settings/>
+        </div>
+
+        <div class="btn-group-toggle btn-group" v-hotkey="keymapToggleAutoRef">
+            <label v-b-tooltip.hover
+                   :title="'Enable automatic continuation based on game events (' + Object.keys(keymapToggleAutoRef)[0] + ')'"
+                   :class="{btn:true, 'btn-secondary': true, active: autoContinue}"
+                   @click="setAutoContinue(true)">
+                Auto
+            </label>
+            <label v-b-tooltip.hover
+                   :title="'Disable automatic continuation based on game events (' + Object.keys(keymapToggleAutoRef)[0] + ')'"
+                   :class="{btn:true, 'btn-secondary': true, active: !autoContinue}"
+                   @click="setAutoContinue(false)">
+                Manual
+            </label>
+        </div>
+
+        <b-button v-b-tooltip.hover title="Proceed to the next stage"
+                  v-on:click="nextStage"
+                  :disabled="forbidMatchControls || noNextStage">
+            Next Stage
+        </b-button>
+
+        <b-button v-b-tooltip.hover title="Finish the game"
+                  v-on:click="endGame"
+                  :disabled="forbidMatchControls || noNextStage">
+            End of Game
+        </b-button>
+    </div>
+</template>
+
+<script>
+    import Settings from "../settings/Settings";
+
+    export default {
+        name: "MatchSettingsBar",
+        components: {Settings},
+        methods: {
+            nextStage: function () {
+                this.$socket.sendObj({
+                    'stage': {'stageOperation': 'next'}
+                })
+            },
+            endGame: function () {
+                this.$socket.sendObj({
+                    'stage': {'stageOperation': 'endGame'}
+                })
+            },
+            setAutoContinue(enabled) {
+                this.$socket.sendObj({
+                    'modify': {'autoContinue': enabled}
+                })
+            },
+        },
+        computed: {
+            state() {
+                return this.$store.state.refBoxState
+            },
+            halted() {
+                return this.state.command === 'halt';
+            },
+            stopped() {
+                return this.state.command === 'stop';
+            },
+            forbidMatchControls() {
+                return !this.stopped && !this.halted;
+            },
+            noNextStage() {
+                return this.state.stage === 'End of Game';
+            },
+            autoContinue() {
+                return this.state.autoContinue;
+            },
+            keymapToggleAutoRef() {
+                return {
+                    'ctrl+alt+numpad 2': () => {
+                        this.setAutoContinue(!this.autoContinue)
+                    }
+                }
+            },
+        }
+    }
+</script>
+
+<style scoped>
+    button, .btn-group {
+        margin-right: 0.5em;
+        margin-bottom: 0.5em;
+    }
+</style>
