@@ -7,6 +7,7 @@ import (
 	"github.com/pkg/errors"
 	"log"
 	"math/rand"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -540,6 +541,9 @@ func (e *Engine) processTeamModify(m *EventModifyValue) error {
 		}
 		if duration, err := strToDuration(m.YellowCardTime.Duration); err == nil {
 			teamState.YellowCardTimes[cardId] = duration
+			sort.SliceStable(teamState.YellowCardTimes, func(i, j int) bool {
+				return teamState.YellowCardTimes[i] < teamState.YellowCardTimes[j]
+			})
 		}
 	} else if m.TimeoutTimeLeft != nil {
 		if duration, err := strToDuration(*m.TimeoutTimeLeft); err == nil {
