@@ -1,5 +1,20 @@
 <template>
     <div class="control-general">
+        <div class="btn-group">
+            <a v-b-modal.settings-modal>
+                <font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon>
+            </a>
+            <b-modal id="settings-modal"
+                     title="Settings"
+                     size="lg"
+                     :lazy="true">
+                <Settings/>
+                <div slot="modal-footer">
+                    <!-- hide modal buttons -->
+                </div>
+            </b-modal>
+        </div>
+
         <span v-b-tooltip.hover
               :title="'Immediately stop all robots (' + Object.keys(keymapHalt)[0] + ')'">
             <b-button v-hotkey="keymapHalt"
@@ -64,9 +79,11 @@
 
 <script>
     import {isNonPausedStage, isPreStage} from "../../refereeState";
+    import Settings from "../settings/Settings";
 
     export default {
         name: "ControlGeneral",
+        components: {Settings},
         methods: {
             send: function (command) {
                 this.$socket.sendObj({command: {commandType: command}})

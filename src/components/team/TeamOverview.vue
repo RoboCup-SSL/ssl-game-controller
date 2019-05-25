@@ -18,18 +18,9 @@
         </h2>
         <div class="content">
             <div>
-                <TeamName
-                        :team-color="teamColor"/>
-            </div>
-            <div>
                 <TeamGoalkeeper
                         :team-color="teamColor"
                         :goalkeeper="team.goalkeeper"/>
-            </div>
-            <div>
-                <TeamScore
-                        :team-color="teamColor"
-                        :score="team.goals"/>
             </div>
             <div>
                 <TeamTimeouts
@@ -53,15 +44,7 @@
                         :team-color="teamColor"/>
             </div>
             <div>
-                <TeamBallPlacement
-                        :team-color="teamColor"/>
-            </div>
-            <div>
                 <TeamBotSubstitution
-                        :team-color="teamColor"/>
-            </div>
-            <div>
-                <TeamHalf
                         :team-color="teamColor"/>
             </div>
             <div>
@@ -72,32 +55,24 @@
 </template>
 
 <script>
-    import TeamScore from "./TeamScore";
     import TeamTimeouts from "./TeamTimeouts";
     import TeamGoalkeeper from "./TeamGoalkeeper";
     import EditableLabelText from "../common/EditableLabelText";
-    import TeamHalf from "./TeamHalf";
-    import TeamName from "./TeamName";
     import TeamYellowCards from "./TeamYellowCards";
     import TeamRedCards from "./TeamRedCards";
     import TeamCounters from "./TeamCounters";
-    import TeamBallPlacement from "./TeamBallPlacement";
     import TeamBotSubstitution from "./TeamBotSubstitution";
 
     export default {
         name: "TeamOverview",
         components: {
             TeamBotSubstitution,
-            TeamBallPlacement,
             TeamCounters,
             TeamRedCards,
             TeamYellowCards,
-            TeamName,
-            TeamHalf,
             EditableLabelText,
             TeamGoalkeeper,
             TeamTimeouts,
-            TeamScore
         },
         props: {
             teamColor: String

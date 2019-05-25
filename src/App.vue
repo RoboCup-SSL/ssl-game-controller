@@ -182,12 +182,4 @@
         width: 100%;
         height: 100%
     }
-
-    .team-yellow {
-        color: gold;
-    }
-
-    .team-blue {
-        color: blue;
-    }
 </style>

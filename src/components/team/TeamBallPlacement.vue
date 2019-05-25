@@ -1,6 +1,5 @@
 <template>
     <div>
-        <label>{{ballPlacementState}}</label>
         <a class="btn-edit" v-on:click="edit()">
             <font-awesome-icon icon="toggle-on" v-if="canPlaceBall"/>
             <font-awesome-icon icon="toggle-off" v-if="!canPlaceBall"/>
@@ -30,12 +29,6 @@
             },
             canPlaceBall() {
                 return this.teamState.canPlaceBall;
-            },
-            ballPlacementState() {
-                if (this.canPlaceBall) {
-                    return 'Ball Placement enabled'
-                }
-                return 'Ball Placement disabled';
             }
         }
     }

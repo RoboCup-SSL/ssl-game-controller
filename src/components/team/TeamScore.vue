@@ -1,7 +1,6 @@
 <template>
     <EditableLabelNumber
-            :label="'Goals: '"
-            :value="score"
+            :value="goals"
             :callback="updateGoals"
             :min="0"
             :max="99"/>
@@ -14,7 +13,6 @@
         name: "TeamScore",
         components: {EditableLabelNumber},
         props: {
-            score: Number,
             teamColor: String
         },
         methods: {
@@ -25,6 +23,14 @@
                         'goals': Number(v)
                     }
                 })
+            }
+        },
+        computed: {
+            team() {
+                return this.$store.state.refBoxState.teamState[this.teamColor]
+            },
+            goals() {
+                return this.team.goals;
             }
         }
     }
