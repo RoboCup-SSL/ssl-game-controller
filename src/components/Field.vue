@@ -50,18 +50,9 @@
 
 <style scoped>
 
-    @media only screen and (max-width: 1600px) {
-        .container {
-            order: 10;
-        }
-    }
-
-    @-moz-document url-prefix() {
-        /* CSS-Hack for limiting following style to Firefox only */
-        .container {
-            /* Setting height to 100% in Chrome and Firefox has contradictory effects*/
-            height: 100%;
-        }
+    .container {
+        width: 100%;
+        height: 90vh;
     }
 
     .vision-client {
@@ -72,7 +63,5 @@
 
     iframe {
         border: 0;
-        width: 100%;
-        height: 100%
     }
 </style>

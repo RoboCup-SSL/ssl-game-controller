@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import VueRouter from 'vue-router'
 import App from './App.vue'
 import store from "./store";
 // use a custom timestamp formatter from this project
@@ -29,12 +30,16 @@ import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 import VueNativeSock from 'vue-native-websocket'
 
 import './assets/css/style.css'
+import AutonomousControl from "./components/AutonomousControl";
+import Field from "./components/Field";
 
 Vue.use(TimestampFormatter);
 
 Vue.use(VueHotkey);
 
 Vue.use(BootstrapVue);
+
+Vue.use(VueRouter);
 
 library.add(faEdit);
 library.add(faCaretSquareDown);
@@ -69,8 +74,18 @@ Vue.use(VueNativeSock, wsAddress, {
     store: store,
 });
 
+const routes = [
+    {path: '/autonomous', component: AutonomousControl},
+    {path: '/field', component: Field},
+    {path: '/', component: AutonomousControl},
+];
+const router = new VueRouter({
+    routes
+});
+
 // create root vue
 new Vue({
     render: h => h(App),
     store,
+    router,
 }).$mount('#app');
