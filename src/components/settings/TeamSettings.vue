@@ -49,10 +49,10 @@
 </template>
 
 <script>
-    import TeamName from "../team/TeamName";
-    import TeamScore from "../team/TeamScore";
-    import TeamBallPlacement from "../team/TeamBallPlacement";
-    import TeamHalf from "../team/TeamHalf";
+    import TeamName from "./team/TeamName";
+    import TeamScore from "./team/TeamScore";
+    import TeamBallPlacement from "./team/TeamBallPlacement";
+    import TeamHalf from "./team/TeamHalf";
 
     export default {
         name: "TeamSettings",

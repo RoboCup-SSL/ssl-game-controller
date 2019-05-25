@@ -8,7 +8,7 @@
 </template>
 
 <script>
-    import EditableLabelSelect from "../common/EditableLabelSelect";
+    import EditableLabelSelect from "../../common/EditableLabelSelect";
 
     export const TEAMS = [
         "",

@@ -129,12 +129,10 @@
 <script>
     import TeamTimeouts from "./TeamTimeouts";
     import TeamGoalkeeper from "./TeamGoalkeeper";
-    import EditableLabelText from "../common/EditableLabelText";
     import TeamYellowCards from "./TeamYellowCards";
     import TeamRedCards from "./TeamRedCards";
     import TeamBotSubstitution from "./TeamBotSubstitution";
     import TeamConnection from "./TeamConnection";
-    import TeamBallPlacement from "./TeamBallPlacement";
     import TeamFoulCounter from "./TeamFoulCounter";
     import TeamPlacementFailures from "./TeamPlacementFailures";
     import TeamTimeoutTime from "./TeamTimeoutTime";
@@ -149,12 +147,10 @@
             TeamTimeoutTime,
             TeamPlacementFailures,
             TeamFoulCounter,
-            TeamBallPlacement,
             TeamConnection,
             TeamBotSubstitution,
             TeamRedCards,
             TeamYellowCards,
-            EditableLabelText,
             TeamGoalkeeper,
             TeamTimeouts,
         },

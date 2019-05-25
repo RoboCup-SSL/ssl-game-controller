@@ -8,7 +8,7 @@
 </template>
 
 <script>
-    import EditableLabelNumber from "../common/EditableLabelNumber";
+    import EditableLabelNumber from "../../common/EditableLabelNumber";
 
     export default {
         name: "TeamScore",
