@@ -14,11 +14,20 @@
                 <span v-for="detail in detailsList(gameEvent)"
                       :key="detail.key">{{detail.key}}: {{detail.value}}<br/></span>
                 </p>
-                <div class="btn-revoke"
-                     v-b-tooltip.hover.righttop="'Revoke this game event'">
-                    <a @click="revoke(index)">
-                        <font-awesome-icon icon="times-circle" class="fa-lg"></font-awesome-icon>
-                    </a>
+                <div class="buttons">
+                    <div class="btn-revoke"
+                         v-b-tooltip.hover.righttop="'Revoke this game event'">
+                        <a @click="revoke(index)">
+                            <font-awesome-icon icon="times-circle" class="fa-lg"></font-awesome-icon>
+                        </a>
+                    </div>
+                    <div class="btn-accept"
+                         v-if="gameEvent.type === 'possibleGoal'"
+                         v-b-tooltip.hover.righttop="'Accept this game event'">
+                        <a @click="acceptGoal(gameEvent)">
+                            <font-awesome-icon icon="check-circle" class="fa-lg"></font-awesome-icon>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -67,6 +76,14 @@
                     "modify": {"removeGameEvent": index}
                 });
             },
+            acceptGoal(gameEvent) {
+                let goalEvent = {};
+                Object.assign(goalEvent, gameEvent);
+                goalEvent.type = 'goal';
+                this.$socket.sendObj({
+                    gameEvent: goalEvent
+                });
+            },
         }
     }
 </script>
@@ -83,10 +100,19 @@
         min-height: 2em;
     }
 
-    .btn-revoke {
+    .buttons {
         position: absolute;
         right: 0;
         bottom: 0;
-        margin: 0.3em;
+        margin: 0.0em;
+        display: flex;
+    }
+
+    .btn-revoke {
+        margin: 0.1em;
+    }
+
+    .btn-accept {
+        margin: 0.1em;
     }
 </style>
