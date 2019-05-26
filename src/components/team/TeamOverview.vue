@@ -74,7 +74,7 @@
                 </td>
                 <td>Placement Failures</td>
                 <td>
-                    <TeamPlacementFailures :edit-mode="editMode" team-color="Yellow"/>
+                    <TeamPlacementFailures :edit-mode="editMode" team-color="Blue"/>
                 </td>
             </tr>
             <tr>
