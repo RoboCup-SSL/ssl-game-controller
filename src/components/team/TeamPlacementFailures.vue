@@ -1,5 +1,6 @@
 <template>
     <EditableLabelNumber
+            :class="{highlighted: !teamState.canPlaceBall}"
             :edit-mode="editMode"
             :value="teamState.ballPlacementFailures"
             :callback="updateBallPlacementFailures"
@@ -36,5 +37,7 @@
 </script>
 
 <style scoped>
-
+    .highlighted {
+        color: red;
+    }
 </style>
