@@ -15,12 +15,6 @@
                       :key="detail.key">{{detail.key}}: {{detail.value}}<br/></span>
                 </p>
                 <div class="buttons">
-                    <div class="btn-revoke"
-                         v-b-tooltip.hover.righttop="'Revoke this game event'">
-                        <a @click="revoke(index)">
-                            <font-awesome-icon icon="times-circle" class="fa-lg"></font-awesome-icon>
-                        </a>
-                    </div>
                     <div class="btn-accept"
                          v-if="gameEvent.type === 'possibleGoal'"
                          v-b-tooltip.hover.righttop="'Accept this game event'">
@@ -71,11 +65,6 @@
                 }
                 return '';
             },
-            revoke(index) {
-                this.$socket.sendObj({
-                    "modify": {"removeGameEvent": index}
-                });
-            },
             acceptGoal(gameEvent) {
                 let goalEvent = {};
                 Object.assign(goalEvent, gameEvent);
@@ -106,10 +95,6 @@
         bottom: 0;
         margin: 0.0em;
         display: flex;
-    }
-
-    .btn-revoke {
-        margin: 0.1em;
     }
 
     .btn-accept {
