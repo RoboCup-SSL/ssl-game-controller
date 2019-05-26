@@ -13,8 +13,6 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 // Use fontawesome to load some icons
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {
-    faCaretSquareDown,
-    faCaretSquareUp,
     faCheckCircle,
     faTimesCircle,
     faEdit,
@@ -23,7 +21,17 @@ import {
     faToggleOn,
     faShieldAlt,
     faCog,
-    faPen,
+    faHistory,
+    faInfoCircle,
+    faQuestionCircle,
+    faExclamationTriangle,
+    faTerminal,
+    faGavel,
+    faClock,
+    faExclamation,
+    faUsers,
+    faBullhorn,
+    faChessBoard,
 } from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 // Connect to the backend with a single websocket that communicates with JSON format and is attached to the store
@@ -43,8 +51,6 @@ Vue.use(BootstrapVue);
 Vue.use(VueRouter);
 
 library.add(faEdit);
-library.add(faCaretSquareDown);
-library.add(faCaretSquareUp);
 library.add(faToggleOn);
 library.add(faToggleOff);
 library.add(faSignal);
@@ -52,7 +58,17 @@ library.add(faCheckCircle);
 library.add(faTimesCircle);
 library.add(faShieldAlt);
 library.add(faCog);
-library.add(faPen);
+library.add(faHistory);
+library.add(faInfoCircle);
+library.add(faQuestionCircle);
+library.add(faExclamationTriangle);
+library.add(faTerminal);
+library.add(faGavel);
+library.add(faChessBoard);
+library.add(faClock);
+library.add(faExclamation);
+library.add(faUsers);
+library.add(faBullhorn);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 
