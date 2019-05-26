@@ -22,7 +22,7 @@
 <script>
     import TeamSettings from "./TeamSettings";
     import MatchSettings from "./MatchSettings";
-    import EventBehavior from "../events/EventBehavior";
+    import EventBehavior from "./EventBehavior";
     import AutonomousSettings from "./AutonomousSettings";
 
     export default {

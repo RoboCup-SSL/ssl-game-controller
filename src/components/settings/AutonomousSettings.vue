@@ -13,7 +13,7 @@
 </template>
 
 <script>
-    import EventBehavior from "../events/EventBehavior";
+    import EventBehavior from "./EventBehavior";
 
     export default {
         name: "AutonomousSettings",

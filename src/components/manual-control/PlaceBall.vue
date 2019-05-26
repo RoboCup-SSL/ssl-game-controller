@@ -11,7 +11,6 @@
 </template>
 
 <script>
-    import EventAccordion from "./EventAccordion";
     import LocationSelection from "../common/LocationSelection";
     import TeamSelection from "../common/TeamSelection";
     import {convertStringLocation} from "../../refereeState";
@@ -19,7 +18,10 @@
 
     export default {
         name: "PlaceBall",
-        components: {EventAccordion,TeamSelection,LocationSelection},
+        components: {
+            TeamSelection,
+            LocationSelection
+        },
         data() {
             return {
                 model: {

@@ -21,13 +21,12 @@
 
 <script>
     import EventTable from "./EventTable";
-    import NewEvent from "./NewEvent";
-    import EventBehavior from "./EventBehavior";
-    import PlaceBall from "./PlaceBall";
 
     export default {
         name: "Events",
-        components: {PlaceBall, EventBehavior, EventTable, NewEvent},
+        components: {
+            EventTable,
+        },
         data() {
             return {
                 currentPage: 1,
@@ -65,11 +64,6 @@
     .event-controls-container button, input {
         margin-bottom: 1rem;
         margin-left: 1rem;
-    }
-
-    .auto-refs-connected {
-        margin-top: 0.2rem;
-        margin-right: 1rem;
     }
 
     input {

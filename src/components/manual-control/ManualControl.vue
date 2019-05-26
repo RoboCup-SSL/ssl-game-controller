@@ -67,7 +67,7 @@
     import ManualControlCommon from "./ManualControlCommon";
     import ManualControlTeam from "./ManualControlTeam";
     import ManualControlTeamMatchCommands from "./ManualControlTeamMatchCommands";
-    import PlaceBall from "../events/PlaceBall";
+    import PlaceBall from "./PlaceBall";
 
     export default {
         name: "ManualControl",
