@@ -31,11 +31,11 @@
     export default {
         name: "EventProposals",
         computed: {
-            state() {
-                return this.$store.state.refBoxState
+            gcState() {
+                return this.$store.state.gcState
             },
             eventProposals() {
-                return this.state.gameEventProposals;
+                return this.gcState.gameEventProposals;
             },
             eventProposalsPresent() {
                 return this.eventProposals != null && this.eventProposals.length > 0;

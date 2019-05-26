@@ -78,7 +78,7 @@ func (c *GameController) Run() {
 	}
 	c.historyPreserver.CloseOnExit()
 
-	c.ApiServer.PublishState(*c.Engine.State, c.Engine.EngineState)
+	c.ApiServer.PublishState(c.Engine.GcState)
 	c.ApiServer.PublishUiProtocol(c.Engine.UiProtocol)
 	c.TeamServer.AllowedTeamNames = []string{c.Engine.State.TeamState[TeamYellow].Name,
 		c.Engine.State.TeamState[TeamBlue].Name}
@@ -131,7 +131,7 @@ func (c *GameController) updateCi(t time.Time) *refproto.Referee {
 	defer c.StateMutex.Unlock()
 	c.Engine.TimeProvider = func() time.Time { return t }
 	c.update()
-	c.Publisher.Publish(c.Engine.State)
+	c.Publisher.Publish(c.Engine.GcState)
 	return c.Publisher.Message.ProtoMsg
 }
 
@@ -156,7 +156,7 @@ func (c *GameController) publish() {
 		c.Engine.State.TeamState[TeamBlue].Name}
 
 	c.publishUiProtocol()
-	c.ApiServer.PublishState(*c.Engine.State, c.Engine.EngineState)
+	c.ApiServer.PublishState(c.Engine.GcState)
 }
 
 // publishUiProtocol publishes the UI protocol, if it has changed
@@ -170,13 +170,13 @@ func (c *GameController) publishUiProtocol() {
 // updateOnlineStates checks if teams and autoRefs are online and writes this into the state
 func (c *GameController) updateOnlineStates() {
 	for _, team := range []Team{TeamYellow, TeamBlue} {
-		c.Engine.EngineState.TeamConnected[team], c.Engine.EngineState.TeamConnectionVerified[team] = c.teamConnected(team)
+		c.Engine.GcState.TeamConnected[team], c.Engine.GcState.TeamConnectionVerified[team] = c.teamConnected(team)
 	}
 	var autoRefs []string
 	for _, autoRef := range c.AutoRefServer.Clients {
 		autoRefs = append(autoRefs, autoRef.Id)
 	}
-	c.Engine.EngineState.AutoRefsConnected = autoRefs
+	c.Engine.GcState.AutoRefsConnected = autoRefs
 }
 
 // publishToNetwork publishes the current state to the network (multicast) every 25ms
@@ -184,7 +184,7 @@ func (c *GameController) publishToNetwork() {
 	for {
 		time.Sleep(25 * time.Millisecond)
 		c.StateMutex.Lock()
-		c.Publisher.Publish(c.Engine.State)
+		c.Publisher.Publish(c.Engine.GcState)
 		c.StateMutex.Unlock()
 	}
 }

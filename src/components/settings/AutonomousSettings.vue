@@ -24,15 +24,15 @@
             }
         },
         computed: {
-            engineState() {
-                return this.$store.state.engineState
+            gcState() {
+                return this.$store.state.gcState
             },
             autoRefs() {
                 if (this.autoRefsConnected) {
                     let autoRefs = 'Connected AutoRefs: ';
-                    for (let i = 0; i < this.engineState.autoRefsConnected.length; i++) {
-                        autoRefs += this.engineState.autoRefsConnected[i];
-                        if (i !== (this.engineState.autoRefsConnected.length - 1)) {
+                    for (let i = 0; i < this.gcState.autoRefsConnected.length; i++) {
+                        autoRefs += this.gcState.autoRefsConnected[i];
+                        if (i !== (this.gcState.autoRefsConnected.length - 1)) {
                             autoRefs += ', '
                         }
                     }
@@ -40,8 +40,8 @@
                 }
             },
             autoRefsConnected() {
-                if (this.engineState.autoRefsConnected != null) {
-                    return this.engineState.autoRefsConnected.length;
+                if (this.gcState.autoRefsConnected != null) {
+                    return this.gcState.autoRefsConnected.length;
                 }
                 return 0;
             },

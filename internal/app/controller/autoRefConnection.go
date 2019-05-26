@@ -17,12 +17,12 @@ func (c *GameController) ProcessAutoRefRequests(id string, request refproto.Auto
 
 		c.Engine.applyGameEventFilters(event.GameEvent)
 
-		if c.Engine.State.GameEventBehavior[event.GameEvent.Type] == GameEventBehaviorMajority {
+		if c.Engine.GcState.GameEventBehavior[event.GameEvent.Type] == GameEventBehaviorMajority {
 			validUntil := c.Engine.TimeProvider().Add(c.Config.Game.AutoRefProposalTimeout)
 			newProposal := GameEventProposal{GameEvent: *event.GameEvent, ProposerId: id, ValidUntil: validUntil}
 
 			eventPresent := false
-			for _, proposal := range c.Engine.State.GameEventProposals {
+			for _, proposal := range c.Engine.GcState.GameEventProposals {
 				if proposal.GameEvent.Type == event.GameEvent.Type && proposal.ProposerId == newProposal.ProposerId {
 					// update proposal
 					*proposal = newProposal
@@ -30,12 +30,12 @@ func (c *GameController) ProcessAutoRefRequests(id string, request refproto.Auto
 				}
 			}
 			if !eventPresent {
-				c.Engine.State.GameEventProposals = append(c.Engine.State.GameEventProposals, &newProposal)
+				c.Engine.GcState.GameEventProposals = append(c.Engine.GcState.GameEventProposals, &newProposal)
 			}
 
 			totalProposals := 0
 			var origins []string
-			for _, proposal := range c.Engine.State.GameEventProposals {
+			for _, proposal := range c.Engine.GcState.GameEventProposals {
 				if proposal.GameEvent.Type == event.GameEvent.Type && proposal.ValidUntil.After(c.Engine.TimeProvider()) {
 					totalProposals++
 					origins = append(origins, proposal.ProposerId)

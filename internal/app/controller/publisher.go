@@ -99,14 +99,14 @@ func initTeamInfo(t *refproto.Referee_TeamInfo) {
 }
 
 // Publish the state and command
-func (p *Publisher) Publish(state *State) {
-	p.Message.Publish(state)
+func (p *Publisher) Publish(gcState *GameControllerState) {
+	p.Message.Publish(gcState)
 }
 
 // Publish the state and command
-func (p *RefMessage) Publish(state *State) {
-	p.setState(state)
-	p.sendCommands(state)
+func (p *RefMessage) Publish(gcState *GameControllerState) {
+	p.setState(gcState)
+	p.sendCommands(gcState.MatchState)
 }
 
 func (p *Publisher) send() {
@@ -127,10 +127,11 @@ func (p *Publisher) send() {
 	}
 }
 
-func (p *RefMessage) setState(state *State) (republish bool) {
+func (p *RefMessage) setState(gcState *GameControllerState) (republish bool) {
+	state := gcState.MatchState
 	p.ProtoMsg.GameEvents = mapGameEvents(state.GameEvents)
 	p.ProtoMsg.DesignatedPosition = mapLocation(state.PlacementPos)
-	p.ProtoMsg.ProposedGameEvents = mapProposals(state.GameEventProposals)
+	p.ProtoMsg.ProposedGameEvents = mapProposals(gcState.GameEventProposals)
 
 	*p.ProtoMsg.PacketTimestamp = uint64(time.Now().UnixNano() / 1000)
 	*p.ProtoMsg.Stage = mapStage(state.Stage)

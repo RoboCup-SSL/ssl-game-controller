@@ -13,27 +13,59 @@ import (
 	"time"
 )
 
-type EngineState struct {
-	AutoRefsConnected      []string      `json:"autoRefsConnected" yaml:"autoRefsConnected"`
-	TeamConnected          map[Team]bool `json:"teamConnected" yaml:"teamConnected"`
-	TeamConnectionVerified map[Team]bool `json:"teamConnectionVerified" yaml:"teamConnectionVerified"`
+type GameControllerState struct {
+	Division               config.Division                     `json:"division" yaml:"division"`
+	AutoContinue           bool                                `json:"autoContinue" yaml:"autoContinue"`
+	GameEventBehavior      map[GameEventType]GameEventBehavior `json:"gameEventBehavior" yaml:"gameEventBehavior"`
+	GameEventProposals     []*GameEventProposal                `json:"gameEventProposals" yaml:"gameEventProposals"`
+	AutoRefsConnected      []string                            `json:"autoRefsConnected" yaml:"autoRefsConnected"`
+	TeamConnected          map[Team]bool                       `json:"teamConnected" yaml:"teamConnected"`
+	TeamConnectionVerified map[Team]bool                       `json:"teamConnectionVerified" yaml:"teamConnectionVerified"`
+	MatchState             *State                              `json:"matchState" yaml:"matchState"`
 }
 
-func NewEngineState() (e EngineState) {
-	e.AutoRefsConnected = []string{}
-	e.TeamConnected = map[Team]bool{}
-	e.TeamConnected[TeamYellow] = false
-	e.TeamConnected[TeamBlue] = false
-	e.TeamConnectionVerified = map[Team]bool{}
-	e.TeamConnectionVerified[TeamYellow] = false
-	e.TeamConnectionVerified[TeamBlue] = false
+func NewGameControllerState() (s *GameControllerState) {
+	s = new(GameControllerState)
+
+	s.Division = config.DivA
+	s.AutoContinue = true
+
+	s.GameEventBehavior = map[GameEventType]GameEventBehavior{}
+	for _, event := range AllGameEvents() {
+		s.GameEventBehavior[event] = GameEventBehaviorOn
+	}
+
+	s.GameEventProposals = []*GameEventProposal{}
+
+	s.AutoRefsConnected = []string{}
+	s.TeamConnected = map[Team]bool{}
+	s.TeamConnected[TeamYellow] = false
+	s.TeamConnected[TeamBlue] = false
+	s.TeamConnectionVerified = map[Team]bool{}
+	s.TeamConnectionVerified[TeamYellow] = false
+	s.TeamConnectionVerified[TeamBlue] = false
+
+	s.MatchState = NewState()
+	return
+}
+
+func (s GameControllerState) DeepCopy() (c GameControllerState) {
+	c = s
+	c.GameEventProposals = make([]*GameEventProposal, len(s.GameEventProposals))
+	copy(c.GameEventProposals, s.GameEventProposals)
+	c.GameEventBehavior = make(map[GameEventType]GameEventBehavior)
+	for k, v := range s.GameEventBehavior {
+		c.GameEventBehavior[k] = v
+	}
+	c.MatchState = new(State)
+	*c.MatchState = s.MatchState.DeepCopy()
 	return
 }
 
 type Engine struct {
 	State          *State
+	GcState        *GameControllerState
 	UiProtocol     []UiProtocolEntry
-	EngineState    EngineState
 	StageTimes     map[Stage]time.Duration
 	config         config.Game
 	TimeProvider   timer.TimeProvider
@@ -45,7 +77,9 @@ type Engine struct {
 
 func NewEngine(config config.Game, seed int64) (e Engine) {
 	e.config = config
-	e.EngineState = NewEngineState()
+	e.GcState = NewGameControllerState()
+	e.GcState.Division = e.config.DefaultDivision
+	e.Geometry = *e.config.DefaultGeometry[e.GcState.Division]
 	e.loadStages()
 	e.ResetGame()
 	e.TimeProvider = func() time.Time { return time.Now() }
@@ -71,14 +105,13 @@ func (e *Engine) loadStages() {
 
 func (e *Engine) ResetGame() {
 	e.State = NewState()
+	e.GcState.MatchState = e.State
 	e.UiProtocol = []UiProtocolEntry{}
-	e.State.Division = e.config.DefaultDivision
-	e.Geometry = *e.config.DefaultGeometry[e.State.Division]
 
 	for _, team := range []Team{TeamBlue, TeamYellow} {
 		e.State.TeamState[team].TimeoutTimeLeft = e.config.Normal.TimeoutDuration
 		e.State.TeamState[team].TimeoutsLeft = e.config.Normal.Timeouts
-		e.State.TeamState[team].MaxAllowedBots = e.config.MaxBots[e.State.Division]
+		e.State.TeamState[team].MaxAllowedBots = e.config.MaxBots[e.GcState.Division]
 	}
 }
 
@@ -193,8 +226,8 @@ func (e *Engine) SendCommand(command RefCommand, forTeam Team) {
 			e.State.GameEvents = []*GameEvent{}
 		}
 		// reset game event proposals
-		if len(e.State.GameEventProposals) > 0 {
-			e.State.GameEventProposals = []*GameEventProposal{}
+		if len(e.GcState.GameEventProposals) > 0 {
+			e.GcState.GameEventProposals = []*GameEventProposal{}
 		}
 		// reset ball placement pos and follow ups
 		e.State.PlacementPos = nil
@@ -203,7 +236,7 @@ func (e *Engine) SendCommand(command RefCommand, forTeam Team) {
 
 		// update current action timeout
 		if command == CommandIndirect || command == CommandDirect {
-			e.setCurrentActionTimeout(e.config.FreeKickTime[e.State.Division])
+			e.setCurrentActionTimeout(e.config.FreeKickTime[e.GcState.Division])
 		} else if command != CommandKickoff && command != CommandPenalty {
 			e.setCurrentActionTimeout(e.config.GeneralTime)
 		}
@@ -307,7 +340,7 @@ func (e *Engine) CommandForEvent(event *GameEvent) (command RefCommand, forTeam 
 		}
 
 		if forTeam.Known() &&
-			e.State.Division == config.DivA && // For division A
+			e.GcState.Division == config.DivA && // For division A
 			!e.State.TeamState[forTeam].CanPlaceBall && // If team in favor can not place the ball
 			e.State.TeamState[forTeam.Opposite()].CanPlaceBall && // If opponent team can place the ball
 			primaryGameEvent.Type.resultsFromBallLeavingField() { // event is caused by the ball leaving the field
@@ -377,7 +410,7 @@ func (e *Engine) Process(event Event) error {
 
 func (e *Engine) updateMaxBots() {
 	for _, team := range []Team{TeamBlue, TeamYellow} {
-		max := e.config.MaxBots[e.State.Division]
+		max := e.config.MaxBots[e.GcState.Division]
 		yellowCards := len(e.State.TeamState[team].YellowCardTimes)
 		redCards := e.State.TeamState[team].RedCards
 		e.State.TeamState[team].MaxAllowedBots = max - yellowCards - redCards
@@ -471,14 +504,14 @@ func (e *Engine) processModify(m *EventModifyValue) error {
 	// process team-independent modifies
 	if m.Division != nil {
 		if *m.Division == config.DivA || *m.Division == config.DivB {
-			e.State.Division = *m.Division
+			e.GcState.Division = *m.Division
 		} else {
 			return errors.Errorf("Invalid division: %v", *m.Division)
 		}
 	} else if m.AutoContinue != nil {
-		e.State.AutoContinue = *m.AutoContinue
+		e.GcState.AutoContinue = *m.AutoContinue
 	} else if m.GameEventBehavior != nil {
-		e.State.GameEventBehavior[m.GameEventBehavior.GameEventType] = m.GameEventBehavior.GameEventBehavior
+		e.GcState.GameEventBehavior[m.GameEventBehavior.GameEventType] = m.GameEventBehavior.GameEventBehavior
 	} else if m.RemoveGameEvent != nil {
 		i := *m.RemoveGameEvent
 		if i >= len(e.State.GameEvents) {
@@ -707,7 +740,7 @@ func (e *Engine) processTrigger(t *EventTrigger) (err error) {
 }
 
 func (e *Engine) disabledGameEvent(event GameEventType) bool {
-	for eventType, behavior := range e.State.GameEventBehavior {
+	for eventType, behavior := range e.GcState.GameEventBehavior {
 		if event == eventType {
 			return behavior == GameEventBehaviorOff
 		}
@@ -819,7 +852,7 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 		e.SendCommand(CommandHalt, "")
 	} else if !event.IsSkipped() && !event.IsSecondary() && !e.State.Command.IsPrepare() {
 		e.placeBall(event)
-	} else if e.State.AutoContinue && event.IsContinueGame() {
+	} else if e.GcState.AutoContinue && event.IsContinueGame() {
 		e.Continue()
 	} else {
 		log.Printf("No change in game with event %v", event)
@@ -856,14 +889,14 @@ func (e *Engine) placeBall(event *GameEvent) {
 	if nextCommand == CommandPenalty || nextCommand == CommandKickoff {
 		e.SendCommand(CommandHalt, "")
 		e.LogHint("manualPlacement", "manual placement required for kickoff and penalty", teamInFavor)
-	} else if e.State.Division == config.DivA && // For division A
+	} else if e.GcState.Division == config.DivA && // For division A
 		!e.State.TeamState[teamInFavor].CanPlaceBall && // If team in favor can not place the ball
 		e.State.TeamState[teamInFavor.Opposite()].CanPlaceBall && // If opponent team can place the ball
 		event.Type.resultsFromBallLeavingField() {
 		// Rule: All free kicks that were a result of the ball leaving the field, are awarded to the opposing team.
 		e.SendCommand(CommandBallPlacement, teamInFavor.Opposite())
 		log.Printf("Let opponent place the ball in DivA")
-	} else if e.State.Division == config.DivB && // For division B
+	} else if e.GcState.Division == config.DivB && // For division B
 		!e.State.TeamState[teamInFavor].CanPlaceBall && // If team in favor can not place the ball
 		e.State.TeamState[teamInFavor.Opposite()].CanPlaceBall && // If opponent team can place the ball
 		event.Type != GameEventPlacementFailed { // opponent team has not failed recently
@@ -905,7 +938,7 @@ func (e *Engine) allTeamsFailedPlacement() bool {
 
 func (e *Engine) filterAimlessKickForDivA(gameEvent *GameEvent) {
 	details := gameEvent.Details
-	if e.State.Division == config.DivA && gameEvent.Type == GameEventAimlessKick {
+	if e.GcState.Division == config.DivA && gameEvent.Type == GameEventAimlessKick {
 		// there is no aimless kick in division A. Map it to a ball left field event
 		gameEvent.Type = GameEventBallLeftFieldGoalLine
 		aimlessKickDetails := details.AimlessKick

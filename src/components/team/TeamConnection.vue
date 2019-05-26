@@ -32,10 +32,10 @@
         },
         computed: {
             teamConnected() {
-                return this.$store.state.engineState.teamConnected[this.teamColor]
+                return this.$store.state.gcState.teamConnected[this.teamColor]
             },
             teamConnectionVerified() {
-                return this.$store.state.engineState.teamConnectionVerified[this.teamColor]
+                return this.$store.state.gcState.teamConnectionVerified[this.teamColor]
             }
         }
     }

@@ -76,7 +76,7 @@
                 return this.$store.state.refBoxState
             },
             isDivA() {
-                return this.$store.state.refBoxState.division === 'DivA';
+                return this.$store.state.gcState.division === 'DivA';
             },
             halted() {
                 return this.state.command === 'halt';

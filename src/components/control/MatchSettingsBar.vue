@@ -88,7 +88,7 @@
                 return this.state.stage === 'End of Game';
             },
             autoContinue() {
-                return this.state.autoContinue;
+                return this.$store.state.gcState.autoContinue;
             },
             keymapToggleAutoRef() {
                 return {

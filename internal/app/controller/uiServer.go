@@ -8,11 +8,10 @@ import (
 )
 
 type ApiServer struct {
-	Consumer          EventConsumer
-	connections       []*websocket.Conn
-	latestState       State
-	latestUiProtocol  []UiProtocolEntry
-	latestEngineState EngineState
+	Consumer         EventConsumer
+	connections      []*websocket.Conn
+	latestState      GameControllerState
+	latestUiProtocol []UiProtocolEntry
 }
 
 type EventConsumer interface {
@@ -20,9 +19,8 @@ type EventConsumer interface {
 }
 
 type MessageWrapper struct {
-	State       *State             `json:"state"`
-	UiProtocol  *[]UiProtocolEntry `json:"gameEvents"`
-	EngineState *EngineState       `json:"engineState"`
+	UiProtocol *[]UiProtocolEntry   `json:"gameEvents"`
+	GcState    *GameControllerState `json:"gcState"`
 }
 
 // WsHandler handles incoming web socket connections
@@ -49,7 +47,7 @@ func (a *ApiServer) WsHandler(w http.ResponseWriter, r *http.Request) {
 	a.listenForNewEvents(conn)
 }
 
-func (a *ApiServer) PublishWrapper(wrapper MessageWrapper) {
+func (a *ApiServer) publishWrapper(wrapper MessageWrapper) {
 	b, err := json.Marshal(wrapper)
 	if err != nil {
 		log.Println("Marshal error:", err)
@@ -64,28 +62,20 @@ func (a *ApiServer) PublishWrapper(wrapper MessageWrapper) {
 }
 
 func (a *ApiServer) publishFullWrapper(conn *websocket.Conn) {
-	wrapper := MessageWrapper{&a.latestState, &a.latestUiProtocol, &a.latestEngineState}
-	b, err := json.Marshal(wrapper)
-	if err != nil {
-		log.Println("Marshal error:", err)
-	}
-	err = conn.WriteMessage(websocket.TextMessage, b)
-	if err != nil {
-		log.Println("Could not write message.", err)
-	}
+	wrapper := MessageWrapper{UiProtocol: &a.latestUiProtocol, GcState: &a.latestState}
+	a.publishWrapper(wrapper)
 }
 
-func (a *ApiServer) PublishState(state State, engineState EngineState) {
-	a.latestState = state
-	a.latestEngineState = engineState
-	wrapper := MessageWrapper{State: &state, EngineState: &engineState}
-	a.PublishWrapper(wrapper)
+func (a *ApiServer) PublishState(gcState *GameControllerState) {
+	a.latestState = *gcState
+	wrapper := MessageWrapper{GcState: gcState}
+	a.publishWrapper(wrapper)
 }
 
 func (a *ApiServer) PublishUiProtocol(protocol []UiProtocolEntry) {
 	a.latestUiProtocol = protocol
 	wrapper := MessageWrapper{UiProtocol: &protocol}
-	a.PublishWrapper(wrapper)
+	a.publishWrapper(wrapper)
 }
 
 func (a *ApiServer) disconnect(conn *websocket.Conn) {

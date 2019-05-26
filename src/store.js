@@ -28,16 +28,16 @@ export class RefBoxState {
     stageTimeLeft = 0;
     matchDuration = 0;
     teamState = {'Yellow': new TeamState(), 'Blue': new TeamState()};
-    division = 'DivA';
-    autoContinue = true;
     nextCommand = '';
     nextCommandFor = '';
-    gameEventBehavior = {};
-    gameEventProposals = [{proposerId: '', gameEvent: {type: '', details: {foo: 'bar'}}, validUntil: 0}];
     currentActionTimeRemaining = 0;
 }
 
-export class EngineState {
+export class GcState {
+    division = 'DivA';
+    autoContinue = true;
+    gameEventBehavior = {};
+    gameEventProposals = [{proposerId: '', gameEvent: {type: '', details: {foo: 'bar'}}, validUntil: 0}];
     autoRefsConnected = [];
     teamConnected = {'Yellow': false, 'Blue': false};
     teamConnectionVerified = {'Yellow': false, 'Blue': false};
@@ -47,7 +47,7 @@ export default new Vuex.Store({
     state: {
         refBoxState: new RefBoxState(),
         gameEvents: [],
-        engineState: new EngineState()
+        gcState: new GcState()
     },
     mutations: {
         SOCKET_ONOPEN() {
@@ -57,14 +57,12 @@ export default new Vuex.Store({
         SOCKET_ONERROR() {
         },
         SOCKET_ONMESSAGE(state, message) {
-            if (message.state) {
-                state.refBoxState = message.state;
-            }
             if (message.gameEvents) {
                 state.gameEvents = message.gameEvents;
             }
-            if (message.engineState) {
-                state.engineState = message.engineState;
+            if (message.gcState) {
+                state.gcState = message.gcState;
+                state.refBoxState = message.gcState.matchState;
             }
         },
         SOCKET_RECONNECT() {

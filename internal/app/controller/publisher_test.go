@@ -9,7 +9,7 @@ import (
 )
 
 func Test_updateMessage(t *testing.T) {
-	state := NewState()
+	state := NewGameControllerState()
 
 	r := &RefMessage{Send: func() {}, ProtoMsg: new(refproto.Referee)}
 	referee := r.ProtoMsg

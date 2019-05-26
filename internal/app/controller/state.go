@@ -3,7 +3,6 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
 	"github.com/pkg/errors"
 	"time"
@@ -342,6 +341,31 @@ type TeamInfo struct {
 	BotSubstitutionIntend bool            `json:"botSubstitutionIntend" yaml:"botSubstitutionIntend"`
 }
 
+func newTeamInfo() (t TeamInfo) {
+	t.Name = ""
+	t.Goals = 0
+	t.Goalkeeper = 0
+	t.YellowCards = 0
+	t.YellowCardTimes = []time.Duration{}
+	t.RedCards = 0
+	t.TimeoutsLeft = 0
+	t.TimeoutTimeLeft = 0
+	t.OnPositiveHalf = true
+	t.FoulCounter = 0
+	t.BallPlacementFailures = 0
+	t.CanPlaceBall = true
+	t.MaxAllowedBots = 0
+	return
+}
+
+func (t TeamInfo) String() string {
+	bytes, e := json.Marshal(t)
+	if e != nil {
+		return e.Error()
+	}
+	return string(bytes)
+}
+
 func (t TeamInfo) DeepCopy() (c TeamInfo) {
 	c = t
 	copy(c.YellowCardTimes, t.YellowCardTimes)
@@ -378,24 +402,20 @@ type GameEventProposal struct {
 
 // State of the game
 type State struct {
-	Stage                      Stage                               `json:"stage" yaml:"stage"`
-	Command                    RefCommand                          `json:"command" yaml:"command"`
-	CommandFor                 Team                                `json:"commandForTeam" yaml:"commandForTeam"`
-	GameEvents                 []*GameEvent                        `json:"gameEvents" yaml:"gameEvents"`
-	StageTimeElapsed           time.Duration                       `json:"stageTimeElapsed" yaml:"stageTimeElapsed"`
-	StageTimeLeft              time.Duration                       `json:"stageTimeLeft" yaml:"stageTimeLeft"`
-	MatchTimeStart             time.Time                           `json:"matchTimeStart" yaml:"matchTimeStart"`
-	MatchDuration              time.Duration                       `json:"matchDuration" yaml:"matchDuration"` // MatchDuration contains the updated match duration based on MatchTimeStart for the UI
-	TeamState                  map[Team]*TeamInfo                  `json:"teamState" yaml:"teamState"`
-	Division                   config.Division                     `json:"division" yaml:"division"`
-	PlacementPos               *Location                           `json:"placementPos" yaml:"placementPos"`
-	AutoContinue               bool                                `json:"autoContinue" yaml:"autoContinue"`
-	NextCommand                RefCommand                          `json:"nextCommand" yaml:"nextCommand"`
-	NextCommandFor             Team                                `json:"nextCommandFor" yaml:"nextCommandFor"`
-	GameEventBehavior          map[GameEventType]GameEventBehavior `json:"gameEventBehavior" yaml:"gameEventBehavior"`
-	GameEventProposals         []*GameEventProposal                `json:"gameEventProposals" yaml:"gameEventProposals"`
-	CurrentActionDeadline      time.Time                           `json:"currentActionDeadline" yaml:"currentActionDeadline"`
-	CurrentActionTimeRemaining time.Duration                       `json:"currentActionTimeRemaining" yaml:"currentActionTimeRemaining"` // CurrentActionTimeRemaining contains the updated remaining lack of progress time for the UI
+	Stage                      Stage              `json:"stage" yaml:"stage"`
+	Command                    RefCommand         `json:"command" yaml:"command"`
+	CommandFor                 Team               `json:"commandForTeam" yaml:"commandForTeam"`
+	GameEvents                 []*GameEvent       `json:"gameEvents" yaml:"gameEvents"`
+	StageTimeElapsed           time.Duration      `json:"stageTimeElapsed" yaml:"stageTimeElapsed"`
+	StageTimeLeft              time.Duration      `json:"stageTimeLeft" yaml:"stageTimeLeft"`
+	MatchTimeStart             time.Time          `json:"matchTimeStart" yaml:"matchTimeStart"`
+	MatchDuration              time.Duration      `json:"matchDuration" yaml:"matchDuration"` // MatchDuration contains the updated match duration based on MatchTimeStart for the UI
+	TeamState                  map[Team]*TeamInfo `json:"teamState" yaml:"teamState"`
+	PlacementPos               *Location          `json:"placementPos" yaml:"placementPos"`
+	NextCommand                RefCommand         `json:"nextCommand" yaml:"nextCommand"`
+	NextCommandFor             Team               `json:"nextCommandFor" yaml:"nextCommandFor"`
+	CurrentActionDeadline      time.Time          `json:"currentActionDeadline" yaml:"currentActionDeadline"`
+	CurrentActionTimeRemaining time.Duration      `json:"currentActionTimeRemaining" yaml:"currentActionTimeRemaining"` // CurrentActionTimeRemaining contains the updated remaining lack of progress time for the UI
 }
 
 // NewState creates a new state, initialized for the start of a new game
@@ -418,16 +438,6 @@ func NewState() (s *State) {
 	*s.TeamState[TeamBlue] = newTeamInfo()
 	s.TeamState[TeamBlue].OnPositiveHalf = !s.TeamState[TeamYellow].OnPositiveHalf
 
-	s.Division = config.DivA
-	s.AutoContinue = true
-
-	s.GameEventBehavior = map[GameEventType]GameEventBehavior{}
-	for _, event := range AllGameEvents() {
-		s.GameEventBehavior[event] = GameEventBehaviorOn
-	}
-
-	s.GameEventProposals = []*GameEventProposal{}
-
 	return
 }
 
@@ -435,8 +445,6 @@ func (s State) DeepCopy() (c State) {
 	c = s
 	c.GameEvents = make([]*GameEvent, len(s.GameEvents))
 	copy(c.GameEvents, s.GameEvents)
-	c.GameEventProposals = make([]*GameEventProposal, len(s.GameEventProposals))
-	copy(c.GameEventProposals, s.GameEventProposals)
 	if s.PlacementPos != nil {
 		c.PlacementPos = new(Location)
 		*c.PlacementPos = *s.PlacementPos
@@ -445,10 +453,6 @@ func (s State) DeepCopy() (c State) {
 	for k, v := range s.TeamState {
 		c.TeamState[k] = new(TeamInfo)
 		*c.TeamState[k] = v.DeepCopy()
-	}
-	c.GameEventBehavior = make(map[GameEventType]GameEventBehavior)
-	for k, v := range s.GameEventBehavior {
-		c.GameEventBehavior[k] = v
 	}
 	return
 }
@@ -520,31 +524,6 @@ func (s *State) PrimaryGameEvent() *GameEvent {
 		}
 	}
 	return nil
-}
-
-func newTeamInfo() (t TeamInfo) {
-	t.Name = ""
-	t.Goals = 0
-	t.Goalkeeper = 0
-	t.YellowCards = 0
-	t.YellowCardTimes = []time.Duration{}
-	t.RedCards = 0
-	t.TimeoutsLeft = 0
-	t.TimeoutTimeLeft = 0
-	t.OnPositiveHalf = true
-	t.FoulCounter = 0
-	t.BallPlacementFailures = 0
-	t.CanPlaceBall = true
-	t.MaxAllowedBots = 0
-	return
-}
-
-func (t TeamInfo) String() string {
-	bytes, e := json.Marshal(t)
-	if e != nil {
-		return e.Error()
-	}
-	return string(bytes)
 }
 
 func (s State) String() string {

@@ -28,16 +28,16 @@
     export default {
         name: "EventBehavior",
         computed: {
-            state() {
-                return this.$store.state.refBoxState
+            gcState() {
+                return this.$store.state.gcState
             },
             eventTypes() {
-                return Object.keys(this.state.gameEventBehavior).sort();
+                return Object.keys(this.gcState.gameEventBehavior).sort();
             },
         },
         methods: {
             eventBehavior(eventType) {
-                return this.state.gameEventBehavior[eventType];
+                return this.gcState.gameEventBehavior[eventType];
             },
             changeBehavior(eventType, eventBehavior) {
                 this.$socket.sendObj({

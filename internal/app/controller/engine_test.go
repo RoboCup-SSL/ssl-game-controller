@@ -111,9 +111,9 @@ func processTransitionFile(t *testing.T, fileName string) {
 	if err := stateTransitions.InitialState.valid(); err != nil {
 		t.Fatal(err)
 	}
-	stateTransitions.InitialState.applyTo(e.State)
+	stateTransitions.InitialState.applyTo(e.GcState)
 	// initialize the expected state with the current engine state
-	expectedState := e.State.DeepCopy()
+	expectedState := e.GcState.DeepCopy()
 
 	for i, s := range stateTransitions.Transitions {
 
@@ -140,7 +140,7 @@ func processTransitionFile(t *testing.T, fileName string) {
 		}
 
 		// check if the engine state is equal to the expected state
-		if diff := deep.Equal(*e.State, expectedState); diff != nil {
+		if diff := deep.Equal(*e.GcState, expectedState); diff != nil {
 			t.Errorf("Step %v of %v failed. engine vs expected diff: %v", i+1, fileName, diff)
 		}
 
@@ -220,7 +220,8 @@ func (t *TestState) valid() error {
 	return nil
 }
 
-func (t *TestState) applyTo(s *State) {
+func (t *TestState) applyTo(g *GameControllerState) {
+	s := g.MatchState
 	if t.Stage != nil {
 		s.Stage = *t.Stage
 	}
@@ -252,24 +253,15 @@ func (t *TestState) applyTo(s *State) {
 		t.TeamState[TeamBlue].applyTo(s.TeamState[TeamBlue])
 	}
 	if t.Division != nil {
-		s.Division = *t.Division
+		g.Division = *t.Division
 	}
 	// special case: always apply placement pos in order to make it resettable
 	s.PlacementPos = t.PlacementPos
-	if t.AutoContinue != nil {
-		s.AutoContinue = *t.AutoContinue
-	}
 	if t.NextCommand != nil {
 		s.NextCommand = *t.NextCommand
 	}
 	if t.NextCommandFor != nil {
 		s.NextCommandFor = *t.NextCommandFor
-	}
-	if t.GameEventBehavior != nil {
-		s.GameEventBehavior = *t.GameEventBehavior
-	}
-	if t.GameEventProposals != nil {
-		s.GameEventProposals = t.GameEventProposals
 	}
 	if t.CurrentActionDeadline != nil {
 		s.CurrentActionDeadline = *t.CurrentActionDeadline
