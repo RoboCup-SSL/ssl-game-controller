@@ -36,7 +36,7 @@
                 return this.$store.state.refBoxState
             },
             gameEvents() {
-                return this.state.gameEvents;
+                return this.state.protocol;
             },
             gameEventsPresent() {
                 return this.gameEvents != null && this.gameEvents.length > 0;

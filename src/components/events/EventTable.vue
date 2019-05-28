@@ -29,7 +29,13 @@
             </span>
         </template>
         <template slot="revert" slot-scope="data">
-            <font-awesome-icon class="fa-sm" icon="history"/>
+            <div class="btn-revert"
+                 v-if="data.item.previousState !== null"
+                 v-b-tooltip.hover.righttop="'Revert this event'">
+                <a @click="revertProtocolEntry(data.item.id)">
+                    <font-awesome-icon icon="history" class="fa-sm"></font-awesome-icon>
+                </a>
+            </div>
         </template>
     </b-table>
 </template>
@@ -77,6 +83,11 @@
             formatTimestamp(timestamp) {
                 let date = new Date(timestamp / 1000000);
                 return date.format("HH:MM:ss,l");
+            },
+            revertProtocolEntry(id) {
+                this.$socket.sendObj({
+                    'revertProtocolEntry': Number(id)
+                })
             },
             iconForType(type) {
                 switch (type) {

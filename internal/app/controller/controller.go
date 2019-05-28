@@ -23,7 +23,7 @@ type GameController struct {
 	TeamServer                *rcon.TeamServer
 	CiServer                  rcon.CiServer
 	Engine                    Engine
-	historyPreserver          HistoryPreserver
+	historyPreserver          StatePreserver
 	numUiProtocolsLastPublish int
 	outstandingTeamChoice     *TeamChoice
 	ConnectionMutex           sync.Mutex
@@ -67,19 +67,19 @@ func (c *GameController) Run() {
 	if err := c.historyPreserver.Open(); err != nil {
 		log.Print("Could not open history", err)
 	} else {
-		history, err := c.historyPreserver.Load()
+		state, err := c.historyPreserver.Load()
 		if err != nil {
-			log.Print("Could not load history", err)
-		} else if len(*history) > 0 {
-			c.Engine.History = *history
-			*c.Engine.State = c.Engine.History[len(c.Engine.History)-1].State
-			c.Engine.UiProtocol = c.Engine.History[len(c.Engine.History)-1].UiProtocol
+			log.Print("Could not load state", err)
+		} else if state != nil && state.CurrentState != nil {
+			c.Engine.PersistentState = state
+			c.Engine.GcState = state.CurrentState
+			c.Engine.State = state.CurrentState.MatchState
 		}
 	}
 	c.historyPreserver.CloseOnExit()
 
 	c.ApiServer.PublishState(c.Engine.GcState)
-	c.ApiServer.PublishUiProtocol(c.Engine.UiProtocol)
+	c.ApiServer.PublishUiProtocol(c.Engine.PersistentState.Protocol)
 	c.TeamServer.AllowedTeamNames = []string{c.Engine.State.TeamState[TeamYellow].Name,
 		c.Engine.State.TeamState[TeamBlue].Name}
 
@@ -149,7 +149,7 @@ func (c *GameController) publish() {
 	defer c.PublishMutex.Unlock()
 
 	c.updateOnlineStates()
-	c.historyPreserver.Save(c.Engine.History)
+	c.historyPreserver.Save(c.Engine.PersistentState)
 
 	c.TeamServer.AllowedTeamNames = []string{
 		c.Engine.State.TeamState[TeamYellow].Name,
@@ -161,9 +161,9 @@ func (c *GameController) publish() {
 
 // publishUiProtocol publishes the UI protocol, if it has changed
 func (c *GameController) publishUiProtocol() {
-	if len(c.Engine.UiProtocol) != c.numUiProtocolsLastPublish {
-		c.ApiServer.PublishUiProtocol(c.Engine.UiProtocol)
-		c.numUiProtocolsLastPublish = len(c.Engine.UiProtocol)
+	if len(c.Engine.PersistentState.Protocol) != c.numUiProtocolsLastPublish {
+		c.ApiServer.PublishUiProtocol(c.Engine.PersistentState.Protocol)
+		c.numUiProtocolsLastPublish = len(c.Engine.PersistentState.Protocol)
 	}
 }
 

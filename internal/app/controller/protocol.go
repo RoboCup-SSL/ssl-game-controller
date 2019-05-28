@@ -30,34 +30,46 @@ const (
 	UiProtocolHint UiProtocolType = "hint"
 )
 
-// UiProtocolEntry represents a single protocol entry as should be displayed in the UI table
-type UiProtocolEntry struct {
-	Timestamp   int64          `json:"timestamp"`
-	StageTime   time.Duration  `json:"stageTime"`
-	Type        UiProtocolType `json:"type"`
-	Name        string         `json:"name"`
-	Team        Team           `json:"team"`
-	Description string         `json:"description"`
+func (e *Engine) newGlobalProtocolEntryId() int {
+	defer e.GcState.ProtocolEntryIdCounterMutex.Unlock()
+	e.GcState.ProtocolEntryIdCounterMutex.Lock()
+	e.GcState.ProtocolEntryIdCounter++
+	return e.GcState.ProtocolEntryIdCounter
+}
+
+// ProtocolEntry represents a single protocol entry as should be displayed in the UI table
+type ProtocolEntry struct {
+	Id            int            `json:"id"`
+	Timestamp     int64          `json:"timestamp"`
+	StageTime     time.Duration  `json:"stageTime"`
+	Type          UiProtocolType `json:"type"`
+	Name          string         `json:"name"`
+	Team          Team           `json:"team"`
+	Description   string         `json:"description"`
+	PreviousState *State         `json:"previousState"`
 }
 
 // LogGameEvent adds a game event to the protocol
-func (e *Engine) LogGameEvent(event GameEvent) {
+func (e *Engine) LogGameEvent(event GameEvent, prevState *State) {
 	log.Printf("Log game event: %v", event)
-	entry := UiProtocolEntry{
-		Timestamp:   e.TimeProvider().UnixNano(),
-		StageTime:   e.State.StageTimeElapsed,
-		Type:        UiProtocolGameEvent,
-		Name:        string(event.Type),
-		Team:        event.ByTeam(),
-		Description: event.Details.String(),
+	entry := ProtocolEntry{
+		Id:            e.newGlobalProtocolEntryId(),
+		Timestamp:     e.TimeProvider().UnixNano(),
+		StageTime:     e.State.StageTimeElapsed,
+		Type:          UiProtocolGameEvent,
+		Name:          string(event.Type),
+		Team:          event.ByTeam(),
+		Description:   event.Details.String(),
+		PreviousState: prevState,
 	}
-	e.UiProtocol = append(e.UiProtocol, entry)
+	e.PersistentState.Add(&entry)
 }
 
 // LogIgnoredGameEvent adds an ignored game event to the protocol
 func (e *Engine) LogIgnoredGameEvent(event GameEvent) {
 	log.Printf("Log ignored game event: %v", event)
-	entry := UiProtocolEntry{
+	entry := ProtocolEntry{
+		Id:          e.newGlobalProtocolEntryId(),
 		Timestamp:   e.TimeProvider().UnixNano(),
 		StageTime:   e.State.StageTimeElapsed,
 		Type:        UiProtocolGameEventIgnored,
@@ -65,7 +77,7 @@ func (e *Engine) LogIgnoredGameEvent(event GameEvent) {
 		Team:        event.ByTeam(),
 		Description: event.Details.String(),
 	}
-	e.UiProtocol = append(e.UiProtocol, entry)
+	e.PersistentState.Add(&entry)
 }
 
 // LogCommand adds a command to the protocol
@@ -75,7 +87,8 @@ func (e *Engine) LogCommand() {
 		description = fmt.Sprintf("place pos: %v", e.State.PlacementPos)
 	}
 	log.Printf("Log command '%v': %v", string(e.State.Command), description)
-	entry := UiProtocolEntry{
+	entry := ProtocolEntry{
+		Id:          e.newGlobalProtocolEntryId(),
 		Timestamp:   e.TimeProvider().UnixNano(),
 		StageTime:   e.State.StageTimeElapsed,
 		Type:        UiProtocolCommand,
@@ -83,51 +96,57 @@ func (e *Engine) LogCommand() {
 		Team:        e.State.CommandFor,
 		Description: description,
 	}
-	e.UiProtocol = append(e.UiProtocol, entry)
+	e.PersistentState.Add(&entry)
 }
 
 // LogCard adds a card to the protocol
-func (e *Engine) LogCard(card *EventCard) {
+func (e *Engine) LogCard(card *EventCard, prevState *State) {
 	log.Printf("Log card: %v", card)
-	entry := UiProtocolEntry{
-		Timestamp: e.TimeProvider().UnixNano(),
-		StageTime: e.State.StageTimeElapsed,
-		Type:      UiProtocolCard,
-		Name:      fmt.Sprintf("%v %v card", card.Operation, card.Type),
-		Team:      card.ForTeam,
+	entry := ProtocolEntry{
+		Id:            e.newGlobalProtocolEntryId(),
+		Timestamp:     e.TimeProvider().UnixNano(),
+		StageTime:     e.State.StageTimeElapsed,
+		Type:          UiProtocolCard,
+		Name:          fmt.Sprintf("%v %v card", card.Operation, card.Type),
+		Team:          card.ForTeam,
+		PreviousState: prevState,
 	}
-	e.UiProtocol = append(e.UiProtocol, entry)
+	e.PersistentState.Add(&entry)
 }
 
 // LogTime adds a time event (like stage time ends or card time ends) to the protocol
 func (e *Engine) LogTime(description string, forTeam Team) {
 	log.Printf("Log time for %v: %v", forTeam, description)
-	entry := UiProtocolEntry{
+	entry := ProtocolEntry{
+		Id:        e.newGlobalProtocolEntryId(),
 		Timestamp: e.TimeProvider().UnixNano(),
 		StageTime: e.State.StageTimeElapsed,
 		Type:      UiProtocolTime,
 		Name:      description,
 		Team:      forTeam,
 	}
-	e.UiProtocol = append(e.UiProtocol, entry)
+	e.PersistentState.Add(&entry)
 }
 
 // LogStage adds a stage change to the protocol
-func (e *Engine) LogStage(stage Stage) {
+func (e *Engine) LogStage(stage Stage, prevState *State) {
 	log.Printf("Log stage: %v", stage)
-	entry := UiProtocolEntry{
-		Timestamp: e.TimeProvider().UnixNano(),
-		StageTime: e.State.StageTimeElapsed,
-		Type:      UiProtocolStage,
-		Name:      string(stage),
+	entry := ProtocolEntry{
+		Id:            e.newGlobalProtocolEntryId(),
+		Timestamp:     e.TimeProvider().UnixNano(),
+		StageTime:     e.State.StageTimeElapsed,
+		Type:          UiProtocolStage,
+		Name:          string(stage),
+		PreviousState: prevState,
 	}
-	e.UiProtocol = append(e.UiProtocol, entry)
+	e.PersistentState.Add(&entry)
 }
 
 // LogModify adds a modification to the protocol
 func (e *Engine) LogModify(m EventModifyValue) {
 	log.Printf("Log modify: %v", m)
-	entry := UiProtocolEntry{
+	entry := ProtocolEntry{
+		Id:          e.newGlobalProtocolEntryId(),
 		Timestamp:   e.TimeProvider().UnixNano(),
 		StageTime:   e.State.StageTimeElapsed,
 		Type:        UiProtocolModify,
@@ -135,14 +154,15 @@ func (e *Engine) LogModify(m EventModifyValue) {
 		Team:        m.ForTeam,
 		Description: m.Value(),
 	}
-	e.UiProtocol = append(e.UiProtocol, entry)
+	e.PersistentState.Add(&entry)
 }
 
 // LogTeamGoalkeeperChange adds a goalkeeper change from a team to the protocol
 func (e *Engine) LogTeamGoalkeeperChange(forTeam Team, oldGoalkeeperId int, newGoalkeeperId int) {
 	description := fmt.Sprintf("%v -> %v", oldGoalkeeperId, newGoalkeeperId)
 	log.Printf("Log goal keeper change for %v: %v", forTeam, description)
-	entry := UiProtocolEntry{
+	entry := ProtocolEntry{
+		Id:          e.newGlobalProtocolEntryId(),
 		Timestamp:   e.TimeProvider().UnixNano(),
 		StageTime:   e.State.StageTimeElapsed,
 		Type:        UiProtocolTeamAction,
@@ -150,14 +170,15 @@ func (e *Engine) LogTeamGoalkeeperChange(forTeam Team, oldGoalkeeperId int, newG
 		Team:        forTeam,
 		Description: description,
 	}
-	e.UiProtocol = append(e.UiProtocol, entry)
+	e.PersistentState.Add(&entry)
 }
 
 // LogTeamBotSubstitutionChange adds a bot substitution intend change from a team to the protocol
 func (e *Engine) LogTeamBotSubstitutionChange(forTeam Team, substituteBot bool) {
 	log.Printf("Log bot substitution for %v: %v", forTeam, substituteBot)
 	description := fmt.Sprintf("%v", substituteBot)
-	entry := UiProtocolEntry{
+	entry := ProtocolEntry{
+		Id:          e.newGlobalProtocolEntryId(),
 		Timestamp:   e.TimeProvider().UnixNano(),
 		StageTime:   e.State.StageTimeElapsed,
 		Type:        UiProtocolTeamAction,
@@ -165,13 +186,14 @@ func (e *Engine) LogTeamBotSubstitutionChange(forTeam Team, substituteBot bool) 
 		Team:        forTeam,
 		Description: description,
 	}
-	e.UiProtocol = append(e.UiProtocol, entry)
+	e.PersistentState.Add(&entry)
 }
 
 // LogHint adds a hint for the game-controller operator to the protocol
 func (e *Engine) LogHint(hint string, description string, team Team) {
 	log.Printf("Log hint '%v' for %v: %v", hint, team, description)
-	entry := UiProtocolEntry{
+	entry := ProtocolEntry{
+		Id:          e.newGlobalProtocolEntryId(),
 		Timestamp:   e.TimeProvider().UnixNano(),
 		StageTime:   e.State.StageTimeElapsed,
 		Type:        UiProtocolHint,
@@ -179,5 +201,5 @@ func (e *Engine) LogHint(hint string, description string, team Team) {
 		Name:        hint,
 		Description: description,
 	}
-	e.UiProtocol = append(e.UiProtocol, entry)
+	e.PersistentState.Add(&entry)
 }

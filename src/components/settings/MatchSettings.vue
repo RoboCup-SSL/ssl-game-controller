@@ -25,13 +25,8 @@
         </div>
 
         <b-button v-b-tooltip.hover title="Start a new match by resetting everything"
-                  v-on:click="resetMatch">
+                  v-on:click="showMsgBoxConfirmResetGame">
             Start new game
-        </b-button>
-
-        <b-button v-b-tooltip.hover title="Undo the last state change"
-                  v-on:click="undo">
-            Undo last change
         </b-button>
     </div>
 </template>
@@ -60,15 +55,31 @@
                     'trigger': {'triggerType': 'switchSides'}
                 })
             },
-            undo: function () {
-                this.$socket.sendObj({
-                    'trigger': {'triggerType': 'undo'}
-                })
-            },
             switchDivision(division) {
                 this.$socket.sendObj({
                     'modify': {'division': division}
                 })
+            },
+            showMsgBoxConfirmResetGame() {
+                this.$bvModal.msgBoxConfirm('Are sure to start a new game and reset the whole state? This can NOT be reverted (easily).', {
+                    title: 'Please Confirm',
+                    size: 'sm',
+                    buttonSize: 'sm',
+                    okVariant: 'danger',
+                    okTitle: 'YES',
+                    cancelTitle: 'NO',
+                    footerClass: 'p-2',
+                    hideHeaderClose: false,
+                    centered: true
+                })
+                    .then(value => {
+                        if (value) {
+                            this.resetMatch();
+                        }
+                    })
+                    .catch(err => {
+                        console.log('Error in confirm dialog: ' + err);
+                    })
             }
         },
         computed: {

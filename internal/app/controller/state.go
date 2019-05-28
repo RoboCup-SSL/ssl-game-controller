@@ -414,6 +414,8 @@ type State struct {
 	PlacementPos               *Location          `json:"placementPos" yaml:"placementPos"`
 	NextCommand                RefCommand         `json:"nextCommand" yaml:"nextCommand"`
 	NextCommandFor             Team               `json:"nextCommandFor" yaml:"nextCommandFor"`
+	PrevCommands               []RefCommand       `json:"prevCommands" yaml:"prevCommands"`
+	PrevCommandsFor            []Team             `json:"prevCommandsFor" yaml:"prevCommandsFor"`
 	CurrentActionDeadline      time.Time          `json:"currentActionDeadline" yaml:"currentActionDeadline"`
 	CurrentActionTimeRemaining time.Duration      `json:"currentActionTimeRemaining" yaml:"currentActionTimeRemaining"` // CurrentActionTimeRemaining contains the updated remaining lack of progress time for the UI
 }
@@ -441,8 +443,9 @@ func NewState() (s *State) {
 	return
 }
 
-func (s State) DeepCopy() (c State) {
-	c = s
+func (s *State) DeepCopy() (c *State) {
+	c = new(State)
+	*c = *s
 	c.GameEvents = make([]*GameEvent, len(s.GameEvents))
 	copy(c.GameEvents, s.GameEvents)
 	if s.PlacementPos != nil {

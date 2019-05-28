@@ -11,7 +11,7 @@ type ApiServer struct {
 	Consumer         EventConsumer
 	connections      []*websocket.Conn
 	latestState      GameControllerState
-	latestUiProtocol []UiProtocolEntry
+	latestUiProtocol []*ProtocolEntry
 }
 
 type EventConsumer interface {
@@ -19,7 +19,7 @@ type EventConsumer interface {
 }
 
 type MessageWrapper struct {
-	UiProtocol *[]UiProtocolEntry   `json:"gameEvents"`
+	UiProtocol *[]*ProtocolEntry    `json:"protocol"`
 	GcState    *GameControllerState `json:"gcState"`
 }
 
@@ -72,7 +72,7 @@ func (a *ApiServer) PublishState(gcState *GameControllerState) {
 	a.publishWrapper(wrapper)
 }
 
-func (a *ApiServer) PublishUiProtocol(protocol []UiProtocolEntry) {
+func (a *ApiServer) PublishUiProtocol(protocol []*ProtocolEntry) {
 	a.latestUiProtocol = protocol
 	wrapper := MessageWrapper{UiProtocol: &protocol}
 	a.publishWrapper(wrapper)

@@ -52,8 +52,6 @@ const (
 	TriggerSwitchColor TriggerType = "switchColor"
 	// TriggerSwitchSides switch sides/goals (onPositiveHalf)
 	TriggerSwitchSides TriggerType = "switchSides"
-	// TriggerUndo undo last action
-	TriggerUndo TriggerType = "undo"
 	// TriggerContinue continues based on the current game event
 	TriggerContinue TriggerType = "continue"
 )
@@ -164,12 +162,13 @@ type EventStage struct {
 
 // Event holds all possible events. Only one at a time can be applied
 type Event struct {
-	Card      *EventCard        `json:"card" yaml:"card"`
-	Command   *EventCommand     `json:"command" yaml:"command"`
-	Modify    *EventModifyValue `json:"modify" yaml:"modify"`
-	Stage     *EventStage       `json:"stage" yaml:"stage"`
-	Trigger   *EventTrigger     `json:"trigger" yaml:"trigger"`
-	GameEvent *GameEvent        `json:"gameEvent" yaml:"gameEvent"`
+	Card                *EventCard        `json:"card" yaml:"card"`
+	Command             *EventCommand     `json:"command" yaml:"command"`
+	Modify              *EventModifyValue `json:"modify" yaml:"modify"`
+	Stage               *EventStage       `json:"stage" yaml:"stage"`
+	Trigger             *EventTrigger     `json:"trigger" yaml:"trigger"`
+	GameEvent           *GameEvent        `json:"gameEvent" yaml:"gameEvent"`
+	RevertProtocolEntry *int              `json:"revertProtocolEntry,omitempty" yaml:"revertProtocolEntry"`
 }
 
 func (e Event) String() string {

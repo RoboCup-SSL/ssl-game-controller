@@ -139,6 +139,11 @@ func processTransitionFile(t *testing.T, fileName string) {
 			s.ExpectedStateDiff.applyTo(&expectedState)
 		}
 
+		// override these, as we do not want to test them
+		expectedState.MatchState.PrevCommands = e.State.PrevCommands
+		expectedState.MatchState.PrevCommandsFor = e.State.PrevCommandsFor
+		expectedState.ProtocolEntryIdCounter = e.GcState.ProtocolEntryIdCounter
+
 		// check if the engine state is equal to the expected state
 		if diff := deep.Equal(*e.GcState, expectedState); diff != nil {
 			t.Errorf("Step %v of %v failed. engine vs expected diff: %v", i+1, fileName, diff)

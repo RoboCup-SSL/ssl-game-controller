@@ -11,31 +11,79 @@ import (
 )
 
 const maxHistorySize = 10
-const historyFileName = "history.json"
+const stateFilename = "gc-state.json"
 
-type HistoryPreserver struct {
-	historyFile *os.File
+type PersistentState struct {
+	CurrentState *GameControllerState `json:"currentState"`
+	Protocol     []*ProtocolEntry     `json:"protocol"`
 }
 
-type HistoryEntry struct {
-	State      State
-	UiProtocol []UiProtocolEntry
+// Add adds the entry and prunes the protocol afterwards, if a new previous state was added
+func (s *PersistentState) Add(entry *ProtocolEntry) {
+	s.Protocol = append(s.Protocol, entry)
+	if entry.PreviousState != nil {
+		s.Prune()
+	}
 }
 
-type History []HistoryEntry
+// Prune removes all except 20 latest previous states from protocol
+func (s *PersistentState) Prune() {
+	maxPreviousStates := maxHistorySize
+	for i := len(s.Protocol) - 1; i > 0; i-- {
+		entry := s.Protocol[i]
+		if maxPreviousStates > 0 {
+			if entry.PreviousState != nil {
+				maxPreviousStates--
+			}
+		} else {
+			entry.PreviousState = nil
+		}
+	}
+}
+
+// GetProtocolEntry returns the protocol entry with given id
+func (s *PersistentState) GetProtocolEntry(id int) *ProtocolEntry {
+	for i := len(s.Protocol) - 1; i > 0; i-- {
+		if s.Protocol[i].Id == id {
+			return s.Protocol[i]
+		}
+	}
+	return nil
+}
+
+// GetProtocolEntry returns the protocol entry with given id
+func (s *PersistentState) RevertProtocolEntry(id int) error {
+	for i := len(s.Protocol) - 1; i > 0; i-- {
+		entry := s.Protocol[i]
+		if entry.Id == id {
+			if entry.PreviousState == nil {
+				return errors.Errorf("Can not revert %v. No previous state present.", entry)
+			} else {
+				s.CurrentState.MatchState = entry.PreviousState
+				s.Protocol = s.Protocol[0:i]
+				return nil
+			}
+		}
+	}
+	return errors.Errorf("No protocol entry with id %v found", id)
+}
+
+type StatePreserver struct {
+	file *os.File
+}
 
 // Open opens the history file
-func (r *HistoryPreserver) Open() error {
-	f, err := os.OpenFile(historyFileName, os.O_RDWR|os.O_CREATE, 0600)
+func (r *StatePreserver) Open() error {
+	f, err := os.OpenFile(stateFilename, os.O_RDWR|os.O_CREATE, 0600)
 	if err != nil {
 		return err
 	}
-	r.historyFile = f
+	r.file = f
 	return nil
 }
 
 // CloseOnExit makes sure to close the file when program exists
-func (r *HistoryPreserver) CloseOnExit() {
+func (r *StatePreserver) CloseOnExit() {
 	var gracefulStop = make(chan os.Signal)
 	signal.Notify(gracefulStop, syscall.SIGTERM)
 	signal.Notify(gracefulStop, syscall.SIGINT)
@@ -46,73 +94,51 @@ func (r *HistoryPreserver) CloseOnExit() {
 	}()
 }
 
-// Close closes the history file
-func (r *HistoryPreserver) Close() {
-	if r.historyFile == nil {
+// Close closes the state file
+func (r *StatePreserver) Close() {
+	if r.file == nil {
 		return
 	}
-	if err := r.historyFile.Close(); err != nil {
-		log.Print("Could not close history file", err)
+	if err := r.file.Close(); err != nil {
+		log.Print("Could not close state file", err)
 	}
 }
 
-// Load loads the history from the filesystem
-func (r *HistoryPreserver) Load() (*History, error) {
-	b, err := ioutil.ReadAll(r.historyFile)
+// Load loads the state from the filesystem
+func (r *StatePreserver) Load() (*PersistentState, error) {
+	b, err := ioutil.ReadAll(r.file)
 	if err != nil {
-		return nil, errors.Errorf("Could not read from history file %v", err)
+		return nil, errors.Errorf("Could not read from state file %v", err)
 	}
 	if len(b) == 0 {
-		return &History{}, nil
+		return &PersistentState{}, nil
 	}
-	history := History{}
-	err = json.Unmarshal(b, &history)
+	state := PersistentState{}
+	err = json.Unmarshal(b, &state)
 	if err != nil {
-		return nil, errors.Errorf("Could not unmarshal history: %v %v", string(b), err)
+		return nil, errors.Errorf("Could not unmarshal state: %v %v", string(b), err)
 	}
-	return &history, nil
+	return &state, nil
 }
 
 // Save writes the current state into a file
-func (r *HistoryPreserver) Save(history History) {
-	jsonState, err := json.MarshalIndent(history, "", "  ")
+func (r *StatePreserver) Save(state *PersistentState) {
+	jsonState, err := json.MarshalIndent(state, "", "  ")
 	if err != nil {
 		log.Print("Can not marshal state ", err)
 		return
 	}
 
-	err = r.historyFile.Truncate(0)
+	err = r.file.Truncate(0)
 	if err != nil {
 		log.Print("Can not truncate last state file ", err)
 	}
-	_, err = r.historyFile.WriteAt(jsonState, 0)
+	_, err = r.file.WriteAt(jsonState, 0)
 	if err != nil {
 		log.Print("Could not write last state ", err)
 	}
-	err = r.historyFile.Sync()
+	err = r.file.Sync()
 	if err != nil {
-		log.Print("Could not sync history file", err)
-	}
-}
-
-// UndoLastAction restores the last state from internal history
-func (e *Engine) UndoLastAction() {
-	lastIndex := len(e.History) - 2
-	if lastIndex >= 0 {
-		*e.State = e.History[lastIndex].State.DeepCopy()
-		e.UiProtocol = append(e.History[lastIndex].UiProtocol[:0:0],
-			e.History[lastIndex].UiProtocol...)
-		e.History = e.History[0:lastIndex]
-	}
-}
-
-// appendHistory appends the current state to the history
-func (e *Engine) appendHistory() {
-	var entry HistoryEntry
-	entry.State = e.State.DeepCopy()
-	entry.UiProtocol = append(e.UiProtocol[:0:0], e.UiProtocol...)
-	e.History = append(e.History, entry)
-	if len(e.History) > maxHistorySize {
-		e.History = e.History[1:]
+		log.Print("Could not sync state file", err)
 	}
 }

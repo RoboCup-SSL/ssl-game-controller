@@ -35,7 +35,7 @@
         },
         computed: {
             events() {
-                return [...this.$store.state.gameEvents].reverse();
+                return [...this.$store.state.protocol].reverse();
             },
             state() {
                 return this.$store.state.refBoxState

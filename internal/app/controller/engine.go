@@ -10,18 +10,21 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 )
 
 type GameControllerState struct {
-	Division               config.Division                     `json:"division" yaml:"division"`
-	AutoContinue           bool                                `json:"autoContinue" yaml:"autoContinue"`
-	GameEventBehavior      map[GameEventType]GameEventBehavior `json:"gameEventBehavior" yaml:"gameEventBehavior"`
-	GameEventProposals     []*GameEventProposal                `json:"gameEventProposals" yaml:"gameEventProposals"`
-	AutoRefsConnected      []string                            `json:"autoRefsConnected" yaml:"autoRefsConnected"`
-	TeamConnected          map[Team]bool                       `json:"teamConnected" yaml:"teamConnected"`
-	TeamConnectionVerified map[Team]bool                       `json:"teamConnectionVerified" yaml:"teamConnectionVerified"`
-	MatchState             *State                              `json:"matchState" yaml:"matchState"`
+	Division                    config.Division                     `json:"division" yaml:"division"`
+	AutoContinue                bool                                `json:"autoContinue" yaml:"autoContinue"`
+	GameEventBehavior           map[GameEventType]GameEventBehavior `json:"gameEventBehavior" yaml:"gameEventBehavior"`
+	GameEventProposals          []*GameEventProposal                `json:"gameEventProposals" yaml:"gameEventProposals"`
+	AutoRefsConnected           []string                            `json:"autoRefsConnected" yaml:"autoRefsConnected"`
+	TeamConnected               map[Team]bool                       `json:"teamConnected" yaml:"teamConnected"`
+	TeamConnectionVerified      map[Team]bool                       `json:"teamConnectionVerified" yaml:"teamConnectionVerified"`
+	MatchState                  *State                              `json:"matchState" yaml:"matchState"`
+	ProtocolEntryIdCounter      int                                 `json:"protocolEntryIdCounter" yaml:"protocolEntryIdCounter"`
+	ProtocolEntryIdCounterMutex sync.Mutex                          `json:"protocolEntryIdCounterMutex" yaml:"protocolEntryIdCounterMutex"`
 }
 
 func NewGameControllerState() (s *GameControllerState) {
@@ -57,22 +60,20 @@ func (s GameControllerState) DeepCopy() (c GameControllerState) {
 	for k, v := range s.GameEventBehavior {
 		c.GameEventBehavior[k] = v
 	}
-	c.MatchState = new(State)
-	*c.MatchState = s.MatchState.DeepCopy()
+	c.MatchState = s.MatchState.DeepCopy()
 	return
 }
 
 type Engine struct {
-	State          *State
-	GcState        *GameControllerState
-	UiProtocol     []UiProtocolEntry
-	StageTimes     map[Stage]time.Duration
-	config         config.Game
-	TimeProvider   timer.TimeProvider
-	LastTimeUpdate time.Time
-	History        History
-	Geometry       config.Geometry
-	Rand           *rand.Rand
+	State           *State
+	GcState         *GameControllerState
+	StageTimes      map[Stage]time.Duration
+	config          config.Game
+	TimeProvider    timer.TimeProvider
+	LastTimeUpdate  time.Time
+	PersistentState *PersistentState
+	Geometry        config.Geometry
+	Rand            *rand.Rand
 }
 
 func NewEngine(config config.Game, seed int64) (e Engine) {
@@ -80,6 +81,7 @@ func NewEngine(config config.Game, seed int64) (e Engine) {
 	e.GcState = NewGameControllerState()
 	e.GcState.Division = e.config.DefaultDivision
 	e.Geometry = *e.config.DefaultGeometry[e.GcState.Division]
+	e.PersistentState = new(PersistentState)
 	e.loadStages()
 	e.ResetGame()
 	e.TimeProvider = func() time.Time { return time.Now() }
@@ -106,7 +108,8 @@ func (e *Engine) loadStages() {
 func (e *Engine) ResetGame() {
 	e.State = NewState()
 	e.GcState.MatchState = e.State
-	e.UiProtocol = []UiProtocolEntry{}
+	e.PersistentState.CurrentState = e.GcState
+	e.PersistentState.Protocol = []*ProtocolEntry{}
 
 	for _, team := range []Team{TeamBlue, TeamYellow} {
 		e.State.TeamState[team].TimeoutTimeLeft = e.config.Normal.TimeoutDuration
@@ -199,6 +202,13 @@ func (e *Engine) countCardTime() bool {
 }
 
 func (e *Engine) SendCommand(command RefCommand, forTeam Team) {
+	e.State.PrevCommands = append(e.State.PrevCommands, e.State.Command)
+	e.State.PrevCommandsFor = append(e.State.PrevCommandsFor, e.State.CommandFor)
+	if len(e.State.PrevCommands) > 10 {
+		e.State.PrevCommands = e.State.PrevCommands[1:]
+		e.State.PrevCommandsFor = e.State.PrevCommandsFor[1:]
+	}
+
 	e.State.Command = command
 	e.State.CommandFor = forTeam
 
@@ -249,22 +259,23 @@ func (e *Engine) setCurrentActionTimeout(timeout time.Duration) {
 }
 
 func (e *Engine) AddGameEvent(gameEvent GameEvent) {
+	e.LogGameEvent(gameEvent, e.State.DeepCopy())
 	e.State.GameEvents = append(e.State.GameEvents, &gameEvent)
-	e.LogGameEvent(gameEvent)
 }
 
 func (e *Engine) Continue() {
 	log.Println("Continue")
 	substitutionIntend := e.State.BotSubstitutionIntend()
 	if substitutionIntend != TeamUnknown {
-		e.State.TeamState[TeamBlue].BotSubstitutionIntend = false
-		e.State.TeamState[TeamYellow].BotSubstitutionIntend = false
 		teamProto := substitutionIntend.toProto()
-		e.AddGameEvent(GameEvent{
+		event := GameEvent{
 			Type: GameEventBotSubstitution,
 			Details: GameEventDetails{
-				BotSubstitution: &refproto.GameEvent_BotSubstitution{ByTeam: &teamProto}}})
+				BotSubstitution: &refproto.GameEvent_BotSubstitution{ByTeam: &teamProto}}}
+		e.AddGameEvent(event)
 		e.LogHint("botSubstitution", "game halted for bot substitution", substitutionIntend)
+		e.State.TeamState[TeamBlue].BotSubstitutionIntend = false
+		e.State.TeamState[TeamYellow].BotSubstitutionIntend = false
 		e.SendCommand(CommandHalt, "")
 	} else if e.State.NextCommand != CommandUnknown {
 		log.Printf("Let game continue with next command")
@@ -404,7 +415,6 @@ func (e *Engine) Process(event Event) error {
 	// do not execute this for timestamp updates
 	e.updateMaxBots()
 	e.updateNextCommand()
-	e.appendHistory()
 	return nil
 }
 
@@ -451,10 +461,10 @@ func (e *Engine) updateNextCommand() {
 }
 
 func (e *Engine) lastCommand(commands []RefCommand) (RefCommand, Team) {
-	for i := len(e.History) - 1; i >= 0; i-- {
+	for i := len(e.State.PrevCommands) - 1; i >= 0; i-- {
 		for _, cmd := range commands {
-			if e.History[i].State.Command == cmd {
-				return e.History[i].State.Command, e.History[i].State.CommandFor
+			if e.State.PrevCommands[i] == cmd {
+				return e.State.PrevCommands[i], e.State.PrevCommandsFor[i]
 			}
 		}
 	}
@@ -474,8 +484,21 @@ func (e *Engine) processEvent(event Event) error {
 		return e.processTrigger(event.Trigger)
 	} else if event.GameEvent != nil {
 		return e.processGameEvent(event.GameEvent)
+	} else if event.RevertProtocolEntry != nil {
+		return e.processRevertProtocolEntry(*event.RevertProtocolEntry)
 	}
 	return errors.New("unknown event")
+}
+
+func (e *Engine) processRevertProtocolEntry(id int) error {
+	err := e.PersistentState.RevertProtocolEntry(id)
+	if err != nil {
+		return err
+	}
+	e.GcState = e.PersistentState.CurrentState
+	e.State = e.GcState.MatchState
+	log.Printf("Revert protocol entry %v", id)
+	return nil
 }
 
 func (e *Engine) processCommand(c *EventCommand) error {
@@ -620,7 +643,7 @@ func (e *Engine) processStage(s *EventStage) error {
 }
 
 func (e *Engine) updateStage(stage Stage) {
-	e.LogStage(stage)
+	e.LogStage(stage, e.State.DeepCopy())
 
 	e.State.StageTimeLeft = e.StageTimes[stage]
 	e.State.StageTimeElapsed = 0
@@ -662,6 +685,7 @@ func (e *Engine) updatePreStages() {
 }
 
 func (e *Engine) processCard(card *EventCard) (err error) {
+	prevState := e.State.DeepCopy()
 	if card.ForTeam != TeamYellow && card.ForTeam != TeamBlue {
 		return errors.Errorf("Unknown team: %v", card.ForTeam)
 	}
@@ -685,7 +709,7 @@ func (e *Engine) processCard(card *EventCard) (err error) {
 	}
 
 	if err == nil {
-		e.LogCard(card)
+		e.LogCard(card, prevState)
 	}
 	return
 }
@@ -727,8 +751,6 @@ func (e *Engine) processTrigger(t *EventTrigger) (err error) {
 		e.State.TeamState[TeamYellow].OnPositiveHalf = !yellowOnPositiveHalf
 		e.State.TeamState[TeamBlue].OnPositiveHalf = yellowOnPositiveHalf
 		e.LogHint("switchSides", "", TeamUnknown)
-	} else if t.Type == TriggerUndo {
-		e.UndoLastAction()
 	} else if t.Type == TriggerContinue {
 		e.Continue()
 		e.LogHint("continue", "", TeamUnknown)

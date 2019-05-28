@@ -43,11 +43,22 @@ export class GcState {
     teamConnectionVerified = {'Yellow': false, 'Blue': false};
 }
 
+export class ProtocolEntry {
+    id = 0;
+    timestamp = 0;
+    stageTime = 0;
+    type = '';
+    name = '';
+    team = 'Yellow';
+    description = '';
+    previousState = null;
+}
+
 export default new Vuex.Store({
     state: {
+        gcState: new GcState(),
         refBoxState: new RefBoxState(),
-        gameEvents: [],
-        gcState: new GcState()
+        protocol: []
     },
     mutations: {
         SOCKET_ONOPEN() {
@@ -57,8 +68,8 @@ export default new Vuex.Store({
         SOCKET_ONERROR() {
         },
         SOCKET_ONMESSAGE(state, message) {
-            if (message.gameEvents) {
-                state.gameEvents = message.gameEvents;
+            if (message.protocol) {
+                state.protocol = message.protocol;
             }
             if (message.gcState) {
                 state.gcState = message.gcState;
