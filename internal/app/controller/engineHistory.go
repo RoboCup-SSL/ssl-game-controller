@@ -12,6 +12,7 @@ import (
 
 const maxHistorySize = 10
 const stateFilename = "gc-state.json"
+const backupFilename = "gc-state.backup"
 
 type PersistentState struct {
 	CurrentState *GameControllerState `json:"currentState"`
@@ -69,16 +70,23 @@ func (s *PersistentState) RevertProtocolEntry(id int) error {
 }
 
 type StatePreserver struct {
-	file *os.File
+	file       *os.File
+	backupFile *os.File
 }
 
-// Open opens the history file
+// Open opens the state and backup file
 func (r *StatePreserver) Open() error {
 	f, err := os.OpenFile(stateFilename, os.O_RDWR|os.O_CREATE, 0600)
 	if err != nil {
 		return err
 	}
 	r.file = f
+
+	f, err = os.OpenFile(backupFilename, os.O_APPEND|os.O_WRONLY, os.ModeAppend)
+	if err != nil {
+		return err
+	}
+	r.backupFile = f
 	return nil
 }
 
@@ -94,13 +102,17 @@ func (r *StatePreserver) CloseOnExit() {
 	}()
 }
 
-// Close closes the state file
+// Close closes the state and backup file
 func (r *StatePreserver) Close() {
-	if r.file == nil {
-		return
+	if r.file != nil {
+		if err := r.file.Close(); err != nil {
+			log.Print("Could not close state file", err)
+		}
 	}
-	if err := r.file.Close(); err != nil {
-		log.Print("Could not close state file", err)
+	if r.backupFile != nil {
+		if err := r.backupFile.Close(); err != nil {
+			log.Print("Could not close backup file", err)
+		}
 	}
 }
 
@@ -131,14 +143,25 @@ func (r *StatePreserver) Save(state *PersistentState) {
 
 	err = r.file.Truncate(0)
 	if err != nil {
-		log.Print("Can not truncate last state file ", err)
+		log.Print("Can not truncate last state file", err)
 	}
 	_, err = r.file.WriteAt(jsonState, 0)
 	if err != nil {
-		log.Print("Could not write last state ", err)
+		log.Print("Could not write last state: ", err)
 	}
 	err = r.file.Sync()
 	if err != nil {
-		log.Print("Could not sync state file", err)
+		log.Print("Could not sync state file: ", err)
+	}
+
+	jsonCompact, err := json.Marshal(state)
+	if err != nil {
+		log.Print("Could not marshal state for backup")
+		return
+	}
+	jsonCompact = append(jsonCompact, []byte("\n")...)
+	_, err = r.backupFile.Write(jsonCompact)
+	if err != nil {
+		log.Print("Could not write to backup file: ", err)
 	}
 }

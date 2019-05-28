@@ -23,7 +23,7 @@ type GameController struct {
 	TeamServer                *rcon.TeamServer
 	CiServer                  rcon.CiServer
 	Engine                    Engine
-	historyPreserver          StatePreserver
+	statePreserver            StatePreserver
 	numUiProtocolsLastPublish int
 	outstandingTeamChoice     *TeamChoice
 	ConnectionMutex           sync.Mutex
@@ -64,10 +64,10 @@ func NewGameController() (c *GameController) {
 // Run the GameController by starting several go-routines. This method will not block.
 func (c *GameController) Run() {
 
-	if err := c.historyPreserver.Open(); err != nil {
-		log.Print("Could not open history", err)
+	if err := c.statePreserver.Open(); err != nil {
+		log.Print("Could not open state", err)
 	} else {
-		state, err := c.historyPreserver.Load()
+		state, err := c.statePreserver.Load()
 		if err != nil {
 			log.Print("Could not load state", err)
 		} else if state != nil && state.CurrentState != nil {
@@ -76,7 +76,7 @@ func (c *GameController) Run() {
 			c.Engine.State = state.CurrentState.MatchState
 		}
 	}
-	c.historyPreserver.CloseOnExit()
+	c.statePreserver.CloseOnExit()
 
 	c.ApiServer.PublishState(c.Engine.GcState)
 	c.ApiServer.PublishUiProtocol(c.Engine.PersistentState.Protocol)
@@ -149,7 +149,7 @@ func (c *GameController) publish() {
 	defer c.PublishMutex.Unlock()
 
 	c.updateOnlineStates()
-	c.historyPreserver.Save(c.Engine.PersistentState)
+	c.statePreserver.Save(c.Engine.PersistentState)
 
 	c.TeamServer.AllowedTeamNames = []string{
 		c.Engine.State.TeamState[TeamYellow].Name,
