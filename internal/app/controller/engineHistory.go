@@ -43,7 +43,7 @@ func (s *PersistentState) Prune() {
 }
 
 // GetProtocolEntry returns the protocol entry with given id
-func (s *PersistentState) GetProtocolEntry(id int) *ProtocolEntry {
+func (s *PersistentState) GetProtocolEntry(id string) *ProtocolEntry {
 	for i := len(s.Protocol) - 1; i > 0; i-- {
 		if s.Protocol[i].Id == id {
 			return s.Protocol[i]
@@ -53,7 +53,7 @@ func (s *PersistentState) GetProtocolEntry(id int) *ProtocolEntry {
 }
 
 // GetProtocolEntry returns the protocol entry with given id
-func (s *PersistentState) RevertProtocolEntry(id int) error {
+func (s *PersistentState) RevertProtocolEntry(id string) error {
 	for i := len(s.Protocol) - 1; i > 0; i-- {
 		entry := s.Protocol[i]
 		if entry.Id == id {

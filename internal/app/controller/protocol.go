@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+	"github.com/odeke-em/go-uuid"
 	"log"
 	"time"
 )
@@ -30,16 +31,13 @@ const (
 	UiProtocolHint UiProtocolType = "hint"
 )
 
-func (e *Engine) newGlobalProtocolEntryId() int {
-	defer e.GcState.ProtocolEntryIdCounterMutex.Unlock()
-	e.GcState.ProtocolEntryIdCounterMutex.Lock()
-	e.GcState.ProtocolEntryIdCounter++
-	return e.GcState.ProtocolEntryIdCounter
+func (e *Engine) newGlobalProtocolEntryId() string {
+	return uuid.New()
 }
 
 // ProtocolEntry represents a single protocol entry as should be displayed in the UI table
 type ProtocolEntry struct {
-	Id            int            `json:"id"`
+	Id            string         `json:"id"`
 	Timestamp     int64          `json:"timestamp"`
 	StageTime     time.Duration  `json:"stageTime"`
 	Type          UiProtocolType `json:"type"`

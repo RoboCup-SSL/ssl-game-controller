@@ -86,7 +86,7 @@
             },
             revertProtocolEntry(id) {
                 this.$socket.sendObj({
-                    'revertProtocolEntry': Number(id)
+                    'revertProtocolEntry': id
                 })
             },
             iconForType(type) {

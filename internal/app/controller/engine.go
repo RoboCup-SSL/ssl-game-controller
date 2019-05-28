@@ -10,21 +10,18 @@ import (
 	"sort"
 	"strconv"
 	"strings"
-	"sync"
 	"time"
 )
 
 type GameControllerState struct {
-	Division                    config.Division                     `json:"division" yaml:"division"`
-	AutoContinue                bool                                `json:"autoContinue" yaml:"autoContinue"`
-	GameEventBehavior           map[GameEventType]GameEventBehavior `json:"gameEventBehavior" yaml:"gameEventBehavior"`
-	GameEventProposals          []*GameEventProposal                `json:"gameEventProposals" yaml:"gameEventProposals"`
-	AutoRefsConnected           []string                            `json:"autoRefsConnected" yaml:"autoRefsConnected"`
-	TeamConnected               map[Team]bool                       `json:"teamConnected" yaml:"teamConnected"`
-	TeamConnectionVerified      map[Team]bool                       `json:"teamConnectionVerified" yaml:"teamConnectionVerified"`
-	MatchState                  *State                              `json:"matchState" yaml:"matchState"`
-	ProtocolEntryIdCounter      int                                 `json:"protocolEntryIdCounter" yaml:"protocolEntryIdCounter"`
-	ProtocolEntryIdCounterMutex sync.Mutex                          `json:"protocolEntryIdCounterMutex" yaml:"protocolEntryIdCounterMutex"`
+	Division               config.Division                     `json:"division" yaml:"division"`
+	AutoContinue           bool                                `json:"autoContinue" yaml:"autoContinue"`
+	GameEventBehavior      map[GameEventType]GameEventBehavior `json:"gameEventBehavior" yaml:"gameEventBehavior"`
+	GameEventProposals     []*GameEventProposal                `json:"gameEventProposals" yaml:"gameEventProposals"`
+	AutoRefsConnected      []string                            `json:"autoRefsConnected" yaml:"autoRefsConnected"`
+	TeamConnected          map[Team]bool                       `json:"teamConnected" yaml:"teamConnected"`
+	TeamConnectionVerified map[Team]bool                       `json:"teamConnectionVerified" yaml:"teamConnectionVerified"`
+	MatchState             *State                              `json:"matchState" yaml:"matchState"`
 }
 
 func NewGameControllerState() (s *GameControllerState) {
@@ -490,7 +487,7 @@ func (e *Engine) processEvent(event Event) error {
 	return errors.New("unknown event")
 }
 
-func (e *Engine) processRevertProtocolEntry(id int) error {
+func (e *Engine) processRevertProtocolEntry(id string) error {
 	err := e.PersistentState.RevertProtocolEntry(id)
 	if err != nil {
 		return err

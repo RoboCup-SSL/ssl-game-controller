@@ -168,7 +168,7 @@ type Event struct {
 	Stage               *EventStage       `json:"stage" yaml:"stage"`
 	Trigger             *EventTrigger     `json:"trigger" yaml:"trigger"`
 	GameEvent           *GameEvent        `json:"gameEvent" yaml:"gameEvent"`
-	RevertProtocolEntry *int              `json:"revertProtocolEntry,omitempty" yaml:"revertProtocolEntry"`
+	RevertProtocolEntry *string           `json:"revertProtocolEntry,omitempty" yaml:"revertProtocolEntry"`
 }
 
 func (e Event) String() string {
