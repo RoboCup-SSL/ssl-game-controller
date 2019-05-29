@@ -31,6 +31,7 @@ func main() {
 	privateKey = client.LoadPrivateKey(*privateKeyLocation)
 
 	if *autoDetectAddress {
+		log.Print("Trying to detect host based on incoming referee messages...")
 		host := client.DetectHost(*udpAddress)
 		if host != "" {
 			log.Print("Detected game-controller host: ", host)
