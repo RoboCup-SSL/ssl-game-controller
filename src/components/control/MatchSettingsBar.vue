@@ -7,13 +7,13 @@
         <div class="btn-group-toggle btn-group" v-hotkey="keymapToggleAutoRef">
             <label v-b-tooltip.hover
                    :title="'Enable automatic continuation based on game events (' + Object.keys(keymapToggleAutoRef)[0] + ')'"
-                   :class="{btn:true, 'btn-secondary': true, active: autoContinue}"
+                   :class="{btn:true, 'btn-active': autoContinue, 'btn-passive': !autoContinue}"
                    @click="setAutoContinue(true)">
                 Auto
             </label>
             <label v-b-tooltip.hover
                    :title="'Disable automatic continuation based on game events (' + Object.keys(keymapToggleAutoRef)[0] + ')'"
-                   :class="{btn:true, 'btn-secondary': true, active: !autoContinue}"
+                   :class="{btn:true, 'btn-active': !autoContinue, 'btn-passive': autoContinue}"
                    @click="setAutoContinue(false)">
                 Manual
             </label>
@@ -111,5 +111,17 @@
     button, .btn-group {
         margin-right: 0.5em;
         margin-bottom: 0.5em;
+    }
+
+    .btn-active {
+        background-color: green;
+        border-color: green;
+        color: white;
+    }
+
+    .btn-passive {
+        background-color: red;
+        border-color: red;
+        color: white;
     }
 </style>
