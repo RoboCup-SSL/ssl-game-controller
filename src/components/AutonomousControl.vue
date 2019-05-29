@@ -2,6 +2,7 @@
     <div id="container">
         <TeamOverview class="view"/>
         <Events/>
+        <ManualControl/>
         <CurrentEvents class="view"/>
         <EventProposals class="view"/>
     </div>
@@ -14,10 +15,12 @@
     import EventProposals from "./events/EventProposals";
     import CurrentEvents from "./events/CurrentEvents";
     import Settings from "./settings/Settings";
+    import ManualControl from "./manual-control/ManualControl";
 
     export default {
         name: "AutonomousControl",
         components: {
+            ManualControl,
             Settings,
             CurrentEvents,
             EventProposals,
