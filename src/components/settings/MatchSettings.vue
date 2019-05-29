@@ -1,5 +1,17 @@
 <template>
     <div>
+        <p>
+            <label>First kickoff team: </label>
+            <DualSwitch
+                    left-label="Yellow"
+                    left-value="Yellow"
+                    right-label="Blue"
+                    right-value="Blue"
+                    :callback="switchFirstKickoffTeam"
+                    :selected-value="firstKickoffTeam"
+            />
+        </p>
+
         <b-button v-b-tooltip.hover title="Switch the colors of the teams, keep everything else"
                   v-on:click="switchColor"
                   :disabled="forbidMatchControls">
@@ -12,17 +24,15 @@
             Switch sides
         </b-button>
 
-        <div class="divisions btn-group-toggle btn-group">
-            <label :class="{btn:true, 'btn-secondary': true, active: isDivA, disabled: forbidMatchControls}"
-                   @click="switchDivision('DivA')"
-                   :disabled="forbidMatchControls">
-                Div A
-            </label>
-            <label :class="{btn:true, 'btn-secondary': true, active: !isDivA, disabled: forbidMatchControls}"
-                   @click="switchDivision('DivB')">
-                Div B
-            </label>
-        </div>
+        <DualSwitch
+                left-label="Div A"
+                left-value="DivA"
+                right-label="Div B"
+                right-value="DivB"
+                :callback="switchDivision"
+                :selected-value="division"
+                :disabled="forbidMatchControls"
+        />
 
         <b-button v-b-tooltip.hover title="Start a new match by resetting everything"
                   v-on:click="showMsgBoxConfirmResetGame">
@@ -32,11 +42,16 @@
 </template>
 
 <script>
+    import TeamSelection from "../common/TeamSelection";
+    import DualSwitch from "../common/DualSwitch";
     export default {
         name: "MatchSettings",
+        components: {DualSwitch, TeamSelection},
         data() {
             return {
-                selected: 'DivA',
+                kickoffTeamSelectionModel: {
+                    team: null,
+                }
             }
         },
         methods: {
@@ -55,9 +70,14 @@
                     'trigger': {'triggerType': 'switchSides'}
                 })
             },
-            switchDivision(division) {
+            switchDivision(div) {
                 this.$socket.sendObj({
-                    'modify': {'division': division}
+                    'modify': {'division': div}
+                })
+            },
+            switchFirstKickoffTeam(team) {
+                this.$socket.sendObj({
+                    'modify': {'firstKickoffTeam': team}
                 })
             },
             showMsgBoxConfirmResetGame() {
@@ -86,8 +106,11 @@
             state() {
                 return this.$store.state.refBoxState
             },
-            isDivA() {
-                return this.$store.state.gcState.division === 'DivA';
+            firstKickoffTeam() {
+                return this.$store.state.gcState.firstKickoffTeam;
+            },
+            division() {
+                return this.$store.state.gcState.division;
             },
             halted() {
                 return this.state.command === 'halt';

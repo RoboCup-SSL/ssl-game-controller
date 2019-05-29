@@ -117,6 +117,7 @@ type EventModifyValue struct {
 	CanPlaceBall          *bool                         `json:"canPlaceBall,omitempty" yaml:"canPlaceBall"`
 	Division              *config.Division              `json:"division,omitempty" yaml:"division"`
 	AutoContinue          *bool                         `json:"autoContinue,omitempty" yaml:"autoContinue"`
+	FirstKickoffTeam      *string                       `json:"firstKickoffTeam,omitempty" yaml:"firstKickoffTeam"`
 	GameEventBehavior     *EventModifyGameEventBehavior `json:"gameEventBehavior,omitempty" yaml:"gameEventBehavior"`
 	BotSubstitutionIntend *bool                         `json:"botSubstitutionIntend,omitempty" yaml:"botSubstitutionIntend"`
 	RemoveGameEvent       *int                          `json:"removeGameEvent,omitempty" yaml:"removeGameEvent"`

@@ -16,6 +16,7 @@ import (
 type GameControllerState struct {
 	Division               config.Division                     `json:"division" yaml:"division"`
 	AutoContinue           bool                                `json:"autoContinue" yaml:"autoContinue"`
+	FirstKickoffTeam       Team                                `json:"firstKickoffTeam" yaml:"firstKickoffTeam"`
 	GameEventBehavior      map[GameEventType]GameEventBehavior `json:"gameEventBehavior" yaml:"gameEventBehavior"`
 	GameEventProposals     []*GameEventProposal                `json:"gameEventProposals" yaml:"gameEventProposals"`
 	AutoRefsConnected      []string                            `json:"autoRefsConnected" yaml:"autoRefsConnected"`
@@ -29,6 +30,7 @@ func NewGameControllerState() (s *GameControllerState) {
 
 	s.Division = config.DivA
 	s.AutoContinue = true
+	s.FirstKickoffTeam = TeamYellow
 
 	s.GameEventBehavior = map[GameEventType]GameEventBehavior{}
 	for _, event := range AllGameEvents() {
@@ -113,6 +115,8 @@ func (e *Engine) ResetGame() {
 		e.State.TeamState[team].TimeoutsLeft = e.config.Normal.Timeouts
 		e.State.TeamState[team].MaxAllowedBots = e.config.MaxBots[e.GcState.Division]
 	}
+
+	e.updateNextCommandForStage()
 }
 
 // Update updates times and triggers events if needed
@@ -535,6 +539,9 @@ func (e *Engine) processModify(m *EventModifyValue) error {
 		}
 	} else if m.AutoContinue != nil {
 		e.GcState.AutoContinue = *m.AutoContinue
+	} else if m.FirstKickoffTeam != nil {
+		e.GcState.FirstKickoffTeam = Team(*m.FirstKickoffTeam)
+		e.updateNextCommandForStage()
 	} else if m.GameEventBehavior != nil {
 		e.GcState.GameEventBehavior[m.GameEventBehavior.GameEventType] = m.GameEventBehavior.GameEventBehavior
 	} else if m.RemoveGameEvent != nil {
@@ -670,6 +677,20 @@ func (e *Engine) updateStage(stage Stage) {
 	}
 
 	e.State.Stage = stage
+
+	e.updateNextCommandForStage()
+}
+
+func (e *Engine) updateNextCommandForStage() {
+	switch e.State.Stage {
+	case StagePreGame, StageOvertimeFirstHalfPre:
+		e.State.NextCommand = CommandKickoff
+		e.State.NextCommandFor = e.GcState.FirstKickoffTeam
+
+	case StageSecondHalfPre, StageOvertimeSecondHalfPre:
+		e.State.NextCommand = CommandKickoff
+		e.State.NextCommandFor = e.GcState.FirstKickoffTeam.Opposite()
+	}
 }
 
 func (e *Engine) updatePreStages() {
