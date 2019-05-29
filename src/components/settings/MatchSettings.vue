@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="view">
         <p>
             <label>First kickoff team: </label>
             <DualSwitch
@@ -126,7 +126,8 @@
 </script>
 
 <style scoped>
-    button, .divisions {
-        margin: 0.5em;
+    button {
+        margin-right: 0.25em;
+        margin-left: 0.25em;
     }
 </style>

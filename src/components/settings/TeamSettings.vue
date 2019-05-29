@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="view">
         <table class="table-layout">
             <tr>
                 <th class="team-yellow">Yellow</th>

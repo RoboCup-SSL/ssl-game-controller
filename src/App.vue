@@ -63,4 +63,8 @@
         bottom: 0;
         text-align: center;
     }
+
+    .view {
+        text-align: center;
+    }
 </style>

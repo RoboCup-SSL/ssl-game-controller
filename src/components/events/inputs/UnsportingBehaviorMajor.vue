@@ -4,7 +4,7 @@
             Major unsporting behavior results in a red card.
         </p>
         <TeamSelection :model="model" label="By: "/>
-        <b-form-group label="Reason: " horizontal>
+        <b-form-group label="Reason: " label-cols-horizontal>
             <input type="text"
                    v-model="model.reason"/>
         </b-form-group>

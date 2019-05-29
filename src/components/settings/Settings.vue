@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="view">
         <a v-b-modal.settings-modal>
             <font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon>
         </a>
@@ -32,8 +32,4 @@
 </script>
 
 <style scoped>
-    button, .btn-group {
-        margin-right: 0.5em;
-        margin-bottom: 0.5em;
-    }
 </style>

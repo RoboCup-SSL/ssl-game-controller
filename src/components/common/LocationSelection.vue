@@ -1,5 +1,5 @@
 <template>
-    <b-form-group :label="label" horizontal>
+    <b-form-group :label="label" label-cols-horizontal>
         <input type="number"
                v-model="model.x"
                :min="-99000.0"

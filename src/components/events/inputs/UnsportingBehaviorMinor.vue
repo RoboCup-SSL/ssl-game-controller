@@ -4,7 +4,7 @@
             Minor unsporting behavior results in a yellow card.
         </p>
         <TeamSelection :model="model" label="By: "/>
-        <b-form-group label="Reason: " horizontal>
+        <b-form-group label="Reason: " label-cols-horizontal>
             <input type="text"
                    v-model="model.reason"/>
         </b-form-group>

@@ -1,5 +1,5 @@
 <template>
-    <b-form-group :label="label" horizontal>
+    <b-form-group :label="label" label-cols-horizontal>
         <b-form-radio-group id="select-team" v-model="model.team" buttons>
             <b-form-radio value="Yellow">Yellow</b-form-radio>
             <b-form-radio value="Blue">Blue</b-form-radio>

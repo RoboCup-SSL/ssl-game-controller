@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="view">
         <table>
             <tr v-for="eventType in eventTypes" :key="eventType">
                 <td align="left">{{eventType}}</td>

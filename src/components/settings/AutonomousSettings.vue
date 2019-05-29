@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="view">
         <div class="auto-refs-connected" v-b-tooltip.hover :title="autoRefs">
             <p>
                 <b>{{autoRefsConnected}}</b> autoRefs connected.
