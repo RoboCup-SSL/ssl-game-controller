@@ -3,7 +3,6 @@
         <b-form-radio-group id="select-team" v-model="model.team" buttons>
             <b-form-radio value="Yellow">Yellow</b-form-radio>
             <b-form-radio value="Blue">Blue</b-form-radio>
-            <b-form-radio value="unknown" :disabled="!allowUnknownTeam">No team</b-form-radio>
         </b-form-radio-group>
     </b-form-group>
 </template>
@@ -12,10 +11,6 @@
     export default {
         name: "TeamSelection",
         props: {
-            allowUnknownTeam: {
-                type: Boolean,
-                default: true
-            },
             label: {
                 type: String,
                 default: ''

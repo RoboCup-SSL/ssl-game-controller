@@ -1,6 +1,6 @@
 <template>
     <div>
-        <TeamSelection :model="model" label="By: " :allow-unknown-team="false"/>
+        <TeamSelection :model="model" label="By: "/>
         <b-button variant="primary"
                   @click="sendEvent()"
                   :disabled="model.team === null">

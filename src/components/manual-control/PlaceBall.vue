@@ -1,6 +1,6 @@
 <template>
     <div>
-        <TeamSelection :model="model" label="For: " :allow-unknown-team="false"/>
+        <TeamSelection :model="model" label="For: "/>
         <LocationSelection :model="model.location" label="Location [m]: "/>
         <b-button variant="primary"
                   @click="sendEvent()"

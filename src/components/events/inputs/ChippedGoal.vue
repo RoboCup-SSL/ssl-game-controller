@@ -1,6 +1,6 @@
 <template>
     <div>
-        <TeamSelection :model="model" label="By: " :allow-unknown-team="false"/>
+        <TeamSelection :model="model" label="By: "/>
         <BotSelection :model="model" label="By Bot: "/>
         <LocationSelection :model="model.location" label="Location [m]: "/>
         <LocationSelection :model="model.kickLocation" label="Kick Location [m]: "/>
