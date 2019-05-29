@@ -112,6 +112,8 @@ func processTransitionFile(t *testing.T, fileName string) {
 		t.Fatal(err)
 	}
 	stateTransitions.InitialState.applyTo(e.GcState)
+	e.updateNextCommandForStage()
+
 	// initialize the expected state with the current engine state
 	expectedState := e.GcState.DeepCopy()
 

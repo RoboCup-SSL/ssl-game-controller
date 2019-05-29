@@ -8,6 +8,8 @@ transitions:
         type: stop
     expectedStateDiff:
       command: stop
+      nextCommand: kickoff
+      nextCommandFor: Yellow
   - event:
       command:
         type: kickoff
@@ -16,6 +18,7 @@ transitions:
       command: kickoff
       commandFor: Yellow
       nextCommand: normalStart
+      nextCommandFor: ""
   - event:
       command:
         type: normalStart

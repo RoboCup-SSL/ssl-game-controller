@@ -690,6 +690,9 @@ func (e *Engine) updateNextCommandForStage() {
 	case StageSecondHalfPre, StageOvertimeSecondHalfPre:
 		e.State.NextCommand = CommandKickoff
 		e.State.NextCommandFor = e.GcState.FirstKickoffTeam.Opposite()
+	default:
+		e.State.NextCommand = ""
+		e.State.NextCommandFor = ""
 	}
 }
 

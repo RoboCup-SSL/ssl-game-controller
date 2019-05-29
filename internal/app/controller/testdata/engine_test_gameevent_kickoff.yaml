@@ -8,6 +8,8 @@ transitions:
         type: stop
     expectedStateDiff:
       command: stop
+      nextCommand: kickoff
+      nextCommandFor: Yellow
   - tick: 1s # make sure that the stage time is not proceeded
   - event:
       command:
@@ -17,6 +19,7 @@ transitions:
       command: kickoff
       commandFor: Blue
       nextCommand: normalStart
+      nextCommandFor: ""
   - event:
       gameEvent:
         type: prepared

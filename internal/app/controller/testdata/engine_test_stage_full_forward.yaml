@@ -10,6 +10,8 @@ transitions:
       stage: First Half
       stageTimeLeft: 5m
       matchTimeStart: "2010-01-01T00:00:00Z"
+      nextCommand: ""
+      nextCommandFor: ""
   - event:
       stage:
         stageOperation: next
@@ -22,12 +24,16 @@ transitions:
     expectedStateDiff:
       stage: Pre-Second Half
       stageTimeLeft: 0
+      nextCommand: kickoff
+      nextCommandFor: Blue
   - event:
       stage:
         stageOperation: next
     expectedStateDiff:
       stage: Second Half
       stageTimeLeft: 5m
+      nextCommand: ""
+      nextCommandFor: ""
   - event:
       stage:
         stageOperation: next
@@ -40,6 +46,8 @@ transitions:
     expectedStateDiff:
       stage: Pre-Overtime First Half
       stageTimeLeft: 0
+      nextCommand: kickoff
+      nextCommandFor: Yellow
       teamState:
         Blue:
           timeoutsLeft: 2
@@ -51,6 +59,8 @@ transitions:
     expectedStateDiff:
       stage: Overtime First Half
       stageTimeLeft: 2m30s
+      nextCommand: ""
+      nextCommandFor: ""
   - event:
       stage:
         stageOperation: next
@@ -63,12 +73,16 @@ transitions:
     expectedStateDiff:
       stage: Pre-Overtime Second Half
       stageTimeLeft: 0
+      nextCommand: kickoff
+      nextCommandFor: Blue
   - event:
       stage:
         stageOperation: next
     expectedStateDiff:
       stage: Overtime Second Half
       stageTimeLeft: 2m30s
+      nextCommand: ""
+      nextCommandFor: ""
   - event:
       stage:
         stageOperation: next
