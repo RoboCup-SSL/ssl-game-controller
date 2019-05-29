@@ -494,6 +494,11 @@ func (e *Engine) processRevertProtocolEntry(id string) error {
 	}
 	e.GcState = e.PersistentState.CurrentState
 	e.State = e.GcState.MatchState
+
+	if e.State.Command != CommandHalt {
+		e.SendCommand(CommandHalt, "")
+	}
+
 	log.Printf("Revert protocol entry %v", id)
 	return nil
 }
