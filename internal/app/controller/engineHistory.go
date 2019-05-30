@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"bufio"
+	"compress/gzip"
 	"encoding/json"
 	"github.com/pkg/errors"
 	"io/ioutil"
@@ -12,7 +14,7 @@ import (
 
 const maxHistorySize = 10
 const stateFilename = "gc-state.json"
-const backupFilename = "gc-state.backup"
+const backupFilename = "gc-state.backup.gz"
 
 type PersistentState struct {
 	CurrentState *GameControllerState `json:"currentState"`
@@ -70,8 +72,10 @@ func (s *PersistentState) RevertProtocolEntry(id string) error {
 }
 
 type StatePreserver struct {
-	file       *os.File
-	backupFile *os.File
+	file             *os.File
+	backupFile       *os.File
+	backupWriter     *bufio.Writer
+	backupWriterGzip *gzip.Writer
 }
 
 // Open opens the state and backup file
@@ -87,6 +91,8 @@ func (r *StatePreserver) Open() error {
 		return err
 	}
 	r.backupFile = f
+	r.backupWriterGzip = gzip.NewWriter(r.backupFile)
+	r.backupWriter = bufio.NewWriter(r.backupWriterGzip)
 	return nil
 }
 
@@ -110,6 +116,12 @@ func (r *StatePreserver) Close() {
 		}
 	}
 	if r.backupFile != nil {
+		if err := r.backupWriter.Flush(); err != nil {
+			log.Print("Could not flush backup writer: ", err)
+		}
+		if err := r.backupWriterGzip.Close(); err != nil {
+			log.Print("Could not close backup writer: ", err)
+		}
 		if err := r.backupFile.Close(); err != nil {
 			log.Print("Could not close backup file", err)
 		}
@@ -160,8 +172,11 @@ func (r *StatePreserver) Save(state *PersistentState) {
 		return
 	}
 	jsonCompact = append(jsonCompact, []byte("\n")...)
-	_, err = r.backupFile.Write(jsonCompact)
+	_, err = r.backupWriter.Write(jsonCompact)
 	if err != nil {
 		log.Print("Could not write to backup file: ", err)
+	}
+	if err := r.backupWriter.Flush(); err != nil {
+		log.Print("Could not flush backup writer: ", err)
 	}
 }

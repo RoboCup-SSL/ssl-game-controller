@@ -24,4 +24,4 @@ yarn-error.log*
 # app-specific ignores
 history.json
 gc-state.json
-gc-state.backup
+gc-state.backup.gz
