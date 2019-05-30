@@ -10,7 +10,7 @@
 <script>
     import TeamOverview from "./team/TeamOverview";
     import ControlTeam from "./manual-control/ManualControlTeam";
-    import Events from "./events/Events";
+    import Events from "./protocol/Events";
     import Settings from "./settings/Settings";
     import ManualControl from "./manual-control/ManualControl";
     import GameEvents from "./game-events/GameEvents";

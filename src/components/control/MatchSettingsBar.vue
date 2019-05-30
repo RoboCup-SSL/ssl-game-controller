@@ -49,7 +49,7 @@
 <script>
     import Settings from "../settings/Settings";
     import {getNextStage, canEndGameFromStage} from "../../refereeState";
-    import NewEvent from "../events/NewEvent";
+    import NewEvent from "../create-event/NewEvent";
 
     export default {
         name: "MatchSettingsBar",
