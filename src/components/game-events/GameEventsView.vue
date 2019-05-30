@@ -29,6 +29,7 @@
         text-align: left;
         overflow-y: auto;
         max-height: 85vh;
+        min-width: 20em;
     }
 
 </style>

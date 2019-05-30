@@ -1,16 +1,16 @@
 <template>
     <div class="control-flaw-bar">
-        <span v-b-tooltip.hover
-              :title="'Immediately stop all robots (' + Object.keys(keymapHalt)[0] + ')'">
+        <div v-b-tooltip.hover
+             :title="'Immediately stop all robots (' + Object.keys(keymapHalt)[0] + ')'">
             <b-button v-hotkey="keymapHalt"
                       ref="btnHalt"
                       v-on:click="send('halt')"
                       v-bind:disabled="halted">
                 Halt
             </b-button>
-        </span>
+        </div>
 
-        <span v-b-tooltip.hover
+        <div v-b-tooltip.hover
               :title="'Continue based on last game event (' + Object.keys(keymapContinue)[0] + ')'">
             <b-button v-hotkey="keymapContinue"
                       ref="btnContinue"
@@ -22,7 +22,7 @@
                     {{state.nextCommand}}
                 </span>
             </b-button>
-        </span>
+        </div>
     </div>
 </template>
 
@@ -82,5 +82,7 @@
         position: fixed;
         bottom: 0;
         text-align: center;
+        display: flex;
+        justify-content: center;
     }
 </style>

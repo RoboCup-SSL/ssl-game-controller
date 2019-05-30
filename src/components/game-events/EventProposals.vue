@@ -79,6 +79,10 @@
 
 <style scoped>
 
+    .content {
+        text-align: center;
+    }
+
     .proposal-item {
         position: relative;
         min-height: 2em;
@@ -87,6 +91,7 @@
         border-radius: 5px;
         padding: 0.2em;
         margin: 0.2em;
+        text-align: left;
     }
 
     .btn-accept {

@@ -77,9 +77,7 @@
 
 <style scoped>
     .content {
-        text-align: left;
-        overflow-y: auto;
-        /*max-height: 15em;*/
+        text-align: center;
     }
 
     .game-event-item {
@@ -90,18 +88,11 @@
         border-radius: 5px;
         padding: 0.2em;
         margin: 0.2em;
+        text-align: left;
     }
 
     .details-row {
         margin-bottom: 0;
-    }
-
-    .buttons {
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        margin: 0.0em;
-        display: flex;
     }
 
     .btn-accept {
