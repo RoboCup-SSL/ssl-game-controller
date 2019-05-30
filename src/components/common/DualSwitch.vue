@@ -1,5 +1,5 @@
 <template>
-    <div class="switch btn-group-toggle btn-group">
+    <div class="btn-group-toggle btn-group">
         <label v-b-tooltip.hover
                :title="leftTitle"
                :class="{btn:true, 'btn-active': (selectedValue === leftValue), 'btn-passive': (selectedValue !== leftValue)}"
@@ -45,10 +45,6 @@
 </script>
 
 <style scoped>
-
-    .switch {
-        margin: 0.25em;
-    }
 
     .btn-active {
         background-color: green;

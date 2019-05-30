@@ -65,9 +65,4 @@
     input {
         text-align: center;
     }
-
-    .btn-edit {
-        margin-left: 0.5em;
-        margin-right: 0.3em;
-    }
 </style>
