@@ -4,15 +4,14 @@
              v-if="eventProposalsPresent"
              v-for="(proposal, index) in eventProposals"
              :key="index">
-                <span :class="{'team-blue': byTeam(proposal) === 2, 'team-yellow': byTeam(proposal) === 1}">
-                    {{proposal.gameEvent.type}}
-                </span>
+            <span :class="{'team-blue': byTeam(proposal) === 2, 'team-yellow': byTeam(proposal) === 1}">
+                {{proposal.gameEvent.type}}
+            </span>
             <span>by {{proposal.proposerId}}</span>
             (<span v-format-ns-duration="proposalTimeout(proposal.validUntil)"></span>):
-            <p>
-                <span v-for="detail in detailsList(proposal)"
-                      :key="detail.key">{{detail.key}}: {{detail.value}}<br/></span>
-            </p>
+            <p class="details-row"
+               v-for="detail in detailsList(proposal)"
+               :key="detail.key">{{detail.key}}: {{detail.value}}</p>
             <a class="btn-accept"
                v-b-tooltip.hover
                title="Accept this game event"
@@ -96,4 +95,9 @@
         bottom: 0;
         margin: 0.3em;
     }
+
+    .details-row {
+        margin-bottom: 0;
+    }
+
 </style>
