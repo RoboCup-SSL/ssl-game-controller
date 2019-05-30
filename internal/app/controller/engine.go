@@ -282,12 +282,12 @@ func (e *Engine) Continue() {
 		e.State.TeamState[TeamBlue].BotSubstitutionIntend = false
 		e.State.TeamState[TeamYellow].BotSubstitutionIntend = false
 		e.SendCommand(CommandHalt, "")
-	} else if e.State.NextCommand != CommandUnknown {
-		log.Printf("Let game continue with next command")
-		e.SendCommand(e.State.NextCommand, e.State.NextCommandFor)
 	} else if e.State.Command == CommandHalt {
 		// continue with a stop after halt to let the robots prepare
 		e.SendCommand(CommandStop, "")
+	} else if e.State.NextCommand != CommandUnknown {
+		log.Printf("Let game continue with next command")
+		e.SendCommand(e.State.NextCommand, e.State.NextCommandFor)
 	} else {
 		if e.State.Command != CommandStop {
 			// halt the game, if not in STOP.

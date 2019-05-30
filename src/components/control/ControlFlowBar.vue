@@ -17,9 +17,9 @@
                       v-on:click="triggerContinue"
                       v-bind:disabled="!continuePossible">
                 Continue
-                <span v-if="state.nextCommand !== ''">with</span>
-                <span :class="{'team-blue': state.nextCommandFor === 'Blue', 'team-yellow': state.nextCommandFor === 'Yellow'}">
-                    {{state.nextCommand}}
+                <span v-if="nextCommand !== ''">with</span>
+                <span :class="{'team-blue': nextCommandFor === 'Blue', 'team-yellow': nextCommandFor === 'Yellow'}">
+                    {{nextCommand}}
                 </span>
             </b-button>
         </div>
@@ -51,7 +51,7 @@
             },
             keymapContinue() {
                 return {
-                    'ctrl+alt+space': () => {
+                    'ctrl+space': () => {
                         if (!this.$refs.btnContinue.disabled) {
                             this.triggerContinue()
                         }
@@ -65,12 +65,24 @@
                 return this.state.command === 'halt';
             },
             continuePossible() {
-                return this.halted || this.state.nextCommand !== '';
+                return this.nextCommand !== '';
             },
             stopAllowed() {
                 return isNonPausedStage(this.$store.state.refBoxState)
                     || isPreStage(this.$store.state.refBoxState);
             },
+            nextCommand() {
+                if (this.halted) {
+                    return 'stop'
+                }
+                return this.state.nextCommand;
+            },
+            nextCommandFor() {
+                if (this.halted) {
+                    return ''
+                }
+                return this.state.nextCommandFor;
+            }
         }
     }
 </script>
