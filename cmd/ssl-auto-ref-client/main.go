@@ -77,11 +77,14 @@ func main() {
 			c.sendBallLeftField()
 		} else if strings.Compare("botCrashUnique", text) == 0 {
 			c.sendBotCrashUnique()
+		} else if strings.Compare("doubleTouch", text) == 0 {
+			c.sendDoubleTouch()
 		} else {
 			fmt.Println("Available commands: ")
 			fmt.Printf("  %-20s: %s\n", "help", "Show this help text")
 			fmt.Printf("  %-20s: %s\n", "ballLeftField", "Send game event")
 			fmt.Printf("  %-20s: %s\n", "botCrashUnique", "Send game event")
+			fmt.Printf("  %-20s: %s\n", "doubleTouch", "Send game event")
 		}
 	}
 }
@@ -141,6 +144,22 @@ func (c *Client) sendBallLeftField() {
 	c.sendRequest(&request, true)
 }
 
+func (c *Client) sendDoubleTouch() {
+	event := refproto.GameEvent_AttackerDoubleTouchedBall_{}
+	event.AttackerDoubleTouchedBall = new(refproto.GameEvent_AttackerDoubleTouchedBall)
+	event.AttackerDoubleTouchedBall.ByBot = new(uint32)
+	*event.AttackerDoubleTouchedBall.ByBot = 2
+	event.AttackerDoubleTouchedBall.ByTeam = new(refproto.Team)
+	*event.AttackerDoubleTouchedBall.ByTeam = refproto.Team_BLUE
+	event.AttackerDoubleTouchedBall.Location = &refproto.Location{X: new(float32), Y: new(float32)}
+	*event.AttackerDoubleTouchedBall.Location.X = 1
+	*event.AttackerDoubleTouchedBall.Location.Y = 4.5
+	gameEvent := refproto.GameEvent{Event: &event, Type: new(refproto.GameEventType)}
+	*gameEvent.Type = refproto.GameEventType_ATTACKER_DOUBLE_TOUCHED_BALL
+	request := refproto.AutoRefToController{GameEvent: &gameEvent}
+	c.sendRequest(&request, true)
+}
+
 func (c *Client) sendBotCrashUnique() {
 	event := refproto.GameEvent_BotCrashUnique_{}
 	event.BotCrashUnique = new(refproto.GameEvent_BotCrashUnique)
@@ -154,7 +173,7 @@ func (c *Client) sendBotCrashUnique() {
 	*event.BotCrashUnique.Location.X = 1
 	*event.BotCrashUnique.Location.Y = 4.5
 	gameEvent := refproto.GameEvent{Event: &event, Type: new(refproto.GameEventType)}
-	*gameEvent.Type = refproto.GameEventType_BALL_LEFT_FIELD_TOUCH_LINE
+	*gameEvent.Type = refproto.GameEventType_BOT_CRASH_UNIQUE
 	request := refproto.AutoRefToController{GameEvent: &gameEvent}
 	c.sendRequest(&request, true)
 }
@@ -194,6 +213,6 @@ func (c *Client) sendRequest(request *refproto.AutoRefToController, doLog bool) 
 
 func logIf(doLog bool, v ...interface{}) {
 	if doLog {
-		log.Print(v)
+		log.Print(v...)
 	}
 }
