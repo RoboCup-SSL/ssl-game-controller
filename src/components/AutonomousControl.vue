@@ -1,9 +1,9 @@
 <template>
     <div id="container">
-        <ManualControl class="view"/>
-        <TeamOverview class="view"/>
-        <Events class="view"/>
-        <div class="view">
+        <ManualControl class="game-controller-view"/>
+        <TeamOverview class="game-controller-view"/>
+        <Events class="game-controller-view"/>
+        <div class="game-controller-view">
             <h2>Game Events</h2>
             <div class="game-events">
                 <CurrentEvents/>
@@ -53,10 +53,6 @@
         text-align: left;
         overflow-y: auto;
         max-height: 85vh;
-    }
-
-    .view {
-        margin: 0.5em;
     }
 
 </style>

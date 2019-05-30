@@ -65,6 +65,5 @@
     }
 
     .view {
-        text-align: center;
     }
 </style>

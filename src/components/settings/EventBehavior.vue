@@ -1,5 +1,5 @@
 <template>
-    <div class="view">
+    <div class="game-controller-container">
         <table>
             <tr v-for="eventType in eventTypes" :key="eventType">
                 <td align="left">{{eventType}}</td>
@@ -49,5 +49,4 @@
 </script>
 
 <style scoped>
-
 </style>

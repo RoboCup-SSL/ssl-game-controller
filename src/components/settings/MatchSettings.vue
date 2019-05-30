@@ -1,5 +1,5 @@
 <template>
-    <div class="view">
+    <div class="game-controller-container">
         <p>
             <label>First kickoff team: </label>
             <DualSwitch
@@ -126,8 +126,4 @@
 </script>
 
 <style scoped>
-    button {
-        margin-right: 0.25em;
-        margin-left: 0.25em;
-    }
 </style>

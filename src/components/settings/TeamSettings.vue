@@ -1,5 +1,5 @@
 <template>
-    <div class="view">
+    <div class="game-controller-container">
         <table class="table-layout">
             <tr>
                 <th class="team-yellow">Yellow</th>

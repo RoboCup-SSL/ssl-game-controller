@@ -1,5 +1,5 @@
 <template>
-    <div class="view">
+    <div class="game-controller-container">
         <a v-b-modal.settings-modal>
             <font-awesome-icon icon="cog" class="fa-lg"></font-awesome-icon>
         </a>

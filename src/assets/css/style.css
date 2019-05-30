@@ -19,3 +19,11 @@
 button, .btn-group {
     margin: 0.25em;
 }
+
+.game-controller-container {
+    text-align: center;
+}
+
+.game-controller-view {
+    margin: 0.5em;
+}

@@ -1,5 +1,5 @@
 <template>
-    <div class="view">
+    <div class="game-controller-container">
         <p>
             Choose a game event and issue it in the current match. Most events are usually issued automatically
             by automatic referees,
