@@ -1,13 +1,17 @@
 package main
 
 import (
+	"bufio"
 	"crypto/rsa"
 	"flag"
+	"fmt"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/client"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
 	"github.com/RoboCup-SSL/ssl-go-tools/pkg/sslconn"
 	"log"
 	"net"
+	"os"
+	"strings"
 	"time"
 )
 
@@ -48,12 +52,37 @@ func main() {
 	c.conn = conn
 
 	c.register()
-	c.sendGameEvent()
 
-	c.sendAutoRefMessage("Hello World")
+	go func() {
+		for {
+			time.Sleep(1 * time.Second)
+			c.sendEmptyMessage()
+		}
+	}()
 
+	reader := bufio.NewReader(os.Stdin)
 	for {
-		time.Sleep(1 * time.Second)
+		fmt.Print("-> ")
+		text, err := reader.ReadString('\n')
+		if err != nil {
+			log.Print("Can not read from stdin: ", err)
+			for {
+				time.Sleep(1 * time.Second)
+			}
+		}
+		// convert CRLF to LF
+		text = strings.Replace(text, "\n", "", -1)
+
+		if strings.Compare("ballLeftField", text) == 0 {
+			c.sendBallLeftField()
+		} else if strings.Compare("botCrashUnique", text) == 0 {
+			c.sendBotCrashUnique()
+		} else {
+			fmt.Println("Available commands: ")
+			fmt.Printf("  %-20s: %s\n", "help", "Show this help text")
+			fmt.Printf("  %-20s: %s\n", "ballLeftField", "Send game event")
+			fmt.Printf("  %-20s: %s\n", "botCrashUnique", "Send game event")
+		}
 	}
 }
 
@@ -96,7 +125,7 @@ func (c *Client) register() {
 	}
 }
 
-func (c *Client) sendGameEvent() {
+func (c *Client) sendBallLeftField() {
 	event := refproto.GameEvent_BallLeftFieldTouchLine{}
 	event.BallLeftFieldTouchLine = new(refproto.GameEvent_BallLeftField)
 	event.BallLeftFieldTouchLine.ByBot = new(uint32)
@@ -109,33 +138,50 @@ func (c *Client) sendGameEvent() {
 	gameEvent := refproto.GameEvent{Event: &event, Type: new(refproto.GameEventType)}
 	*gameEvent.Type = refproto.GameEventType_BALL_LEFT_FIELD_TOUCH_LINE
 	request := refproto.AutoRefToController{GameEvent: &gameEvent}
-	c.sendRequest(&request)
+	c.sendRequest(&request, true)
 }
 
-func (c *Client) sendAutoRefMessage(msg string) {
-	message := refproto.AutoRefMessage{Message: &refproto.AutoRefMessage_Custom{Custom: msg}}
-	request := refproto.AutoRefToController{AutoRefMessage: &message}
-	c.sendRequest(&request)
+func (c *Client) sendBotCrashUnique() {
+	event := refproto.GameEvent_BotCrashUnique_{}
+	event.BotCrashUnique = new(refproto.GameEvent_BotCrashUnique)
+	event.BotCrashUnique.Violator = new(uint32)
+	*event.BotCrashUnique.Violator = 2
+	event.BotCrashUnique.Victim = new(uint32)
+	*event.BotCrashUnique.Victim = 5
+	event.BotCrashUnique.ByTeam = new(refproto.Team)
+	*event.BotCrashUnique.ByTeam = refproto.Team_BLUE
+	event.BotCrashUnique.Location = &refproto.Location{X: new(float32), Y: new(float32)}
+	*event.BotCrashUnique.Location.X = 1
+	*event.BotCrashUnique.Location.Y = 4.5
+	gameEvent := refproto.GameEvent{Event: &event, Type: new(refproto.GameEventType)}
+	*gameEvent.Type = refproto.GameEventType_BALL_LEFT_FIELD_TOUCH_LINE
+	request := refproto.AutoRefToController{GameEvent: &gameEvent}
+	c.sendRequest(&request, true)
 }
 
-func (c *Client) sendRequest(request *refproto.AutoRefToController) {
+func (c *Client) sendEmptyMessage() {
+	request := refproto.AutoRefToController{}
+	c.sendRequest(&request, false)
+}
+
+func (c *Client) sendRequest(request *refproto.AutoRefToController, doLog bool) {
 	if privateKey != nil {
 		request.Signature = &refproto.Signature{Token: &c.token, Pkcs1V15: []byte{}}
 		request.Signature.Pkcs1V15 = client.Sign(privateKey, request)
 	}
 
-	log.Print("Sending ", request)
+	logIf(doLog, "Sending ", request)
 
 	if err := sslconn.SendMessage(c.conn, request); err != nil {
 		log.Fatalf("Failed sending request: %v (%v)", request, err)
 	}
 
-	log.Print("Waiting for reply...")
+	logIf(doLog, "Waiting for reply...")
 	reply := refproto.ControllerToAutoRef{}
 	if err := sslconn.ReceiveMessage(c.conn, &reply); err != nil {
 		log.Fatal("Failed receiving controller reply: ", err)
 	}
-	log.Print("Received reply: ", reply)
+	logIf(doLog, "Received reply: ", reply)
 	if reply.GetControllerReply() == nil || reply.GetControllerReply().StatusCode == nil || *reply.GetControllerReply().StatusCode != refproto.ControllerReply_OK {
 		log.Fatal("Message rejected: ", *reply.GetControllerReply().Reason)
 	}
@@ -143,5 +189,11 @@ func (c *Client) sendRequest(request *refproto.AutoRefToController) {
 		c.token = *reply.GetControllerReply().NextToken
 	} else {
 		c.token = ""
+	}
+}
+
+func logIf(doLog bool, v ...interface{}) {
+	if doLog {
+		log.Print(v)
 	}
 }
