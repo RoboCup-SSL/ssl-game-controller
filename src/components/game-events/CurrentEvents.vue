@@ -75,9 +75,8 @@
                 return '';
             },
             acceptGoal(gameEvent) {
-                let goalEvent = {};
-                Object.assign(goalEvent, gameEvent);
-                goalEvent.type = 'goal';
+                let goalEvent = {type: 'goal', origins: gameEvent.origins, details: {goal: {}}};
+                Object.assign(goalEvent.details.goal, gameEvent.details.possibleGoal);
                 this.$socket.sendObj({
                     gameEvent: goalEvent
                 });
