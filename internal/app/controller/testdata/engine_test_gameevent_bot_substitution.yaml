@@ -67,6 +67,14 @@ transitions:
       trigger:
         type: continue
     expectedStateDiff:
+      command: stop
+      placementPos:
+        x: 5.8
+        y: 4.3
+  - event:
+      trigger:
+        type: continue
+    expectedStateDiff:
       command: direct
       commandFor: Blue
       nextCommand: ""
