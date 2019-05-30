@@ -1,6 +1,7 @@
 <template>
     <div class="game-controller-view">
         <h2>Game Events</h2>
+        <hr>
         <div class="game-events">
             <CurrentEvents/>
             <hr>

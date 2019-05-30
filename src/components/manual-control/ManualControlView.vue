@@ -1,6 +1,7 @@
 <template>
     <div class="game-controller-view">
         <h2>Manual Control</h2>
+        <hr>
         <table>
             <tr>
                 <td colspan="2">

@@ -30,5 +30,9 @@ button, .btn-group {
 }
 
 .game-controller-view {
-    margin: 0.5em;
+    margin: 0.25em;
+    padding: 0.25em;
+    border-style: dashed;
+    border-radius: 10px;
+    border-width: 0.1em;
 }

@@ -1,6 +1,7 @@
 <template>
     <div class="game-controller-view">
         <h2>Team Overview</h2>
+        <hr>
         <table>
             <tr>
                 <th class="team-yellow">{{teamYellow.name}}</th>
@@ -155,6 +156,35 @@
 <style scoped>
     .label-column {
         font-weight: bold;
+    }
+
+    td {
         padding: 0.5em;
+    }
+
+    table {
+        border-collapse: collapse;
+    }
+
+    table td, table th {
+        border: 1px solid black;
+    }
+
+    table tr:first-child th {
+        border-top: 0;
+    }
+
+    table tr:last-child td {
+        border-bottom: 0;
+    }
+
+    table tr td:first-child,
+    table tr th:first-child {
+        border-left: 0;
+    }
+
+    table tr td:last-child,
+    table tr th:last-child {
+        border-right: 0;
     }
 </style>

@@ -1,6 +1,7 @@
 <template>
     <div class="game-controller-view">
         <h2>Game Protocol</h2>
+        <hr>
         <EventTable :current-page="currentPage" :per-page="perPage" :events="events"/>
         <div class="event-controls-container">
 
