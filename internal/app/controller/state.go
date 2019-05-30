@@ -557,14 +557,14 @@ func (s *State) GetFirstGameEvent(gameEventType GameEventType) *GameEvent {
 	return nil
 }
 
-func (s *State) MatchesRecentGameEvent(event *GameEvent) bool {
+func (s *State) FindMatchingRecentGameEvent(event *GameEvent) *GameEvent {
 	for _, gameEvent := range s.GameEvents {
 		if gameEvent.Type == event.Type &&
 			event.Occurred().Sub(gameEvent.Occurred()) < 5*time.Second {
-			return true
+			return gameEvent
 		}
 	}
-	return false
+	return nil
 }
 
 // Location is a two-dimensional coordinate

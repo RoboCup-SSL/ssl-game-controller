@@ -804,6 +804,9 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 
 	e.applyGameEventFilters(event)
 
+	event.Origins = append(event.Origins, collectAllOrigins(e.collectAllMatchingProposals(event))...)
+	e.GcState.GameEventProposals = e.collectNonMatchingProposals(event)
+
 	if e.disabledGameEvent(event.Type) {
 		e.LogIgnoredGameEvent(*event)
 		return nil
@@ -812,7 +815,7 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 
 	var additionalEvents []*GameEvent
 
-	if !e.State.MatchesRecentGameEvent(event) && event.IncrementsFoulCounter() {
+	if event.IncrementsFoulCounter() {
 		team := event.ByTeam()
 		if team.Unknown() {
 			e.State.TeamState[TeamYellow].FoulCounter++

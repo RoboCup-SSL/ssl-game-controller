@@ -11,47 +11,99 @@ func (c *GameController) ProcessAutoRefRequests(id string, request refproto.Auto
 	defer c.ConnectionMutex.Unlock()
 	log.Printf("Received request from autoRef '%v': %v", id, request)
 
-	if request.GameEvent != nil {
-		details := GameEventDetailsFromProto(*request.GameEvent)
-		event := Event{GameEvent: &GameEvent{Type: details.EventType(), Details: details}}
+	if request.GameEvent == nil {
+		return nil
+	}
 
-		c.Engine.applyGameEventFilters(event.GameEvent)
+	details := GameEventDetailsFromProto(*request.GameEvent)
+	event := Event{GameEvent: &GameEvent{Type: details.EventType(), Details: details}}
 
-		if c.Engine.GcState.GameEventBehavior[event.GameEvent.Type] == GameEventBehaviorMajority {
-			validUntil := c.Engine.TimeProvider().Add(c.Config.Game.AutoRefProposalTimeout)
-			newProposal := GameEventProposal{GameEvent: *event.GameEvent, ProposerId: id, ValidUntil: validUntil}
+	c.Engine.applyGameEventFilters(event.GameEvent)
 
-			eventPresent := false
-			for _, proposal := range c.Engine.GcState.GameEventProposals {
-				if proposal.GameEvent.Type == event.GameEvent.Type && proposal.ProposerId == newProposal.ProposerId {
-					// update proposal
-					*proposal = newProposal
-					eventPresent = true
-				}
-			}
-			if !eventPresent {
-				c.Engine.GcState.GameEventProposals = append(c.Engine.GcState.GameEventProposals, &newProposal)
-			}
+	validUntil := c.Engine.TimeProvider().Add(c.Config.Game.AutoRefProposalTimeout)
+	proposal := GameEventProposal{GameEvent: *event.GameEvent, ProposerId: id, ValidUntil: validUntil}
 
-			totalProposals := 0
-			var origins []string
-			for _, proposal := range c.Engine.GcState.GameEventProposals {
-				if proposal.GameEvent.Type == event.GameEvent.Type && proposal.ValidUntil.After(c.Engine.TimeProvider()) {
-					totalProposals++
-					origins = append(origins, proposal.ProposerId)
-				}
-			}
+	if matchingEvent := c.Engine.State.FindMatchingRecentGameEvent(event.GameEvent); matchingEvent != nil {
+		// there was already such a game event recently. Just add the proposer to the existing event.
+		matchingEvent.Origins = append(matchingEvent.Origins, id)
+	} else if c.Engine.applyMajority(&event) { // look for a majority
 
-			majority := int(math.Floor(float64(len(c.AutoRefServer.Clients)) / 2.0))
-			if totalProposals > majority {
-				event.GameEvent.Origins = origins
-				c.OnNewEvent(event)
-			}
-		} else {
-			event.GameEvent.Origins = []string{id}
+		if c.Engine.isNewProposal(&proposal) {
+			// the autoRef has not submitted the same event recently, so add it to the proposals - waiting for majority
+			c.Engine.GcState.GameEventProposals = append(c.Engine.GcState.GameEventProposals, &proposal)
+		}
+
+		numProposals := c.Engine.numberOfMatchingProposals(event.GameEvent)
+		majority := int(math.Floor(float64(len(c.AutoRefServer.Clients)) / 2.0))
+		if numProposals > majority {
+			// there is a majority for a game event that has not yet been submitted to the GC
+			// remove the matching proposals and submit the event to the GC
 			c.OnNewEvent(event)
 		}
+
+	} else {
+		// game event has not been submitted recently (by any autoRef) and no majority required.
+		// Just submit this event
+		event.GameEvent.Origins = []string{id}
+		c.OnNewEvent(event)
 	}
 
 	return nil
+}
+
+func (e *Engine) numberOfMatchingProposals(event *GameEvent) (count int) {
+	count = 0
+	for _, proposal := range e.GcState.GameEventProposals {
+		if proposal.GameEvent.Type == event.Type && e.proposalValid(proposal) {
+			count++
+		}
+	}
+	return
+}
+
+func (e *Engine) collectAllMatchingProposals(event *GameEvent) []*GameEventProposal {
+	var proposals []*GameEventProposal
+	for _, proposal := range e.GcState.GameEventProposals {
+		if proposal.GameEvent.Type == event.Type {
+			proposals = append(proposals, proposal)
+		}
+	}
+	return proposals
+}
+
+func (e *Engine) collectNonMatchingProposals(event *GameEvent) []*GameEventProposal {
+	var proposals []*GameEventProposal
+	for _, proposal := range e.GcState.GameEventProposals {
+		if proposal.GameEvent.Type != event.Type {
+			proposals = append(proposals, proposal)
+		}
+	}
+	return proposals
+}
+
+func collectAllOrigins(proposals []*GameEventProposal) []string {
+	var origins []string
+	for _, proposal := range proposals {
+		origins = append(origins, proposal.ProposerId)
+	}
+	return origins
+}
+
+func (e *Engine) proposalValid(proposal *GameEventProposal) bool {
+	return proposal.ValidUntil.After(e.TimeProvider())
+}
+
+func (e *Engine) isNewProposal(newProposal *GameEventProposal) bool {
+	for _, proposal := range e.GcState.GameEventProposals {
+		if proposal.GameEvent.Type == newProposal.GameEvent.Type &&
+			proposal.ProposerId == newProposal.ProposerId &&
+			e.proposalValid(proposal) {
+			return false
+		}
+	}
+	return true
+}
+
+func (e *Engine) applyMajority(event *Event) bool {
+	return e.GcState.GameEventBehavior[event.GameEvent.Type] == GameEventBehaviorMajority
 }
