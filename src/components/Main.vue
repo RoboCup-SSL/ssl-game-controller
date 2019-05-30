@@ -14,7 +14,7 @@
     import GameEventsView from "./game-events/GameEventsView";
 
     export default {
-        name: "AutonomousControl",
+        name: "Main",
         components: {
             ManualControlView,
             TeamOverviewView,

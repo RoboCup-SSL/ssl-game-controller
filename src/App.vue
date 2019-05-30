@@ -8,6 +8,7 @@
         <router-view></router-view>
 
         <ControlFlowBar id="match-controls"/>
+        <SwitchWindowBar/>
     </div>
 </template>
 
@@ -15,10 +16,12 @@
     import MatchSettingsBar from "./components/control/MatchSettingsBar";
     import GameStateBar from './components/GameStateBar.vue'
     import ControlFlowBar from "./components/control/ControlFlowBar";
+    import SwitchWindowBar from "./components/control/SwitchWindowBar";
 
     export default {
         name: 'app',
         components: {
+            SwitchWindowBar,
             MatchSettingsBar,
             GameStateBar,
             ControlFlowBar,

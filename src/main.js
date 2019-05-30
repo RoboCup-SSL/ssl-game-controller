@@ -38,8 +38,7 @@ import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 import VueNativeSock from 'vue-native-websocket'
 
 import './assets/css/style.css'
-import AutonomousControl from "./components/AutonomousControl";
-import ManualControlView from "./components/manual-control/ManualControlView";
+import Main from "./components/Main";
 import Field from "./components/Field";
 
 Vue.use(TimestampFormatter);
@@ -92,10 +91,8 @@ Vue.use(VueNativeSock, wsAddress, {
 });
 
 const routes = [
-    {path: '/autonomous', component: AutonomousControl},
     {path: '/field', component: Field},
-    {path: '/manual', component: ManualControlView},
-    {path: '/', component: AutonomousControl},
+    {path: '/', component: Main},
 ];
 const router = new VueRouter({
     routes
