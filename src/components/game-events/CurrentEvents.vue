@@ -16,7 +16,7 @@
                 Submitted by: {{gameEvent.origins}}
             </p>
             <div class="btn-accept"
-                 v-if="gameEvent.type === 'possibleGoal'"
+                 v-if="showAcceptGoal(gameEvent)"
                  v-b-tooltip.hover.righttop="'Accept this goal'">
                 <a @click="acceptGoal(gameEvent)">
                     <font-awesome-icon icon="check-circle" class="fa-lg"></font-awesome-icon>
@@ -38,9 +38,20 @@
             },
             gameEventsPresent() {
                 return this.gameEvents != null && this.gameEvents.length > 0;
+            },
+            goalEventPresent() {
+                for (let event of this.state.gameEvents) {
+                    if (event.type === 'goal') {
+                        return true;
+                    }
+                }
+                return false;
             }
         },
         methods: {
+            showAcceptGoal(gameEvent) {
+                return !this.goalEventPresent && gameEvent.type === 'possibleGoal';
+            },
             details(gameEvent) {
                 let key = Object.keys(gameEvent.details)[0];
                 return gameEvent.details[key];
@@ -91,11 +102,14 @@
         text-align: left;
     }
 
-    .details-row {
-        margin-bottom: 0;
+    .btn-accept {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        margin: 0.3em;
     }
 
-    .btn-accept {
-        margin: 0.1em;
+    .details-row {
+        margin-bottom: 0;
     }
 </style>
