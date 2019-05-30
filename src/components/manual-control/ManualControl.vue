@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="game-controller-view">
         <h2>Manual Control</h2>
         <table>
             <tr>

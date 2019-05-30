@@ -1,16 +1,9 @@
 <template>
     <div id="container">
-        <ManualControl class="game-controller-view"/>
-        <TeamOverview class="game-controller-view"/>
-        <Events class="game-controller-view"/>
-        <div class="game-controller-view">
-            <h2>Game Events</h2>
-            <div class="game-events">
-                <CurrentEvents/>
-                <hr>
-                <EventProposals/>
-            </div>
-        </div>
+        <ManualControl/>
+        <TeamOverview/>
+        <Events/>
+        <GameEvents/>
     </div>
 </template>
 
@@ -18,18 +11,16 @@
     import TeamOverview from "./team/TeamOverview";
     import ControlTeam from "./manual-control/ManualControlTeam";
     import Events from "./events/Events";
-    import EventProposals from "./events/EventProposals";
-    import CurrentEvents from "./events/CurrentEvents";
     import Settings from "./settings/Settings";
     import ManualControl from "./manual-control/ManualControl";
+    import GameEvents from "./game-events/GameEvents";
 
     export default {
         name: "AutonomousControl",
         components: {
+            GameEvents,
             ManualControl,
             Settings,
-            CurrentEvents,
-            EventProposals,
             Events,
             ControlTeam,
             TeamOverview,
@@ -47,12 +38,6 @@
         align-items: stretch;
         align-content: flex-start;
         flex-grow: 1;
-    }
-
-    .game-events {
-        text-align: left;
-        overflow-y: auto;
-        max-height: 85vh;
     }
 
 </style>

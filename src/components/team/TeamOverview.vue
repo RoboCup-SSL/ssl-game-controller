@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="game-controller-view">
         <h2>Team Overview</h2>
         <table>
             <tr>
