@@ -160,6 +160,7 @@
 
     td {
         padding: 0.5em;
+        width: 7em;
     }
 
     table {
