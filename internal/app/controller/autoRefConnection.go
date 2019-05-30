@@ -9,11 +9,12 @@ import (
 func (c *GameController) ProcessAutoRefRequests(id string, request refproto.AutoRefToController) error {
 	c.ConnectionMutex.Lock()
 	defer c.ConnectionMutex.Unlock()
-	log.Printf("Received request from autoRef '%v': %v", id, request)
 
 	if request.GameEvent == nil {
 		return nil
 	}
+
+	log.Printf("Received request from autoRef '%v': %v", id, request)
 
 	details := GameEventDetailsFromProto(*request.GameEvent)
 	event := Event{GameEvent: &GameEvent{Type: details.EventType(), Details: details}}
