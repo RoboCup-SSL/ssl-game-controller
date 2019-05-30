@@ -82,7 +82,7 @@ func (r *StatePreserver) Open() error {
 	}
 	r.file = f
 
-	f, err = os.OpenFile(backupFilename, os.O_APPEND|os.O_WRONLY|os.O_CREATE, os.ModeAppend)
+	f, err = os.OpenFile(backupFilename, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
 	if err != nil {
 		return err
 	}
