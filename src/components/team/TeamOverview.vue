@@ -1,5 +1,6 @@
 <template>
     <div>
+        <h2>Team Overview</h2>
         <table>
             <tr>
                 <th class="team-yellow">{{teamYellow.name}}</th>

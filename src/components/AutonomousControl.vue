@@ -4,7 +4,7 @@
         <TeamOverview class="view"/>
         <Events class="view"/>
         <div class="view">
-            <h2>Current Game Events</h2>
+            <h2>Game Events</h2>
             <div class="game-events">
                 <CurrentEvents/>
                 <hr>

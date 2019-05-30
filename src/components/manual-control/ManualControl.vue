@@ -1,5 +1,6 @@
 <template>
     <div>
+        <h2>Manual Control</h2>
         <table>
             <tr>
                 <td colspan="2">

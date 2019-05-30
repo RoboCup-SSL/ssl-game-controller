@@ -1,5 +1,6 @@
 <template>
     <div>
+        <h2>Game Protocol</h2>
         <EventTable :current-page="currentPage" :per-page="perPage" :events="events"/>
         <div class="event-controls-container">
 
