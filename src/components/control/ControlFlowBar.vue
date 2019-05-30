@@ -76,8 +76,4 @@
 </script>
 
 <style scoped>
-    button {
-        margin-right: 0.5em;
-        margin-bottom: 0.5em;
-    }
 </style>

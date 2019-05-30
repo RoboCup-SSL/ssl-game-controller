@@ -6,6 +6,7 @@
                      :title="'Immediately stop all robots (' + Object.keys(keymapHalt)[0] + ')'">
                     <b-button v-hotkey="keymapHalt"
                               ref="btnHalt"
+                              class="manual-control-button"
                               v-on:click="send('halt')"
                               v-bind:disabled="halted">
                         Halt
@@ -17,6 +18,7 @@
                      :title="'Robots have to keep distance to the ball (' + Object.keys(keymapStop)[0] + ')'">
                     <b-button v-hotkey="keymapStop"
                               ref="btnStop"
+                              class="manual-control-button"
                               v-on:click="send('stop')"
                               v-bind:disabled="stopped || !stopAllowed">
                         Stop
@@ -30,6 +32,7 @@
                      :title="'Restart the game in draw situations (' + Object.keys(keymapForceStart)[0] + ')'">
                     <b-button v-hotkey="keymapForceStart"
                               ref="btnForceStart"
+                              class="manual-control-button"
                               v-on:click="send('forceStart')"
                               v-bind:disabled="!stopped || !forceStartAllowed">
                         Force Start
@@ -41,6 +44,7 @@
                      :title="'Continue game after a prepare state (' + Object.keys(keymapNormalStart)[0] + ')'">
                     <b-button v-hotkey="keymapNormalStart"
                               ref="btnNormalStart"
+                              class="manual-control-button"
                               v-on:click="send('normalStart')"
                               v-bind:disabled="!prepareSth || !normalStartAllowed">
                         Normal Start
@@ -125,11 +129,6 @@
 </script>
 
 <style scoped>
-    button {
-        margin: 0.5em;
-        width: 90%;
-    }
-
     table {
         width: 100%;
     }

@@ -1,21 +1,25 @@
 <template>
     <div class="container">
         <b-button v-on:click="addYellowCard"
+                  class="manual-control-button"
                   v-bind:disabled="running || preparing">
             Add Yellow Card
         </b-button>
 
         <b-button v-on:click="revokeYellowCard"
+                  class="manual-control-button"
                   v-bind:disabled="teamState.yellowCardTimes.length===0">
             Revoke Yellow Card
         </b-button>
 
         <b-button v-on:click="addRedCard"
+                  class="manual-control-button"
                   v-bind:disabled="running || preparing">
             Add Red Card
         </b-button>
 
-        <b-button v-on:click="addGoal">
+        <b-button v-on:click="addGoal"
+                  class="manual-control-button">
             Goal
         </b-button>
 
@@ -115,10 +119,5 @@
         flex-wrap: wrap;
         padding-left: 0;
         padding-right: 0;
-    }
-
-    button {
-        margin: 0.5em;
-        width: 90%;
     }
 </style>

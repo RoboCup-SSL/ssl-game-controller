@@ -15,3 +15,7 @@
 .team-blue {
     color: blue;
 }
+
+button, .btn-group {
+    margin: 0.25em;
+}

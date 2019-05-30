@@ -4,6 +4,7 @@
              :title="'Perform direct kick (corner and goal kicks) (' + Object.keys(keymapDirect)[0] + ')'">
             <b-button v-hotkey="keymapDirect"
                       ref="btnDirect"
+                      class="manual-control-button"
                       v-on:click="sendDirect"
                       v-bind:disabled="halted || running || preparing || !nonPausedStage">
                 Direct
@@ -13,6 +14,7 @@
              :title="'Perform indirect kick (throw-in) (' + Object.keys(keymapIndirect)[0] + ')'">
             <b-button v-hotkey="keymapIndirect"
                       ref="btnIndirect"
+                      class="manual-control-button"
                       v-on:click="sendIndirect"
                       v-bind:disabled="halted || running || preparing || !nonPausedStage">
                 Indirect
@@ -22,6 +24,7 @@
              :title="'Prepare for a kickoff (' + Object.keys(keymapKickoff)[0] + ')'">
             <b-button v-hotkey="keymapKickoff"
                       ref="btnKickoff"
+                      class="manual-control-button"
                       v-on:click="sendKickoff"
                       v-bind:disabled="halted || running || preparing">
                 Kickoff
@@ -30,6 +33,7 @@
         <div v-b-tooltip.hover
              title="Prepare for a penalty kick">
             <b-button v-on:click="sendPenalty"
+                      class="manual-control-button"
                       v-bind:disabled="halted || running || preparing || !nonPausedStage">
                 Penalty
             </b-button>
@@ -126,10 +130,5 @@
         flex-wrap: wrap;
         padding-left: 0;
         padding-right: 0;
-    }
-
-    button {
-        margin: 0.5em;
-        width: 90%;
     }
 </style>

@@ -6,8 +6,7 @@
             <b-pagination size="sm"
                           :total-rows="events.length"
                           v-model="currentPage"
-                          :per-page="perPage">
-            </b-pagination>
+                          :per-page="perPage"/>
 
             <input v-model.number="perPage"
                    title="Rows per page"
@@ -61,12 +60,9 @@
         justify-content: center;
     }
 
-    .event-controls-container button, input {
-        margin-bottom: 1rem;
-        margin-left: 1rem;
-    }
-
     input {
         text-align: center;
+        margin-bottom: 1rem;
+        margin-left: 1rem;
     }
 </style>

@@ -108,10 +108,6 @@
 </script>
 
 <style scoped>
-    button, .btn-group {
-        margin-right: 0.5em;
-        margin-bottom: 0.5em;
-    }
 
     .btn-active {
         background-color: green;

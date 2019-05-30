@@ -46,7 +46,7 @@
 
 <style scoped>
 
-    button, .switch {
+    .switch {
         margin: 0.25em;
     }
 

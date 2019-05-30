@@ -87,3 +87,9 @@
 
 <style scoped>
 </style>
+
+<style>
+    .manual-control-button {
+        width: 90%;
+    }
+</style>

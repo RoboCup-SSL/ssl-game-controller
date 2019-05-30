@@ -1,5 +1,6 @@
 <template>
     <b-button v-on:click="toggleTimeout"
+              class="manual-control-button"
               v-bind:disabled="disableTimeoutButton">
         {{timeoutRunning ? 'Stop' : 'Start'}} Timeout
     </b-button>
