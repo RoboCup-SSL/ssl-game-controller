@@ -37,7 +37,7 @@ func NewGameControllerState() (s *GameControllerState) {
 		s.GameEventBehavior[event] = GameEventBehaviorOn
 	}
 
-	s.GameEventProposals = []*GameEventProposal{}
+	s.GameEventProposals = nil
 
 	s.AutoRefsConnected = []string{}
 	s.TeamConnected = map[Team]bool{}
@@ -53,8 +53,12 @@ func NewGameControllerState() (s *GameControllerState) {
 
 func (s GameControllerState) DeepCopy() (c GameControllerState) {
 	c = s
-	c.GameEventProposals = make([]*GameEventProposal, len(s.GameEventProposals))
-	copy(c.GameEventProposals, s.GameEventProposals)
+	if len(s.GameEventProposals) > 0 {
+		c.GameEventProposals = make([]*GameEventProposal, len(s.GameEventProposals))
+		copy(c.GameEventProposals, s.GameEventProposals)
+	} else {
+		c.GameEventProposals = nil
+	}
 	c.GameEventBehavior = make(map[GameEventType]GameEventBehavior)
 	for k, v := range s.GameEventBehavior {
 		c.GameEventBehavior[k] = v
@@ -238,7 +242,7 @@ func (e *Engine) SendCommand(command RefCommand, forTeam Team) {
 		}
 		// reset game event proposals
 		if len(e.GcState.GameEventProposals) > 0 {
-			e.GcState.GameEventProposals = []*GameEventProposal{}
+			e.GcState.GameEventProposals = nil
 		}
 		// reset ball placement pos and follow ups
 		e.State.PlacementPos = nil

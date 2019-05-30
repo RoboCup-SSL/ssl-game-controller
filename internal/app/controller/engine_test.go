@@ -14,24 +14,21 @@ import (
 )
 
 type TestState struct {
-	Stage                      *Stage                               `yaml:"stage"`
-	Command                    *RefCommand                          `yaml:"command"`
-	CommandFor                 *Team                                `yaml:"commandFor"`
-	GameEvents                 []*GameEvent                         `yaml:"gameEvents"`
-	StageTimeElapsed           *time.Duration                       `yaml:"stageTimeElapsed"`
-	StageTimeLeft              *time.Duration                       `yaml:"stageTimeLeft"`
-	MatchTimeStart             *time.Time                           `yaml:"matchTimeStart"`
-	MatchDuration              *time.Duration                       `yaml:"matchDuration"`
-	TeamState                  map[Team]*TestTeamInfo               `yaml:"teamState"`
-	Division                   *config.Division                     `yaml:"division"`
-	PlacementPos               *Location                            `yaml:"placementPos"`
-	AutoContinue               *bool                                `yaml:"autoContinue"`
-	NextCommand                *RefCommand                          `yaml:"nextCommand"`
-	NextCommandFor             *Team                                `yaml:"nextCommandFor"`
-	GameEventBehavior          *map[GameEventType]GameEventBehavior `yaml:"gameEventBehavior"`
-	GameEventProposals         []*GameEventProposal                 `yaml:"gameEventProposals"`
-	CurrentActionDeadline      *time.Time                           `yaml:"currentActionDeadline"`
-	CurrentActionTimeRemaining *time.Duration                       `yaml:"currentActionTimeRemaining"`
+	Stage                      *Stage                 `yaml:"stage"`
+	Command                    *RefCommand            `yaml:"command"`
+	CommandFor                 *Team                  `yaml:"commandFor"`
+	GameEvents                 []*GameEvent           `yaml:"gameEvents"`
+	StageTimeElapsed           *time.Duration         `yaml:"stageTimeElapsed"`
+	StageTimeLeft              *time.Duration         `yaml:"stageTimeLeft"`
+	MatchTimeStart             *time.Time             `yaml:"matchTimeStart"`
+	MatchDuration              *time.Duration         `yaml:"matchDuration"`
+	TeamState                  map[Team]*TestTeamInfo `yaml:"teamState"`
+	Division                   *config.Division       `yaml:"division"`
+	PlacementPos               *Location              `yaml:"placementPos"`
+	NextCommand                *RefCommand            `yaml:"nextCommand"`
+	NextCommandFor             *Team                  `yaml:"nextCommandFor"`
+	CurrentActionDeadline      *time.Time             `yaml:"currentActionDeadline"`
+	CurrentActionTimeRemaining *time.Duration         `yaml:"currentActionTimeRemaining"`
 }
 
 type TestTeamInfo struct {
@@ -207,21 +204,6 @@ func (t *TestState) valid() error {
 	}
 	if t.NextCommandFor != nil && !t.NextCommandFor.Valid() {
 		return errors.Errorf("TestState.NextCommandFor has an invalid value: %v", t.NextCommandFor)
-	}
-	if t.GameEventBehavior != nil {
-		for gameEventType, gameEventBehavior := range *t.GameEventBehavior {
-			if !gameEventType.Valid() {
-				return errors.Errorf("TestState.GameEventBehavior has an invalid key: %v", gameEventType)
-			}
-			if !gameEventBehavior.Valid() {
-				return errors.Errorf("TestState.GameEventBehavior[%v] has an invalid value: %v", gameEventType, gameEventBehavior)
-			}
-		}
-	}
-	for _, proposal := range t.GameEventProposals {
-		if !proposal.GameEvent.Type.Valid() {
-			return errors.Errorf("TestState.GameEventProposals.GameEvent.Type has an invalid value: %v", proposal.GameEvent.Type)
-		}
 	}
 	return nil
 }
