@@ -1,28 +1,24 @@
 <template>
-    <div>
-        <h2>Proposed Game Events</h2>
-        <div class="content">
-            <span v-if="!eventProposalsPresent">None</span>
-            <div class="proposal-item"
-                 v-if="eventProposalsPresent"
-                 v-for="(proposal, index) in eventProposals"
-                 :key="index">
+    <div class="content">
+        <div class="proposal-item"
+             v-if="eventProposalsPresent"
+             v-for="(proposal, index) in eventProposals"
+             :key="index">
                 <span :class="{'team-blue': byTeam(proposal) === 2, 'team-yellow': byTeam(proposal) === 1}">
                     {{proposal.gameEvent.type}}
                 </span>
-                <span>by {{proposal.proposerId}}</span>
-                (<span v-format-ns-duration="proposalTimeout(proposal.validUntil)"></span>):
-                <p>
+            <span>by {{proposal.proposerId}}</span>
+            (<span v-format-ns-duration="proposalTimeout(proposal.validUntil)"></span>):
+            <p>
                 <span v-for="detail in detailsList(proposal)"
                       :key="detail.key">{{detail.key}}: {{detail.value}}<br/></span>
-                </p>
-                <a class="btn-accept"
-                   v-b-tooltip.hover
-                   title="Accept this game event"
-                   @click="accept(proposal.gameEvent)">
-                    <font-awesome-icon icon="check-circle" class="fa-lg"></font-awesome-icon>
-                </a>
-            </div>
+            </p>
+            <a class="btn-accept"
+               v-b-tooltip.hover
+               title="Accept this game event"
+               @click="accept(proposal.gameEvent)">
+                <font-awesome-icon icon="check-circle" class="fa-lg"></font-awesome-icon>
+            </a>
         </div>
     </div>
 </template>
@@ -83,14 +79,15 @@
 </script>
 
 <style scoped>
-    .content {
-        text-align: left;
-        overflow-y: auto;
-        max-height: 15em;
-    }
 
     .proposal-item {
         position: relative;
+        min-height: 2em;
+        border-style: dotted;
+        border-width: thin;
+        border-radius: 5px;
+        padding: 0.2em;
+        margin: 0.2em;
     }
 
     .btn-accept {

@@ -1,28 +1,26 @@
 <template>
-    <div>
-        <h2>Current Game Events</h2>
-        <div class="content">
-            <span v-if="!gameEventsPresent">None</span>
-            <div class="game-event-item"
-                 v-if="gameEventsPresent"
-                 v-for="(gameEvent, index) in gameEvents"
-                 :key="index">
-                <span :class="{'team-blue': byTeam(gameEvent) === 2, 'team-yellow': byTeam(gameEvent) === 1}">
-                    {{gameEvent.type}}
-                </span>
-                <p>
-                <span v-for="detail in detailsList(gameEvent)"
-                      :key="detail.key">{{detail.key}}: {{detail.value}}<br/></span>
-                </p>
-                <div class="buttons">
-                    <div class="btn-accept"
-                         v-if="gameEvent.type === 'possibleGoal'"
-                         v-b-tooltip.hover.righttop="'Accept this game event'">
-                        <a @click="acceptGoal(gameEvent)">
-                            <font-awesome-icon icon="check-circle" class="fa-lg"></font-awesome-icon>
-                        </a>
-                    </div>
-                </div>
+    <div class="content">
+        <span v-if="!gameEventsPresent">None</span>
+        <div class="game-event-item"
+             v-if="gameEventsPresent"
+             v-for="(gameEvent, index) in gameEvents"
+             :key="index">
+            <span :class="{'team-blue': byTeam(gameEvent) === 2, 'team-yellow': byTeam(gameEvent) === 1}">
+                {{gameEvent.type}}
+            </span>
+            <p class="details-row"
+               v-for="detail in detailsList(gameEvent)"
+               :key="detail.key">{{detail.key}}: {{detail.value}}</p>
+            <p class="details-row"
+               v-if="gameEvent.origins !== null && gameEvent.origins.length > 0">
+                Submitted by: {{gameEvent.origins}}
+            </p>
+            <div class="btn-accept"
+                 v-if="gameEvent.type === 'possibleGoal'"
+                 v-b-tooltip.hover.righttop="'Accept this goal'">
+                <a @click="acceptGoal(gameEvent)">
+                    <font-awesome-icon icon="check-circle" class="fa-lg"></font-awesome-icon>
+                </a>
             </div>
         </div>
     </div>
@@ -36,7 +34,7 @@
                 return this.$store.state.refBoxState
             },
             gameEvents() {
-                return this.state.protocol;
+                return this.state.gameEvents;
             },
             gameEventsPresent() {
                 return this.gameEvents != null && this.gameEvents.length > 0;
@@ -81,12 +79,21 @@
     .content {
         text-align: left;
         overflow-y: auto;
-        max-height: 15em;
+        /*max-height: 15em;*/
     }
 
     .game-event-item {
         position: relative;
         min-height: 2em;
+        border-style: dotted;
+        border-width: thin;
+        border-radius: 5px;
+        padding: 0.2em;
+        margin: 0.2em;
+    }
+
+    .details-row {
+        margin-bottom: 0;
     }
 
     .buttons {

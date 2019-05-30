@@ -1,10 +1,16 @@
 <template>
     <div id="container">
+        <ManualControl class="view"/>
         <TeamOverview class="view"/>
-        <Events/>
-        <ManualControl/>
-        <CurrentEvents class="view"/>
-        <EventProposals class="view"/>
+        <Events class="view"/>
+        <div class="view">
+            <h2>Current Game Events</h2>
+            <div class="game-events">
+                <CurrentEvents/>
+                <hr>
+                <EventProposals/>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -41,6 +47,12 @@
         align-items: stretch;
         align-content: flex-start;
         flex-grow: 1;
+    }
+
+    .game-events {
+        text-align: left;
+        overflow-y: auto;
+        max-height: 85vh;
     }
 
     .view {
