@@ -547,7 +547,13 @@ func (e *Engine) processModify(m *EventModifyValue) error {
 		e.GcState.FirstKickoffTeam = Team(*m.FirstKickoffTeam)
 		e.updateNextCommandForStage()
 	} else if m.GameEventBehavior != nil {
-		e.GcState.GameEventBehavior[m.GameEventBehavior.GameEventType] = m.GameEventBehavior.GameEventBehavior
+		if m.GameEventBehavior.GameEventType == GameEventAll {
+			for i := range e.GcState.GameEventBehavior {
+				e.GcState.GameEventBehavior[i] = m.GameEventBehavior.GameEventBehavior
+			}
+		} else {
+			e.GcState.GameEventBehavior[m.GameEventBehavior.GameEventType] = m.GameEventBehavior.GameEventBehavior
+		}
 	} else if m.RemoveGameEvent != nil {
 		i := *m.RemoveGameEvent
 		if i >= len(e.State.GameEvents) {

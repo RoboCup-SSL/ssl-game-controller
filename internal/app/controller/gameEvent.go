@@ -13,6 +13,7 @@ type GameEventType string
 
 const (
 	GameEventNone GameEventType = ""
+	GameEventAll  GameEventType = "all"
 
 	GameEventPrepared           GameEventType = "prepared"
 	GameEventNoProgressInGame   GameEventType = "noProgressInGame"
