@@ -71,7 +71,7 @@
     import PlaceBall from "./PlaceBall";
 
     export default {
-        name: "ManualControl",
+        name: "ManualControlView",
         components: {
             PlaceBall,
             ManualControlTeamMatchCommands,

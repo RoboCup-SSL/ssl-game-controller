@@ -14,7 +14,7 @@
     import EventProposals from "./EventProposals";
 
     export default {
-        name: "GameEvents",
+        name: "GameEventsView",
         components: {
             EventProposals,
             CurrentEvents

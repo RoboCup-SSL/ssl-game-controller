@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="game-state-bar">
         <span v-if="state.currentActionTimeRemaining >= 0">
             <span v-format-ns-duration="state.currentActionTimeRemaining"
                   v-b-tooltip.hover
@@ -56,7 +56,7 @@
 
 <script>
     export default {
-        name: 'GameState',
+        name: 'GameStateBar',
         computed: {
             state() {
                 return this.$store.state.refBoxState
@@ -66,4 +66,8 @@
 </script>
 
 <style scoped>
+    .game-state-bar {
+        font-size: 1.2em;
+        font-weight: bold;
+    }
 </style>

@@ -1,29 +1,25 @@
 <template>
     <div id="container">
-        <ManualControl/>
-        <TeamOverview/>
-        <Events/>
-        <GameEvents/>
+        <ManualControlView/>
+        <TeamOverviewView/>
+        <ProtocolView/>
+        <GameEventsView/>
     </div>
 </template>
 
 <script>
-    import TeamOverview from "./team/TeamOverview";
-    import ControlTeam from "./manual-control/ManualControlTeam";
-    import Events from "./protocol/Events";
-    import Settings from "./settings/Settings";
-    import ManualControl from "./manual-control/ManualControl";
-    import GameEvents from "./game-events/GameEvents";
+    import ManualControlView from "./manual-control/ManualControlView";
+    import TeamOverviewView from "./team/TeamOverviewView";
+    import ProtocolView from "./protocol/ProtocolView";
+    import GameEventsView from "./game-events/GameEventsView";
 
     export default {
         name: "AutonomousControl",
         components: {
-            GameEvents,
-            ManualControl,
-            Settings,
-            Events,
-            ControlTeam,
-            TeamOverview,
+            ManualControlView,
+            TeamOverviewView,
+            ProtocolView,
+            GameEventsView,
         }
     }
 </script>

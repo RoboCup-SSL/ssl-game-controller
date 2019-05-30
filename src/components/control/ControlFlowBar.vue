@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="control-flaw-bar">
         <span v-b-tooltip.hover
               :title="'Immediately stop all robots (' + Object.keys(keymapHalt)[0] + ')'">
             <b-button v-hotkey="keymapHalt"
@@ -76,4 +76,11 @@
 </script>
 
 <style scoped>
+
+    .control-flaw-bar {
+        width: 100%;
+        position: fixed;
+        bottom: 0;
+        text-align: center;
+    }
 </style>

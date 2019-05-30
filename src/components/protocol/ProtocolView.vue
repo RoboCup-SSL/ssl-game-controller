@@ -20,7 +20,7 @@
 </template>
 
 <script>
-    import EventTable from "./EventTable";
+    import EventTable from "./ProtocolTable";
 
     export default {
         name: "Events",

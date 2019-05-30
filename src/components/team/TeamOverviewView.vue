@@ -119,7 +119,7 @@
     import TeamYellowCardsActive from "./TeamYellowCardsActive";
 
     export default {
-        name: "TeamOverview",
+        name: "TeamOverviewView",
         components: {
             TeamYellowCardsActive,
             TeamYellowCardTimes,

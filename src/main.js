@@ -39,7 +39,7 @@ import VueNativeSock from 'vue-native-websocket'
 
 import './assets/css/style.css'
 import AutonomousControl from "./components/AutonomousControl";
-import ManualControl from "./components/manual-control/ManualControl";
+import ManualControlView from "./components/manual-control/ManualControlView";
 import Field from "./components/Field";
 
 Vue.use(TimestampFormatter);
@@ -94,7 +94,7 @@ Vue.use(VueNativeSock, wsAddress, {
 const routes = [
     {path: '/autonomous', component: AutonomousControl},
     {path: '/field', component: Field},
-    {path: '/manual', component: ManualControl},
+    {path: '/manual', component: ManualControlView},
     {path: '/', component: AutonomousControl},
 ];
 const router = new VueRouter({
