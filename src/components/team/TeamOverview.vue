@@ -17,7 +17,7 @@
                 <td>
                     <TeamGoalkeeper :edit-mode="editMode" team-color="Yellow"/>
                 </td>
-                <td>Goal Keeper</td>
+                <td class="label-column">Goal Keeper</td>
                 <td>
                     <TeamGoalkeeper :edit-mode="editMode" team-color="Blue"/>
                 </td>
@@ -28,7 +28,7 @@
                     |
                     <TeamTimeoutTime :edit-mode="editMode" team-color="Yellow"/>
                 </td>
-                <td>Timeouts left</td>
+                <td class="label-column">Timeouts left</td>
                 <td>
                     <TeamTimeouts :edit-mode="editMode" team-color="Blue"/>
                     |
@@ -41,7 +41,7 @@
                     |
                     <TeamRedCards :edit-mode="editMode" team-color="Yellow"/>
                 </td>
-                <td>Yellow / Red Cards</td>
+                <td class="label-column">Yellow / Red Cards</td>
                 <td>
                     <TeamYellowCards :edit-mode="editMode" team-color="Blue"/>
                     |
@@ -52,7 +52,7 @@
                 <td>
                     <TeamYellowCardsActive :edit-mode="editMode" team-color="Yellow"/>
                 </td>
-                <td>
+                <td class="label-column">
                     Active Yellow Cards
                 </td>
                 <td>
@@ -63,7 +63,7 @@
                 <td>
                     <TeamFoulCounter :edit-mode="editMode" team-color="Yellow"/>
                 </td>
-                <td>Foul Counter</td>
+                <td class="label-column">Foul Counter</td>
                 <td>
                     <TeamFoulCounter :edit-mode="editMode" team-color="Blue"/>
                 </td>
@@ -72,7 +72,7 @@
                 <td>
                     <TeamPlacementFailures :edit-mode="editMode" team-color="Yellow"/>
                 </td>
-                <td>Placement Failures</td>
+                <td class="label-column">Placement Failures</td>
                 <td>
                     <TeamPlacementFailures :edit-mode="editMode" team-color="Blue"/>
                 </td>
@@ -81,21 +81,21 @@
                 <td>
                     <TeamBotSubstitution team-color="Yellow"/>
                 </td>
-                <td>Bot Substitution</td>
+                <td class="label-column">Bot Substitution</td>
                 <td>
                     <TeamBotSubstitution team-color="Blue"/>
                 </td>
             </tr>
             <tr>
                 <td>{{teamYellow.maxAllowedBots}}</td>
-                <td>Max allowed Bots</td>
+                <td class="label-column">Max allowed Bots</td>
                 <td>{{teamBlue.maxAllowedBots}}</td>
             </tr>
             <tr>
                 <td>
                     <TeamConnection team-color="Yellow"/>
                 </td>
-                <td>Connected</td>
+                <td class="label-column">Connected</td>
                 <td>
                     <TeamConnection team-color="Blue"/>
                 </td>
@@ -152,4 +152,8 @@
 </script>
 
 <style scoped>
+    .label-column {
+        font-weight: bold;
+        padding: 0.5em;
+    }
 </style>
