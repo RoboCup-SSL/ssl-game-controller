@@ -79,20 +79,21 @@ func (e *Engine) LogIgnoredGameEvent(event GameEvent) {
 }
 
 // LogCommand adds a command to the protocol
-func (e *Engine) LogCommand() {
+func (e *Engine) LogCommand(command RefCommand, commandFor Team, prevState *State) {
 	description := ""
 	if e.State.PlacementPos != nil {
 		description = fmt.Sprintf("place pos: %v", e.State.PlacementPos)
 	}
-	log.Printf("Log command '%v': %v", string(e.State.Command), description)
+	log.Printf("Log command '%v' for '%v': %v", string(command), commandFor, description)
 	entry := ProtocolEntry{
-		Id:          e.newGlobalProtocolEntryId(),
-		Timestamp:   e.TimeProvider().UnixNano(),
-		StageTime:   e.State.StageTimeElapsed,
-		Type:        UiProtocolCommand,
-		Name:        string(e.State.Command),
-		Team:        e.State.CommandFor,
-		Description: description,
+		Id:            e.newGlobalProtocolEntryId(),
+		Timestamp:     e.TimeProvider().UnixNano(),
+		StageTime:     e.State.StageTimeElapsed,
+		Type:          UiProtocolCommand,
+		Name:          string(command),
+		Team:          commandFor,
+		Description:   description,
+		PreviousState: prevState,
 	}
 	e.PersistentState.Add(&entry)
 }

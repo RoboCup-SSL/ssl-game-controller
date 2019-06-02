@@ -212,6 +212,9 @@ func (e *Engine) countCardTime() bool {
 }
 
 func (e *Engine) SendCommand(command RefCommand, forTeam Team) {
+
+	e.LogCommand(command, forTeam, e.State.DeepCopy())
+
 	e.State.PrevCommands = append(e.State.PrevCommands, e.State.Command)
 	e.State.PrevCommandsFor = append(e.State.PrevCommandsFor, e.State.CommandFor)
 	if len(e.State.PrevCommands) > 10 {
@@ -231,8 +234,6 @@ func (e *Engine) SendCommand(command RefCommand, forTeam Team) {
 		// reset placement pos
 		e.State.PlacementPos = nil
 	}
-
-	e.LogCommand()
 
 	if command == CommandTimeout {
 		e.State.TeamState[forTeam].TimeoutsLeft--
@@ -501,6 +502,8 @@ func (e *Engine) processEvent(event Event) error {
 }
 
 func (e *Engine) processRevertProtocolEntry(id string) error {
+	log.Printf("Revert protocol entry %v", id)
+
 	err := e.PersistentState.RevertProtocolEntry(id)
 	if err != nil {
 		return err
@@ -508,11 +511,7 @@ func (e *Engine) processRevertProtocolEntry(id string) error {
 	e.GcState = e.PersistentState.CurrentState
 	e.State = e.GcState.MatchState
 
-	if e.State.Command != CommandHalt {
-		e.SendCommand(CommandHalt, "")
-	}
-
-	log.Printf("Revert protocol entry %v", id)
+	e.SendCommand(CommandHalt, "")
 	return nil
 }
 

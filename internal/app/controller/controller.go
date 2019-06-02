@@ -16,20 +16,20 @@ const configFileName = "config/ssl-game-controller.yaml"
 
 // GameController controls a game
 type GameController struct {
-	Config                    config.Controller
-	Publisher                 Publisher
-	ApiServer                 ApiServer
-	AutoRefServer             *rcon.AutoRefServer
-	TeamServer                *rcon.TeamServer
-	CiServer                  rcon.CiServer
-	Engine                    Engine
-	statePreserver            StatePreserver
-	numUiProtocolsLastPublish int
-	outstandingTeamChoice     *TeamChoice
-	ConnectionMutex           sync.Mutex
-	PublishMutex              sync.Mutex
-	StateMutex                sync.Mutex
-	VisionReceiver            *vision.Receiver
+	Config                config.Controller
+	Publisher             Publisher
+	ApiServer             ApiServer
+	AutoRefServer         *rcon.AutoRefServer
+	TeamServer            *rcon.TeamServer
+	CiServer              rcon.CiServer
+	Engine                Engine
+	statePreserver        StatePreserver
+	uiProtocolLastPublish []*ProtocolEntry
+	outstandingTeamChoice *TeamChoice
+	ConnectionMutex       sync.Mutex
+	PublishMutex          sync.Mutex
+	StateMutex            sync.Mutex
+	VisionReceiver        *vision.Receiver
 }
 
 // NewGameController creates a new RefBox
@@ -40,6 +40,7 @@ func NewGameController() (c *GameController) {
 	c.Publisher = NewPublisher(c.Config.Network.PublishAddress)
 	c.ApiServer = ApiServer{}
 	c.ApiServer.Consumer = c
+	c.uiProtocolLastPublish = []*ProtocolEntry{}
 
 	c.VisionReceiver = vision.NewReceiver(c.Config.Network.VisionAddress)
 	c.VisionReceiver.GeometryCallback = c.ProcessGeometry
@@ -161,9 +162,13 @@ func (c *GameController) publish() {
 
 // publishUiProtocol publishes the UI protocol, if it has changed
 func (c *GameController) publishUiProtocol() {
-	if len(c.Engine.PersistentState.Protocol) != c.numUiProtocolsLastPublish {
+	numNewEntries := len(c.Engine.PersistentState.Protocol)
+	numPreEntries := len(c.uiProtocolLastPublish)
+	if numNewEntries != numPreEntries ||
+		(numNewEntries > 0 && c.Engine.PersistentState.Protocol[numNewEntries-1] != c.uiProtocolLastPublish[numPreEntries-1]) {
 		c.ApiServer.PublishUiProtocol(c.Engine.PersistentState.Protocol)
-		c.numUiProtocolsLastPublish = len(c.Engine.PersistentState.Protocol)
+		c.uiProtocolLastPublish = make([]*ProtocolEntry, numNewEntries)
+		copy(c.uiProtocolLastPublish, c.Engine.PersistentState.Protocol)
 	}
 }
 
