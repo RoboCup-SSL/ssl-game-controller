@@ -249,12 +249,17 @@ func (p *RefMessage) updateTeam(teamInfo *refproto.Referee_TeamInfo, state *Team
 	teamInfo.YellowCardTimes = mapTimes(state.YellowCardTimes)
 	*teamInfo.YellowCards = uint32(state.YellowCards)
 	*teamInfo.Timeouts = uint32(state.TimeoutsLeft)
-	*teamInfo.TimeoutTime = uint32(state.TimeoutTimeLeft.Nanoseconds() / 1000)
 	*teamInfo.Goalkeeper = uint32(state.Goalkeeper)
 	*teamInfo.FoulCounter = uint32(state.FoulCounter)
 	*teamInfo.BallPlacementFailures = uint32(state.BallPlacementFailures)
 	*teamInfo.CanPlaceBall = state.CanPlaceBall
 	*teamInfo.MaxAllowedBots = uint32(state.MaxAllowedBots)
+
+	if state.TimeoutTimeLeft.Nanoseconds() > 0 {
+		*teamInfo.TimeoutTime = uint32(state.TimeoutTimeLeft.Nanoseconds() / 1000)
+	} else {
+		*teamInfo.TimeoutTime = 0
+	}
 }
 
 func mapTimes(durations []time.Duration) []uint32 {

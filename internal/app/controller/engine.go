@@ -193,6 +193,11 @@ func (e *Engine) updateTimes(currentTime time.Time, delta time.Duration) (timeCh
 		newCurrentActionTimeRemaining := e.State.CurrentActionDeadline.Sub(currentTime)
 		timeChanged = timeChanged || isNewFullSecond(e.State.CurrentActionTimeRemaining, newCurrentActionTimeRemaining-e.State.CurrentActionTimeRemaining)
 		e.State.CurrentActionTimeRemaining = newCurrentActionTimeRemaining
+		minimumTimeRemaining := -time.Minute * 30
+		if e.State.CurrentActionTimeRemaining < minimumTimeRemaining {
+			// limit how small this time can get to avoid overflow in referee message
+			e.State.CurrentActionTimeRemaining = minimumTimeRemaining
+		}
 	}
 
 	return
