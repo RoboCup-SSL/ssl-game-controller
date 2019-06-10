@@ -96,9 +96,9 @@ transitions:
       teamState:
         Blue:
           ballPlacementFailures: 4
-  - tick: 1s # make sure that the stage time is not proceeded
+  - tick: 5s # make sure that the stage time is not proceeded
     expectedStateDiff:
-      currentActionTimeRemaining: 29s
+      currentActionTimeRemaining: 25s
       placementPos:
         x: 5.8
         y: 4.3

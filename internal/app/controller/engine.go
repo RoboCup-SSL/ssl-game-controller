@@ -823,16 +823,22 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 		return errors.Errorf("Incomplete game event: %v", event)
 	}
 
+	log.Printf("Processing game event %v", event)
+
+	event.SetOccurred(e.TimeProvider())
+
 	e.applyGameEventFilters(event)
 
-	event.Origins = append(event.Origins, collectAllOrigins(e.collectAllMatchingProposals(event))...)
-	e.GcState.GameEventProposals = e.collectNonMatchingProposals(event)
+	if e.State.IsRecentGameEvent(event) {
+		// only add event to list, not to protocol
+		e.State.GameEvents = append(e.State.GameEvents, event)
+		return nil
+	}
 
 	if e.disabledGameEvent(event.Type) {
 		e.LogIgnoredGameEvent(event)
 		return nil
 	}
-	event.SetOccurred(e.TimeProvider())
 
 	e.applyQueuedGameEvents()
 
