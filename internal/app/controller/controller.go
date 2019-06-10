@@ -8,6 +8,7 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/timer"
 	"github.com/RoboCup-SSL/ssl-go-tools/pkg/sslproto"
 	"log"
+	"sort"
 	"sync"
 	"time"
 )
@@ -181,6 +182,7 @@ func (c *GameController) updateOnlineStates() {
 	for _, autoRef := range c.AutoRefServer.Clients {
 		autoRefs = append(autoRefs, autoRef.Id)
 	}
+	sort.Strings(autoRefs)
 	c.Engine.GcState.AutoRefsConnected = autoRefs
 }
 

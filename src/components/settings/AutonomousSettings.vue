@@ -1,8 +1,8 @@
 <template>
     <div class="game-controller-container">
-        <div class="auto-refs-connected" v-b-tooltip.hover :title="autoRefs">
+        <div class="auto-refs-connected" v-b-tooltip.hover>
             <p>
-                <b>{{autoRefsConnected}}</b> autoRefs connected.
+                <b>{{autoRefsConnected}}</b> autoRefs connected: {{autoRefs}}
             </p>
         </div>
 
@@ -29,7 +29,7 @@
             },
             autoRefs() {
                 if (this.autoRefsConnected) {
-                    let autoRefs = 'Connected AutoRefs: ';
+                    let autoRefs = '';
                     for (let i = 0; i < this.gcState.autoRefsConnected.length; i++) {
                         autoRefs += this.gcState.autoRefsConnected[i];
                         if (i !== (this.gcState.autoRefsConnected.length - 1)) {
