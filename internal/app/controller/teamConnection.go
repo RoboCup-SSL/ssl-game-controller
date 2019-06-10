@@ -53,6 +53,10 @@ func (c *GameController) ProcessTeamRequests(teamName string, request refproto.T
 				c.outstandingTeamChoice.Event.GameEvent.Details.BotPushedBotSkipped = c.outstandingTeamChoice.Event.GameEvent.Details.BotPushedBot
 				c.outstandingTeamChoice.Event.GameEvent.Details.BotPushedBot = nil
 				c.outstandingTeamChoice.Event.GameEvent.Type = GameEventBotPushedBotSkipped
+			case GameEventAttackerTouchedOpponentInDefenseArea:
+				c.outstandingTeamChoice.Event.GameEvent.Details.AttackerTouchedOpponentInDefenseAreaSkipped = c.outstandingTeamChoice.Event.GameEvent.Details.AttackerTouchedOpponentInDefenseArea
+				c.outstandingTeamChoice.Event.GameEvent.Details.AttackerTouchedOpponentInDefenseArea = nil
+				c.outstandingTeamChoice.Event.GameEvent.Type = GameEventAttackerTouchedOpponentInDefenseAreaSkipped
 			default:
 				return errors.Errorf("Unsupported advantage choice game event: %v", c.outstandingTeamChoice.Event.GameEvent.Type)
 			}
