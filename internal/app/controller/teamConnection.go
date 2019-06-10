@@ -60,10 +60,11 @@ func (c *GameController) ProcessTeamRequests(teamName string, request refproto.T
 			default:
 				return errors.Errorf("Unsupported advantage choice game event: %v", c.outstandingTeamChoice.Event.GameEvent.Type)
 			}
+			c.Engine.QueueGameEvent(c.outstandingTeamChoice.Event.GameEvent)
 		} else {
 			log.Printf("Team %v decided to stop the game within %v", c.outstandingTeamChoice.Team, responseTime)
+			c.OnNewEvent(c.outstandingTeamChoice.Event)
 		}
-		c.OnNewEvent(c.outstandingTeamChoice.Event)
 		c.outstandingTeamChoice = nil
 		return nil
 	}

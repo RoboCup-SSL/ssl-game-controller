@@ -406,6 +406,7 @@ type State struct {
 	Command                    RefCommand         `json:"command" yaml:"command"`
 	CommandFor                 Team               `json:"commandForTeam" yaml:"commandForTeam"`
 	GameEvents                 []*GameEvent       `json:"gameEvents" yaml:"gameEvents"`
+	GameEventsQueued           []*GameEvent       `json:"gameEventsQueued" yaml:"gameEvents"`
 	StageTimeElapsed           time.Duration      `json:"stageTimeElapsed" yaml:"stageTimeElapsed"`
 	StageTimeLeft              time.Duration      `json:"stageTimeLeft" yaml:"stageTimeLeft"`
 	MatchTimeStart             time.Time          `json:"matchTimeStart" yaml:"matchTimeStart"`
@@ -426,6 +427,7 @@ func NewState() (s *State) {
 	s.Stage = StagePreGame
 	s.Command = CommandHalt
 	s.GameEvents = []*GameEvent{}
+	s.GameEventsQueued = []*GameEvent{}
 
 	s.StageTimeLeft = 0
 	s.StageTimeElapsed = 0
@@ -448,6 +450,8 @@ func (s *State) DeepCopy() (c *State) {
 	*c = *s
 	c.GameEvents = make([]*GameEvent, len(s.GameEvents))
 	copy(c.GameEvents, s.GameEvents)
+	c.GameEventsQueued = make([]*GameEvent, len(s.GameEventsQueued))
+	copy(c.GameEventsQueued, s.GameEventsQueued)
 	if s.PlacementPos != nil {
 		c.PlacementPos = new(Location)
 		*c.PlacementPos = *s.PlacementPos

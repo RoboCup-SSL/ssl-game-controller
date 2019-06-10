@@ -21,6 +21,8 @@ const (
 	UiProtocolTime UiProtocolType = "time"
 	// UiProtocolGameEvent represents an issued game event
 	UiProtocolGameEvent UiProtocolType = "gameEvent"
+	// UiProtocolGameEvent represents an issued game event
+	UiProtocolGameEventQueued UiProtocolType = "gameEventQueued"
 	// UiProtocolGameEventIgnored represents a detected game event that was not issued
 	UiProtocolGameEventIgnored UiProtocolType = "ignoredGameEvent"
 	// UiProtocolModify represents a manual modification on the state
@@ -48,7 +50,7 @@ type ProtocolEntry struct {
 }
 
 // LogGameEvent adds a game event to the protocol
-func (e *Engine) LogGameEvent(event GameEvent, prevState *State) {
+func (e *Engine) LogGameEvent(event *GameEvent, prevState *State) {
 	log.Printf("Log game event: %v", event)
 	entry := ProtocolEntry{
 		Id:            e.newGlobalProtocolEntryId(),
@@ -63,8 +65,24 @@ func (e *Engine) LogGameEvent(event GameEvent, prevState *State) {
 	e.PersistentState.Add(&entry)
 }
 
+// LogGameEvent adds a game event to the protocol
+func (e *Engine) LogGameEventQueued(event *GameEvent, prevState *State) {
+	log.Printf("Log queued game event: %v", event)
+	entry := ProtocolEntry{
+		Id:            e.newGlobalProtocolEntryId(),
+		Timestamp:     e.TimeProvider().UnixNano(),
+		StageTime:     e.State.StageTimeElapsed,
+		Type:          UiProtocolGameEventQueued,
+		Name:          string(event.Type),
+		Team:          event.ByTeam(),
+		Description:   event.Details.String(),
+		PreviousState: prevState,
+	}
+	e.PersistentState.Add(&entry)
+}
+
 // LogIgnoredGameEvent adds an ignored game event to the protocol
-func (e *Engine) LogIgnoredGameEvent(event GameEvent) {
+func (e *Engine) LogIgnoredGameEvent(event *GameEvent) {
 	log.Printf("Log ignored game event: %v", event)
 	entry := ProtocolEntry{
 		Id:          e.newGlobalProtocolEntryId(),

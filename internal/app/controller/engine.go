@@ -239,6 +239,8 @@ func (e *Engine) SendCommand(command RefCommand, forTeam Team) {
 		e.State.TeamState[forTeam].TimeoutsLeft--
 	} else if command == CommandNormalStart {
 		e.updatePreStages()
+	} else if command == CommandStop {
+		e.applyQueuedGameEvents()
 	}
 
 	if command.ContinuesGame() {
@@ -269,9 +271,14 @@ func (e *Engine) setCurrentActionTimeout(timeout time.Duration) {
 	e.State.CurrentActionDeadline = e.TimeProvider().Add(e.State.CurrentActionTimeRemaining)
 }
 
-func (e *Engine) AddGameEvent(gameEvent GameEvent) {
+func (e *Engine) AddGameEvent(gameEvent *GameEvent) {
 	e.LogGameEvent(gameEvent, e.State.DeepCopy())
-	e.State.GameEvents = append(e.State.GameEvents, &gameEvent)
+	e.State.GameEvents = append(e.State.GameEvents, gameEvent)
+}
+
+func (e *Engine) QueueGameEvent(gameEvent *GameEvent) {
+	e.LogGameEventQueued(gameEvent, e.State.DeepCopy())
+	e.State.GameEventsQueued = append(e.State.GameEventsQueued, gameEvent)
 }
 
 func (e *Engine) Continue() {
@@ -283,7 +290,7 @@ func (e *Engine) Continue() {
 			Type: GameEventBotSubstitution,
 			Details: GameEventDetails{
 				BotSubstitution: &refproto.GameEvent_BotSubstitution{ByTeam: &teamProto}}}
-		e.AddGameEvent(event)
+		e.AddGameEvent(&event)
 		e.LogHint("botSubstitution", "game halted for bot substitution", substitutionIntend)
 		e.State.TeamState[TeamBlue].BotSubstitutionIntend = false
 		e.State.TeamState[TeamYellow].BotSubstitutionIntend = false
@@ -822,10 +829,14 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 	e.GcState.GameEventProposals = e.collectNonMatchingProposals(event)
 
 	if e.disabledGameEvent(event.Type) {
-		e.LogIgnoredGameEvent(*event)
+		e.LogIgnoredGameEvent(event)
 		return nil
 	}
 	event.SetOccurred(e.TimeProvider())
+
+	e.applyQueuedGameEvents()
+
+	e.AddGameEvent(event)
 
 	var additionalEvents []*GameEvent
 
@@ -847,8 +858,6 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 			}
 		}
 	}
-
-	e.AddGameEvent(*event)
 
 	if event.AddsYellowCard() {
 		team := event.ByTeam()
@@ -932,6 +941,16 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 	}
 
 	return nil
+}
+
+func (e *Engine) applyQueuedGameEvents() {
+	queuedGameEvents := e.State.GameEventsQueued
+	e.State.GameEventsQueued = []*GameEvent{}
+	for _, queuedEvent := range queuedGameEvents {
+		if err := e.processGameEvent(queuedEvent); err != nil {
+			log.Print("Could not process queued game event: ", err)
+		}
+	}
 }
 
 func (e *Engine) placeBall(event *GameEvent) {
