@@ -89,7 +89,7 @@ func (a *ApiServer) disconnect(conn *websocket.Conn) {
 			break
 		}
 	}
-	log.Println("Client disconnected")
+	log.Println("UI Client disconnected")
 }
 
 func (a *ApiServer) listenForNewEvents(conn *websocket.Conn) {
