@@ -32,6 +32,7 @@ import {
     faUsers,
     faBullhorn,
     faChessBoard,
+    faRecycle,
 } from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 // Connect to the backend with a single websocket that communicates with JSON format and is attached to the store
@@ -68,6 +69,7 @@ library.add(faClock);
 library.add(faExclamation);
 library.add(faUsers);
 library.add(faBullhorn);
+library.add(faRecycle);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 

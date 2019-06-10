@@ -20,6 +20,7 @@
     import AttackerTouchedBallInDefenseArea from "./inputs/AttackerTouchedBallInDefenseArea"
     import AttackerTooCloseToDefenseArea from "./inputs/AttackerTooCloseToDefenseArea"
     import AttackerTouchedOpponentInDefenseArea from "./inputs/AttackerTouchedOpponentInDefenseArea"
+    import AttackerTouchedOpponentInDefenseAreaSkipped from "./inputs/AttackerTouchedOpponentInDefenseAreaSkipped"
     import BallLeftFieldGoalLine from "./inputs/BallLeftFieldGoalLine"
     import BallLeftFieldTouchLine from "./inputs/BallLeftFieldTouchLine"
     import BotCrashDrawn from "./inputs/BotCrashDrawn"
@@ -61,6 +62,7 @@
             AttackerTouchedBallInDefenseArea,
             AttackerTooCloseToDefenseArea,
             AttackerTouchedOpponentInDefenseArea,
+            AttackerTouchedOpponentInDefenseAreaSkipped,
             BallLeftFieldGoalLine,
             BallLeftFieldTouchLine,
             BotCrashDrawn,

@@ -103,6 +103,8 @@
                         return 'exclamation-triangle';
                     case 'ignoredGameEvent':
                         return 'exclamation';
+                    case 'gameEventQueued':
+                        return 'recycle';
                     case 'modify':
                         return 'edit';
                     case 'teamAction':
