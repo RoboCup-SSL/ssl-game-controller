@@ -31,12 +31,12 @@ message TeamToController {
 
     enum AdvantageResponse {
         option allow_alias = true;
-        // no choice -> will default to STOP
-        UNDECIDED = 0;
         // stop the game and handle the foul immediately
         STOP = 0;
         // continue the game until the next stop of the game, then handle the foul
         CONTINUE = 1;
+        // no choice -> will default to STOP
+        UNDECIDED = 0;
     }
 }
 
