@@ -129,6 +129,9 @@ func (s *TeamServer) handleClientConnection(conn net.Conn) {
 	s.Clients[client.Id] = client.Client
 	defer s.CloseConnection(conn, client.Id)
 	log.Printf("Client %v connected", client.Id)
+	for _, observer := range s.ClientsChangedObservers {
+		observer()
+	}
 
 	for {
 		req := refproto.TeamToController{}

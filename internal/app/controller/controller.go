@@ -49,10 +49,12 @@ func NewGameController() (c *GameController) {
 	c.AutoRefServer = rcon.NewAutoRefServer()
 	c.AutoRefServer.LoadTrustedKeys(c.Config.Server.AutoRef.TrustedKeysDir)
 	c.AutoRefServer.ProcessRequest = c.ProcessAutoRefRequests
+	c.AutoRefServer.ClientsChangedObservers = []func(){c.updateOnlineStates}
 
 	c.TeamServer = rcon.NewTeamServer()
 	c.TeamServer.LoadTrustedKeys(c.Config.Server.Team.TrustedKeysDir)
 	c.TeamServer.ProcessTeamRequest = c.ProcessTeamRequests
+	c.TeamServer.ClientsChangedObservers = []func(){c.updateOnlineStates}
 
 	c.CiServer = rcon.NewCiServer()
 
@@ -84,6 +86,7 @@ func (c *GameController) Run() {
 	c.ApiServer.PublishUiProtocol(c.Engine.PersistentState.Protocol)
 	c.TeamServer.AllowedTeamNames = []string{c.Engine.State.TeamState[TeamYellow].Name,
 		c.Engine.State.TeamState[TeamBlue].Name}
+	c.updateOnlineStates()
 
 	go c.AutoRefServer.Listen(c.Config.Server.AutoRef.Address)
 	go c.AutoRefServer.ListenTls(c.Config.Server.AutoRef.AddressTls)
@@ -150,7 +153,6 @@ func (c *GameController) publish() {
 	c.PublishMutex.Lock()
 	defer c.PublishMutex.Unlock()
 
-	c.updateOnlineStates()
 	c.statePreserver.Save(c.Engine.PersistentState)
 
 	c.TeamServer.AllowedTeamNames = []string{
@@ -184,6 +186,8 @@ func (c *GameController) updateOnlineStates() {
 	}
 	sort.Strings(autoRefs)
 	c.Engine.GcState.AutoRefsConnected = autoRefs
+
+	c.publish()
 }
 
 // publishToNetwork publishes the current state to the network (multicast) every 25ms

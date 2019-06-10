@@ -17,9 +17,10 @@ import (
 )
 
 type Server struct {
-	Clients           map[string]*Client
-	TrustedKeys       map[string]*rsa.PublicKey
-	ConnectionHandler func(net.Conn)
+	Clients                 map[string]*Client
+	TrustedKeys             map[string]*rsa.PublicKey
+	ConnectionHandler       func(net.Conn)
+	ClientsChangedObservers []func()
 }
 
 type Client struct {
@@ -93,6 +94,9 @@ func (s *Server) ListenTls(address string) {
 func (s *Server) CloseConnection(conn net.Conn, id string) {
 	delete(s.Clients, id)
 	log.Printf("Connection to %v closed", id)
+	for _, observer := range s.ClientsChangedObservers {
+		observer()
+	}
 }
 
 func (c *Client) Ok() (reply refproto.ControllerReply) {
