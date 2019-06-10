@@ -110,6 +110,11 @@ func (c *GameController) askForTeamDecisionIfRequired(event Event) (handled bool
 			*choice.Foul = refproto.AdvantageChoice_PUSHING
 			choice.BotPushedBot = new(refproto.GameEvent_BotPushedBot)
 			*choice.BotPushedBot = *event.GameEvent.Details.BotPushedBot
+		} else if event.GameEvent.Details.AttackerTouchedOpponentInDefenseArea != nil {
+			byTeamProto = *event.GameEvent.Details.AttackerTouchedOpponentInDefenseArea.ByTeam
+			*choice.Foul = refproto.AdvantageChoice_ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA
+			choice.AttackerTouchedOpponentInDefenseArea = new(refproto.GameEvent_AttackerTouchedOpponentInDefenseArea)
+			*choice.AttackerTouchedOpponentInDefenseArea = *event.GameEvent.Details.AttackerTouchedOpponentInDefenseArea
 		}
 
 		forTeam := NewTeam(byTeamProto).Opposite()

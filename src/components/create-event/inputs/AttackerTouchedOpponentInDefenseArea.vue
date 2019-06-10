@@ -18,7 +18,7 @@
     import {convertStringLocation} from "@/refereeState";
 
     export default {
-        name: "AttackerTouchedKeeper",
+        name: "AttackerTouchedOpponentInDefenseArea",
         components: {BotSelection, TeamSelection, LocationSelection},
         data() {
             return {
@@ -33,9 +33,9 @@
             sendEvent: function () {
                 this.$socket.sendObj({
                     gameEvent: {
-                        type: 'attackerTouchedKeeper',
+                        type: 'attackerTouchedOpponentInDefenseArea',
                         details: {
-                            ['attackerTouchedKeeper']: {
+                            ['attackerTouchedOpponentInDefenseArea']: {
                                 by_team: this.model.team.toLocaleUpperCase(),
                                 by_bot: parseInt(this.model.id),
                                 location: convertStringLocation(this.model.location)

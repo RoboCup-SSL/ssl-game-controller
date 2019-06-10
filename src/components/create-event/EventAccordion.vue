@@ -17,9 +17,9 @@
 
 <script>
     import AttackerDoubleTouchedBall from "./inputs/AttackerDoubleTouchedBall"
-    import AttackerInDefenseArea from "./inputs/AttackerInDefenseArea"
+    import AttackerTouchedBallInDefenseArea from "./inputs/AttackerTouchedBallInDefenseArea"
     import AttackerTooCloseToDefenseArea from "./inputs/AttackerTooCloseToDefenseArea"
-    import AttackerTouchedKeeper from "./inputs/AttackerTouchedKeeper"
+    import AttackerTouchedOpponentInDefenseArea from "./inputs/AttackerTouchedOpponentInDefenseArea"
     import BallLeftFieldGoalLine from "./inputs/BallLeftFieldGoalLine"
     import BallLeftFieldTouchLine from "./inputs/BallLeftFieldTouchLine"
     import BotCrashDrawn from "./inputs/BotCrashDrawn"
@@ -58,9 +58,9 @@
         name: "EventAccordion",
         components: {
             AttackerDoubleTouchedBall,
-            AttackerInDefenseArea,
+            AttackerTouchedBallInDefenseArea,
             AttackerTooCloseToDefenseArea,
-            AttackerTouchedKeeper,
+            AttackerTouchedOpponentInDefenseArea,
             BallLeftFieldGoalLine,
             BallLeftFieldTouchLine,
             BotCrashDrawn,

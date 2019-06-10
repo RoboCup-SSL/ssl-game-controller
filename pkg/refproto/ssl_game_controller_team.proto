@@ -58,6 +58,8 @@ message AdvantageChoice {
     optional GameEvent.BotCrashUnique bot_crash_unique = 2;
     // the bot push event that was the source for this advantage choice
     optional GameEvent.BotPushedBot bot_pushed_bot = 3;
+    // the bot push event that was the source for this advantage choice
+    optional GameEvent.AttackerTouchedOpponentInDefenseArea attacker_touched_opponent_in_defense_area = 4;
 
     enum Foul {
         // default value when not set
@@ -66,5 +68,7 @@ message AdvantageChoice {
         COLLISION = 1;
         // an opponent bot has pushed one of your bots
         PUSHING = 2;
+        // an opponent has touched one of your bots while your bot has been at least partially inside the defense area
+        ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA = 3;
     }
 }

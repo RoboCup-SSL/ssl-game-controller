@@ -329,8 +329,8 @@ func (e *Engine) CommandForEvent(event *GameEvent) (command RefCommand, forTeam 
 			GameEventBotKickedBallTooFast,
 			GameEventBotDribbledBallTooFar,
 			GameEventAttackerDoubleTouchedBall,
-			GameEventAttackerInDefenseArea,
-			GameEventAttackerTouchedKeeper,
+			GameEventAttackerTouchedBallInDefenseArea,
+			GameEventAttackerTouchedOpponentInDefenseArea,
 			GameEventKickTimeout,
 			GameEventKeeperHeldBall:
 			command = CommandIndirect

@@ -73,10 +73,10 @@ func (e *Engine) BallPlacementPos() *Location {
 		return e.validateProtoLocation(event.Details.AttackerDoubleTouchedBall.Location)
 	case GameEventAttackerTooCloseToDefenseArea:
 		return e.validateProtoLocation(event.Details.AttackerTooCloseToDefenseArea.Location)
-	case GameEventAttackerInDefenseArea:
-		return e.validateProtoLocation(event.Details.AttackerInDefenseArea.Location)
-	case GameEventAttackerTouchedKeeper:
-		return e.validateProtoLocation(event.Details.AttackerTouchedKeeper.Location)
+	case GameEventAttackerTouchedBallInDefenseArea:
+		return e.validateProtoLocation(event.Details.AttackerTouchedBallInDefenseArea.Location)
+	case GameEventAttackerTouchedOpponentInDefenseArea:
+		return e.validateProtoLocation(event.Details.AttackerTouchedOpponentInDefenseArea.Location)
 	case GameEventDefenderTooCloseToKickPoint:
 		return e.validateLocation(e.State.PlacementPos)
 	case GameEventDefenderInDefenseAreaPartially:

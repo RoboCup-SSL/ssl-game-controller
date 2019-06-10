@@ -79,13 +79,8 @@ export const minorOffenseEvents = [
         type: 'auto'
     },
     {
-        name: 'Attacker was in opponent defense area',
-        component: 'AttackerInDefenseArea',
-        type: 'auto'
-    },
-    {
-        name: 'Attacker touched keeper',
-        component: 'AttackerTouchedKeeper',
+        name: 'Attacker was in opponent defense area while touching the ball',
+        component: 'AttackerTouchedBallInDefenseArea',
         type: 'auto'
     },
     {
@@ -163,6 +158,16 @@ export const foulEvents = [
     {
         name: 'Defender touched ball in defense area',
         component: 'DefenderInDefenseArea',
+        type: 'auto'
+    },
+    {
+        name: 'Attacker touched opponent defender in defense area',
+        component: 'AttackerTouchedOpponentInDefenseArea',
+        type: 'auto'
+    },
+    {
+        name: 'Attacker touched opponent defender in defense area - decided to continue',
+        component: 'AttackerTouchedOpponentInDefenseAreaSkipped',
         type: 'auto'
     },
 ];
