@@ -9,6 +9,7 @@
         </span>
         <span v-b-tooltip.hover
               title="connection verified"
+              class="connection-verified"
               v-if="teamConnectionVerified">
             <font-awesome-icon
                     class="fa-xs"
@@ -42,5 +43,7 @@
 </script>
 
 <style scoped>
-
+    .connection-verified {
+        margin-left: 0.3em;
+    }
 </style>
