@@ -272,15 +272,15 @@ message GameEvent {
         // the location where the maximum dribbling distance was reached
         optional Location end = 4;
     }
-    // an attacker touched the opponent keeper
+    // an attacker touched the opponent robot inside defense area
     message AttackerTouchedOpponentInDefenseArea {
         // the team that found guilty
         required Team by_team = 1;
-        // the bot that touched the opponent keeper
+        // the bot that touched the opponent robot
         optional uint32 by_bot = 2;
         // the bot of the opposite team that was touched
         optional uint32 victim = 4;
-        // the location of the contact point between bot and keeper
+        // the location of the contact point between both bots
         optional Location location = 3;
     }
     // an attacker touched the ball multiple times when it was not allowed to
