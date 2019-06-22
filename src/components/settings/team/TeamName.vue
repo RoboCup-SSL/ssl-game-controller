@@ -20,9 +20,12 @@
         "KIKS",
         "MCT Susano Logics",
         "MRL",
+        "nAMeC",
         "NEUIslanders",
         "OMID",
+        "OP-AmP",
         "Parsian",
+        "RobôCIn",
         "RoboDragons",
         "RoboFEI",
         "RoboIME",
@@ -36,7 +39,8 @@
         "ULtron",
         "UMass Minutebots",
         "UBC Thunderbots",
-        "ZJUNlict"];
+        "ZJUNlict",
+    ];
 
     export default {
         name: "TeamName",
