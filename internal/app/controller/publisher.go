@@ -96,6 +96,7 @@ func initTeamInfo(t *refproto.Referee_TeamInfo) {
 	t.BallPlacementFailures = new(uint32)
 	t.CanPlaceBall = new(bool)
 	t.MaxAllowedBots = new(uint32)
+	t.BotSubstitutionIntent = new(bool)
 }
 
 // Publish the state and command
@@ -254,6 +255,7 @@ func (p *RefMessage) updateTeam(teamInfo *refproto.Referee_TeamInfo, state *Team
 	*teamInfo.BallPlacementFailures = uint32(state.BallPlacementFailures)
 	*teamInfo.CanPlaceBall = state.CanPlaceBall
 	*teamInfo.MaxAllowedBots = uint32(state.MaxAllowedBots)
+	*teamInfo.BotSubstitutionIntent = state.BotSubstitutionIntend
 
 	if state.TimeoutTimeLeft.Nanoseconds() > 0 {
 		*teamInfo.TimeoutTime = uint32(state.TimeoutTimeLeft.Nanoseconds() / 1000)

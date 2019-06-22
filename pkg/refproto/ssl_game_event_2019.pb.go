@@ -1997,15 +1997,15 @@ func (m *GameEvent_BotDribbledBallTooFar) GetEnd() *Location {
 	return nil
 }
 
-// an attacker touched the opponent keeper
+// an attacker touched the opponent robot inside defense area
 type GameEvent_AttackerTouchedOpponentInDefenseArea struct {
 	// the team that found guilty
 	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
-	// the bot that touched the opponent keeper
+	// the bot that touched the opponent robot
 	ByBot *uint32 `protobuf:"varint,2,opt,name=by_bot,json=byBot" json:"by_bot,omitempty"`
 	// the bot of the opposite team that was touched
 	Victim *uint32 `protobuf:"varint,4,opt,name=victim" json:"victim,omitempty"`
-	// the location of the contact point between bot and keeper
+	// the location of the contact point between both bots
 	Location             *Location `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
 	XXX_unrecognized     []byte    `json:"-"`
