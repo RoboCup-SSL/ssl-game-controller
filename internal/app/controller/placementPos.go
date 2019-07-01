@@ -12,9 +12,6 @@ func (e *Engine) BallPlacementPos() *Location {
 	if event == nil {
 		return nil
 	}
-	if event.IsSecondary() || event.IsSkipped() {
-		return nil
-	}
 
 	switch event.Type {
 	case GameEventBallLeftFieldTouchLine:
@@ -53,20 +50,14 @@ func (e *Engine) BallPlacementPos() *Location {
 		return e.validateProtoLocation(event.Details.BotTippedOver.Location)
 	case GameEventBotInterferedPlacement:
 		return e.validateLocation(e.State.PlacementPos)
-	case GameEventBotCrashDrawn:
-		return e.validateProtoLocation(event.Details.BotCrashDrawn.Location)
 	case GameEventBotKickedBallTooFast:
 		return e.validateProtoLocation(event.Details.BotKickedBallTooFast.Location)
 	case GameEventBotDribbledBallTooFar:
 		return e.validateProtoLocation(event.Details.BotDribbledBallTooFar.Start)
 	case GameEventBotCrashUnique:
 		return e.validateProtoLocation(event.Details.BotCrashUnique.Location)
-	case GameEventBotCrashUniqueSkipped:
-		return e.validateProtoLocation(event.Details.BotCrashUniqueSkipped.Location)
 	case GameEventBotPushedBot:
 		return e.validateProtoLocation(event.Details.BotPushedBot.Location)
-	case GameEventBotPushedBotSkipped:
-		return e.validateProtoLocation(event.Details.BotPushedBotSkipped.Location)
 	case GameEventBotHeldBallDeliberately:
 		return e.validateProtoLocation(event.Details.BotHeldBallDeliberately.Location)
 	case GameEventAttackerDoubleTouchedBall:
@@ -97,6 +88,20 @@ func (e *Engine) BallPlacementPos() *Location {
 		return e.validateProtoLocation(event.Details.NoProgressInGame.Location)
 	case GameEventPlacementFailed:
 		return e.validateLocation(e.State.PlacementPos)
+	case GameEventBotTooFastInStop,
+		GameEventBotCrashDrawn,
+		GameEventUnsportingBehaviorMinor,
+		GameEventUnsportingBehaviorMajor,
+		GameEventMultipleFouls,
+		GameEventMultiplePlacementFailures,
+		GameEventBotCrashUniqueSkipped,
+		GameEventBotPushedBotSkipped,
+		GameEventAttackerTouchedOpponentInDefenseAreaSkipped,
+		GameEventPlacementSucceeded,
+		GameEventPrepared,
+		GameEventBotSubstitution,
+		GameEventTooManyRobots:
+		return nil
 	default:
 		log.Print("Warn: Unknown game event: ", event.Type)
 		return nil
