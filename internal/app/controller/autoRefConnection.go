@@ -18,6 +18,7 @@ func (c *GameController) ProcessAutoRefRequests(id string, request refproto.Auto
 
 	details := GameEventDetailsFromProto(*request.GameEvent)
 	gameEvent := GameEvent{Type: details.EventType(), Details: details}
+	gameEvent.Origins = []string{id}
 
 	c.Engine.applyGameEventFilters(&gameEvent)
 

@@ -59,10 +59,14 @@ func (e *Engine) LogGameEvent(event *GameEvent, prevState *State) {
 		Type:          UiProtocolGameEvent,
 		Name:          string(event.Type),
 		Team:          event.ByTeam(),
-		Description:   event.Details.String(),
+		Description:   event.toDescription(),
 		PreviousState: prevState,
 	}
 	e.PersistentState.Add(&entry)
+}
+
+func (e *GameEvent) toDescription() string {
+	return fmt.Sprintf("%v\n%v", e.Details, e.Origins)
 }
 
 // LogGameEvent adds a game event to the protocol
