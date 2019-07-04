@@ -307,7 +307,7 @@ func (e *Engine) Continue() {
 			// Rational: After ball placement and no next command, halt the game to indicate that manual action is required
 			// If in STOP, that was most likely triggered manually already and a suddenly halted game might be confusing and not intended
 			e.LogHint("missingFollowUp", "No next command available", TeamUnknown)
-			e.SendCommand(CommandHalt, "")
+			// e.SendCommand(CommandHalt, "")
 		}
 	}
 }
