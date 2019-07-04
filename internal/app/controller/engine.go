@@ -68,15 +68,16 @@ func (s GameControllerState) DeepCopy() (c GameControllerState) {
 }
 
 type Engine struct {
-	State           *State
-	GcState         *GameControllerState
-	StageTimes      map[Stage]time.Duration
-	config          config.Game
-	TimeProvider    timer.TimeProvider
-	LastTimeUpdate  time.Time
-	PersistentState *PersistentState
-	Geometry        config.Geometry
-	Rand            *rand.Rand
+	State            *State
+	GcState          *GameControllerState
+	StageTimes       map[Stage]time.Duration
+	config           config.Game
+	TimeProvider     timer.TimeProvider
+	LastTimeUpdate   time.Time
+	PersistentState  *PersistentState
+	Geometry         config.Geometry
+	Rand             *rand.Rand
+	recentGameEvents []*GameEvent
 }
 
 func NewEngine(config config.Game, seed int64) (e Engine) {
@@ -90,6 +91,7 @@ func NewEngine(config config.Game, seed int64) (e Engine) {
 	e.TimeProvider = func() time.Time { return time.Now() }
 	e.LastTimeUpdate = e.TimeProvider()
 	e.Rand = rand.New(rand.NewSource(seed))
+	e.recentGameEvents = []*GameEvent{}
 	return
 }
 
@@ -274,6 +276,7 @@ func (e *Engine) setCurrentActionTimeout(timeout time.Duration) {
 func (e *Engine) AddGameEvent(gameEvent *GameEvent) {
 	e.LogGameEvent(gameEvent, e.State.DeepCopy())
 	e.State.GameEvents = append(e.State.GameEvents, gameEvent)
+	e.recentGameEvents = append(e.recentGameEvents, gameEvent)
 }
 
 func (e *Engine) QueueGameEvent(gameEvent *GameEvent) {
@@ -827,9 +830,17 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 
 	event.SetOccurred(e.TimeProvider())
 
+	// cleanup old recent events
+	for i, event := range e.recentGameEvents {
+		if event.occurred.Before(e.TimeProvider().Add(-time.Second * 2)) {
+			e.recentGameEvents = e.recentGameEvents[i+1:]
+			break
+		}
+	}
+
 	e.applyGameEventFilters(event)
 
-	if e.State.IsRecentGameEvent(event) {
+	if e.IsRecentGameEvent(event) {
 		// only add event to list, not to protocol
 		e.State.GameEvents = append(e.State.GameEvents, event)
 		return nil
@@ -1159,4 +1170,19 @@ func (e *Engine) removeElapsedYellowCards(team Team, teamState *TeamInfo) (remov
 	}
 	teamState.YellowCardTimes = b
 	return
+}
+
+func (e *Engine) FindMatchingRecentGameEvent(event *GameEvent) *GameEvent {
+	for _, gameEvent := range e.recentGameEvents {
+		if gameEvent.Type == event.Type &&
+			event.Occurred().Sub(gameEvent.Occurred()) < 3*time.Second {
+			return gameEvent
+		}
+	}
+	return nil
+}
+
+func (e *Engine) IsRecentGameEvent(event *GameEvent) bool {
+	matchingEvent := e.FindMatchingRecentGameEvent(event)
+	return matchingEvent != nil
 }

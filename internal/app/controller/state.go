@@ -561,21 +561,6 @@ func (s *State) GetFirstGameEvent(gameEventType GameEventType) *GameEvent {
 	return nil
 }
 
-func (s *State) FindMatchingRecentGameEvent(event *GameEvent) *GameEvent {
-	for _, gameEvent := range s.GameEvents {
-		if gameEvent.Type == event.Type &&
-			event.Occurred().Sub(gameEvent.Occurred()) < 5*time.Second {
-			return gameEvent
-		}
-	}
-	return nil
-}
-
-func (s *State) IsRecentGameEvent(event *GameEvent) bool {
-	matchingEvent := s.FindMatchingRecentGameEvent(event)
-	return matchingEvent != nil
-}
-
 // Location is a two-dimensional coordinate
 type Location struct {
 	X float64 `json:"x" yaml:"x"`

@@ -26,7 +26,7 @@ func (c *GameController) ProcessAutoRefRequests(id string, request refproto.Auto
 	proposal := GameEventProposal{GameEvent: gameEvent, ProposerId: id, ValidUntil: validUntil}
 	proposal.GameEvent.Origins = []string{id}
 
-	recentGameEvent := c.Engine.State.IsRecentGameEvent(&gameEvent)
+	recentGameEvent := c.Engine.IsRecentGameEvent(&gameEvent)
 	if !recentGameEvent && c.Engine.applyMajority(&gameEvent) {
 		log.Printf("Apply majority logic to autoRef proposal %v", proposal)
 		if c.Engine.isNewProposal(&proposal) {
