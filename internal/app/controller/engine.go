@@ -835,7 +835,7 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 		return nil
 	}
 
-	if e.disabledGameEvent(event.Type) {
+	if e.disabledGameEvent(event.Type) && len(event.Origins) > 0 {
 		e.LogIgnoredGameEvent(event)
 		return nil
 	}
