@@ -270,16 +270,6 @@ func (e GameEvent) IsSkipped() bool {
 	return false
 }
 
-// IsContinueGame checks if the game event should trigger continuing the game based on the current primary event
-func (e GameEvent) IsContinueGame() bool {
-	switch e.Type {
-	case GameEventPlacementSucceeded,
-		GameEventPrepared:
-		return true
-	}
-	return false
-}
-
 // ToProto converts the internal game event into a protobuf game event
 func (e GameEvent) ToProto() *refproto.GameEvent {
 	protoEvent := new(refproto.GameEvent)

@@ -932,7 +932,7 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 		e.SendCommand(CommandHalt, "")
 	} else if !event.IsSkipped() && !event.IsSecondary() && !e.State.Command.IsPrepare() {
 		e.placeBall(event)
-	} else if e.GcState.AutoContinue && event.IsContinueGame() {
+	} else if event.Type == GameEventPlacementSucceeded || (e.GcState.AutoContinue && event.Type == GameEventPrepared) {
 		e.Continue()
 	} else {
 		log.Printf("No change in game with event %v", event)
