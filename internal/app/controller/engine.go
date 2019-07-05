@@ -867,6 +867,12 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 		return nil
 	}
 
+	if e.State.GameState() == GameStateRunning &&
+		event.IsSecondary() {
+		e.QueueGameEvent(event)
+		return nil
+	}
+
 	e.applyQueuedGameEvents()
 
 	e.AddGameEvent(event)
