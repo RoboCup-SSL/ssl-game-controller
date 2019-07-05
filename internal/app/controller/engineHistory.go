@@ -12,7 +12,7 @@ import (
 	"syscall"
 )
 
-const maxHistorySize = 10
+const maxHistorySize = 50
 const stateFilename = "gc-state.json"
 const backupFilename = "gc-state.backup.gz"
 
