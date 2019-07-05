@@ -79,7 +79,7 @@ func (e *Engine) LogGameEventQueued(event *GameEvent, prevState *State) {
 		Type:          UiProtocolGameEventQueued,
 		Name:          string(event.Type),
 		Team:          event.ByTeam(),
-		Description:   event.Details.String(),
+		Description:   event.toDescription(),
 		PreviousState: prevState,
 	}
 	e.PersistentState.Add(&entry)
@@ -95,7 +95,7 @@ func (e *Engine) LogIgnoredGameEvent(event *GameEvent) {
 		Type:        UiProtocolGameEventIgnored,
 		Name:        string(event.Type),
 		Team:        event.ByTeam(),
-		Description: event.Details.String(),
+		Description: event.toDescription(),
 	}
 	e.PersistentState.Add(&entry)
 }
