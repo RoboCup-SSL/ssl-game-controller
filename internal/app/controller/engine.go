@@ -873,8 +873,6 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 		return nil
 	}
 
-	e.applyQueuedGameEvents()
-
 	e.AddGameEvent(event)
 
 	var additionalEvents []*GameEvent
@@ -978,6 +976,8 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 
 	log.Printf("Processed game event %v", event)
 
+	e.applyQueuedGameEvents()
+
 	for _, aEvent := range additionalEvents {
 		if err := e.processGameEvent(aEvent); err != nil {
 			log.Print("Could not process new additional game event: ", err)
@@ -989,6 +989,7 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 
 func (e *Engine) applyQueuedGameEvents() {
 	queuedGameEvents := e.State.GameEventsQueued
+	// clear the queue
 	e.State.GameEventsQueued = []*GameEvent{}
 	for _, queuedEvent := range queuedGameEvents {
 		if err := e.processGameEvent(queuedEvent); err != nil {
