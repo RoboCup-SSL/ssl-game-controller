@@ -1,6 +1,6 @@
 <template>
     <div>
-        <a class="btn-edit" v-on:click="edit()">
+        <a class="btn-edit substitution-button" v-on:click="edit()">
             <font-awesome-icon icon="toggle-on" v-if="botSubstitutionIntend"/>
             <font-awesome-icon icon="toggle-off" v-if="!botSubstitutionIntend"/>
         </a>
@@ -35,4 +35,8 @@
 </script>
 
 <style scoped>
+    .substitution-button {
+        font-size: 14pt;
+        padding:15px;
+    }
 </style>
