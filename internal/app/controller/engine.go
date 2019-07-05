@@ -848,7 +848,7 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 
 	// cleanup old recent events
 	for i, event := range e.recentGameEvents {
-		if event.occurred.Before(e.TimeProvider().Add(-time.Second * 2)) {
+		if event.occurred.Before(e.TimeProvider().Add(-time.Second * 10)) {
 			e.recentGameEvents = e.recentGameEvents[i+1:]
 			break
 		}
