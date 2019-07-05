@@ -204,7 +204,10 @@ func (c *GameController) publishToNetwork() {
 func (c *GameController) OnNewEvent(event Event) {
 	c.StateMutex.Lock()
 	defer c.StateMutex.Unlock()
-	if event.GameEvent != nil && !c.Engine.disabledGameEvent(event.GameEvent.Type) && c.askForTeamDecisionIfRequired(event) {
+	if event.GameEvent != nil &&
+		!c.Engine.disabledGameEvent(event.GameEvent.Type) &&
+		!c.Engine.IsRecentGameEvent(event.GameEvent) &&
+		c.askForTeamDecisionIfRequired(event) {
 		return
 	}
 
