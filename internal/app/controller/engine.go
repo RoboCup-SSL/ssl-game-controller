@@ -289,18 +289,18 @@ func (e *Engine) Continue() {
 	substitutionIntend := e.State.BotSubstitutionIntend()
 	if substitutionIntend != TeamUnknown {
 		if substitutionIntend == TeamBoth {
-			teamProto := TeamYellow.toProto()
+			yellowTeam := TeamYellow.toProto()
 			event := GameEvent{
 				Type: GameEventBotSubstitution,
 				Details: GameEventDetails{
-					BotSubstitution: &refproto.GameEvent_BotSubstitution{ByTeam: &teamProto}}}
+					BotSubstitution: &refproto.GameEvent_BotSubstitution{ByTeam: &yellowTeam}}}
 			e.AddGameEvent(&event)
 
-			teamProto = TeamBlue.toProto()
+			blueTeam := TeamBlue.toProto()
 			event = GameEvent{
 				Type: GameEventBotSubstitution,
 				Details: GameEventDetails{
-					BotSubstitution: &refproto.GameEvent_BotSubstitution{ByTeam: &teamProto}}}
+					BotSubstitution: &refproto.GameEvent_BotSubstitution{ByTeam: &blueTeam}}}
 			e.AddGameEvent(&event)
 		} else {
 			teamProto := substitutionIntend.toProto()
