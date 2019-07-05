@@ -947,6 +947,11 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 		e.setCurrentActionTimeout(e.config.BallPlacementTime)
 	}
 
+	if event.AddsYellowCard() || event.AddsRedCard() {
+		team := event.ByTeam()
+		e.State.TeamState[team].BotSubstitutionIntend = true
+	}
+
 	e.State.PlacementPos = e.BallPlacementPos()
 
 	if e.State.GameState() == GameStateHalted {
