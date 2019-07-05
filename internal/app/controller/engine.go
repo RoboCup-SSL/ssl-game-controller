@@ -1196,6 +1196,7 @@ func (e *Engine) removeElapsedYellowCards(team Team, teamState *TeamInfo) (remov
 func (e *Engine) FindMatchingRecentGameEvent(event *GameEvent) *GameEvent {
 	for _, gameEvent := range e.recentGameEvents {
 		if gameEvent.Type == event.Type &&
+			gameEvent.ByTeam() == event.ByTeam() &&
 			event.Occurred().Sub(gameEvent.Occurred()) < 3*time.Second {
 			return gameEvent
 		}
