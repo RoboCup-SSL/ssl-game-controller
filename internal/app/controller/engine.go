@@ -288,12 +288,28 @@ func (e *Engine) Continue() {
 	log.Println("Continue")
 	substitutionIntend := e.State.BotSubstitutionIntend()
 	if substitutionIntend != TeamUnknown {
-		teamProto := substitutionIntend.toProto()
-		event := GameEvent{
-			Type: GameEventBotSubstitution,
-			Details: GameEventDetails{
-				BotSubstitution: &refproto.GameEvent_BotSubstitution{ByTeam: &teamProto}}}
-		e.AddGameEvent(&event)
+		if substitutionIntend == TeamBoth {
+			teamProto := TeamYellow.toProto()
+			event := GameEvent{
+				Type: GameEventBotSubstitution,
+				Details: GameEventDetails{
+					BotSubstitution: &refproto.GameEvent_BotSubstitution{ByTeam: &teamProto}}}
+			e.AddGameEvent(&event)
+
+			teamProto = TeamBlue.toProto()
+			event = GameEvent{
+				Type: GameEventBotSubstitution,
+				Details: GameEventDetails{
+					BotSubstitution: &refproto.GameEvent_BotSubstitution{ByTeam: &teamProto}}}
+			e.AddGameEvent(&event)
+		} else {
+			teamProto := substitutionIntend.toProto()
+			event := GameEvent{
+				Type: GameEventBotSubstitution,
+				Details: GameEventDetails{
+					BotSubstitution: &refproto.GameEvent_BotSubstitution{ByTeam: &teamProto}}}
+			e.AddGameEvent(&event)
+		}
 		e.LogHint("botSubstitution", "game halted for bot substitution", substitutionIntend)
 		e.State.TeamState[TeamBlue].BotSubstitutionIntend = false
 		e.State.TeamState[TeamYellow].BotSubstitutionIntend = false
