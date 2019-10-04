@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/controller"
 	"github.com/gobuffalo/packr"
 	"log"
@@ -9,6 +10,11 @@ import (
 )
 
 var address = flag.String("address", "localhost:8081", "The address on which the UI and API is served")
+var visionAddress = flag.String("visionAddress", "", "The address (ip+port) from which vision packages are received")
+var publishAddress = flag.String("publishAddress", "", "The address (ip+port) to which referee command should be sent")
+var timeAcquisitionMode = flag.String("timeAcquisitionMode", "", "The time acquisitionMode to use (system, ci, vision)")
+
+const configFileName = "config/ssl-game-controller.yaml"
 
 func main() {
 	flag.Parse()
@@ -23,7 +29,19 @@ func main() {
 }
 
 func setupGameController() {
-	gameController := controller.NewGameController()
+	cfg := config.LoadConfig(configFileName)
+
+	if visionAddress != nil && *visionAddress != "" {
+		cfg.Network.VisionAddress = *visionAddress
+	}
+	if publishAddress != nil && *publishAddress != "" {
+		cfg.Network.PublishAddress = *publishAddress
+	}
+	if timeAcquisitionMode != nil && *timeAcquisitionMode != "" {
+		cfg.TimeAcquisitionMode = config.TimeAcquisitionMode(*timeAcquisitionMode)
+	}
+
+	gameController := controller.NewGameController(cfg)
 	gameController.Run()
 	// serve the bidirectional web socket
 	http.HandleFunc("/api/control", gameController.ApiServer.WsHandler)
