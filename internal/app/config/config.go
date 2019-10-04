@@ -4,6 +4,7 @@ import (
 	"github.com/pkg/errors"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
 	"time"
@@ -195,4 +196,19 @@ func DefaultControllerConfig() (c Controller) {
 	c.TimeAcquisitionMode = TimeAcquisitionModeSystem
 
 	return
+}
+
+// loadConfig loads the controller config
+func LoadConfig(configFileName string) Controller {
+	cfg, err := LoadControllerConfig(configFileName)
+	if err != nil {
+		log.Printf("Could not load config: %v", err)
+		err = cfg.WriteTo(configFileName)
+		if err != nil {
+			log.Printf("Failed to write a default config file to %v: %v", configFileName, err)
+		} else {
+			log.Println("New default config has been written to ", configFileName)
+		}
+	}
+	return cfg
 }

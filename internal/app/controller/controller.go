@@ -13,8 +13,6 @@ import (
 	"time"
 )
 
-const configFileName = "config/ssl-game-controller.yaml"
-
 // GameController controls a game
 type GameController struct {
 	Config                config.Controller
@@ -33,11 +31,11 @@ type GameController struct {
 	VisionReceiver        *vision.Receiver
 }
 
-// NewGameController creates a new RefBox
-func NewGameController() (c *GameController) {
+// NewGameController creates a new GameController
+func NewGameController(cfg config.Controller) (c *GameController) {
 
 	c = new(GameController)
-	c.Config = loadConfig()
+	c.Config = cfg
 	c.Publisher = NewPublisher(c.Config.Network.PublishAddress)
 	c.ApiServer = ApiServer{}
 	c.ApiServer.Consumer = c
@@ -217,19 +215,4 @@ func (c *GameController) OnNewEvent(event Event) {
 	} else {
 		c.publish()
 	}
-}
-
-// loadConfig loads the controller config
-func loadConfig() config.Controller {
-	cfg, err := config.LoadControllerConfig(configFileName)
-	if err != nil {
-		log.Printf("Could not load config: %v", err)
-		err = cfg.WriteTo(configFileName)
-		if err != nil {
-			log.Printf("Failed to write a default config file to %v: %v", configFileName, err)
-		} else {
-			log.Println("New default config has been written to ", configFileName)
-		}
-	}
-	return cfg
 }
