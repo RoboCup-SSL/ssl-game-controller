@@ -3,8 +3,8 @@
 set -e
 
 # UI
-npm install
-npm run build
+yarn install
+yarn build
 
 # backend
 go get -v -d ./...

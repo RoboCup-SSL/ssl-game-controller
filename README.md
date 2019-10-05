@@ -120,7 +120,8 @@ If you don't want to run the controller in real time, you can change the time ac
 ### Requirements
 You need to install following dependencies first: 
  * Go >= 1.10
- * NPM
+ * Node
+ * Yarn
 
 ### Prepare
 Download and install to [GOPATH](https://github.com/golang/go/wiki/GOPATH):
@@ -133,7 +134,7 @@ cd $GOPATH/src/github.com/RoboCup-SSL/ssl-game-controller/
 ```
 Download dependencies for frontend
 ```bash
-npm install
+yarn install
 ```
 
 ### Run
@@ -145,7 +146,7 @@ go run cmd/ssl-game-controller/main.go
 Run the UI:
 ```bash
 # compile and hot-reload
-npm run serve
+yarn serve
 ```
 Or use the provided IntelliJ run configurations.
 
@@ -153,7 +154,7 @@ Or use the provided IntelliJ run configurations.
 First, build the UI resources
 ```bash
 # compile and minify UI
-npm run build
+yarn build
 ```
 Then build the backend with `packr`
 ```bash
