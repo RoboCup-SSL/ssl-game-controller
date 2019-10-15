@@ -1,7 +1,7 @@
 package vision
 
 import (
-	"github.com/RoboCup-SSL/ssl-go-tools/pkg/sslproto"
+	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
 	"github.com/golang/protobuf/proto"
 	"log"
 	"net"
@@ -11,14 +11,14 @@ import (
 const maxDatagramSize = 8192
 
 type Receiver struct {
-	DetectionCallback func(*sslproto.SSL_DetectionFrame)
-	GeometryCallback  func(*sslproto.SSL_GeometryData)
+	DetectionCallback func(*refproto.SSL_DetectionFrame)
+	GeometryCallback  func(*refproto.SSL_GeometryData)
 }
 
 func NewReceiver(address string) (v *Receiver) {
 	v = new(Receiver)
-	v.DetectionCallback = func(*sslproto.SSL_DetectionFrame) {}
-	v.GeometryCallback = func(data *sslproto.SSL_GeometryData) {}
+	v.DetectionCallback = func(*refproto.SSL_DetectionFrame) {}
+	v.GeometryCallback = func(data *refproto.SSL_GeometryData) {}
 
 	addr, err := net.ResolveUDPAddr("udp", address)
 	if err != nil {
@@ -52,7 +52,7 @@ func (v *Receiver) receive(conn *net.UDPConn) {
 		if n >= maxDatagramSize {
 			log.Fatal("Buffer size too small")
 		}
-		wrapper := sslproto.SSL_WrapperPacket{}
+		wrapper := refproto.SSL_WrapperPacket{}
 		if err := proto.Unmarshal(b[0:n], &wrapper); err != nil {
 			log.Println("Could not unmarshal referee message")
 			continue

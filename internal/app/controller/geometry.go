@@ -1,12 +1,12 @@
 package controller
 
 import (
-	"github.com/RoboCup-SSL/ssl-go-tools/pkg/sslproto"
+	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
 	"log"
 	"math"
 )
 
-func (c *GameController) ProcessGeometry(data *sslproto.SSL_GeometryData) {
+func (c *GameController) ProcessGeometry(data *refproto.SSL_GeometryData) {
 	if int32(math.Round(c.Engine.Geometry.FieldWidth*1000.0)) != *data.Field.FieldWidth {
 		newFieldWidth := float64(*data.Field.FieldWidth) / 1000.0
 		log.Printf("FieldWidth changed from %v to %v", c.Engine.Geometry.FieldWidth, newFieldWidth)

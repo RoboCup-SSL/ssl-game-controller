@@ -6,7 +6,6 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/vision"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/timer"
-	"github.com/RoboCup-SSL/ssl-go-tools/pkg/sslproto"
 	"log"
 	"sort"
 	"sync"
@@ -112,7 +111,7 @@ func (c *GameController) setupTimeProvider() {
 		c.Engine.TimeProvider = func() time.Time {
 			return time.Unix(0, 0)
 		}
-		c.VisionReceiver.DetectionCallback = func(frame *sslproto.SSL_DetectionFrame) {
+		c.VisionReceiver.DetectionCallback = func(frame *refproto.SSL_DetectionFrame) {
 			c.Engine.TimeProvider = timer.NewFixedTimeProviderFromSeconds(*frame.TCapture)
 		}
 	}
