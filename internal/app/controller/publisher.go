@@ -94,6 +94,7 @@ func initTeamInfo(t *refproto.Referee_TeamInfo) {
 	t.Goalkeeper = new(uint32)
 	t.FoulCounter = new(uint32)
 	t.BallPlacementFailures = new(uint32)
+	t.BallPlacementFailuresReached = new(bool)
 	t.CanPlaceBall = new(bool)
 	t.MaxAllowedBots = new(uint32)
 	t.BotSubstitutionIntent = new(bool)
@@ -253,6 +254,7 @@ func (p *RefMessage) updateTeam(teamInfo *refproto.Referee_TeamInfo, state *Team
 	*teamInfo.Goalkeeper = uint32(state.Goalkeeper)
 	*teamInfo.FoulCounter = uint32(state.FoulCounter)
 	*teamInfo.BallPlacementFailures = uint32(state.BallPlacementFailures)
+	*teamInfo.BallPlacementFailuresReached = state.BallPlacementFailuresReached
 	*teamInfo.CanPlaceBall = state.CanPlaceBall
 	*teamInfo.MaxAllowedBots = uint32(state.MaxAllowedBots)
 	*teamInfo.BotSubstitutionIntent = state.BotSubstitutionIntend

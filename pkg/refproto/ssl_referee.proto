@@ -149,6 +149,8 @@ message Referee {
         optional uint32 max_allowed_bots = 13;
         // The team has submitted an intent to substitute one or more robots at the next chance
         optional bool bot_substitution_intent = 14;
+        // Indicate if the team reached the maximum allowed ball placement failures and is thus not allowed to place the ball anymore
+        optional bool ball_placement_failures_reached = 15;
     }
 
     // Information about the two teams.

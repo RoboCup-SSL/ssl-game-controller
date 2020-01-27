@@ -389,8 +389,8 @@ func (e *Engine) CommandForEvent(event *GameEvent) (command RefCommand, forTeam 
 
 		if forTeam.Known() &&
 			e.GcState.Division == config.DivA && // For division A
-			!e.State.TeamState[forTeam].CanPlaceBall && // If team in favor can not place the ball
-			e.State.TeamState[forTeam.Opposite()].CanPlaceBall && // If opponent team can place the ball
+			!e.State.TeamState[forTeam].BallPlacementAllowed() && // If team in favor can not place the ball
+			e.State.TeamState[forTeam.Opposite()].BallPlacementAllowed() && // If opponent team can place the ball
 			primaryGameEvent.Type.resultsFromBallLeavingField() { // event is caused by the ball leaving the field
 			// All free kicks that were a result of the ball leaving the field, are awarded to the opposing team.
 			forTeam = forTeam.Opposite()
@@ -428,11 +428,11 @@ func (g GameEventType) resultsFromBallLeavingField() bool {
 }
 
 func (s *State) bothTeamsCanPlaceBall() bool {
-	return s.TeamState[TeamYellow].CanPlaceBall && s.TeamState[TeamBlue].CanPlaceBall
+	return s.TeamState[TeamYellow].BallPlacementAllowed() && s.TeamState[TeamBlue].BallPlacementAllowed()
 }
 
 func (s *State) noTeamCanPlaceBall() bool {
-	return !s.TeamState[TeamYellow].CanPlaceBall && !s.TeamState[TeamBlue].CanPlaceBall
+	return !s.TeamState[TeamYellow].BallPlacementAllowed() && !s.TeamState[TeamBlue].BallPlacementAllowed()
 }
 
 func (s *State) ballPlacementFailedBefore() bool {
@@ -676,8 +676,8 @@ func (e *Engine) processStage(s *EventStage) error {
 
 	if s.StageOperation == StageNext {
 		e.updateStage(e.State.Stage.Next())
-		e.State.TeamState[TeamYellow].BallPlacementFailures = 0
-		e.State.TeamState[TeamBlue].BallPlacementFailures = 0
+		e.State.TeamState[TeamYellow].ResetBallPlacementFailures()
+		e.State.TeamState[TeamBlue].ResetBallPlacementFailures()
 	} else if s.StageOperation == StagePrevious {
 		e.updateStage(e.State.Stage.Previous())
 	} else if s.StageOperation == StageEndGame {
@@ -935,7 +935,7 @@ func (e *Engine) processGameEvent(event *GameEvent) error {
 		if team.Unknown() {
 			return errors.New("Missing team in game event")
 		}
-		e.State.TeamState[team].BallPlacementFailures = 0
+		e.State.TeamState[team].ResetBallPlacementFailures()
 	}
 
 	if event.Type == GameEventGoal {
@@ -1019,20 +1019,20 @@ func (e *Engine) placeBall(event *GameEvent) {
 		e.SendCommand(CommandHalt, "")
 		e.LogHint("manualPlacement", "manual placement required for kickoff and penalty", teamInFavor)
 	} else if e.GcState.Division == config.DivA && // For division A
-		!e.State.TeamState[teamInFavor].CanPlaceBall && // If team in favor can not place the ball
-		e.State.TeamState[teamInFavor.Opposite()].CanPlaceBall && // If opponent team can place the ball
+		!e.State.TeamState[teamInFavor].BallPlacementAllowed() && // If team in favor can not place the ball
+		e.State.TeamState[teamInFavor.Opposite()].BallPlacementAllowed() && // If opponent team can place the ball
 		event.Type.resultsFromBallLeavingField() {
 		// Rule: All free kicks that were a result of the ball leaving the field, are awarded to the opposing team.
 		e.SendCommand(CommandBallPlacement, teamInFavor.Opposite())
 		log.Printf("Let opponent place the ball in DivA")
 	} else if e.GcState.Division == config.DivB && // For division B
-		!e.State.TeamState[teamInFavor].CanPlaceBall && // If team in favor can not place the ball
-		e.State.TeamState[teamInFavor.Opposite()].CanPlaceBall && // If opponent team can place the ball
+		!e.State.TeamState[teamInFavor].BallPlacementAllowed() && // If team in favor can not place the ball
+		e.State.TeamState[teamInFavor.Opposite()].BallPlacementAllowed() && // If opponent team can place the ball
 		event.Type != GameEventPlacementFailed { // opponent team has not failed recently
 		// Rule: [...] the team is allowed to bring the ball into play, after the ball was placed by the opposing team.
 		e.SendCommand(CommandBallPlacement, teamInFavor.Opposite())
 		log.Printf("Let opponent place the ball in DivB")
-	} else if e.State.TeamState[teamInFavor].CanPlaceBall &&
+	} else if e.State.TeamState[teamInFavor].BallPlacementAllowed() &&
 		!e.allTeamsFailedPlacement() {
 		// If team can place ball, let it place
 		e.SendCommand(CommandBallPlacement, teamInFavor)
@@ -1047,10 +1047,10 @@ func (e *Engine) placeBall(event *GameEvent) {
 
 func (e *Engine) allTeamsFailedPlacement() bool {
 	possibleFailures := 0
-	if e.State.TeamState[TeamYellow].CanPlaceBall {
+	if e.State.TeamState[TeamYellow].BallPlacementAllowed() {
 		possibleFailures++
 	}
-	if e.State.TeamState[TeamBlue].CanPlaceBall {
+	if e.State.TeamState[TeamBlue].BallPlacementAllowed() {
 		possibleFailures++
 	}
 	failures := 0
@@ -1108,7 +1108,7 @@ func (e *Engine) CardNumberIncremented(team Team) *GameEvent {
 func (e *Engine) PlacementFailuresIncremented(team Team) *GameEvent {
 	if e.State.TeamState[team].BallPlacementFailures == e.config.MultiplePlacementFailures {
 		teamProto := team.toProto()
-		e.State.TeamState[team].CanPlaceBall = false
+		e.State.TeamState[team].BallPlacementFailuresReached = true
 		event := GameEvent{Type: GameEventMultiplePlacementFailures,
 			Details: GameEventDetails{MultiplePlacementFailures: &refproto.GameEvent_MultiplePlacementFailures{ByTeam: &teamProto}}}
 		return &event
