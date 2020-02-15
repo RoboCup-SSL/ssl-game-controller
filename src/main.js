@@ -41,6 +41,8 @@ import VueNativeSock from 'vue-native-websocket'
 import './assets/css/style.css'
 import Main from "./components/Main";
 import Field from "./components/Field";
+import TeamRemoteControl from "./components/TeamRemoteControl";
+import GameController from "./components/GameController";
 
 Vue.use(TimestampFormatter);
 
@@ -93,8 +95,19 @@ Vue.use(VueNativeSock, wsAddress, {
 });
 
 const routes = [
-    {path: '/field', component: Field},
-    {path: '/', component: Main},
+    {path: '/remote', component: TeamRemoteControl},
+    {
+        path: '/', component: GameController, children: [
+            {
+                path: '',
+                component: Main
+            },
+            {
+                path: 'field',
+                component: Field
+            }
+        ]
+    },
 ];
 const router = new VueRouter({
     routes
