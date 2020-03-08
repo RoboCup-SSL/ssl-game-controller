@@ -21,40 +21,23 @@ message GameEvent {
     // the event that occurred
     oneof event {
 
-        // Match proceeding events (not sent by autoRefs)
-
-        Prepared prepared = 1 [deprecated = true]; // replaced by ready_to_continue flag
-        PlacementFailed placement_failed = 3; // replaced by ready_to_continue flag (sent by GC only)
-        PlacementSucceeded placement_succeeded = 5; // replaced by ready_to_continue flag (sent by GC only)
-        BotSubstitution bot_substitution = 37 [deprecated = true]; // remove, keep the flags in the referee msg active until substitution is over
-        TooManyRobots too_many_robots = 38; // replaced by number of robots in GameStateMetaData message (sent by GC only)
-
         // Ball out of field events (stopping)
 
         BallLeftField ball_left_field_touch_line = 6;
         BallLeftField ball_left_field_goal_line = 7;
-        AimlessKick aimless_kick = 11; // converted to ball_left_field_goal_line by GC for DivA
+        AimlessKick aimless_kick = 11;
         Goal possible_goal = 39;
-        Goal goal = 8; // sent by GC only
-        IndirectGoal indirect_goal = 9 [deprecated = true]; // obsolete
         ChippedGoal chipped_goal = 10;
 
         // Non-Foul Violations
 
-        KickTimeout kick_timeout = 12 [deprecated = true]; // obsolete
         NoProgressInGame no_progress_in_game = 2;
         AttackerDoubleTouchedBall attacker_double_touched_ball = 14;
-        MultipleCards multiple_cards = 32; // sent by GC only
-        MultiplePlacementFailures multiple_placement_failures = 33 [deprecated = true]; // remove, the referee msg already indicates this
-        MultipleFouls multiple_fouls = 34; // sent by GC only
 
         // Stopping Fouls
 
         AttackerTooCloseToDefenseArea attacker_too_close_to_defense_area = 19;
-        BotPushedBot bot_pushed_bot = 24; // only called manually by the human ref
-        BotPushedBot bot_pushed_bot_skipped = 25; // can not be used as long as autoRefs do not judge pushing
         BotHeldBallDeliberately bot_held_ball_deliberately = 26;
-        BotTippedOver bot_tipped_over = 27; // only called manually by the human ref
         DefenderInDefenseAreaPartially defender_in_defense_area_partially = 30;
         DefenderInDefenseArea defender_in_defense_area = 31;
         BoundaryCrossing boundary_crossing = 43;
@@ -66,9 +49,7 @@ message GameEvent {
         BotDribbledBallTooFar bot_dribbled_ball_too_far = 17;
         BotKickedBallTooFast bot_kicked_ball_too_fast = 18;
         AttackerTouchedOpponentInDefenseArea attacker_touched_opponent_in_defense_area = 16;
-        AttackerTouchedOpponentInDefenseArea attacker_touched_opponent_in_defense_area_skipped = 42 [deprecated = true]; // obsolete
         BotCrashUnique bot_crash_unique = 22;
-        BotCrashUnique bot_crash_unique_skipped = 23 [deprecated = true]; // obsolete
         BotCrashDrawn bot_crash_drawn = 21;
 
         // Fouls while ball out of play
@@ -77,10 +58,40 @@ message GameEvent {
         BotTooFastInStop bot_too_fast_in_stop = 28;
         BotInterferedPlacement bot_interfered_placement = 20;
 
-        // Unsporting behavior events (only sent by GC)
+        // Events sent by GC only
 
+        Goal goal = 8;
+        TooManyRobots too_many_robots = 38;
+        PlacementFailed placement_failed = 3;
+        PlacementSucceeded placement_succeeded = 5;
         UnsportingBehaviorMinor unsporting_behavior_minor = 35;
         UnsportingBehaviorMajor unsporting_behavior_major = 36;
+        MultipleCards multiple_cards = 32;
+        MultipleFouls multiple_fouls = 34;
+
+        // Events triggered by the human referee through the GC only
+
+        BotTippedOver bot_tipped_over = 27;
+        BotPushedBot bot_pushed_bot = 24;
+
+        // Deprecated events
+
+        // replaced by ready_to_continue flag
+        Prepared prepared = 1 [deprecated = true];
+        // can be read from the referee message
+        BotSubstitution bot_substitution = 37 [deprecated = true];
+        // can not be used as long as autoRefs do not judge pushing
+        BotPushedBot bot_pushed_bot_skipped = 25;
+        // the referee msg already indicates this
+        MultiplePlacementFailures multiple_placement_failures = 33 [deprecated = true];
+        // obsolete
+        BotCrashUnique bot_crash_unique_skipped = 23 [deprecated = true];
+        // obsolete
+        AttackerTouchedOpponentInDefenseArea attacker_touched_opponent_in_defense_area_skipped = 42 [deprecated = true];
+        // obsolete
+        KickTimeout kick_timeout = 12 [deprecated = true];
+        // obsolete
+        IndirectGoal indirect_goal = 9 [deprecated = true];
     }
 
     // the ball left the field normally
