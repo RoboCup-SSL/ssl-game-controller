@@ -178,8 +178,6 @@ message GameEvent {
         // an angle of 0 rad (  0°) means, the bots barely touched each other
         // an angle of π rad (180°) means, the bots crashed frontal into each other
         optional float crash_angle = 6;
-        // the location of the ball at the moment when this foul occurred
-        optional Location ball_location = 7;
     }
     // two robots crashed into each other and one team was found guilty to due significant speed difference
     message BotCrashUnique {
@@ -199,8 +197,6 @@ message GameEvent {
         // an angle of 0 rad (  0°) means, the bots barely touched each other
         // an angle of π rad (180°) means, the bots crashed frontal into each other
         optional float crash_angle = 7;
-        // the location of the ball at the moment when this foul occurred
-        optional Location ball_location = 8;
     }
     // a bot pushed another bot over a significant distance
     message BotPushedBot {
@@ -214,8 +210,6 @@ message GameEvent {
         optional Location location = 4;
         // the pushed distance [m]
         optional float pushed_distance = 5;
-        // the location of the ball at the moment when this foul occurred
-        optional Location ball_location = 6;
     }
     // a bot tipped over
     message BotTippedOver {
@@ -238,8 +232,6 @@ message GameEvent {
         optional Location location = 3;
         // the distance [m] from bot case to the nearest point outside the defense area
         optional float distance = 4;
-        // the location of the ball at the moment when this foul occurred
-        optional Location ball_location = 5;
     }
     // a defender other than the keeper was partially located inside its own defense area and touched the ball
     message DefenderInDefenseAreaPartially {
@@ -264,8 +256,6 @@ message GameEvent {
         optional Location location = 3;
         // the distance [m] that the bot is inside the penalty area
         optional float distance = 4;
-        // the location of the ball at the moment when this foul occurred
-        optional Location ball_location = 5;
     }
     // a bot kicked the ball too fast
     message BotKickedBallTooFast {
@@ -301,8 +291,6 @@ message GameEvent {
         optional uint32 victim = 4;
         // the location of the contact point between both bots
         optional Location location = 3;
-        // the location of the ball at the moment when this foul occurred
-        optional Location ball_location = 5;
     }
     // an attacker touched the ball multiple times when it was not allowed to
     message AttackerDoubleTouchedBall {
@@ -313,7 +301,7 @@ message GameEvent {
         // the location of the ball when it was first touched
         optional Location location = 3;
     }
-    // an attacker was located too near to the opponent defense area when ball entered play
+    // an attacker was located too near to the opponent defense area during stop or free kick
     message AttackerTooCloseToDefenseArea {
         // the team that found guilty
         required Team by_team = 1;
