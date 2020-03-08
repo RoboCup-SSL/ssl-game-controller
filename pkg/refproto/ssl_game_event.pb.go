@@ -306,7 +306,9 @@ func init() {
 	proto.RegisterType((*Game_Event_Originator)(nil), "Game_Event.Originator")
 }
 
-func init() { proto.RegisterFile("ssl_game_event.proto", fileDescriptor_9d7737834ddab500) }
+func init() {
+	proto.RegisterFile("ssl_game_event.proto", fileDescriptor_9d7737834ddab500)
+}
 
 var fileDescriptor_9d7737834ddab500 = []byte{
 	// 532 bytes of a gzipped FileDescriptorProto

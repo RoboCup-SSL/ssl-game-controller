@@ -520,7 +520,9 @@ func init() {
 	proto.RegisterType((*SSL_GeometryData)(nil), "SSL_GeometryData")
 }
 
-func init() { proto.RegisterFile("ssl_vision_geometry.proto", fileDescriptor_3d55d410315aeff8) }
+func init() {
+	proto.RegisterFile("ssl_vision_geometry.proto", fileDescriptor_3d55d410315aeff8)
+}
 
 var fileDescriptor_3d55d410315aeff8 = []byte{
 	// 608 bytes of a gzipped FileDescriptorProto

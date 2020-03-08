@@ -444,7 +444,9 @@ func init() {
 	proto.RegisterType((*AdvantageChoice)(nil), "AdvantageChoice")
 }
 
-func init() { proto.RegisterFile("ssl_game_controller_team.proto", fileDescriptor_96c0c3d07dcb3676) }
+func init() {
+	proto.RegisterFile("ssl_game_controller_team.proto", fileDescriptor_96c0c3d07dcb3676)
+}
 
 var fileDescriptor_96c0c3d07dcb3676 = []byte{
 	// 614 bytes of a gzipped FileDescriptorProto

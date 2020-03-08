@@ -71,7 +71,9 @@ func init() {
 	proto.RegisterType((*SSL_WrapperPacket)(nil), "SSL_WrapperPacket")
 }
 
-func init() { proto.RegisterFile("ssl_vision_wrapper.proto", fileDescriptor_3b7471c3468a2e38) }
+func init() {
+	proto.RegisterFile("ssl_vision_wrapper.proto", fileDescriptor_3b7471c3468a2e38)
+}
 
 var fileDescriptor_3b7471c3468a2e38 = []byte{
 	// 146 bytes of a gzipped FileDescriptorProto

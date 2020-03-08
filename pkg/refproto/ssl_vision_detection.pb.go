@@ -295,7 +295,9 @@ func init() {
 	proto.RegisterType((*SSL_DetectionFrame)(nil), "SSL_DetectionFrame")
 }
 
-func init() { proto.RegisterFile("ssl_vision_detection.proto", fileDescriptor_89b1c3228d8f9a76) }
+func init() {
+	proto.RegisterFile("ssl_vision_detection.proto", fileDescriptor_89b1c3228d8f9a76)
+}
 
 var fileDescriptor_89b1c3228d8f9a76 = []byte{
 	// 375 bytes of a gzipped FileDescriptorProto
