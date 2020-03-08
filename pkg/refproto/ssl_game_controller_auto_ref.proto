@@ -19,6 +19,29 @@ message AutoRefToController {
     optional Signature signature = 1;
     // game_event is an optional event that the autoRef detected during the game
     optional GameEvent game_event = 2;
+
+    // the origin of this game event
+    // autoRef id
+    optional string origin = 5;
+
+    // metadata on the current game state
+    optional GameStateMetadata game_state_metadata = 6;
+}
+
+message GameStateMetadata {
+    // if current state is prepare_kickoff, prepare_penalty, stop or ball_placement:
+    // true: all conditions are met to continue from the current state
+    // false: at least one condition not met yet
+    // not present: not supported by the autoRef
+    // else:
+    // undefined
+    optional bool ready_to_continue = 1;
+
+    // number of yellow robots currently visible on the field
+    optional uint32 number_of_robots_yellow = 2;
+
+    // number of blue robots currently visible on the field
+    optional uint32 number_of_robots_blue = 3;
 }
 
 // ControllerToAutoRef is the wrapper message for all messages from controller to autoRef
