@@ -20,12 +20,8 @@ message AutoRefToController {
     // game_event is an optional event that the autoRef detected during the game
     optional GameEvent game_event = 2;
 
-    // the origin of this game event
-    // autoRef id
-    optional string origin = 5;
-
     // metadata on the current game state
-    optional GameStateMetadata game_state_metadata = 6;
+    optional GameStateMetadata game_state_metadata = 5;
 }
 
 message GameStateMetadata {
