@@ -3,7 +3,6 @@ package store
 import (
 	"bufio"
 	"encoding/json"
-	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"github.com/pkg/errors"
 	"log"
@@ -12,31 +11,28 @@ import (
 	"syscall"
 )
 
-type StateEntry struct {
-	State  state.State
-	Change statemachine.Change
-}
+type Entry statemachine.StateChange
 
 type Store struct {
 	filename string
 	file     *os.File
-	states   []*StateEntry
+	entries  []*Entry
 }
 
 func NewStore(filename string) (s *Store) {
 	s = new(Store)
 	s.filename = filename
-	s.states = []*StateEntry{}
+	s.entries = []*Entry{}
 	return
 }
 
-func (s *Store) States() []*StateEntry {
-	return s.states
+func (s *Store) States() []*Entry {
+	return s.entries
 }
 
-func (s *Store) LatestState() *state.State {
-	if len(s.states) > 0 {
-		return &s.states[len(s.states)-1].State
+func (s *Store) LatestEntry() *Entry {
+	if len(s.entries) > 0 {
+		return s.entries[len(s.entries)-1]
 	}
 	return nil
 }
@@ -70,22 +66,22 @@ func (s *Store) Close() error {
 		return nil
 	}
 	if err := s.file.Close(); err != nil {
-		return errors.Wrap(err, "Could not close state file")
+		return errors.Wrap(err, "Could not close store file")
 	}
 	s.file = nil
 	return nil
 }
 
 func (s *Store) Load() error {
-	s.states = []*StateEntry{}
+	s.entries = []*Entry{}
 	scanner := bufio.NewScanner(s.file)
 	for scanner.Scan() {
 		b := scanner.Bytes()
-		entry := StateEntry{}
+		entry := Entry{}
 		if err := json.Unmarshal(b, &entry); err != nil {
-			return errors.Errorf("Could not unmarshal state: %v %v", string(b), err)
+			return errors.Errorf("Could not unmarshal entry: %v %v", string(b), err)
 		}
-		s.states = append(s.states, &entry)
+		s.entries = append(s.entries, &entry)
 	}
 
 	if err := scanner.Err(); err != nil {
@@ -95,12 +91,12 @@ func (s *Store) Load() error {
 	return nil
 }
 
-func (s *Store) Add(entry StateEntry) error {
-	s.states = append(s.states, &entry)
+func (s *Store) Add(entry Entry) error {
+	s.entries = append(s.entries, &entry)
 
 	jsonState, err := json.Marshal(entry)
 	if err != nil {
-		return errors.Wrap(err, "Can not marshal state")
+		return errors.Wrap(err, "Can not marshal entry")
 	}
 
 	_, err = s.file.Write(jsonState)

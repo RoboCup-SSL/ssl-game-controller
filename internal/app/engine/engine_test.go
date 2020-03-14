@@ -3,7 +3,6 @@ package engine
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
-	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/store"
 	"io/ioutil"
 	"os"
 	"reflect"
@@ -22,7 +21,7 @@ func Test_Engine(t *testing.T) {
 	}()
 
 	engine := NewEngine(tmpDir + "/store.json.stream")
-	hook := make(chan store.StateEntry)
+	hook := make(chan statemachine.StateChange)
 	engine.RegisterHook(hook)
 	if err := engine.Start(); err != nil {
 		t.Fatal("Could not start engine")

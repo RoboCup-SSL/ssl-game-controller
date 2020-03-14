@@ -2,12 +2,13 @@ package statemachine
 
 import "github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 
+type StateChange struct {
+	State  state.State
+	Change Change
+}
+
 func Process(currentState *state.State, change Change) (newState *state.State) {
-	if currentState == nil {
-		newState = &state.State{}
-	} else {
-		newState = currentState.DeepCopy()
-	}
+	newState = currentState.DeepCopy()
 	switch change.ChangeType {
 	case ChangeTypeCommand:
 		newState.Command = change.NewCommand.Command

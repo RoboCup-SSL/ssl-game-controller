@@ -2,6 +2,7 @@ package store
 
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"github.com/go-test/deep"
 	"io/ioutil"
 	"os"
@@ -26,12 +27,12 @@ func TestStore(t *testing.T) {
 
 	s1 := state.NewState()
 	s1.Command = state.CommandBallPlacement
-	if err := d.Add(StateEntry{State: s1}); err != nil {
+	if err := d.Add(Entry(statemachine.StateChange{State: s1})); err != nil {
 		t.Fatalf("Could not save state %v: %v", s1, err)
 	}
 	s2 := state.NewState()
 	s2.GameEvents = append(s2.GameEvents, state.GameEvent{})
-	if err := d.Add(StateEntry{State: s2}); err != nil {
+	if err := d.Add(Entry(statemachine.StateChange{State: s2})); err != nil {
 		t.Fatalf("Could not save state %v: %v", s2, err)
 	}
 
