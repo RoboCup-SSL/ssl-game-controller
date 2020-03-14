@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"encoding/json"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"github.com/pkg/errors"
 	"log"
 	"os"
@@ -12,7 +13,8 @@ import (
 )
 
 type StateEntry struct {
-	State state.State
+	State  state.State
+	Change statemachine.Change
 }
 
 type Store struct {
@@ -21,7 +23,8 @@ type Store struct {
 	states   []*StateEntry
 }
 
-func NewStore(filename string) (s Store) {
+func NewStore(filename string) (s *Store) {
+	s = new(Store)
 	s.filename = filename
 	s.states = []*StateEntry{}
 	return
@@ -31,9 +34,9 @@ func (s *Store) States() []*StateEntry {
 	return s.states
 }
 
-func (s *Store) LatestState() *StateEntry {
+func (s *Store) LatestState() *state.State {
 	if len(s.states) > 0 {
-		return s.states[len(s.states)-1]
+		return &s.states[len(s.states)-1].State
 	}
 	return nil
 }

@@ -44,7 +44,8 @@ func Test_process(t *testing.T) {
 					AddGameEvent: AddGameEvent{
 						GameEvent: state.GameEvent{Type: state.GameEventBallLeftFieldGoalLine},
 					},
-				}},
+				},
+			},
 			wantNewState: &state.State{
 				GameEvents: []state.GameEvent{
 					{Type: state.GameEventBotCrashDrawn},
@@ -55,8 +56,8 @@ func Test_process(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if gotNewState := process(tt.args.currentState, tt.args.change); !reflect.DeepEqual(gotNewState, tt.wantNewState) {
-				t.Errorf("process() != want:\n%v\n%v", gotNewState, tt.wantNewState)
+			if gotNewState := Process(tt.args.currentState, tt.args.change); !reflect.DeepEqual(gotNewState, tt.wantNewState) {
+				t.Errorf("Process() != want:\n%v\n%v", gotNewState, tt.wantNewState)
 			}
 		})
 	}
