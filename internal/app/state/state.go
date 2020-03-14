@@ -19,16 +19,16 @@ type State struct {
 	PrevCommands          []RefCommand       `json:"prevCommands" yaml:"prevCommands"`
 	PrevCommandsFor       []Team             `json:"prevCommandsFor" yaml:"prevCommandsFor"`
 	CurrentActionDeadline time.Time          `json:"currentActionDeadline" yaml:"currentActionDeadline"`
-	GameEvents            []*GameEvent       `json:"gameEvents" yaml:"gameEvents"`
-	GameEventsQueued      []*GameEvent       `json:"gameEventsQueued" yaml:"gameEventsQueued"`
+	GameEvents            []GameEvent        `json:"gameEvents" yaml:"gameEvents"`
+	GameEventsQueued      []GameEvent        `json:"gameEventsQueued" yaml:"gameEventsQueued"`
 }
 
 // NewState creates a new state, initialized for the start of a new game
 func NewState() (s State) {
 	s.Stage = StagePreGame
 	s.Command = CommandHalt
-	s.GameEvents = []*GameEvent{}
-	s.GameEventsQueued = []*GameEvent{}
+	s.GameEvents = []GameEvent{}
+	s.GameEventsQueued = []GameEvent{}
 
 	s.StageTimeStart = time.Unix(0, 0)
 	s.MatchTimeStart = time.Unix(0, 0)
@@ -47,18 +47,25 @@ func NewState() (s State) {
 func (s *State) DeepCopy() (c *State) {
 	c = new(State)
 	*c = *s
-	c.GameEvents = make([]*GameEvent, len(s.GameEvents))
-	copy(c.GameEvents, s.GameEvents)
-	c.GameEventsQueued = make([]*GameEvent, len(s.GameEventsQueued))
-	copy(c.GameEventsQueued, s.GameEventsQueued)
+
+	if s.GameEvents != nil {
+		c.GameEvents = make([]GameEvent, len(s.GameEvents))
+		copy(c.GameEvents, s.GameEvents)
+	}
+	if s.GameEventsQueued != nil {
+		c.GameEventsQueued = make([]GameEvent, len(s.GameEventsQueued))
+		copy(c.GameEventsQueued, s.GameEventsQueued)
+	}
 	if s.PlacementPos != nil {
 		c.PlacementPos = new(Location)
 		*c.PlacementPos = *s.PlacementPos
 	}
-	c.TeamState = make(map[Team]*TeamInfo)
-	for k, v := range s.TeamState {
-		c.TeamState[k] = new(TeamInfo)
-		*c.TeamState[k] = v.DeepCopy()
+	if s.TeamState != nil {
+		c.TeamState = make(map[Team]*TeamInfo)
+		for k, v := range s.TeamState {
+			c.TeamState[k] = new(TeamInfo)
+			*c.TeamState[k] = v.DeepCopy()
+		}
 	}
 	return
 }
@@ -126,7 +133,7 @@ func (s *State) PrimaryGameEvent() *GameEvent {
 	for i := len(s.GameEvents) - 1; i >= 0; i-- {
 		gameEvent := s.GameEvents[i]
 		if !gameEvent.IsSecondary() && gameEvent.Type != GameEventPlacementFailed {
-			return gameEvent
+			return &gameEvent
 		}
 	}
 	return nil
@@ -154,7 +161,7 @@ func (s *State) GetFirstGameEvent(gameEventType GameEventType) *GameEvent {
 	for i := len(s.GameEvents) - 1; i >= 0; i-- {
 		gameEvent := s.GameEvents[i]
 		if gameEvent.Type == gameEventType {
-			return gameEvent
+			return &gameEvent
 		}
 	}
 	return nil
