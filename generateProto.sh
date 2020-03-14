@@ -6,10 +6,18 @@ set -e
 # Update to latest protobuf compiler
 go get -u github.com/golang/protobuf/protoc-gen-go
 
-protoc -I"./proto/vision" \
-  --go_out=import_path="vision:./internal/app/vision" \
-  ./proto/vision/*.proto
+# vision
+protoc -I"./proto" -I"$GOPATH/src" --go_out=$GOPATH/src proto/ssl_vision_detection.proto
+protoc -I"./proto" -I"$GOPATH/src" --go_out=$GOPATH/src proto/ssl_vision_geometry.proto
+protoc -I"./proto" -I"$GOPATH/src" --go_out=$GOPATH/src proto/ssl_vision_wrapper.proto
 
-protoc -I"./proto/refproto" \
-  --go_out=import_path="refproto:./internal/app/refproto" \
-  ./proto/refproto/*.proto
+# game events
+protoc -I"./proto" -I"$GOPATH/src" --go_out=$GOPATH/src proto/ssl_game_event.proto
+
+# referee message
+protoc -I"./proto" -I"$GOPATH/src" --go_out=$GOPATH/src proto/ssl_referee.proto
+
+# remote communication
+protoc -I"./proto" -I"$GOPATH/src" --go_out=$GOPATH/src proto/ssl_game_controller_common.proto
+protoc -I"./proto" -I"$GOPATH/src" --go_out=$GOPATH/src proto/ssl_game_controller_auto_ref.proto
+protoc -I"./proto" -I"$GOPATH/src" --go_out=$GOPATH/src proto/ssl_game_controller_team.proto

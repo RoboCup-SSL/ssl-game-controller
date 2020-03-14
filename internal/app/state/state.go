@@ -35,11 +35,11 @@ func NewState() (s State) {
 	s.CurrentActionDeadline = time.Unix(0, 0)
 
 	s.TeamState = map[Team]*TeamInfo{}
-	s.TeamState[TeamYellow] = new(TeamInfo)
-	s.TeamState[TeamBlue] = new(TeamInfo)
-	*s.TeamState[TeamYellow] = newTeamInfo()
-	*s.TeamState[TeamBlue] = newTeamInfo()
-	s.TeamState[TeamBlue].OnPositiveHalf = !s.TeamState[TeamYellow].OnPositiveHalf
+	s.TeamState[Team_YELLOW] = new(TeamInfo)
+	s.TeamState[Team_BLUE] = new(TeamInfo)
+	*s.TeamState[Team_YELLOW] = newTeamInfo()
+	*s.TeamState[Team_BLUE] = newTeamInfo()
+	s.TeamState[Team_BLUE].OnPositiveHalf = !s.TeamState[Team_YELLOW].OnPositiveHalf
 
 	return
 }
@@ -90,55 +90,6 @@ func (s State) GameState() GameState {
 	return ""
 }
 
-func (s State) BotSubstitutionIntend() Team {
-	blue := false
-	yellow := false
-	for _, event := range s.GameEvents {
-		if event.Type == GameEventTooManyRobots {
-			blue = blue || event.ByTeam() == TeamBlue
-			yellow = yellow || event.ByTeam() == TeamYellow
-		} else if event.Type == GameEventBotSubstitution {
-			// reset after a sub substitution event
-			blue = false
-			yellow = false
-		}
-	}
-
-	yellow = yellow || s.TeamState[TeamYellow].BotSubstitutionIntend
-	blue = blue || s.TeamState[TeamBlue].BotSubstitutionIntend
-
-	if yellow && blue {
-		return TeamBoth
-	}
-	if yellow {
-		return TeamYellow
-	}
-	if blue {
-		return TeamBlue
-	}
-	return TeamUnknown
-}
-
-func (s *State) PrimaryGameEvent() *GameEvent {
-	if event := s.GetFirstGameEvent(GameEventMultipleCards); event != nil {
-		// only this event causes a penalty kick and must be prioritized.
-		return event
-	}
-
-	if event := s.GetFirstGameEvent(GameEventGoal); event != nil {
-		// Goal overrides everything else
-		return event
-	}
-
-	for i := len(s.GameEvents) - 1; i >= 0; i-- {
-		gameEvent := s.GameEvents[i]
-		if !gameEvent.IsSecondary() && gameEvent.Type != GameEventPlacementFailed {
-			return &gameEvent
-		}
-	}
-	return nil
-}
-
 func (s State) String() string {
 	bytes, e := json.Marshal(s)
 	if e != nil {
@@ -148,21 +99,11 @@ func (s State) String() string {
 }
 
 func (s *State) TeamByName(teamName string) Team {
-	if s.TeamState[TeamBlue].Name == teamName {
-		return TeamBlue
+	if s.TeamState[Team_BLUE].Name == teamName {
+		return Team_BLUE
 	}
-	if s.TeamState[TeamYellow].Name == teamName {
-		return TeamYellow
+	if s.TeamState[Team_YELLOW].Name == teamName {
+		return Team_YELLOW
 	}
-	return ""
-}
-
-func (s *State) GetFirstGameEvent(gameEventType GameEventType) *GameEvent {
-	for i := len(s.GameEvents) - 1; i >= 0; i-- {
-		gameEvent := s.GameEvents[i]
-		if gameEvent.Type == gameEventType {
-			return &gameEvent
-		}
-	}
-	return nil
+	return Team_UNKNOWN
 }

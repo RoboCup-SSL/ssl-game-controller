@@ -1,5 +1,7 @@
 syntax = "proto2";
 
+option go_package = "github.com/RoboCup-SSL/ssl-game-controller/internal/app/vision";
+
 message SSL_DetectionBall {
   required float  confidence = 1;
   optional uint32 area       = 2;
