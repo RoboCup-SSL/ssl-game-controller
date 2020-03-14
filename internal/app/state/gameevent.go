@@ -1,7 +1,6 @@
 package state
 
 import (
-	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
 	"reflect"
 )
 
@@ -12,7 +11,7 @@ func (e GameEvent) ByTeam() Team {
 		if !v.Field(i).IsNil() {
 			byTeamValue := v.Field(i).Elem().FieldByName("ByTeam")
 			if byTeamValue.IsValid() && !byTeamValue.IsNil() {
-				return Team(refproto.Team(byTeamValue.Elem().Int()))
+				return Team(Team(byTeamValue.Elem().Int()))
 			}
 		}
 	}

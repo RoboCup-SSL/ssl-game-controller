@@ -7,20 +7,23 @@ import (
 
 // State of the game
 type State struct {
-	Stage                 Stage              `json:"stage" yaml:"stage"`
-	Command               RefCommand         `json:"command" yaml:"command"`
-	CommandFor            Team               `json:"commandForTeam" yaml:"commandForTeam"`
-	StageTimeStart        time.Time          `json:"stageTimeElapsed" yaml:"stageTimeElapsed"`
-	MatchTimeStart        time.Time          `json:"matchTimeStart" yaml:"matchTimeStart"`
-	TeamState             map[Team]*TeamInfo `json:"teamState" yaml:"teamState"`
-	PlacementPos          *Location          `json:"placementPos" yaml:"placementPos"`
-	NextCommand           RefCommand         `json:"nextCommand" yaml:"nextCommand"`
-	NextCommandFor        Team               `json:"nextCommandFor" yaml:"nextCommandFor"`
-	PrevCommands          []RefCommand       `json:"prevCommands" yaml:"prevCommands"`
-	PrevCommandsFor       []Team             `json:"prevCommandsFor" yaml:"prevCommandsFor"`
-	CurrentActionDeadline time.Time          `json:"currentActionDeadline" yaml:"currentActionDeadline"`
-	GameEvents            []GameEvent        `json:"gameEvents" yaml:"gameEvents"`
-	GameEventsQueued      []GameEvent        `json:"gameEventsQueued" yaml:"gameEventsQueued"`
+	Stage                      Stage               `json:"stage" yaml:"stage"`
+	Command                    RefCommand          `json:"command" yaml:"command"`
+	CommandFor                 Team                `json:"commandForTeam" yaml:"commandForTeam"`
+	StageTimeElapsed           time.Duration       `json:"stageTimeElapsed" yaml:"stageTimeElapsed"`
+	StageTimeLeft              time.Duration       `json:"stageTimeLeft" yaml:"stageTimeLeft"`
+	MatchTimeStart             time.Time           `json:"matchTimeStart" yaml:"matchTimeStart"`
+	MatchDuration              time.Duration       `json:"matchDuration" yaml:"matchDuration"`
+	TeamState                  map[Team]*TeamInfo  `json:"teamState" yaml:"teamState"`
+	PlacementPos               *Location           `json:"placementPos" yaml:"placementPos"`
+	NextCommand                RefCommand          `json:"nextCommand" yaml:"nextCommand"`
+	NextCommandFor             Team                `json:"nextCommandFor" yaml:"nextCommandFor"`
+	PrevCommands               []RefCommand        `json:"prevCommands" yaml:"prevCommands"`
+	PrevCommandsFor            []Team              `json:"prevCommandsFor" yaml:"prevCommandsFor"`
+	CurrentActionDeadline      time.Time           `json:"currentActionDeadline" yaml:"currentActionDeadline"`
+	CurrentActionTimeRemaining time.Duration       `json:"currentActionTimeRemaining" yaml:"currentActionTimeRemaining"`
+	GameEvents                 []GameEvent         `json:"gameEvents" yaml:"gameEvents"`
+	GameEventsQueued           []ProposedGameEvent `json:"gameEventsQueued" yaml:"gameEventsQueued"`
 }
 
 // NewState creates a new state, initialized for the start of a new game
@@ -28,9 +31,11 @@ func NewState() (s State) {
 	s.Stage = StagePreGame
 	s.Command = CommandHalt
 	s.GameEvents = []GameEvent{}
-	s.GameEventsQueued = []GameEvent{}
+	s.GameEventsQueued = []ProposedGameEvent{}
 
-	s.StageTimeStart = time.Unix(0, 0)
+	s.StageTimeLeft = 0
+	s.StageTimeElapsed = 0
+	s.MatchDuration = 0
 	s.MatchTimeStart = time.Unix(0, 0)
 	s.CurrentActionDeadline = time.Unix(0, 0)
 
@@ -53,7 +58,7 @@ func (s *State) DeepCopy() (c *State) {
 		copy(c.GameEvents, s.GameEvents)
 	}
 	if s.GameEventsQueued != nil {
-		c.GameEventsQueued = make([]GameEvent, len(s.GameEventsQueued))
+		c.GameEventsQueued = make([]ProposedGameEvent, len(s.GameEventsQueued))
 		copy(c.GameEventsQueued, s.GameEventsQueued)
 	}
 	if s.PlacementPos != nil {

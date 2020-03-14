@@ -6,12 +6,14 @@ import (
 	"testing"
 )
 
-func Test_process(t *testing.T) {
+func Test_Statemachine(t *testing.T) {
 
 	type args struct {
 		currentState *state.State
 		change       Change
 	}
+	gameEventTypeGoalLine := state.GameEventType_BALL_LEFT_FIELD_GOAL_LINE
+	gameEventTypeCrash := state.GameEventType_BOT_CRASH_DRAWN
 	tests := []struct {
 		name         string
 		args         args
@@ -25,31 +27,31 @@ func Test_process(t *testing.T) {
 					ChangeType: ChangeTypeCommand,
 					NewCommand: NewCommand{
 						Command:    state.CommandBallPlacement,
-						CommandFor: state.TeamBlue,
+						CommandFor: state.Team_BLUE,
 					},
 				}},
 			wantNewState: &state.State{
 				Command:    state.CommandBallPlacement,
-				CommandFor: state.TeamBlue,
+				CommandFor: state.Team_BLUE,
 			},
 		},
 		{
 			name: "GameEvent",
 			args: args{
 				currentState: &state.State{
-					GameEvents: []state.GameEvent{{Type: state.GameEventBotCrashDrawn}},
+					GameEvents: []state.GameEvent{{Type: &gameEventTypeCrash}},
 				},
 				change: Change{
 					ChangeType: ChangeTypeGameEvent,
 					AddGameEvent: AddGameEvent{
-						GameEvent: state.GameEvent{Type: state.GameEventBallLeftFieldGoalLine},
+						GameEvent: state.GameEvent{Type: &gameEventTypeGoalLine},
 					},
 				},
 			},
 			wantNewState: &state.State{
 				GameEvents: []state.GameEvent{
-					{Type: state.GameEventBotCrashDrawn},
-					{Type: state.GameEventBallLeftFieldGoalLine},
+					{Type: &gameEventTypeCrash},
+					{Type: &gameEventTypeGoalLine},
 				},
 			},
 		},

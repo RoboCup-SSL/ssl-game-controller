@@ -30,13 +30,14 @@ func Test_Engine(t *testing.T) {
 		ChangeType: statemachine.ChangeTypeCommand,
 		NewCommand: statemachine.NewCommand{
 			Command:    state.CommandBallPlacement,
-			CommandFor: state.TeamBlue,
+			CommandFor: state.Team_BLUE,
 		},
 	})
+	gameEventTypeGoalLine := state.GameEventType_BALL_LEFT_FIELD_GOAL_LINE
 	engine.Enqueue(statemachine.Change{
 		ChangeType: statemachine.ChangeTypeGameEvent,
 		AddGameEvent: statemachine.AddGameEvent{
-			GameEvent: state.GameEvent{Type: state.GameEventBallLeftFieldGoalLine},
+			GameEvent: state.GameEvent{Type: &gameEventTypeGoalLine},
 		},
 	})
 	// wait for the changes to be processed
@@ -47,10 +48,8 @@ func Test_Engine(t *testing.T) {
 
 	wantNewState := &state.State{
 		Command:    state.CommandBallPlacement,
-		CommandFor: state.TeamBlue,
-		GameEvents: []state.GameEvent{
-			{Type: state.GameEventBallLeftFieldGoalLine},
-		},
+		CommandFor: state.Team_BLUE,
+		GameEvents: []state.GameEvent{{Type: &gameEventTypeGoalLine}},
 	}
 
 	if gotNewState := engine.State(); !reflect.DeepEqual(gotNewState, wantNewState) {

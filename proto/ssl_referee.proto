@@ -1,6 +1,6 @@
 syntax = "proto2";
 
-option go_package = "github.com/RoboCup-SSL/ssl-game-controller/internal/app/publish";
+option go_package = "github.com/RoboCup-SSL/ssl-game-controller/internal/app/state";
 
 import "github.com/RoboCup-SSL/ssl-game-controller/proto/ssl_game_event.proto";
 
