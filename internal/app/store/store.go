@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"github.com/pkg/errors"
+	"io"
 	"log"
 	"os"
 	"os/signal"
@@ -110,6 +111,25 @@ func (s *Store) Add(entry Entry) error {
 	err = s.file.Sync()
 	if err != nil {
 		return errors.Wrap(err, "Could not write to store")
+	}
+	return nil
+}
+
+func (s *Store) Backup(backupFilename string) error {
+	if s.file == nil {
+		return errors.New("Store is not open")
+	}
+	backupFile, err := os.Create(backupFilename)
+	if err != nil {
+		return errors.Wrapf(err, "Could not create backup file %v", backupFilename)
+	}
+	defer func() {
+		if err := backupFile.Close(); err != nil {
+			log.Println("Could not close backup file")
+		}
+	}()
+	if _, err := io.Copy(backupFile, s.file); err != nil {
+		return errors.Wrapf(err, "Could not copy store file (%v) to backup file (%v)", s.filename, backupFilename)
 	}
 	return nil
 }
