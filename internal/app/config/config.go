@@ -127,7 +127,7 @@ func (c *Controller) WriteTo(fileName string) (err error) {
 	}
 	err = os.MkdirAll(filepath.Dir(fileName), 0755)
 	if err != nil {
-		err = errors.Wrapf(err, "Could not create directly for config file: %v", fileName)
+		err = errors.Wrapf(err, "Could not create directory for config file: %v", fileName)
 		return
 	}
 	err = ioutil.WriteFile(fileName, b, 0600)

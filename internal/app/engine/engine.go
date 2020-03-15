@@ -1,30 +1,44 @@
 package engine
 
 import (
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/store"
 	"github.com/pkg/errors"
 	"log"
+	"math/rand"
+	"time"
 )
 
 type Engine struct {
 	stateStore   *store.Store
 	currentState *state.State
 	cfg          *Config
+	cfgFilename  string
+	gameConfig   config.Game
+	geometry     config.Geometry
+	stageTimes   map[state.Stage]time.Duration
 	queue        chan statemachine.Change
 	quit         chan int
 	hooks        []chan statemachine.StateChange
+	rand         *rand.Rand
 }
 
-func NewEngine(cfg *Config, stateStoreFilename string) (s *Engine) {
+func NewEngine(gameConfig config.Game, seed int64, storeFilename, cfgFilename string) (s *Engine) {
 	s = new(Engine)
-	s.stateStore = store.NewStore(stateStoreFilename)
+	s.stateStore = store.NewStore(storeFilename)
 	s.currentState = &state.State{}
-	s.cfg = cfg
+	s.cfg = DefaultConfig()
+	s.cfgFilename = cfgFilename
+	s.cfg.Division = gameConfig.DefaultDivision
+	s.gameConfig = gameConfig
+	s.geometry = *gameConfig.DefaultGeometry[s.cfg.Division]
+	s.stageTimes = loadStageTimes(gameConfig)
 	s.queue = make(chan statemachine.Change, 100)
 	s.quit = make(chan int)
 	s.hooks = []chan statemachine.StateChange{}
+	s.rand = rand.New(rand.NewSource(seed))
 	return
 }
 
@@ -54,6 +68,7 @@ func (e *Engine) Start() error {
 		return errors.Wrap(err, "Could not load state store")
 	}
 	e.currentState = e.initialStateFromStore()
+	e.cfg.LoadFrom(e.cfgFilename)
 	go e.processChanges()
 	return nil
 }
@@ -74,6 +89,9 @@ func (e *Engine) processChanges() {
 	for {
 		select {
 		case <-e.quit:
+			if err := e.cfg.SaveTo(e.cfgFilename); err != nil {
+				log.Printf("Could not save engine config to %v: %v", e.cfgFilename, err)
+			}
 			return
 		case change := <-e.queue:
 			newState, newChanges := statemachine.Process(e.currentState, change)

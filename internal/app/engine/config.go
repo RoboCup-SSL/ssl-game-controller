@@ -3,25 +3,27 @@ package engine
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
-	"math/rand"
+	"github.com/pkg/errors"
+	"gopkg.in/yaml.v2"
+	"io/ioutil"
+	"os"
+	"path/filepath"
 	"time"
 )
 
+// Config contains mutable and persistent configuration parameters for the engine
 type Config struct {
 	Division          config.Division                           `json:"division" yaml:"division"`
 	FirstKickoffTeam  state.Team                                `json:"firstKickoffTeam" yaml:"firstKickoffTeam"`
 	AutoContinue      bool                                      `json:"autoContinue" yaml:"autoContinue"`
 	GameEventBehavior map[state.GameEventType]GameEventBehavior `json:"gameEventBehavior" yaml:"gameEventBehavior"`
-	config            config.Game
-	geometry          config.Geometry
-	stageTimes        map[state.Stage]time.Duration
-	rand              *rand.Rand
 }
 
-func DefaultConfig(gameConfig config.Game, seed int64) (s *Config) {
+// DefaultConfig creates a default config populated with reasonable values
+func DefaultConfig() (s *Config) {
 	s = new(Config)
 
-	s.Division = gameConfig.DefaultDivision
+	s.Division = config.DivA
 	s.FirstKickoffTeam = state.Team_YELLOW
 	s.AutoContinue = true
 
@@ -30,15 +32,44 @@ func DefaultConfig(gameConfig config.Game, seed int64) (s *Config) {
 		s.GameEventBehavior[event] = GameEventBehaviorOn
 	}
 
-	s.config = gameConfig
-	s.geometry = *gameConfig.DefaultGeometry[s.Division]
-	s.stageTimes = loadStages(gameConfig)
-	s.rand = rand.New(rand.NewSource(seed))
-
 	return
 }
 
-func loadStages(gameConfig config.Game) (s map[state.Stage]time.Duration) {
+// SaveTo saves the current config to the given file
+func (c *Config) SaveTo(filename string) (err error) {
+	b, err := yaml.Marshal(c)
+	if err != nil {
+		err = errors.Wrapf(err, "Could not marshal config %v", c)
+		return
+	}
+	err = os.MkdirAll(filepath.Dir(filename), 0755)
+	if err != nil {
+		err = errors.Wrapf(err, "Could not create directory for config file: %v", filename)
+		return
+	}
+	err = ioutil.WriteFile(filename, b, 0600)
+	return
+}
+
+// LoadFrom loads the config from a file, if the file is present and merges it with the current values
+func (c *Config) LoadFrom(filename string) {
+	f, err := os.OpenFile(filename, os.O_RDONLY, 0600)
+	if err != nil {
+		return
+	}
+	b, err := ioutil.ReadAll(f)
+	if err != nil {
+		return
+	}
+
+	err = yaml.Unmarshal(b, &c)
+	if err != nil {
+		err = errors.Wrapf(err, "Could not unmarshal config file %v", filename)
+	}
+}
+
+// loadStageTimes loads the stage time durations from the game config into a map
+func loadStageTimes(gameConfig config.Game) (s map[state.Stage]time.Duration) {
 	s = map[state.Stage]time.Duration{}
 	for _, stage := range state.Stages {
 		s[stage] = 0
