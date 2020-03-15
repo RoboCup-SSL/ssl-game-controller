@@ -7,14 +7,16 @@ type StateChange struct {
 	Change Change
 }
 
-func Process(currentState *state.State, change Change) (newState *state.State) {
+func Process(currentState *state.State, change Change) (newState *state.State, newChanges []Change) {
 	newState = currentState.DeepCopy()
 	switch change.ChangeType {
+	case ChangeTypeTick:
+
 	case ChangeTypeNewCommand:
 		newState.Command = change.NewCommand.Command
 		newState.CommandFor = change.NewCommand.CommandFor
 	case ChangeTypeAddGameEvent:
 		newState.GameEvents = append(newState.GameEvents, change.AddGameEvent.GameEvent)
 	}
-	return newState
+	return
 }

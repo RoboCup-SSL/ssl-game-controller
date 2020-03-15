@@ -52,7 +52,7 @@ func Test_Engine(t *testing.T) {
 		GameEvents: []state.GameEvent{{Type: &gameEventTypeGoalLine}},
 	}
 
-	if gotNewState := engine.State(); !reflect.DeepEqual(gotNewState, wantNewState) {
+	if gotNewState := engine.LatestStateInStore(); !reflect.DeepEqual(gotNewState, wantNewState) {
 		t.Errorf("State mismatch:\n%v\n%v", gotNewState, wantNewState)
 	}
 }

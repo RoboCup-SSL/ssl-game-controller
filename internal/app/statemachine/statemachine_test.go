@@ -58,7 +58,7 @@ func Test_Statemachine(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if gotNewState := Process(tt.args.currentState, tt.args.change); !reflect.DeepEqual(gotNewState, tt.wantNewState) {
+			if gotNewState, _ := Process(tt.args.currentState, tt.args.change); !reflect.DeepEqual(gotNewState, tt.wantNewState) {
 				t.Errorf("Process() != want:\n%v\n%v", gotNewState, tt.wantNewState)
 			}
 		})

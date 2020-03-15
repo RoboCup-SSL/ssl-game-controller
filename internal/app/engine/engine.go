@@ -9,16 +9,18 @@ import (
 )
 
 type Engine struct {
-	stateStore *store.Store
-	queue      chan statemachine.Change
-	quit       chan int
-	hooks      []chan statemachine.StateChange
+	stateStore   *store.Store
+	currentState *state.State
+	queue        chan statemachine.Change
+	quit         chan int
+	hooks        []chan statemachine.StateChange
 }
 
 func NewEngine(stateStoreFilename string) (s *Engine) {
 	s = new(Engine)
 	s.stateStore = store.NewStore(stateStoreFilename)
-	s.queue = make(chan statemachine.Change, 10)
+	s.currentState = &state.State{}
+	s.queue = make(chan statemachine.Change, 100)
 	s.quit = make(chan int)
 	s.hooks = []chan statemachine.StateChange{}
 	return
@@ -49,6 +51,7 @@ func (e *Engine) Start() error {
 	if err := e.stateStore.Load(); err != nil {
 		return errors.Wrap(err, "Could not load state store")
 	}
+	e.currentState = e.initialStateFromStore()
 	go e.processChanges()
 	return nil
 }
@@ -57,7 +60,7 @@ func (e *Engine) Stop() {
 	e.quit <- 0
 }
 
-func (e *Engine) State() *state.State {
+func (e *Engine) LatestStateInStore() *state.State {
 	entry := e.stateStore.LatestEntry()
 	if entry != nil {
 		return entry.State
@@ -71,31 +74,38 @@ func (e *Engine) processChanges() {
 		case <-e.quit:
 			return
 		case change := <-e.queue:
-			newState := statemachine.Process(e.currentState(), change)
+			newState, newChanges := statemachine.Process(e.currentState, change)
 			entry := statemachine.StateChange{
 				State:  newState,
 				Change: change,
 			}
-			err := e.stateStore.Add(store.Entry(entry))
-			if err != nil {
-				log.Println("Could not add new state to store: ", err)
-			} else {
-				for _, hook := range e.hooks {
-					hook <- entry
+			e.currentState = newState
+
+			for _, newChange := range newChanges {
+				e.queue <- newChange
+			}
+
+			// do not save state for ticks
+			if change.ChangeType != statemachine.ChangeTypeTick {
+				if err := e.stateStore.Add(store.Entry(entry)); err != nil {
+					log.Println("Could not add new state to store: ", err)
 				}
+			}
+			for _, hook := range e.hooks {
+				hook <- entry
 			}
 		}
 	}
 }
 
 // currentState gets the current state or returns an empty default state
-func (e *Engine) currentState() *state.State {
+func (e *Engine) initialStateFromStore() *state.State {
 	latestEntry := e.stateStore.LatestEntry()
 	var currentState *state.State
 	if latestEntry == nil {
 		currentState = &state.State{}
 	} else {
-		currentState = latestEntry.State
+		currentState = latestEntry.State.DeepCopy()
 	}
 	return currentState
 }
