@@ -97,6 +97,8 @@ func (e *Engine) processChanges() {
 			}
 			e.currentState = newState
 
+			e.postProcessChange(change)
+
 			for _, newChange := range newChanges {
 				e.queue <- newChange
 			}
@@ -124,4 +126,13 @@ func (e *Engine) initialStateFromStore() *state.State {
 		currentState = latestEntry.State.DeepCopy()
 	}
 	return currentState
+}
+
+func (e *Engine) postProcessChange(change statemachine.Change) {
+	switch change.ChangeType {
+	case statemachine.ChangeTypeChangeStage:
+		if change.ChangeStage.NewStage == state.StageFirstHalf {
+			e.currentState.MatchTimeStart = e.timeProvider()
+		}
+	}
 }

@@ -50,7 +50,8 @@ func Test_Statemachine(t *testing.T) {
 				},
 			},
 			wantNewState: &state.State{
-				Stage: state.StageFirstHalf,
+				Stage:         state.StageFirstHalf,
+				StageTimeLeft: gameConfig.Normal.HalfDuration,
 			},
 		},
 	}
