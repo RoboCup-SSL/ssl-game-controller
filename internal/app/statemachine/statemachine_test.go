@@ -1,6 +1,7 @@
 package statemachine
 
 import (
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"reflect"
 	"testing"
@@ -56,9 +57,11 @@ func Test_Statemachine(t *testing.T) {
 			},
 		},
 	}
+	gameConfig := config.DefaultControllerConfig().Game
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if gotNewState, _ := Process(tt.args.currentState, tt.args.change); !reflect.DeepEqual(gotNewState, tt.wantNewState) {
+			sm := NewStateMachine(gameConfig, "/tmp/foo")
+			if gotNewState, _ := sm.Process(tt.args.currentState, tt.args.change); !reflect.DeepEqual(gotNewState, tt.wantNewState) {
 				t.Errorf("Process() != want:\n%v\n%v", gotNewState, tt.wantNewState)
 			}
 		})

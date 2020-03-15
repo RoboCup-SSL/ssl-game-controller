@@ -22,8 +22,8 @@ func Test_Engine(t *testing.T) {
 	}()
 
 	gameConfig := config.DefaultControllerConfig().Game
-	cfg := DefaultConfig(gameConfig, 0)
-	engine := NewEngine(cfg, tmpDir+"/store.json.stream")
+	sm := statemachine.NewStateMachine(gameConfig, "/tmp/foo")
+	engine := NewEngine(sm, 0, tmpDir+"/store.json.stream")
 	hook := make(chan statemachine.StateChange)
 	engine.RegisterHook(hook)
 	if err := engine.Start(); err != nil {

@@ -1,4 +1,4 @@
-package engine
+package statemachine
 
 type GameEventBehavior string
 
