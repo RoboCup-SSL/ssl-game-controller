@@ -11,15 +11,17 @@ import (
 type Engine struct {
 	stateStore   *store.Store
 	currentState *state.State
+	cfg          *Config
 	queue        chan statemachine.Change
 	quit         chan int
 	hooks        []chan statemachine.StateChange
 }
 
-func NewEngine(stateStoreFilename string) (s *Engine) {
+func NewEngine(cfg *Config, stateStoreFilename string) (s *Engine) {
 	s = new(Engine)
 	s.stateStore = store.NewStore(stateStoreFilename)
 	s.currentState = &state.State{}
+	s.cfg = cfg
 	s.queue = make(chan statemachine.Change, 100)
 	s.quit = make(chan int)
 	s.hooks = []chan statemachine.StateChange{}

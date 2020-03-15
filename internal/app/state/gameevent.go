@@ -5,8 +5,8 @@ import (
 )
 
 // ByTeam extracts the `ByTeam` attribute from the game event details
-func (e GameEvent) ByTeam() Team {
-	v := reflect.ValueOf(e.Event)
+func (m GameEvent) ByTeam() Team {
+	v := reflect.ValueOf(m.Event)
 	for i := 0; i < v.NumField(); i++ {
 		if !v.Field(i).IsNil() {
 			byTeamValue := v.Field(i).Elem().FieldByName("ByTeam")
@@ -16,4 +16,11 @@ func (e GameEvent) ByTeam() Team {
 		}
 	}
 	return Team_UNKNOWN
+}
+
+func AllGameEvents() (a []GameEventType) {
+	for t := range GameEventType_name {
+		a = append(a, GameEventType(t))
+	}
+	return
 }
