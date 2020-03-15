@@ -75,12 +75,12 @@ func (p *MessageGenerator) stateToRefereeMessage(matchState *state.State) (r *st
 func updateTeam(teamInfo *state.Referee_TeamInfo, teamState *state.TeamInfo) {
 	*teamInfo.Name = teamState.Name
 	*teamInfo.Score = uint32(teamState.Goals)
-	*teamInfo.RedCards = uint32(teamState.RedCards)
-	teamInfo.YellowCardTimes = mapTimes(teamState.YellowCardTimes)
-	*teamInfo.YellowCards = uint32(teamState.YellowCards)
+	*teamInfo.RedCards = uint32(len(teamState.RedCards))
+	teamInfo.YellowCardTimes = mapYellowCardTimes(teamState.YellowCards)
+	*teamInfo.YellowCards = uint32(len(teamState.YellowCards))
 	*teamInfo.Timeouts = uint32(teamState.TimeoutsLeft)
 	*teamInfo.Goalkeeper = uint32(teamState.Goalkeeper)
-	*teamInfo.FoulCounter = uint32(teamState.FoulCounter)
+	*teamInfo.FoulCounter = uint32(len(teamState.Fouls))
 	*teamInfo.BallPlacementFailures = uint32(teamState.BallPlacementFailures)
 	*teamInfo.BallPlacementFailuresReached = teamState.BallPlacementFailuresReached
 	*teamInfo.CanPlaceBall = teamState.CanPlaceBall

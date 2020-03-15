@@ -7,6 +7,7 @@ import (
 )
 
 type StateChange struct {
+	Id     int
 	State  *state.State
 	Change Change
 }

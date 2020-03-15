@@ -93,6 +93,7 @@ func (s *Store) Load() error {
 }
 
 func (s *Store) Add(entry Entry) error {
+	entry.Id = len(s.entries)
 	s.entries = append(s.entries, &entry)
 
 	jsonState, err := json.Marshal(entry)

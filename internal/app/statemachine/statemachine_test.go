@@ -26,7 +26,7 @@ func Test_Statemachine(t *testing.T) {
 				currentState: &state.State{},
 				change: Change{
 					ChangeType: ChangeTypeNewCommand,
-					NewCommand: NewCommand{
+					NewCommand: &NewCommand{
 						Command:    state.CommandBallPlacement,
 						CommandFor: state.Team_BLUE,
 					},
@@ -44,7 +44,7 @@ func Test_Statemachine(t *testing.T) {
 				},
 				change: Change{
 					ChangeType: ChangeTypeAddGameEvent,
-					AddGameEvent: AddGameEvent{
+					AddGameEvent: &AddGameEvent{
 						GameEvent: state.GameEvent{Type: &gameEventTypeGoalLine},
 					},
 				},
