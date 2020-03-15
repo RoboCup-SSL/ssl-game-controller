@@ -60,7 +60,7 @@ func (e *Engine) Stop() {
 func (e *Engine) State() *state.State {
 	entry := e.stateStore.LatestEntry()
 	if entry != nil {
-		return &entry.State
+		return entry.State
 	}
 	return nil
 }
@@ -73,7 +73,7 @@ func (e *Engine) processChanges() {
 		case change := <-e.queue:
 			newState := statemachine.Process(e.currentState(), change)
 			entry := statemachine.StateChange{
-				State:  *newState,
+				State:  newState,
 				Change: change,
 			}
 			err := e.stateStore.Add(store.Entry(entry))
@@ -95,7 +95,7 @@ func (e *Engine) currentState() *state.State {
 	if latestEntry == nil {
 		currentState = &state.State{}
 	} else {
-		currentState = &latestEntry.State
+		currentState = latestEntry.State
 	}
 	return currentState
 }

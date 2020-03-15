@@ -27,7 +27,7 @@ func Test_Engine(t *testing.T) {
 		t.Fatal("Could not start engine")
 	}
 	engine.Enqueue(statemachine.Change{
-		ChangeType: statemachine.ChangeTypeCommand,
+		ChangeType: statemachine.ChangeTypeNewCommand,
 		NewCommand: statemachine.NewCommand{
 			Command:    state.CommandBallPlacement,
 			CommandFor: state.Team_BLUE,
@@ -35,7 +35,7 @@ func Test_Engine(t *testing.T) {
 	})
 	gameEventTypeGoalLine := state.GameEventType_BALL_LEFT_FIELD_GOAL_LINE
 	engine.Enqueue(statemachine.Change{
-		ChangeType: statemachine.ChangeTypeGameEvent,
+		ChangeType: statemachine.ChangeTypeAddGameEvent,
 		AddGameEvent: statemachine.AddGameEvent{
 			GameEvent: state.GameEvent{Type: &gameEventTypeGoalLine},
 		},

@@ -5,8 +5,9 @@ import "github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 type ChangeType string
 
 const (
-	ChangeTypeCommand   ChangeType = "Command"
-	ChangeTypeGameEvent ChangeType = "GameEvent"
+	ChangeTypeTick         ChangeType = "Tick"
+	ChangeTypeNewCommand   ChangeType = "Command"
+	ChangeTypeAddGameEvent ChangeType = "GameEvent"
 )
 
 type Change struct {

@@ -2,6 +2,7 @@ package publish
 
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"reflect"
 	"testing"
 	"time"
@@ -9,35 +10,45 @@ import (
 
 func Test_updateMessage(t *testing.T) {
 	s := state.NewState()
+	c := statemachine.StateChange{
+		State: &s,
+		Change: statemachine.Change{
+			ChangeType: statemachine.ChangeTypeTick,
+		},
+	}
 
 	p := NewPublisher("")
-	p.update(&s)
+	rs := p.GenerateRefereeMessages(c)
+	if len(rs) != 1 {
+		t.Errorf("Expected only one referee message, got: %v", rs)
+	}
+	r := rs[0]
 
-	if *p.ProtoMsg.PacketTimestamp <= 0 {
-		t.Errorf("Wrong packet timestamp: %v", *p.ProtoMsg.PacketTimestamp)
+	if *r.PacketTimestamp <= 0 {
+		t.Errorf("Wrong packet timestamp: %v", *r.PacketTimestamp)
 	}
-	if *p.ProtoMsg.Stage != state.Referee_NORMAL_FIRST_HALF_PRE {
-		t.Errorf("Wrong Stage: %v", *p.ProtoMsg.Stage)
+	if *r.Stage != state.Referee_NORMAL_FIRST_HALF_PRE {
+		t.Errorf("Wrong Stage: %v", *r.Stage)
 	}
-	if *p.ProtoMsg.StageTimeLeft != 0 {
-		t.Errorf("Wrong StageTimeLeft: %v", *p.ProtoMsg.StageTimeLeft)
+	if *r.StageTimeLeft != 0 {
+		t.Errorf("Wrong StageTimeLeft: %v", *r.StageTimeLeft)
 	}
-	if *p.ProtoMsg.Command != state.Referee_HALT {
-		t.Errorf("Wrong command: %v", *p.ProtoMsg.Command)
+	if *r.Command != state.Referee_HALT {
+		t.Errorf("Wrong command: %v", *r.Command)
 	}
-	if *p.ProtoMsg.CommandCounter == 1 {
-		t.Errorf("Wrong CommandCounter: %v", *p.ProtoMsg.CommandCounter)
+	if *r.CommandCounter == 1 {
+		t.Errorf("Wrong CommandCounter: %v", *r.CommandCounter)
 	}
-	if *p.ProtoMsg.CommandTimestamp != 0 {
-		t.Errorf("Wrong CommandTimestamp: %v", *p.ProtoMsg.CommandTimestamp)
+	if *r.CommandTimestamp != 0 {
+		t.Errorf("Wrong CommandTimestamp: %v", *r.CommandTimestamp)
 	}
-	if *p.ProtoMsg.BlueTeamOnPositiveHalf {
-		t.Errorf("Wrong half: %v", *p.ProtoMsg.BlueTeamOnPositiveHalf)
+	if *r.BlueTeamOnPositiveHalf {
+		t.Errorf("Wrong half: %v", *r.BlueTeamOnPositiveHalf)
 	}
-	if p.ProtoMsg.Yellow == nil {
+	if r.Yellow == nil {
 		t.Errorf("Missing Yellow")
 	}
-	if p.ProtoMsg.Blue == nil {
+	if r.Blue == nil {
 		t.Errorf("Missing Blue")
 	}
 }

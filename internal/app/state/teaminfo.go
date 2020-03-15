@@ -64,3 +64,7 @@ func (t *TeamInfo) ResetBallPlacementFailures() {
 	t.BallPlacementFailuresReached = false
 	t.BallPlacementFailures = 0
 }
+
+func BothTeams() []Team {
+	return []Team{Team_YELLOW, Team_BLUE}
+}
