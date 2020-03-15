@@ -54,6 +54,8 @@ func (s *StateMachine) Process(currentState *state.State, change Change) (newSta
 		newChanges = s.AddRedCard(newState, change.AddRedCard)
 	case ChangeTypeYellowCardOver:
 		newChanges = s.YellowCardOver(newState)
+	case ChangeTypeUpdateConfig:
+		newChanges = s.UpdateConfig(change.UpdateConfig)
 	}
 	return
 }

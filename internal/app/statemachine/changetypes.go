@@ -9,33 +9,33 @@ type ChangeType string
 type ChangeOrigin string
 
 const (
-	ChangeTypeNewCommand               ChangeType = "NewCommand"
-	ChangeTypeChangeStage              ChangeType = "ChangeStage"
-	ChangeTypeSetBallPlacementPos      ChangeType = "SetBallPlacementPos"
-	ChangeTypeAddYellowCard            ChangeType = "AddYellowCard"
-	ChangeTypeAddRedCard               ChangeType = "AddRedCard"
-	ChangeTypeYellowCardOver           ChangeType = "ChangeTypeYellowCardOver"
-	ChangeTypeAddGameEvent             ChangeType = "AddGameEvent"
-	ChangeTypeAddProposedGameEvent     ChangeType = "AddProposedGameEvent"
-	ChangeTypeUpdateStateMachineConfig ChangeType = "UpdateStateMachineConfig"
-	ChangeTypeUpdateTeamState          ChangeType = "UpdateTeamState"
-	ChangeTypeSwitchColor              ChangeType = "SwitchColor"
-	ChangeTypeRevert                   ChangeType = "Revert"
+	ChangeTypeNewCommand           ChangeType = "NewCommand"
+	ChangeTypeChangeStage          ChangeType = "ChangeStage"
+	ChangeTypeSetBallPlacementPos  ChangeType = "SetBallPlacementPos"
+	ChangeTypeAddYellowCard        ChangeType = "AddYellowCard"
+	ChangeTypeAddRedCard           ChangeType = "AddRedCard"
+	ChangeTypeYellowCardOver       ChangeType = "YellowCardOver"
+	ChangeTypeUpdateConfig         ChangeType = "UpdateConfig"
+	ChangeTypeUpdateTeamState      ChangeType = "UpdateTeamState"
+	ChangeTypeSwitchColor          ChangeType = "SwitchColor"
+	ChangeTypeAddGameEvent         ChangeType = "AddGameEvent"
+	ChangeTypeAddProposedGameEvent ChangeType = "AddProposedGameEvent"
+	ChangeTypeRevert               ChangeType = "Revert"
 )
 
 type Change struct {
-	ChangeType               ChangeType                `json:"changeType,omitempty" yaml:"changeType"`
-	ChangeOrigin             ChangeOrigin              `json:"changeOrigin,omitempty" yaml:"changeOrigin"`
-	NewCommand               *NewCommand               `json:"newCommand,omitempty" yaml:"newCommand"`
-	AddGameEvent             *AddGameEvent             `json:"addGameEvent,omitempty" yaml:"addGameEvent"`
-	AddProposedGameEvent     *AddProposedGameEvent     `json:"addProposedGameEvent,omitempty" yaml:"addProposedGameEvent"`
-	ChangeStage              *ChangeStage              `json:"changeStage,omitempty" yaml:"changeStage"`
-	SetBallPlacementPos      *SetBallPlacementPos      `json:"setBallPlacementPos,omitempty" yaml:"setBallPlacementPos"`
-	AddYellowCard            *AddYellowCard            `json:"addYellowCard,omitempty" yaml:"addYellowCard"`
-	AddRedCard               *AddRedCard               `json:"addRedCard,omitempty" yaml:"addRedCard"`
-	UpdateStateMachineConfig *UpdateStateMachineConfig `json:"updateStateMachineConfig,omitempty" yaml:"updateStateMachineConfig"`
-	UpdateTeamState          *UpdateTeamState          `json:"updateTeamState,omitempty" yaml:"updateTeamState"`
-	Revert                   *Revert                   `json:"revert,omitempty" yaml:"revert"`
+	ChangeType           ChangeType            `json:"changeType,omitempty" yaml:"changeType"`
+	ChangeOrigin         ChangeOrigin          `json:"changeOrigin,omitempty" yaml:"changeOrigin"`
+	NewCommand           *NewCommand           `json:"newCommand,omitempty" yaml:"newCommand"`
+	AddGameEvent         *AddGameEvent         `json:"addGameEvent,omitempty" yaml:"addGameEvent"`
+	AddProposedGameEvent *AddProposedGameEvent `json:"addProposedGameEvent,omitempty" yaml:"addProposedGameEvent"`
+	ChangeStage          *ChangeStage          `json:"changeStage,omitempty" yaml:"changeStage"`
+	SetBallPlacementPos  *SetBallPlacementPos  `json:"setBallPlacementPos,omitempty" yaml:"setBallPlacementPos"`
+	AddYellowCard        *AddYellowCard        `json:"addYellowCard,omitempty" yaml:"addYellowCard"`
+	AddRedCard           *AddRedCard           `json:"addRedCard,omitempty" yaml:"addRedCard"`
+	UpdateConfig         *UpdateConfig         `json:"updateConfig,omitempty" yaml:"updateConfig"`
+	UpdateTeamState      *UpdateTeamState      `json:"updateTeamState,omitempty" yaml:"updateTeamState"`
+	Revert               *Revert               `json:"revert,omitempty" yaml:"revert"`
 }
 
 type NewCommand struct {
@@ -69,7 +69,7 @@ type AddRedCard struct {
 	CausedByGameEvent *state.GameEvent `json:"causedByGameEvent,omitempty" yaml:"causedByGameEvent"`
 }
 
-type UpdateStateMachineConfig struct {
+type UpdateConfig struct {
 	Division          *config.Division                          `json:"division,omitempty" yaml:"division"`
 	FirstKickoffTeam  *state.Team                               `json:"firstKickoffTeam,omitempty" yaml:"firstKickoffTeam"`
 	AutoContinue      *bool                                     `json:"autoContinue,omitempty" yaml:"autoContinue"`
