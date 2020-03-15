@@ -61,7 +61,9 @@ func commandByTeam(team state.Team, blueCommand state.Referee_Command, yellowCom
 func mapYellowCardTimes(cards []state.YellowCard) []uint32 {
 	times := make([]uint32, len(cards))
 	for i, c := range cards {
-		times[i] = mapTime(c.TimeRemaining)
+		if c.TimeRemaining > 0 {
+			times[i] = mapTime(c.TimeRemaining)
+		}
 	}
 	return times
 }

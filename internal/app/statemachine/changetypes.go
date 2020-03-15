@@ -9,7 +9,6 @@ type ChangeType string
 type ChangeOrigin string
 
 const (
-	ChangeTypeTick                     ChangeType = "Tick"
 	ChangeTypeNewCommand               ChangeType = "NewCommand"
 	ChangeTypeAddGameEvent             ChangeType = "AddGameEvent"
 	ChangeTypeAddProposedGameEvent     ChangeType = "AddProposedGameEvent"
@@ -17,6 +16,7 @@ const (
 	ChangeTypeSetBallPlacementPos      ChangeType = "SetBallPlacementPos"
 	ChangeTypeAddYellowCard            ChangeType = "AddYellowCard"
 	ChangeTypeAddRedCard               ChangeType = "AddRedCard"
+	ChangeTypeYellowCardOver           ChangeType = "ChangeTypeYellowCardOver"
 	ChangeTypeUpdateStateMachineConfig ChangeType = "UpdateStateMachineConfig"
 	ChangeTypeUpdateTeamState          ChangeType = "UpdateTeamState"
 	ChangeTypeSwitchColor              ChangeType = "SwitchColor"

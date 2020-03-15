@@ -4,19 +4,23 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/store"
+	"github.com/RoboCup-SSL/ssl-game-controller/pkg/timer"
 	"github.com/pkg/errors"
 	"log"
 	"math/rand"
+	"time"
 )
 
 type Engine struct {
-	stateStore   *store.Store
-	currentState *state.State
-	stateMachine *statemachine.StateMachine
-	queue        chan statemachine.Change
-	quit         chan int
-	hooks        []chan statemachine.StateChange
-	rand         *rand.Rand
+	stateStore     *store.Store
+	currentState   *state.State
+	stateMachine   *statemachine.StateMachine
+	queue          chan statemachine.Change
+	quit           chan int
+	hooks          []chan statemachine.StateChange
+	rand           *rand.Rand
+	timeProvider   timer.TimeProvider
+	lastTimeUpdate time.Time
 }
 
 func NewEngine(stateMachine *statemachine.StateMachine, seed int64, storeFilename string) (s *Engine) {
@@ -28,6 +32,8 @@ func NewEngine(stateMachine *statemachine.StateMachine, seed int64, storeFilenam
 	s.quit = make(chan int)
 	s.hooks = []chan statemachine.StateChange{}
 	s.rand = rand.New(rand.NewSource(seed))
+	s.timeProvider = func() time.Time { return time.Now() }
+	s.lastTimeUpdate = s.timeProvider()
 	return
 }
 
@@ -94,14 +100,14 @@ func (e *Engine) processChanges() {
 			}
 
 			// do not save state for ticks
-			if change.ChangeType != statemachine.ChangeTypeTick {
-				if err := e.stateStore.Add(store.Entry(entry)); err != nil {
-					log.Println("Could not add new state to store: ", err)
-				}
+			if err := e.stateStore.Add(store.Entry(entry)); err != nil {
+				log.Println("Could not add new state to store: ", err)
 			}
 			for _, hook := range e.hooks {
 				hook <- entry
 			}
+		case <-time.After(10 * time.Millisecond):
+			e.Tick()
 		}
 	}
 }
