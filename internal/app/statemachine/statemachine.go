@@ -48,6 +48,10 @@ func (s *StateMachine) Process(currentState *state.State, change Change) (newSta
 		newChanges = s.ChangeStage(newState, change.ChangeStage)
 	case ChangeTypeSetBallPlacementPos:
 		newChanges = s.SetBallPlacementPos(newState, change.SetBallPlacementPos)
+	case ChangeTypeAddYellowCard:
+		newChanges = s.AddYellowCard(newState, change.AddYellowCard)
+	case ChangeTypeAddRedCard:
+		newChanges = s.AddRedCard(newState, change.AddRedCard)
 	case ChangeTypeYellowCardOver:
 		newChanges = s.YellowCardOver(newState)
 	}
