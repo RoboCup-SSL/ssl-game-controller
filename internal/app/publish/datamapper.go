@@ -61,9 +61,16 @@ func commandByTeam(team state.Team, blueCommand state.Referee_Command, yellowCom
 func mapTimes(durations []time.Duration) []uint32 {
 	times := make([]uint32, len(durations))
 	for i, d := range durations {
-		times[i] = uint32(d.Nanoseconds() / 1000)
+		times[i] = mapTime(d)
 	}
 	return times
+}
+
+func mapTime(duration time.Duration) uint32 {
+	if duration.Nanoseconds() > 0 {
+		return uint32(duration.Nanoseconds() / 1000)
+	}
+	return 0
 }
 
 func mapStage(stage state.Stage) state.Referee_Stage {

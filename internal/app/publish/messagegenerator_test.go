@@ -3,12 +3,10 @@ package publish
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
-	"reflect"
 	"testing"
-	"time"
 )
 
-func Test_updateMessage(t *testing.T) {
+func Test_generateMessages(t *testing.T) {
 	s := state.NewState()
 	c := statemachine.StateChange{
 		State: &s,
@@ -17,8 +15,8 @@ func Test_updateMessage(t *testing.T) {
 		},
 	}
 
-	p := NewPublisher("")
-	rs := p.GenerateRefereeMessages(c)
+	g := NewMessageGenerator()
+	rs := g.GenerateRefereeMessages(c)
 	if len(rs) != 1 {
 		t.Errorf("Expected only one referee message, got: %v", rs)
 	}
@@ -50,27 +48,5 @@ func Test_updateMessage(t *testing.T) {
 	}
 	if r.Blue == nil {
 		t.Errorf("Missing Blue")
-	}
-}
-
-func Test_mapTimes(t *testing.T) {
-	type args struct {
-		durations []time.Duration
-	}
-	tests := []struct {
-		name string
-		args args
-		want []uint32
-	}{
-		{"zero", args{durations: []time.Duration{0}}, []uint32{0}},
-		{"second", args{durations: []time.Duration{1 * time.Second}}, []uint32{1000000}},
-		{"multiple", args{durations: []time.Duration{1 * time.Millisecond, 5 * time.Millisecond}}, []uint32{1000, 5000}},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := mapTimes(tt.args.durations); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("mapTimes() = %v, want %v", got, tt.want)
-			}
-		})
 	}
 }
