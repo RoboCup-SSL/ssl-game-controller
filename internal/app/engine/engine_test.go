@@ -32,7 +32,7 @@ func Test_Engine(t *testing.T) {
 	engine.Enqueue(statemachine.Change{
 		ChangeType: statemachine.ChangeTypeNewCommand,
 		NewCommand: &statemachine.NewCommand{
-			Command:    state.CommandBallPlacement,
+			Command:    state.CommandDirect,
 			CommandFor: state.Team_BLUE,
 		},
 	})
@@ -50,7 +50,7 @@ func Test_Engine(t *testing.T) {
 	engine.Stop()
 
 	wantNewState := &state.State{
-		Command:    state.CommandBallPlacement,
+		Command:    state.CommandDirect,
 		CommandFor: state.Team_BLUE,
 		GameEvents: []state.GameEvent{{Type: &gameEventTypeGoalLine}},
 	}

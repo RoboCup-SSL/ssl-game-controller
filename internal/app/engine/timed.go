@@ -17,6 +17,13 @@ func (e *Engine) Tick() {
 	if e.countStageTime() {
 		e.currentState.StageTimeElapsed += delta
 		e.currentState.StageTimeLeft -= delta
+
+		e.currentState.CurrentActionTimeRemaining -= delta
+		minimumTimeRemaining := -time.Minute * 30
+		if e.currentState.CurrentActionTimeRemaining < minimumTimeRemaining {
+			// limit how small this time can get to avoid overflow in referee message
+			e.currentState.CurrentActionTimeRemaining = minimumTimeRemaining
+		}
 	}
 
 	if e.countCardTime() {
@@ -32,16 +39,6 @@ func (e *Engine) Tick() {
 	if e.currentState.MatchTimeStart.After(time.Unix(0, 0)) {
 		newMatchDuration := currentTime.Sub(e.currentState.MatchTimeStart)
 		e.currentState.MatchDuration = newMatchDuration
-	}
-
-	if e.currentState.CurrentActionDeadline.After(time.Unix(0, 0)) {
-		newCurrentActionTimeRemaining := e.currentState.CurrentActionDeadline.Sub(currentTime)
-		e.currentState.CurrentActionTimeRemaining = newCurrentActionTimeRemaining
-		minimumTimeRemaining := -time.Minute * 30
-		if e.currentState.CurrentActionTimeRemaining < minimumTimeRemaining {
-			// limit how small this time can get to avoid overflow in referee message
-			e.currentState.CurrentActionTimeRemaining = minimumTimeRemaining
-		}
 	}
 }
 

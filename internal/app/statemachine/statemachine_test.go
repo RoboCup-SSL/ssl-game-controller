@@ -27,12 +27,12 @@ func Test_Statemachine(t *testing.T) {
 				change: Change{
 					ChangeType: ChangeTypeNewCommand,
 					NewCommand: &NewCommand{
-						Command:    state.CommandBallPlacement,
+						Command:    state.CommandDirect,
 						CommandFor: state.Team_BLUE,
 					},
 				}},
 			wantNewState: &state.State{
-				Command:    state.CommandBallPlacement,
+				Command:    state.CommandDirect,
 				CommandFor: state.Team_BLUE,
 			},
 		},

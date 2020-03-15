@@ -41,8 +41,7 @@ func (s *StateMachine) Process(currentState *state.State, change Change) (newSta
 	newState = currentState.DeepCopy()
 	switch change.ChangeType {
 	case ChangeTypeNewCommand:
-		newState.Command = change.NewCommand.Command
-		newState.CommandFor = change.NewCommand.CommandFor
+		s.NewCommand(newState, change.NewCommand)
 	case ChangeTypeAddGameEvent:
 		newState.GameEvents = append(newState.GameEvents, change.AddGameEvent.GameEvent)
 	case ChangeTypeYellowCardOver:
@@ -57,6 +56,21 @@ func (s *StateMachine) updateMaxBots(newState *state.State) {
 		yellowCards := activeYellowCards(newState.TeamState[team].YellowCards)
 		redCards := len(newState.TeamState[team].RedCards)
 		newState.TeamState[team].MaxAllowedBots = max - yellowCards - redCards
+	}
+}
+
+func (s *StateMachine) NewCommand(newState *state.State, newCommand *NewCommand) {
+	newState.Command = newCommand.Command
+	newState.CommandFor = newCommand.CommandFor
+
+	switch newState.Command {
+	case state.CommandBallPlacement:
+		newState.CurrentActionTimeRemaining = s.gameConfig.BallPlacementTime
+	case state.CommandHalt, state.CommandStop, state.CommandTimeout, state.CommandUnknown:
+		// nothing to do
+	default:
+		// reset placement pos
+		newState.PlacementPos = nil
 	}
 }
 

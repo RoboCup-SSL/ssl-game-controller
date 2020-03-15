@@ -20,7 +20,6 @@ type State struct {
 	NextCommandFor             Team                `json:"nextCommandFor" yaml:"nextCommandFor"`
 	PrevCommands               []RefCommand        `json:"prevCommands" yaml:"prevCommands"`
 	PrevCommandsFor            []Team              `json:"prevCommandsFor" yaml:"prevCommandsFor"`
-	CurrentActionDeadline      time.Time           `json:"currentActionDeadline" yaml:"currentActionDeadline"`
 	CurrentActionTimeRemaining time.Duration       `json:"currentActionTimeRemaining" yaml:"currentActionTimeRemaining"`
 	GameEvents                 []GameEvent         `json:"gameEvents" yaml:"gameEvents"`
 	GameEventsQueued           []ProposedGameEvent `json:"gameEventsQueued" yaml:"gameEventsQueued"`
@@ -37,7 +36,6 @@ func NewState() (s State) {
 	s.StageTimeElapsed = 0
 	s.MatchDuration = 0
 	s.MatchTimeStart = time.Unix(0, 0)
-	s.CurrentActionDeadline = time.Unix(0, 0)
 
 	s.TeamState = map[Team]*TeamInfo{}
 	s.TeamState[Team_YELLOW] = new(TeamInfo)
