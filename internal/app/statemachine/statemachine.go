@@ -6,6 +6,8 @@ import (
 	"time"
 )
 
+const changeOriginStateMachine = "StateMachine"
+
 type StateChange struct {
 	Id     int
 	State  *state.State
@@ -41,9 +43,9 @@ func (s *StateMachine) Process(currentState *state.State, change Change) (newSta
 	newState = currentState.DeepCopy()
 	switch change.ChangeType {
 	case ChangeTypeNewCommand:
-		s.NewCommand(newState, change.NewCommand)
-	case ChangeTypeAddGameEvent:
-		newState.GameEvents = append(newState.GameEvents, change.AddGameEvent.GameEvent)
+		newChanges = s.NewCommand(newState, change.NewCommand)
+	case ChangeTypeChangeStage:
+		newState.Stage = change.ChangeStage.NewStage
 	case ChangeTypeYellowCardOver:
 		s.updateMaxBots(newState)
 	}
@@ -59,19 +61,40 @@ func (s *StateMachine) updateMaxBots(newState *state.State) {
 	}
 }
 
-func (s *StateMachine) NewCommand(newState *state.State, newCommand *NewCommand) {
+func (s *StateMachine) NewCommand(newState *state.State, newCommand *NewCommand) (changes []Change) {
 	newState.Command = newCommand.Command
 	newState.CommandFor = newCommand.CommandFor
 
 	switch newState.Command {
 	case state.CommandBallPlacement:
 		newState.CurrentActionTimeRemaining = s.gameConfig.BallPlacementTime
-	case state.CommandHalt, state.CommandStop, state.CommandTimeout, state.CommandUnknown:
-		// nothing to do
-	default:
-		// reset placement pos
-		newState.PlacementPos = nil
+	case state.CommandDirect, state.CommandIndirect:
+		newState.CurrentActionTimeRemaining = s.gameConfig.FreeKickTime[s.cfg.Division]
+	case state.CommandKickoff, state.CommandPenalty:
+		newState.CurrentActionTimeRemaining = s.gameConfig.GeneralTime
+	case state.CommandTimeout:
+		newState.TeamState[newState.CommandFor].TimeoutsLeft--
 	}
+
+	if newState.GameState() == state.GameStateRunning {
+		if newState.Stage.IsPreStage() {
+			changes = append(changes, Change{
+				ChangeType:   ChangeTypeChangeStage,
+				ChangeOrigin: changeOriginStateMachine,
+				ChangeStage:  &ChangeStage{NewStage: newState.Stage.Next()},
+			})
+		}
+
+		// reset game event proposals
+		newState.ProposedGameEvents = nil
+
+		// reset ball placement pos and follow ups
+		newState.PlacementPos = nil
+		newState.NextCommand = state.CommandUnknown
+		newState.NextCommandFor = state.Team_UNKNOWN
+	}
+
+	return
 }
 
 func activeYellowCards(cards []state.YellowCard) (count int) {

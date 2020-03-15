@@ -53,9 +53,8 @@ func (p *MessageGenerator) updateCommand() {
 
 func (p *MessageGenerator) stateToRefereeMessage(matchState *state.State) (r *state.Referee) {
 	r = newRefereeMessage()
-	r.GameEvents = mapGameEvents(matchState.GameEvents)
 	r.DesignatedPosition = mapLocation(matchState.PlacementPos)
-	r.ProposedGameEvents = mapProposedGameEvents(matchState.GameEventsQueued)
+	r.ProposedGameEvents = mapProposedGameEvents(matchState.ProposedGameEvents)
 
 	*r.Command = mapCommand(matchState.Command, matchState.CommandFor)
 	*r.CommandCounter = p.commandCounter

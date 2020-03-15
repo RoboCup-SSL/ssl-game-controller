@@ -21,16 +21,14 @@ type State struct {
 	PrevCommands               []RefCommand        `json:"prevCommands" yaml:"prevCommands"`
 	PrevCommandsFor            []Team              `json:"prevCommandsFor" yaml:"prevCommandsFor"`
 	CurrentActionTimeRemaining time.Duration       `json:"currentActionTimeRemaining" yaml:"currentActionTimeRemaining"`
-	GameEvents                 []GameEvent         `json:"gameEvents" yaml:"gameEvents"`
-	GameEventsQueued           []ProposedGameEvent `json:"gameEventsQueued" yaml:"gameEventsQueued"`
+	ProposedGameEvents         []ProposedGameEvent `json:"proposedGameEvents" yaml:"proposedGameEvents"`
 }
 
 // NewState creates a new state, initialized for the start of a new game
 func NewState() (s State) {
 	s.Stage = StagePreGame
 	s.Command = CommandHalt
-	s.GameEvents = []GameEvent{}
-	s.GameEventsQueued = []ProposedGameEvent{}
+	s.ProposedGameEvents = []ProposedGameEvent{}
 
 	s.StageTimeLeft = 0
 	s.StageTimeElapsed = 0
@@ -51,13 +49,9 @@ func (s *State) DeepCopy() (c *State) {
 	c = new(State)
 	*c = *s
 
-	if s.GameEvents != nil {
-		c.GameEvents = make([]GameEvent, len(s.GameEvents))
-		copy(c.GameEvents, s.GameEvents)
-	}
-	if s.GameEventsQueued != nil {
-		c.GameEventsQueued = make([]ProposedGameEvent, len(s.GameEventsQueued))
-		copy(c.GameEventsQueued, s.GameEventsQueued)
+	if s.ProposedGameEvents != nil {
+		c.ProposedGameEvents = make([]ProposedGameEvent, len(s.ProposedGameEvents))
+		copy(c.ProposedGameEvents, s.ProposedGameEvents)
 	}
 	if s.PlacementPos != nil {
 		c.PlacementPos = new(Location)
@@ -74,23 +68,7 @@ func (s *State) DeepCopy() (c *State) {
 }
 
 func (s State) GameState() GameState {
-	switch s.Command {
-	case CommandHalt:
-		return GameStateHalted
-	case CommandStop:
-		return GameStateStopped
-	case CommandNormalStart, CommandForceStart, CommandDirect, CommandIndirect:
-		return GameStateRunning
-	case CommandKickoff:
-		return GameStatePreKickoff
-	case CommandPenalty:
-		return GameStatePrePenalty
-	case CommandTimeout:
-		return GameStateTimeout
-	case CommandBallPlacement:
-		return GameStateBallPlacement
-	}
-	return ""
+	return s.Command.GameState()
 }
 
 func (s State) String() string {

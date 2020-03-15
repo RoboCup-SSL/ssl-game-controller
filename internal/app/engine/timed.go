@@ -6,8 +6,6 @@ import (
 	"time"
 )
 
-const changeOriginGc = "GC"
-
 // Tick updates the timers of the state and triggers changes if required
 func (e *Engine) Tick() {
 	currentTime := e.timeProvider()
@@ -60,7 +58,7 @@ func (e *Engine) updateYellowCardTimes(teamState *state.TeamInfo, delta time.Dur
 			teamState.YellowCards[i].TimeRemaining = 0
 			e.queue <- statemachine.Change{
 				ChangeType:   statemachine.ChangeTypeYellowCardOver,
-				ChangeOrigin: changeOriginGc,
+				ChangeOrigin: changeOriginEngine,
 			}
 		}
 	}

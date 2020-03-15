@@ -50,9 +50,9 @@ func Test_Engine(t *testing.T) {
 	engine.Stop()
 
 	wantNewState := &state.State{
-		Command:    state.CommandDirect,
-		CommandFor: state.Team_BLUE,
-		GameEvents: []state.GameEvent{{Type: &gameEventTypeGoalLine}},
+		Command:                    state.CommandDirect,
+		CommandFor:                 state.Team_BLUE,
+		CurrentActionTimeRemaining: gameConfig.FreeKickTime[config.DivA],
 	}
 
 	if gotNewState := engine.LatestStateInStore(); !reflect.DeepEqual(gotNewState, wantNewState) {

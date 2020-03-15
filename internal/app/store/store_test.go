@@ -31,7 +31,7 @@ func TestStore(t *testing.T) {
 		t.Fatalf("Could not save state %v: %v", s1, err)
 	}
 	s2 := state.NewState()
-	s2.GameEvents = append(s2.GameEvents, state.GameEvent{})
+	s2.Stage = state.StagePreGame
 	if err := d.Add(Entry(statemachine.StateChange{State: &s2})); err != nil {
 		t.Fatalf("Could not save state %v: %v", s2, err)
 	}

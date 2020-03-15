@@ -9,12 +9,11 @@ import (
 
 func Test_Statemachine(t *testing.T) {
 
+	gameConfig := config.DefaultControllerConfig().Game
 	type args struct {
 		currentState *state.State
 		change       Change
 	}
-	gameEventTypeGoalLine := state.GameEventType_BALL_LEFT_FIELD_GOAL_LINE
-	gameEventTypeCrash := state.GameEventType_BOT_CRASH_DRAWN
 	tests := []struct {
 		name         string
 		args         args
@@ -32,32 +31,29 @@ func Test_Statemachine(t *testing.T) {
 					},
 				}},
 			wantNewState: &state.State{
-				Command:    state.CommandDirect,
-				CommandFor: state.Team_BLUE,
+				Command:                    state.CommandDirect,
+				CommandFor:                 state.Team_BLUE,
+				CurrentActionTimeRemaining: gameConfig.FreeKickTime[config.DivA],
 			},
 		},
 		{
-			name: "GameEvent",
+			name: "Stage",
 			args: args{
 				currentState: &state.State{
-					GameEvents: []state.GameEvent{{Type: &gameEventTypeCrash}},
+					Stage: state.StagePreGame,
 				},
 				change: Change{
-					ChangeType: ChangeTypeAddGameEvent,
-					AddGameEvent: &AddGameEvent{
-						GameEvent: state.GameEvent{Type: &gameEventTypeGoalLine},
+					ChangeType: ChangeTypeChangeStage,
+					ChangeStage: &ChangeStage{
+						NewStage: state.StageFirstHalf,
 					},
 				},
 			},
 			wantNewState: &state.State{
-				GameEvents: []state.GameEvent{
-					{Type: &gameEventTypeCrash},
-					{Type: &gameEventTypeGoalLine},
-				},
+				Stage: state.StageFirstHalf,
 			},
 		},
 	}
-	gameConfig := config.DefaultControllerConfig().Game
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			sm := NewStateMachine(gameConfig, "/tmp/foo")

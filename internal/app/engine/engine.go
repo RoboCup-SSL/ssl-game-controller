@@ -11,6 +11,8 @@ import (
 	"time"
 )
 
+const changeOriginEngine = "Engine"
+
 type Engine struct {
 	stateStore     *store.Store
 	currentState   *state.State

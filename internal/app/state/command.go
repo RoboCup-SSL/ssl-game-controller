@@ -45,6 +45,27 @@ var RefCommands = []RefCommand{
 	CommandBallPlacement,
 }
 
+// GameState returns the game state corresponding to the command
+func (c RefCommand) GameState() GameState {
+	switch c {
+	case CommandHalt:
+		return GameStateHalted
+	case CommandStop:
+		return GameStateStopped
+	case CommandNormalStart, CommandForceStart, CommandDirect, CommandIndirect:
+		return GameStateRunning
+	case CommandKickoff:
+		return GameStatePreKickoff
+	case CommandPenalty:
+		return GameStatePrePenalty
+	case CommandTimeout:
+		return GameStateTimeout
+	case CommandBallPlacement:
+		return GameStateBallPlacement
+	}
+	return ""
+}
+
 // Valid checks if the RefCommand enum value is among the known values
 func (c RefCommand) Valid() bool {
 	for _, command := range RefCommands {
