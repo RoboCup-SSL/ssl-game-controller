@@ -79,21 +79,20 @@ type UpdateConfig struct {
 type UpdateTeamState struct {
 	ForTeam state.Team `json:"forTeam"`
 
-	Goals                 *int                     `json:"goals,omitempty" yaml:"goals"`
-	Goalkeeper            *int                     `json:"goalkeeper,omitempty" yaml:"goalkeeper"`
-	YellowCards           map[int]state.YellowCard `json:"yellowCards,omitempty" yaml:"yellowCards"`
-	YellowCardsRemove     *int                     `json:"yellowCardsRemove,omitempty" yaml:"yellowCardsRemove"`
-	RedCards              map[int]state.RedCard    `json:"redCards,omitempty" yaml:"redCards"`
-	RedCardsRemove        *int                     `json:"yellowCardsRemove,omitempty" yaml:"yellowCardsRemove"`
-	TimeoutsLeft          *int                     `json:"timeoutsLeft,omitempty" yaml:"timeoutsLeft"`
-	TimeoutTimeLeft       *string                  `json:"timeoutTimeLeft,omitempty" yaml:"timeoutTimeLeft"`
-	OnPositiveHalf        *bool                    `json:"onPositiveHalf,omitempty" yaml:"onPositiveHalf"`
-	TeamName              *string                  `json:"teamName,omitempty" yaml:"teamName"`
-	Fouls                 map[int]state.Foul       `json:"fouls,omitempty" yaml:"fouls"`
-	FoulsRemove           *int                     `json:"foulsRemove,omitempty" yaml:"foulsRemove"`
-	BallPlacementFailures *int                     `json:"ballPlacementFailures,omitempty" yaml:"ballPlacementFailures"`
-	CanPlaceBall          *bool                    `json:"canPlaceBall,omitempty" yaml:"canPlaceBall"`
-	BotSubstitutionIntend *bool                    `json:"botSubstitutionIntend,omitempty" yaml:"botSubstitutionIntend"`
+	TeamName              *string `json:"teamName,omitempty" yaml:"teamName"`
+	Goals                 *int    `json:"goals,omitempty" yaml:"goals"`
+	Goalkeeper            *int    `json:"goalkeeper,omitempty" yaml:"goalkeeper"`
+	TimeoutsLeft          *int    `json:"timeoutsLeft,omitempty" yaml:"timeoutsLeft"`
+	TimeoutTimeLeft       *string `json:"timeoutTimeLeft,omitempty" yaml:"timeoutTimeLeft"`
+	OnPositiveHalf        *bool   `json:"onPositiveHalf,omitempty" yaml:"onPositiveHalf"`
+	BallPlacementFailures *int    `json:"ballPlacementFailures,omitempty" yaml:"ballPlacementFailures"`
+	CanPlaceBall          *bool   `json:"canPlaceBall,omitempty" yaml:"canPlaceBall"`
+	BotSubstitutionIntend *bool   `json:"botSubstitutionIntend,omitempty" yaml:"botSubstitutionIntend"`
+
+	YellowCards       map[int]state.YellowCard `json:"yellowCards,omitempty" yaml:"yellowCards"`
+	YellowCardsRemove *int                     `json:"yellowCardsRemove,omitempty" yaml:"yellowCardsRemove"`
+	RedCards          map[int]state.RedCard    `json:"redCards,omitempty" yaml:"redCards"`
+	RedCardsRemove    *int                     `json:"yellowCardsRemove,omitempty" yaml:"yellowCardsRemove"`
 }
 
 type Revert struct {
