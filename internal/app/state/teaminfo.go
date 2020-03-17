@@ -77,3 +77,43 @@ func (t *TeamInfo) ResetBallPlacementFailures() {
 	t.BallPlacementFailuresReached = false
 	t.BallPlacementFailures = 0
 }
+
+func (t *TeamInfo) AddYellowCard(duration time.Duration, causedByGameEvent *GameEvent) {
+	id := 0
+	numCards := len(t.YellowCards)
+	if numCards > 0 {
+		id = t.YellowCards[numCards-1].Id + 1
+	}
+	t.YellowCards = append(t.YellowCards, YellowCard{
+		Id:                id,
+		TimeRemaining:     duration,
+		CausedByGameEvent: causedByGameEvent,
+	})
+	return
+}
+
+func (t *TeamInfo) AddRedCard(causedByGameEvent *GameEvent) {
+	id := 0
+	numCards := len(t.RedCards)
+	if numCards > 0 {
+		id = t.RedCards[numCards-1].Id + 1
+	}
+	t.RedCards = append(t.RedCards, RedCard{
+		Id:                id,
+		CausedByGameEvent: causedByGameEvent,
+	})
+	return
+}
+
+func (t *TeamInfo) AddFoul(causedByGameEvent *GameEvent) {
+	id := 0
+	numCards := len(t.Fouls)
+	if numCards > 0 {
+		id = t.Fouls[numCards-1].Id + 1
+	}
+	t.Fouls = append(t.Fouls, Foul{
+		Id:                id,
+		CausedByGameEvent: causedByGameEvent,
+	})
+	return
+}

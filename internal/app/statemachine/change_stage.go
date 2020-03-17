@@ -8,8 +8,13 @@ func (s *StateMachine) ChangeStage(newState *state.State, change *ChangeStage) (
 	newState.StageTimeLeft = s.stageTimes[change.NewStage]
 	newState.StageTimeElapsed = 0
 
-	// if not transiting from a pre stage, halt the game
+	// if not transiting from a pre stage
 	if !newState.Stage.IsPreStage() {
+		// reset ball placement failures
+		newState.TeamState[state.Team_YELLOW].ResetBallPlacementFailures()
+		newState.TeamState[state.Team_BLUE].ResetBallPlacementFailures()
+
+		// halt the game
 		changes = append(changes, Change{
 			ChangeType:   ChangeTypeNewCommand,
 			ChangeOrigin: changeOriginStateMachine,

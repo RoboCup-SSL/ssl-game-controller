@@ -6,13 +6,19 @@ import (
 
 // ByTeam extracts the `ByTeam` attribute from the game event details
 func (m GameEvent) ByTeam() Team {
-	v := reflect.ValueOf(m.Event)
-	for i := 0; i < v.NumField(); i++ {
-		if !v.Field(i).IsNil() {
-			byTeamValue := v.Field(i).Elem().FieldByName("ByTeam")
-			if byTeamValue.IsValid() && !byTeamValue.IsNil() {
-				return Team(Team(byTeamValue.Elem().Int()))
-			}
+	if m.GetEvent() == nil {
+		return Team_UNKNOWN
+	}
+	event := reflect.ValueOf(m.GetEvent())
+	if event.Elem().NumField() == 0 {
+		return Team_UNKNOWN
+	}
+	// all structs have a single field that we need to access
+	v := event.Elem().Field(0)
+	if !v.IsNil() {
+		byTeamValue := v.Elem().FieldByName("ByTeam")
+		if byTeamValue.IsValid() && !byTeamValue.IsNil() {
+			return Team(Team(byTeamValue.Elem().Int()))
 		}
 	}
 	return Team_UNKNOWN

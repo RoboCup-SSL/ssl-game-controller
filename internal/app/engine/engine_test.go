@@ -37,10 +37,18 @@ func Test_Engine(t *testing.T) {
 		},
 	})
 	gameEventTypeGoalLine := state.GameEventType_BALL_LEFT_FIELD_GOAL_LINE
+	byTeam := state.Team_YELLOW
 	engine.Enqueue(statemachine.Change{
 		ChangeType: statemachine.ChangeTypeAddGameEvent,
 		AddGameEvent: &statemachine.AddGameEvent{
-			GameEvent: state.GameEvent{Type: &gameEventTypeGoalLine},
+			GameEvent: state.GameEvent{
+				Type: &gameEventTypeGoalLine,
+				Event: &state.GameEvent_BallLeftFieldGoalLine{
+					BallLeftFieldGoalLine: &state.GameEvent_BallLeftField{
+						ByTeam: &byTeam,
+					},
+				},
+			},
 		},
 	})
 	// wait for the changes to be processed
@@ -53,6 +61,8 @@ func Test_Engine(t *testing.T) {
 		Command:                    state.CommandDirect,
 		CommandFor:                 state.Team_BLUE,
 		CurrentActionTimeRemaining: gameConfig.FreeKickTime[config.DivA],
+		NextCommand:                state.CommandDirect,
+		NextCommandFor:             byTeam.Opposite(),
 	}
 
 	if gotNewState := engine.LatestStateInStore(); !reflect.DeepEqual(gotNewState, wantNewState) {

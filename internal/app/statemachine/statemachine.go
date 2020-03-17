@@ -60,6 +60,8 @@ func (s *StateMachine) Process(currentState *state.State, change Change) (newSta
 		newChanges = s.UpdateTeamState(newState, change.UpdateTeamState)
 	case ChangeTypeSwitchColor:
 		newChanges = s.SwitchColor(newState)
+	case ChangeTypeAddGameEvent:
+		newChanges = s.AddGameEvent(newState, change.AddGameEvent)
 	}
 	return
 }
