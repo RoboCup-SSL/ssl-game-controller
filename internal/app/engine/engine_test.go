@@ -4,9 +4,9 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
+	"github.com/go-test/deep"
 	"io/ioutil"
 	"os"
-	"reflect"
 	"testing"
 )
 
@@ -32,19 +32,18 @@ func Test_Engine(t *testing.T) {
 	engine.Enqueue(statemachine.Change{
 		ChangeType: statemachine.ChangeTypeNewCommand,
 		NewCommand: &statemachine.NewCommand{
-			Command:    state.CommandDirect,
-			CommandFor: state.Team_BLUE,
+			Command: state.CommandHalt,
 		},
 	})
-	gameEventTypeGoalLine := state.GameEventType_BALL_LEFT_FIELD_GOAL_LINE
+	gameEventType := state.GameEventType_TOO_MANY_ROBOTS
 	byTeam := state.Team_YELLOW
 	engine.Enqueue(statemachine.Change{
 		ChangeType: statemachine.ChangeTypeAddGameEvent,
 		AddGameEvent: &statemachine.AddGameEvent{
 			GameEvent: state.GameEvent{
-				Type: &gameEventTypeGoalLine,
-				Event: &state.GameEvent_BallLeftFieldGoalLine{
-					BallLeftFieldGoalLine: &state.GameEvent_BallLeftField{
+				Type: &gameEventType,
+				Event: &state.GameEvent_TooManyRobots_{
+					TooManyRobots: &state.GameEvent_TooManyRobots{
 						ByTeam: &byTeam,
 					},
 				},
@@ -54,18 +53,15 @@ func Test_Engine(t *testing.T) {
 	// wait for the changes to be processed
 	<-hook
 	<-hook
-
+	engine.UnregisterHook(hook)
 	engine.Stop()
 
-	wantNewState := &state.State{
-		Command:                    state.CommandDirect,
-		CommandFor:                 state.Team_BLUE,
-		CurrentActionTimeRemaining: gameConfig.FreeKickTime[config.DivA],
-		NextCommand:                state.CommandDirect,
-		NextCommandFor:             byTeam.Opposite(),
-	}
+	wantNewState := state.NewState()
+	wantNewState.Command = state.CommandHalt
 
-	if gotNewState := engine.LatestStateInStore(); !reflect.DeepEqual(gotNewState, wantNewState) {
-		t.Errorf("State mismatch:\n%v\n%v", gotNewState, wantNewState)
+	gotNewState := engine.LatestStateInStore()
+	diffs := deep.Equal(gotNewState, &wantNewState)
+	if len(diffs) > 0 {
+		t.Error("States differ: ", diffs)
 	}
 }

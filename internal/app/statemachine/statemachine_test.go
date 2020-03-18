@@ -3,7 +3,7 @@ package statemachine
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
-	"reflect"
+	"github.com/go-test/deep"
 	"testing"
 )
 
@@ -58,8 +58,11 @@ func Test_Statemachine(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			sm := NewStateMachine(gameConfig, "/tmp/foo")
-			if gotNewState, _ := sm.Process(tt.args.currentState, tt.args.change); !reflect.DeepEqual(gotNewState, tt.wantNewState) {
-				t.Errorf("Process() != want:\n%v\n%v", gotNewState, tt.wantNewState)
+
+			gotNewState, _ := sm.Process(tt.args.currentState, tt.args.change)
+			diffs := deep.Equal(gotNewState, tt.wantNewState)
+			if len(diffs) > 0 {
+				t.Error("States differ: ", diffs)
 			}
 		})
 	}

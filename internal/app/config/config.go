@@ -25,6 +25,7 @@ type Geometry struct {
 	FieldWidth                      float64 `yaml:"field-width"`
 	DefenseAreaDepth                float64 `yaml:"defense-area-depth"`
 	DefenseAreaWidth                float64 `yaml:"defense-area-width"`
+	PenaltyKickDistToGoal           float64 `yaml:"penalty-kick-dist-to-goal"`
 	PlacementOffsetTouchLine        float64 `yaml:"placement-offset-touch-line"`
 	PlacementOffsetGoalLine         float64 `yaml:"placement-offset-goal-line"`
 	PlacementOffsetGoalLineGoalKick float64 `yaml:"placement-offset-goal-line-goal-kick"`
@@ -47,6 +48,7 @@ type Game struct {
 	FreeKickTime              map[Division]time.Duration `yaml:"free-kick-time"`
 	GeneralTime               time.Duration              `yaml:"general-time"`
 	BallPlacementTime         time.Duration              `yaml:"ball-placement-time"`
+	BallPlacementTimeTopUp    time.Duration              `yaml:"ball-placement-time-top-up"`
 }
 
 // Network holds configs for network communication
@@ -147,6 +149,7 @@ func DefaultControllerConfig() (c Controller) {
 	c.Game.GeneralTime = time.Second * 10
 	c.Game.FreeKickTime = map[Division]time.Duration{DivA: time.Second * 5, DivB: time.Second * 10}
 	c.Game.BallPlacementTime = time.Second * 30
+	c.Game.BallPlacementTimeTopUp = time.Second * 10
 
 	c.Game.Normal.HalfDuration = 5 * time.Minute
 	c.Game.Normal.HalfTimeDuration = 5 * time.Minute
@@ -176,6 +179,7 @@ func DefaultControllerConfig() (c Controller) {
 	c.Game.DefaultGeometry[DivA].FieldWidth = 9
 	c.Game.DefaultGeometry[DivA].DefenseAreaDepth = 1.2
 	c.Game.DefaultGeometry[DivA].DefenseAreaWidth = 2.4
+	c.Game.DefaultGeometry[DivA].PenaltyKickDistToGoal = 8.0
 	c.Game.DefaultGeometry[DivA].PlacementOffsetGoalLine = 0.2
 	c.Game.DefaultGeometry[DivA].PlacementOffsetGoalLineGoalKick = 1.0
 	c.Game.DefaultGeometry[DivA].PlacementOffsetTouchLine = 0.2
@@ -186,6 +190,7 @@ func DefaultControllerConfig() (c Controller) {
 	c.Game.DefaultGeometry[DivB].FieldWidth = 6
 	c.Game.DefaultGeometry[DivB].DefenseAreaDepth = 1
 	c.Game.DefaultGeometry[DivB].DefenseAreaWidth = 2
+	c.Game.DefaultGeometry[DivB].PenaltyKickDistToGoal = 6.0
 	c.Game.DefaultGeometry[DivB].PlacementOffsetGoalLine = 0.2
 	c.Game.DefaultGeometry[DivB].PlacementOffsetGoalLineGoalKick = 1.0
 	c.Game.DefaultGeometry[DivB].PlacementOffsetTouchLine = 0.2

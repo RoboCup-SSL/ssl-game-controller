@@ -25,6 +25,7 @@ game:
     DivB: 10s
   general-time: 10s
   ball-placement-time: 30s
+  ball-placement-time-top-up: 10s
   normal:
     half-duration: 5m
     half-time-duration: 5m
@@ -44,6 +45,7 @@ game:
       field-width: 9.0
       defense-area-depth: 1.2
       defense-area-width: 2.4
+      penalty-kick-dist-to-goal: 8.0
       placement-offset-touch-line: 0.2
       placement-offset-goal-line: 0.2
       placement-offset-goal-line-goal-kick: 1.0
@@ -53,6 +55,7 @@ game:
       field-width: 6.0
       defense-area-depth: 1.0
       defense-area-width: 2.0
+      penalty-kick-dist-to-goal: 6.0
       placement-offset-touch-line: 0.2
       placement-offset-goal-line: 0.2
       placement-offset-goal-line-goal-kick: 1.0

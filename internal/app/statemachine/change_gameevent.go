@@ -3,6 +3,8 @@ package statemachine
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine/ballplace"
+	"log"
 )
 
 func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent) (changes []Change) {
@@ -20,21 +22,55 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 	}
 
 	// determine next command
-	newState.NextCommand, newState.NextCommandFor = s.getNextCommand(newState, gameEvent)
+	newState.NextCommand, newState.NextCommandFor = s.nextCommandForEvent(newState, gameEvent)
 
 	// Increment foul counter
 	if incrementsFoulCounter(*gameEvent.Type) {
-		newState.TeamState[byTeam].AddFoul(&gameEvent)
-		if len(newState.TeamState[byTeam].Fouls)%3 == 0 {
-			changes = append(changes, s.multipleFoulsChange(byTeam))
+		for _, team := range state.BothTeams() {
+			if byTeam == state.Team_UNKNOWN || byTeam == team {
+				newState.TeamState[team].AddFoul(&gameEvent)
+				if len(newState.TeamState[team].Fouls)%3 == 0 {
+					changes = append(changes, s.multipleFoulsChange(team))
+				}
+			}
 		}
 	}
 
 	// Add yellow/red card
-
-	// ball placement + ball placement pos
+	if addsYellowCard(*gameEvent.Type) {
+		newState.TeamState[byTeam].AddYellowCard(s.gameConfig.YellowCardDuration, &gameEvent)
+	}
+	if addsRedCard(*gameEvent.Type) {
+		newState.TeamState[byTeam].AddRedCard(&gameEvent)
+	}
 
 	// goal
+	if *gameEvent.Type == state.GameEventType_GOAL {
+		if byTeam.Known() {
+			newState.TeamState[byTeam].Goals++
+		} else {
+			log.Print("Can not process goal event for unknown team")
+		}
+	}
+
+	// ball placement interference
+	if *gameEvent.Type == state.GameEventType_BOT_INTERFERED_PLACEMENT {
+		newState.CurrentActionTimeRemaining += s.gameConfig.BallPlacementTimeTopUp
+	}
+
+	// ball placement position
+	placementPosDeterminer := ballplace.BallPlacementPosDeterminer{
+		Event:               &gameEvent,
+		Geometry:            &s.geometry,
+		CurrentPlacementPos: newState.PlacementPos,
+		OnPositiveHalf: map[state.Team]bool{
+			state.Team_BLUE:   newState.TeamState[state.Team_BLUE].OnPositiveHalf,
+			state.Team_YELLOW: newState.TeamState[state.Team_YELLOW].OnPositiveHalf,
+		},
+	}
+	newState.PlacementPos = placementPosDeterminer.Location()
+
+	// ball placement
 
 	return
 }
@@ -73,7 +109,7 @@ func (s *StateMachine) convertAimlessKick(gameEvent state.GameEvent) state.GameE
 	}
 }
 
-func (s *StateMachine) getNextCommand(newState *state.State, gameEvent state.GameEvent) (command state.RefCommand, commandFor state.Team) {
+func (s *StateMachine) nextCommandForEvent(newState *state.State, gameEvent state.GameEvent) (command state.RefCommand, commandFor state.Team) {
 	if newState.Command == state.CommandPenalty || newState.Command == state.CommandKickoff {
 		command = state.CommandNormalStart
 		commandFor = state.Team_UNKNOWN
@@ -114,7 +150,7 @@ func (s *StateMachine) getNextCommand(newState *state.State, gameEvent state.Gam
 	return
 }
 
-// IncrementsFoulCounter checks if the game event increments the foul counter
+// incrementsFoulCounter checks if the game event increments the foul counter
 func incrementsFoulCounter(gameEvent state.GameEventType) bool {
 	switch gameEvent {
 	case
@@ -138,6 +174,28 @@ func incrementsFoulCounter(gameEvent state.GameEventType) bool {
 		state.GameEventType_BOT_TOO_FAST_IN_STOP,
 		state.GameEventType_DEFENDER_TOO_CLOSE_TO_KICK_POINT,
 		state.GameEventType_BOUNDARY_CROSSING:
+		return true
+	}
+	return false
+}
+
+// addsYellowCard checks if the game event adds a yellow card
+func addsYellowCard(gameEvent state.GameEventType) bool {
+	switch gameEvent {
+	case
+		state.GameEventType_MULTIPLE_FOULS,
+		state.GameEventType_UNSPORTING_BEHAVIOR_MINOR:
+		return true
+	}
+	return false
+}
+
+// addsYellowCard checks if the game event adds a yellow card
+func addsRedCard(gameEvent state.GameEventType) bool {
+	switch gameEvent {
+	case
+		state.GameEventType_DEFENDER_IN_DEFENSE_AREA,
+		state.GameEventType_UNSPORTING_BEHAVIOR_MAJOR:
 		return true
 	}
 	return false

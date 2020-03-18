@@ -51,6 +51,10 @@ func (e *Engine) UnregisterHook(hook chan statemachine.StateChange) bool {
 	for i, h := range e.hooks {
 		if h == hook {
 			e.hooks = append(e.hooks[:i], e.hooks[i+1:]...)
+			select {
+			case <-hook:
+			case <-time.After(10 * time.Millisecond):
+			}
 			return true
 		}
 	}
@@ -121,7 +125,8 @@ func (e *Engine) initialStateFromStore() *state.State {
 	latestEntry := e.stateStore.LatestEntry()
 	var currentState *state.State
 	if latestEntry == nil {
-		currentState = &state.State{}
+		currentState = new(state.State)
+		*currentState = state.NewState()
 	} else {
 		currentState = latestEntry.State.DeepCopy()
 	}
