@@ -35,11 +35,19 @@ message GameStateMetadata {
     // undefined
     optional bool ready_to_continue = 1;
 
+    // if current state is stop:
+    // true: ball placement not required, can directly continue
+    // false: need to initiate ball placement
+    // if current state is ball placement:
+    // true: ball placement done, all conditions met
+    // false: ball not yet placed successfully
+    optional bool ball_placed = 2;
+
     // number of yellow robots currently visible on the field
-    optional uint32 number_of_robots_yellow = 2;
+    optional uint32 number_of_robots_yellow = 3;
 
     // number of blue robots currently visible on the field
-    optional uint32 number_of_robots_blue = 3;
+    optional uint32 number_of_robots_blue = 4;
 }
 
 // ControllerToAutoRef is the wrapper message for all messages from controller to autoRef

@@ -9,7 +9,8 @@ import (
 
 func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent) (changes []Change) {
 
-	// assuming that game events are already filtered in engine
+	// TODO assuming that game events are already filtered in engine
+	// TODO ball placement handling must be done outside using the feedback from autoRefs
 
 	gameEvent := change.GameEvent
 	byTeam := gameEvent.ByTeam()
@@ -17,7 +18,7 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 	if s.cfg.Division == config.DivA &&
 		gameEvent.Type != nil &&
 		*gameEvent.Type == state.GameEventType_AIMLESS_KICK {
-		// there is no aimless kick in division A. Map it to a ball left field event
+		log.Println("Convert aimless kick to ball left field event, because we are in DivA")
 		gameEvent = s.convertAimlessKick(change.GameEvent)
 	}
 
@@ -45,12 +46,21 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 	}
 
 	// goal
-	if *gameEvent.Type == state.GameEventType_GOAL {
-		if byTeam.Known() {
-			newState.TeamState[byTeam].Goals++
-		} else {
-			log.Print("Can not process goal event for unknown team")
-		}
+	if *gameEvent.Type == state.GameEventType_GOAL && byTeam.Known() {
+		newState.TeamState[byTeam].Goals++
+	}
+	if *gameEvent.Type == state.GameEventType_POSSIBLE_GOAL {
+		// halt the game to let the human referee decide if this was a valid goal
+		changes = append(changes, s.newCommandChange(state.CommandHalt))
+	}
+
+	if *gameEvent.Type == state.GameEventType_BOT_SUBSTITUTION {
+		// reset robot substitution flags
+		newState.TeamState[state.Team_BLUE].BotSubstitutionIntend = false
+		newState.TeamState[state.Team_YELLOW].BotSubstitutionIntend = false
+		// halt the game to allow teams to substitute robots
+		changes = append(changes, s.newCommandChange(state.CommandHalt))
+		log.Printf("Halt the game, because team %v requested robot substitution", gameEvent.ByTeam())
 	}
 
 	// ball placement interference
@@ -71,8 +81,67 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 	newState.PlacementPos = placementPosDeterminer.Location()
 
 	// ball placement
+	if *gameEvent.Type == state.GameEventType_PLACEMENT_FAILED &&
+		byTeam.Known() {
+		newState.TeamState[byTeam].BallPlacementFailures++
+	}
+	if *gameEvent.Type == state.GameEventType_PLACEMENT_SUCCEEDED &&
+		byTeam.Known() &&
+		newState.TeamState[byTeam].BallPlacementFailures > 0 {
+		newState.TeamState[byTeam].BallPlacementFailures--
+	}
+
+	if *gameEvent.Type == state.GameEventType_DEFENDER_TOO_CLOSE_TO_KICK_POINT {
+		// Reset the current action time
+		newState.CurrentActionTimeRemaining = s.gameConfig.GeneralTime
+	}
+
+	// stop the game if needed
+	if newState.GameState() != state.GameStateStopped &&
+		stopsTheGame(*gameEvent.Type) {
+		changes = append(changes, s.newCommandChange(state.CommandStop))
+	}
+
+	// continue game
+	if *gameEvent.Type == state.GameEventType_PLACEMENT_SUCCEEDED ||
+		(s.cfg.AutoContinue && *gameEvent.Type == state.GameEventType_PREPARED) {
+		substituteBots := false
+		for _, team := range state.BothTeams() {
+			if newState.TeamState[team].BotSubstitutionIntend {
+				changes = append(changes, s.botSubstitutionIntentEventChange(team))
+				substituteBots = true
+			}
+		}
+		if !substituteBots {
+			if newState.NextCommand != state.CommandUnknown {
+				log.Printf("Continue with next command: %v %v", newState.NextCommand, newState.NextCommandFor)
+				changes = append(changes, s.newCommandWithTeamChange(newState.NextCommand, newState.NextCommandFor))
+			} else if newState.GameState() != state.GameStateStopped {
+				log.Println("Halting the game as there is no known next command to continue with")
+				// halt the game, if not in STOP.
+				// Rational: After ball placement and no next command, halt the game to indicate that manual action is required
+				// If in STOP, that was most likely triggered manually already and a suddenly halted game might be confusing and not intended
+				changes = append(changes, s.newCommandChange(state.CommandHalt))
+			}
+		}
+	}
 
 	return
+}
+
+func (s *StateMachine) newCommandChange(command state.RefCommand) Change {
+	return s.newCommandWithTeamChange(command, state.Team_UNKNOWN)
+}
+
+func (s *StateMachine) newCommandWithTeamChange(command state.RefCommand, team state.Team) Change {
+	return Change{
+		ChangeType:   ChangeTypeNewCommand,
+		ChangeOrigin: changeOriginStateMachine,
+		NewCommand: &NewCommand{
+			Command:    command,
+			CommandFor: team,
+		},
+	}
 }
 
 func (s *StateMachine) multipleFoulsChange(byTeam state.Team) Change {
@@ -86,6 +155,25 @@ func (s *StateMachine) multipleFoulsChange(byTeam state.Team) Change {
 				Origin: []string{changeOriginStateMachine},
 				Event: &state.GameEvent_MultipleFouls_{
 					MultipleFouls: &state.GameEvent_MultipleFouls{
+						ByTeam: &byTeam,
+					},
+				},
+			},
+		},
+	}
+}
+
+func (s *StateMachine) botSubstitutionIntentEventChange(byTeam state.Team) Change {
+	eventType := state.GameEventType_BOT_SUBSTITUTION
+	return Change{
+		ChangeType:   ChangeTypeAddGameEvent,
+		ChangeOrigin: changeOriginStateMachine,
+		AddGameEvent: &AddGameEvent{
+			GameEvent: state.GameEvent{
+				Type:   &eventType,
+				Origin: []string{changeOriginStateMachine},
+				Event: &state.GameEvent_BotSubstitution_{
+					BotSubstitution: &state.GameEvent_BotSubstitution{
 						ByTeam: &byTeam,
 					},
 				},
@@ -196,6 +284,23 @@ func addsRedCard(gameEvent state.GameEventType) bool {
 	case
 		state.GameEventType_DEFENDER_IN_DEFENSE_AREA,
 		state.GameEventType_UNSPORTING_BEHAVIOR_MAJOR:
+		return true
+	}
+	return false
+}
+
+// addsYellowCard checks if the game event adds a yellow card
+func stopsTheGame(gameEvent state.GameEventType) bool {
+	switch gameEvent {
+	case
+		state.GameEventType_ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA,
+		state.GameEventType_BOT_PUSHED_BOT,
+		state.GameEventType_BOT_HELD_BALL_DELIBERATELY,
+		state.GameEventType_BOT_TIPPED_OVER,
+		state.GameEventType_DEFENDER_IN_DEFENSE_AREA,
+		state.GameEventType_BOUNDARY_CROSSING,
+		state.GameEventType_KEEPER_HELD_BALL,
+		state.GameEventType_BOT_DRIBBLED_BALL_TOO_FAR:
 		return true
 	}
 	return false

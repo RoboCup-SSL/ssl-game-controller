@@ -3,7 +3,6 @@ package ballplace
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
-	"log"
 	"math"
 )
 
@@ -28,24 +27,24 @@ func (s *BallPlacementPosDeterminer) Location() *state.Location {
 			*location.Y = float32(math.Copysign(y, float64(*location.Y)))
 			return s.validateLocation(location)
 		}
-		return nil
+		return s.validateLocation(nil)
 	case state.GameEventType_BALL_LEFT_FIELD_GOAL_LINE:
 		if s.Event.GetBallLeftFieldGoalLine().Location != nil {
 			location := s.Event.GetBallLeftFieldGoalLine().Location
 			return s.ballPlacementLocationGoalLine(location)
 		}
-		return nil
+		return s.validateLocation(nil)
 	case state.GameEventType_POSSIBLE_GOAL:
 		if s.Event.GetPossibleGoal().Location != nil {
 			location := s.Event.GetPossibleGoal().Location
 			return s.ballPlacementLocationGoalLine(location)
 		}
-		return nil
+		return s.validateLocation(nil)
 	case state.GameEventType_AIMLESS_KICK:
 		return s.validateLocation(s.Event.GetAimlessKick().KickLocation)
 	case state.GameEventType_GOAL:
 		center := state.NewLocation(0.0, 0.0)
-		return &center
+		return s.validateLocation(&center)
 	case state.GameEventType_CHIPPED_GOAL:
 		return s.validateLocation(s.Event.GetChippedGoal().KickLocation)
 	case state.GameEventType_BOT_TIPPED_OVER:
@@ -88,23 +87,8 @@ func (s *BallPlacementPosDeterminer) Location() *state.Location {
 		return s.validateLocation(s.Event.GetNoProgressInGame().Location)
 	case state.GameEventType_PLACEMENT_FAILED:
 		return s.validateLocation(s.CurrentPlacementPos)
-	case state.GameEventType_BOT_TOO_FAST_IN_STOP,
-		state.GameEventType_BOT_CRASH_DRAWN,
-		state.GameEventType_UNSPORTING_BEHAVIOR_MINOR,
-		state.GameEventType_UNSPORTING_BEHAVIOR_MAJOR,
-		state.GameEventType_MULTIPLE_FOULS,
-		state.GameEventType_MULTIPLE_PLACEMENT_FAILURES,
-		state.GameEventType_BOT_CRASH_UNIQUE_SKIPPED,
-		state.GameEventType_BOT_PUSHED_BOT_SKIPPED,
-		state.GameEventType_ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA_SKIPPED,
-		state.GameEventType_PLACEMENT_SUCCEEDED,
-		state.GameEventType_PREPARED,
-		state.GameEventType_BOT_SUBSTITUTION,
-		state.GameEventType_TOO_MANY_ROBOTS:
-		return nil
 	default:
-		log.Print("Warn: Unknown game event: ", s.Event.Type)
-		return nil
+		return s.validateLocation(nil)
 	}
 }
 
@@ -142,7 +126,7 @@ func (s *BallPlacementPosDeterminer) isGoalKick() bool {
 
 func (s *BallPlacementPosDeterminer) validateLocation(location *state.Location) *state.Location {
 	if location == nil {
-		return nil
+		return s.CurrentPlacementPos
 	}
 
 	s.movePositionInsideField(location)
