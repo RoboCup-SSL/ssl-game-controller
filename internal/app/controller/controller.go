@@ -2,7 +2,7 @@ package controller
 
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
-	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/rcon"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/controller/rcon"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/vision"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/timer"
