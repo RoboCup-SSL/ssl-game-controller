@@ -33,6 +33,7 @@ func (s *StateMachine) UpdateTeamState(newState *state.State, change *UpdateTeam
 	}
 	if change.BallPlacementFailures != nil {
 		teamState.BallPlacementFailures = *change.BallPlacementFailures
+		teamState.BallPlacementFailuresReached = teamState.BallPlacementFailures >= s.gameConfig.MultiplePlacementFailures
 	}
 	if change.CanPlaceBall != nil {
 		teamState.CanPlaceBall = *change.CanPlaceBall

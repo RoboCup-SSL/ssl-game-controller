@@ -22,8 +22,8 @@ func Test_Engine(t *testing.T) {
 	}()
 
 	gameConfig := config.DefaultControllerConfig().Game
-	sm := statemachine.NewStateMachine(gameConfig, "/tmp/foo")
-	engine := NewEngine(sm, 0, tmpDir+"/store.json.stream")
+	sm := statemachine.NewStateMachine(gameConfig, 0, "/tmp/foo")
+	engine := NewEngine(sm, tmpDir+"/store.json.stream")
 	hook := make(chan statemachine.StateChange)
 	engine.RegisterHook(hook)
 	if err := engine.Start(); err != nil {
@@ -35,23 +35,7 @@ func Test_Engine(t *testing.T) {
 			Command: state.CommandHalt,
 		},
 	})
-	gameEventType := state.GameEventType_TOO_MANY_ROBOTS
-	byTeam := state.Team_YELLOW
-	engine.Enqueue(statemachine.Change{
-		ChangeType: statemachine.ChangeTypeAddGameEvent,
-		AddGameEvent: &statemachine.AddGameEvent{
-			GameEvent: state.GameEvent{
-				Type: &gameEventType,
-				Event: &state.GameEvent_TooManyRobots_{
-					TooManyRobots: &state.GameEvent_TooManyRobots{
-						ByTeam: &byTeam,
-					},
-				},
-			},
-		},
-	})
 	// wait for the changes to be processed
-	<-hook
 	<-hook
 	engine.UnregisterHook(hook)
 	engine.Stop()

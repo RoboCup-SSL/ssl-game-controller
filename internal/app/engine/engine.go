@@ -7,25 +7,25 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/timer"
 	"github.com/pkg/errors"
 	"log"
-	"math/rand"
 	"time"
 )
 
 const changeOriginEngine = "Engine"
 
 type Engine struct {
-	stateStore     *store.Store
-	currentState   *state.State
-	stateMachine   *statemachine.StateMachine
-	queue          chan statemachine.Change
-	quit           chan int
-	hooks          []chan statemachine.StateChange
-	rand           *rand.Rand
-	timeProvider   timer.TimeProvider
-	lastTimeUpdate time.Time
+	stateStore      *store.Store
+	currentState    *state.State
+	stateMachine    *statemachine.StateMachine
+	queue           chan statemachine.Change
+	quit            chan int
+	hooks           []chan statemachine.StateChange
+	timeProvider    timer.TimeProvider
+	lastTimeUpdate  time.Time
+	readyToContinue *bool
+	ballPlaced      *bool
 }
 
-func NewEngine(stateMachine *statemachine.StateMachine, seed int64, storeFilename string) (s *Engine) {
+func NewEngine(stateMachine *statemachine.StateMachine, storeFilename string) (s *Engine) {
 	s = new(Engine)
 	s.stateStore = store.NewStore(storeFilename)
 	s.currentState = &state.State{}
@@ -33,7 +33,6 @@ func NewEngine(stateMachine *statemachine.StateMachine, seed int64, storeFilenam
 	s.queue = make(chan statemachine.Change, 100)
 	s.quit = make(chan int)
 	s.hooks = []chan statemachine.StateChange{}
-	s.rand = rand.New(rand.NewSource(seed))
 	s.timeProvider = func() time.Time { return time.Now() }
 	s.lastTimeUpdate = s.timeProvider()
 	return
@@ -87,6 +86,7 @@ func (e *Engine) LatestStateInStore() *state.State {
 
 func (e *Engine) processChanges() {
 	for {
+		entry := statemachine.StateChange{}
 		select {
 		case <-e.quit:
 			if err := e.stateMachine.Save(); err != nil {
@@ -94,12 +94,10 @@ func (e *Engine) processChanges() {
 			}
 			return
 		case change := <-e.queue:
-			newState, newChanges := e.stateMachine.Process(e.currentState, change)
-			entry := statemachine.StateChange{
-				State:  newState,
-				Change: change,
-			}
-			e.currentState = newState
+			entry.Change = change
+			var newChanges []statemachine.Change
+			entry.State, newChanges = e.stateMachine.Process(e.currentState, change)
+			e.currentState = entry.State
 
 			e.postProcessChange(change)
 
@@ -111,11 +109,11 @@ func (e *Engine) processChanges() {
 			if err := e.stateStore.Add(store.Entry(entry)); err != nil {
 				log.Println("Could not add new state to store: ", err)
 			}
-			for _, hook := range e.hooks {
-				hook <- entry
-			}
 		case <-time.After(10 * time.Millisecond):
 			e.Tick()
+		}
+		for _, hook := range e.hooks {
+			hook <- entry
 		}
 	}
 }

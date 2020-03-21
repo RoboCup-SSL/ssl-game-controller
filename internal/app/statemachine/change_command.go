@@ -26,8 +26,9 @@ func (s *StateMachine) NewCommand(newState *state.State, newCommand *NewCommand)
 			})
 		}
 
-		// reset game event proposals
+		// reset game events and proposals
 		newState.ProposedGameEvents = nil
+		newState.GameEvents = nil
 
 		// reset ball placement pos and follow ups
 		newState.PlacementPos = nil

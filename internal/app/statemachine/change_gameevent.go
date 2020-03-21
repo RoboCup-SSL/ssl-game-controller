@@ -10,7 +10,6 @@ import (
 func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent) (changes []Change) {
 
 	// TODO assuming that game events are already filtered in engine
-	// TODO ball placement handling must be done outside using the feedback from autoRefs
 
 	gameEvent := change.GameEvent
 	byTeam := gameEvent.ByTeam()
@@ -21,6 +20,9 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 		log.Println("Convert aimless kick to ball left field event, because we are in DivA")
 		gameEvent = s.convertAimlessKick(change.GameEvent)
 	}
+
+	// remember game event
+	newState.GameEvents = append(newState.GameEvents, gameEvent)
 
 	// determine next command
 	newState.NextCommand, newState.NextCommandFor = s.nextCommandForEvent(newState, gameEvent)
@@ -84,11 +86,29 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 	if *gameEvent.Type == state.GameEventType_PLACEMENT_FAILED &&
 		byTeam.Known() {
 		newState.TeamState[byTeam].BallPlacementFailures++
+		newState.TeamState[byTeam].BallPlacementFailuresReached = newState.TeamState[byTeam].BallPlacementFailures >= s.gameConfig.MultiplePlacementFailures
+		if s.allTeamsFailedPlacement(newState) {
+			log.Printf("Placement failed for all teams. The human ref must place the ball.")
+			changes = append(changes, s.newCommandChange(state.CommandHalt))
+		} else {
+			log.Printf("Placement failed for team %v. Team %v is awarded a free kick and places the ball.", byTeam, byTeam.Opposite())
+			newState.NextCommand = state.CommandDirect
+			newState.NextCommandFor = byTeam.Opposite()
+			changes = append(changes, s.newCommandWithTeamChange(state.CommandBallPlacement, byTeam.Opposite()))
+		}
 	}
+
 	if *gameEvent.Type == state.GameEventType_PLACEMENT_SUCCEEDED &&
 		byTeam.Known() &&
 		newState.TeamState[byTeam].BallPlacementFailures > 0 {
 		newState.TeamState[byTeam].BallPlacementFailures--
+		if gameEvent.ByTeam() == newState.NextCommandFor {
+			log.Printf("Placement succeeded by team %v, which is also in favor. Can continue.", byTeam)
+			changes = append(changes, Change{
+				ChangeType:   ChangeTypeContinue,
+				ChangeOrigin: changeOriginStateMachine,
+			})
+		}
 	}
 
 	if *gameEvent.Type == state.GameEventType_DEFENDER_TOO_CLOSE_TO_KICK_POINT {
@@ -100,30 +120,6 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 	if newState.GameState() != state.GameStateStopped &&
 		stopsTheGame(*gameEvent.Type) {
 		changes = append(changes, s.newCommandChange(state.CommandStop))
-	}
-
-	// continue game
-	if *gameEvent.Type == state.GameEventType_PLACEMENT_SUCCEEDED ||
-		(s.cfg.AutoContinue && *gameEvent.Type == state.GameEventType_PREPARED) {
-		substituteBots := false
-		for _, team := range state.BothTeams() {
-			if newState.TeamState[team].BotSubstitutionIntend {
-				changes = append(changes, s.botSubstitutionIntentEventChange(team))
-				substituteBots = true
-			}
-		}
-		if !substituteBots {
-			if newState.NextCommand != state.CommandUnknown {
-				log.Printf("Continue with next command: %v %v", newState.NextCommand, newState.NextCommandFor)
-				changes = append(changes, s.newCommandWithTeamChange(newState.NextCommand, newState.NextCommandFor))
-			} else if newState.GameState() != state.GameStateStopped {
-				log.Println("Halting the game as there is no known next command to continue with")
-				// halt the game, if not in STOP.
-				// Rational: After ball placement and no next command, halt the game to indicate that manual action is required
-				// If in STOP, that was most likely triggered manually already and a suddenly halted game might be confusing and not intended
-				changes = append(changes, s.newCommandChange(state.CommandHalt))
-			}
-		}
 	}
 
 	return
@@ -216,18 +212,12 @@ func (s *StateMachine) nextCommandForEvent(newState *state.State, gameEvent stat
 		state.GameEventType_BOUNDARY_CROSSING,
 		state.GameEventType_BOT_DRIBBLED_BALL_TOO_FAR,
 		state.GameEventType_ATTACKER_DOUBLE_TOUCHED_BALL,
-		state.GameEventType_CHIPPED_GOAL,
-		state.GameEventType_INDIRECT_GOAL,
-		state.GameEventType_POSSIBLE_GOAL,
-		state.GameEventType_PLACEMENT_FAILED:
+		state.GameEventType_POSSIBLE_GOAL:
 		command = state.CommandDirect
 		commandFor = gameEvent.ByTeam().Opposite()
 	case state.GameEventType_DEFENDER_IN_DEFENSE_AREA:
 		command = state.CommandPenalty
 		commandFor = gameEvent.ByTeam().Opposite()
-	case state.GameEventType_PREPARED:
-		command = state.CommandNormalStart
-		commandFor = state.Team_UNKNOWN
 	case state.GameEventType_NO_PROGRESS_IN_GAME:
 		command = state.CommandForceStart
 		commandFor = state.Team_UNKNOWN
@@ -243,20 +233,15 @@ func incrementsFoulCounter(gameEvent state.GameEventType) bool {
 	switch gameEvent {
 	case
 		state.GameEventType_AIMLESS_KICK,
-		state.GameEventType_KICK_TIMEOUT,
 		state.GameEventType_KEEPER_HELD_BALL,
 		state.GameEventType_ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA,
-		state.GameEventType_ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA,
-		state.GameEventType_ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA_SKIPPED,
 		state.GameEventType_BOT_DRIBBLED_BALL_TOO_FAR,
 		state.GameEventType_BOT_KICKED_BALL_TOO_FAST,
 		state.GameEventType_ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA,
 		state.GameEventType_BOT_INTERFERED_PLACEMENT,
 		state.GameEventType_BOT_CRASH_DRAWN,
 		state.GameEventType_BOT_CRASH_UNIQUE,
-		state.GameEventType_BOT_CRASH_UNIQUE_SKIPPED,
 		state.GameEventType_BOT_PUSHED_BOT,
-		state.GameEventType_BOT_PUSHED_BOT_SKIPPED,
 		state.GameEventType_BOT_HELD_BALL_DELIBERATELY,
 		state.GameEventType_BOT_TIPPED_OVER,
 		state.GameEventType_BOT_TOO_FAST_IN_STOP,
@@ -300,7 +285,8 @@ func stopsTheGame(gameEvent state.GameEventType) bool {
 		state.GameEventType_DEFENDER_IN_DEFENSE_AREA,
 		state.GameEventType_BOUNDARY_CROSSING,
 		state.GameEventType_KEEPER_HELD_BALL,
-		state.GameEventType_BOT_DRIBBLED_BALL_TOO_FAR:
+		state.GameEventType_BOT_DRIBBLED_BALL_TOO_FAR,
+		state.GameEventType_PLACEMENT_SUCCEEDED:
 		return true
 	}
 	return false

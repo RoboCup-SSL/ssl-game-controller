@@ -21,6 +21,7 @@ type State struct {
 	PrevCommands               []RefCommand        `json:"prevCommands" yaml:"prevCommands"`
 	PrevCommandsFor            []Team              `json:"prevCommandsFor" yaml:"prevCommandsFor"`
 	CurrentActionTimeRemaining time.Duration       `json:"currentActionTimeRemaining" yaml:"currentActionTimeRemaining"`
+	GameEvents                 []GameEvent         `json:"gameEvents" yaml:"gameEvents"`
 	ProposedGameEvents         []ProposedGameEvent `json:"proposedGameEvents" yaml:"proposedGameEvents"`
 }
 

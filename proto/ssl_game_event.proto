@@ -52,8 +52,10 @@ message GameEvent {
         BallLeftField ball_left_field_touch_line = 6;
         BallLeftField ball_left_field_goal_line = 7;
         AimlessKick aimless_kick = 11;
+
+        // Scoring goals
+
         Goal possible_goal = 39;
-        ChippedGoal chipped_goal = 10;
 
         // Non-Foul Violations
 
@@ -63,18 +65,15 @@ message GameEvent {
         // Stopping Fouls
 
         AttackerTooCloseToDefenseArea attacker_too_close_to_defense_area = 19;
-        BotHeldBallDeliberately bot_held_ball_deliberately = 26;
-        DefenderInDefenseAreaPartially defender_in_defense_area_partially = 30;
         DefenderInDefenseArea defender_in_defense_area = 31;
         BoundaryCrossing boundary_crossing = 43;
         KeeperHeldBall keeper_held_ball = 13;
+        BotDribbledBallTooFar bot_dribbled_ball_too_far = 17;
 
         // Non-Stopping Fouls
 
         AttackerTouchedBallInDefenseArea attacker_touched_ball_in_defense_area = 15;
-        BotDribbledBallTooFar bot_dribbled_ball_too_far = 17;
         BotKickedBallTooFast bot_kicked_ball_too_fast = 18;
-        AttackerTouchedOpponentInDefenseArea attacker_touched_opponent_in_defense_area = 16;
         BotCrashUnique bot_crash_unique = 22;
         BotCrashDrawn bot_crash_drawn = 21;
 
@@ -87,37 +86,45 @@ message GameEvent {
         // Events sent by GC only
 
         Goal goal = 8;
-        TooManyRobots too_many_robots = 38;
+        Goal invalid_goal = 44;
         PlacementFailed placement_failed = 3;
         PlacementSucceeded placement_succeeded = 5;
-        UnsportingBehaviorMinor unsporting_behavior_minor = 35;
-        UnsportingBehaviorMajor unsporting_behavior_major = 36;
         MultipleCards multiple_cards = 32;
         MultipleFouls multiple_fouls = 34;
+        BotSubstitution bot_substitution = 37;
 
         // Events triggered by the human referee through the GC only
 
-        BotTippedOver bot_tipped_over = 27;
+        UnsportingBehaviorMinor unsporting_behavior_minor = 35;
+        UnsportingBehaviorMajor unsporting_behavior_major = 36;
         BotPushedBot bot_pushed_bot = 24;
+        BotHeldBallDeliberately bot_held_ball_deliberately = 26;
+        BotTippedOver bot_tipped_over = 27;
 
         // Deprecated events
 
         // replaced by ready_to_continue flag
         Prepared prepared = 1 [deprecated = true];
-        // can be read from the referee message
-        BotSubstitution bot_substitution = 37 [deprecated = true];
-        // can not be used as long as autoRefs do not judge pushing
-        BotPushedBot bot_pushed_bot_skipped = 25;
-        // the referee msg already indicates this
-        MultiplePlacementFailures multiple_placement_failures = 33 [deprecated = true];
+        // event not raised explicitly
+        TooManyRobots too_many_robots = 38 [deprecated = true];
         // obsolete
-        BotCrashUnique bot_crash_unique_skipped = 23 [deprecated = true];
+        IndirectGoal indirect_goal = 9 [deprecated = true];
+        // replaced by the meta-information in the possible_goal event
+        ChippedGoal chipped_goal = 10 [deprecated = true];
+        // obsolete
+        KickTimeout kick_timeout = 12 [deprecated = true];
+        // rule removed
+        AttackerTouchedOpponentInDefenseArea attacker_touched_opponent_in_defense_area = 16 [deprecated = true];
         // obsolete
         AttackerTouchedOpponentInDefenseArea attacker_touched_opponent_in_defense_area_skipped = 42 [deprecated = true];
         // obsolete
-        KickTimeout kick_timeout = 12 [deprecated = true];
-        // obsolete
-        IndirectGoal indirect_goal = 9 [deprecated = true];
+        BotCrashUnique bot_crash_unique_skipped = 23 [deprecated = true];
+        // can not be used as long as autoRefs do not judge pushing
+        BotPushedBot bot_pushed_bot_skipped = 25;
+        // rule removed
+        DefenderInDefenseAreaPartially defender_in_defense_area_partially = 30 [deprecated = true];
+        // the referee msg already indicates this
+        MultiplePlacementFailures multiple_placement_failures = 33 [deprecated = true];
     }
 
     // the ball left the field normally
@@ -150,8 +157,12 @@ message GameEvent {
         optional uint32 kicking_bot = 2;
         // the location where the ball entered the goal
         optional Location location = 3;
-        // the location where the ball was kicked
+        // the location where the ball was kicked (for deciding if this was a valid goal)
         optional Location kick_location = 4;
+        // the kick speed of the goal shot (for deciding if this was a valid goal)
+        optional float kick_speed = 5;
+        // the maximum height the ball reached during the goal kick (for deciding if this was a valid goal)
+        optional float max_ball_height = 7;
     }
     // the ball entered the goal directly during an indirect free kick
     message IndirectGoal {
@@ -470,44 +481,71 @@ message GameEvent {
 enum GameEventType {
     UNKNOWN_GAME_EVENT_TYPE = 0;
 
-    PREPARED = 1;
-    NO_PROGRESS_IN_GAME = 2;
-    PLACEMENT_FAILED = 3;
-    PLACEMENT_SUCCEEDED = 5;
-    BOT_SUBSTITUTION = 37;
-    TOO_MANY_ROBOTS = 38;
+    // Ball out of field events (stopping)
+
     BALL_LEFT_FIELD_TOUCH_LINE = 6;
     BALL_LEFT_FIELD_GOAL_LINE = 7;
-    POSSIBLE_GOAL = 39;
-    GOAL = 8;
-    INDIRECT_GOAL = 9;
-    CHIPPED_GOAL = 10;
     AIMLESS_KICK = 11;
-    KICK_TIMEOUT = 12;
-    KEEPER_HELD_BALL = 13;
+
+    // Scoring goals
+
+    POSSIBLE_GOAL = 39;
+
+    // Non-Foul Violations
+
+    NO_PROGRESS_IN_GAME = 2;
     ATTACKER_DOUBLE_TOUCHED_BALL = 14;
-    ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA = 15;
-    ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA = 16;
-    ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA_SKIPPED = 40;
-    BOT_DRIBBLED_BALL_TOO_FAR = 17;
-    BOT_KICKED_BALL_TOO_FAST = 18;
+    BOUNDARY_CROSSING = 41;
+
+    // Stopping Fouls
+
     ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA = 19;
-    BOT_INTERFERED_PLACEMENT = 20;
-    BOT_CRASH_DRAWN = 21;
-    BOT_CRASH_UNIQUE = 22;
-    BOT_CRASH_UNIQUE_SKIPPED = 23;
-    BOT_PUSHED_BOT = 24;
-    BOT_PUSHED_BOT_SKIPPED = 25;
-    BOT_HELD_BALL_DELIBERATELY = 26;
-    BOT_TIPPED_OVER = 27;
-    BOT_TOO_FAST_IN_STOP = 28;
-    DEFENDER_TOO_CLOSE_TO_KICK_POINT = 29;
-    DEFENDER_IN_DEFENSE_AREA_PARTIALLY = 30;
     DEFENDER_IN_DEFENSE_AREA = 31;
+    KEEPER_HELD_BALL = 13;
+    BOT_DRIBBLED_BALL_TOO_FAR = 17;
+
+    // Non-Stopping Fouls
+
+    ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA = 15;
+    BOT_KICKED_BALL_TOO_FAST = 18;
+    BOT_CRASH_UNIQUE = 22;
+    BOT_CRASH_DRAWN = 21;
+
+    // Fouls while ball out of play
+
+    DEFENDER_TOO_CLOSE_TO_KICK_POINT = 29;
+    BOT_TOO_FAST_IN_STOP = 28;
+    BOT_INTERFERED_PLACEMENT = 20;
+
+    // Events sent by GC only
+
+    GOAL = 8;
+    INVALID_GOAL = 42;
+    PLACEMENT_FAILED = 3;
+    PLACEMENT_SUCCEEDED = 5;
     MULTIPLE_CARDS = 32;
-    MULTIPLE_PLACEMENT_FAILURES = 33;
     MULTIPLE_FOULS = 34;
+    BOT_SUBSTITUTION = 37;
+
+    // Events triggered by the human referee through the GC only
+
     UNSPORTING_BEHAVIOR_MINOR = 35;
     UNSPORTING_BEHAVIOR_MAJOR = 36;
-    BOUNDARY_CROSSING = 41;
+    BOT_PUSHED_BOT = 24;
+    BOT_HELD_BALL_DELIBERATELY = 26;
+    BOT_TIPPED_OVER = 27;
+
+    // Deprecated events
+
+    PREPARED = 1 [deprecated = true];
+    TOO_MANY_ROBOTS = 38 [deprecated = true];
+    INDIRECT_GOAL = 9 [deprecated = true];
+    CHIPPED_GOAL = 10 [deprecated = true];
+    KICK_TIMEOUT = 12 [deprecated = true];
+    ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA = 16 [deprecated = true];
+    ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA_SKIPPED = 40 [deprecated = true];
+    BOT_CRASH_UNIQUE_SKIPPED = 23 [deprecated = true];
+    BOT_PUSHED_BOT_SKIPPED = 25 [deprecated = true];
+    DEFENDER_IN_DEFENSE_AREA_PARTIALLY = 30 [deprecated = true];
+    MULTIPLE_PLACEMENT_FAILURES = 33 [deprecated = true];
 }

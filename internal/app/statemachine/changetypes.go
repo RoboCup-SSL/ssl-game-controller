@@ -19,6 +19,8 @@ const (
 	ChangeTypeUpdateTeamState      ChangeType = "UpdateTeamState"
 	ChangeTypeSwitchColor          ChangeType = "SwitchColor"
 	ChangeTypeAddGameEvent         ChangeType = "AddGameEvent"
+	ChangeTypeStartBallPlacement   ChangeType = "StartBallPlacement"
+	ChangeTypeContinue             ChangeType = "Continue"
 	ChangeTypeAddProposedGameEvent ChangeType = "AddProposedGameEvent"
 	ChangeTypeRevert               ChangeType = "Revert"
 )

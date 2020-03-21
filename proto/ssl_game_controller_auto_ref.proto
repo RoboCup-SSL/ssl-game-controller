@@ -43,11 +43,15 @@ message GameStateMetadata {
     // false: ball not yet placed successfully
     optional bool ball_placed = 2;
 
+    // UNIX timestamp [μs] when the ball last moved
+    // Used by the GC to determine if there is still progress
+    optional uint64 last_progress = 3;
+
     // number of yellow robots currently visible on the field
-    optional uint32 number_of_robots_yellow = 3;
+    optional uint32 number_of_robots_yellow = 4;
 
     // number of blue robots currently visible on the field
-    optional uint32 number_of_robots_blue = 4;
+    optional uint32 number_of_robots_blue = 5;
 }
 
 // ControllerToAutoRef is the wrapper message for all messages from controller to autoRef

@@ -57,7 +57,7 @@ func Test_Statemachine(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			sm := NewStateMachine(gameConfig, "/tmp/foo")
+			sm := NewStateMachine(gameConfig, 0, "/tmp/foo")
 
 			gotNewState, _ := sm.Process(tt.args.currentState, tt.args.change)
 			diffs := deep.Equal(gotNewState, tt.wantNewState)
