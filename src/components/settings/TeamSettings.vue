@@ -8,40 +8,40 @@
             </tr>
             <tr>
                 <td>
-                    <TeamName :edit-mode="{active: true}" team-color="Yellow"/>
+                    <TeamName :edit-mode="{active: true}" :team-color="TEAM_YELLOW"/>
                 </td>
                 <td class="label-column">
                     Team Name
                 </td>
                 <td>
-                    <TeamName :edit-mode="{active: true}" team-color="Blue"/>
+                    <TeamName :edit-mode="{active: true}" :team-color="TEAM_BLUE"/>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <TeamScore :edit-mode="{active: true}" team-color="Yellow"/>
+                    <TeamScore :edit-mode="{active: true}" :team-color="TEAM_YELLOW"/>
                 </td>
                 <td class="label-column">Goals</td>
                 <td>
-                    <TeamScore :edit-mode="{active: true}" team-color="Blue"/>
+                    <TeamScore :edit-mode="{active: true}" :team-color="TEAM_BLUE"/>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <TeamBallPlacement team-color="Yellow"/>
+                    <TeamBallPlacement :team-color="TEAM_YELLOW"/>
                 </td>
                 <td class="label-column">Ball placement enabled</td>
                 <td>
-                    <TeamBallPlacement team-color="Blue"/>
+                    <TeamBallPlacement :team-color="TEAM_BLUE"/>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <TeamHalf team-color="Yellow"/>
+                    <TeamHalf :team-color="TEAM_YELLOW"/>
                 </td>
                 <td class="label-column">Goal Half</td>
                 <td>
-                    <TeamHalf team-color="Blue"/>
+                    <TeamHalf :team-color="TEAM_BLUE"/>
                 </td>
             </tr>
         </table>
@@ -53,6 +53,7 @@
     import TeamScore from "./team/TeamScore";
     import TeamBallPlacement from "./team/TeamBallPlacement";
     import TeamHalf from "./team/TeamHalf";
+    import {TEAM_BLUE, TEAM_YELLOW} from "../../refereeState";
 
     export default {
         name: "TeamSettings",
@@ -61,7 +62,13 @@
             TeamBallPlacement,
             TeamScore,
             TeamName,
-        }
+        },
+        data() {
+            return {
+                TEAM_YELLOW: TEAM_YELLOW,
+                TEAM_BLUE: TEAM_BLUE
+            }
+        },
     }
 </script>
 

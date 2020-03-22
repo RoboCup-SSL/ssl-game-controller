@@ -12,18 +12,18 @@
     export default {
         name: "ControlTeamTimeout",
         props: {
-            teamColor: String
+            teamColor: Number
         },
         computed: {
             command: function () {
-                return this.$store.state.refBoxState.command
+                return this.$store.state.matchState.command
             },
             timeoutRunning: function () {
-                return this.command === "timeout" && this.$store.state.refBoxState.commandForTeam === this.teamColor.toString()
+                return this.command === "timeout" && this.$store.state.matchState.commandForTeam === this.teamColor.toString()
             },
             disableTimeoutButton() {
-                return !isNonPausedStage(this.$store.state.refBoxState)
-                    && !isPreStage(this.$store.state.refBoxState);
+                return !isNonPausedStage(this.$store.state.matchState)
+                    && !isPreStage(this.$store.state.matchState);
             },
         },
         methods: {

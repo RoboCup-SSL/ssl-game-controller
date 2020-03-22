@@ -1,7 +1,7 @@
 <template>
     <EditableLabelNumber
             :edit-mode="editMode"
-            :value="teamState.foulCounter"
+            :value="teamState.fouls.length"
             :callback="updateFoulCounter"
             :min="0"
             :max="99"/>
@@ -14,12 +14,12 @@
         name: "TeamFoulCounter",
         components: {EditableLabelNumber},
         props: {
-            teamColor: String,
+            teamColor: Number,
             editMode: Object,
         },
         computed: {
             teamState: function () {
-                return this.$store.state.refBoxState.teamState[this.teamColor]
+                return this.$store.state.matchState.teamState[this.teamColor]
             }
         },
         methods: {

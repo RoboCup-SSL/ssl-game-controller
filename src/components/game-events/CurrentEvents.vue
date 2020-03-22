@@ -31,7 +31,7 @@
         name: "CurrentEvents",
         computed: {
             state() {
-                return this.$store.state.refBoxState
+                return this.$store.state.matchState
             },
             gameEvents() {
                 return this.state.gameEvents;

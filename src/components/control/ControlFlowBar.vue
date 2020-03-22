@@ -18,7 +18,7 @@
                       v-bind:disabled="!continuePossible">
                 Continue
                 <span v-if="nextCommand !== ''">with</span>
-                <span :class="{'team-blue': nextCommandFor === 'Blue', 'team-yellow': nextCommandFor === 'Yellow'}">
+                <span :class="teamColorClass">
                     {{nextCommand}}
                 </span>
             </b-button>
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-    import {isNonPausedStage, isPreStage} from "../../refereeState";
+    import {isNonPausedStage, isPreStage, TEAM_BLUE, TEAM_YELLOW} from "../../refereeState";
 
     export default {
         name: "ControlFlowBar",
@@ -59,7 +59,7 @@
                 }
             },
             state() {
-                return this.$store.state.refBoxState
+                return this.$store.state.matchState
             },
             halted() {
                 return this.state.command === 'halt';
@@ -68,8 +68,8 @@
                 return this.nextCommand !== '';
             },
             stopAllowed() {
-                return isNonPausedStage(this.$store.state.refBoxState)
-                    || isPreStage(this.$store.state.refBoxState);
+                return isNonPausedStage(this.$store.state.matchState)
+                    || isPreStage(this.$store.state.matchState);
             },
             nextCommand() {
                 if (this.halted) {
@@ -82,6 +82,12 @@
                     return ''
                 }
                 return this.state.nextCommandFor;
+            },
+            teamColorClass() {
+                return {
+                    'team-blue': this.state.nextCommandFor === TEAM_BLUE,
+                    'team-yellow': this.state.nextCommandFor === TEAM_YELLOW
+                }
             }
         }
     }

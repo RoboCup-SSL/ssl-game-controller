@@ -46,12 +46,12 @@
         name: "TeamName",
         components: {EditableLabelSelect},
         props: {
-            teamColor: String,
+            teamColor: Number,
             editMode: Object,
         },
         computed: {
             team: function () {
-                return this.$store.state.refBoxState.teamState[this.teamColor]
+                return this.$store.state.matchState.teamState[this.teamColor]
             },
             teams: function () {
                 return TEAMS

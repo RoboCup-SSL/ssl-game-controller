@@ -15,12 +15,12 @@
         name: "TeamPlacementFailures",
         components: {EditableLabelNumber},
         props: {
-            teamColor: String,
+            teamColor: Number,
             editMode: Object,
         },
         computed: {
             teamState: function () {
-                return this.$store.state.refBoxState.teamState[this.teamColor]
+                return this.$store.state.matchState.teamState[this.teamColor]
             }
         },
         methods: {

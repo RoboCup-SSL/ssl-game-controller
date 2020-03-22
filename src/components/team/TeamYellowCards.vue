@@ -1,7 +1,7 @@
 <template>
     <EditableLabelNumber
             :edit-mode="editMode"
-            :value="team.yellowCards"
+            :value="team.yellowCards.length"
             :callback="updateYellowCards"
             :min="0"
             :max="99"/>
@@ -14,7 +14,7 @@
         name: "TeamYellowCards",
         components: {EditableLabelNumber},
         props: {
-            teamColor: String,
+            teamColor: Number,
             editMode: Object,
         },
         methods: {
@@ -29,7 +29,7 @@
         },
         computed: {
             team() {
-                return this.$store.state.refBoxState.teamState[this.teamColor]
+                return this.$store.state.matchState.teamState[this.teamColor]
             },
         }
     }

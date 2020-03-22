@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/engine"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"github.com/gorilla/websocket"
 	"log"
@@ -55,6 +56,15 @@ func (s *ServerConnection) publish() {
 	s.gcEngine.RegisterHook(hook)
 	defer s.gcEngine.UnregisterHook(hook)
 
+	gcState := GameControllerState{
+		AutoRefsConnected:      []string{},
+		TeamConnected:          map[state.Team]bool{},
+		TeamConnectionVerified: map[state.Team]bool{},
+	}
+	out := Output{MatchState: s.gcEngine.CurrentState(), GcState: gcState}
+
+	s.publishOutput(out)
+
 	for {
 		select {
 		case <-s.quit:
@@ -63,7 +73,7 @@ func (s *ServerConnection) publish() {
 			out := Output{MatchState: change.State}
 			s.publishOutput(out)
 		case <-time.After(100 * time.Millisecond):
-			out := Output{MatchState: s.gcEngine.CurrentState()}
+			out := Output{MatchState: s.gcEngine.CurrentState(), GcState: gcState}
 			s.publishOutput(out)
 		}
 	}

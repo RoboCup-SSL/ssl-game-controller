@@ -103,7 +103,7 @@
                 }
             },
             state() {
-                return this.$store.state.refBoxState
+                return this.$store.state.matchState
             },
             halted() {
                 return this.state.command === 'halt';
@@ -121,8 +121,8 @@
                 return isNonPausedStage(this.state) || this.state.command === 'kickoff';
             },
             stopAllowed() {
-                return isNonPausedStage(this.$store.state.refBoxState)
-                    || isPreStage(this.$store.state.refBoxState);
+                return isNonPausedStage(this.$store.state.matchState)
+                    || isPreStage(this.$store.state.matchState);
             },
         }
     }

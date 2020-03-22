@@ -14,7 +14,7 @@
         name: "TeamTimeouts",
         components: {EditableLabelNumber},
         props: {
-            teamColor: String,
+            teamColor: Number,
             editMode: Object,
         },
         methods: {
@@ -29,7 +29,7 @@
         },
         computed: {
             team() {
-                return this.$store.state.refBoxState.teamState[this.teamColor]
+                return this.$store.state.matchState.teamState[this.teamColor]
             },
         }
     }

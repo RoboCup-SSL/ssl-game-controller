@@ -1,5 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import {TEAM_YELLOW} from "./refereeState";
+import {TEAM_BLUE} from "./refereeState";
 
 Vue.use(Vuex);
 
@@ -7,40 +9,42 @@ export class TeamState {
     name = 'someone';
     goals = 0;
     goalkeeper = 0;
-    yellowCards = 0;
-    yellowCardTimes = [];
-    redCards = 0;
+    yellowCards = [];
+    redCards = [];
     timeoutsLeft = 4;
     timeoutTimeLeft = 300;
     onPositiveHalf = true;
-    foulCounter = 0;
+    fouls = [];
     ballPlacementFailures = 0;
+    ballPlacementFailuresReached = false;
     canPlaceBall = true;
     maxAllowedBots = 0;
+    botSubstitutionIntend = false;
 }
 
-export class RefBoxState {
+export class MatchState {
     stage = 'unknown';
     command = '';
     commandForTeam = '';
-    gameEvents = [];
     stageTimeElapsed = 0;
     stageTimeLeft = 0;
     matchDuration = 0;
-    teamState = {'Yellow': new TeamState(), 'Blue': new TeamState()};
+    teamState = {[TEAM_YELLOW]: new TeamState(), [TEAM_BLUE]: new TeamState()};
     nextCommand = '';
     nextCommandFor = '';
     currentActionTimeRemaining = 0;
-}
-
-export class GcState {
+    gameEvents = [];
+    proposedGameEvents = [];
     division = 'DivA';
     autoContinue = true;
-    gameEventBehavior = {};
-    gameEventProposals = [{proposerId: '', gameEvent: {type: '', details: {foo: 'bar'}}, validUntil: 0}];
+    firstKickoffTeam = TEAM_YELLOW;
+    gameEventBehavior = [];
+}
+
+export class GameControllerState {
     autoRefsConnected = [];
-    teamConnected = {'Yellow': false, 'Blue': false};
-    teamConnectionVerified = {'Yellow': false, 'Blue': false};
+    teamConnected = {[TEAM_YELLOW]: false, [TEAM_BLUE]: false};
+    teamConnectionVerified = {[TEAM_YELLOW]: false, [TEAM_BLUE]: false};
 }
 
 export class ProtocolEntry {
@@ -49,15 +53,15 @@ export class ProtocolEntry {
     stageTime = 0;
     type = '';
     name = '';
-    team = 'Yellow';
+    team = TEAM_YELLOW;
     description = '';
     previousState = null;
 }
 
 export default new Vuex.Store({
     state: {
-        gcState: new GcState(),
-        refBoxState: new RefBoxState(),
+        gcState: new GameControllerState(),
+        matchState: new MatchState(),
         protocol: []
     },
     mutations: {
@@ -73,7 +77,9 @@ export default new Vuex.Store({
             }
             if (message.gcState) {
                 state.gcState = message.gcState;
-                state.refBoxState = message.gcState.matchState;
+            }
+            if (message.matchState) {
+                state.matchState = message.matchState;
             }
         },
         SOCKET_RECONNECT() {

@@ -17,75 +17,75 @@
             </tr>
             <tr>
                 <td>
-                    <TeamGoalkeeper :edit-mode="editMode" team-color="Yellow"/>
+                    <TeamGoalkeeper :edit-mode="editMode" :team-color="TEAM_YELLOW"/>
                 </td>
                 <td class="label-column">Goal Keeper</td>
                 <td>
-                    <TeamGoalkeeper :edit-mode="editMode" team-color="Blue"/>
+                    <TeamGoalkeeper :edit-mode="editMode" :team-color="TEAM_BLUE"/>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <TeamTimeouts :edit-mode="editMode" team-color="Yellow"/>
+                    <TeamTimeouts :edit-mode="editMode" :team-color="TEAM_YELLOW"/>
                     |
-                    <TeamTimeoutTime :edit-mode="editMode" team-color="Yellow"/>
+                    <TeamTimeoutTime :edit-mode="editMode" :team-color="TEAM_YELLOW"/>
                 </td>
                 <td class="label-column">Timeouts left</td>
                 <td>
-                    <TeamTimeouts :edit-mode="editMode" team-color="Blue"/>
+                    <TeamTimeouts :edit-mode="editMode" :team-color="TEAM_BLUE"/>
                     |
-                    <TeamTimeoutTime :edit-mode="editMode" team-color="Blue"/>
+                    <TeamTimeoutTime :edit-mode="editMode" :team-color="TEAM_BLUE"/>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <TeamYellowCards :edit-mode="editMode" team-color="Yellow"/>
+                    <TeamYellowCards :edit-mode="editMode" :team-color="TEAM_YELLOW"/>
                     |
-                    <TeamRedCards :edit-mode="editMode" team-color="Yellow"/>
+                    <TeamRedCards :edit-mode="editMode" :team-color="TEAM_YELLOW"/>
                 </td>
                 <td class="label-column">Yellow / Red Cards</td>
                 <td>
-                    <TeamYellowCards :edit-mode="editMode" team-color="Blue"/>
+                    <TeamYellowCards :edit-mode="editMode" :team-color="TEAM_BLUE"/>
                     |
-                    <TeamRedCards :edit-mode="editMode" team-color="Blue"/>
+                    <TeamRedCards :edit-mode="editMode" :team-color="TEAM_BLUE"/>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <TeamYellowCardsActive :edit-mode="editMode" team-color="Yellow"/>
+                    <TeamYellowCardsActive :edit-mode="editMode" :team-color="TEAM_YELLOW"/>
                 </td>
                 <td class="label-column">
                     Active Yellow Cards
                 </td>
                 <td>
-                    <TeamYellowCardsActive :edit-mode="editMode" team-color="Blue"/>
+                    <TeamYellowCardsActive :edit-mode="editMode" :team-color="TEAM_BLUE"/>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <TeamFoulCounter :edit-mode="editMode" team-color="Yellow"/>
+                    <TeamFoulCounter :edit-mode="editMode" :team-color="TEAM_YELLOW"/>
                 </td>
                 <td class="label-column">Foul Counter</td>
                 <td>
-                    <TeamFoulCounter :edit-mode="editMode" team-color="Blue"/>
+                    <TeamFoulCounter :edit-mode="editMode" :team-color="TEAM_BLUE"/>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <TeamPlacementFailures :edit-mode="editMode" team-color="Yellow"/>
+                    <TeamPlacementFailures :edit-mode="editMode" :team-color="TEAM_YELLOW"/>
                 </td>
                 <td class="label-column">Placement Failures</td>
                 <td>
-                    <TeamPlacementFailures :edit-mode="editMode" team-color="Blue"/>
+                    <TeamPlacementFailures :edit-mode="editMode" :team-color="TEAM_BLUE"/>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <TeamBotSubstitution team-color="Yellow"/>
+                    <TeamBotSubstitution :team-color="TEAM_YELLOW"/>
                 </td>
                 <td class="label-column">Bot Substitution</td>
                 <td>
-                    <TeamBotSubstitution team-color="Blue"/>
+                    <TeamBotSubstitution :team-color="TEAM_BLUE"/>
                 </td>
             </tr>
             <tr>
@@ -95,11 +95,11 @@
             </tr>
             <tr>
                 <td>
-                    <TeamConnection team-color="Yellow"/>
+                    <TeamConnection :team-color="TEAM_YELLOW"/>
                 </td>
                 <td class="label-column">Connected</td>
                 <td>
-                    <TeamConnection team-color="Blue"/>
+                    <TeamConnection :team-color="TEAM_BLUE"/>
                 </td>
             </tr>
         </table>
@@ -118,6 +118,7 @@
     import TeamTimeoutTime from "./TeamTimeoutTime";
     import TeamYellowCardTimes from "./TeamYellowCardTimes";
     import TeamYellowCardsActive from "./TeamYellowCardsActive";
+    import {TEAM_BLUE, TEAM_YELLOW} from "../../refereeState";
 
     export default {
         name: "TeamOverviewView",
@@ -139,15 +140,17 @@
                 showAllCards: false,
                 editMode: {
                     active: false,
-                }
+                },
+                TEAM_YELLOW: TEAM_YELLOW,
+                TEAM_BLUE: TEAM_BLUE
             }
         },
         computed: {
             teamYellow() {
-                return this.$store.state.refBoxState.teamState['Yellow'];
+                return this.$store.state.matchState.teamState[TEAM_YELLOW];
             },
             teamBlue() {
-                return this.$store.state.refBoxState.teamState['Blue'];
+                return this.$store.state.matchState.teamState[TEAM_BLUE];
             },
         }
     }

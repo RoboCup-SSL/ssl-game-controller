@@ -73,7 +73,7 @@
         },
         computed: {
             state() {
-                return this.$store.state.refBoxState
+                return this.$store.state.matchState
             },
             halted() {
                 return this.state.command === 'halt';

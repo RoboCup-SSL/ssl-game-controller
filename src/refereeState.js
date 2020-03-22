@@ -1,3 +1,7 @@
+export const TEAM_UNKNOWN = 0;
+export const TEAM_YELLOW = 1;
+export const TEAM_BLUE = 2;
+
 export const stages = [
     "Pre-First Half",
     "First Half",

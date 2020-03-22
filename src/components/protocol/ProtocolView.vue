@@ -39,7 +39,7 @@
                 return [...this.$store.state.protocol].reverse();
             },
             state() {
-                return this.$store.state.refBoxState
+                return this.$store.state.matchState
             },
         },
         mounted() {

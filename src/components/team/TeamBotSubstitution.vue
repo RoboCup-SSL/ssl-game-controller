@@ -11,7 +11,7 @@
     export default {
         name: "TeamBotSubstitution",
         props: {
-            teamColor: String,
+            teamColor: Number,
         },
         methods: {
             edit: function () {
@@ -25,7 +25,7 @@
         },
         computed: {
             teamState: function () {
-                return this.$store.state.refBoxState.teamState[this.teamColor]
+                return this.$store.state.matchState.teamState[this.teamColor]
             },
             botSubstitutionIntend() {
                 return this.teamState.botSubstitutionIntend;

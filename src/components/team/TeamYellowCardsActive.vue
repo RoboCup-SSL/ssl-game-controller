@@ -2,7 +2,7 @@
     <div>
         <span v-b-tooltip.hover
               title="Active yellow cards">
-            {{team.yellowCardTimes.length}}
+            {{activeYellowCards.length}}
         </span>
         |
         <span v-b-tooltip.hover
@@ -32,13 +32,20 @@
 <script>
     import EditableLabelDuration from "../common/EditableLabelDuration";
     import TeamYellowCardTimes from "./TeamYellowCardTimes";
+    import {TEAM_BLUE, TEAM_YELLOW} from "../../refereeState";
 
     export default {
         name: "TeamYellowCardsActive",
         components: {TeamYellowCardTimes, EditableLabelDuration},
         props: {
-            teamColor: String,
+            teamColor: Number,
             editMode: Object,
+        },
+        data() {
+            return {
+                TEAM_YELLOW: TEAM_YELLOW,
+                TEAM_BLUE: TEAM_BLUE
+            }
         },
         methods: {
             updateCardTime: function (v, index) {
@@ -52,17 +59,20 @@
         },
         computed: {
             team() {
-                return this.$store.state.refBoxState.teamState[this.teamColor]
+                return this.$store.state.matchState.teamState[this.teamColor]
             },
             latestCardTime() {
-                if (this.team.yellowCardTimes.length > 0) {
-                    return this.team.yellowCardTimes[0];
+                if (this.activeYellowCards.length > 0) {
+                    return this.activeYellowCards[0];
                 }
                 return 0;
             },
             modalId() {
                 return `yellow-card-times-${this.teamColor}-modal`;
             },
+            activeYellowCards() {
+                return this.team.yellowCards.filter(e => e.timeRemaining > 0);
+            }
         }
     }
 </script>

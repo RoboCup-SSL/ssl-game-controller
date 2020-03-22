@@ -9,7 +9,7 @@
             </span>
         <span v-b-tooltip.hover title="Next command">
             <span v-if="state.nextCommand !== ''"
-                  :class="{'team-blue': state.nextCommandFor === 'Blue', 'team-yellow': state.nextCommandFor === 'Yellow'}">
+                  :class="teamColorClass">
             {{state.nextCommand}}
             </span>
             <span v-if="state.nextCommand === ''">-</span>
@@ -17,7 +17,7 @@
         |
         <span v-b-tooltip.hover
               title="Current command"
-              :class="{'team-blue': state.commandForTeam === 'Blue', 'team-yellow': state.commandForTeam === 'Yellow'}">
+              :class="teamColorClass">
             {{state.command}}
         </span>
         |
@@ -28,13 +28,13 @@
         <span v-b-tooltip.hover
               title="Goals for yellow"
               class="team-yellow">
-            {{state.teamState['Yellow'].goals}}
+            {{teamStateYellow.goals}}
         </span>
         :
         <span v-b-tooltip.hover
               title="Goals for blue"
               class="team-blue">
-            {{state.teamState['Blue'].goals}}
+            {{teamStateBlue.goals}}
         </span>
         |
         <span v-format-ns-duration="state.stageTimeElapsed"
@@ -55,11 +55,26 @@
 </template>
 
 <script>
+    import {TEAM_YELLOW} from "../refereeState";
+    import {TEAM_BLUE} from "../refereeState";
+
     export default {
         name: 'GameStateBar',
         computed: {
             state() {
-                return this.$store.state.refBoxState
+                return this.$store.state.matchState
+            },
+            teamStateYellow() {
+                return this.$store.state.matchState.teamState[TEAM_YELLOW]
+            },
+            teamStateBlue() {
+                return this.$store.state.matchState.teamState[TEAM_BLUE]
+            },
+            teamColorClass() {
+                return {
+                    'team-blue': this.state.nextCommandFor === TEAM_BLUE,
+                    'team-yellow': this.state.nextCommandFor === TEAM_YELLOW
+                }
             }
         }
     }

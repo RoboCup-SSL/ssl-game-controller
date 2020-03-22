@@ -15,18 +15,18 @@
             </tr>
             <tr>
                 <td class="team-yellow">
-                    {{state.teamState['Yellow'].name}}
+                    {{teamStateYellow.name}}
                 </td>
                 <td class="team-blue">
-                    {{state.teamState['Blue'].name}}
+                    {{teamStateBlue.name}}
                 </td>
             </tr>
             <tr>
                 <td>
-                    <ManualControlTeamMatchCommands team-color="Yellow"/>
+                    <ManualControlTeamMatchCommands :team-color="TEAM_YELLOW"/>
                 </td>
                 <td>
-                    <ManualControlTeamMatchCommands team-color="Blue"/>
+                    <ManualControlTeamMatchCommands :team-color="TEAM_BLUE"/>
                 </td>
             </tr>
             <tr>
@@ -36,10 +36,10 @@
             </tr>
             <tr>
                 <td>
-                    <ManualControlTeam team-color="Yellow"/>
+                    <ManualControlTeam :team-color="TEAM_YELLOW"/>
                 </td>
                 <td>
-                    <ManualControlTeam team-color="Blue"/>
+                    <ManualControlTeam :team-color="TEAM_BLUE"/>
                 </td>
             </tr>
             <tr>
@@ -70,6 +70,7 @@
     import ManualControlTeam from "./ManualControlTeam";
     import ManualControlTeamMatchCommands from "./ManualControlTeamMatchCommands";
     import PlaceBall from "./PlaceBall";
+    import {TEAM_BLUE, TEAM_YELLOW} from "../../refereeState";
 
     export default {
         name: "ManualControlView",
@@ -79,9 +80,21 @@
             ManualControlCommon,
             ManualControlTeam
         },
+        data() {
+            return {
+                TEAM_YELLOW: TEAM_YELLOW,
+                TEAM_BLUE: TEAM_BLUE
+            }
+        },
         computed: {
             state() {
-                return this.$store.state.refBoxState
+                return this.$store.state.matchState
+            },
+            teamStateYellow() {
+                return this.$store.state.matchState.teamState["1"]
+            },
+            teamStateBlue() {
+                return this.$store.state.matchState.teamState["2"]
             },
         }
     }

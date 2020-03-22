@@ -8,7 +8,7 @@
 
         <b-button v-on:click="revokeYellowCard"
                   class="manual-control-button"
-                  v-bind:disabled="teamState.yellowCardTimes.length===0">
+                  v-bind:disabled="!yellowCardActive">
             Revoke Yellow Card
         </b-button>
 
@@ -29,13 +29,19 @@
 
 <script>
     import ControlTeamTimeout from "./ControlTeamTimeout";
-    import {isNonPausedStage} from "../../refereeState";
+    import {isNonPausedStage, TEAM_BLUE, TEAM_YELLOW} from "../../refereeState";
 
     export default {
         name: "ManualControlTeam",
         components: {ControlTeamTimeout},
         props: {
-            teamColor: String
+            teamColor: Number
+        },
+        data() {
+            return {
+                TEAM_YELLOW: TEAM_YELLOW,
+                TEAM_BLUE: TEAM_BLUE
+            }
         },
         methods: {
             send: function (command) {
@@ -67,31 +73,31 @@
         },
         computed: {
             teamState: function () {
-                return this.$store.state.refBoxState.teamState[this.teamColor]
+                return this.$store.state.matchState.teamState[this.teamColor]
             },
             keymapKickoff() {
-                if (this.teamColor === 'Yellow') {
+                if (this.teamColor === TEAM_YELLOW) {
                     return {'ctrl+alt+numpad 1': this.sendKickoff};
-                } else if (this.teamColor === 'Blue') {
+                } else if (this.teamColor === TEAM_BLUE) {
                     return {'ctrl+alt+numpad 3': this.sendKickoff};
                 }
             },
             keymapDirect() {
-                if (this.teamColor === 'Yellow') {
+                if (this.teamColor === TEAM_YELLOW) {
                     return {'ctrl+alt+numpad 7': this.sendDirect};
-                } else if (this.teamColor === 'Blue') {
+                } else if (this.teamColor === TEAM_BLUE) {
                     return {'ctrl+alt+numpad 9': this.sendDirect};
                 }
             },
             keymapIndirect() {
-                if (this.teamColor === 'Yellow') {
+                if (this.teamColor === TEAM_YELLOW) {
                     return {'ctrl+alt+numpad 4': this.sendIndirect};
-                } else if (this.teamColor === 'Blue') {
+                } else if (this.teamColor === TEAM_BLUE) {
                     return {'ctrl+alt+numpad 6': this.sendIndirect};
                 }
             },
             state() {
-                return this.$store.state.refBoxState
+                return this.$store.state.matchState
             },
             halted() {
                 return this.state.command === 'halt';
@@ -108,6 +114,9 @@
             nonPausedStage() {
                 return isNonPausedStage(this.state);
             },
+            yellowCardActive() {
+                return this.teamState.yellowCards.some(e => e.timeRemaining > 0);
+            }
         }
     }
 </script>

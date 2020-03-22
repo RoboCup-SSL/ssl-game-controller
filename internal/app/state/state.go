@@ -19,11 +19,9 @@ type State struct {
 	PlacementPos               *Location                           `json:"placementPos" yaml:"placementPos"`
 	NextCommand                RefCommand                          `json:"nextCommand" yaml:"nextCommand"`
 	NextCommandFor             Team                                `json:"nextCommandFor" yaml:"nextCommandFor"`
-	PrevCommands               []RefCommand                        `json:"prevCommands" yaml:"prevCommands"`
-	PrevCommandsFor            []Team                              `json:"prevCommandsFor" yaml:"prevCommandsFor"`
 	CurrentActionTimeRemaining time.Duration                       `json:"currentActionTimeRemaining" yaml:"currentActionTimeRemaining"` // CurrentActionTimeRemaining contains the updated remaining lack of progress time for the UI
 	GameEvents                 []GameEvent                         `json:"gameEvents" yaml:"gameEvents"`
-	ProposedGameEvents         []ProposedGameEvent                 `json:"gameEventProposals" yaml:"gameEventProposals"`
+	ProposedGameEvents         []ProposedGameEvent                 `json:"proposedGameEvents" yaml:"proposedGameEvents"`
 	Division                   config.Division                     `json:"division" yaml:"division"`
 	AutoContinue               bool                                `json:"autoContinue" yaml:"autoContinue"`
 	FirstKickoffTeam           Team                                `json:"firstKickoffTeam" yaml:"firstKickoffTeam"`

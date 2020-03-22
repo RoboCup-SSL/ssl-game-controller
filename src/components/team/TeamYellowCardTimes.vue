@@ -4,8 +4,8 @@
                 :edit-mode="editMode"
                 class="editable-label"
                 v-bind:key="cardId"
-                v-for="(cardTime, cardId) in team.yellowCardTimes"
-                :value="cardTime"
+                v-for="(card, cardId) in team.yellowCards"
+                :value="card.remainingTime"
                 :callback="(v) => updateCardTime(v, cardId)"/>
     </div>
 </template>
@@ -17,7 +17,7 @@
         name: "TeamYellowCardTimes",
         components: {EditableLabelDuration},
         props: {
-            teamColor: String,
+            teamColor: Number,
             editMode: Object,
         },
         methods: {
@@ -32,7 +32,7 @@
         },
         computed: {
             team() {
-                return this.$store.state.refBoxState.teamState[this.teamColor]
+                return this.$store.state.matchState.teamState[this.teamColor]
             },
         }
     }

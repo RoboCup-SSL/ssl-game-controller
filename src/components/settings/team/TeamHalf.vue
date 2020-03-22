@@ -9,11 +9,11 @@
     export default {
         name: "TeamHalf",
         props: {
-            teamColor: String
+            teamColor: Number
         },
         computed: {
             teamState: function () {
-                return this.$store.state.refBoxState.teamState[this.teamColor]
+                return this.$store.state.matchState.teamState[this.teamColor]
             }
         }
     }

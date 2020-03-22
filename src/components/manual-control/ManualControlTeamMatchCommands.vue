@@ -43,13 +43,13 @@
 
 <script>
     import ControlTeamTimeout from "./ControlTeamTimeout";
-    import {isNonPausedStage} from "../../refereeState";
+    import {isNonPausedStage, TEAM_BLUE, TEAM_YELLOW} from "../../refereeState";
 
     export default {
         name: "ManualControlTeamMatchCommands",
         components: {ControlTeamTimeout},
         props: {
-            teamColor: String
+            teamColor: Number
         },
         methods: {
             send: function (command) {
@@ -78,31 +78,31 @@
         },
         computed: {
             teamState: function () {
-                return this.$store.state.refBoxState.teamState[this.teamColor]
+                return this.$store.state.matchState.teamState[this.teamColor]
             },
             keymapKickoff() {
-                if (this.teamColor.toString() === 'Yellow') {
+                if (this.teamColor === TEAM_YELLOW) {
                     return {'ctrl+alt+numpad 1': this.sendKickoff};
-                } else if (this.teamColor.toString() === 'Blue') {
+                } else if (this.teamColor === TEAM_BLUE) {
                     return {'ctrl+alt+numpad 3': this.sendKickoff};
                 }
             },
             keymapDirect() {
-                if (this.teamColor.toString() === 'Yellow') {
+                if (this.teamColor === TEAM_YELLOW) {
                     return {'ctrl+alt+numpad 7': this.sendDirect};
-                } else if (this.teamColor.toString() === 'Blue') {
+                } else if (this.teamColor === TEAM_BLUE) {
                     return {'ctrl+alt+numpad 9': this.sendDirect};
                 }
             },
             keymapIndirect() {
-                if (this.teamColor.toString() === 'Yellow') {
+                if (this.teamColor === TEAM_YELLOW) {
                     return {'ctrl+alt+numpad 4': this.sendIndirect};
-                } else if (this.teamColor.toString() === 'Blue') {
+                } else if (this.teamColor === TEAM_BLUE) {
                     return {'ctrl+alt+numpad 6': this.sendIndirect};
                 }
             },
             state() {
-                return this.$store.state.refBoxState
+                return this.$store.state.matchState
             },
             halted() {
                 return this.state.command === 'halt';

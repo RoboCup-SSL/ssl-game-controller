@@ -11,7 +11,7 @@
     export default {
         name: "TeamBallPlacement",
         props: {
-            teamColor: String,
+            teamColor: Number,
             editMode: Object,
         },
         methods: {
@@ -26,7 +26,7 @@
         },
         computed: {
             teamState: function () {
-                return this.$store.state.refBoxState.teamState[this.teamColor]
+                return this.$store.state.matchState.teamState[this.teamColor]
             },
             canPlaceBall() {
                 return this.teamState.canPlaceBall;
