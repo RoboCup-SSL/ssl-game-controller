@@ -7,7 +7,6 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/pem"
-	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
 	"github.com/golang/protobuf/proto"
 	"io/ioutil"
 	"log"
@@ -99,30 +98,30 @@ func (s *Server) CloseConnection(conn net.Conn, id string) {
 	}
 }
 
-func (c *Client) Ok() (reply refproto.ControllerReply) {
-	reply.StatusCode = new(refproto.ControllerReply_StatusCode)
-	*reply.StatusCode = refproto.ControllerReply_OK
+func (c *Client) Ok() (reply ControllerReply) {
+	reply.StatusCode = new(ControllerReply_StatusCode)
+	*reply.StatusCode = ControllerReply_OK
 	c.addVerification(&reply)
 	return
 }
 
-func (c *Client) addVerification(reply *refproto.ControllerReply) {
-	reply.Verification = new(refproto.ControllerReply_Verification)
+func (c *Client) addVerification(reply *ControllerReply) {
+	reply.Verification = new(ControllerReply_Verification)
 	if c.Token != "" {
 		reply.NextToken = new(string)
 		*reply.NextToken = c.Token
-		*reply.Verification = refproto.ControllerReply_VERIFIED
+		*reply.Verification = ControllerReply_VERIFIED
 		c.VerifiedConnection = true
 	} else {
-		*reply.Verification = refproto.ControllerReply_UNVERIFIED
+		*reply.Verification = ControllerReply_UNVERIFIED
 		c.VerifiedConnection = false
 	}
 }
 
-func (c *Client) Reject(reason string) (reply refproto.ControllerReply) {
+func (c *Client) Reject(reason string) (reply ControllerReply) {
 	log.Print("Reject connection: " + reason)
-	reply.StatusCode = new(refproto.ControllerReply_StatusCode)
-	*reply.StatusCode = refproto.ControllerReply_REJECTED
+	reply.StatusCode = new(ControllerReply_StatusCode)
+	*reply.StatusCode = ControllerReply_REJECTED
 	reply.Reason = new(string)
 	*reply.Reason = reason
 	c.addVerification(&reply)

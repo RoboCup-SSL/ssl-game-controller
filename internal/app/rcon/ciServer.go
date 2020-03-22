@@ -3,7 +3,7 @@ package rcon
 import (
 	"bufio"
 	"encoding/binary"
-	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-go-tools/pkg/sslconn"
 	"log"
 	"net"
@@ -14,7 +14,7 @@ type CiServer struct {
 	TimeConsumer CiTimeConsumer
 }
 
-type CiTimeConsumer func(time.Time) *refproto.Referee
+type CiTimeConsumer func(time.Time) *state.Referee
 
 func NewCiServer() CiServer {
 	return CiServer{}

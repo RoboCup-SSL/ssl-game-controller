@@ -5,16 +5,15 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/engine"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/publish"
-	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/vision"
 )
 
 // GameController contains all the different connected modules of the game controller
 type GameController struct {
-	config         config.Controller
-	gcEngine       *engine.Engine
-	publisher      *publish.Publisher
-	apiServer      *api.Server
-	visionReceiver *vision.Receiver
+	config    config.Controller
+	gcEngine  *engine.Engine
+	publisher *publish.Publisher
+	apiServer *api.Server
+	//visionReceiver *vision.Receiver
 	// TODO recon
 }
 

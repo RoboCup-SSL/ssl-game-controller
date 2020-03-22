@@ -1,7 +1,6 @@
 package rcon
 
 import (
-	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
 	"github.com/RoboCup-SSL/ssl-go-tools/pkg/sslconn"
 	"github.com/odeke-em/go-uuid"
 	"github.com/pkg/errors"
@@ -11,7 +10,7 @@ import (
 )
 
 type AutoRefServer struct {
-	ProcessRequest func(string, refproto.AutoRefToController) error
+	ProcessRequest func(string, AutoRefToController) error
 	*Server
 }
 
@@ -21,14 +20,14 @@ type AutoRefClient struct {
 
 func NewAutoRefServer() (s *AutoRefServer) {
 	s = new(AutoRefServer)
-	s.ProcessRequest = func(string, refproto.AutoRefToController) error { return nil }
+	s.ProcessRequest = func(string, AutoRefToController) error { return nil }
 	s.Server = NewServer()
 	s.ConnectionHandler = s.handleClientConnection
 	return
 }
 
 func (c *AutoRefClient) receiveRegistration(server *AutoRefServer) error {
-	registration := refproto.AutoRefRegistration{}
+	registration := AutoRefRegistration{}
 	if err := sslconn.ReceiveMessage(c.Conn, &registration); err != nil {
 		return err
 	}
@@ -58,7 +57,7 @@ func (c *AutoRefClient) receiveRegistration(server *AutoRefServer) error {
 	return nil
 }
 
-func (c *AutoRefClient) verifyRegistration(registration refproto.AutoRefRegistration) error {
+func (c *AutoRefClient) verifyRegistration(registration AutoRefRegistration) error {
 	if registration.Signature == nil {
 		return errors.New("Missing signature")
 	}
@@ -80,7 +79,7 @@ func (c *AutoRefClient) verifyRegistration(registration refproto.AutoRefRegistra
 	return nil
 }
 
-func (c *AutoRefClient) verifyRequest(req refproto.AutoRefToController) error {
+func (c *AutoRefClient) verifyRequest(req AutoRefToController) error {
 	if req.Signature == nil {
 		return errors.New("Missing signature")
 	}
@@ -122,7 +121,7 @@ func (s *AutoRefServer) handleClientConnection(conn net.Conn) {
 	}
 
 	for {
-		req := refproto.AutoRefToController{}
+		req := AutoRefToController{}
 		if err := sslconn.ReceiveMessage(conn, &req); err != nil {
 			if err == io.EOF {
 				return
@@ -144,9 +143,9 @@ func (s *AutoRefServer) handleClientConnection(conn net.Conn) {
 	}
 }
 
-func (c *AutoRefClient) reply(reply refproto.ControllerReply) {
-	msg := refproto.ControllerToAutoRef_ControllerReply{ControllerReply: &reply}
-	response := refproto.ControllerToAutoRef{Msg: &msg}
+func (c *AutoRefClient) reply(reply ControllerReply) {
+	msg := ControllerToAutoRef_ControllerReply{ControllerReply: &reply}
+	response := ControllerToAutoRef{Msg: &msg}
 	if err := sslconn.SendMessage(c.Conn, &response); err != nil {
 		log.Print("Failed to send reply: ", err)
 	}

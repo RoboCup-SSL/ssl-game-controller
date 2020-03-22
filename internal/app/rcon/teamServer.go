@@ -1,7 +1,6 @@
 package rcon
 
 import (
-	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
 	"github.com/RoboCup-SSL/ssl-go-tools/pkg/sslconn"
 	"github.com/odeke-em/go-uuid"
 	"github.com/pkg/errors"
@@ -11,7 +10,7 @@ import (
 )
 
 type TeamServer struct {
-	ProcessTeamRequest func(teamName string, request refproto.TeamToController) error
+	ProcessTeamRequest func(teamName string, request TeamToController) error
 	AllowedTeamNames   []string
 	*Server
 }
@@ -22,14 +21,14 @@ type TeamClient struct {
 
 func NewTeamServer() (s *TeamServer) {
 	s = new(TeamServer)
-	s.ProcessTeamRequest = func(string, refproto.TeamToController) error { return nil }
+	s.ProcessTeamRequest = func(string, TeamToController) error { return nil }
 	s.Server = NewServer()
 	s.ConnectionHandler = s.handleClientConnection
 	return
 }
 
 func (c *TeamClient) receiveRegistration(server *TeamServer) error {
-	registration := refproto.TeamRegistration{}
+	registration := TeamRegistration{}
 	if err := sslconn.ReceiveMessage(c.Conn, &registration); err != nil {
 		return err
 	}
@@ -70,7 +69,7 @@ func isAllowedTeamName(teamName string, allowed []string) bool {
 	return false
 }
 
-func (c *TeamClient) verifyRegistration(registration refproto.TeamRegistration) error {
+func (c *TeamClient) verifyRegistration(registration TeamRegistration) error {
 	if registration.Signature == nil {
 		return errors.New("Missing signature")
 	}
@@ -92,7 +91,7 @@ func (c *TeamClient) verifyRegistration(registration refproto.TeamRegistration) 
 	return nil
 }
 
-func (c *TeamClient) verifyRequest(req refproto.TeamToController) error {
+func (c *TeamClient) verifyRequest(req TeamToController) error {
 	if req.Signature == nil {
 		return errors.New("Missing signature")
 	}
@@ -134,7 +133,7 @@ func (s *TeamServer) handleClientConnection(conn net.Conn) {
 	}
 
 	for {
-		req := refproto.TeamToController{}
+		req := TeamToController{}
 		if err := sslconn.ReceiveMessage(conn, &req); err != nil {
 			if err == io.EOF {
 				return
@@ -156,20 +155,20 @@ func (s *TeamServer) handleClientConnection(conn net.Conn) {
 	}
 }
 
-func (s *TeamServer) SendRequest(teamName string, request refproto.ControllerToTeam) error {
+func (s *TeamServer) SendRequest(teamName string, request ControllerToTeam) error {
 	if client, ok := s.Clients[teamName]; ok {
 		return client.SendRequest(request)
 	}
 	return errors.Errorf("Client '%v' not connected", teamName)
 }
 
-func (c *Client) SendRequest(request refproto.ControllerToTeam) error {
+func (c *Client) SendRequest(request ControllerToTeam) error {
 	return sslconn.SendMessage(c.Conn, &request)
 }
 
-func (c *Client) reply(reply refproto.ControllerReply) {
-	msg := refproto.ControllerToTeam_ControllerReply{ControllerReply: &reply}
-	response := refproto.ControllerToTeam{Msg: &msg}
+func (c *Client) reply(reply ControllerReply) {
+	msg := ControllerToTeam_ControllerReply{ControllerReply: &reply}
+	response := ControllerToTeam{Msg: &msg}
 	if err := sslconn.SendMessage(c.Conn, &response); err != nil {
 		log.Print("Failed to send reply: ", err)
 	}
