@@ -30,7 +30,6 @@ func Test_Engine(t *testing.T) {
 		t.Fatal("Could not start engine")
 	}
 	engine.Enqueue(statemachine.Change{
-		ChangeType: statemachine.ChangeTypeNewCommand,
 		NewCommand: &statemachine.NewCommand{
 			Command: state.CommandHalt,
 		},

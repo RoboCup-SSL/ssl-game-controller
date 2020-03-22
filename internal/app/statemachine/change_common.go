@@ -8,8 +8,6 @@ func (s *StateMachine) newCommandChange(command state.RefCommand) Change {
 
 func (s *StateMachine) newCommandWithTeamChange(command state.RefCommand, team state.Team) Change {
 	return Change{
-		ChangeType:   ChangeTypeNewCommand,
-		ChangeOrigin: changeOriginStateMachine,
 		NewCommand: &NewCommand{
 			Command:    command,
 			CommandFor: team,

@@ -11,7 +11,7 @@ func Test_generateMessages(t *testing.T) {
 	c := statemachine.StateChange{
 		State: s,
 		Change: statemachine.Change{
-			ChangeType: statemachine.ChangeTypeYellowCardOver,
+			YellowCardOver: &statemachine.YellowCardOver{},
 		},
 	}
 

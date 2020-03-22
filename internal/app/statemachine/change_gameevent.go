@@ -46,8 +46,6 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 	if addsYellowCard(*gameEvent.Type) && byTeam.Known() {
 		log.Printf("Team %v got a yellow card", byTeam)
 		changes = append(changes, Change{
-			ChangeType:   ChangeTypeAddYellowCard,
-			ChangeOrigin: changeOriginStateMachine,
 			AddYellowCard: &AddYellowCard{
 				ForTeam:           byTeam,
 				CausedByGameEvent: &gameEvent,
@@ -59,8 +57,6 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 	if addsRedCard(*gameEvent.Type) && byTeam.Known() {
 		log.Printf("Team %v got a red card", byTeam)
 		changes = append(changes, Change{
-			ChangeType:   ChangeTypeAddRedCard,
-			ChangeOrigin: changeOriginStateMachine,
 			AddRedCard: &AddRedCard{
 				ForTeam:           byTeam,
 				CausedByGameEvent: &gameEvent,
@@ -132,8 +128,7 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 		if byTeam == newState.NextCommandFor {
 			log.Printf("Placement succeeded by team %v, which is also in favor. Can continue.", byTeam)
 			changes = append(changes, Change{
-				ChangeType:   ChangeTypeContinue,
-				ChangeOrigin: changeOriginStateMachine,
+				Continue: &Continue{},
 			})
 		}
 	}
@@ -158,12 +153,9 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 func (s *StateMachine) multipleFoulsChange(byTeam state.Team) Change {
 	eventType := state.GameEventType_MULTIPLE_FOULS
 	return Change{
-		ChangeType:   ChangeTypeAddGameEvent,
-		ChangeOrigin: changeOriginStateMachine,
 		AddGameEvent: &AddGameEvent{
 			GameEvent: state.GameEvent{
-				Type:   &eventType,
-				Origin: []string{changeOriginStateMachine},
+				Type: &eventType,
 				Event: &state.GameEvent_MultipleFouls_{
 					MultipleFouls: &state.GameEvent_MultipleFouls{
 						ByTeam: &byTeam,

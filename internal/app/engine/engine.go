@@ -133,10 +133,8 @@ func (e *Engine) initialStateFromStore() state.State {
 
 // postProcessChange performs synchronous post processing steps
 func (e *Engine) postProcessChange(change statemachine.Change) {
-	switch change.ChangeType {
-	case statemachine.ChangeTypeChangeStage:
-		if change.ChangeStage.NewStage == state.Referee_NORMAL_FIRST_HALF {
-			e.currentState.MatchTimeStart = e.timeProvider()
-		}
+	if change.ChangeStage != nil &&
+		change.ChangeStage.NewStage == state.Referee_NORMAL_FIRST_HALF {
+		e.currentState.MatchTimeStart = e.timeProvider()
 	}
 }

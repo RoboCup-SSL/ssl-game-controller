@@ -59,35 +59,52 @@ func loadStageTimes(gameConfig config.Game) (s map[state.Referee_Stage]time.Dura
 // Process translates a state and a change into a new state and resulting new changes
 func (s *StateMachine) Process(currentState state.State, change Change) (newState state.State, newChanges []Change) {
 	newState = currentState.DeepCopy()
-	switch change.ChangeType {
-	case ChangeTypeNewCommand:
+	if change.NewCommand != nil {
 		newChanges = s.NewCommand(&newState, change.NewCommand)
-	case ChangeTypeChangeStage:
+	}
+	if change.ChangeStage != nil {
 		newChanges = s.ChangeStage(&newState, change.ChangeStage)
-	case ChangeTypeSetBallPlacementPos:
+	}
+	if change.SetBallPlacementPos != nil {
 		newChanges = s.SetBallPlacementPos(&newState, change.SetBallPlacementPos)
-	case ChangeTypeAddYellowCard:
+	}
+	if change.AddYellowCard != nil {
 		newChanges = s.AddYellowCard(&newState, change.AddYellowCard)
-	case ChangeTypeAddRedCard:
+	}
+	if change.AddRedCard != nil {
 		newChanges = s.AddRedCard(&newState, change.AddRedCard)
-	case ChangeTypeYellowCardOver:
+	}
+	if change.YellowCardOver != nil {
 		newChanges = s.YellowCardOver(&newState)
-	case ChangeTypeUpdateConfig:
+	}
+	if change.UpdateConfig != nil {
 		newChanges = s.UpdateConfig(&newState, change.UpdateConfig)
-	case ChangeTypeUpdateTeamState:
+	}
+	if change.UpdateTeamState != nil {
 		newChanges = s.UpdateTeamState(&newState, change.UpdateTeamState)
-	case ChangeTypeSwitchColors:
+	}
+	if change.SwitchColors != nil {
 		newChanges = s.SwitchColors(&newState)
-	case ChangeTypeAddGameEvent:
+	}
+	if change.AddGameEvent != nil {
 		newChanges = s.AddGameEvent(&newState, change.AddGameEvent)
-	case ChangeTypeStartBallPlacement:
+	}
+	if change.StartBallPlacement != nil {
 		newChanges = s.StartBallPlacement(&newState)
-	case ChangeTypeContinue:
+	}
+	if change.Continue != nil {
 		newChanges = s.Continue(&newState)
-	case ChangeTypeAddProposedGameEvent:
+	}
+	if change.AddProposedGameEvent != nil {
 		newChanges = s.AddProposedGameEvent(&newState, change.AddProposedGameEvent)
-	case ChangeTypeRevert:
+	}
+	if change.Revert != nil {
 		newChanges = s.Revert(&newState, change.Revert)
 	}
+
+	for i := range newChanges {
+		newChanges[i].ChangeOrigin = changeOriginStateMachine
+	}
+
 	return
 }

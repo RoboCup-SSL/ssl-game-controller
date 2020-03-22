@@ -18,8 +18,6 @@ func (s *StateMachine) ChangeStage(newState *state.State, change *ChangeStage) (
 
 		// halt the game
 		changes = append(changes, Change{
-			ChangeType:   ChangeTypeNewCommand,
-			ChangeOrigin: changeOriginStateMachine,
 			NewCommand: &NewCommand{
 				Command: state.CommandHalt,
 			},
