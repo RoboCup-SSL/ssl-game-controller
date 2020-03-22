@@ -9,7 +9,7 @@ import (
 func Test_generateMessages(t *testing.T) {
 	s := state.NewState()
 	c := statemachine.StateChange{
-		State: &s,
+		State: s,
 		Change: statemachine.Change{
 			ChangeType: statemachine.ChangeTypeYellowCardOver,
 		},

@@ -51,7 +51,7 @@ func (g *MessageGenerator) updateCommand() {
 	g.commandTimestamp = uint64(time.Now().UnixNano() / 1000)
 }
 
-func (g *MessageGenerator) StateToRefereeMessage(matchState *state.State) (r *state.Referee) {
+func (g *MessageGenerator) StateToRefereeMessage(matchState state.State) (r *state.Referee) {
 	r = newRefereeMessage()
 	r.DesignatedPosition = mapLocation(matchState.PlacementPos)
 	r.ProposedGameEvents = mapProposedGameEvents(matchState.ProposedGameEvents)

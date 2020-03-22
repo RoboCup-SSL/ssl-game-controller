@@ -11,7 +11,7 @@ const changeOriginStateMachine = "StateMachine"
 
 type StateChange struct {
 	Id     int
-	State  *state.State
+	State  state.State
 	Change Change
 }
 
@@ -52,33 +52,33 @@ func loadStageTimes(gameConfig config.Game) (s map[state.Stage]time.Duration) {
 	return
 }
 
-func (s *StateMachine) Process(currentState *state.State, change Change) (newState *state.State, newChanges []Change) {
-	newState = currentState.DeepCopy()
+func (s *StateMachine) Process(currentState state.State, change Change) (newState state.State, newChanges []Change) {
+	newState = currentState
 	switch change.ChangeType {
 	case ChangeTypeNewCommand:
-		newChanges = s.NewCommand(newState, change.NewCommand)
+		newChanges = s.NewCommand(&newState, change.NewCommand)
 	case ChangeTypeChangeStage:
-		newChanges = s.ChangeStage(newState, change.ChangeStage)
+		newChanges = s.ChangeStage(&newState, change.ChangeStage)
 	case ChangeTypeSetBallPlacementPos:
-		newChanges = s.SetBallPlacementPos(newState, change.SetBallPlacementPos)
+		newChanges = s.SetBallPlacementPos(&newState, change.SetBallPlacementPos)
 	case ChangeTypeAddYellowCard:
-		newChanges = s.AddYellowCard(newState, change.AddYellowCard)
+		newChanges = s.AddYellowCard(&newState, change.AddYellowCard)
 	case ChangeTypeAddRedCard:
-		newChanges = s.AddRedCard(newState, change.AddRedCard)
+		newChanges = s.AddRedCard(&newState, change.AddRedCard)
 	case ChangeTypeYellowCardOver:
-		newChanges = s.YellowCardOver(newState)
+		newChanges = s.YellowCardOver(&newState)
 	case ChangeTypeUpdateConfig:
-		newChanges = s.UpdateConfig(newState, change.UpdateConfig)
+		newChanges = s.UpdateConfig(&newState, change.UpdateConfig)
 	case ChangeTypeUpdateTeamState:
-		newChanges = s.UpdateTeamState(newState, change.UpdateTeamState)
+		newChanges = s.UpdateTeamState(&newState, change.UpdateTeamState)
 	case ChangeTypeSwitchColor:
-		newChanges = s.SwitchColor(newState)
+		newChanges = s.SwitchColor(&newState)
 	case ChangeTypeAddGameEvent:
-		newChanges = s.AddGameEvent(newState, change.AddGameEvent)
+		newChanges = s.AddGameEvent(&newState, change.AddGameEvent)
 	case ChangeTypeStartBallPlacement:
-		newChanges = s.StartBallPlacement(newState)
+		newChanges = s.StartBallPlacement(&newState)
 	case ChangeTypeContinue:
-		newChanges = s.Continue(newState)
+		newChanges = s.Continue(&newState)
 	}
 	return
 }

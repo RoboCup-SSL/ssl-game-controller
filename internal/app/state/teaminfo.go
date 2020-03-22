@@ -60,19 +60,13 @@ func newTeamInfo() (t *TeamInfo) {
 	return
 }
 
+// String converts the team info into a json string
 func (t TeamInfo) String() string {
 	bytes, e := json.Marshal(t)
 	if e != nil {
 		return e.Error()
 	}
 	return string(bytes)
-}
-
-// DeepCopy creates a deep copy of the struct
-func (t TeamInfo) DeepCopy() (c TeamInfo) {
-	c = t
-	copy(c.YellowCards, t.YellowCards)
-	return
 }
 
 // BallPlacementAllowed returns true, if the team has ball placement enabled and has not yet failed too often

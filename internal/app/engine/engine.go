@@ -16,7 +16,7 @@ const changeOriginEngine = "Engine"
 type Engine struct {
 	gameConfig      config.Game
 	stateStore      *store.Store
-	currentState    *state.State
+	currentState    state.State
 	stateMachine    *statemachine.StateMachine
 	queue           chan statemachine.Change
 	quit            chan int
@@ -30,7 +30,6 @@ type Engine struct {
 func NewEngine(gameConfig config.Game) (s *Engine) {
 	s = new(Engine)
 	s.stateStore = store.NewStore(gameConfig.StateStoreFile)
-	s.currentState = &state.State{}
 	s.stateMachine = statemachine.NewStateMachine(gameConfig)
 	s.queue = make(chan statemachine.Change, 100)
 	s.quit = make(chan int)
@@ -79,8 +78,8 @@ func (e *Engine) Stop() {
 	e.quit <- 0
 }
 
-func (e *Engine) CurrentState() *state.State {
-	return e.currentState.DeepCopy()
+func (e *Engine) CurrentState() state.State {
+	return e.currentState
 }
 
 func (e *Engine) processChanges() {
@@ -115,16 +114,12 @@ func (e *Engine) processChanges() {
 }
 
 // currentState gets the current state or returns an empty default state
-func (e *Engine) initialStateFromStore() *state.State {
+func (e *Engine) initialStateFromStore() state.State {
 	latestEntry := e.stateStore.LatestEntry()
-	var currentState *state.State
 	if latestEntry == nil {
-		currentState = new(state.State)
-		*currentState = state.NewState()
-	} else {
-		currentState = latestEntry.State.DeepCopy()
+		return state.NewState()
 	}
-	return currentState
+	return latestEntry.State
 }
 
 func (e *Engine) postProcessChange(change statemachine.Change) {

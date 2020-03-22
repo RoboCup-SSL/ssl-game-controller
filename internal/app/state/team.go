@@ -1,5 +1,6 @@
 package state
 
+// BothTeams returns a list with both teams
 func BothTeams() []Team {
 	return []Team{Team_YELLOW, Team_BLUE}
 }

@@ -60,28 +60,6 @@ func NewState() (s State) {
 	return
 }
 
-func (s *State) DeepCopy() (c *State) {
-	c = new(State)
-	*c = *s
-
-	if s.ProposedGameEvents != nil {
-		c.ProposedGameEvents = make([]ProposedGameEvent, len(s.ProposedGameEvents))
-		copy(c.ProposedGameEvents, s.ProposedGameEvents)
-	}
-	if s.PlacementPos != nil {
-		c.PlacementPos = new(Location)
-		*c.PlacementPos = *s.PlacementPos
-	}
-	if s.TeamState != nil {
-		c.TeamState = make(map[Team]*TeamInfo)
-		for k, v := range s.TeamState {
-			c.TeamState[k] = new(TeamInfo)
-			*c.TeamState[k] = v.DeepCopy()
-		}
-	}
-	return
-}
-
 func (s State) GameState() GameState {
 	return s.Command.GameState()
 }

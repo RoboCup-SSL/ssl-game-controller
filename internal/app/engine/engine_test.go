@@ -44,7 +44,7 @@ func Test_Engine(t *testing.T) {
 	wantNewState.Command = state.CommandHalt
 
 	gotNewState := engine.currentState
-	diffs := deep.Equal(gotNewState, &wantNewState)
+	diffs := deep.Equal(gotNewState, wantNewState)
 	if len(diffs) > 0 {
 		t.Error("States differ: ", diffs)
 	}
