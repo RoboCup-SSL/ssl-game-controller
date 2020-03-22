@@ -58,6 +58,17 @@ func NewState() (s State) {
 	return
 }
 
+// DeepCopy creates a deep copy of the state
+func (s State) DeepCopy() State {
+	ns := s
+	ns.TeamState = map[Team]*TeamInfo{}
+	for team, ts := range s.TeamState {
+		ns.TeamState[team] = new(TeamInfo)
+		*ns.TeamState[team] = *ts
+	}
+	return ns
+}
+
 // GameState returns the game state corresponding to the current command
 func (s State) GameState() GameState {
 	switch s.Command {

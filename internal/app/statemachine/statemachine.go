@@ -58,7 +58,7 @@ func loadStageTimes(gameConfig config.Game) (s map[state.Referee_Stage]time.Dura
 
 // Process translates a state and a change into a new state and resulting new changes
 func (s *StateMachine) Process(currentState state.State, change Change) (newState state.State, newChanges []Change) {
-	newState = currentState
+	newState = currentState.DeepCopy()
 	switch change.ChangeType {
 	case ChangeTypeNewCommand:
 		newChanges = s.NewCommand(&newState, change.NewCommand)
