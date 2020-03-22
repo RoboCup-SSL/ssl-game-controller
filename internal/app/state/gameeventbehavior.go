@@ -8,7 +8,7 @@ const (
 	GameEventBehaviorOff      GameEventBehavior = "off"
 )
 
-// GameEventBehaviors contain all known command enum constants
+// GameEventBehaviors contain all known enum constants
 var GameEventBehaviors = []GameEventBehavior{GameEventBehaviorOn, GameEventBehaviorMajority, GameEventBehaviorOff}
 
 // Valid checks if the GameEventBehavior enum value is among the known values

@@ -45,7 +45,7 @@ var RefCommands = []RefCommand{
 	CommandBallPlacement,
 }
 
-// Valid checks if the RefCommand enum value is among the known values
+// Valid checks if the enum value is among the known values
 func (c RefCommand) Valid() bool {
 	for _, command := range RefCommands {
 		if command == c {
@@ -55,20 +55,7 @@ func (c RefCommand) Valid() bool {
 	return false
 }
 
-func (c RefCommand) ContinuesGame() bool {
-	switch c {
-	case CommandNormalStart,
-		CommandForceStart,
-		CommandDirect,
-		CommandIndirect,
-		CommandPenalty,
-		CommandKickoff:
-		return true
-	default:
-		return false
-	}
-}
-
+// NeedsTeam returns true if the command must be specialized with a team
 func (c RefCommand) NeedsTeam() bool {
 	switch c {
 	case CommandUnknown,
@@ -88,12 +75,4 @@ func (c RefCommand) NeedsTeam() bool {
 		log.Fatal("Missing case for command ", c)
 		return false
 	}
-}
-
-func (c RefCommand) IsFreeKick() bool {
-	return c == CommandDirect || c == CommandIndirect
-}
-
-func (c RefCommand) IsPrepare() bool {
-	return c == CommandKickoff || c == CommandPenalty
 }

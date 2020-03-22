@@ -4,7 +4,7 @@ import (
 	"reflect"
 )
 
-// ByTeam extracts the `ByTeam` attribute from the game event details
+// ByTeam extracts the `ByTeam` attribute from the game event details, if present
 func (m GameEvent) ByTeam() Team {
 	if m.GetEvent() == nil {
 		return Team_UNKNOWN
@@ -18,7 +18,7 @@ func (m GameEvent) ByTeam() Team {
 	if !v.IsNil() {
 		byTeamValue := v.Elem().FieldByName("ByTeam")
 		if byTeamValue.IsValid() && !byTeamValue.IsNil() {
-			return Team(Team(byTeamValue.Elem().Int()))
+			return Team(byTeamValue.Elem().Int())
 		}
 	}
 	return Team_UNKNOWN

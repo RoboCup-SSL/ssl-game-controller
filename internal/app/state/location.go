@@ -2,6 +2,7 @@ package state
 
 import "fmt"
 
+// NewLocation64 creates a new location with float64 input
 func NewLocation64(x, y float64) (l Location) {
 	l.X = new(float32)
 	l.Y = new(float32)
@@ -10,6 +11,7 @@ func NewLocation64(x, y float64) (l Location) {
 	return
 }
 
+// NewLocation creates a new location
 func NewLocation(x, y float32) (l Location) {
 	l.X = new(float32)
 	l.Y = new(float32)
@@ -18,14 +20,15 @@ func NewLocation(x, y float32) (l Location) {
 	return
 }
 
-func (l Location) StringPretty() string {
+// StringPretty converts the location into a pretty printed string
+func (m Location) StringPretty() string {
 	x := float32(0)
 	y := float32(0)
-	if l.X != nil {
-		x = *l.X
+	if m.X != nil {
+		x = *m.X
 	}
-	if l.Y != nil {
-		y = *l.Y
+	if m.Y != nil {
+		y = *m.Y
 	}
 	return fmt.Sprintf("x: %v, y: %v", x, y)
 }

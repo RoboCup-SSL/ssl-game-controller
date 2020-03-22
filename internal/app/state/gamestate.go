@@ -20,7 +20,7 @@ const (
 	GameStateBallPlacement GameState = "Ball Placement"
 )
 
-// GameStates contain all known command enum constants
+// GameStates contain all known enum constants
 var GameStates = []GameState{
 	GameStateHalted,
 	GameStateStopped,
