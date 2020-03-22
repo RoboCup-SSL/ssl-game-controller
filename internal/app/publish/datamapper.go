@@ -6,14 +6,6 @@ import (
 	"time"
 )
 
-func mapGameEvents(events []state.GameEvent) []*state.GameEvent {
-	mappedEvents := make([]*state.GameEvent, len(events))
-	for i, e := range events {
-		mappedEvents[i] = &e
-	}
-	return mappedEvents
-}
-
 func mapProposedGameEvents(events []state.ProposedGameEvent) []*state.ProposedGameEvent {
 	mappedEvents := make([]*state.ProposedGameEvent, len(events))
 	for i, e := range events {
@@ -73,40 +65,6 @@ func mapTime(duration time.Duration) uint32 {
 		return uint32(duration.Nanoseconds() / 1000)
 	}
 	return 0
-}
-
-func mapStage(stage state.Stage) state.Referee_Stage {
-	switch stage {
-	case state.StagePreGame:
-		return state.Referee_NORMAL_FIRST_HALF_PRE
-	case state.StageFirstHalf:
-		return state.Referee_NORMAL_FIRST_HALF
-	case state.StageHalfTime:
-		return state.Referee_NORMAL_HALF_TIME
-	case state.StageSecondHalfPre:
-		return state.Referee_NORMAL_SECOND_HALF_PRE
-	case state.StageSecondHalf:
-		return state.Referee_NORMAL_SECOND_HALF
-	case state.StageOvertimeBreak:
-		return state.Referee_EXTRA_TIME_BREAK
-	case state.StageOvertimeFirstHalfPre:
-		return state.Referee_EXTRA_FIRST_HALF_PRE
-	case state.StageOvertimeFirstHalf:
-		return state.Referee_EXTRA_FIRST_HALF
-	case state.StageOvertimeHalfTime:
-		return state.Referee_EXTRA_HALF_TIME
-	case state.StageOvertimeSecondHalfPre:
-		return state.Referee_EXTRA_SECOND_HALF_PRE
-	case state.StageOvertimeSecondHalf:
-		return state.Referee_EXTRA_SECOND_HALF
-	case state.StageShootoutBreak:
-		return state.Referee_PENALTY_SHOOTOUT_BREAK
-	case state.StageShootout:
-		return state.Referee_PENALTY_SHOOTOUT
-	case state.StagePostGame:
-		return state.Referee_POST_GAME
-	}
-	return -1
 }
 
 func mapLocation(location *state.Location) *state.Referee_Point {

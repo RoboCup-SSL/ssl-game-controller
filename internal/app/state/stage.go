@@ -1,113 +1,42 @@
 package state
 
-import "github.com/pkg/errors"
-
-// Stage represents the different stages of a game
-type Stage string
-
-const (
-	// StagePreGame before game has started
-	StagePreGame Stage = "Pre-First Half"
-	// StageFirstHalf in first half
-	StageFirstHalf Stage = "First Half"
-	// StageHalfTime in half time
-	StageHalfTime Stage = "Half Time"
-	// StageSecondHalfPre before second half
-	StageSecondHalfPre Stage = "Pre-Second Half"
-	// StageSecondHalf in second half
-	StageSecondHalf Stage = "Second Half"
-	// StageOvertimeBreak in break to overtime
-	StageOvertimeBreak Stage = "Overtime Break"
-	// StageOvertimeFirstHalfPre before first overtime half
-	StageOvertimeFirstHalfPre Stage = "Pre-Overtime First Half"
-	// StageOvertimeFirstHalf in first overtime half
-	StageOvertimeFirstHalf Stage = "Overtime First Half"
-	// StageOvertimeHalfTime in overtime half time
-	StageOvertimeHalfTime Stage = "Overtime Half Time"
-	// StageOvertimeSecondHalfPre before second overtime half
-	StageOvertimeSecondHalfPre Stage = "Pre-Overtime Second Half"
-	// StageOvertimeSecondHalf in second overtime half
-	StageOvertimeSecondHalf Stage = "Overtime Second Half"
-	// StageShootoutBreak in break to shootout
-	StageShootoutBreak Stage = "Shootout Break"
-	// StageShootout in Shootout
-	StageShootout Stage = "Shootout"
-	// StagePostGame after game ended
-	StagePostGame Stage = "End of Game"
-)
-
-// Stages include all available stages, ordered
-var Stages = []Stage{
-	StagePreGame,
-	StageFirstHalf,
-	StageHalfTime,
-	StageSecondHalfPre,
-	StageSecondHalf,
-	StageOvertimeBreak,
-	StageOvertimeFirstHalfPre,
-	StageOvertimeFirstHalf,
-	StageOvertimeHalfTime,
-	StageOvertimeSecondHalfPre,
-	StageOvertimeSecondHalf,
-	StageShootoutBreak,
-	StageShootout,
-	StagePostGame,
-}
-
 // Valid checks if the Stage enum value is among the known values
-func (s Stage) Valid() bool {
-	for _, stage := range Stages {
-		if stage == s {
-			return true
-		}
-	}
-	return false
+func (x Referee_Stage) Valid() bool {
+	_, ok := Referee_Stage_name[int32(x)]
+	return ok
 }
 
-func (s Stage) index() (int, error) {
-	for i, v := range Stages {
-		if v == s {
-			return i, nil
-		}
+// Next returns the next stage if there is one, or itself else
+func (x Referee_Stage) Next() Referee_Stage {
+	next := Referee_Stage(int32(x) + 1)
+	if next.Valid() {
+		return next
 	}
-	return 0, errors.Errorf("unknown stage: %v", s)
+	return x
 }
 
-func (s Stage) Next() Stage {
-	index, err := s.index()
-	if err != nil {
-		return s
+// Previous returns the previous stage if there is one, or itself else
+func (x Referee_Stage) Previous() Referee_Stage {
+	next := Referee_Stage(int32(x) - 1)
+	if next.Valid() {
+		return next
 	}
-	nextIndex := index + 1
-	if nextIndex >= len(Stages) {
-		return s
-	}
-	return Stages[nextIndex]
+	return x
 }
 
-func (s Stage) Previous() Stage {
-	index, err := s.index()
-	if err != nil {
-		return s
-	}
-	nextIndex := index - 1
-	if nextIndex < 0 {
-		return s
-	}
-	return Stages[nextIndex]
-}
-
-func (s Stage) IsPreStage() bool {
-	switch s {
-	case StagePreGame, StageSecondHalfPre, StageOvertimeFirstHalfPre, StageOvertimeSecondHalfPre:
+// IsPreStage returns true if this is one of the pre stages
+func (x Referee_Stage) IsPreStage() bool {
+	switch x {
+	case Referee_NORMAL_FIRST_HALF_PRE, Referee_NORMAL_SECOND_HALF_PRE, Referee_EXTRA_FIRST_HALF_PRE, Referee_EXTRA_SECOND_HALF_PRE:
 		return true
 	}
 	return false
 }
 
-func (s Stage) IsPausedStage() bool {
-	switch s {
-	case StageHalfTime, StageOvertimeBreak, StageOvertimeHalfTime, StageShootoutBreak:
+// IsPausedStage returns true if this stage indicates a break
+func (x Referee_Stage) IsPausedStage() bool {
+	switch x {
+	case Referee_NORMAL_HALF_TIME, Referee_EXTRA_TIME_BREAK, Referee_EXTRA_HALF_TIME, Referee_PENALTY_SHOOTOUT_BREAK:
 		return true
 	}
 	return false

@@ -58,7 +58,7 @@ type AddProposedGameEvent struct {
 }
 
 type ChangeStage struct {
-	NewStage state.Stage `json:"newStage" yaml:"newStage"`
+	NewStage state.Referee_Stage `json:"newStage" yaml:"newStage"`
 }
 
 type AddYellowCard struct {

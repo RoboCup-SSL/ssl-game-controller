@@ -41,17 +41,17 @@ func Test_Statemachine(t *testing.T) {
 			name: "Stage",
 			args: args{
 				initState: func(s *state.State) {
-					s.Stage = state.StagePreGame
+					s.Stage = state.Referee_NORMAL_FIRST_HALF_PRE
 				},
 				change: Change{
 					ChangeType: ChangeTypeChangeStage,
 					ChangeStage: &ChangeStage{
-						NewStage: state.StageFirstHalf,
+						NewStage: state.Referee_NORMAL_FIRST_HALF,
 					},
 				},
 			},
 			wantNewState: func(s *state.State) {
-				s.Stage = state.StageFirstHalf
+				s.Stage = state.Referee_NORMAL_FIRST_HALF
 				s.StageTimeLeft = gameConfig.Normal.HalfDuration
 			},
 		},

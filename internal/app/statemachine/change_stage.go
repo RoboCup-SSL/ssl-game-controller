@@ -27,7 +27,7 @@ func (s *StateMachine) ChangeStage(newState *state.State, change *ChangeStage) (
 	}
 
 	// update timeout times when transiting to overtime
-	if change.NewStage == state.StageOvertimeFirstHalfPre {
+	if change.NewStage == state.Referee_EXTRA_FIRST_HALF_PRE {
 		newState.TeamState[state.Team_YELLOW].TimeoutsLeft = s.gameConfig.Overtime.Timeouts
 		newState.TeamState[state.Team_YELLOW].TimeoutTimeLeft = s.gameConfig.Overtime.TimeoutDuration
 		newState.TeamState[state.Team_BLUE].TimeoutsLeft = s.gameConfig.Overtime.Timeouts
@@ -43,12 +43,12 @@ func (s *StateMachine) ChangeStage(newState *state.State, change *ChangeStage) (
 	return
 }
 
-func (s *StateMachine) getNextCommandForStage(newState *state.State, stage state.Stage) (command state.RefCommand, commandFor state.Team) {
+func (s *StateMachine) getNextCommandForStage(newState *state.State, stage state.Referee_Stage) (command state.RefCommand, commandFor state.Team) {
 	switch stage {
-	case state.StagePreGame, state.StageOvertimeFirstHalfPre:
+	case state.Referee_NORMAL_FIRST_HALF_PRE, state.Referee_EXTRA_FIRST_HALF_PRE:
 		command = state.CommandKickoff
 		commandFor = newState.FirstKickoffTeam
-	case state.StageSecondHalfPre, state.StageOvertimeSecondHalfPre:
+	case state.Referee_NORMAL_SECOND_HALF_PRE, state.Referee_EXTRA_SECOND_HALF_PRE:
 		command = state.CommandKickoff
 		commandFor = newState.FirstKickoffTeam.Opposite()
 	default:

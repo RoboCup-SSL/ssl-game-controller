@@ -30,8 +30,10 @@ func (g *MessageGenerator) GenerateRefereeMessages(change statemachine.StateChan
 		g.updateCommand()
 		refereeMsg := g.StateToRefereeMessage(change.State)
 		if change.Change.AddGameEvent.GameEvent.ByTeam() == state.Team_YELLOW {
+			//noinspection GoDeprecation (sent for compatibility)
 			*refereeMsg.Command = state.Referee_GOAL_YELLOW
 		} else {
+			//noinspection GoDeprecation (sent for compatibility)
 			*refereeMsg.Command = state.Referee_GOAL_BLUE
 		}
 		rs = append(rs, refereeMsg)
@@ -60,7 +62,7 @@ func (g *MessageGenerator) StateToRefereeMessage(matchState state.State) (r *sta
 	*r.CommandCounter = g.commandCounter
 	*r.CommandTimestamp = g.commandTimestamp
 	*r.PacketTimestamp = uint64(time.Now().UnixNano() / 1000)
-	*r.Stage = mapStage(matchState.Stage)
+	*r.Stage = matchState.Stage
 	*r.StageTimeLeft = int32(matchState.StageTimeLeft.Nanoseconds() / 1000)
 	*r.BlueTeamOnPositiveHalf = matchState.TeamState[state.Team_BLUE].OnPositiveHalf
 	*r.NextCommand = mapCommand(matchState.NextCommand, matchState.NextCommandFor)

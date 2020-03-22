@@ -8,7 +8,7 @@ import (
 
 // State of the game
 type State struct {
-	Stage                      Stage                               `json:"stage" yaml:"stage"`
+	Stage                      Referee_Stage                       `json:"stage" yaml:"stage"`
 	Command                    RefCommand                          `json:"command" yaml:"command"`
 	CommandFor                 Team                                `json:"commandForTeam" yaml:"commandForTeam"`
 	StageTimeElapsed           time.Duration                       `json:"stageTimeElapsed" yaml:"stageTimeElapsed"`
@@ -32,7 +32,7 @@ type State struct {
 
 // NewState creates a new state, initialized for the start of a new game
 func NewState() (s State) {
-	s.Stage = StagePreGame
+	s.Stage = Referee_NORMAL_FIRST_HALF_PRE
 	s.Command = CommandHalt
 
 	s.StageTimeLeft = 0
@@ -60,10 +60,28 @@ func NewState() (s State) {
 	return
 }
 
+// GameState returns the game state corresponding to the current command
 func (s State) GameState() GameState {
-	return s.Command.GameState()
+	switch s.Command {
+	case CommandHalt:
+		return GameStateHalted
+	case CommandStop:
+		return GameStateStopped
+	case CommandNormalStart, CommandForceStart, CommandDirect, CommandIndirect:
+		return GameStateRunning
+	case CommandKickoff:
+		return GameStatePreKickoff
+	case CommandPenalty:
+		return GameStatePrePenalty
+	case CommandTimeout:
+		return GameStateTimeout
+	case CommandBallPlacement:
+		return GameStateBallPlacement
+	}
+	return ""
 }
 
+// String returns the state encoded in JSON
 func (s State) String() string {
 	bytes, e := json.Marshal(s)
 	if e != nil {
