@@ -9,14 +9,16 @@ import (
 
 func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent) (changes []Change) {
 
-	// TODO assuming that game events are already filtered in engine
-
 	gameEvent := change.GameEvent
 	byTeam := gameEvent.ByTeam()
 
-	if newState.Division == config.DivA &&
-		gameEvent.Type != nil &&
-		*gameEvent.Type == state.GameEventType_AIMLESS_KICK {
+	if gameEvent.Type == nil {
+		log.Printf("Can not process a game event without a type: %v", gameEvent)
+		return
+	}
+
+	// convert aimless kick if necessary
+	if newState.Division == config.DivA && *gameEvent.Type == state.GameEventType_AIMLESS_KICK {
 		log.Println("Convert aimless kick to ball left field event, because we are in DivA")
 		gameEvent = s.convertAimlessKick(change.GameEvent)
 	}
@@ -31,6 +33,7 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 	if incrementsFoulCounter(*gameEvent.Type) {
 		for _, team := range state.BothTeams() {
 			if byTeam == state.Team_UNKNOWN || byTeam == team {
+				log.Printf("Team %v got a foul for %v", byTeam, gameEvent)
 				newState.TeamState[team].AddFoul(&gameEvent)
 				if len(newState.TeamState[team].Fouls)%3 == 0 {
 					changes = append(changes, s.multipleFoulsChange(team))
@@ -39,34 +42,58 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 		}
 	}
 
-	// Add yellow/red card
-	if addsYellowCard(*gameEvent.Type) {
-		newState.TeamState[byTeam].AddYellowCard(s.gameConfig.YellowCardDuration, &gameEvent)
+	// Add yellow card
+	if addsYellowCard(*gameEvent.Type) && byTeam.Known() {
+		log.Printf("Team %v got a yellow card", byTeam)
+		changes = append(changes, Change{
+			ChangeType:   ChangeTypeAddYellowCard,
+			ChangeOrigin: changeOriginStateMachine,
+			AddYellowCard: &AddYellowCard{
+				ForTeam:           byTeam,
+				CausedByGameEvent: &gameEvent,
+			},
+		})
 	}
-	if addsRedCard(*gameEvent.Type) {
-		newState.TeamState[byTeam].AddRedCard(&gameEvent)
+
+	// Add red card
+	if addsRedCard(*gameEvent.Type) && byTeam.Known() {
+		log.Printf("Team %v got a red card", byTeam)
+		changes = append(changes, Change{
+			ChangeType:   ChangeTypeAddRedCard,
+			ChangeOrigin: changeOriginStateMachine,
+			AddRedCard: &AddRedCard{
+				ForTeam:           byTeam,
+				CausedByGameEvent: &gameEvent,
+			},
+		})
 	}
 
 	// goal
 	if *gameEvent.Type == state.GameEventType_GOAL && byTeam.Known() {
 		newState.TeamState[byTeam].Goals++
 	}
+
+	// possible goal
 	if *gameEvent.Type == state.GameEventType_POSSIBLE_GOAL {
+		log.Printf("Halt the game, because team %v might have scored a goal", byTeam)
 		// halt the game to let the human referee decide if this was a valid goal
 		changes = append(changes, s.newCommandChange(state.CommandHalt))
 	}
 
+	// bot substitution
 	if *gameEvent.Type == state.GameEventType_BOT_SUBSTITUTION {
+		log.Printf("Halt the game, because team %v requested robot substitution", byTeam)
 		// reset robot substitution flags
-		newState.TeamState[state.Team_BLUE].BotSubstitutionIntend = false
-		newState.TeamState[state.Team_YELLOW].BotSubstitutionIntend = false
+		for _, team := range state.BothTeams() {
+			newState.TeamState[team].BotSubstitutionIntend = false
+		}
 		// halt the game to allow teams to substitute robots
 		changes = append(changes, s.newCommandChange(state.CommandHalt))
-		log.Printf("Halt the game, because team %v requested robot substitution", gameEvent.ByTeam())
 	}
 
 	// ball placement interference
 	if *gameEvent.Type == state.GameEventType_BOT_INTERFERED_PLACEMENT {
+		log.Printf("Reset current action time for ball placement interference by %v", byTeam)
 		newState.CurrentActionTimeRemaining += s.gameConfig.BallPlacementTimeTopUp
 	}
 
@@ -82,9 +109,8 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 	}
 	newState.PlacementPos = placementPosDeterminer.Location()
 
-	// ball placement
-	if *gameEvent.Type == state.GameEventType_PLACEMENT_FAILED &&
-		byTeam.Known() {
+	// ball placement failed
+	if *gameEvent.Type == state.GameEventType_PLACEMENT_FAILED && byTeam.Known() {
 		newState.TeamState[byTeam].BallPlacementFailures++
 		newState.TeamState[byTeam].BallPlacementFailuresReached = newState.TeamState[byTeam].BallPlacementFailures >= s.gameConfig.MultiplePlacementFailures
 		if s.allTeamsFailedPlacement(newState) {
@@ -98,11 +124,12 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 		}
 	}
 
+	// ball placement succeeded
 	if *gameEvent.Type == state.GameEventType_PLACEMENT_SUCCEEDED &&
 		byTeam.Known() &&
 		newState.TeamState[byTeam].BallPlacementFailures > 0 {
 		newState.TeamState[byTeam].BallPlacementFailures--
-		if gameEvent.ByTeam() == newState.NextCommandFor {
+		if byTeam == newState.NextCommandFor {
 			log.Printf("Placement succeeded by team %v, which is also in favor. Can continue.", byTeam)
 			changes = append(changes, Change{
 				ChangeType:   ChangeTypeContinue,
@@ -111,35 +138,23 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 		}
 	}
 
+	// defender too close to kick point
 	if *gameEvent.Type == state.GameEventType_DEFENDER_TOO_CLOSE_TO_KICK_POINT {
-		// Reset the current action time
+		log.Printf("Reset current action time because defender of team %v was too close to kick point", byTeam)
 		newState.CurrentActionTimeRemaining = s.gameConfig.GeneralTime
 	}
 
 	// stop the game if needed
 	if newState.GameState() != state.GameStateStopped &&
 		stopsTheGame(*gameEvent.Type) {
+		log.Printf("Stopping the game for event %v", *gameEvent.Type)
 		changes = append(changes, s.newCommandChange(state.CommandStop))
 	}
 
 	return
 }
 
-func (s *StateMachine) newCommandChange(command state.RefCommand) Change {
-	return s.newCommandWithTeamChange(command, state.Team_UNKNOWN)
-}
-
-func (s *StateMachine) newCommandWithTeamChange(command state.RefCommand, team state.Team) Change {
-	return Change{
-		ChangeType:   ChangeTypeNewCommand,
-		ChangeOrigin: changeOriginStateMachine,
-		NewCommand: &NewCommand{
-			Command:    command,
-			CommandFor: team,
-		},
-	}
-}
-
+// multipleFoulsChange creates a multiple fouls event change
 func (s *StateMachine) multipleFoulsChange(byTeam state.Team) Change {
 	eventType := state.GameEventType_MULTIPLE_FOULS
 	return Change{
@@ -159,25 +174,8 @@ func (s *StateMachine) multipleFoulsChange(byTeam state.Team) Change {
 	}
 }
 
-func (s *StateMachine) botSubstitutionIntentEventChange(byTeam state.Team) Change {
-	eventType := state.GameEventType_BOT_SUBSTITUTION
-	return Change{
-		ChangeType:   ChangeTypeAddGameEvent,
-		ChangeOrigin: changeOriginStateMachine,
-		AddGameEvent: &AddGameEvent{
-			GameEvent: state.GameEvent{
-				Type:   &eventType,
-				Origin: []string{changeOriginStateMachine},
-				Event: &state.GameEvent_BotSubstitution_{
-					BotSubstitution: &state.GameEvent_BotSubstitution{
-						ByTeam: &byTeam,
-					},
-				},
-			},
-		},
-	}
-}
-
+// convertAimlessKick converts the aimless kick event into a ball left field via goal line event
+// because aimless kick only applies to DivB
 func (s *StateMachine) convertAimlessKick(gameEvent state.GameEvent) state.GameEvent {
 	eventType := state.GameEventType_BALL_LEFT_FIELD_GOAL_LINE
 	return state.GameEvent{
@@ -193,6 +191,7 @@ func (s *StateMachine) convertAimlessKick(gameEvent state.GameEvent) state.GameE
 	}
 }
 
+// nextCommandForEvent determines the next command for the given event or returns the currently set one
 func (s *StateMachine) nextCommandForEvent(newState *state.State, gameEvent state.GameEvent) (command state.RefCommand, commandFor state.Team) {
 	if newState.Command == state.CommandPenalty || newState.Command == state.CommandKickoff {
 		command = state.CommandNormalStart
@@ -288,6 +287,28 @@ func stopsTheGame(gameEvent state.GameEventType) bool {
 		state.GameEventType_BOT_DRIBBLED_BALL_TOO_FAR,
 		state.GameEventType_PLACEMENT_SUCCEEDED:
 		return true
+	}
+	return false
+}
+
+// allTeamsFailedPlacement returns true if all teams failed placing the ball
+// It takes into account, how many teams are able to place the ball and how many failures happened
+func (s *StateMachine) allTeamsFailedPlacement(newState *state.State) bool {
+	possibleFailures := 0
+	for _, team := range state.BothTeams() {
+		if newState.TeamState[team].BallPlacementAllowed() {
+			possibleFailures++
+		}
+	}
+
+	failures := 0
+	for _, e := range newState.GameEvents {
+		if *e.Type == state.GameEventType_PLACEMENT_FAILED {
+			failures++
+			if failures >= possibleFailures {
+				return true
+			}
+		}
 	}
 	return false
 }

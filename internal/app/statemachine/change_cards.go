@@ -1,14 +1,18 @@
 package statemachine
 
-import "github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
+import (
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
+)
 
 func (s *StateMachine) AddYellowCard(newState *state.State, change *AddYellowCard) (changes []Change) {
 	newState.TeamState[change.ForTeam].AddYellowCard(s.gameConfig.YellowCardDuration, change.CausedByGameEvent)
+	s.updateMaxBots(newState)
 	return
 }
 
 func (s *StateMachine) AddRedCard(newState *state.State, change *AddRedCard) (changes []Change) {
 	newState.TeamState[change.ForTeam].AddRedCard(change.CausedByGameEvent)
+	s.updateMaxBots(newState)
 	return
 }
 

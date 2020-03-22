@@ -1,6 +1,9 @@
 package statemachine
 
-import "github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
+import (
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
+	"log"
+)
 
 func (s *StateMachine) NewCommand(newState *state.State, newCommand *NewCommand) (changes []Change) {
 	newState.Command = newCommand.Command
@@ -19,6 +22,7 @@ func (s *StateMachine) NewCommand(newState *state.State, newCommand *NewCommand)
 
 	if newState.GameState() == state.GameStateRunning {
 		if newState.Stage.IsPreStage() {
+			log.Print("Pre-Stage is over, because game is running now")
 			changes = append(changes, Change{
 				ChangeType:   ChangeTypeChangeStage,
 				ChangeOrigin: changeOriginStateMachine,

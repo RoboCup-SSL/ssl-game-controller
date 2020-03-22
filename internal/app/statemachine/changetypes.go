@@ -15,13 +15,13 @@ const (
 	ChangeTypeAddYellowCard        ChangeType = "AddYellowCard"
 	ChangeTypeAddRedCard           ChangeType = "AddRedCard"
 	ChangeTypeYellowCardOver       ChangeType = "YellowCardOver"
-	ChangeTypeUpdateConfig         ChangeType = "UpdateConfig"
-	ChangeTypeUpdateTeamState      ChangeType = "UpdateTeamState"
-	ChangeTypeSwitchColor          ChangeType = "SwitchColor"
 	ChangeTypeAddGameEvent         ChangeType = "AddGameEvent"
+	ChangeTypeAddProposedGameEvent ChangeType = "AddProposedGameEvent"
 	ChangeTypeStartBallPlacement   ChangeType = "StartBallPlacement"
 	ChangeTypeContinue             ChangeType = "Continue"
-	ChangeTypeAddProposedGameEvent ChangeType = "AddProposedGameEvent"
+	ChangeTypeUpdateConfig         ChangeType = "UpdateConfig"
+	ChangeTypeUpdateTeamState      ChangeType = "UpdateTeamState"
+	ChangeTypeSwitchColors         ChangeType = "SwitchColors"
 	ChangeTypeRevert               ChangeType = "Revert"
 )
 

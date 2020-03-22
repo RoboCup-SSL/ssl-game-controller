@@ -22,7 +22,7 @@ func (s *StateMachine) StartBallPlacement(newState *state.State) (changes []Chan
 	if newState.NextCommandFor.Unknown() {
 		// select a team by 50% chance
 		teamInFavor = s.randomTeam()
-		log.Printf("No team in favor. Chose randomly.")
+		log.Printf("No team in favor. Chose one randomly.")
 	} else {
 		teamInFavor = newState.NextCommandFor
 	}
@@ -47,26 +47,7 @@ func (s *StateMachine) StartBallPlacement(newState *state.State) (changes []Chan
 	return
 }
 
-func (s *StateMachine) allTeamsFailedPlacement(newState *state.State) bool {
-	possibleFailures := 0
-	for _, team := range state.BothTeams() {
-		if newState.TeamState[team].BallPlacementAllowed() {
-			possibleFailures++
-		}
-	}
-
-	failures := 0
-	for _, e := range newState.GameEvents {
-		if *e.Type == state.GameEventType_PLACEMENT_FAILED {
-			failures++
-			if failures >= possibleFailures {
-				return true
-			}
-		}
-	}
-	return false
-}
-
+// randomTeam selects a team by 50% chance
 func (s *StateMachine) randomTeam() state.Team {
 	if s.rand.Intn(2) == 0 {
 		return state.Team_YELLOW
@@ -74,6 +55,7 @@ func (s *StateMachine) randomTeam() state.Team {
 	return state.Team_BLUE
 }
 
+// ballLeftField returns true if the game was stopped because the ball left the field
 func ballLeftField(newState *state.State) bool {
 	for _, gameEvent := range newState.GameEvents {
 		switch *gameEvent.Type {
@@ -88,6 +70,7 @@ func ballLeftField(newState *state.State) bool {
 	return false
 }
 
+// noTeamCanPlaceBall returns true if no team can or is allowed to place the ball
 func noTeamCanPlaceBall(s *state.State) bool {
 	return !s.TeamState[state.Team_YELLOW].BallPlacementAllowed() && !s.TeamState[state.Team_BLUE].BallPlacementAllowed()
 }

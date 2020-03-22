@@ -14,6 +14,7 @@ func (s *StateMachine) Continue(newState *state.State) (changes []Change) {
 		}
 	}
 	if substituteBots {
+		log.Print("Can not continue yet: A bot substitution was requested.")
 		return
 	}
 
@@ -28,4 +29,23 @@ func (s *StateMachine) Continue(newState *state.State) (changes []Change) {
 		changes = append(changes, s.newCommandChange(state.CommandHalt))
 	}
 	return
+}
+
+func (s *StateMachine) botSubstitutionIntentEventChange(byTeam state.Team) Change {
+	eventType := state.GameEventType_BOT_SUBSTITUTION
+	return Change{
+		ChangeType:   ChangeTypeAddGameEvent,
+		ChangeOrigin: changeOriginStateMachine,
+		AddGameEvent: &AddGameEvent{
+			GameEvent: state.GameEvent{
+				Type:   &eventType,
+				Origin: []string{changeOriginStateMachine},
+				Event: &state.GameEvent_BotSubstitution_{
+					BotSubstitution: &state.GameEvent_BotSubstitution{
+						ByTeam: &byTeam,
+					},
+				},
+			},
+		},
+	}
 }

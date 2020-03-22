@@ -45,8 +45,6 @@ func (s *BallPlacementPosDeterminer) Location() *state.Location {
 	case state.GameEventType_GOAL:
 		center := state.NewLocation(0.0, 0.0)
 		return s.validateLocation(&center)
-	case state.GameEventType_CHIPPED_GOAL:
-		return s.validateLocation(s.Event.GetChippedGoal().KickLocation)
 	case state.GameEventType_BOT_TIPPED_OVER:
 		return s.validateLocation(s.Event.GetBotTippedOver().Location)
 	case state.GameEventType_BOT_INTERFERED_PLACEMENT:
@@ -67,12 +65,8 @@ func (s *BallPlacementPosDeterminer) Location() *state.Location {
 		return s.validateLocation(s.Event.GetAttackerTooCloseToDefenseArea().Location)
 	case state.GameEventType_ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA:
 		return s.validateLocation(s.Event.GetAttackerTouchedBallInDefenseArea().Location)
-	case state.GameEventType_ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA:
-		return s.validateLocation(s.Event.GetAttackerTouchedOpponentInDefenseArea().Location)
 	case state.GameEventType_DEFENDER_TOO_CLOSE_TO_KICK_POINT:
 		return s.validateLocation(s.CurrentPlacementPos)
-	case state.GameEventType_DEFENDER_IN_DEFENSE_AREA_PARTIALLY:
-		return s.validateLocation(s.Event.GetDefenderInDefenseAreaPartially().Location)
 	case state.GameEventType_DEFENDER_IN_DEFENSE_AREA, state.GameEventType_MULTIPLE_CARDS:
 		teamInFavor := s.Event.ByTeam().Opposite()
 		location := state.NewLocation(0, 0)
@@ -92,6 +86,7 @@ func (s *BallPlacementPosDeterminer) Location() *state.Location {
 	}
 }
 
+// ballPlacementLocationGoalLine determines the placement location for the case that the ball left the field via goal line
 func (s *BallPlacementPosDeterminer) ballPlacementLocationGoalLine(lastBallLocation *state.Location) *state.Location {
 	var x float64
 	if s.isGoalKick() {
@@ -108,6 +103,7 @@ func (s *BallPlacementPosDeterminer) ballPlacementLocationGoalLine(lastBallLocat
 	return s.validateLocation(&placementLocation)
 }
 
+// isGoalKick returns true if a goal kick is required. This depends on where the ball left the field.
 func (s *BallPlacementPosDeterminer) isGoalKick() bool {
 	if s.Event.GetBallLeftFieldGoalLine() == nil {
 		// failed goal shot -> goal kick
@@ -124,6 +120,8 @@ func (s *BallPlacementPosDeterminer) isGoalKick() bool {
 	return false
 }
 
+// validateLocation will move the location to a valid location or will return the current placement pos
+// if given location is nil
 func (s *BallPlacementPosDeterminer) validateLocation(location *state.Location) *state.Location {
 	if location == nil {
 		return s.CurrentPlacementPos
@@ -135,6 +133,7 @@ func (s *BallPlacementPosDeterminer) validateLocation(location *state.Location) 
 	return location
 }
 
+// movePositionOutOfDefenseArea will move the given location outside of the defense area if required
 func (s *BallPlacementPosDeterminer) movePositionOutOfDefenseArea(location *state.Location) {
 	maxX := s.Geometry.FieldLength/2 - s.Geometry.DefenseAreaDepth - s.Geometry.PlacementOffsetDefenseArea
 	minY := s.Geometry.DefenseAreaWidth/2 + s.Geometry.PlacementOffsetDefenseArea
@@ -149,6 +148,7 @@ func (s *BallPlacementPosDeterminer) movePositionOutOfDefenseArea(location *stat
 	}
 }
 
+// movePositionInsideField will move the given location into the field if required
 func (s *BallPlacementPosDeterminer) movePositionInsideField(location *state.Location) {
 	maxX := s.Geometry.FieldLength/2 - s.Geometry.PlacementOffsetGoalLine
 	if math.Abs(float64(*location.X)) > maxX {

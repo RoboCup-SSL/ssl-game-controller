@@ -86,13 +86,6 @@ func (s *StateMachine) UpdateTeamState(newState *state.State, change *UpdateTeam
 	return
 }
 
-func (s *StateMachine) SwitchColor(newState *state.State) (changes []Change) {
-	yellow := newState.TeamState[state.Team_YELLOW]
-	newState.TeamState[state.Team_YELLOW] = newState.TeamState[state.Team_BLUE]
-	newState.TeamState[state.Team_BLUE] = yellow
-	return
-}
-
 func strToDuration(s string) (duration time.Duration, err error) {
 	duration = 0
 	err = nil

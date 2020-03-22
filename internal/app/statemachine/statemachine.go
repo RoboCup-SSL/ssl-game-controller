@@ -9,12 +9,14 @@ import (
 
 const changeOriginStateMachine = "StateMachine"
 
+// StateChange describes a change and its result together with a unique number
 type StateChange struct {
 	Id     int
 	State  state.State
 	Change Change
 }
 
+// StateMachine describes the state machine that translates changes into new states
 type StateMachine struct {
 	gameConfig config.Game
 	geometry   config.Geometry
@@ -22,6 +24,7 @@ type StateMachine struct {
 	rand       *rand.Rand
 }
 
+// NewStateMachine creates a new state machine
 func NewStateMachine(gameConfig config.Game) (s *StateMachine) {
 	s = new(StateMachine)
 	s.gameConfig = gameConfig
@@ -31,6 +34,7 @@ func NewStateMachine(gameConfig config.Game) (s *StateMachine) {
 	return
 }
 
+// UpdateGeometry sets a new geometry
 func (s *StateMachine) UpdateGeometry(geometry config.Geometry) {
 	s.geometry = geometry
 }
@@ -52,6 +56,7 @@ func loadStageTimes(gameConfig config.Game) (s map[state.Referee_Stage]time.Dura
 	return
 }
 
+// Process translates a state and a change into a new state and resulting new changes
 func (s *StateMachine) Process(currentState state.State, change Change) (newState state.State, newChanges []Change) {
 	newState = currentState
 	switch change.ChangeType {
@@ -71,14 +76,18 @@ func (s *StateMachine) Process(currentState state.State, change Change) (newStat
 		newChanges = s.UpdateConfig(&newState, change.UpdateConfig)
 	case ChangeTypeUpdateTeamState:
 		newChanges = s.UpdateTeamState(&newState, change.UpdateTeamState)
-	case ChangeTypeSwitchColor:
-		newChanges = s.SwitchColor(&newState)
+	case ChangeTypeSwitchColors:
+		newChanges = s.SwitchColors(&newState)
 	case ChangeTypeAddGameEvent:
 		newChanges = s.AddGameEvent(&newState, change.AddGameEvent)
 	case ChangeTypeStartBallPlacement:
 		newChanges = s.StartBallPlacement(&newState)
 	case ChangeTypeContinue:
 		newChanges = s.Continue(&newState)
+	case ChangeTypeAddProposedGameEvent:
+		newChanges = s.AddProposedGameEvent(&newState, change.AddProposedGameEvent)
+	case ChangeTypeRevert:
+		newChanges = s.Revert(&newState, change.Revert)
 	}
 	return
 }
