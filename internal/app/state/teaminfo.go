@@ -5,19 +5,23 @@ import (
 	"time"
 )
 
+// YellowCard describes a yellow card with unique id, remaining time and caused game event
 type YellowCard struct {
-	Id                int
-	TimeRemaining     time.Duration
-	CausedByGameEvent *GameEvent
-}
-type RedCard struct {
-	Id                int
-	CausedByGameEvent *GameEvent
+	Id                int           `json:"id" yaml:"id"`
+	TimeRemaining     time.Duration `json:"timeRemaining" yaml:"timeRemaining"`
+	CausedByGameEvent *GameEvent    `json:"causedByGameEvent" yaml:"causedByGameEvent"`
 }
 
+// RedCard describes a red card with unique id and caused game event
+type RedCard struct {
+	Id                int        `json:"id" yaml:"id"`
+	CausedByGameEvent *GameEvent `json:"causedByGameEvent" yaml:"causedByGameEvent"`
+}
+
+// Foul describes a foul with id and the caused game event
 type Foul struct {
-	Id                int
-	CausedByGameEvent *GameEvent
+	Id                int        `json:"id" yaml:"id"`
+	CausedByGameEvent *GameEvent `json:"causedByGameEvent" yaml:"causedByGameEvent"`
 }
 
 // TeamInfo about a team
@@ -38,7 +42,8 @@ type TeamInfo struct {
 	BotSubstitutionIntend        bool          `json:"botSubstitutionIntend" yaml:"botSubstitutionIntend"`
 }
 
-func newTeamInfo() (t TeamInfo) {
+func newTeamInfo() (t *TeamInfo) {
+	t = new(TeamInfo)
 	t.Name = ""
 	t.Goals = 0
 	t.Goalkeeper = 0
@@ -63,21 +68,19 @@ func (t TeamInfo) String() string {
 	return string(bytes)
 }
 
+// DeepCopy creates a deep copy of the struct
 func (t TeamInfo) DeepCopy() (c TeamInfo) {
 	c = t
 	copy(c.YellowCards, t.YellowCards)
 	return
 }
 
+// BallPlacementAllowed returns true, if the team has ball placement enabled and has not yet failed too often
 func (t *TeamInfo) BallPlacementAllowed() bool {
 	return t.CanPlaceBall && !t.BallPlacementFailuresReached
 }
 
-func (t *TeamInfo) ResetBallPlacementFailures() {
-	t.BallPlacementFailuresReached = false
-	t.BallPlacementFailures = 0
-}
-
+// AddYellowCard adds a new yellow card to the team
 func (t *TeamInfo) AddYellowCard(duration time.Duration, causedByGameEvent *GameEvent) {
 	id := 0
 	numCards := len(t.YellowCards)
@@ -92,6 +95,7 @@ func (t *TeamInfo) AddYellowCard(duration time.Duration, causedByGameEvent *Game
 	return
 }
 
+// AddRedCard adds a new red card to the team
 func (t *TeamInfo) AddRedCard(causedByGameEvent *GameEvent) {
 	id := 0
 	numCards := len(t.RedCards)
@@ -105,6 +109,7 @@ func (t *TeamInfo) AddRedCard(causedByGameEvent *GameEvent) {
 	return
 }
 
+// AddFoul adds a new foul to the team
 func (t *TeamInfo) AddFoul(causedByGameEvent *GameEvent) {
 	id := 0
 	numCards := len(t.Fouls)

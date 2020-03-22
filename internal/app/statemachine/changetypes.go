@@ -72,10 +72,10 @@ type AddRedCard struct {
 }
 
 type UpdateConfig struct {
-	Division          *config.Division                          `json:"division,omitempty" yaml:"division"`
-	FirstKickoffTeam  *state.Team                               `json:"firstKickoffTeam,omitempty" yaml:"firstKickoffTeam"`
-	AutoContinue      *bool                                     `json:"autoContinue,omitempty" yaml:"autoContinue"`
-	GameEventBehavior map[state.GameEventType]GameEventBehavior `json:"gameEventBehavior,omitempty" yaml:"gameEventBehavior"`
+	Division          *config.Division                                `json:"division,omitempty" yaml:"division"`
+	FirstKickoffTeam  *state.Team                                     `json:"firstKickoffTeam,omitempty" yaml:"firstKickoffTeam"`
+	AutoContinue      *bool                                           `json:"autoContinue,omitempty" yaml:"autoContinue"`
+	GameEventBehavior map[state.GameEventType]state.GameEventBehavior `json:"gameEventBehavior,omitempty" yaml:"gameEventBehavior"`
 }
 
 type UpdateTeamState struct {

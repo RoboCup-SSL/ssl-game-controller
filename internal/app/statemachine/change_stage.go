@@ -11,8 +11,10 @@ func (s *StateMachine) ChangeStage(newState *state.State, change *ChangeStage) (
 	// if not transiting from a pre stage
 	if !newState.Stage.IsPreStage() {
 		// reset ball placement failures
-		newState.TeamState[state.Team_YELLOW].ResetBallPlacementFailures()
-		newState.TeamState[state.Team_BLUE].ResetBallPlacementFailures()
+		for _, team := range state.BothTeams() {
+			newState.TeamState[team].BallPlacementFailuresReached = false
+			newState.TeamState[team].BallPlacementFailures = 0
+		}
 
 		// halt the game
 		changes = append(changes, Change{
@@ -33,7 +35,7 @@ func (s *StateMachine) ChangeStage(newState *state.State, change *ChangeStage) (
 	}
 
 	// update next command based on new stage
-	newState.NextCommand, newState.NextCommandFor = s.getNextCommandForStage(change.NewStage)
+	newState.NextCommand, newState.NextCommandFor = s.getNextCommandForStage(newState, change.NewStage)
 
 	// update new stage
 	newState.Stage = change.NewStage
@@ -41,14 +43,14 @@ func (s *StateMachine) ChangeStage(newState *state.State, change *ChangeStage) (
 	return
 }
 
-func (s *StateMachine) getNextCommandForStage(stage state.Stage) (command state.RefCommand, commandFor state.Team) {
+func (s *StateMachine) getNextCommandForStage(newState *state.State, stage state.Stage) (command state.RefCommand, commandFor state.Team) {
 	switch stage {
 	case state.StagePreGame, state.StageOvertimeFirstHalfPre:
 		command = state.CommandKickoff
-		commandFor = s.cfg.FirstKickoffTeam
+		commandFor = newState.FirstKickoffTeam
 	case state.StageSecondHalfPre, state.StageOvertimeSecondHalfPre:
 		command = state.CommandKickoff
-		commandFor = s.cfg.FirstKickoffTeam.Opposite()
+		commandFor = newState.FirstKickoffTeam.Opposite()
 	default:
 		command = ""
 		commandFor = state.Team_UNKNOWN

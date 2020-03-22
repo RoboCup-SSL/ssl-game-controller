@@ -14,7 +14,7 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 	gameEvent := change.GameEvent
 	byTeam := gameEvent.ByTeam()
 
-	if s.cfg.Division == config.DivA &&
+	if newState.Division == config.DivA &&
 		gameEvent.Type != nil &&
 		*gameEvent.Type == state.GameEventType_AIMLESS_KICK {
 		log.Println("Convert aimless kick to ball left field event, because we are in DivA")

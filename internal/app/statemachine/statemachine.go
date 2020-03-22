@@ -16,30 +16,44 @@ type StateChange struct {
 }
 
 type StateMachine struct {
-	cfg         *Config
-	cfgFilename string
-	gameConfig  config.Game
-	geometry    config.Geometry
-	stageTimes  map[state.Stage]time.Duration
-	rand        *rand.Rand
+	gameConfig config.Game
+	geometry   config.Geometry
+	stageTimes map[state.Stage]time.Duration
+	rand       *rand.Rand
 }
 
-func NewStateMachine(gameConfig config.Game, seed int64, cfgFilename string) (s *StateMachine) {
+func NewStateMachine(gameConfig config.Game, seed int64) (s *StateMachine) {
 	s = new(StateMachine)
-	s.cfg = DefaultConfig()
-	s.cfgFilename = cfgFilename
-	s.cfg.LoadFrom(s.cfgFilename)
-	s.cfg.Division = gameConfig.DefaultDivision
 	s.gameConfig = gameConfig
-	s.geometry = *gameConfig.DefaultGeometry[s.cfg.Division]
+	s.geometry = *gameConfig.DefaultGeometry[config.DivA]
 	s.stageTimes = loadStageTimes(gameConfig)
 	s.rand = rand.New(rand.NewSource(seed))
 	return
 }
 
-// Save saves the state machine config to a file
-func (s *StateMachine) Save() error {
-	return s.cfg.SaveTo(s.cfgFilename)
+func (s *StateMachine) UpdateGeometry(geometry config.Geometry) {
+	s.geometry = geometry
+}
+
+func (s *StateMachine) UpdateDivision(division config.Division) {
+	s.geometry = *s.gameConfig.DefaultGeometry[division]
+}
+
+// loadStageTimes loads the stage time durations from the game config into a map
+func loadStageTimes(gameConfig config.Game) (s map[state.Stage]time.Duration) {
+	s = map[state.Stage]time.Duration{}
+	for _, stage := range state.Stages {
+		s[stage] = 0
+	}
+	s[state.StageFirstHalf] = gameConfig.Normal.HalfDuration
+	s[state.StageHalfTime] = gameConfig.Normal.HalfTimeDuration
+	s[state.StageSecondHalf] = gameConfig.Normal.HalfDuration
+	s[state.StageOvertimeBreak] = gameConfig.Normal.BreakAfter
+	s[state.StageOvertimeFirstHalf] = gameConfig.Overtime.HalfDuration
+	s[state.StageOvertimeHalfTime] = gameConfig.Overtime.HalfTimeDuration
+	s[state.StageOvertimeSecondHalf] = gameConfig.Overtime.HalfDuration
+	s[state.StageShootoutBreak] = gameConfig.Overtime.BreakAfter
+	return
 }
 
 func (s *StateMachine) Process(currentState *state.State, change Change) (newState *state.State, newChanges []Change) {
@@ -58,7 +72,7 @@ func (s *StateMachine) Process(currentState *state.State, change Change) (newSta
 	case ChangeTypeYellowCardOver:
 		newChanges = s.YellowCardOver(newState)
 	case ChangeTypeUpdateConfig:
-		newChanges = s.UpdateConfig(change.UpdateConfig)
+		newChanges = s.UpdateConfig(newState, change.UpdateConfig)
 	case ChangeTypeUpdateTeamState:
 		newChanges = s.UpdateTeamState(newState, change.UpdateTeamState)
 	case ChangeTypeSwitchColor:

@@ -68,6 +68,7 @@ func (e *Engine) Start() error {
 		return errors.Wrap(err, "Could not load state store")
 	}
 	e.currentState = e.initialStateFromStore()
+	e.stateMachine.UpdateDivision(e.currentState.Division)
 	go e.processChanges()
 	return nil
 }
@@ -76,12 +77,8 @@ func (e *Engine) Stop() {
 	e.quit <- 0
 }
 
-func (e *Engine) LatestStateInStore() *state.State {
-	entry := e.stateStore.LatestEntry()
-	if entry != nil {
-		return entry.State
-	}
-	return nil
+func (e *Engine) CurrentState() *state.State {
+	return e.currentState.DeepCopy()
 }
 
 func (e *Engine) processChanges() {
@@ -89,9 +86,6 @@ func (e *Engine) processChanges() {
 		entry := statemachine.StateChange{}
 		select {
 		case <-e.quit:
-			if err := e.stateMachine.Save(); err != nil {
-				log.Printf("Could not save state machine config: %v", err)
-			}
 			return
 		case change := <-e.queue:
 			entry.Change = change

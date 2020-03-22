@@ -19,7 +19,7 @@ func (s *StateMachine) YellowCardOver(newState *state.State) (changes []Change) 
 
 func (s *StateMachine) updateMaxBots(newState *state.State) {
 	for _, team := range state.BothTeams() {
-		max := s.gameConfig.MaxBots[s.cfg.Division]
+		max := s.gameConfig.MaxBots[newState.Division]
 		yellowCards := activeYellowCards(newState.TeamState[team].YellowCards)
 		redCards := len(newState.TeamState[team].RedCards)
 		newState.TeamState[team].MaxAllowedBots = max - yellowCards - redCards

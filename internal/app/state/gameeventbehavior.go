@@ -1,4 +1,4 @@
-package statemachine
+package state
 
 type GameEventBehavior string
 

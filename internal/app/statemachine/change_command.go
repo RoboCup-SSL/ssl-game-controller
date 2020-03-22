@@ -10,7 +10,7 @@ func (s *StateMachine) NewCommand(newState *state.State, newCommand *NewCommand)
 	case state.CommandBallPlacement:
 		newState.CurrentActionTimeRemaining = s.gameConfig.BallPlacementTime
 	case state.CommandDirect, state.CommandIndirect:
-		newState.CurrentActionTimeRemaining = s.gameConfig.FreeKickTime[s.cfg.Division]
+		newState.CurrentActionTimeRemaining = s.gameConfig.FreeKickTime[newState.Division]
 	case state.CommandKickoff, state.CommandPenalty:
 		newState.CurrentActionTimeRemaining = s.gameConfig.GeneralTime
 	case state.CommandTimeout:
@@ -27,8 +27,8 @@ func (s *StateMachine) NewCommand(newState *state.State, newCommand *NewCommand)
 		}
 
 		// reset game events and proposals
-		newState.ProposedGameEvents = nil
-		newState.GameEvents = nil
+		newState.ProposedGameEvents = []state.ProposedGameEvent{}
+		newState.GameEvents = []state.GameEvent{}
 
 		// reset ball placement pos and follow ups
 		newState.PlacementPos = nil

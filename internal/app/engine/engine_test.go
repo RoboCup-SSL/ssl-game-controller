@@ -22,7 +22,7 @@ func Test_Engine(t *testing.T) {
 	}()
 
 	gameConfig := config.DefaultControllerConfig().Game
-	sm := statemachine.NewStateMachine(gameConfig, 0, "/tmp/foo")
+	sm := statemachine.NewStateMachine(gameConfig, 0)
 	engine := NewEngine(sm, tmpDir+"/store.json.stream")
 	hook := make(chan statemachine.StateChange)
 	engine.RegisterHook(hook)
@@ -43,7 +43,7 @@ func Test_Engine(t *testing.T) {
 	wantNewState := state.NewState()
 	wantNewState.Command = state.CommandHalt
 
-	gotNewState := engine.LatestStateInStore()
+	gotNewState := engine.currentState
 	diffs := deep.Equal(gotNewState, &wantNewState)
 	if len(diffs) > 0 {
 		t.Error("States differ: ", diffs)
