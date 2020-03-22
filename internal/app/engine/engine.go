@@ -83,11 +83,11 @@ func (e *Engine) CurrentState() *state.State {
 
 func (e *Engine) processChanges() {
 	for {
-		entry := statemachine.StateChange{}
 		select {
 		case <-e.quit:
 			return
 		case change := <-e.queue:
+			entry := statemachine.StateChange{}
 			entry.Change = change
 			var newChanges []statemachine.Change
 			entry.State, newChanges = e.stateMachine.Process(e.currentState, change)
@@ -103,11 +103,11 @@ func (e *Engine) processChanges() {
 			if err := e.stateStore.Add(store.Entry(entry)); err != nil {
 				log.Println("Could not add new state to store: ", err)
 			}
+			for _, hook := range e.hooks {
+				hook <- entry
+			}
 		case <-time.After(10 * time.Millisecond):
 			e.Tick()
-		}
-		for _, hook := range e.hooks {
-			hook <- entry
 		}
 	}
 }
