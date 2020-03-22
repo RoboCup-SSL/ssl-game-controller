@@ -8,7 +8,7 @@ import (
 
 type BallPlacementPosDeterminer struct {
 	Event               *state.GameEvent
-	Geometry            *config.Geometry
+	Geometry            config.Geometry
 	CurrentPlacementPos *state.Location
 	OnPositiveHalf      map[state.Team]bool
 }

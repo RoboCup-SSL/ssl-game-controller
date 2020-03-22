@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
-	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/controller"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/gc"
 	"github.com/gobuffalo/packr"
 	"log"
 	"net/http"
@@ -41,10 +41,10 @@ func setupGameController() {
 		cfg.TimeAcquisitionMode = config.TimeAcquisitionMode(*timeAcquisitionMode)
 	}
 
-	gameController := controller.NewGameController(cfg)
-	gameController.Run()
+	gameController := gc.NewGameController(cfg)
+	gameController.Start()
 	// serve the bidirectional web socket
-	http.HandleFunc("/api/control", gameController.ApiServer.WsHandler)
+	http.HandleFunc("/api/control", gameController.ApiServer().WsHandler)
 }
 
 func setupUi() {

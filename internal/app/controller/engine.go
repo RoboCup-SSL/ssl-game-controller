@@ -84,7 +84,7 @@ func NewEngine(config config.Game, seed int64) (e Engine) {
 	e.config = config
 	e.GcState = NewGameControllerState()
 	e.GcState.Division = e.config.DefaultDivision
-	e.Geometry = *e.config.DefaultGeometry[e.GcState.Division]
+	e.Geometry = e.config.DefaultGeometry[e.GcState.Division]
 	e.PersistentState = new(PersistentState)
 	e.loadStages()
 	e.ResetGame()

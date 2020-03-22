@@ -21,8 +21,11 @@ type ServerConnection struct {
 	gcEngine *engine.Engine
 }
 
-type EventConsumer interface {
-	OnNewEvent(event Event)
+func NewServer(gcEngine *engine.Engine) (s *Server) {
+	s = new(Server)
+	s.connections = []*ServerConnection{}
+	s.gcEngine = gcEngine
+	return
 }
 
 // WsHandler handles incoming web socket connections

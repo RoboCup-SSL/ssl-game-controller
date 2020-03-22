@@ -1,6 +1,7 @@
 package engine
 
 import (
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/store"
@@ -13,6 +14,7 @@ import (
 const changeOriginEngine = "Engine"
 
 type Engine struct {
+	gameConfig      config.Game
 	stateStore      *store.Store
 	currentState    *state.State
 	stateMachine    *statemachine.StateMachine
@@ -25,11 +27,11 @@ type Engine struct {
 	ballPlaced      *bool
 }
 
-func NewEngine(stateMachine *statemachine.StateMachine, storeFilename string) (s *Engine) {
+func NewEngine(gameConfig config.Game) (s *Engine) {
 	s = new(Engine)
-	s.stateStore = store.NewStore(storeFilename)
+	s.stateStore = store.NewStore(gameConfig.StateStoreFile)
 	s.currentState = &state.State{}
-	s.stateMachine = stateMachine
+	s.stateMachine = statemachine.NewStateMachine(gameConfig)
 	s.queue = make(chan statemachine.Change, 100)
 	s.quit = make(chan int)
 	s.hooks = []chan statemachine.StateChange{}
@@ -68,7 +70,7 @@ func (e *Engine) Start() error {
 		return errors.Wrap(err, "Could not load state store")
 	}
 	e.currentState = e.initialStateFromStore()
-	e.stateMachine.UpdateDivision(e.currentState.Division)
+	e.stateMachine.UpdateGeometry(e.gameConfig.DefaultGeometry[e.currentState.Division])
 	go e.processChanges()
 	return nil
 }

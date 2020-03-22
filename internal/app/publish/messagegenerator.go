@@ -23,12 +23,12 @@ func NewMessageGenerator() (m *MessageGenerator) {
 }
 
 // GenerateRefereeMessages generates a list of referee messages that result from the given state change
-func (p *MessageGenerator) GenerateRefereeMessages(change statemachine.StateChange) (rs []*state.Referee) {
+func (g *MessageGenerator) GenerateRefereeMessages(change statemachine.StateChange) (rs []*state.Referee) {
 	// send the GOAL command based on the team score for compatibility with old behavior
 	if change.Change.ChangeType == statemachine.ChangeTypeAddGameEvent &&
 		*change.Change.AddGameEvent.GameEvent.Type == state.GameEventType_GOAL {
-		p.updateCommand()
-		refereeMsg := p.stateToRefereeMessage(change.State)
+		g.updateCommand()
+		refereeMsg := g.StateToRefereeMessage(change.State)
 		if change.Change.AddGameEvent.GameEvent.ByTeam() == state.Team_YELLOW {
 			*refereeMsg.Command = state.Referee_GOAL_YELLOW
 		} else {
@@ -38,27 +38,27 @@ func (p *MessageGenerator) GenerateRefereeMessages(change statemachine.StateChan
 	}
 
 	if change.Change.ChangeType == statemachine.ChangeTypeNewCommand {
-		p.updateCommand()
+		g.updateCommand()
 	}
 
-	rs = append(rs, p.stateToRefereeMessage(change.State))
+	rs = append(rs, g.StateToRefereeMessage(change.State))
 
 	return
 }
 
-func (p *MessageGenerator) updateCommand() {
-	p.commandCounter++
-	p.commandTimestamp = uint64(time.Now().UnixNano() / 1000)
+func (g *MessageGenerator) updateCommand() {
+	g.commandCounter++
+	g.commandTimestamp = uint64(time.Now().UnixNano() / 1000)
 }
 
-func (p *MessageGenerator) stateToRefereeMessage(matchState *state.State) (r *state.Referee) {
+func (g *MessageGenerator) StateToRefereeMessage(matchState *state.State) (r *state.Referee) {
 	r = newRefereeMessage()
 	r.DesignatedPosition = mapLocation(matchState.PlacementPos)
 	r.ProposedGameEvents = mapProposedGameEvents(matchState.ProposedGameEvents)
 
 	*r.Command = mapCommand(matchState.Command, matchState.CommandFor)
-	*r.CommandCounter = p.commandCounter
-	*r.CommandTimestamp = p.commandTimestamp
+	*r.CommandCounter = g.commandCounter
+	*r.CommandTimestamp = g.commandTimestamp
 	*r.PacketTimestamp = uint64(time.Now().UnixNano() / 1000)
 	*r.Stage = mapStage(matchState.Stage)
 	*r.StageTimeLeft = int32(matchState.StageTimeLeft.Nanoseconds() / 1000)

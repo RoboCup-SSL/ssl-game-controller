@@ -39,7 +39,7 @@ type Game struct {
 	Normal                    Special                    `yaml:"normal"`
 	Overtime                  Special                    `yaml:"overtime"`
 	TeamChoiceTimeout         time.Duration              `yaml:"team-choice-timeout"`
-	DefaultGeometry           map[Division]*Geometry     `yaml:"default-geometry"`
+	DefaultGeometry           map[Division]Geometry      `yaml:"default-geometry"`
 	MultipleCardStep          int                        `yaml:"multiple-card-step"`
 	MultipleFoulStep          int                        `yaml:"multiple-foul-step"`
 	MultiplePlacementFailures int                        `yaml:"multiple-placement-failures"`
@@ -49,6 +49,7 @@ type Game struct {
 	GeneralTime               time.Duration              `yaml:"general-time"`
 	BallPlacementTime         time.Duration              `yaml:"ball-placement-time"`
 	BallPlacementTimeTopUp    time.Duration              `yaml:"ball-placement-time-top-up"`
+	StateStoreFile            string                     `yaml:"state-store-file"`
 }
 
 // Network holds configs for network communication
@@ -88,7 +89,7 @@ type Controller struct {
 	Network             Network             `yaml:"network"`
 	Game                Game                `yaml:"game"`
 	Server              Server              `yaml:"server"`
-	TimeAcquisitionMode TimeAcquisitionMode `yaml:"timeAcquisitionMode"`
+	TimeAcquisitionMode TimeAcquisitionMode `yaml:"time-acquisition-mode"`
 }
 
 type TimeAcquisitionMode string
@@ -140,6 +141,7 @@ func (c *Controller) WriteTo(fileName string) (err error) {
 func DefaultControllerConfig() (c Controller) {
 	c.Network.PublishAddress = "224.5.23.1:10003"
 	c.Network.VisionAddress = "224.5.23.2:10006"
+	c.Game.StateStoreFile = "state-store.json.stream"
 	c.Game.YellowCardDuration = 2 * time.Minute
 	c.Game.TeamChoiceTimeout = 200 * time.Millisecond
 	c.Game.MultipleCardStep = 3
@@ -173,28 +175,29 @@ func DefaultControllerConfig() (c Controller) {
 	c.Server.Team.TrustedKeysDir = "config/trusted_keys/team"
 	c.Server.Ci.Address = ":10009"
 
-	c.Game.DefaultGeometry = map[Division]*Geometry{}
-	c.Game.DefaultGeometry[DivA] = new(Geometry)
-	c.Game.DefaultGeometry[DivA].FieldLength = 12
-	c.Game.DefaultGeometry[DivA].FieldWidth = 9
-	c.Game.DefaultGeometry[DivA].DefenseAreaDepth = 1.2
-	c.Game.DefaultGeometry[DivA].DefenseAreaWidth = 2.4
-	c.Game.DefaultGeometry[DivA].PenaltyKickDistToGoal = 8.0
-	c.Game.DefaultGeometry[DivA].PlacementOffsetGoalLine = 0.2
-	c.Game.DefaultGeometry[DivA].PlacementOffsetGoalLineGoalKick = 1.0
-	c.Game.DefaultGeometry[DivA].PlacementOffsetTouchLine = 0.2
-	c.Game.DefaultGeometry[DivA].PlacementOffsetDefenseArea = 1.0
-
-	c.Game.DefaultGeometry[DivB] = new(Geometry)
-	c.Game.DefaultGeometry[DivB].FieldLength = 9
-	c.Game.DefaultGeometry[DivB].FieldWidth = 6
-	c.Game.DefaultGeometry[DivB].DefenseAreaDepth = 1
-	c.Game.DefaultGeometry[DivB].DefenseAreaWidth = 2
-	c.Game.DefaultGeometry[DivB].PenaltyKickDistToGoal = 6.0
-	c.Game.DefaultGeometry[DivB].PlacementOffsetGoalLine = 0.2
-	c.Game.DefaultGeometry[DivB].PlacementOffsetGoalLineGoalKick = 1.0
-	c.Game.DefaultGeometry[DivB].PlacementOffsetTouchLine = 0.2
-	c.Game.DefaultGeometry[DivB].PlacementOffsetDefenseArea = 1.0
+	c.Game.DefaultGeometry = map[Division]Geometry{}
+	c.Game.DefaultGeometry[DivA] = Geometry{
+		FieldLength:                     12,
+		FieldWidth:                      9,
+		DefenseAreaDepth:                1.2,
+		DefenseAreaWidth:                2.4,
+		PenaltyKickDistToGoal:           8.0,
+		PlacementOffsetTouchLine:        0.2,
+		PlacementOffsetGoalLine:         0.2,
+		PlacementOffsetGoalLineGoalKick: 1.0,
+		PlacementOffsetDefenseArea:      1.0,
+	}
+	c.Game.DefaultGeometry[DivB] = Geometry{
+		FieldLength:                     9,
+		FieldWidth:                      6,
+		DefenseAreaDepth:                1,
+		DefenseAreaWidth:                2,
+		PenaltyKickDistToGoal:           6.0,
+		PlacementOffsetTouchLine:        0.2,
+		PlacementOffsetGoalLine:         0.2,
+		PlacementOffsetGoalLineGoalKick: 1.0,
+		PlacementOffsetDefenseArea:      1.0,
+	}
 
 	c.Game.MaxBots = map[Division]int{DivA: 8, DivB: 6}
 

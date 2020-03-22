@@ -22,21 +22,17 @@ type StateMachine struct {
 	rand       *rand.Rand
 }
 
-func NewStateMachine(gameConfig config.Game, seed int64) (s *StateMachine) {
+func NewStateMachine(gameConfig config.Game) (s *StateMachine) {
 	s = new(StateMachine)
 	s.gameConfig = gameConfig
-	s.geometry = *gameConfig.DefaultGeometry[config.DivA]
+	s.geometry = gameConfig.DefaultGeometry[config.DivA]
 	s.stageTimes = loadStageTimes(gameConfig)
-	s.rand = rand.New(rand.NewSource(seed))
+	s.rand = rand.New(rand.NewSource(time.Now().Unix()))
 	return
 }
 
 func (s *StateMachine) UpdateGeometry(geometry config.Geometry) {
 	s.geometry = geometry
-}
-
-func (s *StateMachine) UpdateDivision(division config.Division) {
-	s.geometry = *s.gameConfig.DefaultGeometry[division]
 }
 
 // loadStageTimes loads the stage time durations from the game config into a map

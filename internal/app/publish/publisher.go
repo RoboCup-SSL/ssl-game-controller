@@ -1,11 +1,13 @@
 package publish
 
 import (
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/engine"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"github.com/golang/protobuf/proto"
 	"log"
 	"net"
+	"time"
 )
 
 const maxDatagramSize = 8192
@@ -13,17 +15,17 @@ const maxDatagramSize = 8192
 // Publisher can publish state and commands to the teams
 type Publisher struct {
 	address    string
+	gcEngine   *engine.Engine
 	conn       *net.UDPConn
-	queue      chan statemachine.StateChange
 	quit       chan int
 	messageGen MessageGenerator
 }
 
 // NewPublisher creates a new publisher that publishes referee messages via UDP to the teams
-func NewPublisher(address string) (p *Publisher) {
+func NewPublisher(gcEngine *engine.Engine, address string) (p *Publisher) {
 	p = new(Publisher)
 	p.address = address
-	p.queue = make(chan statemachine.StateChange, 10)
+	p.gcEngine = gcEngine
 	p.quit = make(chan int)
 
 	return
@@ -38,11 +40,6 @@ func (p *Publisher) Start() {
 // Stop stops listening on state changes
 func (p *Publisher) Stop() {
 	p.quit <- 0
-}
-
-// Queue returns the queue that listens for new state changes
-func (p *Publisher) Queue() chan statemachine.StateChange {
-	return p.queue
 }
 
 func (p *Publisher) connect() {
@@ -74,16 +71,23 @@ func (p *Publisher) disconnect() {
 }
 
 func (p *Publisher) publish() {
+	var hook chan statemachine.StateChange
+	p.gcEngine.RegisterHook(hook)
+	defer p.gcEngine.UnregisterHook(hook)
+
 	for {
 		select {
 		case <-p.quit:
 			p.disconnect()
 			return
-		case change := <-p.queue:
+		case change := <-hook:
 			refereeMessages := p.messageGen.GenerateRefereeMessages(change)
 			for _, refereeMsg := range refereeMessages {
 				p.sendMessage(refereeMsg)
 			}
+		case <-time.After(25 * time.Millisecond):
+			refMsg := p.messageGen.StateToRefereeMessage(p.gcEngine.CurrentState())
+			p.sendMessage(refMsg)
 		}
 	}
 }
