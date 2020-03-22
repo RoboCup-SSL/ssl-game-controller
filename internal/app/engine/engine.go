@@ -13,6 +13,7 @@ import (
 
 const changeOriginEngine = "Engine"
 
+// Engine listens for changes and runs ticks to update the current state using the state machine
 type Engine struct {
 	gameConfig      config.Game
 	stateStore      *store.Store
@@ -27,6 +28,7 @@ type Engine struct {
 	ballPlaced      *bool
 }
 
+// NewEngine creates a new engine
 func NewEngine(gameConfig config.Game) (s *Engine) {
 	s = new(Engine)
 	s.stateStore = store.NewStore(gameConfig.StateStoreFile)
@@ -39,14 +41,17 @@ func NewEngine(gameConfig config.Game) (s *Engine) {
 	return
 }
 
+// Enqueue adds the change to the change queue
 func (e *Engine) Enqueue(change statemachine.Change) {
 	e.queue <- change
 }
 
+// RegisterHook registers given hook for post processing after each change
 func (e *Engine) RegisterHook(hook chan statemachine.StateChange) {
 	e.hooks = append(e.hooks, hook)
 }
 
+// UnregisterHook unregisters hooks that were registered before
 func (e *Engine) UnregisterHook(hook chan statemachine.StateChange) bool {
 	for i, h := range e.hooks {
 		if h == hook {
@@ -61,6 +66,7 @@ func (e *Engine) UnregisterHook(hook chan statemachine.StateChange) bool {
 	return false
 }
 
+// Start loads the state store and runs a go routine that consumes the change queue
 func (e *Engine) Start() error {
 	if err := e.stateStore.Open(); err != nil {
 		return errors.Wrap(err, "Could not open state store")
@@ -74,14 +80,17 @@ func (e *Engine) Start() error {
 	return nil
 }
 
+// Stop stops the go routine that processes the change queue
 func (e *Engine) Stop() {
 	e.quit <- 0
 }
 
+// CurrentState returns the current state
 func (e *Engine) CurrentState() state.State {
 	return e.currentState
 }
 
+// processChanges listens for new changes on the queue and triggers ticks when there are no changes
 func (e *Engine) processChanges() {
 	for {
 		select {
@@ -113,7 +122,7 @@ func (e *Engine) processChanges() {
 	}
 }
 
-// currentState gets the current state or returns an empty default state
+// initialStateFromStore gets the current state or returns a new default state
 func (e *Engine) initialStateFromStore() state.State {
 	latestEntry := e.stateStore.LatestEntry()
 	if latestEntry == nil {
@@ -122,6 +131,7 @@ func (e *Engine) initialStateFromStore() state.State {
 	return latestEntry.State
 }
 
+// postProcessChange performs synchronous post processing steps
 func (e *Engine) postProcessChange(change statemachine.Change) {
 	switch change.ChangeType {
 	case statemachine.ChangeTypeChangeStage:

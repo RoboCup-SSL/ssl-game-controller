@@ -14,12 +14,14 @@ import (
 
 type Entry statemachine.StateChange
 
+// Store streams entries into a file store
 type Store struct {
 	filename string
 	file     *os.File
 	entries  []*Entry
 }
 
+// NewStore creates a new store
 func NewStore(filename string) (s *Store) {
 	s = new(Store)
 	s.filename = filename
@@ -27,10 +29,12 @@ func NewStore(filename string) (s *Store) {
 	return
 }
 
+// States returns a list of all entries
 func (s *Store) States() []*Entry {
 	return s.entries
 }
 
+// LatestEntry returns the latest entry in the store or nil if there is none yet
 func (s *Store) LatestEntry() *Entry {
 	if len(s.entries) > 0 {
 		return s.entries[len(s.entries)-1]
@@ -48,7 +52,7 @@ func (s *Store) Open() error {
 	return nil
 }
 
-// CloseOnExit makes sure to close the file when program exists
+// CloseOnExit makes sure to close the file when program exits
 func (s *Store) CloseOnExit() {
 	var gracefulStop = make(chan os.Signal)
 	signal.Notify(gracefulStop, syscall.SIGTERM)
@@ -62,6 +66,7 @@ func (s *Store) CloseOnExit() {
 	}()
 }
 
+// Close closes the store and underlying file
 func (s *Store) Close() error {
 	if s.file == nil {
 		return nil
@@ -73,6 +78,7 @@ func (s *Store) Close() error {
 	return nil
 }
 
+// Load loads all entries from the store file into memory
 func (s *Store) Load() error {
 	s.entries = []*Entry{}
 	scanner := bufio.NewScanner(s.file)
@@ -92,6 +98,7 @@ func (s *Store) Load() error {
 	return nil
 }
 
+// Add add a new entry to the store
 func (s *Store) Add(entry Entry) error {
 	entry.Id = len(s.entries)
 	s.entries = append(s.entries, &entry)
@@ -116,6 +123,7 @@ func (s *Store) Add(entry Entry) error {
 	return nil
 }
 
+// Backup copies the current store file to the given backup file
 func (s *Store) Backup(backupFilename string) error {
 	if s.file == nil {
 		return errors.New("Store is not open")
