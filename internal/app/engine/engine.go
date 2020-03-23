@@ -20,7 +20,6 @@ type Engine struct {
 	currentState    state.State
 	stateMachine    *statemachine.StateMachine
 	queue           chan statemachine.Change
-	quit            chan int
 	hooks           []chan statemachine.StateChange
 	timeProvider    timer.TimeProvider
 	lastTimeUpdate  time.Time
@@ -34,7 +33,6 @@ func NewEngine(gameConfig config.Game) (s *Engine) {
 	s.stateStore = store.NewStore(gameConfig.StateStoreFile)
 	s.stateMachine = statemachine.NewStateMachine(gameConfig)
 	s.queue = make(chan statemachine.Change, 100)
-	s.quit = make(chan int)
 	s.hooks = []chan statemachine.StateChange{}
 	s.timeProvider = func() time.Time { return time.Now() }
 	s.lastTimeUpdate = s.timeProvider()
@@ -77,12 +75,26 @@ func (e *Engine) Start() error {
 	e.currentState = e.initialStateFromStore()
 	e.stateMachine.UpdateGeometry(e.gameConfig.DefaultGeometry[e.currentState.Division])
 	go e.processChanges()
+	eventType := state.GameEventType_GOAL
+	byTeam := state.Team_YELLOW
+	e.Enqueue(statemachine.Change{
+		AddGameEvent: &statemachine.AddGameEvent{
+			GameEvent: state.GameEvent{
+				Type: &eventType,
+				Event: &state.GameEvent_Goal_{
+					Goal: &state.GameEvent_Goal{
+						ByTeam: &byTeam,
+					},
+				},
+			},
+		},
+	})
 	return nil
 }
 
 // Stop stops the go routine that processes the change queue
 func (e *Engine) Stop() {
-	e.quit <- 0
+	close(e.queue)
 }
 
 // CurrentState returns the current state
@@ -94,9 +106,10 @@ func (e *Engine) CurrentState() state.State {
 func (e *Engine) processChanges() {
 	for {
 		select {
-		case <-e.quit:
-			return
-		case change := <-e.queue:
+		case change, ok := <-e.queue:
+			if !ok {
+				return
+			}
 			entry := statemachine.StateChange{}
 			entry.Change = change
 			var newChanges []statemachine.Change

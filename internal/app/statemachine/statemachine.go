@@ -3,6 +3,7 @@ package statemachine
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
+	"log"
 	"math/rand"
 	"time"
 )
@@ -59,6 +60,7 @@ func loadStageTimes(gameConfig config.Game) (s map[state.Referee_Stage]time.Dura
 // Process translates a state and a change into a new state and resulting new changes
 func (s *StateMachine) Process(currentState state.State, change Change) (newState state.State, newChanges []Change) {
 	newState = currentState.DeepCopy()
+	log.Printf("Processing change: %v", change)
 	if change.NewCommand != nil {
 		newChanges = s.NewCommand(&newState, change.NewCommand)
 	}

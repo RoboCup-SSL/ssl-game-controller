@@ -71,9 +71,12 @@ func (p *Publisher) disconnect() {
 }
 
 func (p *Publisher) publish() {
-	var hook chan statemachine.StateChange
+	hook := make(chan statemachine.StateChange)
 	p.gcEngine.RegisterHook(hook)
-	defer p.gcEngine.UnregisterHook(hook)
+	defer func() {
+		p.gcEngine.UnregisterHook(hook)
+		close(hook)
+	}()
 
 	for {
 		select {

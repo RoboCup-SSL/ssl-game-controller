@@ -114,8 +114,30 @@ const router = new VueRouter({
 });
 
 // create root vue
-new Vue({
+const vueApp = new Vue({
     render: h => h(App),
     store,
     router,
 }).$mount('#app');
+
+
+export const submitChange = function (change) {
+    vueApp.$socket.sendObj({"change": change})
+};
+
+export const submitNewCommand = function (command, commandFor) {
+    submitChange({
+        NewCommand: {
+            command,
+            commandFor
+        }
+    })
+};
+
+export const submitGameEvent = function (gameEvent) {
+    submitChange({
+        AddGameEvent: {
+            gameEvent
+        }
+    })
+};

@@ -56,13 +56,14 @@
 </template>
 
 <script>
-    import {isNonPausedStage, isPreStage} from "../../refereeState";
+    import {isNonPausedStage, isPreStage, TEAM_UNKNOWN} from "../../refereeState";
+    import {submitNewCommand} from "../../main";
 
     export default {
         name: "ManualControlCommon",
         methods: {
             send: function (command) {
-                this.$socket.sendObj({command: {commandType: command}})
+                submitNewCommand(command, TEAM_UNKNOWN);
             },
         },
         computed: {
@@ -70,7 +71,7 @@
                 return {
                     'esc': () => {
                         if (!this.$refs.btnHalt.disabled) {
-                            this.send('halt')
+                            submitNewCommand('halt', TEAM_UNKNOWN);
                         }
                     }
                 }
@@ -79,7 +80,7 @@
                 return {
                     'ctrl+alt+numpad 0': () => {
                         if (!this.$refs.btnStop.disabled) {
-                            this.send('stop')
+                            submitNewCommand('stop', TEAM_UNKNOWN);
                         }
                     }
                 }
@@ -88,7 +89,7 @@
                 return {
                     'ctrl+alt+numpad 5': () => {
                         if (!this.$refs.btnForceStart.disabled) {
-                            this.send('forceStart')
+                            submitNewCommand('forceStart', TEAM_UNKNOWN);
                         }
                     }
                 }
@@ -97,7 +98,7 @@
                 return {
                     'ctrl+alt+numpad 8': () => {
                         if (!this.$refs.btnNormalStart.disabled) {
-                            this.send('normalStart')
+                            submitNewCommand('normalStart', TEAM_UNKNOWN);
                         }
                     }
                 }

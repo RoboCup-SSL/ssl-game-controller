@@ -1,6 +1,7 @@
 package statemachine
 
 import (
+	"encoding/json"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 )
@@ -97,4 +98,13 @@ type SwitchColors struct {
 
 type Revert struct {
 	StateId int `json:"stateId" yaml:"stateId"`
+}
+
+// String converts the change into a json string
+func (c Change) String() string {
+	bytes, e := json.Marshal(c)
+	if e != nil {
+		return e.Error()
+	}
+	return string(bytes)
 }

@@ -7,7 +7,8 @@
 </template>
 
 <script>
-    import {isNonPausedStage, isPreStage} from "../../refereeState";
+    import {isNonPausedStage, isPreStage, TEAM_UNKNOWN} from "../../refereeState";
+    import {submitNewCommand} from "../../main";
 
     export default {
         name: "ControlTeamTimeout",
@@ -29,9 +30,9 @@
         methods: {
             toggleTimeout() {
                 if (this.timeoutRunning) {
-                    this.$socket.sendObj({'command': {'commandType': 'stop'}});
+                    submitNewCommand('stop', TEAM_UNKNOWN);
                 } else {
-                    this.$socket.sendObj({'command': {'commandType': 'timeout', 'forTeam': this.teamColor}});
+                    submitNewCommand('timeout', this.teamColor);
                 }
             }
         }

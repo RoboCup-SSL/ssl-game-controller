@@ -54,9 +54,12 @@ func (a *Server) WsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *ServerConnection) publish() {
-	var hook chan statemachine.StateChange
+	hook := make(chan statemachine.StateChange)
 	s.gcEngine.RegisterHook(hook)
-	defer s.gcEngine.UnregisterHook(hook)
+	defer func() {
+		s.gcEngine.UnregisterHook(hook)
+		close(hook)
+	}()
 
 	s.publishState(s.gcEngine.CurrentState())
 
@@ -130,14 +133,16 @@ func (a *Server) listenForNewEvents(conn *websocket.Conn) {
 }
 
 func (a *Server) handleNewEventMessage(b []byte) {
-	event := Event{}
-	err := json.Unmarshal(b, &event)
+	in := Input{}
+	err := json.Unmarshal(b, &in)
 	if err != nil {
-		log.Println("Could not read event:", string(b), err)
+		log.Println("Could not read input:", string(b), err)
 		return
 	}
 
-	// TODO consume event
+	if in.Change != nil {
+		a.gcEngine.Enqueue(*in.Change)
+	}
 }
 
 func stateChanged(s1, s2 state.State) bool {
