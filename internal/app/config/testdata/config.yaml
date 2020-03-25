@@ -20,10 +20,10 @@ game:
   multiple-foul-step: 3
   multiple-placement-failures: 5
   auto-ref-proposal-timeout: 5s
-  default-division: DivA
+  default-division: DIV_A
   free-kick-time:
-    DivA: 5s
-    DivB: 10s
+    DIV_A: 5s
+    DIV_B: 10s
   general-time: 10s
   ball-placement-time: 30s
   ball-placement-time-top-up: 10s
@@ -41,7 +41,7 @@ game:
     break-after: 2m
   team-choice-timeout: 200ms
   default-geometry:
-    DivA:
+    DIV_A:
       field-length: 12.0
       field-width: 9.0
       defense-area-depth: 1.2
@@ -51,7 +51,7 @@ game:
       placement-offset-goal-line: 0.2
       placement-offset-goal-line-goal-kick: 1.0
       placement-offset-defense-area: 1.0
-    DivB:
+    DIV_B:
       field-length: 9.0
       field-width: 6.0
       defense-area-depth: 1.0
@@ -62,5 +62,5 @@ game:
       placement-offset-goal-line-goal-kick: 1.0
       placement-offset-defense-area: 1.0
   max-bots:
-    DivA: 8
-    DivB: 6
+    DIV_A: 8
+    DIV_B: 6

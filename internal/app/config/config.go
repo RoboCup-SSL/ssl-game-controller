@@ -15,7 +15,7 @@ type Special struct {
 	HalfDuration     time.Duration `yaml:"half-duration"`
 	HalfTimeDuration time.Duration `yaml:"half-time-duration"`
 	TimeoutDuration  time.Duration `yaml:"timeout-duration"`
-	Timeouts         int           `yaml:"timeouts"`
+	Timeouts         int32         `yaml:"timeouts"`
 	BreakAfter       time.Duration `yaml:"break-after"`
 }
 
@@ -40,10 +40,10 @@ type Game struct {
 	Overtime                  Special                    `yaml:"overtime"`
 	TeamChoiceTimeout         time.Duration              `yaml:"team-choice-timeout"`
 	DefaultGeometry           map[Division]Geometry      `yaml:"default-geometry"`
-	MultipleCardStep          int                        `yaml:"multiple-card-step"`
-	MultipleFoulStep          int                        `yaml:"multiple-foul-step"`
-	MultiplePlacementFailures int                        `yaml:"multiple-placement-failures"`
-	MaxBots                   map[Division]int           `yaml:"max-bots"`
+	MultipleCardStep          int32                      `yaml:"multiple-card-step"`
+	MultipleFoulStep          int32                      `yaml:"multiple-foul-step"`
+	MultiplePlacementFailures int32                      `yaml:"multiple-placement-failures"`
+	MaxBots                   map[Division]int32         `yaml:"max-bots"`
 	AutoRefProposalTimeout    time.Duration              `yaml:"auto-ref-proposal-timeout"`
 	FreeKickTime              map[Division]time.Duration `yaml:"free-kick-time"`
 	GeneralTime               time.Duration              `yaml:"general-time"`
@@ -199,7 +199,7 @@ func DefaultControllerConfig() (c Controller) {
 		PlacementOffsetDefenseArea:      1.0,
 	}
 
-	c.Game.MaxBots = map[Division]int{DivA: 8, DivB: 6}
+	c.Game.MaxBots = map[Division]int32{DivA: 8, DivB: 6}
 
 	c.TimeAcquisitionMode = TimeAcquisitionModeSystem
 

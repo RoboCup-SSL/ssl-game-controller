@@ -21,3 +21,6 @@ protoc -I"./proto" -I"$GOPATH/src" --go_out=$GOPATH/src proto/ssl_referee.proto
 protoc -I"./proto" -I"$GOPATH/src" --go_out=$GOPATH/src proto/ssl_game_controller_common.proto
 protoc -I"./proto" -I"$GOPATH/src" --go_out=$GOPATH/src proto/ssl_game_controller_auto_ref.proto
 protoc -I"./proto" -I"$GOPATH/src" --go_out=$GOPATH/src proto/ssl_game_controller_team.proto
+
+protoc -I"./proto" -I"$GOPATH/src" --go_out=$GOPATH/src proto/ssl_game_controller_state.proto
+protoc -I"./proto" -I"$GOPATH/src" --go_out=$GOPATH/src proto/ssl_game_controller_change.proto

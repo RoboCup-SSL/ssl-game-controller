@@ -3,6 +3,10 @@ package engine
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
+	"github.com/golang/protobuf/ptypes"
+	"github.com/golang/protobuf/ptypes/duration"
+	"github.com/golang/protobuf/ptypes/timestamp"
+	"log"
 	"time"
 )
 
@@ -13,14 +17,14 @@ func (e *Engine) Tick() {
 	e.lastTimeUpdate = currentTime
 
 	if e.countStageTime() {
-		e.currentState.StageTimeElapsed += delta
-		e.currentState.StageTimeLeft -= delta
+		addDur(e.currentState.StageTimeElapsed, delta)
+		addDur(e.currentState.StageTimeLeft, -delta)
 
-		e.currentState.CurrentActionTimeRemaining -= delta
+		addDur(e.currentState.CurrentActionTimeRemaining, -delta)
 		minimumTimeRemaining := -time.Minute * 30
-		if e.currentState.CurrentActionTimeRemaining < minimumTimeRemaining {
+		if goDur(e.currentState.CurrentActionTimeRemaining) < minimumTimeRemaining {
 			// limit how small this time can get to avoid overflow in referee message
-			e.currentState.CurrentActionTimeRemaining = minimumTimeRemaining
+			e.currentState.CurrentActionTimeRemaining = ptypes.DurationProto(minimumTimeRemaining)
 		}
 	}
 
@@ -30,36 +34,60 @@ func (e *Engine) Tick() {
 		}
 	}
 
-	if e.currentState.GameState() == state.GameStateTimeout && e.currentState.CommandFor.Known() {
-		e.currentState.TeamState[e.currentState.CommandFor].TimeoutTimeLeft -= delta
+	if *e.currentState.Command.Type == state.Command_TIMEOUT {
+		addDur(e.currentState.TeamInfo(*e.currentState.Command.ForTeam).TimeoutTimeLeft, -delta)
 	}
 
-	if e.currentState.MatchTimeStart.After(time.Unix(0, 0)) {
-		newMatchDuration := currentTime.Sub(e.currentState.MatchTimeStart)
-		e.currentState.MatchDuration = newMatchDuration
+	if goTime(e.currentState.MatchTimeStart).After(time.Unix(0, 0)) {
+		newMatchDuration := currentTime.Sub(goTime(e.currentState.MatchTimeStart))
+		e.currentState.MatchDuration = ptypes.DurationProto(newMatchDuration)
 	}
 }
 
 func (e *Engine) countStageTime() bool {
-	return e.currentState.Stage.IsPausedStage() || e.currentState.GameState() == state.GameStateRunning
+	return e.currentState.Stage.IsPausedStage() || e.currentState.Command.IsRunning()
 }
 
 func (e *Engine) countCardTime() bool {
-	return e.currentState.GameState() == state.GameStateRunning
+	return e.currentState.Command.IsRunning()
 }
 
 func (e *Engine) updateYellowCardTimes(teamState *state.TeamInfo, delta time.Duration) {
 	for i := range teamState.YellowCards {
-		if teamState.YellowCards[i].TimeRemaining < 0 {
+		if goDur(teamState.YellowCards[i].TimeRemaining) < 0 {
 			continue
 		}
-		teamState.YellowCards[i].TimeRemaining -= delta
-		if teamState.YellowCards[i].TimeRemaining <= 0 {
-			teamState.YellowCards[i].TimeRemaining = 0
-			e.queue <- statemachine.Change{
-				ChangeOrigin:   changeOriginEngine,
+		addDur(teamState.YellowCards[i].TimeRemaining, -delta)
+		if goDur(teamState.YellowCards[i].TimeRemaining) <= 0 {
+			teamState.YellowCards[i].TimeRemaining = ptypes.DurationProto(0)
+			e.queue <- &statemachine.Change{
+				Origin:         &changeOriginEngine,
 				YellowCardOver: &statemachine.YellowCardOver{},
 			}
 		}
 	}
+}
+
+func goDur(duration *duration.Duration) time.Duration {
+	goDur, err := ptypes.Duration(duration)
+	if err != nil {
+		log.Printf("Could not parse duration: %v", duration)
+	}
+	return goDur
+}
+
+func goTime(timestamp *timestamp.Timestamp) time.Time {
+	goTime, err := ptypes.Timestamp(timestamp)
+	if err != nil {
+		log.Printf("Could not parse timestamp: %v", timestamp)
+	}
+	return goTime
+}
+
+func addDur(duration *duration.Duration, delta time.Duration) *duration.Duration {
+	goDur, err := ptypes.Duration(duration)
+	if err != nil {
+		log.Printf("Could not parse duration: %v", duration)
+	}
+	return ptypes.DurationProto(goDur + delta)
 }

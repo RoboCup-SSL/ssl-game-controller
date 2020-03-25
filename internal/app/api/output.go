@@ -5,8 +5,8 @@ import (
 )
 
 type Output struct {
-	MatchState state.State         `json:"matchState"`
-	GcState    GameControllerState `json:"gcState"`
+	MatchState *state.State         `json:"matchState"`
+	GcState    *GameControllerState `json:"gcState"`
 }
 
 type GameControllerState struct {

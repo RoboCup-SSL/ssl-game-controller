@@ -4,6 +4,7 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/go-test/deep"
+	"github.com/golang/protobuf/ptypes"
 	"testing"
 )
 
@@ -12,8 +13,9 @@ func Test_Statemachine(t *testing.T) {
 	gameConfig := config.DefaultControllerConfig().Game
 	type args struct {
 		initState func(*state.State)
-		change    Change
+		change    *Change
 	}
+	firstHalf := state.Referee_NORMAL_FIRST_HALF
 	tests := []struct {
 		name         string
 		args         args
@@ -24,33 +26,31 @@ func Test_Statemachine(t *testing.T) {
 			args: args{
 				initState: func(s *state.State) {
 				},
-				change: Change{
+				change: &Change{
 					NewCommand: &NewCommand{
-						Command:    state.CommandDirect,
-						CommandFor: state.Team_BLUE,
+						Command: state.NewCommand(state.Command_DIRECT, state.Team_BLUE),
 					},
 				}},
 			wantNewState: func(s *state.State) {
-				s.Command = state.CommandDirect
-				s.CommandFor = state.Team_BLUE
-				s.CurrentActionTimeRemaining = gameConfig.FreeKickTime[config.DivA]
+				s.Command = state.NewCommand(state.Command_DIRECT, state.Team_BLUE)
+				s.CurrentActionTimeRemaining = ptypes.DurationProto(gameConfig.FreeKickTime[config.DivA])
 			},
 		},
 		{
 			name: "Stage",
 			args: args{
 				initState: func(s *state.State) {
-					s.Stage = state.Referee_NORMAL_FIRST_HALF_PRE
+					*s.Stage = state.Referee_NORMAL_FIRST_HALF_PRE
 				},
-				change: Change{
+				change: &Change{
 					ChangeStage: &ChangeStage{
-						NewStage: state.Referee_NORMAL_FIRST_HALF,
+						NewStage: &firstHalf,
 					},
 				},
 			},
 			wantNewState: func(s *state.State) {
-				s.Stage = state.Referee_NORMAL_FIRST_HALF
-				s.StageTimeLeft = gameConfig.Normal.HalfDuration
+				*s.Stage = state.Referee_NORMAL_FIRST_HALF
+				s.StageTimeLeft = ptypes.DurationProto(gameConfig.Normal.HalfDuration)
 			},
 		},
 	}
@@ -58,9 +58,9 @@ func Test_Statemachine(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			sm := NewStateMachine(gameConfig)
 			currentState := state.NewState()
-			tt.args.initState(&currentState)
+			tt.args.initState(currentState)
 			newState := state.NewState()
-			tt.wantNewState(&newState)
+			tt.wantNewState(newState)
 
 			gotNewState, _ := sm.Process(currentState, tt.args.change)
 			diffs := deep.Equal(gotNewState, newState)

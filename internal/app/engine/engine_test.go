@@ -24,14 +24,14 @@ func Test_Engine(t *testing.T) {
 	gameConfig := config.DefaultControllerConfig().Game
 	gameConfig.StateStoreFile = tmpDir + "/store.json.stream"
 	engine := NewEngine(gameConfig)
-	hook := make(chan statemachine.StateChange)
+	hook := make(chan *statemachine.StateChange)
 	engine.RegisterHook(hook)
 	if err := engine.Start(); err != nil {
 		t.Fatal("Could not start engine")
 	}
-	engine.Enqueue(statemachine.Change{
+	engine.Enqueue(&statemachine.Change{
 		NewCommand: &statemachine.NewCommand{
-			Command: state.CommandHalt,
+			Command: state.NewCommandNeutral(state.Command_HALT),
 		},
 	})
 	// wait for the changes to be processed
@@ -40,7 +40,7 @@ func Test_Engine(t *testing.T) {
 	engine.Stop()
 
 	wantNewState := state.NewState()
-	wantNewState.Command = state.CommandHalt
+	wantNewState.Command = state.NewCommandNeutral(state.Command_HALT)
 
 	gotNewState := engine.currentState
 	diffs := deep.Equal(gotNewState, wantNewState)

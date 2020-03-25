@@ -3,19 +3,13 @@ package statemachine
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
+	"github.com/golang/protobuf/proto"
 	"log"
 	"math/rand"
 	"time"
 )
 
 const changeOriginStateMachine = "StateMachine"
-
-// StateChange describes a change and its result together with a unique number
-type StateChange struct {
-	Id     int
-	State  state.State
-	Change Change
-}
 
 // StateMachine describes the state machine that translates changes into new states
 type StateMachine struct {
@@ -58,54 +52,56 @@ func loadStageTimes(gameConfig config.Game) (s map[state.Referee_Stage]time.Dura
 }
 
 // Process translates a state and a change into a new state and resulting new changes
-func (s *StateMachine) Process(currentState state.State, change Change) (newState state.State, newChanges []Change) {
-	newState = currentState.DeepCopy()
+func (s *StateMachine) Process(currentState *state.State, change *Change) (newState *state.State, newChanges []*Change) {
+	newState = new(state.State)
+	proto.Merge(newState, currentState)
 	log.Printf("Processing change: %v", change)
 	if change.NewCommand != nil {
-		newChanges = s.NewCommand(&newState, change.NewCommand)
+		newChanges = s.NewCommand(newState, change.NewCommand)
 	}
 	if change.ChangeStage != nil {
-		newChanges = s.ChangeStage(&newState, change.ChangeStage)
+		newChanges = s.ChangeStage(newState, change.ChangeStage)
 	}
 	if change.SetBallPlacementPos != nil {
-		newChanges = s.SetBallPlacementPos(&newState, change.SetBallPlacementPos)
+		newChanges = s.SetBallPlacementPos(newState, change.SetBallPlacementPos)
 	}
 	if change.AddYellowCard != nil {
-		newChanges = s.AddYellowCard(&newState, change.AddYellowCard)
+		newChanges = s.AddYellowCard(newState, change.AddYellowCard)
 	}
 	if change.AddRedCard != nil {
-		newChanges = s.AddRedCard(&newState, change.AddRedCard)
+		newChanges = s.AddRedCard(newState, change.AddRedCard)
 	}
 	if change.YellowCardOver != nil {
-		newChanges = s.YellowCardOver(&newState)
+		newChanges = s.YellowCardOver(newState)
 	}
 	if change.UpdateConfig != nil {
-		newChanges = s.UpdateConfig(&newState, change.UpdateConfig)
+		newChanges = s.UpdateConfig(newState, change.UpdateConfig)
 	}
 	if change.UpdateTeamState != nil {
-		newChanges = s.UpdateTeamState(&newState, change.UpdateTeamState)
+		newChanges = s.UpdateTeamState(newState, change.UpdateTeamState)
 	}
 	if change.SwitchColors != nil {
-		newChanges = s.SwitchColors(&newState)
+		newChanges = s.SwitchColors(newState)
 	}
 	if change.AddGameEvent != nil {
-		newChanges = s.AddGameEvent(&newState, change.AddGameEvent)
+		newChanges = s.AddGameEvent(newState, change.AddGameEvent)
 	}
 	if change.StartBallPlacement != nil {
-		newChanges = s.StartBallPlacement(&newState)
+		newChanges = s.StartBallPlacement(newState)
 	}
 	if change.Continue != nil {
-		newChanges = s.Continue(&newState)
+		newChanges = s.Continue(newState)
 	}
 	if change.AddProposedGameEvent != nil {
-		newChanges = s.AddProposedGameEvent(&newState, change.AddProposedGameEvent)
+		newChanges = s.AddProposedGameEvent(newState, change.AddProposedGameEvent)
 	}
 	if change.Revert != nil {
-		newChanges = s.Revert(&newState, change.Revert)
+		newChanges = s.Revert(newState, change.Revert)
 	}
 
 	for i := range newChanges {
-		newChanges[i].ChangeOrigin = changeOriginStateMachine
+		newChanges[i].Origin = new(string)
+		*newChanges[i].Origin = changeOriginStateMachine
 	}
 
 	return

@@ -2,49 +2,50 @@ package statemachine
 
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
+	"github.com/golang/protobuf/ptypes"
 	"github.com/pkg/errors"
 	"strconv"
 	"strings"
 	"time"
 )
 
-func (s *StateMachine) UpdateTeamState(newState *state.State, change *UpdateTeamState) (changes []Change) {
-	teamState := newState.TeamState[change.ForTeam]
+func (s *StateMachine) UpdateTeamState(newState *state.State, change *UpdateTeamState) (changes []*Change) {
+	teamState := newState.TeamInfo(*change.ForTeam)
 	if change.TeamName != nil {
-		teamState.Name = *change.TeamName
+		*teamState.Name = *change.TeamName
 	}
 	if change.Goals != nil {
-		teamState.Goals = *change.Goals
+		*teamState.Goals = *change.Goals
 	}
 	if change.Goalkeeper != nil {
-		teamState.Goalkeeper = *change.Goalkeeper
+		*teamState.Goalkeeper = *change.Goalkeeper
 	}
 	if change.TimeoutsLeft != nil {
-		teamState.TimeoutsLeft = *change.TimeoutsLeft
+		*teamState.TimeoutsLeft = *change.TimeoutsLeft
 	}
 	if change.TimeoutTimeLeft != nil {
 		if duration, err := strToDuration(*change.TimeoutTimeLeft); err == nil {
-			teamState.TimeoutTimeLeft = duration
+			teamState.TimeoutTimeLeft = ptypes.DurationProto(duration)
 		}
 	}
 	if change.OnPositiveHalf != nil {
-		teamState.OnPositiveHalf = *change.OnPositiveHalf
-		newState.TeamState[change.ForTeam.Opposite()].OnPositiveHalf = !*change.OnPositiveHalf
+		*teamState.OnPositiveHalf = *change.OnPositiveHalf
+		*newState.TeamInfo(change.ForTeam.Opposite()).OnPositiveHalf = !*change.OnPositiveHalf
 	}
 	if change.BallPlacementFailures != nil {
-		teamState.BallPlacementFailures = *change.BallPlacementFailures
-		teamState.BallPlacementFailuresReached = teamState.BallPlacementFailures >= s.gameConfig.MultiplePlacementFailures
+		*teamState.BallPlacementFailures = *change.BallPlacementFailures
+		*teamState.BallPlacementFailuresReached = *teamState.BallPlacementFailures >= int32(s.gameConfig.MultiplePlacementFailures)
 	}
 	if change.CanPlaceBall != nil {
-		teamState.CanPlaceBall = *change.CanPlaceBall
+		*teamState.CanPlaceBall = *change.CanPlaceBall
 	}
 	if change.BotSubstitutionIntend != nil {
-		teamState.BotSubstitutionIntend = *change.BotSubstitutionIntend
+		*teamState.BotSubstitutionIntend = *change.BotSubstitutionIntend
 	}
 
 	for id, newCard := range change.YellowCards {
 		for i, existingCard := range teamState.YellowCards {
-			if id == existingCard.Id {
+			if id == *existingCard.Id {
 				teamState.YellowCards[i].TimeRemaining = newCard.TimeRemaining
 				if newCard.CausedByGameEvent != nil {
 					teamState.YellowCards[i].CausedByGameEvent = newCard.CausedByGameEvent
@@ -56,7 +57,7 @@ func (s *StateMachine) UpdateTeamState(newState *state.State, change *UpdateTeam
 
 	if change.YellowCardsRemove != nil {
 		for i, card := range teamState.YellowCards {
-			if card.Id == *change.YellowCardsRemove {
+			if *card.Id == *change.YellowCardsRemove {
 				teamState.YellowCards = append(teamState.YellowCards[:i], teamState.YellowCards[i+1:]...)
 				break
 			}
@@ -65,7 +66,7 @@ func (s *StateMachine) UpdateTeamState(newState *state.State, change *UpdateTeam
 
 	for id, newCard := range change.RedCards {
 		for i, existingCard := range teamState.RedCards {
-			if id == existingCard.Id {
+			if id == *existingCard.Id {
 				if newCard.CausedByGameEvent != nil {
 					teamState.RedCards[i].CausedByGameEvent = newCard.CausedByGameEvent
 				}
@@ -76,7 +77,7 @@ func (s *StateMachine) UpdateTeamState(newState *state.State, change *UpdateTeam
 
 	if change.RedCardsRemove != nil {
 		for i, card := range teamState.RedCards {
-			if card.Id == *change.RedCardsRemove {
+			if *card.Id == *change.RedCardsRemove {
 				teamState.RedCards = append(teamState.RedCards[:i], teamState.RedCards[i+1:]...)
 				break
 			}

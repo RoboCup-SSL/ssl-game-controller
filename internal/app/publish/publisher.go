@@ -71,7 +71,7 @@ func (p *Publisher) disconnect() {
 }
 
 func (p *Publisher) publish() {
-	hook := make(chan statemachine.StateChange)
+	hook := make(chan *statemachine.StateChange)
 	p.gcEngine.RegisterHook(hook)
 	defer func() {
 		p.gcEngine.UnregisterHook(hook)

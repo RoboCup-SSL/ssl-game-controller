@@ -1,0 +1,104 @@
+syntax = "proto2";
+
+option go_package = "github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine";
+
+import "github.com/RoboCup-SSL/ssl-game-controller/proto/ssl_game_controller_state.proto";
+import "github.com/RoboCup-SSL/ssl-game-controller/proto/ssl_game_event.proto";
+import "github.com/RoboCup-SSL/ssl-game-controller/proto/ssl_referee.proto";
+
+message StateChange {
+    optional uint32 id = 1;
+    optional State state_pre = 2;
+    optional State state = 3;
+    optional Change change = 4;
+}
+
+message Change {
+    optional string origin = 1;
+
+    optional NewCommand new_command = 2;
+    optional ChangeStage change_stage = 3;
+    optional SetBallPlacementPos set_ball_placement_pos = 4;
+    optional AddYellowCard add_yellow_card = 5;
+    optional AddRedCard add_red_card = 6;
+    optional YellowCardOver yellow_card_over = 7;
+    optional AddGameEvent add_game_event = 8;
+    optional AddProposedGameEvent add_proposed_game_event = 9;
+    optional StartBallPlacement start_ball_placement = 10;
+    optional Continue continue = 11;
+    optional UpdateConfig update_config = 12;
+    optional UpdateTeamState update_team_state = 13;
+    optional SwitchColors switch_colors = 14;
+    optional Revert revert = 15;
+}
+
+message NewCommand {
+    optional Command command = 1;
+}
+
+message ChangeStage {
+    optional Referee.Stage new_stage = 1;
+}
+
+message SetBallPlacementPos {
+    optional Location pos = 1;
+}
+
+message AddYellowCard {
+    optional Team for_team = 1;
+    optional GameEvent caused_by_game_event = 2;
+}
+
+message AddRedCard {
+    optional Team for_team = 1;
+    optional GameEvent caused_by_game_event = 2;
+}
+
+message YellowCardOver {
+}
+
+message AddGameEvent {
+    optional GameEvent game_event = 1;
+}
+
+message AddProposedGameEvent {
+    optional GameEvent game_event = 1;
+}
+
+message StartBallPlacement {
+}
+
+message Continue {
+}
+
+message UpdateConfig {
+    optional Division division = 1;
+    optional Team first_kickoff_team = 2;
+    optional bool auto_continue = 3;
+    map<int32, GameEventBehavior> game_event_behavior = 4;
+}
+
+message UpdateTeamState {
+    optional Team for_team = 1;
+
+    optional string team_name = 2;
+    optional int32 goals = 3;
+    optional int32 goalkeeper = 4;
+    optional int32 timeouts_left = 5;
+    optional string timeout_time_left = 6;
+    optional bool on_positive_half = 7;
+    optional int32 ball_placement_failures = 8;
+    optional bool can_place_ball = 9;
+    optional bool bot_substitution_intend = 10;
+    map<uint32, YellowCard> yellow_cards = 11;
+    optional uint32 yellow_cards_remove = 12;
+    map<uint32, RedCard> red_cards = 13;
+    optional uint32 red_cards_remove = 14;
+}
+
+message SwitchColors {
+}
+
+message Revert {
+    optional int32 state_id = 1;
+}

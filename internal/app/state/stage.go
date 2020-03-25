@@ -7,21 +7,21 @@ func (x Referee_Stage) Valid() bool {
 }
 
 // Next returns the next stage if there is one, or itself else
-func (x Referee_Stage) Next() Referee_Stage {
+func (x Referee_Stage) Next() *Referee_Stage {
 	next := Referee_Stage(int32(x) + 1)
 	if next.Valid() {
-		return next
+		return &next
 	}
-	return x
+	return &x
 }
 
 // Previous returns the previous stage if there is one, or itself else
-func (x Referee_Stage) Previous() Referee_Stage {
+func (x Referee_Stage) Previous() *Referee_Stage {
 	next := Referee_Stage(int32(x) - 1)
 	if next.Valid() {
-		return next
+		return &next
 	}
-	return x
+	return &x
 }
 
 // IsPreStage returns true if this is one of the pre stages

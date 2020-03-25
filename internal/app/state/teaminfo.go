@@ -1,117 +1,75 @@
 package state
 
 import (
-	"encoding/json"
+	"github.com/golang/protobuf/ptypes"
+	"github.com/golang/protobuf/ptypes/duration"
 	"time"
 )
 
-// YellowCard describes a yellow card with unique id, remaining time and caused game event
-type YellowCard struct {
-	Id                int           `json:"id" yaml:"id"`
-	TimeRemaining     time.Duration `json:"timeRemaining" yaml:"timeRemaining"`
-	CausedByGameEvent *GameEvent    `json:"causedByGameEvent" yaml:"causedByGameEvent"`
-}
-
-// RedCard describes a red card with unique id and caused game event
-type RedCard struct {
-	Id                int        `json:"id" yaml:"id"`
-	CausedByGameEvent *GameEvent `json:"causedByGameEvent" yaml:"causedByGameEvent"`
-}
-
-// Foul describes a foul with id and the caused game event
-type Foul struct {
-	Id                int        `json:"id" yaml:"id"`
-	CausedByGameEvent *GameEvent `json:"causedByGameEvent" yaml:"causedByGameEvent"`
-}
-
-// TeamInfo about a team
-type TeamInfo struct {
-	Name                         string        `json:"name" yaml:"name"`
-	Goals                        int           `json:"goals" yaml:"goals"`
-	Goalkeeper                   int           `json:"goalkeeper" yaml:"goalkeeper"`
-	YellowCards                  []YellowCard  `json:"yellowCards" yaml:"yellowCards"`
-	RedCards                     []RedCard     `json:"redCards" yaml:"redCards"`
-	TimeoutsLeft                 int           `json:"timeoutsLeft" yaml:"timeoutsLeft"`
-	TimeoutTimeLeft              time.Duration `json:"timeoutTimeLeft" yaml:"timeoutTimeLeft"`
-	OnPositiveHalf               bool          `json:"onPositiveHalf" yaml:"onPositiveHalf"`
-	Fouls                        []Foul        `json:"fouls" yaml:"fouls"`
-	BallPlacementFailures        int           `json:"ballPlacementFailures" yaml:"ballPlacementFailures"`
-	BallPlacementFailuresReached bool          `json:"ballPlacementFailuresReached" yaml:"ballPlacementFailuresReached"`
-	CanPlaceBall                 bool          `json:"canPlaceBall" yaml:"canPlaceBall"`
-	MaxAllowedBots               int           `json:"maxAllowedBots" yaml:"maxAllowedBots"`
-	BotSubstitutionIntend        bool          `json:"botSubstitutionIntend" yaml:"botSubstitutionIntend"`
-}
-
 func newTeamInfo() (t *TeamInfo) {
 	t = new(TeamInfo)
-	t.Name = ""
-	t.Goals = 0
-	t.Goalkeeper = 0
-	t.YellowCards = []YellowCard{}
-	t.RedCards = []RedCard{}
-	t.TimeoutsLeft = 0
-	t.TimeoutTimeLeft = 0
-	t.OnPositiveHalf = true
-	t.Fouls = []Foul{}
-	t.BallPlacementFailures = 0
-	t.BallPlacementFailuresReached = false
-	t.CanPlaceBall = true
-	t.MaxAllowedBots = 0
+	t.Name = new(string)
+	t.Goals = new(int32)
+	t.Goalkeeper = new(int32)
+	t.YellowCards = []*YellowCard{}
+	t.RedCards = []*RedCard{}
+	t.TimeoutsLeft = new(int32)
+	t.TimeoutTimeLeft = new(duration.Duration)
+	t.OnPositiveHalf = new(bool)
+	t.Fouls = []*Foul{}
+	t.BallPlacementFailures = new(int32)
+	t.BallPlacementFailuresReached = new(bool)
+	t.CanPlaceBall = new(bool)
+	t.MaxAllowedBots = new(int32)
+	t.BotSubstitutionIntend = new(bool)
+
+	*t.CanPlaceBall = true
 	return
 }
 
-// String converts the team info into a json string
-func (t TeamInfo) String() string {
-	bytes, e := json.Marshal(t)
-	if e != nil {
-		return e.Error()
-	}
-	return string(bytes)
-}
-
 // BallPlacementAllowed returns true, if the team has ball placement enabled and has not yet failed too often
-func (t *TeamInfo) BallPlacementAllowed() bool {
-	return t.CanPlaceBall && !t.BallPlacementFailuresReached
+func (m *TeamInfo) BallPlacementAllowed() bool {
+	return *m.CanPlaceBall && !*m.BallPlacementFailuresReached
 }
 
 // AddYellowCard adds a new yellow card to the team
-func (t *TeamInfo) AddYellowCard(duration time.Duration, causedByGameEvent *GameEvent) {
-	id := 0
-	numCards := len(t.YellowCards)
+func (m *TeamInfo) AddYellowCard(d time.Duration, causedByGameEvent *GameEvent) {
+	id := uint32(0)
+	numCards := len(m.YellowCards)
 	if numCards > 0 {
-		id = t.YellowCards[numCards-1].Id + 1
+		id = *m.YellowCards[numCards-1].Id + 1
 	}
-	t.YellowCards = append(t.YellowCards, YellowCard{
-		Id:                id,
-		TimeRemaining:     duration,
+	m.YellowCards = append(m.YellowCards, &YellowCard{
+		Id:                &id,
+		TimeRemaining:     ptypes.DurationProto(d),
 		CausedByGameEvent: causedByGameEvent,
 	})
 	return
 }
 
 // AddRedCard adds a new red card to the team
-func (t *TeamInfo) AddRedCard(causedByGameEvent *GameEvent) {
-	id := 0
-	numCards := len(t.RedCards)
+func (m *TeamInfo) AddRedCard(causedByGameEvent *GameEvent) {
+	id := uint32(0)
+	numCards := len(m.RedCards)
 	if numCards > 0 {
-		id = t.RedCards[numCards-1].Id + 1
+		id = *m.RedCards[numCards-1].Id + 1
 	}
-	t.RedCards = append(t.RedCards, RedCard{
-		Id:                id,
+	m.RedCards = append(m.RedCards, &RedCard{
+		Id:                &id,
 		CausedByGameEvent: causedByGameEvent,
 	})
 	return
 }
 
 // AddFoul adds a new foul to the team
-func (t *TeamInfo) AddFoul(causedByGameEvent *GameEvent) {
-	id := 0
-	numCards := len(t.Fouls)
+func (m *TeamInfo) AddFoul(causedByGameEvent *GameEvent) {
+	id := uint32(0)
+	numCards := len(m.Fouls)
 	if numCards > 0 {
-		id = t.Fouls[numCards-1].Id + 1
+		id = *m.Fouls[numCards-1].Id + 1
 	}
-	t.Fouls = append(t.Fouls, Foul{
-		Id:                id,
+	m.Fouls = append(m.Fouls, &Foul{
+		Id:                &id,
 		CausedByGameEvent: causedByGameEvent,
 	})
 	return

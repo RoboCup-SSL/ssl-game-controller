@@ -3,8 +3,8 @@ package config
 type Division string
 
 const (
-	DivA Division = "DivA"
-	DivB Division = "DivB"
+	DivA Division = "DIV_A"
+	DivB Division = "DIV_B"
 )
 
 // Division contain all known command enum constants

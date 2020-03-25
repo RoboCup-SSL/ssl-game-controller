@@ -1,0 +1,93 @@
+syntax = "proto2";
+
+option go_package = "github.com/RoboCup-SSL/ssl-game-controller/internal/app/state";
+
+import "github.com/RoboCup-SSL/ssl-game-controller/proto/ssl_game_event.proto";
+import "github.com/RoboCup-SSL/ssl-game-controller/proto/ssl_referee.proto";
+
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+
+enum Division {
+    DIV_UNKNOWN = 0;
+    DIV_A = 1;
+    DIV_B = 2;
+}
+
+enum GameEventBehavior {
+    GAME_EVENT_BEHAVIOR_UNKNOWN = 0;
+    GAME_EVENT_BEHAVIOR_On = 1;
+    GAME_EVENT_BEHAVIOR_MAJORITY = 2;
+    GAME_EVENT_BEHAVIOR_OFF = 3;
+}
+
+message YellowCard {
+    optional uint32 id = 1;
+    optional GameEvent caused_by_game_event = 2;
+    optional google.protobuf.Duration time_remaining = 3;
+}
+
+message RedCard {
+    optional uint32 id = 1;
+    optional GameEvent caused_by_game_event = 2;
+}
+
+message Foul {
+    optional uint32 id = 1;
+    optional GameEvent caused_by_game_event = 2;
+}
+
+message Command {
+    required Type type = 1;
+    optional Team for_team = 2;
+
+    enum Type {
+        UNKNOWN = 0;
+        HALT = 1;
+        STOP = 2;
+        NORMAL_START = 3;
+        FORCE_START = 4;
+        DIRECT = 5;
+        INDIRECT = 6;
+        KICKOFF = 7;
+        PENALTY = 8;
+        TIMEOUT = 9;
+        BALL_PLACEMENT = 10;
+    }
+}
+
+message TeamInfo {
+    optional string name = 1;
+    optional int32 goals = 2;
+    optional int32 goalkeeper = 3;
+    repeated YellowCard yellow_cards = 4;
+    repeated RedCard red_cards = 5;
+    optional int32 timeouts_left = 6;
+    optional google.protobuf.Duration timeout_time_left = 7;
+    optional bool on_positive_half = 8;
+    repeated Foul fouls = 9;
+    optional int32 ball_placement_failures = 10;
+    optional bool ball_placement_failures_reached = 11;
+    optional bool can_place_ball = 12;
+    optional int32 max_allowed_bots = 13;
+    optional bool bot_substitution_intend = 14;
+}
+
+message State {
+    optional Referee.Stage stage = 1;
+    optional Command command = 2;
+    optional google.protobuf.Duration stage_time_elapsed = 4;
+    optional google.protobuf.Duration stage_time_left = 5;
+    optional google.protobuf.Timestamp match_time_start = 6;
+    optional google.protobuf.Duration match_duration = 7;
+    map<int32, TeamInfo> team_state = 8;
+    optional Location placement_pos = 9;
+    optional Command next_command = 10;
+    optional google.protobuf.Duration current_action_time_remaining = 12;
+    repeated GameEvent game_events = 13;
+    repeated ProposedGameEvent proposed_game_events = 14;
+    optional Division division = 15;
+    optional bool auto_continue = 16;
+    optional Team first_kickoff_team = 17;
+    map<int32, GameEventBehavior> game_event_behavior = 18;
+}

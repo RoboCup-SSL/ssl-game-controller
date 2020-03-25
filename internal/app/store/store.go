@@ -2,8 +2,8 @@ package store
 
 import (
 	"bufio"
-	"encoding/json"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
+	"github.com/golang/protobuf/jsonpb"
 	"github.com/pkg/errors"
 	"io"
 	"log"
@@ -12,30 +12,29 @@ import (
 	"syscall"
 )
 
-type Entry statemachine.StateChange
-
 // Store streams entries into a file store
 type Store struct {
-	filename string
-	file     *os.File
-	entries  []*Entry
+	filename  string
+	file      *os.File
+	entries   []*statemachine.StateChange
+	marshaler jsonpb.Marshaler
 }
 
 // NewStore creates a new store
 func NewStore(filename string) (s *Store) {
 	s = new(Store)
 	s.filename = filename
-	s.entries = []*Entry{}
+	s.entries = []*statemachine.StateChange{}
 	return
 }
 
 // States returns a list of all entries
-func (s *Store) States() []*Entry {
+func (s *Store) States() []*statemachine.StateChange {
 	return s.entries
 }
 
 // LatestEntry returns the latest entry in the store or nil if there is none yet
-func (s *Store) LatestEntry() *Entry {
+func (s *Store) LatestEntry() *statemachine.StateChange {
 	if len(s.entries) > 0 {
 		return s.entries[len(s.entries)-1]
 	}
@@ -80,15 +79,15 @@ func (s *Store) Close() error {
 
 // Load loads all entries from the store file into memory
 func (s *Store) Load() error {
-	s.entries = []*Entry{}
+	s.entries = []*statemachine.StateChange{}
 	scanner := bufio.NewScanner(s.file)
 	for scanner.Scan() {
-		b := scanner.Bytes()
-		entry := Entry{}
-		if err := json.Unmarshal(b, &entry); err != nil {
-			return errors.Errorf("Could not unmarshal entry: %v %v", string(b), err)
+		b := scanner.Text()
+		entry := new(statemachine.StateChange)
+		if err := jsonpb.UnmarshalString(b, entry); err != nil {
+			return errors.Errorf("Could not unmarshal entry: %v %v", b, err)
 		}
-		s.entries = append(s.entries, &entry)
+		s.entries = append(s.entries, entry)
 	}
 
 	if err := scanner.Err(); err != nil {
@@ -99,16 +98,17 @@ func (s *Store) Load() error {
 }
 
 // Add add a new entry to the store
-func (s *Store) Add(entry Entry) error {
-	entry.Id = len(s.entries)
-	s.entries = append(s.entries, &entry)
+func (s *Store) Add(entry *statemachine.StateChange) error {
+	entry.Id = new(uint32)
+	*entry.Id = uint32(len(s.entries))
+	s.entries = append(s.entries, entry)
 
-	jsonState, err := json.Marshal(entry)
+	jsonState, err := s.marshaler.MarshalToString(entry)
 	if err != nil {
 		return errors.Wrap(err, "Can not marshal entry")
 	}
 
-	_, err = s.file.Write(jsonState)
+	_, err = s.file.WriteString(jsonState)
 	if err != nil {
 		return errors.Wrap(err, "Could not write to store")
 	}

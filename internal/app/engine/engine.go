@@ -6,21 +6,22 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/store"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/timer"
+	"github.com/golang/protobuf/ptypes"
 	"github.com/pkg/errors"
 	"log"
 	"time"
 )
 
-const changeOriginEngine = "Engine"
+var changeOriginEngine = "Engine"
 
 // Engine listens for changes and runs ticks to update the current state using the state machine
 type Engine struct {
 	gameConfig      config.Game
 	stateStore      *store.Store
-	currentState    state.State
+	currentState    *state.State
 	stateMachine    *statemachine.StateMachine
-	queue           chan statemachine.Change
-	hooks           []chan statemachine.StateChange
+	queue           chan *statemachine.Change
+	hooks           []chan *statemachine.StateChange
 	timeProvider    timer.TimeProvider
 	lastTimeUpdate  time.Time
 	readyToContinue *bool
@@ -32,25 +33,25 @@ func NewEngine(gameConfig config.Game) (s *Engine) {
 	s = new(Engine)
 	s.stateStore = store.NewStore(gameConfig.StateStoreFile)
 	s.stateMachine = statemachine.NewStateMachine(gameConfig)
-	s.queue = make(chan statemachine.Change, 100)
-	s.hooks = []chan statemachine.StateChange{}
+	s.queue = make(chan *statemachine.Change, 100)
+	s.hooks = []chan *statemachine.StateChange{}
 	s.timeProvider = func() time.Time { return time.Now() }
 	s.lastTimeUpdate = s.timeProvider()
 	return
 }
 
 // Enqueue adds the change to the change queue
-func (e *Engine) Enqueue(change statemachine.Change) {
+func (e *Engine) Enqueue(change *statemachine.Change) {
 	e.queue <- change
 }
 
 // RegisterHook registers given hook for post processing after each change
-func (e *Engine) RegisterHook(hook chan statemachine.StateChange) {
+func (e *Engine) RegisterHook(hook chan *statemachine.StateChange) {
 	e.hooks = append(e.hooks, hook)
 }
 
 // UnregisterHook unregisters hooks that were registered before
-func (e *Engine) UnregisterHook(hook chan statemachine.StateChange) bool {
+func (e *Engine) UnregisterHook(hook chan *statemachine.StateChange) bool {
 	for i, h := range e.hooks {
 		if h == hook {
 			e.hooks = append(e.hooks[:i], e.hooks[i+1:]...)
@@ -73,22 +74,8 @@ func (e *Engine) Start() error {
 		return errors.Wrap(err, "Could not load state store")
 	}
 	e.currentState = e.initialStateFromStore()
-	e.stateMachine.UpdateGeometry(e.gameConfig.DefaultGeometry[e.currentState.Division])
+	e.stateMachine.UpdateGeometry(e.gameConfig.DefaultGeometry[e.currentState.Division.Div()])
 	go e.processChanges()
-	eventType := state.GameEventType_GOAL
-	byTeam := state.Team_YELLOW
-	e.Enqueue(statemachine.Change{
-		AddGameEvent: &statemachine.AddGameEvent{
-			GameEvent: state.GameEvent{
-				Type: &eventType,
-				Event: &state.GameEvent_Goal_{
-					Goal: &state.GameEvent_Goal{
-						ByTeam: &byTeam,
-					},
-				},
-			},
-		},
-	})
 	return nil
 }
 
@@ -98,7 +85,7 @@ func (e *Engine) Stop() {
 }
 
 // CurrentState returns the current state
-func (e *Engine) CurrentState() state.State {
+func (e *Engine) CurrentState() *state.State {
 	return e.currentState
 }
 
@@ -112,7 +99,7 @@ func (e *Engine) processChanges() {
 			}
 			entry := statemachine.StateChange{}
 			entry.Change = change
-			var newChanges []statemachine.Change
+			var newChanges []*statemachine.Change
 			entry.State, newChanges = e.stateMachine.Process(e.currentState, change)
 			e.currentState = entry.State
 
@@ -123,11 +110,11 @@ func (e *Engine) processChanges() {
 			}
 
 			// do not save state for ticks
-			if err := e.stateStore.Add(store.Entry(entry)); err != nil {
+			if err := e.stateStore.Add(&entry); err != nil {
 				log.Println("Could not add new state to store: ", err)
 			}
 			for _, hook := range e.hooks {
-				hook <- entry
+				hook <- &entry
 			}
 		case <-time.After(10 * time.Millisecond):
 			e.Tick()
@@ -136,7 +123,7 @@ func (e *Engine) processChanges() {
 }
 
 // initialStateFromStore gets the current state or returns a new default state
-func (e *Engine) initialStateFromStore() state.State {
+func (e *Engine) initialStateFromStore() *state.State {
 	latestEntry := e.stateStore.LatestEntry()
 	if latestEntry == nil {
 		return state.NewState()
@@ -145,9 +132,9 @@ func (e *Engine) initialStateFromStore() state.State {
 }
 
 // postProcessChange performs synchronous post processing steps
-func (e *Engine) postProcessChange(change statemachine.Change) {
+func (e *Engine) postProcessChange(change *statemachine.Change) {
 	if change.ChangeStage != nil &&
-		change.ChangeStage.NewStage == state.Referee_NORMAL_FIRST_HALF {
-		e.currentState.MatchTimeStart = e.timeProvider()
+		*change.ChangeStage.NewStage == state.Referee_NORMAL_FIRST_HALF {
+		e.currentState.MatchTimeStart, _ = ptypes.TimestampProto(e.timeProvider())
 	}
 }

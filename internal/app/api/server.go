@@ -21,7 +21,7 @@ type ServerConnection struct {
 	quit               chan int
 	conn               *websocket.Conn
 	gcEngine           *engine.Engine
-	lastPublishedState state.State
+	lastPublishedState *state.State
 }
 
 func NewServer(gcEngine *engine.Engine) (s *Server) {
@@ -54,7 +54,7 @@ func (a *Server) WsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *ServerConnection) publish() {
-	hook := make(chan statemachine.StateChange)
+	hook := make(chan *statemachine.StateChange)
 	s.gcEngine.RegisterHook(hook)
 	defer func() {
 		s.gcEngine.UnregisterHook(hook)
@@ -75,7 +75,7 @@ func (s *ServerConnection) publish() {
 	}
 }
 
-func (s *ServerConnection) publishState(matchState state.State) {
+func (s *ServerConnection) publishState(matchState *state.State) {
 
 	if !stateChanged(s.lastPublishedState, matchState) {
 		return
@@ -87,7 +87,7 @@ func (s *ServerConnection) publishState(matchState state.State) {
 		TeamConnectionVerified: map[state.Team]bool{},
 	}
 
-	out := Output{MatchState: matchState, GcState: gcState}
+	out := Output{MatchState: matchState, GcState: &gcState}
 	s.publishOutput(out)
 
 	s.lastPublishedState = matchState
@@ -141,34 +141,31 @@ func (a *Server) handleNewEventMessage(b []byte) {
 	}
 
 	if in.Change != nil {
-		a.gcEngine.Enqueue(*in.Change)
+		a.gcEngine.Enqueue(in.Change)
 	}
 }
 
-func stateChanged(s1, s2 state.State) bool {
+func stateChanged(s1, s2 *state.State) bool {
 	if s1.Stage != s2.Stage {
 		return true
 	}
 	if s1.Command != s2.Command {
 		return true
 	}
-	if s1.CommandFor != s2.CommandFor {
+	if s1.StageTimeElapsed.Seconds != s2.StageTimeElapsed.Seconds {
 		return true
 	}
-	if s1.StageTimeElapsed.Seconds() != s2.StageTimeElapsed.Seconds() {
-		return true
-	}
-	if s1.StageTimeLeft.Seconds() != s2.StageTimeLeft.Seconds() {
+	if s1.StageTimeLeft.Seconds != s2.StageTimeLeft.Seconds {
 		return true
 	}
 	if s1.MatchTimeStart != s2.MatchTimeStart {
 		return true
 	}
-	if s1.MatchDuration.Seconds() != s2.MatchDuration.Seconds() {
+	if s1.MatchDuration.Seconds != s2.MatchDuration.Seconds {
 		return true
 	}
 	for _, team := range state.BothTeams() {
-		if teamStateChanged(*s1.TeamState[team], *s2.TeamState[team]) {
+		if teamStateChanged(s1.TeamInfo(team), s2.TeamInfo(team)) {
 			return true
 		}
 	}
@@ -178,10 +175,7 @@ func stateChanged(s1, s2 state.State) bool {
 	if s1.NextCommand != s2.NextCommand {
 		return true
 	}
-	if s1.NextCommandFor != s2.NextCommandFor {
-		return true
-	}
-	if s1.CurrentActionTimeRemaining.Seconds() != s2.CurrentActionTimeRemaining.Seconds() {
+	if s1.CurrentActionTimeRemaining.Seconds != s2.CurrentActionTimeRemaining.Seconds {
 		return true
 	}
 	if !reflect.DeepEqual(s1.GameEvents, s2.GameEvents) {
@@ -205,7 +199,7 @@ func stateChanged(s1, s2 state.State) bool {
 	return false
 }
 
-func teamStateChanged(s1, s2 state.TeamInfo) bool {
+func teamStateChanged(s1, s2 *state.TeamInfo) bool {
 	if s1.Name != s2.Name {
 		return true
 	}
@@ -225,7 +219,7 @@ func teamStateChanged(s1, s2 state.TeamInfo) bool {
 		if s1.YellowCards[i].CausedByGameEvent != s2.YellowCards[i].CausedByGameEvent {
 			return true
 		}
-		if s1.YellowCards[i].TimeRemaining.Seconds() != s2.YellowCards[i].TimeRemaining.Seconds() {
+		if s1.YellowCards[i].TimeRemaining.Seconds != s2.YellowCards[i].TimeRemaining.Seconds {
 			return true
 		}
 	}

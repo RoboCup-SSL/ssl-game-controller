@@ -1,39 +1,43 @@
 package statemachine
 
-import "github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
+import (
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
+	"github.com/golang/protobuf/ptypes"
+	"time"
+)
 
-func (s *StateMachine) ChangeStage(newState *state.State, change *ChangeStage) (changes []Change) {
+func (s *StateMachine) ChangeStage(newState *state.State, change *ChangeStage) (changes []*Change) {
 
 	// update stage time
-	newState.StageTimeLeft = s.stageTimes[change.NewStage]
-	newState.StageTimeElapsed = 0
+	newState.StageTimeLeft = ptypes.DurationProto(s.stageTimes[*change.NewStage])
+	newState.StageTimeElapsed = ptypes.DurationProto(time.Duration(0))
 
 	// if not transiting from a pre stage
 	if !newState.Stage.IsPreStage() {
 		// reset ball placement failures
 		for _, team := range state.BothTeams() {
-			newState.TeamState[team].BallPlacementFailuresReached = false
-			newState.TeamState[team].BallPlacementFailures = 0
+			*newState.TeamInfo(team).BallPlacementFailuresReached = false
+			*newState.TeamInfo(team).BallPlacementFailures = 0
 		}
 
 		// halt the game
-		changes = append(changes, Change{
+		changes = append(changes, &Change{
 			NewCommand: &NewCommand{
-				Command: state.CommandHalt,
+				Command: state.NewCommand(state.Command_HALT, state.Team_UNKNOWN),
 			},
 		})
 	}
 
 	// update timeout times when transiting to overtime
-	if change.NewStage == state.Referee_EXTRA_FIRST_HALF_PRE {
-		newState.TeamState[state.Team_YELLOW].TimeoutsLeft = s.gameConfig.Overtime.Timeouts
-		newState.TeamState[state.Team_YELLOW].TimeoutTimeLeft = s.gameConfig.Overtime.TimeoutDuration
-		newState.TeamState[state.Team_BLUE].TimeoutsLeft = s.gameConfig.Overtime.Timeouts
-		newState.TeamState[state.Team_BLUE].TimeoutTimeLeft = s.gameConfig.Overtime.TimeoutDuration
+	if *change.NewStage == state.Referee_EXTRA_FIRST_HALF_PRE {
+		*newState.TeamInfo(state.Team_YELLOW).TimeoutsLeft = s.gameConfig.Overtime.Timeouts
+		newState.TeamInfo(state.Team_YELLOW).TimeoutTimeLeft = ptypes.DurationProto(s.gameConfig.Overtime.TimeoutDuration)
+		*newState.TeamInfo(state.Team_BLUE).TimeoutsLeft = s.gameConfig.Overtime.Timeouts
+		newState.TeamInfo(state.Team_BLUE).TimeoutTimeLeft = ptypes.DurationProto(s.gameConfig.Overtime.TimeoutDuration)
 	}
 
 	// update next command based on new stage
-	newState.NextCommand, newState.NextCommandFor = s.getNextCommandForStage(newState, change.NewStage)
+	newState.NextCommand = s.getNextCommandForStage(newState, *change.NewStage)
 
 	// update new stage
 	newState.Stage = change.NewStage
@@ -41,17 +45,13 @@ func (s *StateMachine) ChangeStage(newState *state.State, change *ChangeStage) (
 	return
 }
 
-func (s *StateMachine) getNextCommandForStage(newState *state.State, stage state.Referee_Stage) (command state.RefCommand, commandFor state.Team) {
+func (s *StateMachine) getNextCommandForStage(newState *state.State, stage state.Referee_Stage) (command *state.Command) {
 	switch stage {
 	case state.Referee_NORMAL_FIRST_HALF_PRE, state.Referee_EXTRA_FIRST_HALF_PRE:
-		command = state.CommandKickoff
-		commandFor = newState.FirstKickoffTeam
+		return state.NewCommand(state.Command_KICKOFF, *newState.FirstKickoffTeam)
 	case state.Referee_NORMAL_SECOND_HALF_PRE, state.Referee_EXTRA_SECOND_HALF_PRE:
-		command = state.CommandKickoff
-		commandFor = newState.FirstKickoffTeam.Opposite()
+		return state.NewCommand(state.Command_KICKOFF, newState.FirstKickoffTeam.Opposite())
 	default:
-		command = ""
-		commandFor = state.Team_UNKNOWN
+		return nil
 	}
-	return
 }

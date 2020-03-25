@@ -4,10 +4,11 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine/ballplace"
+	"github.com/golang/protobuf/ptypes"
 	"log"
 )
 
-func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent) (changes []Change) {
+func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent) (changes []*Change) {
 
 	gameEvent := change.GameEvent
 	byTeam := gameEvent.ByTeam()
@@ -18,7 +19,7 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 	}
 
 	// convert aimless kick if necessary
-	if newState.Division == config.DivA && *gameEvent.Type == state.GameEventType_AIMLESS_KICK {
+	if newState.Division.Div() == config.DivA && *gameEvent.Type == state.GameEventType_AIMLESS_KICK {
 		log.Println("Convert aimless kick to ball left field event, because we are in DivA")
 		gameEvent = s.convertAimlessKick(change.GameEvent)
 	}
@@ -27,15 +28,15 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 	newState.GameEvents = append(newState.GameEvents, gameEvent)
 
 	// determine next command
-	newState.NextCommand, newState.NextCommandFor = s.nextCommandForEvent(newState, gameEvent)
+	newState.NextCommand = s.nextCommandForEvent(newState, gameEvent)
 
 	// Increment foul counter
 	if incrementsFoulCounter(*gameEvent.Type) {
 		for _, team := range state.BothTeams() {
 			if byTeam == state.Team_UNKNOWN || byTeam == team {
 				log.Printf("Team %v got a foul for %v", byTeam, gameEvent)
-				newState.TeamState[team].AddFoul(&gameEvent)
-				if len(newState.TeamState[team].Fouls)%3 == 0 {
+				newState.TeamInfo(team).AddFoul(gameEvent)
+				if len(newState.TeamInfo(team).Fouls)%3 == 0 {
 					changes = append(changes, s.multipleFoulsChange(team))
 				}
 			}
@@ -45,10 +46,10 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 	// Add yellow card
 	if addsYellowCard(*gameEvent.Type) && byTeam.Known() {
 		log.Printf("Team %v got a yellow card", byTeam)
-		changes = append(changes, Change{
+		changes = append(changes, &Change{
 			AddYellowCard: &AddYellowCard{
-				ForTeam:           byTeam,
-				CausedByGameEvent: &gameEvent,
+				ForTeam:           &byTeam,
+				CausedByGameEvent: gameEvent,
 			},
 		})
 	}
@@ -56,24 +57,24 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 	// Add red card
 	if addsRedCard(*gameEvent.Type) && byTeam.Known() {
 		log.Printf("Team %v got a red card", byTeam)
-		changes = append(changes, Change{
+		changes = append(changes, &Change{
 			AddRedCard: &AddRedCard{
-				ForTeam:           byTeam,
-				CausedByGameEvent: &gameEvent,
+				ForTeam:           &byTeam,
+				CausedByGameEvent: gameEvent,
 			},
 		})
 	}
 
 	// goal
 	if *gameEvent.Type == state.GameEventType_GOAL && byTeam.Known() {
-		newState.TeamState[byTeam].Goals++
+		*newState.TeamInfo(byTeam).Goals++
 	}
 
 	// possible goal
 	if *gameEvent.Type == state.GameEventType_POSSIBLE_GOAL {
 		log.Printf("Halt the game, because team %v might have scored a goal", byTeam)
 		// halt the game to let the human referee decide if this was a valid goal
-		changes = append(changes, s.newCommandChange(state.CommandHalt))
+		changes = append(changes, s.newCommandChange(state.NewCommandNeutral(state.Command_HALT)))
 	}
 
 	// bot substitution
@@ -81,53 +82,53 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 		log.Printf("Halt the game, because team %v requested robot substitution", byTeam)
 		// reset robot substitution flags
 		for _, team := range state.BothTeams() {
-			newState.TeamState[team].BotSubstitutionIntend = false
+			*newState.TeamInfo(team).BotSubstitutionIntend = false
 		}
 		// halt the game to allow teams to substitute robots
-		changes = append(changes, s.newCommandChange(state.CommandHalt))
+		changes = append(changes, s.newCommandChange(state.NewCommandNeutral(state.Command_HALT)))
 	}
 
 	// ball placement interference
 	if *gameEvent.Type == state.GameEventType_BOT_INTERFERED_PLACEMENT {
 		log.Printf("Reset current action time for ball placement interference by %v", byTeam)
-		newState.CurrentActionTimeRemaining += s.gameConfig.BallPlacementTimeTopUp
+		curDuration, _ := ptypes.Duration(newState.CurrentActionTimeRemaining)
+		newState.CurrentActionTimeRemaining = ptypes.DurationProto(curDuration + s.gameConfig.BallPlacementTimeTopUp)
 	}
 
 	// ball placement position
 	placementPosDeterminer := ballplace.BallPlacementPosDeterminer{
-		Event:               &gameEvent,
+		Event:               gameEvent,
 		Geometry:            s.geometry,
 		CurrentPlacementPos: newState.PlacementPos,
 		OnPositiveHalf: map[state.Team]bool{
-			state.Team_BLUE:   newState.TeamState[state.Team_BLUE].OnPositiveHalf,
-			state.Team_YELLOW: newState.TeamState[state.Team_YELLOW].OnPositiveHalf,
+			state.Team_BLUE:   *newState.TeamInfo(state.Team_BLUE).OnPositiveHalf,
+			state.Team_YELLOW: *newState.TeamInfo(state.Team_YELLOW).OnPositiveHalf,
 		},
 	}
 	newState.PlacementPos = placementPosDeterminer.Location()
 
 	// ball placement failed
 	if *gameEvent.Type == state.GameEventType_PLACEMENT_FAILED && byTeam.Known() {
-		newState.TeamState[byTeam].BallPlacementFailures++
-		newState.TeamState[byTeam].BallPlacementFailuresReached = newState.TeamState[byTeam].BallPlacementFailures >= s.gameConfig.MultiplePlacementFailures
+		*newState.TeamInfo(byTeam).BallPlacementFailures++
+		*newState.TeamInfo(byTeam).BallPlacementFailuresReached = *newState.TeamInfo(byTeam).BallPlacementFailures >= s.gameConfig.MultiplePlacementFailures
 		if s.allTeamsFailedPlacement(newState) {
 			log.Printf("Placement failed for all teams. The human ref must place the ball.")
-			changes = append(changes, s.newCommandChange(state.CommandHalt))
+			changes = append(changes, s.newCommandChange(state.NewCommandNeutral(state.Command_HALT)))
 		} else {
 			log.Printf("Placement failed for team %v. Team %v is awarded a free kick and places the ball.", byTeam, byTeam.Opposite())
-			newState.NextCommand = state.CommandDirect
-			newState.NextCommandFor = byTeam.Opposite()
-			changes = append(changes, s.newCommandWithTeamChange(state.CommandBallPlacement, byTeam.Opposite()))
+			newState.NextCommand = state.NewCommand(state.Command_DIRECT, byTeam.Opposite())
+			changes = append(changes, s.newCommandChange(state.NewCommand(state.Command_BALL_PLACEMENT, byTeam.Opposite())))
 		}
 	}
 
 	// ball placement succeeded
 	if *gameEvent.Type == state.GameEventType_PLACEMENT_SUCCEEDED &&
 		byTeam.Known() &&
-		newState.TeamState[byTeam].BallPlacementFailures > 0 {
-		newState.TeamState[byTeam].BallPlacementFailures--
-		if byTeam == newState.NextCommandFor {
+		*newState.TeamInfo(byTeam).BallPlacementFailures > 0 {
+		*newState.TeamInfo(byTeam).BallPlacementFailures--
+		if byTeam == *newState.NextCommand.ForTeam {
 			log.Printf("Placement succeeded by team %v, which is also in favor. Can continue.", byTeam)
-			changes = append(changes, Change{
+			changes = append(changes, &Change{
 				Continue: &Continue{},
 			})
 		}
@@ -136,25 +137,25 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 	// defender too close to kick point
 	if *gameEvent.Type == state.GameEventType_DEFENDER_TOO_CLOSE_TO_KICK_POINT {
 		log.Printf("Reset current action time because defender of team %v was too close to kick point", byTeam)
-		newState.CurrentActionTimeRemaining = s.gameConfig.GeneralTime
+		newState.CurrentActionTimeRemaining = ptypes.DurationProto(s.gameConfig.GeneralTime)
 	}
 
 	// stop the game if needed
-	if newState.GameState() != state.GameStateStopped &&
+	if *newState.Command.Type != state.Command_STOP &&
 		stopsTheGame(*gameEvent.Type) {
 		log.Printf("Stopping the game for event %v", *gameEvent.Type)
-		changes = append(changes, s.newCommandChange(state.CommandStop))
+		changes = append(changes, s.newCommandChange(state.NewCommandNeutral(state.Command_STOP)))
 	}
 
 	return
 }
 
 // multipleFoulsChange creates a multiple fouls event change
-func (s *StateMachine) multipleFoulsChange(byTeam state.Team) Change {
+func (s *StateMachine) multipleFoulsChange(byTeam state.Team) *Change {
 	eventType := state.GameEventType_MULTIPLE_FOULS
-	return Change{
+	return &Change{
 		AddGameEvent: &AddGameEvent{
-			GameEvent: state.GameEvent{
+			GameEvent: &state.GameEvent{
 				Type: &eventType,
 				Event: &state.GameEvent_MultipleFouls_{
 					MultipleFouls: &state.GameEvent_MultipleFouls{
@@ -168,9 +169,9 @@ func (s *StateMachine) multipleFoulsChange(byTeam state.Team) Change {
 
 // convertAimlessKick converts the aimless kick event into a ball left field via goal line event
 // because aimless kick only applies to DivB
-func (s *StateMachine) convertAimlessKick(gameEvent state.GameEvent) state.GameEvent {
+func (s *StateMachine) convertAimlessKick(gameEvent *state.GameEvent) *state.GameEvent {
 	eventType := state.GameEventType_BALL_LEFT_FIELD_GOAL_LINE
-	return state.GameEvent{
+	return &state.GameEvent{
 		Type:   &eventType,
 		Origin: gameEvent.Origin,
 		Event: &state.GameEvent_BallLeftFieldGoalLine{
@@ -184,11 +185,9 @@ func (s *StateMachine) convertAimlessKick(gameEvent state.GameEvent) state.GameE
 }
 
 // nextCommandForEvent determines the next command for the given event or returns the currently set one
-func (s *StateMachine) nextCommandForEvent(newState *state.State, gameEvent state.GameEvent) (command state.RefCommand, commandFor state.Team) {
-	if newState.Command == state.CommandPenalty || newState.Command == state.CommandKickoff {
-		command = state.CommandNormalStart
-		commandFor = state.Team_UNKNOWN
-		return
+func (s *StateMachine) nextCommandForEvent(newState *state.State, gameEvent *state.GameEvent) (command *state.Command) {
+	if *newState.Command.Type == state.Command_PENALTY || *newState.Command.Type == state.Command_KICKOFF {
+		return state.NewCommand(state.Command_NORMAL_START, state.Team_UNKNOWN)
 	}
 
 	switch *gameEvent.Type {
@@ -204,19 +203,14 @@ func (s *StateMachine) nextCommandForEvent(newState *state.State, gameEvent stat
 		state.GameEventType_BOT_DRIBBLED_BALL_TOO_FAR,
 		state.GameEventType_ATTACKER_DOUBLE_TOUCHED_BALL,
 		state.GameEventType_POSSIBLE_GOAL:
-		command = state.CommandDirect
-		commandFor = gameEvent.ByTeam().Opposite()
+		return state.NewCommand(state.Command_DIRECT, gameEvent.ByTeam().Opposite())
 	case state.GameEventType_DEFENDER_IN_DEFENSE_AREA:
-		command = state.CommandPenalty
-		commandFor = gameEvent.ByTeam().Opposite()
+		return state.NewCommand(state.Command_PENALTY, gameEvent.ByTeam().Opposite())
 	case state.GameEventType_NO_PROGRESS_IN_GAME:
-		command = state.CommandForceStart
-		commandFor = state.Team_UNKNOWN
+		return state.NewCommand(state.Command_FORCE_START, state.Team_UNKNOWN)
 	default:
-		command = newState.NextCommand
-		commandFor = newState.NextCommandFor
+		return newState.NextCommand
 	}
-	return
 }
 
 // incrementsFoulCounter checks if the game event increments the foul counter
@@ -288,7 +282,7 @@ func stopsTheGame(gameEvent state.GameEventType) bool {
 func (s *StateMachine) allTeamsFailedPlacement(newState *state.State) bool {
 	possibleFailures := 0
 	for _, team := range state.BothTeams() {
-		if newState.TeamState[team].BallPlacementAllowed() {
+		if newState.TeamInfo(team).BallPlacementAllowed() {
 			possibleFailures++
 		}
 	}

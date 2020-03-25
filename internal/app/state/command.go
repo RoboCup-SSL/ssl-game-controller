@@ -2,77 +2,45 @@ package state
 
 import "log"
 
-// RefCommand is a command to be send to the teams
-type RefCommand string
-
-const (
-	// CommandUnknown not set
-	CommandUnknown RefCommand = ""
-	// CommandHalt HALT
-	CommandHalt RefCommand = "halt"
-	// CommandStop STOP
-	CommandStop RefCommand = "stop"
-	// CommandNormalStart NORMAL_START
-	CommandNormalStart RefCommand = "normalStart"
-	// CommandForceStart FORCE_START
-	CommandForceStart RefCommand = "forceStart"
-	// CommandDirect DIRECT
-	CommandDirect RefCommand = "direct"
-	// CommandIndirect INDIRECT
-	CommandIndirect RefCommand = "indirect"
-	// CommandKickoff KICKOFF
-	CommandKickoff RefCommand = "kickoff"
-	// CommandPenalty PENALTY
-	CommandPenalty RefCommand = "penalty"
-	// CommandTimeout TIMEOUT
-	CommandTimeout RefCommand = "timeout"
-	// CommandBallPlacement BALL_PLACEMENT
-	CommandBallPlacement RefCommand = "ballPlacement"
-)
-
-// Commands contain all known command enum constants
-var RefCommands = []RefCommand{
-	CommandUnknown,
-	CommandHalt,
-	CommandStop,
-	CommandNormalStart,
-	CommandForceStart,
-	CommandDirect,
-	CommandIndirect,
-	CommandKickoff,
-	CommandPenalty,
-	CommandTimeout,
-	CommandBallPlacement,
+// NewCommand creates a new command
+func NewCommand(t Command_Type, forTeam Team) (c *Command) {
+	return &Command{Type: &t, ForTeam: &forTeam}
 }
 
-// Valid checks if the enum value is among the known values
-func (c RefCommand) Valid() bool {
-	for _, command := range RefCommands {
-		if command == c {
-			return true
-		}
-	}
-	return false
+// NewCommandNeutral creates a new command without a team
+func NewCommandNeutral(t Command_Type) (c *Command) {
+	return &Command{Type: &t}
 }
 
 // NeedsTeam returns true if the command must be specialized with a team
-func (c RefCommand) NeedsTeam() bool {
-	switch c {
-	case CommandUnknown,
-		CommandHalt,
-		CommandStop,
-		CommandNormalStart,
-		CommandForceStart:
+func (m Command) NeedsTeam() bool {
+	switch *m.Type {
+	case Command_UNKNOWN,
+		Command_HALT,
+		Command_STOP,
+		Command_NORMAL_START,
+		Command_FORCE_START:
 		return false
-	case CommandDirect,
-		CommandIndirect,
-		CommandKickoff,
-		CommandPenalty,
-		CommandTimeout,
-		CommandBallPlacement:
+	case Command_DIRECT,
+		Command_INDIRECT,
+		Command_KICKOFF,
+		Command_PENALTY,
+		Command_TIMEOUT,
+		Command_BALL_PLACEMENT:
 		return true
 	default:
-		log.Fatal("Missing case for command ", c)
+		log.Fatal("Missing case for command ", m)
 		return false
 	}
+}
+
+func (m Command) IsRunning() bool {
+	switch *m.Type {
+	case Command_DIRECT,
+		Command_INDIRECT,
+		Command_NORMAL_START,
+		Command_FORCE_START:
+		return true
+	}
+	return false
 }

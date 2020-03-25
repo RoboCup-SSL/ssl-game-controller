@@ -10,13 +10,13 @@ func Test_generateMessages(t *testing.T) {
 	s := state.NewState()
 	c := statemachine.StateChange{
 		State: s,
-		Change: statemachine.Change{
+		Change: &statemachine.Change{
 			YellowCardOver: &statemachine.YellowCardOver{},
 		},
 	}
 
 	g := NewMessageGenerator()
-	rs := g.GenerateRefereeMessages(c)
+	rs := g.GenerateRefereeMessages(&c)
 	if len(rs) != 1 {
 		t.Errorf("Expected only one referee message, got: %v", rs)
 	}
@@ -40,7 +40,7 @@ func Test_generateMessages(t *testing.T) {
 	if *r.CommandTimestamp != 0 {
 		t.Errorf("Wrong CommandTimestamp: %v", *r.CommandTimestamp)
 	}
-	if *r.BlueTeamOnPositiveHalf {
+	if !*r.BlueTeamOnPositiveHalf {
 		t.Errorf("Wrong half: %v", *r.BlueTeamOnPositiveHalf)
 	}
 	if r.Yellow == nil {

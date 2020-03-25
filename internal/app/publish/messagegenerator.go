@@ -3,6 +3,7 @@ package publish
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
+	"github.com/golang/protobuf/ptypes"
 	"time"
 )
 
@@ -23,7 +24,7 @@ func NewMessageGenerator() (m *MessageGenerator) {
 }
 
 // GenerateRefereeMessages generates a list of referee messages that result from the given state change
-func (g *MessageGenerator) GenerateRefereeMessages(change statemachine.StateChange) (rs []*state.Referee) {
+func (g *MessageGenerator) GenerateRefereeMessages(change *statemachine.StateChange) (rs []*state.Referee) {
 	// send the GOAL command based on the team score for compatibility with old behavior
 	if change.Change.AddGameEvent != nil &&
 		*change.Change.AddGameEvent.GameEvent.Type == state.GameEventType_GOAL {
@@ -53,41 +54,42 @@ func (g *MessageGenerator) updateCommand() {
 	g.commandTimestamp = uint64(time.Now().UnixNano() / 1000)
 }
 
-func (g *MessageGenerator) StateToRefereeMessage(matchState state.State) (r *state.Referee) {
+func (g *MessageGenerator) StateToRefereeMessage(matchState *state.State) (r *state.Referee) {
 	r = newRefereeMessage()
 	r.DesignatedPosition = mapLocation(matchState.PlacementPos)
 	r.ProposedGameEvents = mapProposedGameEvents(matchState.ProposedGameEvents)
 
-	*r.Command = mapCommand(matchState.Command, matchState.CommandFor)
+	r.Command = mapCommand(matchState.Command)
 	*r.CommandCounter = g.commandCounter
 	*r.CommandTimestamp = g.commandTimestamp
 	*r.PacketTimestamp = uint64(time.Now().UnixNano() / 1000)
-	*r.Stage = matchState.Stage
-	*r.StageTimeLeft = int32(matchState.StageTimeLeft.Nanoseconds() / 1000)
-	*r.BlueTeamOnPositiveHalf = matchState.TeamState[state.Team_BLUE].OnPositiveHalf
-	*r.NextCommand = mapCommand(matchState.NextCommand, matchState.NextCommandFor)
-	*r.CurrentActionTimeRemaining = int32(matchState.CurrentActionTimeRemaining.Nanoseconds() / 1000)
+	*r.Stage = *matchState.Stage
+	*r.StageTimeLeft = matchState.StageTimeLeft.Nanos / 1000
+	*r.BlueTeamOnPositiveHalf = *matchState.TeamInfo(state.Team_BLUE).OnPositiveHalf
+	r.NextCommand = mapCommand(matchState.NextCommand)
+	*r.CurrentActionTimeRemaining = matchState.CurrentActionTimeRemaining.Nanos / 1000
 
-	updateTeam(r.Yellow, matchState.TeamState[state.Team_YELLOW])
-	updateTeam(r.Blue, matchState.TeamState[state.Team_BLUE])
+	updateTeam(r.Yellow, matchState.TeamInfo(state.Team_YELLOW))
+	updateTeam(r.Blue, matchState.TeamInfo(state.Team_BLUE))
 	return
 }
 
 func updateTeam(teamInfo *state.Referee_TeamInfo, teamState *state.TeamInfo) {
-	*teamInfo.Name = teamState.Name
-	*teamInfo.Score = uint32(teamState.Goals)
+	*teamInfo.Name = *teamState.Name
+	*teamInfo.Score = uint32(*teamState.Goals)
 	*teamInfo.RedCards = uint32(len(teamState.RedCards))
 	teamInfo.YellowCardTimes = mapYellowCardTimes(teamState.YellowCards)
 	*teamInfo.YellowCards = uint32(len(teamState.YellowCards))
-	*teamInfo.Timeouts = uint32(teamState.TimeoutsLeft)
-	*teamInfo.Goalkeeper = uint32(teamState.Goalkeeper)
+	*teamInfo.Timeouts = uint32(*teamState.TimeoutsLeft)
+	*teamInfo.Goalkeeper = uint32(*teamState.Goalkeeper)
 	*teamInfo.FoulCounter = uint32(len(teamState.Fouls))
-	*teamInfo.BallPlacementFailures = uint32(teamState.BallPlacementFailures)
-	*teamInfo.BallPlacementFailuresReached = teamState.BallPlacementFailuresReached
-	*teamInfo.CanPlaceBall = teamState.CanPlaceBall
-	*teamInfo.MaxAllowedBots = uint32(teamState.MaxAllowedBots)
-	*teamInfo.BotSubstitutionIntent = teamState.BotSubstitutionIntend
-	*teamInfo.TimeoutTime = mapTime(teamState.TimeoutTimeLeft)
+	*teamInfo.BallPlacementFailures = uint32(*teamState.BallPlacementFailures)
+	*teamInfo.BallPlacementFailuresReached = *teamState.BallPlacementFailuresReached
+	*teamInfo.CanPlaceBall = *teamState.CanPlaceBall
+	*teamInfo.MaxAllowedBots = uint32(*teamState.MaxAllowedBots)
+	*teamInfo.BotSubstitutionIntent = *teamState.BotSubstitutionIntend
+	timeoutTime, _ := ptypes.Duration(teamState.TimeoutTimeLeft)
+	*teamInfo.TimeoutTime = mapTime(timeoutTime)
 }
 
 func newRefereeMessage() (m *state.Referee) {
