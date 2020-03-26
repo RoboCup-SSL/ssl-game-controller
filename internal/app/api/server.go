@@ -1,10 +1,11 @@
 package api
 
 import (
-	"encoding/json"
+	"bytes"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/engine"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
+	"github.com/golang/protobuf/jsonpb"
 	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
@@ -22,6 +23,7 @@ type ServerConnection struct {
 	conn               *websocket.Conn
 	gcEngine           *engine.Engine
 	lastPublishedState *state.State
+	marshaler          jsonpb.Marshaler
 }
 
 func NewServer(gcEngine *engine.Engine) (s *Server) {
@@ -83,23 +85,23 @@ func (s *ServerConnection) publishState(matchState *state.State) {
 
 	gcState := GameControllerState{
 		AutoRefsConnected:      []string{},
-		TeamConnected:          map[state.Team]bool{},
-		TeamConnectionVerified: map[state.Team]bool{},
+		TeamConnected:          map[int32]bool{},
+		TeamConnectionVerified: map[int32]bool{},
 	}
 
 	out := Output{MatchState: matchState, GcState: &gcState}
-	s.publishOutput(out)
+	s.publishOutput(&out)
 
 	s.lastPublishedState = matchState
 }
 
-func (s *ServerConnection) publishOutput(wrapper Output) {
-	b, err := json.Marshal(wrapper)
+func (s *ServerConnection) publishOutput(wrapper *Output) {
+	b, err := s.marshaler.MarshalToString(wrapper)
 	if err != nil {
 		log.Println("Marshal error:", err)
 	}
 
-	err = s.conn.WriteMessage(websocket.TextMessage, b)
+	err = s.conn.WriteMessage(websocket.TextMessage, []byte(b))
 	if err != nil {
 		log.Println("Could not write message.", err)
 	}
@@ -134,7 +136,7 @@ func (a *Server) listenForNewEvents(conn *websocket.Conn) {
 
 func (a *Server) handleNewEventMessage(b []byte) {
 	in := Input{}
-	err := json.Unmarshal(b, &in)
+	err := jsonpb.Unmarshal(bytes.NewReader(b), &in)
 	if err != nil {
 		log.Println("Could not read input:", string(b), err)
 		return

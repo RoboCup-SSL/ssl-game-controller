@@ -24,3 +24,4 @@ protoc -I"./proto" -I"$GOPATH/src" --go_out=$GOPATH/src proto/ssl_game_controlle
 
 protoc -I"./proto" -I"$GOPATH/src" --go_out=$GOPATH/src proto/ssl_game_controller_state.proto
 protoc -I"./proto" -I"$GOPATH/src" --go_out=$GOPATH/src proto/ssl_game_controller_change.proto
+protoc -I"./proto" -I"$GOPATH/src" --go_out=$GOPATH/src proto/ssl_game_controller_api.proto
