@@ -1,4 +1,4 @@
-timeAcquisitionMode: system
+time-acquisition-mode: system
 network:
   publish-address: 224.5.23.1:10003
   vision-address: 224.5.23.2:10006
@@ -14,17 +14,19 @@ server:
   ci:
     address: :10009
 game:
+  state-store-file: state-store.json.stream
   yellow-card-duration: 2m
   multiple-card-step: 3
   multiple-foul-step: 3
   multiple-placement-failures: 5
   auto-ref-proposal-timeout: 5s
-  default-division: DivA
+  default-division: DIV_A
   free-kick-time:
-    DivA: 5s
-    DivB: 10s
+    DIV_A: 5s
+    DIV_B: 10s
   general-time: 10s
   ball-placement-time: 30s
+  ball-placement-time-top-up: 10s
   normal:
     half-duration: 5m
     half-time-duration: 5m
@@ -39,24 +41,26 @@ game:
     break-after: 2m
   team-choice-timeout: 200ms
   default-geometry:
-    DivA:
+    DIV_A:
       field-length: 12.0
       field-width: 9.0
       defense-area-depth: 1.2
       defense-area-width: 2.4
+      penalty-kick-dist-to-goal: 8.0
       placement-offset-touch-line: 0.2
       placement-offset-goal-line: 0.2
       placement-offset-goal-line-goal-kick: 1.0
       placement-offset-defense-area: 1.0
-    DivB:
+    DIV_B:
       field-length: 9.0
       field-width: 6.0
       defense-area-depth: 1.0
       defense-area-width: 2.0
+      penalty-kick-dist-to-goal: 6.0
       placement-offset-touch-line: 0.2
       placement-offset-goal-line: 0.2
       placement-offset-goal-line-goal-kick: 1.0
       placement-offset-defense-area: 1.0
   max-bots:
-    DivA: 8
-    DivB: 6
+    DIV_A: 8
+    DIV_B: 6

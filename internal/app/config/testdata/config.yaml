@@ -36,7 +36,7 @@ game:
   overtime:
     half-duration: 2m30s
     half-time-duration: 2m
-    timeout-duration: 5m
+    timeout-duration: 2m30s
     timeouts: 2
     break-after: 2m
   team-choice-timeout: 200ms

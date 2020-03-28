@@ -162,7 +162,7 @@ func DefaultControllerConfig() (c Controller) {
 	c.Game.Overtime.HalfDuration = 2*time.Minute + 30*time.Second
 	c.Game.Overtime.HalfTimeDuration = 2 * time.Minute
 	c.Game.Overtime.Timeouts = 2
-	c.Game.Overtime.TimeoutDuration = 5 * time.Minute
+	c.Game.Overtime.TimeoutDuration = 2*time.Minute + 30*time.Second
 	c.Game.Overtime.BreakAfter = 2 * time.Minute
 
 	c.Game.DefaultDivision = DivA
