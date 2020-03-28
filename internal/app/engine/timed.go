@@ -37,11 +37,6 @@ func (e *Engine) Tick() {
 	if *e.currentState.Command.Type == state.Command_TIMEOUT {
 		addDur(e.currentState.TeamInfo(*e.currentState.Command.ForTeam).TimeoutTimeLeft, -delta)
 	}
-
-	if goTime(e.currentState.MatchTimeStart).After(time.Unix(0, 0)) {
-		newMatchDuration := currentTime.Sub(goTime(e.currentState.MatchTimeStart))
-		e.currentState.MatchDuration = ptypes.DurationProto(newMatchDuration)
-	}
 }
 
 func (e *Engine) countStageTime() bool {

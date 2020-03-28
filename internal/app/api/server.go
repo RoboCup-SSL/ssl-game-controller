@@ -176,9 +176,6 @@ func stateChanged(s1, s2 *state.State) bool {
 	if !reflect.DeepEqual(s1.MatchTimeStart, s2.MatchTimeStart) {
 		return true
 	}
-	if s1.MatchDuration.Seconds != s2.MatchDuration.Seconds {
-		return true
-	}
 	for _, team := range state.BothTeams() {
 		if teamStateChanged(s1.TeamInfo(team), s2.TeamInfo(team)) {
 			return true

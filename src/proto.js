@@ -19175,7 +19175,6 @@ export const State = $root.State = (() => {
      * @property {google.protobuf.IDuration|null} [stageTimeElapsed] State stageTimeElapsed
      * @property {google.protobuf.IDuration|null} [stageTimeLeft] State stageTimeLeft
      * @property {google.protobuf.ITimestamp|null} [matchTimeStart] State matchTimeStart
-     * @property {google.protobuf.IDuration|null} [matchDuration] State matchDuration
      * @property {Object.<string,ITeamInfo>|null} [teamState] State teamState
      * @property {ILocation|null} [placementPos] State placementPos
      * @property {ICommand|null} [nextCommand] State nextCommand
@@ -19246,14 +19245,6 @@ export const State = $root.State = (() => {
      * @instance
      */
     State.prototype.matchTimeStart = null;
-
-    /**
-     * State matchDuration.
-     * @member {google.protobuf.IDuration|null|undefined} matchDuration
-     * @memberof State
-     * @instance
-     */
-    State.prototype.matchDuration = null;
 
     /**
      * State teamState.
@@ -19369,8 +19360,6 @@ export const State = $root.State = (() => {
             $root.google.protobuf.Duration.encode(message.stageTimeLeft, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
         if (message.matchTimeStart != null && message.hasOwnProperty("matchTimeStart"))
             $root.google.protobuf.Timestamp.encode(message.matchTimeStart, writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
-        if (message.matchDuration != null && message.hasOwnProperty("matchDuration"))
-            $root.google.protobuf.Duration.encode(message.matchDuration, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
         if (message.teamState != null && message.hasOwnProperty("teamState"))
             for (let keys = Object.keys(message.teamState), i = 0; i < keys.length; ++i) {
                 writer.uint32(/* id 8, wireType 2 =*/66).fork().uint32(/* id 1, wireType 2 =*/10).string(keys[i]);
@@ -19445,9 +19434,6 @@ export const State = $root.State = (() => {
                 break;
             case 6:
                 message.matchTimeStart = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
-                break;
-            case 7:
-                message.matchDuration = $root.google.protobuf.Duration.decode(reader, reader.uint32());
                 break;
             case 8:
                 reader.skip().pos++;
@@ -19567,11 +19553,6 @@ export const State = $root.State = (() => {
             let error = $root.google.protobuf.Timestamp.verify(message.matchTimeStart);
             if (error)
                 return "matchTimeStart." + error;
-        }
-        if (message.matchDuration != null && message.hasOwnProperty("matchDuration")) {
-            let error = $root.google.protobuf.Duration.verify(message.matchDuration);
-            if (error)
-                return "matchDuration." + error;
         }
         if (message.teamState != null && message.hasOwnProperty("teamState")) {
             if (!$util.isObject(message.teamState))
@@ -19745,11 +19726,6 @@ export const State = $root.State = (() => {
                 throw TypeError(".State.matchTimeStart: object expected");
             message.matchTimeStart = $root.google.protobuf.Timestamp.fromObject(object.matchTimeStart);
         }
-        if (object.matchDuration != null) {
-            if (typeof object.matchDuration !== "object")
-                throw TypeError(".State.matchDuration: object expected");
-            message.matchDuration = $root.google.protobuf.Duration.fromObject(object.matchDuration);
-        }
         if (object.teamState) {
             if (typeof object.teamState !== "object")
                 throw TypeError(".State.teamState: object expected");
@@ -19879,7 +19855,6 @@ export const State = $root.State = (() => {
             object.stageTimeElapsed = null;
             object.stageTimeLeft = null;
             object.matchTimeStart = null;
-            object.matchDuration = null;
             object.placementPos = null;
             object.nextCommand = null;
             object.currentActionTimeRemaining = null;
@@ -19897,8 +19872,6 @@ export const State = $root.State = (() => {
             object.stageTimeLeft = $root.google.protobuf.Duration.toObject(message.stageTimeLeft, options);
         if (message.matchTimeStart != null && message.hasOwnProperty("matchTimeStart"))
             object.matchTimeStart = $root.google.protobuf.Timestamp.toObject(message.matchTimeStart, options);
-        if (message.matchDuration != null && message.hasOwnProperty("matchDuration"))
-            object.matchDuration = $root.google.protobuf.Duration.toObject(message.matchDuration, options);
         let keys2;
         if (message.teamState && (keys2 = Object.keys(message.teamState)).length) {
             object.teamState = {};

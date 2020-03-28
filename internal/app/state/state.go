@@ -14,7 +14,6 @@ func NewState() (s *State) {
 	s.StageTimeElapsed = new(duration.Duration)
 	s.StageTimeLeft = new(duration.Duration)
 	s.MatchTimeStart = new(timestamp.Timestamp)
-	s.MatchDuration = new(duration.Duration)
 	s.CurrentActionTimeRemaining = new(duration.Duration)
 	s.Division = new(State_Division)
 	s.AutoContinue = new(bool)

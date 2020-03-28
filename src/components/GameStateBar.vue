@@ -47,7 +47,7 @@
               title="Total time left for this stage">
         </span>
         |
-        <span v-format-ns-duration="state.matchDuration"
+        <span v-format-ns-duration="matchDuration"
               v-b-tooltip.hover.d500
               title="Total real time elapsed since the match has been started">
         </span>
@@ -60,9 +60,27 @@
 
     export default {
         name: 'GameStateBar',
+        data() {
+            return {
+                now: Date.now()
+            }
+        },
+        created () {
+            let self = this;
+            setInterval(function () {
+                self.now = Date.now()
+            }, 1000)
+        },
         computed: {
             state() {
                 return this.$store.state.matchState
+            },
+            matchDuration() {
+                let start = Date.parse(this.state.matchTimeStart);
+                if (start === 0) {
+                    return 0;
+                }
+                return (this.now - start) * 1000000;
             },
             teamStateYellow() {
                 return this.$store.state.matchState.teamState[TEAM_YELLOW]

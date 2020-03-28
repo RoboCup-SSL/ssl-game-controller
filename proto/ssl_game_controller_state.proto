@@ -66,7 +66,6 @@ message State {
     optional google.protobuf.Duration stage_time_elapsed = 4;
     optional google.protobuf.Duration stage_time_left = 5;
     optional google.protobuf.Timestamp match_time_start = 6;
-    optional google.protobuf.Duration match_duration = 7;
     map<string, TeamInfo> team_state = 8;
     optional Location placement_pos = 9;
     optional Command next_command = 10;
