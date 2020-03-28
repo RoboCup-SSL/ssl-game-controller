@@ -19,7 +19,7 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 	}
 
 	// convert aimless kick if necessary
-	if newState.Division.Div() == config.DivA && *gameEvent.Type == state.GameEventType_AIMLESS_KICK {
+	if newState.Division.Div() == config.DivA && *gameEvent.Type == state.GameEvent_AIMLESS_KICK {
 		log.Println("Convert aimless kick to ball left field event, because we are in DivA")
 		gameEvent = s.convertAimlessKick(change.GameEvent)
 	}
@@ -66,19 +66,19 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 	}
 
 	// goal
-	if *gameEvent.Type == state.GameEventType_GOAL && byTeam.Known() {
+	if *gameEvent.Type == state.GameEvent_GOAL && byTeam.Known() {
 		*newState.TeamInfo(byTeam).Goals++
 	}
 
 	// possible goal
-	if *gameEvent.Type == state.GameEventType_POSSIBLE_GOAL {
+	if *gameEvent.Type == state.GameEvent_POSSIBLE_GOAL {
 		log.Printf("Halt the game, because team %v might have scored a goal", byTeam)
 		// halt the game to let the human referee decide if this was a valid goal
 		changes = append(changes, s.newCommandChange(state.NewCommandNeutral(state.Command_HALT)))
 	}
 
 	// bot substitution
-	if *gameEvent.Type == state.GameEventType_BOT_SUBSTITUTION {
+	if *gameEvent.Type == state.GameEvent_BOT_SUBSTITUTION {
 		log.Printf("Halt the game, because team %v requested robot substitution", byTeam)
 		// reset robot substitution flags
 		for _, team := range state.BothTeams() {
@@ -89,7 +89,7 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 	}
 
 	// ball placement interference
-	if *gameEvent.Type == state.GameEventType_BOT_INTERFERED_PLACEMENT {
+	if *gameEvent.Type == state.GameEvent_BOT_INTERFERED_PLACEMENT {
 		log.Printf("Reset current action time for ball placement interference by %v", byTeam)
 		curDuration, _ := ptypes.Duration(newState.CurrentActionTimeRemaining)
 		newState.CurrentActionTimeRemaining = ptypes.DurationProto(curDuration + s.gameConfig.BallPlacementTimeTopUp)
@@ -108,7 +108,7 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 	newState.PlacementPos = placementPosDeterminer.Location()
 
 	// ball placement failed
-	if *gameEvent.Type == state.GameEventType_PLACEMENT_FAILED && byTeam.Known() {
+	if *gameEvent.Type == state.GameEvent_PLACEMENT_FAILED && byTeam.Known() {
 		*newState.TeamInfo(byTeam).BallPlacementFailures++
 		*newState.TeamInfo(byTeam).BallPlacementFailuresReached = *newState.TeamInfo(byTeam).BallPlacementFailures >= s.gameConfig.MultiplePlacementFailures
 		if s.allTeamsFailedPlacement(newState) {
@@ -122,7 +122,7 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 	}
 
 	// ball placement succeeded
-	if *gameEvent.Type == state.GameEventType_PLACEMENT_SUCCEEDED &&
+	if *gameEvent.Type == state.GameEvent_PLACEMENT_SUCCEEDED &&
 		byTeam.Known() &&
 		*newState.TeamInfo(byTeam).BallPlacementFailures > 0 {
 		*newState.TeamInfo(byTeam).BallPlacementFailures--
@@ -135,7 +135,7 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 	}
 
 	// defender too close to kick point
-	if *gameEvent.Type == state.GameEventType_DEFENDER_TOO_CLOSE_TO_KICK_POINT {
+	if *gameEvent.Type == state.GameEvent_DEFENDER_TOO_CLOSE_TO_KICK_POINT {
 		log.Printf("Reset current action time because defender of team %v was too close to kick point", byTeam)
 		newState.CurrentActionTimeRemaining = ptypes.DurationProto(s.gameConfig.GeneralTime)
 	}
@@ -152,7 +152,7 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 
 // multipleFoulsChange creates a multiple fouls event change
 func (s *StateMachine) multipleFoulsChange(byTeam state.Team) *Change {
-	eventType := state.GameEventType_MULTIPLE_FOULS
+	eventType := state.GameEvent_MULTIPLE_FOULS
 	return &Change{
 		AddGameEvent: &AddGameEvent{
 			GameEvent: &state.GameEvent{
@@ -170,7 +170,7 @@ func (s *StateMachine) multipleFoulsChange(byTeam state.Team) *Change {
 // convertAimlessKick converts the aimless kick event into a ball left field via goal line event
 // because aimless kick only applies to DivB
 func (s *StateMachine) convertAimlessKick(gameEvent *state.GameEvent) *state.GameEvent {
-	eventType := state.GameEventType_BALL_LEFT_FIELD_GOAL_LINE
+	eventType := state.GameEvent_BALL_LEFT_FIELD_GOAL_LINE
 	return &state.GameEvent{
 		Type:   &eventType,
 		Origin: gameEvent.Origin,
@@ -191,22 +191,22 @@ func (s *StateMachine) nextCommandForEvent(newState *state.State, gameEvent *sta
 	}
 
 	switch *gameEvent.Type {
-	case state.GameEventType_BALL_LEFT_FIELD_GOAL_LINE,
-		state.GameEventType_BALL_LEFT_FIELD_TOUCH_LINE,
-		state.GameEventType_AIMLESS_KICK,
-		state.GameEventType_ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA,
-		state.GameEventType_BOT_PUSHED_BOT,
-		state.GameEventType_BOT_HELD_BALL_DELIBERATELY,
-		state.GameEventType_BOT_TIPPED_OVER,
-		state.GameEventType_KEEPER_HELD_BALL,
-		state.GameEventType_BOUNDARY_CROSSING,
-		state.GameEventType_BOT_DRIBBLED_BALL_TOO_FAR,
-		state.GameEventType_ATTACKER_DOUBLE_TOUCHED_BALL,
-		state.GameEventType_POSSIBLE_GOAL:
+	case state.GameEvent_BALL_LEFT_FIELD_GOAL_LINE,
+		state.GameEvent_BALL_LEFT_FIELD_TOUCH_LINE,
+		state.GameEvent_AIMLESS_KICK,
+		state.GameEvent_ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA,
+		state.GameEvent_BOT_PUSHED_BOT,
+		state.GameEvent_BOT_HELD_BALL_DELIBERATELY,
+		state.GameEvent_BOT_TIPPED_OVER,
+		state.GameEvent_KEEPER_HELD_BALL,
+		state.GameEvent_BOUNDARY_CROSSING,
+		state.GameEvent_BOT_DRIBBLED_BALL_TOO_FAR,
+		state.GameEvent_ATTACKER_DOUBLE_TOUCHED_BALL,
+		state.GameEvent_POSSIBLE_GOAL:
 		return state.NewCommand(state.Command_DIRECT, gameEvent.ByTeam().Opposite())
-	case state.GameEventType_DEFENDER_IN_DEFENSE_AREA:
+	case state.GameEvent_DEFENDER_IN_DEFENSE_AREA:
 		return state.NewCommand(state.Command_PENALTY, gameEvent.ByTeam().Opposite())
-	case state.GameEventType_NO_PROGRESS_IN_GAME:
+	case state.GameEvent_NO_PROGRESS_IN_GAME:
 		return state.NewCommand(state.Command_FORCE_START, state.Team_UNKNOWN)
 	default:
 		return newState.NextCommand
@@ -214,64 +214,64 @@ func (s *StateMachine) nextCommandForEvent(newState *state.State, gameEvent *sta
 }
 
 // incrementsFoulCounter checks if the game event increments the foul counter
-func incrementsFoulCounter(gameEvent state.GameEventType) bool {
+func incrementsFoulCounter(gameEvent state.GameEvent_Type) bool {
 	switch gameEvent {
 	case
-		state.GameEventType_AIMLESS_KICK,
-		state.GameEventType_KEEPER_HELD_BALL,
-		state.GameEventType_ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA,
-		state.GameEventType_BOT_DRIBBLED_BALL_TOO_FAR,
-		state.GameEventType_BOT_KICKED_BALL_TOO_FAST,
-		state.GameEventType_ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA,
-		state.GameEventType_BOT_INTERFERED_PLACEMENT,
-		state.GameEventType_BOT_CRASH_DRAWN,
-		state.GameEventType_BOT_CRASH_UNIQUE,
-		state.GameEventType_BOT_PUSHED_BOT,
-		state.GameEventType_BOT_HELD_BALL_DELIBERATELY,
-		state.GameEventType_BOT_TIPPED_OVER,
-		state.GameEventType_BOT_TOO_FAST_IN_STOP,
-		state.GameEventType_DEFENDER_TOO_CLOSE_TO_KICK_POINT,
-		state.GameEventType_BOUNDARY_CROSSING:
+		state.GameEvent_AIMLESS_KICK,
+		state.GameEvent_KEEPER_HELD_BALL,
+		state.GameEvent_ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA,
+		state.GameEvent_BOT_DRIBBLED_BALL_TOO_FAR,
+		state.GameEvent_BOT_KICKED_BALL_TOO_FAST,
+		state.GameEvent_ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA,
+		state.GameEvent_BOT_INTERFERED_PLACEMENT,
+		state.GameEvent_BOT_CRASH_DRAWN,
+		state.GameEvent_BOT_CRASH_UNIQUE,
+		state.GameEvent_BOT_PUSHED_BOT,
+		state.GameEvent_BOT_HELD_BALL_DELIBERATELY,
+		state.GameEvent_BOT_TIPPED_OVER,
+		state.GameEvent_BOT_TOO_FAST_IN_STOP,
+		state.GameEvent_DEFENDER_TOO_CLOSE_TO_KICK_POINT,
+		state.GameEvent_BOUNDARY_CROSSING:
 		return true
 	}
 	return false
 }
 
 // addsYellowCard checks if the game event adds a yellow card
-func addsYellowCard(gameEvent state.GameEventType) bool {
+func addsYellowCard(gameEvent state.GameEvent_Type) bool {
 	switch gameEvent {
 	case
-		state.GameEventType_MULTIPLE_FOULS,
-		state.GameEventType_UNSPORTING_BEHAVIOR_MINOR:
+		state.GameEvent_MULTIPLE_FOULS,
+		state.GameEvent_UNSPORTING_BEHAVIOR_MINOR:
 		return true
 	}
 	return false
 }
 
 // addsYellowCard checks if the game event adds a yellow card
-func addsRedCard(gameEvent state.GameEventType) bool {
+func addsRedCard(gameEvent state.GameEvent_Type) bool {
 	switch gameEvent {
 	case
-		state.GameEventType_DEFENDER_IN_DEFENSE_AREA,
-		state.GameEventType_UNSPORTING_BEHAVIOR_MAJOR:
+		state.GameEvent_DEFENDER_IN_DEFENSE_AREA,
+		state.GameEvent_UNSPORTING_BEHAVIOR_MAJOR:
 		return true
 	}
 	return false
 }
 
 // addsYellowCard checks if the game event adds a yellow card
-func stopsTheGame(gameEvent state.GameEventType) bool {
+func stopsTheGame(gameEvent state.GameEvent_Type) bool {
 	switch gameEvent {
 	case
-		state.GameEventType_ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA,
-		state.GameEventType_BOT_PUSHED_BOT,
-		state.GameEventType_BOT_HELD_BALL_DELIBERATELY,
-		state.GameEventType_BOT_TIPPED_OVER,
-		state.GameEventType_DEFENDER_IN_DEFENSE_AREA,
-		state.GameEventType_BOUNDARY_CROSSING,
-		state.GameEventType_KEEPER_HELD_BALL,
-		state.GameEventType_BOT_DRIBBLED_BALL_TOO_FAR,
-		state.GameEventType_PLACEMENT_SUCCEEDED:
+		state.GameEvent_ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA,
+		state.GameEvent_BOT_PUSHED_BOT,
+		state.GameEvent_BOT_HELD_BALL_DELIBERATELY,
+		state.GameEvent_BOT_TIPPED_OVER,
+		state.GameEvent_DEFENDER_IN_DEFENSE_AREA,
+		state.GameEvent_BOUNDARY_CROSSING,
+		state.GameEvent_KEEPER_HELD_BALL,
+		state.GameEvent_BOT_DRIBBLED_BALL_TOO_FAR,
+		state.GameEvent_PLACEMENT_SUCCEEDED:
 		return true
 	}
 	return false
@@ -289,7 +289,7 @@ func (s *StateMachine) allTeamsFailedPlacement(newState *state.State) bool {
 
 	failures := 0
 	for _, e := range newState.GameEvents {
-		if *e.Type == state.GameEventType_PLACEMENT_FAILED {
+		if *e.Type == state.GameEvent_PLACEMENT_FAILED {
 			failures++
 			if failures >= possibleFailures {
 				return true

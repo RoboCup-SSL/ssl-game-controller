@@ -2,8 +2,8 @@ syntax = "proto2";
 
 option go_package = "github.com/RoboCup-SSL/ssl-game-controller/internal/app/rcon";
 
-import "github.com/RoboCup-SSL/ssl-game-controller/proto/ssl_game_event.proto";
-import "github.com/RoboCup-SSL/ssl-game-controller/proto/ssl_game_controller_common.proto";
+import "ssl_game_event.proto";
+import "ssl_game_controller_common.proto";
 
 // AutoRefRegistration is the first message that a client must send to the controller to identify itself
 message AutoRefRegistration {

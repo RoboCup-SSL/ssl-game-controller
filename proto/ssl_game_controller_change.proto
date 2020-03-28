@@ -2,9 +2,9 @@ syntax = "proto2";
 
 option go_package = "github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine";
 
-import "github.com/RoboCup-SSL/ssl-game-controller/proto/ssl_game_controller_state.proto";
-import "github.com/RoboCup-SSL/ssl-game-controller/proto/ssl_game_event.proto";
-import "github.com/RoboCup-SSL/ssl-game-controller/proto/ssl_referee.proto";
+import "ssl_game_controller_state.proto";
+import "ssl_game_event.proto";
+import "ssl_referee.proto";
 
 message StateChange {
     optional uint32 id = 1;
@@ -72,10 +72,10 @@ message Continue {
 }
 
 message UpdateConfig {
-    optional Division division = 1;
+    optional State.Division division = 1;
     optional Team first_kickoff_team = 2;
     optional bool auto_continue = 3;
-    map<int32, GameEventBehavior> game_event_behavior = 4;
+    map<string, State.GameEventBehavior> game_event_behavior = 4;
 }
 
 message UpdateTeamState {

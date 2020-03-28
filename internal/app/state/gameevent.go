@@ -24,9 +24,9 @@ func (m GameEvent) ByTeam() Team {
 	return Team_UNKNOWN
 }
 
-func AllGameEvents() (a []GameEventType) {
-	for t := range GameEventType_name {
-		a = append(a, GameEventType(t))
+func AllGameEvents() (a []GameEvent_Type) {
+	for t := range GameEvent_Type_name {
+		a = append(a, GameEvent_Type(t))
 	}
 	return
 }

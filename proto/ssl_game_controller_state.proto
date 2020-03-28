@@ -2,24 +2,11 @@ syntax = "proto2";
 
 option go_package = "github.com/RoboCup-SSL/ssl-game-controller/internal/app/state";
 
-import "github.com/RoboCup-SSL/ssl-game-controller/proto/ssl_game_event.proto";
-import "github.com/RoboCup-SSL/ssl-game-controller/proto/ssl_referee.proto";
+import "ssl_game_event.proto";
+import "ssl_referee.proto";
 
 import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
-
-enum Division {
-    DIV_UNKNOWN = 0;
-    DIV_A = 1;
-    DIV_B = 2;
-}
-
-enum GameEventBehavior {
-    GAME_EVENT_BEHAVIOR_UNKNOWN = 0;
-    GAME_EVENT_BEHAVIOR_On = 1;
-    GAME_EVENT_BEHAVIOR_MAJORITY = 2;
-    GAME_EVENT_BEHAVIOR_OFF = 3;
-}
 
 message YellowCard {
     optional uint32 id = 1;
@@ -80,7 +67,7 @@ message State {
     optional google.protobuf.Duration stage_time_left = 5;
     optional google.protobuf.Timestamp match_time_start = 6;
     optional google.protobuf.Duration match_duration = 7;
-    map<int32, TeamInfo> team_state = 8;
+    map<string, TeamInfo> team_state = 8;
     optional Location placement_pos = 9;
     optional Command next_command = 10;
     optional google.protobuf.Duration current_action_time_remaining = 12;
@@ -89,5 +76,18 @@ message State {
     optional Division division = 15;
     optional bool auto_continue = 16;
     optional Team first_kickoff_team = 17;
-    map<int32, GameEventBehavior> game_event_behavior = 18;
+    map<string, GameEventBehavior> game_event_behavior = 18;
+
+    enum Division {
+        DIV_UNKNOWN = 0;
+        DIV_A = 1;
+        DIV_B = 2;
+    }
+
+    enum GameEventBehavior {
+        GAME_EVENT_BEHAVIOR_UNKNOWN = 0;
+        GAME_EVENT_BEHAVIOR_On = 1;
+        GAME_EVENT_BEHAVIOR_MAJORITY = 2;
+        GAME_EVENT_BEHAVIOR_OFF = 3;
+    }
 }

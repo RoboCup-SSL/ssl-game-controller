@@ -85,8 +85,8 @@ func (s *ServerConnection) publishState(matchState *state.State) {
 
 	gcState := GameControllerState{
 		AutoRefsConnected:      []string{},
-		TeamConnected:          map[int32]bool{},
-		TeamConnectionVerified: map[int32]bool{},
+		TeamConnected:          map[string]bool{},
+		TeamConnectionVerified: map[string]bool{},
 	}
 
 	out := Output{MatchState: matchState, GcState: &gcState}
@@ -148,7 +148,7 @@ func (a *Server) handleNewEventMessage(b []byte) {
 }
 
 func stateChanged(s1, s2 *state.State) bool {
-	if s1.Stage != s2.Stage {
+	if s1 == nil || s2 == nil || s1.Stage != s2.Stage {
 		return true
 	}
 	if s1.Command != s2.Command {

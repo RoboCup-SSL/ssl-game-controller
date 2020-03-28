@@ -27,7 +27,7 @@ func NewMessageGenerator() (m *MessageGenerator) {
 func (g *MessageGenerator) GenerateRefereeMessages(change *statemachine.StateChange) (rs []*state.Referee) {
 	// send the GOAL command based on the team score for compatibility with old behavior
 	if change.Change.AddGameEvent != nil &&
-		*change.Change.AddGameEvent.GameEvent.Type == state.GameEventType_GOAL {
+		*change.Change.AddGameEvent.GameEvent.Type == state.GameEvent_GOAL {
 		g.updateCommand()
 		refereeMsg := g.StateToRefereeMessage(change.State)
 		if change.Change.AddGameEvent.GameEvent.ByTeam() == state.Team_YELLOW {

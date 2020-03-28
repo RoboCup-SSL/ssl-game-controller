@@ -20,7 +20,7 @@ func (s *StateMachine) UpdateConfig(newState *state.State, change *UpdateConfig)
 	}
 	for eventType, behavior := range change.GameEventBehavior {
 		log.Printf("Change game event behavior for %v to %v", eventType, behavior)
-		newState.GameEventBehavior[int32(eventType)] = behavior
+		newState.GameEventBehavior[eventType] = behavior
 	}
 	return
 }

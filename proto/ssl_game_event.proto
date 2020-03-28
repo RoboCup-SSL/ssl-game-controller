@@ -36,7 +36,7 @@ message Location {
 // An autoRef should ideally set all fields, except if there are good reasons to not do so.
 message GameEvent {
 
-    required GameEventType type = 40;
+    required Type type = 40;
 
     // the origins of this game event
     // empty, if it originates from game controller
@@ -476,76 +476,76 @@ message GameEvent {
         // the location of the ball
         optional Location location = 2;
     }
-}
 
-enum GameEventType {
-    UNKNOWN_GAME_EVENT_TYPE = 0;
+    enum Type {
+        UNKNOWN_GAME_EVENT_TYPE = 0;
 
-    // Ball out of field events (stopping)
+        // Ball out of field events (stopping)
 
-    BALL_LEFT_FIELD_TOUCH_LINE = 6;
-    BALL_LEFT_FIELD_GOAL_LINE = 7;
-    AIMLESS_KICK = 11;
+        BALL_LEFT_FIELD_TOUCH_LINE = 6;
+        BALL_LEFT_FIELD_GOAL_LINE = 7;
+        AIMLESS_KICK = 11;
 
-    // Scoring goals
+        // Scoring goals
 
-    POSSIBLE_GOAL = 39;
+        POSSIBLE_GOAL = 39;
 
-    // Non-Foul Violations
+        // Non-Foul Violations
 
-    NO_PROGRESS_IN_GAME = 2;
-    ATTACKER_DOUBLE_TOUCHED_BALL = 14;
-    BOUNDARY_CROSSING = 41;
+        NO_PROGRESS_IN_GAME = 2;
+        ATTACKER_DOUBLE_TOUCHED_BALL = 14;
+        BOUNDARY_CROSSING = 41;
 
-    // Stopping Fouls
+        // Stopping Fouls
 
-    ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA = 19;
-    DEFENDER_IN_DEFENSE_AREA = 31;
-    KEEPER_HELD_BALL = 13;
-    BOT_DRIBBLED_BALL_TOO_FAR = 17;
+        ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA = 19;
+        DEFENDER_IN_DEFENSE_AREA = 31;
+        KEEPER_HELD_BALL = 13;
+        BOT_DRIBBLED_BALL_TOO_FAR = 17;
 
-    // Non-Stopping Fouls
+        // Non-Stopping Fouls
 
-    ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA = 15;
-    BOT_KICKED_BALL_TOO_FAST = 18;
-    BOT_CRASH_UNIQUE = 22;
-    BOT_CRASH_DRAWN = 21;
+        ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA = 15;
+        BOT_KICKED_BALL_TOO_FAST = 18;
+        BOT_CRASH_UNIQUE = 22;
+        BOT_CRASH_DRAWN = 21;
 
-    // Fouls while ball out of play
+        // Fouls while ball out of play
 
-    DEFENDER_TOO_CLOSE_TO_KICK_POINT = 29;
-    BOT_TOO_FAST_IN_STOP = 28;
-    BOT_INTERFERED_PLACEMENT = 20;
+        DEFENDER_TOO_CLOSE_TO_KICK_POINT = 29;
+        BOT_TOO_FAST_IN_STOP = 28;
+        BOT_INTERFERED_PLACEMENT = 20;
 
-    // Events sent by GC only
+        // Events sent by GC only
 
-    GOAL = 8;
-    INVALID_GOAL = 42;
-    PLACEMENT_FAILED = 3;
-    PLACEMENT_SUCCEEDED = 5;
-    MULTIPLE_CARDS = 32;
-    MULTIPLE_FOULS = 34;
-    BOT_SUBSTITUTION = 37;
+        GOAL = 8;
+        INVALID_GOAL = 42;
+        PLACEMENT_FAILED = 3;
+        PLACEMENT_SUCCEEDED = 5;
+        MULTIPLE_CARDS = 32;
+        MULTIPLE_FOULS = 34;
+        BOT_SUBSTITUTION = 37;
 
-    // Events triggered by the human referee through the GC only
+        // Events triggered by the human referee through the GC only
 
-    UNSPORTING_BEHAVIOR_MINOR = 35;
-    UNSPORTING_BEHAVIOR_MAJOR = 36;
-    BOT_PUSHED_BOT = 24;
-    BOT_HELD_BALL_DELIBERATELY = 26;
-    BOT_TIPPED_OVER = 27;
+        UNSPORTING_BEHAVIOR_MINOR = 35;
+        UNSPORTING_BEHAVIOR_MAJOR = 36;
+        BOT_PUSHED_BOT = 24;
+        BOT_HELD_BALL_DELIBERATELY = 26;
+        BOT_TIPPED_OVER = 27;
 
-    // Deprecated events
+        // Deprecated events
 
-    PREPARED = 1 [deprecated = true];
-    TOO_MANY_ROBOTS = 38 [deprecated = true];
-    INDIRECT_GOAL = 9 [deprecated = true];
-    CHIPPED_GOAL = 10 [deprecated = true];
-    KICK_TIMEOUT = 12 [deprecated = true];
-    ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA = 16 [deprecated = true];
-    ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA_SKIPPED = 40 [deprecated = true];
-    BOT_CRASH_UNIQUE_SKIPPED = 23 [deprecated = true];
-    BOT_PUSHED_BOT_SKIPPED = 25 [deprecated = true];
-    DEFENDER_IN_DEFENSE_AREA_PARTIALLY = 30 [deprecated = true];
-    MULTIPLE_PLACEMENT_FAILURES = 33 [deprecated = true];
+        PREPARED = 1 [deprecated = true];
+        TOO_MANY_ROBOTS = 38 [deprecated = true];
+        INDIRECT_GOAL = 9 [deprecated = true];
+        CHIPPED_GOAL = 10 [deprecated = true];
+        KICK_TIMEOUT = 12 [deprecated = true];
+        ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA = 16 [deprecated = true];
+        ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA_SKIPPED = 40 [deprecated = true];
+        BOT_CRASH_UNIQUE_SKIPPED = 23 [deprecated = true];
+        BOT_PUSHED_BOT_SKIPPED = 25 [deprecated = true];
+        DEFENDER_IN_DEFENSE_AREA_PARTIALLY = 30 [deprecated = true];
+        MULTIPLE_PLACEMENT_FAILURES = 33 [deprecated = true];
+    }
 }

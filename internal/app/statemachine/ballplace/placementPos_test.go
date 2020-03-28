@@ -164,7 +164,7 @@ func Test_BallPlacementPos(t *testing.T) {
 
 func createBallLeftFieldTouchLine(eventLocation state.Location) *state.GameEvent {
 	var byTeam = state.Team_YELLOW
-	eventType := state.GameEventType_BALL_LEFT_FIELD_TOUCH_LINE
+	eventType := state.GameEvent_BALL_LEFT_FIELD_TOUCH_LINE
 	return &state.GameEvent{
 		Type: &eventType,
 		Event: &state.GameEvent_BallLeftFieldTouchLine{
@@ -178,7 +178,7 @@ func createBallLeftFieldTouchLine(eventLocation state.Location) *state.GameEvent
 
 func createBallLeftFieldGoalLine(eventLocation state.Location, placingTeam state.Team) *state.GameEvent {
 	var byTeam = placingTeam.Opposite()
-	eventType := state.GameEventType_BALL_LEFT_FIELD_GOAL_LINE
+	eventType := state.GameEvent_BALL_LEFT_FIELD_GOAL_LINE
 	return &state.GameEvent{
 		Type: &eventType,
 		Event: &state.GameEvent_BallLeftFieldGoalLine{
@@ -191,7 +191,7 @@ func createBallLeftFieldGoalLine(eventLocation state.Location, placingTeam state
 }
 func createBotCrashUnique(eventLocation state.Location) *state.GameEvent {
 	var byTeam = state.Team_YELLOW
-	eventType := state.GameEventType_BOT_CRASH_UNIQUE
+	eventType := state.GameEvent_BOT_CRASH_UNIQUE
 	return &state.GameEvent{
 		Type: &eventType,
 		Event: &state.GameEvent_BotCrashUnique_{

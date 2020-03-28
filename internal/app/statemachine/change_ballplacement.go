@@ -60,10 +60,10 @@ func ballLeftField(newState *state.State) bool {
 	for _, gameEvent := range newState.GameEvents {
 		switch *gameEvent.Type {
 		case
-			state.GameEventType_BALL_LEFT_FIELD_GOAL_LINE,
-			state.GameEventType_BALL_LEFT_FIELD_TOUCH_LINE,
-			state.GameEventType_AIMLESS_KICK,
-			state.GameEventType_POSSIBLE_GOAL:
+			state.GameEvent_BALL_LEFT_FIELD_GOAL_LINE,
+			state.GameEvent_BALL_LEFT_FIELD_TOUCH_LINE,
+			state.GameEvent_AIMLESS_KICK,
+			state.GameEvent_POSSIBLE_GOAL:
 			return true
 		}
 	}

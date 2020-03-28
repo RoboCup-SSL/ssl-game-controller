@@ -2,8 +2,8 @@ syntax = "proto2";
 
 option go_package = "github.com/RoboCup-SSL/ssl-game-controller/internal/app/api";
 
-import "github.com/RoboCup-SSL/ssl-game-controller/proto/ssl_game_controller_state.proto";
-import "github.com/RoboCup-SSL/ssl-game-controller/proto/ssl_game_controller_change.proto";
+import "ssl_game_controller_state.proto";
+import "ssl_game_controller_change.proto";
 
 message Output {
     optional State match_state = 1;
@@ -12,8 +12,8 @@ message Output {
 
 message GameControllerState {
     repeated string auto_refs_connected = 1;
-    map<int32, bool> team_connected = 2;
-    map<int32, bool> team_connection_verified = 3;
+    map<string, bool> team_connected = 2;
+    map<string, bool> team_connection_verified = 3;
 }
 
 message Input {
