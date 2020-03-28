@@ -225,10 +225,10 @@ func teamStateChanged(s1, s2 *state.TeamInfo) bool {
 		return true
 	}
 	for i := range s1.YellowCards {
-		if s1.YellowCards[i].Id != s2.YellowCards[i].Id {
+		if *s1.YellowCards[i].Id != *s2.YellowCards[i].Id {
 			return true
 		}
-		if s1.YellowCards[i].CausedByGameEvent != s2.YellowCards[i].CausedByGameEvent {
+		if !reflect.DeepEqual(s1.YellowCards[i].CausedByGameEvent, s2.YellowCards[i].CausedByGameEvent) {
 			return true
 		}
 		if s1.YellowCards[i].TimeRemaining.Seconds != s2.YellowCards[i].TimeRemaining.Seconds {
