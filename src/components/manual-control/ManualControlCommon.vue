@@ -33,7 +33,7 @@
                     <b-button v-hotkey="keymapForceStart"
                               ref="btnForceStart"
                               class="manual-control-button"
-                              v-on:click="send('forcestart')"
+                              v-on:click="send('FORCE_START')"
                               v-bind:disabled="!stopped || !forceStartAllowed">
                         Force Start
                     </b-button>
@@ -45,7 +45,7 @@
                     <b-button v-hotkey="keymapNormalStart"
                               ref="btnNormalStart"
                               class="manual-control-button"
-                              v-on:click="send('normalStart')"
+                              v-on:click="send('NORMAL_START')"
                               v-bind:disabled="!prepareSth || !normalStartAllowed">
                         Normal Start
                     </b-button>
@@ -71,7 +71,7 @@
                 return {
                     'esc': () => {
                         if (!this.$refs.btnHalt.disabled) {
-                            submitNewCommand('halt', TEAM_UNKNOWN);
+                            submitNewCommand('HALT', TEAM_UNKNOWN);
                         }
                     }
                 }
@@ -80,7 +80,7 @@
                 return {
                     'ctrl+alt+numpad 0': () => {
                         if (!this.$refs.btnStop.disabled) {
-                            submitNewCommand('stop', TEAM_UNKNOWN);
+                            submitNewCommand('STOP', TEAM_UNKNOWN);
                         }
                     }
                 }
@@ -89,7 +89,7 @@
                 return {
                     'ctrl+alt+numpad 5': () => {
                         if (!this.$refs.btnForceStart.disabled) {
-                            submitNewCommand('forceStart', TEAM_UNKNOWN);
+                            submitNewCommand('FORCE_START', TEAM_UNKNOWN);
                         }
                     }
                 }
@@ -98,7 +98,7 @@
                 return {
                     'ctrl+alt+numpad 8': () => {
                         if (!this.$refs.btnNormalStart.disabled) {
-                            submitNewCommand('normalStart', TEAM_UNKNOWN);
+                            submitNewCommand('NORMAL_START', TEAM_UNKNOWN);
                         }
                     }
                 }
@@ -119,7 +119,7 @@
                 return isNonPausedStage(this.state);
             },
             normalStartAllowed() {
-                return isNonPausedStage(this.state) || this.state.command === 'KICKOFF';
+                return isNonPausedStage(this.state) || this.state.command.type === 'KICKOFF';
             },
             stopAllowed() {
                 return isNonPausedStage(this.$store.state.matchState)
