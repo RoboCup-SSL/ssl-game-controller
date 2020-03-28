@@ -3,19 +3,13 @@
         <b-button v-on:click="addYellowCard"
                   class="manual-control-button"
                   v-bind:disabled="running || preparing">
-            Add Yellow Card
-        </b-button>
-
-        <b-button v-on:click="revokeYellowCard"
-                  class="manual-control-button"
-                  v-bind:disabled="!yellowCardActive">
-            Revoke Yellow Card
+            Yellow Card
         </b-button>
 
         <b-button v-on:click="addRedCard"
                   class="manual-control-button"
                   v-bind:disabled="running || preparing">
-            Add Red Card
+            Red Card
         </b-button>
 
         <b-button v-on:click="addGoal"
@@ -47,9 +41,6 @@
         methods: {
             send(command) {
                 submitNewCommand(command, this.teamColor);
-            },
-            revokeYellowCard: function () {
-                // TODO
             },
             addYellowCard() {
                 submitChange({addYellowCard: {forTeam: this.teamColor}});
@@ -108,9 +99,6 @@
             },
             nonPausedStage() {
                 return isNonPausedStage(this.state);
-            },
-            yellowCardActive() {
-                return this.teamState.yellowCards.some(e => e.timeRemaining > 0);
             }
         }
     }
