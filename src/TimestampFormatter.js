@@ -21,6 +21,15 @@ const process = function (el, binding) {
     let timestamp;
     if (isNumeric(binding.value)) {
         timestamp = binding.value;
+    } else if (typeof binding.value === 'string' && binding.value.endsWith('s')) {
+        let parts = binding.value.substring(0, binding.value.length - 1).split('.');
+        if (parts.length === 1) {
+            timestamp = parseInt(parts[0]) * 1000000000;
+        } else if (parts.length === 2) {
+            timestamp = parseInt(parts[0]) * 1000000000 + parseInt(parts[1]);
+        } else {
+            timestamp = el.innerHTML;
+        }
     } else {
         timestamp = el.innerHTML;
     }
