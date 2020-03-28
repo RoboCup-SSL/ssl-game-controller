@@ -22,7 +22,7 @@
         </span>
         |
         <span v-b-tooltip.hover.d500 title="The current stage of the game">
-            {{state.stage}}
+            {{stageText}}
         </span>
         |
         <span v-b-tooltip.hover.d500
@@ -55,7 +55,7 @@
 </template>
 
 <script>
-    import {TEAM_YELLOW} from "../refereeState";
+    import {stageNames, TEAM_YELLOW} from "../refereeState";
     import {TEAM_BLUE} from "../refereeState";
 
     export default {
@@ -81,6 +81,9 @@
                     'team-blue': this.state.command.forTeam === TEAM_BLUE,
                     'team-yellow': this.state.command.forTeam === TEAM_YELLOW
                 }
+            },
+            stageText() {
+                return stageNames[this.state.stage];
             }
         }
     }

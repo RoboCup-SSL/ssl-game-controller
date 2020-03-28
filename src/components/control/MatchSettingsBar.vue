@@ -23,7 +23,7 @@
                   title="Proceed to the next stage"
                   v-on:click="nextStage"
                   :disabled="forbidMatchControls || noNextStage">
-            Proceed to '{{nextStageText}}'
+            Proceed to {{nextStageText}}
         </b-button>
 
         <b-button v-b-tooltip.hover.d500
@@ -48,47 +48,47 @@
 
 <script>
     import Settings from "../settings/Settings";
-    import {getNextStage, canEndGameFromStage} from "../../refereeState";
+    import {getNextStage, canEndGameFromStage, stageNames} from "../../refereeState";
     import NewEvent from "../create-event/NewEvent";
+    import {submitChange} from "../../submit";
 
     export default {
         name: "MatchSettingsBar",
         components: {NewEvent, Settings},
         methods: {
             nextStage: function () {
-                this.$socket.sendObj({
-                    'stage': {'stageOperation': 'next'}
-                })
+                submitChange({
+                    changeStage: {
+                        newStage: getNextStage(this.$store.state.matchState.stage)
+                    }
+                });
             },
             endGame: function () {
-                this.$socket.sendObj({
-                    'stage': {'stageOperation': 'endGame'}
-                })
+                submitChange({
+                    changeStage: {
+                        newStage: 'POST_GAME'
+                    }
+                });
             },
             setAutoContinue(enabled) {
-                this.$socket.sendObj({
-                    'modify': {'autoContinue': enabled}
-                })
+                submitChange({updateConfig: {autoContinue: enabled}});
             },
         },
         computed: {
-            state() {
-                return this.$store.state.matchState
-            },
             halted() {
-                return this.state.command === 'halt';
+                return this.$store.state.matchState.command.type === 'HALT';
             },
             stopped() {
-                return this.state.command === 'stop';
+                return this.$store.state.matchState.command.type === 'STOP';
             },
             forbidMatchControls() {
                 return !this.stopped && !this.halted;
             },
             noNextStage() {
-                return this.state.stage === 'End of Game';
+                return this.$store.state.matchState.stage === 'POST_GAME';
             },
             autoContinue() {
-                return this.$store.state.gcState.autoContinue;
+                return this.$store.state.matchState.autoContinue;
             },
             keymapToggleAutoRef() {
                 return {
@@ -98,10 +98,10 @@
                 }
             },
             nextStageText() {
-                return getNextStage(this.state.stage);
+                return stageNames[getNextStage(this.$store.state.matchState.stage)];
             },
             showEndGame() {
-                return canEndGameFromStage(this.state.stage);
+                return canEndGameFromStage(this.$store.state.matchState.stage);
             },
         }
     }

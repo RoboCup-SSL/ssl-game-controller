@@ -1,10 +1,30 @@
+import {Referee} from "./proto";
+
 export const TEAM_UNKNOWN = 'UNKNOWN';
 export const TEAM_YELLOW = 'YELLOW';
 export const TEAM_BLUE = 'BLUE';
 
+export const stageNames = {
+    'NORMAL_FIRST_HALF_PRE': 'Pre-First Half',
+    'NORMAL_FIRST_HALF': 'First Half',
+    'NORMAL_HALF_TIME': 'Half Time',
+    'NORMAL_SECOND_HALF_PRE': 'Pre-Second Half',
+    'NORMAL_SECOND_HALF': 'Second Half',
+    'EXTRA_TIME_BREAK': 'Overtime Break',
+    'EXTRA_FIRST_HALF_PRE': 'Pre-Overtime First Half',
+    'EXTRA_FIRST_HALF': 'Overtime First Half',
+    'EXTRA_HALF_TIME': 'Overtime Half Time',
+    'EXTRA_SECOND_HALF_PRE': 'Pre-Overtime Second Half',
+    'EXTRA_SECOND_HALF': 'Overtime Second Half',
+    'PENALTY_SHOOTOUT_BREAK': 'Shootout Break',
+    'PENALTY_SHOOTOUT': 'Shootout',
+    'POST_GAME': 'End of Game',
+};
+
 export let getNextStage = function (stage) {
-    if (stage < 'POST_GAME') {
-        return stage + 1;
+    let curStage = Referee.Stage[stage];
+    if (curStage < Referee.Stage.POST_GAME) {
+        return Referee.Stage.__proto__[curStage + 1];
     }
     return stage;
 };
