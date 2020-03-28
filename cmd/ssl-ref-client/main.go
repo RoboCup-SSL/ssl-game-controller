@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/golang/protobuf/proto"
 	"log"
 	"math"
@@ -17,7 +17,7 @@ const maxDatagramSize = 8192
 var refereeAddress = flag.String("address", "224.5.23.1:10003", "The multicast address of ssl-game-controller")
 var fullScreen = flag.Bool("fullScreen", false, "Print the formatted message to the console, clearing the screen during print")
 
-var history []refproto.Referee_Command
+var history []state.Referee_Command
 
 func main() {
 	flag.Parse()
@@ -47,7 +47,7 @@ func main() {
 		if n >= maxDatagramSize {
 			log.Fatal("Buffer size too small")
 		}
-		refMsg := refproto.Referee{}
+		refMsg := state.Referee{}
 		if err := proto.Unmarshal(b[0:n], &refMsg); err != nil {
 			log.Println("Could not unmarshal referee message")
 			continue

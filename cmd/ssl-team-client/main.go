@@ -4,7 +4,7 @@ import (
 	"crypto/rsa"
 	"flag"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/client"
-	"github.com/RoboCup-SSL/ssl-game-controller/pkg/refproto"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/rcon"
 	"github.com/RoboCup-SSL/ssl-go-tools/pkg/sslconn"
 	"github.com/golang/protobuf/proto"
 	"log"
@@ -59,7 +59,7 @@ func main() {
 }
 
 func (c *Client) register() {
-	reply := refproto.ControllerToTeam{}
+	reply := rcon.ControllerToTeam{}
 	if err := sslconn.ReceiveMessage(c.conn, &reply); err != nil {
 		log.Fatal("Failed receiving controller reply: ", err)
 	}
@@ -67,10 +67,10 @@ func (c *Client) register() {
 		log.Fatal("Missing next token")
 	}
 
-	registration := refproto.TeamRegistration{}
+	registration := rcon.TeamRegistration{}
 	registration.TeamName = teamName
 	if privateKey != nil {
-		registration.Signature = &refproto.Signature{Token: reply.GetControllerReply().NextToken, Pkcs1V15: []byte{}}
+		registration.Signature = &rcon.Signature{Token: reply.GetControllerReply().NextToken, Pkcs1V15: []byte{}}
 		registration.Signature.Pkcs1V15 = client.Sign(privateKey, &registration)
 	}
 	log.Print("Sending registration")
@@ -78,11 +78,11 @@ func (c *Client) register() {
 		log.Fatal("Failed sending registration: ", err)
 	}
 	log.Print("Sent registration, waiting for reply")
-	reply = refproto.ControllerToTeam{}
+	reply = rcon.ControllerToTeam{}
 	if err := sslconn.ReceiveMessage(c.conn, &reply); err != nil {
 		log.Fatal("Failed receiving controller reply: ", err)
 	}
-	if reply.GetControllerReply().StatusCode == nil || *reply.GetControllerReply().StatusCode != refproto.ControllerReply_OK {
+	if reply.GetControllerReply().StatusCode == nil || *reply.GetControllerReply().StatusCode != rcon.ControllerReply_OK {
 		reason := ""
 		if reply.GetControllerReply().Reason != nil {
 			reason = *reply.GetControllerReply().Reason
@@ -98,27 +98,27 @@ func (c *Client) register() {
 }
 
 func (c *Client) sendDesiredKeeper(id int32) (accepted bool) {
-	message := refproto.TeamToController_DesiredKeeper{DesiredKeeper: id}
-	request := refproto.TeamToController{Msg: &message}
+	message := rcon.TeamToController_DesiredKeeper{DesiredKeeper: id}
+	request := rcon.TeamToController{Msg: &message}
 	return c.sendRequest(&request)
 }
 
 func (c *Client) ReplyToChoices() {
-	request := refproto.ControllerToTeam{}
+	request := rcon.ControllerToTeam{}
 	if err := sslconn.ReceiveMessage(c.conn, &request); err != nil {
 		log.Fatal("Failed receiving controller request: ", err)
 	}
 	if request.GetAdvantageChoice() != nil {
 		log.Printf("Received choice for: %v", *request.GetAdvantageChoice().Foul)
 	}
-	reply := refproto.TeamToController_AdvantageResponse_{AdvantageResponse: refproto.TeamToController_CONTINUE}
-	response := refproto.TeamToController{Msg: &reply}
+	reply := rcon.TeamToController_AdvantageResponse_{AdvantageResponse: rcon.TeamToController_CONTINUE}
+	response := rcon.TeamToController{Msg: &reply}
 	c.sendRequest(&response)
 }
 
-func (c *Client) sendRequest(request *refproto.TeamToController) (accepted bool) {
+func (c *Client) sendRequest(request *rcon.TeamToController) (accepted bool) {
 	if privateKey != nil {
-		request.Signature = &refproto.Signature{Token: &c.token, Pkcs1V15: []byte{}}
+		request.Signature = &rcon.Signature{Token: &c.token, Pkcs1V15: []byte{}}
 		request.Signature.Pkcs1V15 = client.Sign(privateKey, request)
 	}
 
@@ -129,12 +129,12 @@ func (c *Client) sendRequest(request *refproto.TeamToController) (accepted bool)
 	}
 
 	log.Print("Waiting for reply...")
-	reply := refproto.ControllerToTeam{}
+	reply := rcon.ControllerToTeam{}
 	if err := sslconn.ReceiveMessage(c.conn, &reply); err != nil {
 		log.Fatal("Failed receiving controller reply: ", err)
 	}
 	log.Print("Received reply: ", proto.MarshalTextString(&reply))
-	if reply.GetControllerReply().StatusCode == nil || *reply.GetControllerReply().StatusCode != refproto.ControllerReply_OK {
+	if reply.GetControllerReply().StatusCode == nil || *reply.GetControllerReply().StatusCode != rcon.ControllerReply_OK {
 		log.Print("Message rejected: ", *reply.GetControllerReply().Reason)
 		accepted = false
 	} else {
