@@ -30,12 +30,13 @@
 <script>
     import ControlTeamTimeout from "./ControlTeamTimeout";
     import {isNonPausedStage, TEAM_BLUE, TEAM_YELLOW} from "../../refereeState";
+    import {submitChange, submitGameEvent, submitNewCommand} from "../../main";
 
     export default {
         name: "ManualControlTeam",
         components: {ControlTeamTimeout},
         props: {
-            teamColor: Number
+            teamColor: String
         },
         data() {
             return {
@@ -44,29 +45,24 @@
             }
         },
         methods: {
-            send: function (command) {
-                this.$socket.sendObj({
-                    'command': {'forTeam': this.teamColor, 'commandType': command}
-                })
+            send(command) {
+                submitNewCommand(command, this.teamColor);
             },
             revokeYellowCard: function () {
-                this.$socket.sendObj({'card': {'forTeam': this.teamColor, 'cardType': 'yellow', 'operation': 'revoke'}})
+                // TODO
             },
-            addYellowCard: function () {
-                this.$socket.sendObj({'card': {'forTeam': this.teamColor, 'cardType': 'yellow', 'operation': 'add'}})
+            addYellowCard() {
+                submitChange({addYellowCard: {forTeam: this.teamColor}});
             },
-            addRedCard: function () {
-                this.$socket.sendObj({'card': {'forTeam': this.teamColor, 'cardType': 'red', 'operation': 'add'}})
+            addRedCard() {
+                submitChange({addRedCard: {forTeam: this.teamColor}});
             },
-            addGoal: function () {
-                this.$socket.sendObj({
-                    gameEvent: {
-                        type: 'goal',
-                        details: {
-                            ['goal']: {
-                                by_team: this.teamColor.toString().toLocaleUpperCase(),
-                            }
-                        }
+            addGoal() {
+                submitGameEvent({
+                    type: GameEvent.Type.GOAL,
+                    origin: ['UI'],
+                    goal: {
+                        byTeam: this.teamColor
                     }
                 });
             },

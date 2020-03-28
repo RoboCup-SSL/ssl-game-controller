@@ -20,7 +20,7 @@
     export default {
         name: "EditableLabelDuration",
         props: {
-            value: Number,
+            value: String,
             callback: Function,
             editMode: Object,
         },

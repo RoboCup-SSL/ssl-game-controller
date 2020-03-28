@@ -1,14 +1,19 @@
 <template>
     <div id="game-controller">
-        <div id="app-header">
-            <MatchSettingsBar class="app-header-item"/>
-            <GameStateBar class="app-header-item"/>
+        <div v-if="initialized">
+            <div id="app-header">
+                <MatchSettingsBar class="app-header-item"/>
+                <GameStateBar class="app-header-item"/>
+            </div>
+
+            <router-view></router-view>
+
+            <ControlFlowBar id="match-controls"/>
+            <SwitchWindowBar/>
         </div>
-
-        <router-view></router-view>
-
-        <ControlFlowBar id="match-controls"/>
-        <SwitchWindowBar/>
+        <div v-else>
+            <p>No state received yet. Is the backend running?</p>
+        </div>
     </div>
 </template>
 
@@ -26,6 +31,11 @@
             GameStateBar,
             ControlFlowBar,
         },
+        computed: {
+            initialized() {
+                return this.$store.state.initialized;
+            },
+        }
     }
 </script>
 

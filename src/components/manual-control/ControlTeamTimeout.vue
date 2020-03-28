@@ -13,7 +13,7 @@
     export default {
         name: "ControlTeamTimeout",
         props: {
-            teamColor: Number
+            teamColor: String
         },
         computed: {
             command: function () {

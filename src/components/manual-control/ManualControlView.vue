@@ -91,10 +91,10 @@
                 return this.$store.state.matchState
             },
             teamStateYellow() {
-                return this.$store.state.matchState.teamState["1"]
+                return this.$store.state.matchState.teamState[TEAM_YELLOW]
             },
             teamStateBlue() {
-                return this.$store.state.matchState.teamState["2"]
+                return this.$store.state.matchState.teamState[TEAM_BLUE]
             },
         }
     }

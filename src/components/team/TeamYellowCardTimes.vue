@@ -17,7 +17,7 @@
         name: "TeamYellowCardTimes",
         components: {EditableLabelDuration},
         props: {
-            teamColor: Number,
+            teamColor: String,
             editMode: Object,
         },
         methods: {

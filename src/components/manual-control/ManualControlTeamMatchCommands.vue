@@ -49,7 +49,7 @@
         name: "ManualControlTeamMatchCommands",
         components: {ControlTeamTimeout},
         props: {
-            teamColor: Number
+            teamColor: String
         },
         methods: {
             send: function (command) {

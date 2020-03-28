@@ -14,7 +14,7 @@
         name: "TeamScore",
         components: {EditableLabelNumber},
         props: {
-            teamColor: Number,
+            teamColor: String,
             editMode: Object,
         },
         methods: {

@@ -12,7 +12,7 @@
         name: "TeamTimeoutTime",
         components: {EditableLabelDuration},
         props: {
-            teamColor: Number,
+            teamColor: String,
             editMode: Object,
         },
         methods: {

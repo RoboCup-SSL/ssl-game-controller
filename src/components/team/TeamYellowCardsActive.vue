@@ -38,7 +38,7 @@
         name: "TeamYellowCardsActive",
         components: {TeamYellowCardTimes, EditableLabelDuration},
         props: {
-            teamColor: Number,
+            teamColor: String,
             editMode: Object,
         },
         data() {

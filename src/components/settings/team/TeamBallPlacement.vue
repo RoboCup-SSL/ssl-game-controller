@@ -11,7 +11,7 @@
     export default {
         name: "TeamBallPlacement",
         props: {
-            teamColor: Number,
+            teamColor: String,
             editMode: Object,
         },
         methods: {

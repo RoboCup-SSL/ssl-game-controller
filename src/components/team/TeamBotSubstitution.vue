@@ -11,7 +11,7 @@
     export default {
         name: "TeamBotSubstitution",
         props: {
-            teamColor: Number,
+            teamColor: String,
         },
         methods: {
             edit: function () {

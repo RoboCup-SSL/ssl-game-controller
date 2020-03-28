@@ -29,7 +29,7 @@
     export default {
         name: "TeamConnection",
         props: {
-            teamColor: Number
+            teamColor: String
         },
         computed: {
             teamConnected() {

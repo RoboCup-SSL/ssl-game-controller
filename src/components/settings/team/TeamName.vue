@@ -46,7 +46,7 @@
         name: "TeamName",
         components: {EditableLabelSelect},
         props: {
-            teamColor: Number,
+            teamColor: String,
             editMode: Object,
         },
         computed: {

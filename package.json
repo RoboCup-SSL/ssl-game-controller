@@ -15,6 +15,7 @@
     "bootstrap-vue": "^2.0.0-rc.20",
     "jquery": "^3.4.1",
     "popper.js": "^1.15.0",
+    "protobufjs": "^6.8.9",
     "v-hotkey": "^0.2.3",
     "vue": "^2.6.10",
     "vue-native-websocket": "^2.0.13",

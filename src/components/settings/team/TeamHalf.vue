@@ -9,7 +9,7 @@
     export default {
         name: "TeamHalf",
         props: {
-            teamColor: Number
+            teamColor: String
         },
         computed: {
             teamState: function () {

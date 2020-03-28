@@ -15,7 +15,7 @@
         name: "TeamRedCards",
         components: {EditableLabelDuration, EditableLabelNumber},
         props: {
-            teamColor: Number,
+            teamColor: String,
             editMode: Object,
         },
         methods: {

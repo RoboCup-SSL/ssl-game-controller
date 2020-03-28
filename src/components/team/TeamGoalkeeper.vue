@@ -15,7 +15,7 @@
         name: "TeamGoalkeeper",
         components: {EditableLabelNumber},
         props: {
-            teamColor: Number,
+            teamColor: String,
             editMode: Object,
         },
         methods: {
