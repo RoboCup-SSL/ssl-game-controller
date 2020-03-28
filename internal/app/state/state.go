@@ -37,7 +37,7 @@ func NewState() (s *State) {
 
 	s.GameEventBehavior = map[string]State_GameEventBehavior{}
 	for _, event := range AllGameEvents() {
-		s.GameEventBehavior[event.String()] = State_GAME_EVENT_BEHAVIOR_On
+		s.GameEventBehavior[event.String()] = State_GAME_EVENT_BEHAVIOR_ON
 	}
 
 	return

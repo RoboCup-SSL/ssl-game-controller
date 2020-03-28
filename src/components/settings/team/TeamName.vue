@@ -9,6 +9,7 @@
 
 <script>
     import EditableLabelSelect from "../../common/EditableLabelSelect";
+    import {submitChange} from "../../../submit";
 
     export const TEAMS = [
         "",
@@ -59,12 +60,12 @@
         },
         methods: {
             updateTeamName: function (v) {
-                this.$socket.sendObj({
-                    'modify': {
-                        'forTeam': this.teamColor,
-                        'teamName': v
+                submitChange({
+                    updateTeamState: {
+                        forTeam: this.teamColor,
+                        teamName: v
                     }
-                })
+                });
             }
         }
     }

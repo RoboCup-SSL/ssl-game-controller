@@ -86,7 +86,7 @@ message State {
 
     enum GameEventBehavior {
         GAME_EVENT_BEHAVIOR_UNKNOWN = 0;
-        GAME_EVENT_BEHAVIOR_On = 1;
+        GAME_EVENT_BEHAVIOR_ON = 1;
         GAME_EVENT_BEHAVIOR_MAJORITY = 2;
         GAME_EVENT_BEHAVIOR_OFF = 3;
     }

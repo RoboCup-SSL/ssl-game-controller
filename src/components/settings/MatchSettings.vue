@@ -4,9 +4,9 @@
             <label>First kickoff team: </label>
             <DualSwitch
                     left-label="Yellow"
-                    left-value="Yellow"
+                    left-value="YELLOW"
                     right-label="Blue"
-                    right-value="Blue"
+                    right-value="BLUE"
                     :callback="switchFirstKickoffTeam"
                     :selected-value="firstKickoffTeam"
             />
@@ -26,9 +26,9 @@
 
         <DualSwitch
                 left-label="Div A"
-                left-value="DivA"
+                left-value="DIV_A"
                 right-label="Div B"
-                right-value="DivB"
+                right-value="DIV_B"
                 :callback="switchDivision"
                 :selected-value="division"
                 :disabled="forbidMatchControls"
@@ -44,6 +44,9 @@
 <script>
     import TeamSelection from "../common/TeamSelection";
     import DualSwitch from "../common/DualSwitch";
+    import {submitChange} from "../../submit";
+    import {TEAM_YELLOW} from "../../refereeState";
+
     export default {
         name: "MatchSettings",
         components: {DualSwitch, TeamSelection},
@@ -56,29 +59,19 @@
         },
         methods: {
             resetMatch: function () {
-                this.$socket.sendObj({
-                    'trigger': {'triggerType': 'resetMatch'}
-                })
+                // TODO
             },
             switchColor: function () {
-                this.$socket.sendObj({
-                    'trigger': {'triggerType': 'switchColor'}
-                })
+                submitChange({switchColors: {}});
             },
             switchSides: function () {
-                this.$socket.sendObj({
-                    'trigger': {'triggerType': 'switchSides'}
-                })
+                submitChange({updateTeamState: {forTeam: TEAM_YELLOW, onPositiveHalf: !this.$store.state.matchState.teamState[TEAM_YELLOW].onPositiveHalf}});
             },
             switchDivision(div) {
-                this.$socket.sendObj({
-                    'modify': {'division': div}
-                })
+                submitChange({updateConfig: {division: div}});
             },
             switchFirstKickoffTeam(team) {
-                this.$socket.sendObj({
-                    'modify': {'firstKickoffTeam': team}
-                })
+                submitChange({updateConfig: {firstKickoffTeam: team}});
             },
             showMsgBoxConfirmResetGame() {
                 this.$bvModal.msgBoxConfirm('Are sure to start a new game and reset the whole state? This can NOT be reverted (easily).', {
@@ -107,16 +100,16 @@
                 return this.$store.state.matchState
             },
             firstKickoffTeam() {
-                return this.$store.state.gcState.firstKickoffTeam;
+                return this.$store.state.matchState.firstKickoffTeam;
             },
             division() {
-                return this.$store.state.gcState.division;
+                return this.$store.state.matchState.division;
             },
             halted() {
-                return this.state.command === 'halt';
+                return this.state.command.type === 'HALT';
             },
             stopped() {
-                return this.state.command === 'stop';
+                return this.state.command.type === 'STOP';
             },
             forbidMatchControls() {
                 return !this.stopped && !this.halted;

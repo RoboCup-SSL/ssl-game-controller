@@ -8,6 +8,8 @@
 </template>
 
 <script>
+    import {submitChange} from "../../../submit";
+
     export default {
         name: "TeamBallPlacement",
         props: {
@@ -16,12 +18,12 @@
         },
         methods: {
             edit: function () {
-                this.$socket.sendObj({
-                    'modify': {
-                        'forTeam': this.teamColor,
-                        'canPlaceBall': !this.canPlaceBall
+                submitChange({
+                    updateTeamState: {
+                        forTeam: this.teamColor,
+                        canPlaceBall: !this.canPlaceBall
                     }
-                })
+                });
             }
         },
         computed: {

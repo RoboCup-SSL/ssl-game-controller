@@ -16660,7 +16660,7 @@ export const UpdateConfig = $root.UpdateConfig = (() => {
                 case 0:
                     message.gameEventBehavior[keys[i]] = 0;
                     break;
-                case "GAME_EVENT_BEHAVIOR_On":
+                case "GAME_EVENT_BEHAVIOR_ON":
                 case 1:
                     message.gameEventBehavior[keys[i]] = 1;
                     break;
@@ -19835,7 +19835,7 @@ export const State = $root.State = (() => {
                 case 0:
                     message.gameEventBehavior[keys[i]] = 0;
                     break;
-                case "GAME_EVENT_BEHAVIOR_On":
+                case "GAME_EVENT_BEHAVIOR_ON":
                 case 1:
                     message.gameEventBehavior[keys[i]] = 1;
                     break;
@@ -19967,14 +19967,14 @@ export const State = $root.State = (() => {
      * @name State.GameEventBehavior
      * @enum {string}
      * @property {number} GAME_EVENT_BEHAVIOR_UNKNOWN=0 GAME_EVENT_BEHAVIOR_UNKNOWN value
-     * @property {number} GAME_EVENT_BEHAVIOR_On=1 GAME_EVENT_BEHAVIOR_On value
+     * @property {number} GAME_EVENT_BEHAVIOR_ON=1 GAME_EVENT_BEHAVIOR_ON value
      * @property {number} GAME_EVENT_BEHAVIOR_MAJORITY=2 GAME_EVENT_BEHAVIOR_MAJORITY value
      * @property {number} GAME_EVENT_BEHAVIOR_OFF=3 GAME_EVENT_BEHAVIOR_OFF value
      */
     State.GameEventBehavior = (function() {
         const valuesById = {}, values = Object.create(valuesById);
         values[valuesById[0] = "GAME_EVENT_BEHAVIOR_UNKNOWN"] = 0;
-        values[valuesById[1] = "GAME_EVENT_BEHAVIOR_On"] = 1;
+        values[valuesById[1] = "GAME_EVENT_BEHAVIOR_ON"] = 1;
         values[valuesById[2] = "GAME_EVENT_BEHAVIOR_MAJORITY"] = 2;
         values[valuesById[3] = "GAME_EVENT_BEHAVIOR_OFF"] = 3;
         return values;

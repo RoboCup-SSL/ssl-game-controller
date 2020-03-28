@@ -5,16 +5,16 @@
                 <td align="left"><b>All</b></td>
                 <td>
                     <div class="btn-group-toggle btn-group">
-                        <label :class="{btn:true, 'btn-secondary': true, active: allBehaviorsAre('on')}"
-                               @click="changeAllBehaviorsTo('on')">
+                        <label :class="{btn:true, 'btn-secondary': true, active: allBehaviorsAre('GAME_EVENT_BEHAVIOR_ON')}"
+                               @click="changeAllBehaviorsTo('GAME_EVENT_BEHAVIOR_ON')">
                             On
                         </label>
-                        <label :class="{btn:true, 'btn-secondary': true, active: allBehaviorsAre('majority')}"
-                               @click="changeAllBehaviorsTo('majority')">
+                        <label :class="{btn:true, 'btn-secondary': true, active: allBehaviorsAre('GAME_EVENT_BEHAVIOR_MAJORITY')}"
+                               @click="changeAllBehaviorsTo('GAME_EVENT_BEHAVIOR_MAJORITY')">
                             Majority
                         </label>
-                        <label :class="{btn:true, 'btn-secondary': true, active: allBehaviorsAre('off')}"
-                               @click="changeAllBehaviorsTo('off')">
+                        <label :class="{btn:true, 'btn-secondary': true, active: allBehaviorsAre('GAME_EVENT_BEHAVIOR_OFF')}"
+                               @click="changeAllBehaviorsTo('GAME_EVENT_BEHAVIOR_OFF')">
                             Off
                         </label>
                     </div>
@@ -29,16 +29,16 @@
                 <td align="left">{{eventType}}</td>
                 <td>
                     <div class="btn-group-toggle btn-group">
-                        <label :class="{btn:true, 'btn-secondary': true, active: eventBehavior(eventType) === 'on'}"
-                               @click="changeBehavior(eventType, 'on')">
+                        <label :class="{btn:true, 'btn-secondary': true, active: eventBehavior(eventType) === 'GAME_EVENT_BEHAVIOR_ON'}"
+                               @click="changeBehavior(eventType, 'GAME_EVENT_BEHAVIOR_ON')">
                             On
                         </label>
-                        <label :class="{btn:true, 'btn-secondary': true, active: eventBehavior(eventType) === 'majority'}"
-                               @click="changeBehavior(eventType, 'majority')">
+                        <label :class="{btn:true, 'btn-secondary': true, active: eventBehavior(eventType) === 'GAME_EVENT_BEHAVIOR_MAJORITY'}"
+                               @click="changeBehavior(eventType, 'GAME_EVENT_BEHAVIOR_MAJORITY')">
                             Majority
                         </label>
-                        <label :class="{btn:true, 'btn-secondary': true, active: eventBehavior(eventType) === 'off'}"
-                               @click="changeBehavior(eventType, 'off')">
+                        <label :class="{btn:true, 'btn-secondary': true, active: eventBehavior(eventType) === 'GAME_EVENT_BEHAVIOR_OFF'}"
+                               @click="changeBehavior(eventType, 'GAME_EVENT_BEHAVIOR_OFF')">
                             Off
                         </label>
                     </div>
@@ -49,27 +49,30 @@
 </template>
 
 <script>
+    import {submitChange} from "../../submit";
+
     export default {
         name: "EventBehavior",
         computed: {
-            gcState() {
-                return this.$store.state.gcState
-            },
             eventTypes() {
-                return Object.keys(this.gcState.gameEventBehavior).sort();
+                return Object.keys(this.$store.state.matchState.gameEventBehavior).sort();
             },
         },
         methods: {
             eventBehavior(eventType) {
-                return this.gcState.gameEventBehavior[eventType];
+                return this.$store.state.matchState.gameEventBehavior[eventType];
             },
             changeBehavior(eventType, eventBehavior) {
-                this.$socket.sendObj({
-                    'modify': {'gameEventBehavior': {gameEventType: eventType, gameEventBehavior: eventBehavior}}
-                })
+                submitChange({
+                    updateConfig: {
+                        gameEventBehavior: {
+                            [eventType]: eventBehavior
+                        }
+                    }
+                });
             },
             allBehaviorsAre(value) {
-                for (let behavior in Object.values(this.gcState.gameEventBehavior)) {
+                for (let behavior of Object.values(this.$store.state.matchState.gameEventBehavior)) {
                     if (behavior !== value) {
                         return false;
                     }
@@ -77,7 +80,16 @@
                 return true;
             },
             changeAllBehaviorsTo(eventBehavior) {
-                this.changeBehavior('all', eventBehavior);
+                let behaviorMap = {};
+                for (let key of Object.keys(this.$store.state.matchState.gameEventBehavior)) {
+                    behaviorMap[key] = eventBehavior;
+                }
+
+                submitChange({
+                    updateConfig: {
+                        gameEventBehavior: behaviorMap
+                    }
+                });
             }
         }
     }
