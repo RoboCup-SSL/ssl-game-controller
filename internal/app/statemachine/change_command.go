@@ -24,8 +24,10 @@ func (s *StateMachine) NewCommand(newState *state.State, newCommand *NewCommand)
 		if newState.Stage.IsPreStage() {
 			log.Print("Pre-Stage is over, because game is running now")
 			changes = append(changes, &Change{
-				ChangeStage: &ChangeStage{
-					NewStage: newState.Stage.Next(),
+				Change: &Change_ChangeStage{
+					ChangeStage: &ChangeStage{
+						NewStage: newState.Stage.Next(),
+					},
 				},
 			})
 		}

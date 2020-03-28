@@ -31,6 +31,7 @@ type Engine struct {
 // NewEngine creates a new engine
 func NewEngine(gameConfig config.Game) (s *Engine) {
 	s = new(Engine)
+	s.gameConfig = gameConfig
 	s.stateStore = store.NewStore(gameConfig.StateStoreFile)
 	s.stateMachine = statemachine.NewStateMachine(gameConfig)
 	s.queue = make(chan *statemachine.Change, 100)
@@ -126,15 +127,26 @@ func (e *Engine) processChanges() {
 func (e *Engine) initialStateFromStore() *state.State {
 	latestEntry := e.stateStore.LatestEntry()
 	if latestEntry == nil {
-		return state.NewState()
+		return e.createInitialState()
 	}
 	return latestEntry.State
 }
 
+func (e *Engine) createInitialState() (s *state.State) {
+	s = state.NewState()
+	s.Division = state.ToDiv(e.gameConfig.DefaultDivision)
+	for _, team := range state.BothTeams() {
+		*s.TeamInfo(team).TimeoutsLeft = e.gameConfig.Normal.Timeouts
+		s.TeamInfo(team).TimeoutTimeLeft = ptypes.DurationProto(e.gameConfig.Normal.TimeoutDuration)
+		*s.TeamInfo(team).MaxAllowedBots = e.gameConfig.MaxBots[e.gameConfig.DefaultDivision]
+	}
+	return
+}
+
 // postProcessChange performs synchronous post processing steps
 func (e *Engine) postProcessChange(change *statemachine.Change) {
-	if change.ChangeStage != nil &&
-		*change.ChangeStage.NewStage == state.Referee_NORMAL_FIRST_HALF {
+	if change.GetChangeStage() != nil &&
+		*change.GetChangeStage().NewStage == state.Referee_NORMAL_FIRST_HALF {
 		e.currentState.MatchTimeStart, _ = ptypes.TimestampProto(e.timeProvider())
 	}
 }

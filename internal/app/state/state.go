@@ -51,3 +51,8 @@ func (m *State) TeamInfo(team Team) *TeamInfo {
 func (x *State_Division) Div() config.Division {
 	return config.Division(x.String())
 }
+
+func ToDiv(div config.Division) *State_Division {
+	protoDiv := State_Division(State_Division_value[string(div)])
+	return &protoDiv
+}

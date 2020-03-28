@@ -61,8 +61,10 @@ func (e *Engine) updateYellowCardTimes(teamState *state.TeamInfo, delta time.Dur
 		if goDur(teamState.YellowCards[i].TimeRemaining) <= 0 {
 			teamState.YellowCards[i].TimeRemaining = ptypes.DurationProto(0)
 			e.queue <- &statemachine.Change{
-				Origin:         &changeOriginEngine,
-				YellowCardOver: &statemachine.YellowCardOver{},
+				Origin: &changeOriginEngine,
+				Change: &statemachine.Change_YellowCardOver{
+					YellowCardOver: &statemachine.YellowCardOver{},
+				},
 			}
 		}
 	}

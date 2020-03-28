@@ -22,8 +22,10 @@ func (s *StateMachine) ChangeStage(newState *state.State, change *ChangeStage) (
 
 		// halt the game
 		changes = append(changes, &Change{
-			NewCommand: &NewCommand{
-				Command: state.NewCommand(state.Command_HALT, state.Team_UNKNOWN),
+			Change: &Change_NewCommand{
+				NewCommand: &NewCommand{
+					Command: state.NewCommand(state.Command_HALT, state.Team_UNKNOWN),
+				},
 			},
 		})
 	}

@@ -34,12 +34,14 @@ func (s *StateMachine) Continue(newState *state.State) (changes []*Change) {
 func (s *StateMachine) botSubstitutionIntentEventChange(byTeam state.Team) *Change {
 	eventType := state.GameEvent_BOT_SUBSTITUTION
 	return &Change{
-		AddGameEvent: &AddGameEvent{
-			GameEvent: &state.GameEvent{
-				Type: &eventType,
-				Event: &state.GameEvent_BotSubstitution_{
-					BotSubstitution: &state.GameEvent_BotSubstitution{
-						ByTeam: &byTeam,
+		Change: &Change_AddGameEvent{
+			AddGameEvent: &AddGameEvent{
+				GameEvent: &state.GameEvent{
+					Type: &eventType,
+					Event: &state.GameEvent_BotSubstitution_{
+						BotSubstitution: &state.GameEvent_BotSubstitution{
+							ByTeam: &byTeam,
+						},
 					},
 				},
 			},

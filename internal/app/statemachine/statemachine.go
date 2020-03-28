@@ -56,47 +56,47 @@ func (s *StateMachine) Process(currentState *state.State, change *Change) (newSt
 	newState = new(state.State)
 	proto.Merge(newState, currentState)
 	log.Printf("Processing change: %v", change)
-	if change.NewCommand != nil {
-		newChanges = s.NewCommand(newState, change.NewCommand)
+	if change.GetNewCommand() != nil {
+		newChanges = s.NewCommand(newState, change.GetNewCommand())
 	}
-	if change.ChangeStage != nil {
-		newChanges = s.ChangeStage(newState, change.ChangeStage)
+	if change.GetChangeStage() != nil {
+		newChanges = s.ChangeStage(newState, change.GetChangeStage())
 	}
-	if change.SetBallPlacementPos != nil {
-		newChanges = s.SetBallPlacementPos(newState, change.SetBallPlacementPos)
+	if change.GetSetBallPlacementPos() != nil {
+		newChanges = s.SetBallPlacementPos(newState, change.GetSetBallPlacementPos())
 	}
-	if change.AddYellowCard != nil {
-		newChanges = s.AddYellowCard(newState, change.AddYellowCard)
+	if change.GetAddYellowCard() != nil {
+		newChanges = s.AddYellowCard(newState, change.GetAddYellowCard())
 	}
-	if change.AddRedCard != nil {
-		newChanges = s.AddRedCard(newState, change.AddRedCard)
+	if change.GetAddRedCard() != nil {
+		newChanges = s.AddRedCard(newState, change.GetAddRedCard())
 	}
-	if change.YellowCardOver != nil {
+	if change.GetYellowCardOver() != nil {
 		newChanges = s.YellowCardOver(newState)
 	}
-	if change.UpdateConfig != nil {
-		newChanges = s.UpdateConfig(newState, change.UpdateConfig)
+	if change.GetUpdateConfig() != nil {
+		newChanges = s.UpdateConfig(newState, change.GetUpdateConfig())
 	}
-	if change.UpdateTeamState != nil {
-		newChanges = s.UpdateTeamState(newState, change.UpdateTeamState)
+	if change.GetUpdateTeamState() != nil {
+		newChanges = s.UpdateTeamState(newState, change.GetUpdateTeamState())
 	}
-	if change.SwitchColors != nil {
+	if change.GetSwitchColors() != nil {
 		newChanges = s.SwitchColors(newState)
 	}
-	if change.AddGameEvent != nil {
-		newChanges = s.AddGameEvent(newState, change.AddGameEvent)
+	if change.GetAddGameEvent() != nil {
+		newChanges = s.AddGameEvent(newState, change.GetAddGameEvent())
 	}
-	if change.StartBallPlacement != nil {
+	if change.GetStartBallPlacement() != nil {
 		newChanges = s.StartBallPlacement(newState)
 	}
-	if change.Continue != nil {
+	if change.GetContinue() != nil {
 		newChanges = s.Continue(newState)
 	}
-	if change.AddProposedGameEvent != nil {
-		newChanges = s.AddProposedGameEvent(newState, change.AddProposedGameEvent)
+	if change.GetAddProposedGameEvent() != nil {
+		newChanges = s.AddProposedGameEvent(newState, change.GetAddProposedGameEvent())
 	}
-	if change.Revert != nil {
-		newChanges = s.Revert(newState, change.Revert)
+	if change.GetRevert() != nil {
+		newChanges = s.Revert(newState, change.GetRevert())
 	}
 
 	for i := range newChanges {

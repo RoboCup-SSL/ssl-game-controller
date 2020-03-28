@@ -47,9 +47,11 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 	if addsYellowCard(*gameEvent.Type) && byTeam.Known() {
 		log.Printf("Team %v got a yellow card", byTeam)
 		changes = append(changes, &Change{
-			AddYellowCard: &AddYellowCard{
-				ForTeam:           &byTeam,
-				CausedByGameEvent: gameEvent,
+			Change: &Change_AddYellowCard{
+				AddYellowCard: &AddYellowCard{
+					ForTeam:           &byTeam,
+					CausedByGameEvent: gameEvent,
+				},
 			},
 		})
 	}
@@ -58,9 +60,11 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 	if addsRedCard(*gameEvent.Type) && byTeam.Known() {
 		log.Printf("Team %v got a red card", byTeam)
 		changes = append(changes, &Change{
-			AddRedCard: &AddRedCard{
-				ForTeam:           &byTeam,
-				CausedByGameEvent: gameEvent,
+			Change: &Change_AddRedCard{
+				AddRedCard: &AddRedCard{
+					ForTeam:           &byTeam,
+					CausedByGameEvent: gameEvent,
+				},
 			},
 		})
 	}
@@ -129,7 +133,9 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 		if byTeam == *newState.NextCommand.ForTeam {
 			log.Printf("Placement succeeded by team %v, which is also in favor. Can continue.", byTeam)
 			changes = append(changes, &Change{
-				Continue: &Continue{},
+				Change: &Change_Continue{
+					Continue: &Continue{},
+				},
 			})
 		}
 	}
@@ -154,12 +160,14 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 func (s *StateMachine) multipleFoulsChange(byTeam state.Team) *Change {
 	eventType := state.GameEvent_MULTIPLE_FOULS
 	return &Change{
-		AddGameEvent: &AddGameEvent{
-			GameEvent: &state.GameEvent{
-				Type: &eventType,
-				Event: &state.GameEvent_MultipleFouls_{
-					MultipleFouls: &state.GameEvent_MultipleFouls{
-						ByTeam: &byTeam,
+		Change: &Change_AddGameEvent{
+			AddGameEvent: &AddGameEvent{
+				GameEvent: &state.GameEvent{
+					Type: &eventType,
+					Event: &state.GameEvent_MultipleFouls_{
+						MultipleFouls: &state.GameEvent_MultipleFouls{
+							ByTeam: &byTeam,
+						},
 					},
 				},
 			},

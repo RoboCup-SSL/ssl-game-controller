@@ -26,11 +26,11 @@ func NewMessageGenerator() (m *MessageGenerator) {
 // GenerateRefereeMessages generates a list of referee messages that result from the given state change
 func (g *MessageGenerator) GenerateRefereeMessages(change *statemachine.StateChange) (rs []*state.Referee) {
 	// send the GOAL command based on the team score for compatibility with old behavior
-	if change.Change.AddGameEvent != nil &&
-		*change.Change.AddGameEvent.GameEvent.Type == state.GameEvent_GOAL {
+	if change.Change.GetAddGameEvent() != nil &&
+		*change.Change.GetAddGameEvent().GameEvent.Type == state.GameEvent_GOAL {
 		g.updateCommand()
 		refereeMsg := g.StateToRefereeMessage(change.State)
-		if change.Change.AddGameEvent.GameEvent.ByTeam() == state.Team_YELLOW {
+		if change.Change.GetAddGameEvent().GameEvent.ByTeam() == state.Team_YELLOW {
 			//noinspection GoDeprecation (sent for compatibility)
 			*refereeMsg.Command = state.Referee_GOAL_YELLOW
 		} else {
@@ -40,7 +40,7 @@ func (g *MessageGenerator) GenerateRefereeMessages(change *statemachine.StateCha
 		rs = append(rs, refereeMsg)
 	}
 
-	if change.Change.NewCommand != nil {
+	if change.Change.GetNewCommand() != nil {
 		g.updateCommand()
 	}
 

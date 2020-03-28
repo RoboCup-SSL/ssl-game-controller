@@ -5,6 +5,7 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"github.com/go-test/deep"
+	"github.com/golang/protobuf/proto"
 	"io/ioutil"
 	"os"
 	"testing"
@@ -29,9 +30,13 @@ func Test_Engine(t *testing.T) {
 	if err := engine.Start(); err != nil {
 		t.Fatal("Could not start engine")
 	}
+	wantNewState := state.NewState()
+	proto.Merge(wantNewState, engine.currentState)
 	engine.Enqueue(&statemachine.Change{
-		NewCommand: &statemachine.NewCommand{
-			Command: state.NewCommandNeutral(state.Command_HALT),
+		Change: &statemachine.Change_NewCommand{
+			NewCommand: &statemachine.NewCommand{
+				Command: state.NewCommandNeutral(state.Command_HALT),
+			},
 		},
 	})
 	// wait for the changes to be processed
@@ -39,7 +44,6 @@ func Test_Engine(t *testing.T) {
 	engine.UnregisterHook(hook)
 	engine.Stop()
 
-	wantNewState := state.NewState()
 	wantNewState.Command = state.NewCommandNeutral(state.Command_HALT)
 
 	gotNewState := engine.currentState

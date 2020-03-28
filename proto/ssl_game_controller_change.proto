@@ -16,20 +16,22 @@ message StateChange {
 message Change {
     optional string origin = 1;
 
-    optional NewCommand new_command = 2;
-    optional ChangeStage change_stage = 3;
-    optional SetBallPlacementPos set_ball_placement_pos = 4;
-    optional AddYellowCard add_yellow_card = 5;
-    optional AddRedCard add_red_card = 6;
-    optional YellowCardOver yellow_card_over = 7;
-    optional AddGameEvent add_game_event = 8;
-    optional AddProposedGameEvent add_proposed_game_event = 9;
-    optional StartBallPlacement start_ball_placement = 10;
-    optional Continue continue = 11;
-    optional UpdateConfig update_config = 12;
-    optional UpdateTeamState update_team_state = 13;
-    optional SwitchColors switch_colors = 14;
-    optional Revert revert = 15;
+    oneof change {
+        NewCommand new_command = 2;
+        ChangeStage change_stage = 3;
+        SetBallPlacementPos set_ball_placement_pos = 4;
+        AddYellowCard add_yellow_card = 5;
+        AddRedCard add_red_card = 6;
+        YellowCardOver yellow_card_over = 7;
+        AddGameEvent add_game_event = 8;
+        AddProposedGameEvent add_proposed_game_event = 9;
+        StartBallPlacement start_ball_placement = 10;
+        Continue continue = 11;
+        UpdateConfig update_config = 12;
+        UpdateTeamState update_team_state = 13;
+        SwitchColors switch_colors = 14;
+        Revert revert = 15;
+    }
 }
 
 message NewCommand {
