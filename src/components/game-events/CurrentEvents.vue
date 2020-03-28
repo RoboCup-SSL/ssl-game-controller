@@ -5,14 +5,14 @@
              v-if="gameEventsPresent"
              v-for="(gameEvent, index) in gameEvents"
              :key="index">
-            <span :class="{'team-blue': byTeam(gameEvent) === 2, 'team-yellow': byTeam(gameEvent) === 1}">
+            <span :class="{'team-blue': byTeam(gameEvent) === 'BLUE', 'team-yellow': byTeam(gameEvent) === 'YELLOW'}">
                 {{gameEvent.type}}
             </span>
             <p class="details-row"
                v-for="detail in detailsList(gameEvent)"
                :key="detail.key">{{detail.key}}: {{detail.value}}</p>
             <p class="details-row"
-               v-if="gameEvent.origins !== null && gameEvent.origins.length > 0">
+               v-if="gameEvent.origins && gameEvent.origins.length > 0">
                 Submitted by: {{gameEvent.origins}}
             </p>
             <div class="btn-accept"
@@ -27,21 +27,20 @@
 </template>
 
 <script>
+    import {submitGameEvent} from "../../submit";
+
     export default {
         name: "CurrentEvents",
         computed: {
-            state() {
-                return this.$store.state.matchState
-            },
             gameEvents() {
-                return this.state.gameEvents;
+                return this.$store.state.matchState.gameEvents;
             },
             gameEventsPresent() {
-                return this.gameEvents != null && this.gameEvents.length > 0;
+                return this.gameEvents && this.gameEvents.length > 0;
             },
             goalEventPresent() {
-                for (let event of this.state.gameEvents) {
-                    if (event.type === 'goal') {
+                for (let event of this.$store.state.matchState.gameEvents) {
+                    if (event.type === 'GOAL') {
                         return true;
                     }
                 }
@@ -50,35 +49,39 @@
         },
         methods: {
             showAcceptGoal(gameEvent) {
-                return !this.goalEventPresent && gameEvent.type === 'possibleGoal';
+                return !this.goalEventPresent && gameEvent.type === 'POSSIBLE_GOAL';
             },
             details(gameEvent) {
-                let key = Object.keys(gameEvent.details)[0];
-                return gameEvent.details[key];
+                Object.keys(gameEvent).forEach(function (wrapperKey) {
+                    if (wrapperKey !== 'type' && wrapperKey !== 'origin') {
+                        return gameEvent[wrapperKey];
+                    }
+                });
+                return {};
             },
             detailsList(gameEvent) {
                 let list = [];
-                let details = this.details(gameEvent);
                 let i = 0;
-                Object.keys(details).forEach(function (key) {
-                    if (key !== 'by_team') {
-                        list[i++] = {key: key, value: details[key]};
+                let eventDetails = this.details(gameEvent);
+                Object.keys(eventDetails).forEach(function (key) {
+                    if (key !== 'byTeam') {
+                        list[i++] = {key: key, value: eventDetails[key]};
                     }
                 });
                 return list;
             },
             byTeam(gameEvent) {
-                let details = this.details(gameEvent);
-                if (details.hasOwnProperty('by_team')) {
-                    return details.by_team;
+                let eventDetails = this.details(gameEvent);
+                if (eventDetails.hasOwnProperty('byTeam')) {
+                    return eventDetails.byTeam;
                 }
                 return '';
             },
             acceptGoal(gameEvent) {
-                let goalEvent = {type: 'goal', origins: gameEvent.origins, details: {goal: {}}};
-                Object.assign(goalEvent.details.goal, gameEvent.details.possibleGoal);
-                this.$socket.sendObj({
-                    gameEvent: goalEvent
+                submitGameEvent({
+                    type: 'GOAL',
+                    origins: gameEvent.origins,
+                    goal: gameEvent.possibleGoal
                 });
             },
         }

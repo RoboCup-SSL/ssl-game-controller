@@ -18,7 +18,7 @@ export const submitNewCommand = function (type, forTeam) {
 
 export const submitGameEvent = function (gameEvent) {
     submitChange({
-        AddGameEvent: {
+        addGameEvent: {
             gameEvent
         }
     })

@@ -86,10 +86,10 @@ func goTime(timestamp *timestamp.Timestamp) time.Time {
 	return goTime
 }
 
-func addDur(duration *duration.Duration, delta time.Duration) *duration.Duration {
+func addDur(duration *duration.Duration, delta time.Duration) {
 	goDur, err := ptypes.Duration(duration)
 	if err != nil {
 		log.Printf("Could not parse duration: %v", duration)
 	}
-	return ptypes.DurationProto(goDur + delta)
+	*duration = *ptypes.DurationProto(goDur + delta)
 }

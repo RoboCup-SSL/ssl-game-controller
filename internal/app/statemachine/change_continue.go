@@ -18,7 +18,10 @@ func (s *StateMachine) Continue(newState *state.State) (changes []*Change) {
 		return
 	}
 
-	if newState.NextCommand != nil {
+	if *newState.Command.Type == state.Command_HALT {
+		log.Printf("Continue with STOP after HALT")
+		changes = append(changes, s.newCommandChange(state.NewCommandNeutral(state.Command_STOP)))
+	} else if newState.NextCommand != nil {
 		log.Printf("Continue with next command: %v", *newState.NextCommand)
 		changes = append(changes, s.newCommandChange(newState.NextCommand))
 	} else if *newState.Command.Type != state.Command_STOP {

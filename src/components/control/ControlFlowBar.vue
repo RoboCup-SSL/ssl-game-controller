@@ -15,9 +15,9 @@
             <b-button v-hotkey="keymapContinue"
                       ref="btnContinue"
                       v-on:click="triggerContinue"
-                      v-bind:disabled="!continuePossible">
+                      v-bind:disabled="continueDisabled">
                 Continue
-                <span v-if="nextCommand !== ''">with</span>
+                <span v-if="nextCommand">with</span>
                 <span :class="teamColorClass">
                     {{nextCommand}}
                 </span>
@@ -28,7 +28,6 @@
 
 <script>
     import {isNonPausedStage, isPreStage, TEAM_BLUE, TEAM_UNKNOWN, TEAM_YELLOW} from "../../refereeState";
-    import {Command} from "../../proto"
     import {submitChange, submitNewCommand} from "../../submit";
 
     export default {
@@ -60,29 +59,32 @@
                     }
                 }
             },
-            state() {
-                return this.$store.state.matchState
-            },
             halted() {
-                return this.$store.state.matchState.command.type === Command.Type.HALT;
+                return this.$store.state.matchState.command.type === 'HALT';
             },
-            continuePossible() {
-                return this.nextCommand;
+            continueDisabled() {
+                return !this.nextCommand;
             },
             stopAllowed() {
                 return isNonPausedStage(this.$store.state.matchState)
                     || isPreStage(this.$store.state.matchState);
             },
             nextCommand() {
-                if (this.halted || !this.state.nextCommand) {
-                    return 'STOP';
+                if (this.halted) {
+                    if (this.stopAllowed) {
+                        return 'STOP';
+                    }
+                    return null;
                 }
-                return this.state.nextCommand.type;
+                if (!this.$store.state.matchState.nextCommand) {
+                    return null;
+                }
+                return this.$store.state.matchState.nextCommand.type;
             },
             teamColorClass() {
                 return {
-                    'team-blue': this.state.nextCommand && this.state.nextCommand.forTeam === TEAM_BLUE,
-                    'team-yellow': this.state.nextCommand && this.state.nextCommand.forTeam === TEAM_YELLOW
+                    'team-blue': this.$store.state.matchState.nextCommand && this.$store.state.matchState.nextCommand.forTeam === TEAM_BLUE,
+                    'team-yellow': this.$store.state.matchState.nextCommand && this.$store.state.matchState.nextCommand.forTeam === TEAM_YELLOW
                 }
             }
         }
