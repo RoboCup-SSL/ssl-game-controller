@@ -2,24 +2,24 @@
     <table>
         <tr>
             <td>
-                <div v-b-tooltip.hover
+                <div v-b-tooltip.hover.d500
                      :title="'Immediately stop all robots (' + Object.keys(keymapHalt)[0] + ')'">
                     <b-button v-hotkey="keymapHalt"
                               ref="btnHalt"
                               class="manual-control-button"
-                              v-on:click="send('halt')"
+                              v-on:click="send('HALT')"
                               v-bind:disabled="halted">
                         Halt
                     </b-button>
                 </div>
             </td>
             <td>
-                <div v-b-tooltip.hover
+                <div v-b-tooltip.hover.d500
                      :title="'Robots have to keep distance to the ball (' + Object.keys(keymapStop)[0] + ')'">
                     <b-button v-hotkey="keymapStop"
                               ref="btnStop"
                               class="manual-control-button"
-                              v-on:click="send('stop')"
+                              v-on:click="send('STOP')"
                               v-bind:disabled="stopped || !stopAllowed">
                         Stop
                     </b-button>
@@ -28,19 +28,19 @@
         </tr>
         <tr>
             <td>
-                <div v-b-tooltip.hover
+                <div v-b-tooltip.hover.d500
                      :title="'Restart the game in draw situations (' + Object.keys(keymapForceStart)[0] + ')'">
                     <b-button v-hotkey="keymapForceStart"
                               ref="btnForceStart"
                               class="manual-control-button"
-                              v-on:click="send('forceStart')"
+                              v-on:click="send('forcestart')"
                               v-bind:disabled="!stopped || !forceStartAllowed">
                         Force Start
                     </b-button>
                 </div>
             </td>
             <td>
-                <div v-b-tooltip.hover
+                <div v-b-tooltip.hover.d500
                      :title="'Continue game after a prepare state (' + Object.keys(keymapNormalStart)[0] + ')'">
                     <b-button v-hotkey="keymapNormalStart"
                               ref="btnNormalStart"
@@ -57,7 +57,7 @@
 
 <script>
     import {isNonPausedStage, isPreStage, TEAM_UNKNOWN} from "../../refereeState";
-    import {submitNewCommand} from "../../main";
+    import {submitNewCommand} from "../../submit";
 
     export default {
         name: "ManualControlCommon",
@@ -107,19 +107,19 @@
                 return this.$store.state.matchState
             },
             halted() {
-                return this.state.command === 'halt';
+                return this.state.command.type === 'HALT';
             },
             stopped() {
-                return this.state.command === 'stop';
+                return this.state.command.type === 'STOP';
             },
             prepareSth() {
-                return this.state.command === 'kickoff' || this.state.command === 'penalty';
+                return this.state.command.type === 'KICKOFF' || this.state.command.type === 'PENALTY';
             },
             forceStartAllowed() {
                 return isNonPausedStage(this.state);
             },
             normalStartAllowed() {
-                return isNonPausedStage(this.state) || this.state.command === 'kickoff';
+                return isNonPausedStage(this.state) || this.state.command === 'KICKOFF';
             },
             stopAllowed() {
                 return isNonPausedStage(this.$store.state.matchState)

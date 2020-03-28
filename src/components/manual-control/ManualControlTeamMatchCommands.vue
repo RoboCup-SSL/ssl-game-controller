@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div v-b-tooltip.hover
+        <div v-b-tooltip.hover.d500
              :title="'Perform direct kick (corner and goal kicks) (' + Object.keys(keymapDirect)[0] + ')'">
             <b-button v-hotkey="keymapDirect"
                       ref="btnDirect"
@@ -10,7 +10,7 @@
                 Direct
             </b-button>
         </div>
-        <div v-b-tooltip.hover
+        <div v-b-tooltip.hover.d500
              :title="'Perform indirect kick (throw-in) (' + Object.keys(keymapIndirect)[0] + ')'">
             <b-button v-hotkey="keymapIndirect"
                       ref="btnIndirect"
@@ -20,7 +20,7 @@
                 Indirect
             </b-button>
         </div>
-        <div v-b-tooltip.hover
+        <div v-b-tooltip.hover.d500
              :title="'Prepare for a kickoff (' + Object.keys(keymapKickoff)[0] + ')'">
             <b-button v-hotkey="keymapKickoff"
                       ref="btnKickoff"
@@ -30,7 +30,7 @@
                 Kickoff
             </b-button>
         </div>
-        <div v-b-tooltip.hover
+        <div v-b-tooltip.hover.d500
              title="Prepare for a penalty kick">
             <b-button v-on:click="sendPenalty"
                       class="manual-control-button"
@@ -44,6 +44,7 @@
 <script>
     import ControlTeamTimeout from "./ControlTeamTimeout";
     import {isNonPausedStage, TEAM_BLUE, TEAM_YELLOW} from "../../refereeState";
+    import {submitNewCommand} from "../../submit";
 
     export default {
         name: "ManualControlTeamMatchCommands",
@@ -53,27 +54,25 @@
         },
         methods: {
             send: function (command) {
-                this.$socket.sendObj({
-                    'command': {'forTeam': this.teamColor, 'commandType': command}
-                })
+                submitNewCommand(command, this.teamColor);
             },
             sendKickoff() {
                 if (!this.$refs.btnKickoff.disabled) {
-                    this.send('kickoff')
+                    this.send('KICKOFF')
                 }
             },
             sendDirect() {
                 if (!this.$refs.btnDirect.disabled) {
-                    this.send('direct')
+                    this.send('DIRECT')
                 }
             },
             sendIndirect() {
                 if (!this.$refs.btnIndirect.disabled) {
-                    this.send('indirect')
+                    this.send('INDIRECT')
                 }
             },
             sendPenalty() {
-                this.send('penalty')
+                this.send('PENALTY')
             },
         },
         computed: {
@@ -105,16 +104,16 @@
                 return this.$store.state.matchState
             },
             halted() {
-                return this.state.command === 'halt';
+                return this.state.command.type === 'HALT';
             },
             running() {
-                return this.state.command === 'forceStart'
-                    || this.state.command === 'normalStart'
-                    || this.state.command === 'direct'
-                    || this.state.command === 'indirect';
+                return this.state.command.type === 'FORCES_TART'
+                    || this.state.command.type === 'NORMAL_START'
+                    || this.state.command.type === 'DIRECT'
+                    || this.state.command.type === 'INDIRECT';
             },
             preparing() {
-                return this.state.command === 'kickoff' || this.state.command === 'penalty';
+                return this.state.command.type === 'KICKOFF' || this.state.command.type === 'PENALTY';
             },
             nonPausedStage() {
                 return isNonPausedStage(this.state);

@@ -2,53 +2,53 @@
     <div class="game-state-bar">
         <span v-if="state.currentActionTimeRemaining >= 0">
             <span v-format-ns-duration="state.currentActionTimeRemaining"
-                  v-b-tooltip.hover
+                  v-b-tooltip.hover.d500
                   title="Remaining time until lack of progress">
             </span>
             |
             </span>
-        <span v-b-tooltip.hover title="Next command">
-            <span v-if="state.nextCommand !== ''"
-                  :class="teamColorClass">
+        <span v-b-tooltip.hover.d500 title="Next command">
+            <span v-if="state.nextCommand !== null"
+                  :class="teamColorClassNextCommand">
             {{state.nextCommand}}
             </span>
-            <span v-if="state.nextCommand === ''">-</span>
+            <span v-else>-</span>
         </span>
         |
-        <span v-b-tooltip.hover
+        <span v-b-tooltip.hover.d500
               title="Current command"
-              :class="teamColorClass">
-            {{state.command}}
+              :class="teamColorClassCommand">
+            {{state.command.type}}
         </span>
         |
-        <span v-b-tooltip.hover title="The current stage of the game">
+        <span v-b-tooltip.hover.d500 title="The current stage of the game">
             {{state.stage}}
         </span>
         |
-        <span v-b-tooltip.hover
+        <span v-b-tooltip.hover.d500
               title="Goals for yellow"
               class="team-yellow">
             {{teamStateYellow.goals}}
         </span>
         :
-        <span v-b-tooltip.hover
+        <span v-b-tooltip.hover.d500
               title="Goals for blue"
               class="team-blue">
             {{teamStateBlue.goals}}
         </span>
         |
         <span v-format-ns-duration="state.stageTimeElapsed"
-              v-b-tooltip.hover
+              v-b-tooltip.hover.d500
               title="Total time elapsed in the current stage">
         </span>
         |
         <span v-format-ns-duration="state.stageTimeLeft"
-              v-b-tooltip.hover
+              v-b-tooltip.hover.d500
               title="Total time left for this stage">
         </span>
         |
         <span v-format-ns-duration="state.matchDuration"
-              v-b-tooltip.hover
+              v-b-tooltip.hover.d500
               title="Total real time elapsed since the match has been started">
         </span>
     </div>
@@ -70,10 +70,16 @@
             teamStateBlue() {
                 return this.$store.state.matchState.teamState[TEAM_BLUE]
             },
-            teamColorClass() {
+            teamColorClassNextCommand() {
                 return {
-                    'team-blue': this.state.nextCommandFor === TEAM_BLUE,
-                    'team-yellow': this.state.nextCommandFor === TEAM_YELLOW
+                    'team-blue': this.state.nextCommand && this.state.nextCommand.forTeam === TEAM_BLUE,
+                    'team-yellow': this.state.nextCommand && this.state.nextCommand.forTeam === TEAM_YELLOW
+                }
+            },
+            teamColorClassCommand() {
+                return {
+                    'team-blue': this.state.command.forTeam === TEAM_BLUE,
+                    'team-yellow': this.state.command.forTeam === TEAM_YELLOW
                 }
             }
         }

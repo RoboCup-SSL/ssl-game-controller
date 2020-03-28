@@ -7,7 +7,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         gcState: GameControllerState.create(),
-        matchState: new State(),
+        matchState: State.create(),
         protocol: [],
         initialized: false
     },

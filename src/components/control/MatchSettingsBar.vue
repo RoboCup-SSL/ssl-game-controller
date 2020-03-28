@@ -5,13 +5,13 @@
         </div>
 
         <div class="btn-group-toggle btn-group" v-hotkey="keymapToggleAutoRef">
-            <label v-b-tooltip.hover
+            <label v-b-tooltip.hover.d500
                    :title="'Enable automatic continuation based on game events (' + Object.keys(keymapToggleAutoRef)[0] + ')'"
                    :class="{btn:true, 'btn-active': autoContinue, 'btn-passive': !autoContinue}"
                    @click="setAutoContinue(true)">
                 Auto
             </label>
-            <label v-b-tooltip.hover
+            <label v-b-tooltip.hover.d500
                    :title="'Disable automatic continuation based on game events (' + Object.keys(keymapToggleAutoRef)[0] + ')'"
                    :class="{btn:true, 'btn-active': !autoContinue, 'btn-passive': autoContinue}"
                    @click="setAutoContinue(false)">
@@ -19,14 +19,14 @@
             </label>
         </div>
 
-        <b-button v-b-tooltip.hover
+        <b-button v-b-tooltip.hover.d500
                   title="Proceed to the next stage"
                   v-on:click="nextStage"
                   :disabled="forbidMatchControls || noNextStage">
             Proceed to '{{nextStageText}}'
         </b-button>
 
-        <b-button v-b-tooltip.hover
+        <b-button v-b-tooltip.hover.d500
                   title="Finish the game"
                   v-on:click="endGame"
                   v-if="showEndGame"

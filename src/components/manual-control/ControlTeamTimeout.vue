@@ -8,7 +8,7 @@
 
 <script>
     import {isNonPausedStage, isPreStage, TEAM_UNKNOWN} from "../../refereeState";
-    import {submitNewCommand} from "../../main";
+    import {submitNewCommand} from "../../submit";
 
     export default {
         name: "ControlTeamTimeout",
@@ -16,11 +16,8 @@
             teamColor: String
         },
         computed: {
-            command: function () {
-                return this.$store.state.matchState.command
-            },
             timeoutRunning: function () {
-                return this.command === "timeout" && this.$store.state.matchState.commandForTeam === this.teamColor.toString()
+                return this.$store.state.matchState.command.type === "TIMEOUT" && this.$store.state.matchState.command.forTeam === this.teamColor
             },
             disableTimeoutButton() {
                 return !isNonPausedStage(this.$store.state.matchState)
@@ -30,9 +27,9 @@
         methods: {
             toggleTimeout() {
                 if (this.timeoutRunning) {
-                    submitNewCommand('stop', TEAM_UNKNOWN);
+                    submitNewCommand('STOP', TEAM_UNKNOWN);
                 } else {
-                    submitNewCommand('timeout', this.teamColor);
+                    submitNewCommand('TIMEOUT', this.teamColor);
                 }
             }
         }

@@ -2,82 +2,50 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import App from './App.vue'
 import store from "./store";
-// use a custom timestamp formatter from this project
 import TimestampFormatter from "./TimestampFormatter";
-// use hotkeys for binding keyboard keys to buttons and other components
 import VueHotkey from 'v-hotkey'
-// use Bootstrap for styling
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-// Use fontawesome to load some icons
 import {library} from '@fortawesome/fontawesome-svg-core'
-import {
-    faCheckCircle,
-    faTimesCircle,
-    faEdit,
-    faSignal,
-    faToggleOff,
-    faToggleOn,
-    faShieldAlt,
-    faCog,
-    faHistory,
-    faInfoCircle,
-    faQuestionCircle,
-    faExclamationTriangle,
-    faTerminal,
-    faGavel,
-    faClock,
-    faExclamation,
-    faUsers,
-    faBullhorn,
-    faChessBoard,
-    faRecycle,
-} from '@fortawesome/free-solid-svg-icons'
+import * as fa from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
-// Connect to the backend with a single websocket that communicates with JSON format and is attached to the store
 import VueNativeSock from 'vue-native-websocket'
-
 import './assets/css/style.css'
 import Main from "./components/Main";
 import Field from "./components/Field";
-import TeamRemoteControl from "./components/TeamRemoteControl";
 import GameController from "./components/GameController";
 
+// use a custom timestamp formatter from this project
 Vue.use(TimestampFormatter);
-
+// use hotkeys for binding keyboard keys to buttons and other components
 Vue.use(VueHotkey);
-
+// use Bootstrap for styling
 Vue.use(BootstrapVue);
 
-Vue.use(VueRouter);
-
-library.add(faEdit);
-library.add(faToggleOn);
-library.add(faToggleOff);
-library.add(faSignal);
-library.add(faCheckCircle);
-library.add(faTimesCircle);
-library.add(faShieldAlt);
-library.add(faCog);
-library.add(faHistory);
-library.add(faInfoCircle);
-library.add(faQuestionCircle);
-library.add(faExclamationTriangle);
-library.add(faTerminal);
-library.add(faGavel);
-library.add(faChessBoard);
-library.add(faClock);
-library.add(faExclamation);
-library.add(faUsers);
-library.add(faBullhorn);
-library.add(faRecycle);
+library.add(
+    fa.faEdit,
+    fa.faToggleOn,
+    fa.faToggleOff,
+    fa.faSignal,
+    fa.faCheckCircle,
+    fa.faTimesCircle,
+    fa.faShieldAlt,
+    fa.faCog,
+    fa.faHistory,
+    fa.faInfoCircle,
+    fa.faQuestionCircle,
+    fa.faExclamationTriangle,
+    fa.faTerminal,
+    fa.faGavel,
+    fa.faChessBoard,
+    fa.faClock,
+    fa.faExclamation,
+    fa.faUsers,
+    fa.faBullhorn,
+    fa.faRecycle
+);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
-
-
-export let isNumeric = function (n) {
-    return !isNaN(parseFloat(n)) && isFinite(n);
-};
 
 let wsAddress;
 if (process.env.NODE_ENV === 'development') {
@@ -88,56 +56,35 @@ if (process.env.NODE_ENV === 'development') {
     wsAddress = 'ws://' + window.location.hostname + ':' + window.location.port + '/api/control';
 }
 
+// Connect to the backend with a single websocket that communicates with JSON format and is attached to the store
 Vue.use(VueNativeSock, wsAddress, {
     reconnection: true,
     format: 'json',
     store: store,
 });
 
-const routes = [
-    {path: '/remote', component: TeamRemoteControl},
-    {
-        path: '/', component: GameController, children: [
-            {
-                path: '',
-                component: Main
-            },
-            {
-                path: 'field',
-                component: Field
-            }
-        ]
-    },
-];
+Vue.use(VueRouter);
 const router = new VueRouter({
-    routes
+    routes: [
+        {
+            path: '/', component: GameController, children: [
+                {
+                    path: '',
+                    component: Main
+                },
+                {
+                    path: 'field',
+                    component: Field
+                }
+            ]
+        },
+    ]
 });
 
 // create root vue
-const vueApp = new Vue({
+// noinspection JSUnusedGlobalSymbols
+export const vueApp = new Vue({
     render: h => h(App),
     store,
     router,
 }).$mount('#app');
-
-
-export const submitChange = function (change) {
-    vueApp.$socket.sendObj({"change": change})
-};
-
-export const submitNewCommand = function (command, commandFor) {
-    submitChange({
-        NewCommand: {
-            command,
-            commandFor
-        }
-    })
-};
-
-export const submitGameEvent = function (gameEvent) {
-    submitChange({
-        AddGameEvent: {
-            gameEvent
-        }
-    })
-};

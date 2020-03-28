@@ -13898,6 +13898,20 @@ export const Change = $root.Change = (() => {
      */
     Change.prototype.revert = null;
 
+    // OneOf field names bound to virtual getters and setters
+    let $oneOfFields;
+
+    /**
+     * Change change.
+     * @member {"newCommand"|"changeStage"|"setBallPlacementPos"|"addYellowCard"|"addRedCard"|"yellowCardOver"|"addGameEvent"|"addProposedGameEvent"|"startBallPlacement"|"continue"|"updateConfig"|"updateTeamState"|"switchColors"|"revert"|undefined} change
+     * @memberof Change
+     * @instance
+     */
+    Object.defineProperty(Change.prototype, "change", {
+        get: $util.oneOfGetter($oneOfFields = ["newCommand", "changeStage", "setBallPlacementPos", "addYellowCard", "addRedCard", "yellowCardOver", "addGameEvent", "addProposedGameEvent", "startBallPlacement", "continue", "updateConfig", "updateTeamState", "switchColors", "revert"]),
+        set: $util.oneOfSetter($oneOfFields)
+    });
+
     /**
      * Creates a new Change instance using the specified properties.
      * @function create
@@ -14066,78 +14080,147 @@ export const Change = $root.Change = (() => {
     Change.verify = function verify(message) {
         if (typeof message !== "object" || message === null)
             return "object expected";
+        let properties = {};
         if (message.origin != null && message.hasOwnProperty("origin"))
             if (!$util.isString(message.origin))
                 return "origin: string expected";
         if (message.newCommand != null && message.hasOwnProperty("newCommand")) {
-            let error = $root.NewCommand.verify(message.newCommand);
-            if (error)
-                return "newCommand." + error;
+            properties.change = 1;
+            {
+                let error = $root.NewCommand.verify(message.newCommand);
+                if (error)
+                    return "newCommand." + error;
+            }
         }
         if (message.changeStage != null && message.hasOwnProperty("changeStage")) {
-            let error = $root.ChangeStage.verify(message.changeStage);
-            if (error)
-                return "changeStage." + error;
+            if (properties.change === 1)
+                return "change: multiple values";
+            properties.change = 1;
+            {
+                let error = $root.ChangeStage.verify(message.changeStage);
+                if (error)
+                    return "changeStage." + error;
+            }
         }
         if (message.setBallPlacementPos != null && message.hasOwnProperty("setBallPlacementPos")) {
-            let error = $root.SetBallPlacementPos.verify(message.setBallPlacementPos);
-            if (error)
-                return "setBallPlacementPos." + error;
+            if (properties.change === 1)
+                return "change: multiple values";
+            properties.change = 1;
+            {
+                let error = $root.SetBallPlacementPos.verify(message.setBallPlacementPos);
+                if (error)
+                    return "setBallPlacementPos." + error;
+            }
         }
         if (message.addYellowCard != null && message.hasOwnProperty("addYellowCard")) {
-            let error = $root.AddYellowCard.verify(message.addYellowCard);
-            if (error)
-                return "addYellowCard." + error;
+            if (properties.change === 1)
+                return "change: multiple values";
+            properties.change = 1;
+            {
+                let error = $root.AddYellowCard.verify(message.addYellowCard);
+                if (error)
+                    return "addYellowCard." + error;
+            }
         }
         if (message.addRedCard != null && message.hasOwnProperty("addRedCard")) {
-            let error = $root.AddRedCard.verify(message.addRedCard);
-            if (error)
-                return "addRedCard." + error;
+            if (properties.change === 1)
+                return "change: multiple values";
+            properties.change = 1;
+            {
+                let error = $root.AddRedCard.verify(message.addRedCard);
+                if (error)
+                    return "addRedCard." + error;
+            }
         }
         if (message.yellowCardOver != null && message.hasOwnProperty("yellowCardOver")) {
-            let error = $root.YellowCardOver.verify(message.yellowCardOver);
-            if (error)
-                return "yellowCardOver." + error;
+            if (properties.change === 1)
+                return "change: multiple values";
+            properties.change = 1;
+            {
+                let error = $root.YellowCardOver.verify(message.yellowCardOver);
+                if (error)
+                    return "yellowCardOver." + error;
+            }
         }
         if (message.addGameEvent != null && message.hasOwnProperty("addGameEvent")) {
-            let error = $root.AddGameEvent.verify(message.addGameEvent);
-            if (error)
-                return "addGameEvent." + error;
+            if (properties.change === 1)
+                return "change: multiple values";
+            properties.change = 1;
+            {
+                let error = $root.AddGameEvent.verify(message.addGameEvent);
+                if (error)
+                    return "addGameEvent." + error;
+            }
         }
         if (message.addProposedGameEvent != null && message.hasOwnProperty("addProposedGameEvent")) {
-            let error = $root.AddProposedGameEvent.verify(message.addProposedGameEvent);
-            if (error)
-                return "addProposedGameEvent." + error;
+            if (properties.change === 1)
+                return "change: multiple values";
+            properties.change = 1;
+            {
+                let error = $root.AddProposedGameEvent.verify(message.addProposedGameEvent);
+                if (error)
+                    return "addProposedGameEvent." + error;
+            }
         }
         if (message.startBallPlacement != null && message.hasOwnProperty("startBallPlacement")) {
-            let error = $root.StartBallPlacement.verify(message.startBallPlacement);
-            if (error)
-                return "startBallPlacement." + error;
+            if (properties.change === 1)
+                return "change: multiple values";
+            properties.change = 1;
+            {
+                let error = $root.StartBallPlacement.verify(message.startBallPlacement);
+                if (error)
+                    return "startBallPlacement." + error;
+            }
         }
         if (message["continue"] != null && message.hasOwnProperty("continue")) {
-            let error = $root.Continue.verify(message["continue"]);
-            if (error)
-                return "continue." + error;
+            if (properties.change === 1)
+                return "change: multiple values";
+            properties.change = 1;
+            {
+                let error = $root.Continue.verify(message["continue"]);
+                if (error)
+                    return "continue." + error;
+            }
         }
         if (message.updateConfig != null && message.hasOwnProperty("updateConfig")) {
-            let error = $root.UpdateConfig.verify(message.updateConfig);
-            if (error)
-                return "updateConfig." + error;
+            if (properties.change === 1)
+                return "change: multiple values";
+            properties.change = 1;
+            {
+                let error = $root.UpdateConfig.verify(message.updateConfig);
+                if (error)
+                    return "updateConfig." + error;
+            }
         }
         if (message.updateTeamState != null && message.hasOwnProperty("updateTeamState")) {
-            let error = $root.UpdateTeamState.verify(message.updateTeamState);
-            if (error)
-                return "updateTeamState." + error;
+            if (properties.change === 1)
+                return "change: multiple values";
+            properties.change = 1;
+            {
+                let error = $root.UpdateTeamState.verify(message.updateTeamState);
+                if (error)
+                    return "updateTeamState." + error;
+            }
         }
         if (message.switchColors != null && message.hasOwnProperty("switchColors")) {
-            let error = $root.SwitchColors.verify(message.switchColors);
-            if (error)
-                return "switchColors." + error;
+            if (properties.change === 1)
+                return "change: multiple values";
+            properties.change = 1;
+            {
+                let error = $root.SwitchColors.verify(message.switchColors);
+                if (error)
+                    return "switchColors." + error;
+            }
         }
         if (message.revert != null && message.hasOwnProperty("revert")) {
-            let error = $root.Revert.verify(message.revert);
-            if (error)
-                return "revert." + error;
+            if (properties.change === 1)
+                return "change: multiple values";
+            properties.change = 1;
+            {
+                let error = $root.Revert.verify(message.revert);
+                if (error)
+                    return "revert." + error;
+            }
         }
         return null;
     };
@@ -14242,53 +14325,80 @@ export const Change = $root.Change = (() => {
         if (!options)
             options = {};
         let object = {};
-        if (options.defaults) {
+        if (options.defaults)
             object.origin = "";
-            object.newCommand = null;
-            object.changeStage = null;
-            object.setBallPlacementPos = null;
-            object.addYellowCard = null;
-            object.addRedCard = null;
-            object.yellowCardOver = null;
-            object.addGameEvent = null;
-            object.addProposedGameEvent = null;
-            object.startBallPlacement = null;
-            object["continue"] = null;
-            object.updateConfig = null;
-            object.updateTeamState = null;
-            object.switchColors = null;
-            object.revert = null;
-        }
         if (message.origin != null && message.hasOwnProperty("origin"))
             object.origin = message.origin;
-        if (message.newCommand != null && message.hasOwnProperty("newCommand"))
+        if (message.newCommand != null && message.hasOwnProperty("newCommand")) {
             object.newCommand = $root.NewCommand.toObject(message.newCommand, options);
-        if (message.changeStage != null && message.hasOwnProperty("changeStage"))
+            if (options.oneofs)
+                object.change = "newCommand";
+        }
+        if (message.changeStage != null && message.hasOwnProperty("changeStage")) {
             object.changeStage = $root.ChangeStage.toObject(message.changeStage, options);
-        if (message.setBallPlacementPos != null && message.hasOwnProperty("setBallPlacementPos"))
+            if (options.oneofs)
+                object.change = "changeStage";
+        }
+        if (message.setBallPlacementPos != null && message.hasOwnProperty("setBallPlacementPos")) {
             object.setBallPlacementPos = $root.SetBallPlacementPos.toObject(message.setBallPlacementPos, options);
-        if (message.addYellowCard != null && message.hasOwnProperty("addYellowCard"))
+            if (options.oneofs)
+                object.change = "setBallPlacementPos";
+        }
+        if (message.addYellowCard != null && message.hasOwnProperty("addYellowCard")) {
             object.addYellowCard = $root.AddYellowCard.toObject(message.addYellowCard, options);
-        if (message.addRedCard != null && message.hasOwnProperty("addRedCard"))
+            if (options.oneofs)
+                object.change = "addYellowCard";
+        }
+        if (message.addRedCard != null && message.hasOwnProperty("addRedCard")) {
             object.addRedCard = $root.AddRedCard.toObject(message.addRedCard, options);
-        if (message.yellowCardOver != null && message.hasOwnProperty("yellowCardOver"))
+            if (options.oneofs)
+                object.change = "addRedCard";
+        }
+        if (message.yellowCardOver != null && message.hasOwnProperty("yellowCardOver")) {
             object.yellowCardOver = $root.YellowCardOver.toObject(message.yellowCardOver, options);
-        if (message.addGameEvent != null && message.hasOwnProperty("addGameEvent"))
+            if (options.oneofs)
+                object.change = "yellowCardOver";
+        }
+        if (message.addGameEvent != null && message.hasOwnProperty("addGameEvent")) {
             object.addGameEvent = $root.AddGameEvent.toObject(message.addGameEvent, options);
-        if (message.addProposedGameEvent != null && message.hasOwnProperty("addProposedGameEvent"))
+            if (options.oneofs)
+                object.change = "addGameEvent";
+        }
+        if (message.addProposedGameEvent != null && message.hasOwnProperty("addProposedGameEvent")) {
             object.addProposedGameEvent = $root.AddProposedGameEvent.toObject(message.addProposedGameEvent, options);
-        if (message.startBallPlacement != null && message.hasOwnProperty("startBallPlacement"))
+            if (options.oneofs)
+                object.change = "addProposedGameEvent";
+        }
+        if (message.startBallPlacement != null && message.hasOwnProperty("startBallPlacement")) {
             object.startBallPlacement = $root.StartBallPlacement.toObject(message.startBallPlacement, options);
-        if (message["continue"] != null && message.hasOwnProperty("continue"))
+            if (options.oneofs)
+                object.change = "startBallPlacement";
+        }
+        if (message["continue"] != null && message.hasOwnProperty("continue")) {
             object["continue"] = $root.Continue.toObject(message["continue"], options);
-        if (message.updateConfig != null && message.hasOwnProperty("updateConfig"))
+            if (options.oneofs)
+                object.change = "continue";
+        }
+        if (message.updateConfig != null && message.hasOwnProperty("updateConfig")) {
             object.updateConfig = $root.UpdateConfig.toObject(message.updateConfig, options);
-        if (message.updateTeamState != null && message.hasOwnProperty("updateTeamState"))
+            if (options.oneofs)
+                object.change = "updateConfig";
+        }
+        if (message.updateTeamState != null && message.hasOwnProperty("updateTeamState")) {
             object.updateTeamState = $root.UpdateTeamState.toObject(message.updateTeamState, options);
-        if (message.switchColors != null && message.hasOwnProperty("switchColors"))
+            if (options.oneofs)
+                object.change = "updateTeamState";
+        }
+        if (message.switchColors != null && message.hasOwnProperty("switchColors")) {
             object.switchColors = $root.SwitchColors.toObject(message.switchColors, options);
-        if (message.revert != null && message.hasOwnProperty("revert"))
+            if (options.oneofs)
+                object.change = "switchColors";
+        }
+        if (message.revert != null && message.hasOwnProperty("revert")) {
             object.revert = $root.Revert.toObject(message.revert, options);
+            if (options.oneofs)
+                object.change = "revert";
+        }
         return object;
     };
 

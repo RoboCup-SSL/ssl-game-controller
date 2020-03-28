@@ -1,11 +1,11 @@
 <template>
     <div>
-        <span v-b-tooltip.hover
+        <span v-b-tooltip.hover.d500
               title="Active yellow cards">
             {{activeYellowCards.length}}
         </span>
         |
-        <span v-b-tooltip.hover
+        <span v-b-tooltip.hover.d500
               title="Next yellow card due"
               v-format-ns-duration="latestCardTime">
         </span>
@@ -63,7 +63,7 @@
             },
             latestCardTime() {
                 if (this.activeYellowCards.length > 0) {
-                    return this.activeYellowCards[0];
+                    return this.activeYellowCards[0].timeRemaining;
                 }
                 return 0;
             },
@@ -71,7 +71,7 @@
                 return `yellow-card-times-${this.teamColor}-modal`;
             },
             activeYellowCards() {
-                return this.team.yellowCards.filter(e => e.timeRemaining > 0);
+                return this.team.yellowCards.filter(e => e.timeRemaining !== '0s');
             }
         }
     }

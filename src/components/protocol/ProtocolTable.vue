@@ -9,7 +9,7 @@
             <div style="text-align: left; width: 100%;">Description</div>
         </template>
         <template slot="type" slot-scope="data">
-            <span v-b-tooltip.hover :title="data.item.type">
+            <span v-b-tooltip.hover.d500 :title="data.item.type">
                 <font-awesome-icon class="fa-sm" :icon="iconForType(data.item.type)"/>
             </span>
         </template>
@@ -23,7 +23,7 @@
             </div>
         </template>
         <template slot="details" slot-scope="data">
-            <span v-b-tooltip.hover :title="`Time: ${formatTimestamp(data.item.timestamp)}
+            <span v-b-tooltip.hover.d500 :title="`Time: ${formatTimestamp(data.item.timestamp)}
             Details: ${data.item.description}`">
                 <font-awesome-icon class="fa-sm" icon="info-circle"/>
             </span>
@@ -31,7 +31,7 @@
         <template slot="revert" slot-scope="data">
             <div class="btn-revert"
                  v-if="data.item.previousState !== null"
-                 v-b-tooltip.hover.righttop="'Revert this event'">
+                 v-b-tooltip.hover.d500.righttop="'Revert this event'">
                 <a @click="revertProtocolEntry(data.item.id)">
                     <font-awesome-icon icon="history" class="fa-sm"></font-awesome-icon>
                 </a>

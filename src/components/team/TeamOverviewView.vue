@@ -6,7 +6,7 @@
             <tr>
                 <th class="team-yellow">{{teamYellow.name}}</th>
                 <th>
-                    <a v-b-tooltip.hover
+                    <a v-b-tooltip.hover.d500
                        :title="editMode.active ? 'Stop editing' : 'Start editing'"
                        class="btn-edit"
                        v-on:click="editMode.active=!editMode.active">

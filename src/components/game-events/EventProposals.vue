@@ -13,7 +13,7 @@
                v-for="detail in detailsList(proposal)"
                :key="detail.key">{{detail.key}}: {{detail.value}}</p>
             <a class="btn-accept"
-               v-b-tooltip.hover
+               v-b-tooltip.hover.d500
                title="Accept this game event"
                @click="accept(proposal.gameEvent)">
                 <font-awesome-icon icon="check-circle" class="fa-lg"></font-awesome-icon>

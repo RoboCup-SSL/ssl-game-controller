@@ -30,7 +30,7 @@
 <script>
     import ControlTeamTimeout from "./ControlTeamTimeout";
     import {isNonPausedStage, TEAM_BLUE, TEAM_YELLOW} from "../../refereeState";
-    import {submitChange, submitGameEvent, submitNewCommand} from "../../main";
+    import {submitChange, submitGameEvent, submitNewCommand} from "../../submit";
 
     export default {
         name: "ManualControlTeam",
@@ -59,8 +59,7 @@
             },
             addGoal() {
                 submitGameEvent({
-                    type: GameEvent.Type.GOAL,
-                    origin: ['UI'],
+                    type: 'GOAL',
                     goal: {
                         byTeam: this.teamColor
                     }

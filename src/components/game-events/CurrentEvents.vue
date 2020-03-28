@@ -17,7 +17,7 @@
             </p>
             <div class="btn-accept"
                  v-if="showAcceptGoal(gameEvent)"
-                 v-b-tooltip.hover.righttop="'Accept this goal'">
+                 v-b-tooltip.hover.d500.righttop="'Accept this goal'">
                 <a @click="acceptGoal(gameEvent)">
                     <font-awesome-icon icon="check-circle" class="fa-lg"></font-awesome-icon>
                 </a>

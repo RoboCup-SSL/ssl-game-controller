@@ -14,7 +14,7 @@
     import LocationSelection from "../common/LocationSelection";
     import TeamSelection from "../common/TeamSelection";
     import {convertStringLocation} from "../../refereeState";
-    import {isNumeric} from "../../main";
+    import {isNumeric} from "../../util";
 
     export default {
         name: "PlaceBall",
