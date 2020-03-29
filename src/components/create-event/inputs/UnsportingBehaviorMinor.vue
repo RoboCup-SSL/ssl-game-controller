@@ -18,6 +18,7 @@
 
 <script>
     import TeamSelection from "@/components/common/TeamSelection";
+    import {submitGameEvent} from "../../../submit";
 
     export default {
         name: "UnsportingBehaviorMinor",
@@ -32,15 +33,11 @@
         },
         methods: {
             sendEvent: function () {
-                this.$socket.sendObj({
-                    gameEvent: {
-                        type: 'unsportingBehaviorMinor',
-                        details: {
-                            ['unsportingBehaviorMinor']: {
-                                by_team: this.model.team.toLocaleUpperCase(),
-                                reason: this.model.reason
-                            }
-                        }
+                submitGameEvent({
+                    type: 'UNSPORTING_BEHAVIOR_MINOR',
+                    unsportingBehaviorMinor: {
+                        by_team: this.model.team.toLocaleUpperCase(),
+                        reason: this.model.reason
                     }
                 });
                 this.$root.$emit('bv::hide::modal', 'new-event-modal');

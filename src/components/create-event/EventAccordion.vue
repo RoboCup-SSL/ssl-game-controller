@@ -20,18 +20,15 @@
     import AttackerTouchedBallInDefenseArea from "./inputs/AttackerTouchedBallInDefenseArea"
     import AttackerTooCloseToDefenseArea from "./inputs/AttackerTooCloseToDefenseArea"
     import AttackerTouchedOpponentInDefenseArea from "./inputs/AttackerTouchedOpponentInDefenseArea"
-    import AttackerTouchedOpponentInDefenseAreaSkipped from "./inputs/AttackerTouchedOpponentInDefenseAreaSkipped"
     import BallLeftFieldGoalLine from "./inputs/BallLeftFieldGoalLine"
     import BallLeftFieldTouchLine from "./inputs/BallLeftFieldTouchLine"
     import BotCrashDrawn from "./inputs/BotCrashDrawn"
     import BotCrashUnique from "./inputs/BotCrashUnique"
-    import BotCrashUniqueSkipped from "./inputs/BotCrashUniqueSkipped"
     import BotDribbledBallTooFar from "./inputs/BotDribbledBallTooFar"
     import BotHeldBallDeliberately from "./inputs/BotHeldBallDeliberately"
     import BotInterferedPlacement from "./inputs/BotInterferedPlacement"
     import BotKickedBallTooFast from "./inputs/BotKickedBallTooFast"
     import BotPushedBot from "./inputs/BotPushedBot"
-    import BotPushedBotSkipped from "./inputs/BotPushedBotSkipped"
     import BotTippedOver from "./inputs/BotTippedOver"
     import BotTooFastInStop from "./inputs/BotTooFastInStop"
     import ChippedGoal from "./inputs/ChippedGoal"
@@ -62,18 +59,15 @@
             AttackerTouchedBallInDefenseArea,
             AttackerTooCloseToDefenseArea,
             AttackerTouchedOpponentInDefenseArea,
-            AttackerTouchedOpponentInDefenseAreaSkipped,
             BallLeftFieldGoalLine,
             BallLeftFieldTouchLine,
             BotCrashDrawn,
             BotCrashUnique,
-            BotCrashUniqueSkipped,
             BotDribbledBallTooFar,
             BotHeldBallDeliberately,
             BotInterferedPlacement,
             BotKickedBallTooFast,
             BotPushedBot,
-            BotPushedBotSkipped,
             BotTippedOver,
             BotTooFastInStop,
             ChippedGoal,

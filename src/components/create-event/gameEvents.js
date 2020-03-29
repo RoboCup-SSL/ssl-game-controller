@@ -116,18 +116,8 @@ export const foulEvents = [
         type: 'auto'
     },
     {
-        name: 'Bot crashed into another bot - decided to continue',
-        component: 'BotCrashUniqueSkipped',
-        type: 'auto'
-    },
-    {
         name: 'One bot pushed another one',
         component: 'BotPushedBot',
-        type: 'auto'
-    },
-    {
-        name: 'One bot pushed another one - decided to continue',
-        component: 'BotPushedBotSkipped',
         type: 'auto'
     },
     {
@@ -163,11 +153,6 @@ export const foulEvents = [
     {
         name: 'Attacker touched opponent defender in defense area',
         component: 'AttackerTouchedOpponentInDefenseArea',
-        type: 'auto'
-    },
-    {
-        name: 'Attacker touched opponent defender in defense area - decided to continue',
-        component: 'AttackerTouchedOpponentInDefenseAreaSkipped',
         type: 'auto'
     },
 ];

@@ -11,6 +11,7 @@
 
 <script>
     import TeamSelection from "@/components/common/TeamSelection";
+    import {submitGameEvent} from "../../../submit";
 
     export default {
         name: "TooManyRobots",
@@ -26,16 +27,12 @@
         },
         methods: {
             sendEvent: function () {
-                this.$socket.sendObj({
-                    gameEvent: {
-                        type: 'tooManyRobots',
-                        details: {
-                            ['tooManyRobots']: {
+                submitGameEvent( {
+                        type: 'TOO_MANY_ROBOTS',
+tooManyRobots: {
                                 by_team: this.model.team.toLocaleUpperCase(),
                             }
-                        }
-                    }
-                });
+                        });
                 this.$root.$emit('bv::hide::modal', 'new-event-modal');
             }
         },

@@ -17,6 +17,7 @@
     import BotSelection from "@/components/common/BotSelection";
     import LocationSelection from "@/components/common/LocationSelection";
     import {convertStringLocation} from "@/refereeState";
+    import {submitGameEvent} from "../../../submit";
 
     export default {
         name: "BotDribbledBallTooFar",
@@ -33,17 +34,13 @@
         },
         methods: {
             sendEvent: function () {
-                this.$socket.sendObj({
-                    gameEvent: {
-                        type: 'botDribbledBallTooFar',
-                        details: {
-                            ['botDribbledBallTooFar']: {
-                                by_team: this.model.team.toLocaleUpperCase(),
-                                by_bot: parseInt(this.model.id),
-                                start: convertStringLocation(this.model.startLocation),
-                                end: convertStringLocation(this.model.endLocation)
-                            }
-                        }
+                submitGameEvent({
+                    type: 'BOT_DRIBBLED_BALL_TOO_FAR',
+                    botDribbledBallTooFar: {
+                        by_team: this.model.team.toLocaleUpperCase(),
+                        by_bot: parseInt(this.model.id),
+                        start: convertStringLocation(this.model.startLocation),
+                        end: convertStringLocation(this.model.endLocation)
                     }
                 });
                 this.$root.$emit('bv::hide::modal', 'new-event-modal');

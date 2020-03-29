@@ -17,6 +17,7 @@
     import BotSelection from "@/components/common/BotSelection";
     import LocationSelection from "@/components/common/LocationSelection";
     import {convertStringLocation} from "@/refereeState";
+    import {submitGameEvent} from "../../../submit";
 
     export default {
         name: "AimlessKick",
@@ -33,17 +34,13 @@
         },
         methods: {
             sendEvent: function () {
-                this.$socket.sendObj({
-                    gameEvent: {
-                        type: 'aimlessKick',
-                        details: {
-                            ['aimlessKick']: {
-                                by_team: this.model.team.toLocaleUpperCase(),
-                                by_bot: parseInt(this.model.id),
-                                location: convertStringLocation(this.model.location),
-                                kick_location: convertStringLocation(this.model.kickLocation),
-                            }
-                        }
+                submitGameEvent({
+                    type: 'AIMLESS_KICK',
+                    aimlessKick: {
+                        byTeam: this.model.team.toLocaleUpperCase(),
+                        byBot: parseInt(this.model.id),
+                        location: convertStringLocation(this.model.location),
+                        kickLocation: convertStringLocation(this.model.kickLocation),
                     }
                 });
                 this.$root.$emit('bv::hide::modal', 'new-event-modal');

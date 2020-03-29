@@ -16,6 +16,7 @@
     import BotSelection from "@/components/common/BotSelection";
     import LocationSelection from "@/components/common/LocationSelection";
     import {convertStringLocation} from "@/refereeState";
+    import {submitGameEvent} from "../../../submit";
 
     export default {
         name: "AttackerTouchedBallInDefenseArea",
@@ -31,16 +32,12 @@
         },
         methods: {
             sendEvent: function () {
-                this.$socket.sendObj({
-                    gameEvent: {
-                        type: 'attackerTouchedBallInDefenseArea',
-                        details: {
-                            ['attackerTouchedBallInDefenseArea']: {
-                                by_team: this.model.team.toLocaleUpperCase(),
-                                by_bot: parseInt(this.model.id),
-                                location: convertStringLocation(this.model.location)
-                            }
-                        }
+                submitGameEvent({
+                    type: 'ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA',
+                    attackerTouchedBallInDefenseArea: {
+                        by_team: this.model.team.toLocaleUpperCase(),
+                        by_bot: parseInt(this.model.id),
+                        location: convertStringLocation(this.model.location)
                     }
                 });
                 this.$root.$emit('bv::hide::modal', 'new-event-modal');

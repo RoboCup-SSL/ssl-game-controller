@@ -17,6 +17,7 @@
     import BotSelection from "@/components/common/BotSelection";
     import LocationSelection from "@/components/common/LocationSelection";
     import {convertStringLocation} from "@/refereeState";
+    import {submitGameEvent} from "../../../submit";
 
     export default {
         name: "BotCrashUnique",
@@ -33,17 +34,13 @@
         },
         methods: {
             sendEvent: function () {
-                this.$socket.sendObj({
-                    gameEvent: {
-                        type: 'botCrashUnique',
-                        details: {
-                            ['botCrashUnique']: {
-                                by_team: this.model.team.toLocaleUpperCase(),
-                                violator: parseInt(this.model.violator.id),
-                                victim: parseInt(this.model.victim.id),
-                                location: convertStringLocation(this.model.location),
-                            }
-                        }
+                submitGameEvent({
+                    type: 'BOT_CRASH_UNIQUE',
+                    botCrashUnique: {
+                        by_team: this.model.team.toLocaleUpperCase(),
+                        violator: parseInt(this.model.violator.id),
+                        victim: parseInt(this.model.victim.id),
+                        location: convertStringLocation(this.model.location),
                     }
                 });
                 this.$root.$emit('bv::hide::modal', 'new-event-modal');

@@ -26,36 +26,37 @@
     export default {
         name: "EventProposals",
         computed: {
-            gcState() {
-                return this.$store.state.gcState
-            },
             eventProposals() {
-                return this.gcState.gameEventProposals;
+                return this.$store.state.matchState.proposedGameEvents;
             },
             eventProposalsPresent() {
                 return this.eventProposals != null && this.eventProposals.length > 0;
             }
         },
         methods: {
-            details(proposal) {
-                let key = Object.keys(proposal.gameEvent.details)[0];
-                return proposal.gameEvent.details[key];
+            details(gameEvent) {
+                Object.keys(gameEvent).forEach(function (wrapperKey) {
+                    if (wrapperKey !== 'type' && wrapperKey !== 'origin') {
+                        return gameEvent[wrapperKey];
+                    }
+                });
+                return {};
             },
-            detailsList(proposal) {
+            detailsList(gameEvent) {
                 let list = [];
-                let details = this.details(proposal);
                 let i = 0;
-                Object.keys(details).forEach(function (key) {
-                    if (key !== 'by_team') {
-                        list[i++] = {key: key, value: details[key]};
+                let eventDetails = this.details(gameEvent);
+                Object.keys(eventDetails).forEach(function (key) {
+                    if (key !== 'byTeam') {
+                        list[i++] = {key: key, value: eventDetails[key]};
                     }
                 });
                 return list;
             },
-            byTeam(proposal) {
-                let details = this.details(proposal);
-                if (details.hasOwnProperty('by_team')) {
-                    return details.by_team;
+            byTeam(gameEvent) {
+                let eventDetails = this.details(gameEvent);
+                if (eventDetails.hasOwnProperty('byTeam')) {
+                    return eventDetails.byTeam;
                 }
                 return '';
             },

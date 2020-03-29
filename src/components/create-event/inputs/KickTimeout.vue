@@ -11,6 +11,7 @@
 
 <script>
     import TeamSelection from "@/components/common/TeamSelection";
+    import {submitGameEvent} from "../../../submit";
 
     export default {
         name: "KickTimeout",
@@ -24,14 +25,10 @@
         },
         methods: {
             sendEvent: function () {
-                this.$socket.sendObj({
-                    gameEvent: {
-                        type: 'kickTimeout',
-                        details: {
-                            ['kickTimeout']: {
-                                by_team: this.model.team.toLocaleUpperCase(),
-                            }
-                        }
+                submitGameEvent({
+                    type: 'KICK_TIMEOUT',
+                    kickTimeout: {
+                        by_team: this.model.team.toLocaleUpperCase(),
                     }
                 });
                 this.$root.$emit('bv::hide::modal', 'new-event-modal');

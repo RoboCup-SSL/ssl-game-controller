@@ -11,6 +11,7 @@
 
 <script>
     import TeamSelection from "@/components/common/TeamSelection";
+    import {submitGameEvent} from "../../../submit";
 
     export default {
         name: "MultiplePlacementFailures",
@@ -24,14 +25,10 @@
         },
         methods: {
             sendEvent: function () {
-                this.$socket.sendObj({
-                    gameEvent: {
-                        type: 'multiplePlacementFailures',
-                        details: {
-                            ['multiplePlacementFailures']: {
-                                by_team: this.model.team.toLocaleUpperCase(),
-                            }
-                        }
+                submitGameEvent({
+                    type: 'MULTIPLE_PLACEMENT_FAILURES',
+                    multiplePlacementFailures: {
+                        by_team: this.model.team.toLocaleUpperCase(),
                     }
                 });
                 this.$root.$emit('bv::hide::modal', 'new-event-modal');

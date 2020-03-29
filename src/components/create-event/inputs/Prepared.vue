@@ -9,20 +9,17 @@
 
 <script>
     import TeamSelection from "@/components/common/TeamSelection";
+    import {submitGameEvent} from "../../../submit";
 
     export default {
         name: "Prepared",
         components: {TeamSelection},
         methods: {
             sendEvent: function () {
-                this.$socket.sendObj({
-                    gameEvent: {
-                        type: 'prepared',
-                        details: {
-                            ['prepared']: {}
-                        }
-                    }
-                });
+                submitGameEvent( {
+                        type: 'PREPARED',
+prepared: {}
+                        });
                 this.$root.$emit('bv::hide::modal', 'new-event-modal');
             }
         },

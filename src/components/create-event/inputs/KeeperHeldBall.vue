@@ -14,6 +14,7 @@
     import TeamSelection from "@/components/common/TeamSelection";
     import LocationSelection from "@/components/common/LocationSelection";
     import {convertStringLocation} from "@/refereeState";
+    import {submitGameEvent} from "../../../submit";
 
     export default {
         name: "KeeperHeldBall",
@@ -28,15 +29,11 @@
         },
         methods: {
             sendEvent: function () {
-                this.$socket.sendObj({
-                    gameEvent: {
-                        type: 'keeperHeldBall',
-                        details: {
-                            ['keeperHeldBall']: {
-                                by_team: this.model.team.toLocaleUpperCase(),
-                                location: convertStringLocation(this.model.location)
-                            }
-                        }
+                submitGameEvent({
+                    type: 'KEEPER_HELD_BALL',
+                    keeperHeldBall: {
+                        by_team: this.model.team.toLocaleUpperCase(),
+                        location: convertStringLocation(this.model.location)
                     }
                 });
                 this.$root.$emit('bv::hide::modal', 'new-event-modal');

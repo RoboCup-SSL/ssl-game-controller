@@ -16,6 +16,7 @@
     import BotSelection from "@/components/common/BotSelection";
     import LocationSelection from "@/components/common/LocationSelection";
     import {convertStringLocation} from "@/refereeState";
+    import {submitGameEvent} from "../../../submit";
 
     export default {
         name: "BotCrashDrawn",
@@ -31,16 +32,12 @@
         },
         methods: {
             sendEvent: function () {
-                this.$socket.sendObj({
-                    gameEvent: {
-                        type: 'botCrashDrawn',
-                        details: {
-                            ['botCrashDrawn']: {
-                                bot_yellow: parseInt(this.model.botYellow.id),
-                                bot_blue: parseInt(this.model.botBlue.id),
-                                location: convertStringLocation(this.model.location),
-                            }
-                        }
+                submitGameEvent({
+                    type: 'BOT_CRASH_DRAWN',
+                    botCrashDrawn: {
+                        bot_yellow: parseInt(this.model.botYellow.id),
+                        bot_blue: parseInt(this.model.botBlue.id),
+                        location: convertStringLocation(this.model.location),
                     }
                 });
                 this.$root.$emit('bv::hide::modal', 'new-event-modal');

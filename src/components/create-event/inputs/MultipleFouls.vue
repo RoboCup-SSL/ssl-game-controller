@@ -11,6 +11,7 @@
 
 <script>
     import TeamSelection from "@/components/common/TeamSelection";
+    import {submitGameEvent} from "../../../submit";
 
     export default {
         name: "MultipleFouls",
@@ -24,14 +25,10 @@
         },
         methods: {
             sendEvent: function () {
-                this.$socket.sendObj({
-                    gameEvent: {
-                        type: 'multipleFouls',
-                        details: {
-                            ['multipleFouls']: {
-                                by_team: this.model.team.toLocaleUpperCase(),
-                            }
-                        }
+                submitGameEvent({
+                    type: 'MULTIPLE_FOULS',
+                    multipleFouls: {
+                        by_team: this.model.team.toLocaleUpperCase(),
                     }
                 });
                 this.$root.$emit('bv::hide::modal', 'new-event-modal');
