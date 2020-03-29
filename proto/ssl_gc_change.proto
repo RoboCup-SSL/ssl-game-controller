@@ -2,9 +2,10 @@ syntax = "proto2";
 
 option go_package = "github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine";
 
-import "ssl_game_controller_state.proto";
+import "ssl_gc_state.proto";
 import "ssl_game_event.proto";
 import "ssl_referee.proto";
+
 import "google/protobuf/timestamp.proto";
 
 message StateChange {

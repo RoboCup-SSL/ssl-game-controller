@@ -2,8 +2,9 @@ syntax = "proto2";
 
 option go_package = "github.com/RoboCup-SSL/ssl-game-controller/internal/app/api";
 
-import "ssl_game_controller_state.proto";
-import "ssl_game_controller_change.proto";
+import "ssl_gc_state.proto";
+import "ssl_gc_change.proto";
+
 import "google/protobuf/duration.proto";
 
 message Output {

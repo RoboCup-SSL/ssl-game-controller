@@ -2,7 +2,7 @@ syntax = "proto2";
 
 option go_package = "github.com/RoboCup-SSL/ssl-game-controller/internal/app/rcon";
 
-import "ssl_game_controller_common.proto";
+import "ssl_gc_rcon.proto";
 
 // a registration that must be send by teams and autoRefs to the controller as the very first message
 message TeamRegistration {
