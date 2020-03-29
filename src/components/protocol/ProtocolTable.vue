@@ -2,7 +2,7 @@
     <div>
         <b-table striped hover small
                  responsive="true"
-                 sticky-header="100%"
+                 sticky-header="80vh"
                  selectable
                  @row-clicked="onRowClicked"
                  :items="protocol"
