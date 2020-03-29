@@ -33,6 +33,7 @@
     import EditableLabelDuration from "../common/EditableLabelDuration";
     import TeamYellowCardTimes from "./TeamYellowCardTimes";
     import {TEAM_BLUE, TEAM_YELLOW} from "../../refereeState";
+    import {submitChange} from "../../submit";
 
     export default {
         name: "TeamYellowCardsActive",
@@ -48,13 +49,17 @@
             }
         },
         methods: {
-            updateCardTime: function (v, index) {
-                this.$socket.sendObj({
-                    'modify': {
-                        'forTeam': this.teamColor,
-                        'yellowCardTime': {'cardID': index, 'duration': v}
+            updateCardTime: function (duration, index) {
+                // TODO
+                submitChange({
+                    updateTeamState: {
+                        forTeam: this.teamColor,
+                        yellowCard: {
+                            id: index,
+                            timeRemaining: duration
+                        }
                     }
-                })
+                });
             },
         },
         computed: {

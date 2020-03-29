@@ -16741,7 +16741,7 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
      * @property {boolean|null} [onPositiveHalf] UpdateTeamState onPositiveHalf
      * @property {number|null} [ballPlacementFailures] UpdateTeamState ballPlacementFailures
      * @property {boolean|null} [canPlaceBall] UpdateTeamState canPlaceBall
-     * @property {boolean|null} [botSubstitutionIntend] UpdateTeamState botSubstitutionIntend
+     * @property {boolean|null} [botSubstitutionIntent] UpdateTeamState botSubstitutionIntent
      * @property {Object.<string,IYellowCard>|null} [yellowCards] UpdateTeamState yellowCards
      * @property {number|null} [yellowCardsRemove] UpdateTeamState yellowCardsRemove
      * @property {Object.<string,IRedCard>|null} [redCards] UpdateTeamState redCards
@@ -16838,12 +16838,12 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
     UpdateTeamState.prototype.canPlaceBall = false;
 
     /**
-     * UpdateTeamState botSubstitutionIntend.
-     * @member {boolean} botSubstitutionIntend
+     * UpdateTeamState botSubstitutionIntent.
+     * @member {boolean} botSubstitutionIntent
      * @memberof UpdateTeamState
      * @instance
      */
-    UpdateTeamState.prototype.botSubstitutionIntend = false;
+    UpdateTeamState.prototype.botSubstitutionIntent = false;
 
     /**
      * UpdateTeamState yellowCards.
@@ -16919,8 +16919,8 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
             writer.uint32(/* id 8, wireType 0 =*/64).int32(message.ballPlacementFailures);
         if (message.canPlaceBall != null && message.hasOwnProperty("canPlaceBall"))
             writer.uint32(/* id 9, wireType 0 =*/72).bool(message.canPlaceBall);
-        if (message.botSubstitutionIntend != null && message.hasOwnProperty("botSubstitutionIntend"))
-            writer.uint32(/* id 10, wireType 0 =*/80).bool(message.botSubstitutionIntend);
+        if (message.botSubstitutionIntent != null && message.hasOwnProperty("botSubstitutionIntent"))
+            writer.uint32(/* id 10, wireType 0 =*/80).bool(message.botSubstitutionIntent);
         if (message.yellowCards != null && message.hasOwnProperty("yellowCards"))
             for (let keys = Object.keys(message.yellowCards), i = 0; i < keys.length; ++i) {
                 writer.uint32(/* id 11, wireType 2 =*/90).fork().uint32(/* id 1, wireType 0 =*/8).uint32(keys[i]);
@@ -16997,7 +16997,7 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
                 message.canPlaceBall = reader.bool();
                 break;
             case 10:
-                message.botSubstitutionIntend = reader.bool();
+                message.botSubstitutionIntent = reader.bool();
                 break;
             case 11:
                 reader.skip().pos++;
@@ -17089,9 +17089,9 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
         if (message.canPlaceBall != null && message.hasOwnProperty("canPlaceBall"))
             if (typeof message.canPlaceBall !== "boolean")
                 return "canPlaceBall: boolean expected";
-        if (message.botSubstitutionIntend != null && message.hasOwnProperty("botSubstitutionIntend"))
-            if (typeof message.botSubstitutionIntend !== "boolean")
-                return "botSubstitutionIntend: boolean expected";
+        if (message.botSubstitutionIntent != null && message.hasOwnProperty("botSubstitutionIntent"))
+            if (typeof message.botSubstitutionIntent !== "boolean")
+                return "botSubstitutionIntent: boolean expected";
         if (message.yellowCards != null && message.hasOwnProperty("yellowCards")) {
             if (!$util.isObject(message.yellowCards))
                 return "yellowCards: object expected";
@@ -17171,8 +17171,8 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
             message.ballPlacementFailures = object.ballPlacementFailures | 0;
         if (object.canPlaceBall != null)
             message.canPlaceBall = Boolean(object.canPlaceBall);
-        if (object.botSubstitutionIntend != null)
-            message.botSubstitutionIntend = Boolean(object.botSubstitutionIntend);
+        if (object.botSubstitutionIntent != null)
+            message.botSubstitutionIntent = Boolean(object.botSubstitutionIntent);
         if (object.yellowCards) {
             if (typeof object.yellowCards !== "object")
                 throw TypeError(".UpdateTeamState.yellowCards: object expected");
@@ -17227,7 +17227,7 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
             object.onPositiveHalf = false;
             object.ballPlacementFailures = 0;
             object.canPlaceBall = false;
-            object.botSubstitutionIntend = false;
+            object.botSubstitutionIntent = false;
             object.yellowCardsRemove = 0;
             object.redCardsRemove = 0;
         }
@@ -17249,8 +17249,8 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
             object.ballPlacementFailures = message.ballPlacementFailures;
         if (message.canPlaceBall != null && message.hasOwnProperty("canPlaceBall"))
             object.canPlaceBall = message.canPlaceBall;
-        if (message.botSubstitutionIntend != null && message.hasOwnProperty("botSubstitutionIntend"))
-            object.botSubstitutionIntend = message.botSubstitutionIntend;
+        if (message.botSubstitutionIntent != null && message.hasOwnProperty("botSubstitutionIntent"))
+            object.botSubstitutionIntent = message.botSubstitutionIntent;
         let keys2;
         if (message.yellowCards && (keys2 = Object.keys(message.yellowCards)).length) {
             object.yellowCards = {};
@@ -18639,7 +18639,7 @@ export const TeamInfo = $root.TeamInfo = (() => {
      * @property {boolean|null} [ballPlacementFailuresReached] TeamInfo ballPlacementFailuresReached
      * @property {boolean|null} [canPlaceBall] TeamInfo canPlaceBall
      * @property {number|null} [maxAllowedBots] TeamInfo maxAllowedBots
-     * @property {boolean|null} [botSubstitutionIntend] TeamInfo botSubstitutionIntend
+     * @property {boolean|null} [botSubstitutionIntent] TeamInfo botSubstitutionIntent
      */
 
     /**
@@ -18765,12 +18765,12 @@ export const TeamInfo = $root.TeamInfo = (() => {
     TeamInfo.prototype.maxAllowedBots = 0;
 
     /**
-     * TeamInfo botSubstitutionIntend.
-     * @member {boolean} botSubstitutionIntend
+     * TeamInfo botSubstitutionIntent.
+     * @member {boolean} botSubstitutionIntent
      * @memberof TeamInfo
      * @instance
      */
-    TeamInfo.prototype.botSubstitutionIntend = false;
+    TeamInfo.prototype.botSubstitutionIntent = false;
 
     /**
      * Creates a new TeamInfo instance using the specified properties.
@@ -18825,8 +18825,8 @@ export const TeamInfo = $root.TeamInfo = (() => {
             writer.uint32(/* id 12, wireType 0 =*/96).bool(message.canPlaceBall);
         if (message.maxAllowedBots != null && message.hasOwnProperty("maxAllowedBots"))
             writer.uint32(/* id 13, wireType 0 =*/104).int32(message.maxAllowedBots);
-        if (message.botSubstitutionIntend != null && message.hasOwnProperty("botSubstitutionIntend"))
-            writer.uint32(/* id 14, wireType 0 =*/112).bool(message.botSubstitutionIntend);
+        if (message.botSubstitutionIntent != null && message.hasOwnProperty("botSubstitutionIntent"))
+            writer.uint32(/* id 14, wireType 0 =*/112).bool(message.botSubstitutionIntent);
         return writer;
     };
 
@@ -18907,7 +18907,7 @@ export const TeamInfo = $root.TeamInfo = (() => {
                 message.maxAllowedBots = reader.int32();
                 break;
             case 14:
-                message.botSubstitutionIntend = reader.bool();
+                message.botSubstitutionIntent = reader.bool();
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -19003,9 +19003,9 @@ export const TeamInfo = $root.TeamInfo = (() => {
         if (message.maxAllowedBots != null && message.hasOwnProperty("maxAllowedBots"))
             if (!$util.isInteger(message.maxAllowedBots))
                 return "maxAllowedBots: integer expected";
-        if (message.botSubstitutionIntend != null && message.hasOwnProperty("botSubstitutionIntend"))
-            if (typeof message.botSubstitutionIntend !== "boolean")
-                return "botSubstitutionIntend: boolean expected";
+        if (message.botSubstitutionIntent != null && message.hasOwnProperty("botSubstitutionIntent"))
+            if (typeof message.botSubstitutionIntent !== "boolean")
+                return "botSubstitutionIntent: boolean expected";
         return null;
     };
 
@@ -19074,8 +19074,8 @@ export const TeamInfo = $root.TeamInfo = (() => {
             message.canPlaceBall = Boolean(object.canPlaceBall);
         if (object.maxAllowedBots != null)
             message.maxAllowedBots = object.maxAllowedBots | 0;
-        if (object.botSubstitutionIntend != null)
-            message.botSubstitutionIntend = Boolean(object.botSubstitutionIntend);
+        if (object.botSubstitutionIntent != null)
+            message.botSubstitutionIntent = Boolean(object.botSubstitutionIntent);
         return message;
     };
 
@@ -19108,7 +19108,7 @@ export const TeamInfo = $root.TeamInfo = (() => {
             object.ballPlacementFailuresReached = false;
             object.canPlaceBall = false;
             object.maxAllowedBots = 0;
-            object.botSubstitutionIntend = false;
+            object.botSubstitutionIntent = false;
         }
         if (message.name != null && message.hasOwnProperty("name"))
             object.name = message.name;
@@ -19145,8 +19145,8 @@ export const TeamInfo = $root.TeamInfo = (() => {
             object.canPlaceBall = message.canPlaceBall;
         if (message.maxAllowedBots != null && message.hasOwnProperty("maxAllowedBots"))
             object.maxAllowedBots = message.maxAllowedBots;
-        if (message.botSubstitutionIntend != null && message.hasOwnProperty("botSubstitutionIntend"))
-            object.botSubstitutionIntend = message.botSubstitutionIntend;
+        if (message.botSubstitutionIntent != null && message.hasOwnProperty("botSubstitutionIntent"))
+            object.botSubstitutionIntent = message.botSubstitutionIntent;
         return object;
     };
 

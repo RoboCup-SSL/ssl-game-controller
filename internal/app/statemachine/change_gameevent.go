@@ -86,7 +86,7 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 		log.Printf("Halt the game, because team %v requested robot substitution", byTeam)
 		// reset robot substitution flags
 		for _, team := range state.BothTeams() {
-			*newState.TeamInfo(team).BotSubstitutionIntend = false
+			*newState.TeamInfo(team).BotSubstitutionIntent = false
 		}
 		// halt the game to allow teams to substitute robots
 		changes = append(changes, s.newCommandChange(state.NewCommandNeutral(state.Command_HALT)))

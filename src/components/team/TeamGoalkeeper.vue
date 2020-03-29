@@ -10,6 +10,7 @@
 
 <script>
     import EditableLabelNumber from "../common/EditableLabelNumber";
+    import {submitChange} from "../../submit";
 
     export default {
         name: "TeamGoalkeeper",
@@ -20,12 +21,12 @@
         },
         methods: {
             updateGoalkeeper: function (v) {
-                this.$socket.sendObj({
-                    'modify': {
-                        'forTeam': this.teamColor,
-                        'goalkeeper': Number(v)
+                submitChange({
+                    updateTeamState: {
+                        forTeam: this.teamColor,
+                        goalkeeper: v
                     }
-                })
+                });
             },
         },
         computed: {

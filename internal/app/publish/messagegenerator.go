@@ -87,7 +87,7 @@ func updateTeam(teamInfo *state.Referee_TeamInfo, teamState *state.TeamInfo) {
 	*teamInfo.BallPlacementFailuresReached = *teamState.BallPlacementFailuresReached
 	*teamInfo.CanPlaceBall = *teamState.CanPlaceBall
 	*teamInfo.MaxAllowedBots = uint32(*teamState.MaxAllowedBots)
-	*teamInfo.BotSubstitutionIntent = *teamState.BotSubstitutionIntend
+	*teamInfo.BotSubstitutionIntent = *teamState.BotSubstitutionIntent
 	timeoutTime, _ := ptypes.Duration(teamState.TimeoutTimeLeft)
 	*teamInfo.TimeoutTime = mapTime(timeoutTime)
 }

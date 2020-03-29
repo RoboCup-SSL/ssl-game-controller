@@ -262,7 +262,7 @@ func teamStateChanged(s1, s2 *state.TeamInfo) bool {
 	if *s1.MaxAllowedBots != *s2.MaxAllowedBots {
 		return true
 	}
-	if *s1.BotSubstitutionIntend != *s2.BotSubstitutionIntend {
+	if *s1.BotSubstitutionIntent != *s2.BotSubstitutionIntent {
 		return true
 	}
 	return false

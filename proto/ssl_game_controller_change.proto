@@ -91,7 +91,7 @@ message UpdateTeamState {
     optional bool on_positive_half = 7;
     optional int32 ball_placement_failures = 8;
     optional bool can_place_ball = 9;
-    optional bool bot_substitution_intend = 10;
+    optional bool bot_substitution_intent = 10;
     map<uint32, YellowCard> yellow_cards = 11;
     optional uint32 yellow_cards_remove = 12;
     map<uint32, RedCard> red_cards = 13;

@@ -4,11 +4,12 @@
             :value="team.timeoutsLeft"
             :callback="updateTimeoutsLeft"
             :min="0"
-            :max="4"/>
+            :max="99"/>
 </template>
 
 <script>
     import EditableLabelNumber from "../common/EditableLabelNumber";
+    import {submitChange} from "../../submit";
 
     export default {
         name: "TeamTimeouts",
@@ -19,12 +20,12 @@
         },
         methods: {
             updateTimeoutsLeft: function (v) {
-                this.$socket.sendObj({
-                    'modify': {
-                        'forTeam': this.teamColor,
-                        'timeoutsLeft': Number(v)
+                submitChange({
+                    updateTeamState: {
+                        forTeam: this.teamColor,
+                        timeoutsLeft: Number(v)
                     }
-                })
+                });
             },
         },
         computed: {

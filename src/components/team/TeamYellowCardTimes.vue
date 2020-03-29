@@ -22,12 +22,8 @@
         },
         methods: {
             updateCardTime: function (v, index) {
-                this.$socket.sendObj({
-                    'modify': {
-                        'forTeam': this.teamColor,
-                        'yellowCardTime': {'cardID': index, 'duration': v}
-                    }
-                })
+                // TODO
+                console.log(v + index);
             },
         },
         computed: {

@@ -21,7 +21,7 @@ func newTeamInfo() (t *TeamInfo) {
 	t.BallPlacementFailuresReached = new(bool)
 	t.CanPlaceBall = new(bool)
 	t.MaxAllowedBots = new(int32)
-	t.BotSubstitutionIntend = new(bool)
+	t.BotSubstitutionIntent = new(bool)
 
 	*t.CanPlaceBall = true
 	return

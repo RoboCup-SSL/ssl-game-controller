@@ -1,10 +1,7 @@
 <template>
-    <EditableLabelNumber
-            :edit-mode="editMode"
-            :value="team.yellowCards.length"
-            :callback="updateYellowCards"
-            :min="0"
-            :max="99"/>
+    <span>
+        <a>{{team.yellowCards.length}}</a>
+    </span>
 </template>
 
 <script>
@@ -16,16 +13,6 @@
         props: {
             teamColor: String,
             editMode: Object,
-        },
-        methods: {
-            updateYellowCards: function (v) {
-                this.$socket.sendObj({
-                    'modify': {
-                        'forTeam': this.teamColor,
-                        'yellowCards': Number(v)
-                    }
-                })
-            },
         },
         computed: {
             team() {

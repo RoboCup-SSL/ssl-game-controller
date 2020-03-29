@@ -7,6 +7,7 @@
 
 <script>
     import EditableLabelDuration from "../common/EditableLabelDuration";
+    import {submitChange} from "../../submit";
 
     export default {
         name: "TeamTimeoutTime",
@@ -17,12 +18,12 @@
         },
         methods: {
             updateTimeoutTimeLeft: function (v) {
-                this.$socket.sendObj({
-                    'modify': {
-                        'forTeam': this.teamColor,
-                        'timeoutTimeLeft': v
+                submitChange({
+                    updateTeamState: {
+                        forTeam: this.teamColor,
+                        timeoutTimeLeft: v
                     }
-                })
+                });
             },
         },
         computed: {

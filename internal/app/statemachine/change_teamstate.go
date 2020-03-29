@@ -39,8 +39,8 @@ func (s *StateMachine) UpdateTeamState(newState *state.State, change *UpdateTeam
 	if change.CanPlaceBall != nil {
 		*teamState.CanPlaceBall = *change.CanPlaceBall
 	}
-	if change.BotSubstitutionIntend != nil {
-		*teamState.BotSubstitutionIntend = *change.BotSubstitutionIntend
+	if change.BotSubstitutionIntent != nil {
+		*teamState.BotSubstitutionIntent = *change.BotSubstitutionIntent
 	}
 
 	for id, newCard := range change.YellowCards {
