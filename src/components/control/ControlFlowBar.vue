@@ -17,9 +17,10 @@
                       v-on:click="triggerContinue"
                       v-bind:disabled="continueDisabled">
                 Continue
-                <span v-if="nextCommand">with</span>
-                <span :class="teamColorClass">
-                    {{nextCommand}}
+                <span v-if="nextCommand && nextCommand.forTeam">with</span>
+                <span v-if="nextCommand"
+                      :class="teamColorClass">
+                    {{nextCommand.type}}
                 </span>
             </b-button>
         </div>
@@ -72,19 +73,19 @@
             nextCommand() {
                 if (this.halted) {
                     if (this.stopAllowed) {
-                        return 'STOP';
+                        return {type: 'STOP'};
                     }
                     return null;
                 }
                 if (!this.$store.state.matchState.nextCommand) {
                     return null;
                 }
-                return this.$store.state.matchState.nextCommand.type;
+                return this.$store.state.matchState.nextCommand;
             },
             teamColorClass() {
                 return {
-                    'team-blue': this.$store.state.matchState.nextCommand && this.$store.state.matchState.nextCommand.forTeam === TEAM_BLUE,
-                    'team-yellow': this.$store.state.matchState.nextCommand && this.$store.state.matchState.nextCommand.forTeam === TEAM_YELLOW
+                    'team-blue': this.nextCommand && this.nextCommand.forTeam === TEAM_BLUE,
+                    'team-yellow': this.nextCommand && this.nextCommand.forTeam === TEAM_YELLOW
                 }
             }
         }
