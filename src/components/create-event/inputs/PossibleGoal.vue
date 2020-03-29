@@ -38,7 +38,7 @@
                     type: 'POSSIBLE_GOAL',
                     possibleGoal: {
                         by_team: this.model.team.toLocaleUpperCase(),
-                        by_bot: parseInt(this.model.id),
+                        kicking_bot: parseInt(this.model.id),
                         location: convertStringLocation(this.model.location),
                         kick_location: convertStringLocation(this.model.kickLocation),
                     }
