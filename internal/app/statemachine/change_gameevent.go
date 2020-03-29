@@ -214,6 +214,8 @@ func (s *StateMachine) nextCommandForEvent(newState *state.State, gameEvent *sta
 		return state.NewCommand(state.Command_DIRECT, gameEvent.ByTeam().Opposite())
 	case state.GameEvent_DEFENDER_IN_DEFENSE_AREA:
 		return state.NewCommand(state.Command_PENALTY, gameEvent.ByTeam().Opposite())
+	case state.GameEvent_GOAL:
+		return state.NewCommand(state.Command_KICKOFF, gameEvent.ByTeam().Opposite())
 	case state.GameEvent_NO_PROGRESS_IN_GAME:
 		return state.NewCommand(state.Command_FORCE_START, state.Team_UNKNOWN)
 	default:
