@@ -8,6 +8,7 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"github.com/golang/protobuf/proto"
+	"github.com/pkg/errors"
 	"io/ioutil"
 	"log"
 	"net"
@@ -16,6 +17,8 @@ import (
 )
 
 type Server struct {
+	address                 string
+	Tls                     bool
 	Clients                 map[string]*Client
 	TrustedKeys             map[string]*rsa.PublicKey
 	ConnectionHandler       func(net.Conn)
@@ -30,20 +33,31 @@ type Client struct {
 	VerifiedConnection bool
 }
 
-func NewServer() (s *Server) {
+func NewServer(address string) (s *Server) {
 	s = new(Server)
+	s.address = address
 	s.Clients = map[string]*Client{}
 	s.TrustedKeys = map[string]*rsa.PublicKey{}
 	return
 }
 
-func (s *Server) Listen(address string) {
-	listener, err := net.Listen("tcp", address)
+func (s *Server) Start() {
+	var listener net.Listener
+	var err error
+	if s.Tls {
+		listener, err = s.createTlsListener()
+	} else {
+		listener, err = s.createListener()
+	}
 	if err != nil {
-		log.Print("Failed to listen on ", address)
+		log.Printf("Failed to listen on %v: %v", s.address, err)
 		return
 	}
-	log.Print("Listening on ", address)
+	go s.listen(listener)
+}
+
+func (s *Server) listen(listener net.Listener) {
+	log.Print("Listening on ", s.address)
 
 	for {
 		conn, err := listener.Accept()
@@ -55,42 +69,37 @@ func (s *Server) Listen(address string) {
 	}
 }
 
-func (s *Server) ListenTls(address string) {
+func (s *Server) createListener() (net.Listener, error) {
+	return net.Listen("tcp", s.address)
+}
 
+func (s *Server) createTlsListener() (net.Listener, error) {
+	config, err := s.loadTlsConfig()
+	if err != nil {
+		return nil, err
+	}
+
+	return tls.Listen("tcp", s.address, config)
+}
+
+func (s *Server) loadTlsConfig() (*tls.Config, error) {
 	if _, err := os.Stat("server.crt"); os.IsNotExist(err) {
-		log.Println("Missing certificate for TLS endpoint. Put a server.crt in the working dir.")
-		return
+		return nil, errors.Wrap(err, "Missing certificate for TLS endpoint. Put a server.crt in the working dir")
 	}
 	if _, err := os.Stat("server.key"); os.IsNotExist(err) {
-		log.Println("Missing certificate key for TLS endpoint. Put a server.key in the working dir.")
-		return
+		return nil, errors.Wrap(err, "Missing certificate key for TLS endpoint. Put a server.key in the working dir")
 	}
 
 	cer, err := tls.LoadX509KeyPair("server.crt", "server.key")
 	if err != nil {
-		log.Printf("Could not load X509 key pair: %v", err)
-		return
+		return nil, errors.Wrap(err, "Could not load X509 key pair")
 	}
 
 	config := &tls.Config{Certificates: []tls.Certificate{cer}}
-	listener, err := tls.Listen("tcp", address, config)
-	if err != nil {
-		log.Printf("Failed to listen on %v: %v", address, err)
-		return
-	}
-	log.Print("Listening on ", address)
-
-	for {
-		conn, err := listener.Accept()
-		if err != nil {
-			log.Print("Could not accept connection: ", err)
-		} else {
-			go s.ConnectionHandler(conn)
-		}
-	}
+	return config, nil
 }
 
-func (s *Server) CloseConnection(conn net.Conn, id string) {
+func (s *Server) CloseConnection(id string) {
 	delete(s.Clients, id)
 	log.Printf("Connection to %v closed", id)
 	for _, observer := range s.ClientsChangedObservers {

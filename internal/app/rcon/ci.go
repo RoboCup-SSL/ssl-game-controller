@@ -41,7 +41,11 @@ func (s *CiServer) Listen(address string) {
 }
 
 func (s *CiServer) serve(conn net.Conn) {
-	defer conn.Close()
+	defer func() {
+		if err := conn.Close(); err != nil {
+			log.Printf("Could not close CI client connection: %v", err)
+		}
+	}()
 
 	for {
 		reader := bufio.NewReaderSize(conn, 1)
@@ -51,7 +55,7 @@ func (s *CiServer) serve(conn net.Conn) {
 			return
 		}
 
-		sec := int64(timestamp / 1e9)
+		sec := timestamp / 1e9
 		nSec := timestamp - sec*1e9
 		refMessage := s.TimeConsumer(time.Unix(sec, nSec))
 

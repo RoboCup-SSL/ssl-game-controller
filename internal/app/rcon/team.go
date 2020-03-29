@@ -19,10 +19,10 @@ type TeamClient struct {
 	*Client
 }
 
-func NewTeamServer() (s *TeamServer) {
+func NewTeamServer(address string) (s *TeamServer) {
 	s = new(TeamServer)
 	s.ProcessTeamRequest = func(string, TeamToController) error { return nil }
-	s.Server = NewServer()
+	s.Server = NewServer(address)
 	s.ConnectionHandler = s.handleClientConnection
 	return
 }
@@ -114,7 +114,11 @@ func (c *TeamClient) verifyRequest(req TeamToController) error {
 }
 
 func (s *TeamServer) handleClientConnection(conn net.Conn) {
-	defer conn.Close()
+	defer func() {
+		if err := conn.Close(); err != nil {
+			log.Printf("Could not close team client connection: %v", err)
+		}
+	}()
 
 	client := TeamClient{Client: &Client{Conn: conn, Token: uuid.New()}}
 	client.reply(client.Ok())
@@ -126,7 +130,7 @@ func (s *TeamServer) handleClientConnection(conn net.Conn) {
 	}
 
 	s.Clients[client.Id] = client.Client
-	defer s.CloseConnection(conn, client.Id)
+	defer s.CloseConnection(client.Id)
 	log.Printf("Client %v connected", client.Id)
 	for _, observer := range s.ClientsChangedObservers {
 		observer()

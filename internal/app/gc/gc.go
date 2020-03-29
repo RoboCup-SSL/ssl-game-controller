@@ -5,16 +5,18 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/engine"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/publish"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/rcon"
 )
 
 // GameController contains all the different connected modules of the game controller
 type GameController struct {
-	config    config.Controller
-	gcEngine  *engine.Engine
-	publisher *publish.Publisher
-	apiServer *api.Server
+	config           config.Controller
+	gcEngine         *engine.Engine
+	publisher        *publish.Publisher
+	apiServer        *api.Server
+	autoRefServer    *rcon.AutoRefServer
+	autoRefServerTls *rcon.AutoRefServer
 	//visionReceiver *vision.Receiver
-	// TODO recon
 }
 
 // NewGameController creates a new GameController
@@ -24,6 +26,9 @@ func NewGameController(cfg config.Controller) (c *GameController) {
 	c.gcEngine = engine.NewEngine(cfg.Game)
 	c.publisher = publish.NewPublisher(c.gcEngine, c.config.Network.PublishAddress)
 	c.apiServer = api.NewServer(c.gcEngine)
+	c.autoRefServer = rcon.NewAutoRefServer(cfg.Server.AutoRef.Address, c.gcEngine)
+	c.autoRefServerTls = rcon.NewAutoRefServer(cfg.Server.AutoRef.AddressTls, c.gcEngine)
+	c.autoRefServerTls.Server.Tls = true
 	return
 }
 
@@ -33,6 +38,8 @@ func (c *GameController) Start() {
 		panic(err)
 	}
 	c.publisher.Start()
+	c.autoRefServer.Server.Start()
+	c.autoRefServerTls.Server.Start()
 }
 
 // Stop stops all go routines

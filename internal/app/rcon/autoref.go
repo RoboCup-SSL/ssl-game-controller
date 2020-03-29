@@ -1,6 +1,8 @@
 package rcon
 
 import (
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/engine"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"github.com/RoboCup-SSL/ssl-go-tools/pkg/sslconn"
 	"github.com/odeke-em/go-uuid"
 	"github.com/pkg/errors"
@@ -10,7 +12,7 @@ import (
 )
 
 type AutoRefServer struct {
-	ProcessRequest func(string, AutoRefToController) error
+	gcEngine *engine.Engine
 	*Server
 }
 
@@ -18,10 +20,10 @@ type AutoRefClient struct {
 	*Client
 }
 
-func NewAutoRefServer() (s *AutoRefServer) {
+func NewAutoRefServer(address string, gcEngine *engine.Engine) (s *AutoRefServer) {
 	s = new(AutoRefServer)
-	s.ProcessRequest = func(string, AutoRefToController) error { return nil }
-	s.Server = NewServer()
+	s.gcEngine = gcEngine
+	s.Server = NewServer(address)
 	s.ConnectionHandler = s.handleClientConnection
 	return
 }
@@ -102,7 +104,11 @@ func (c *AutoRefClient) verifyRequest(req AutoRefToController) error {
 }
 
 func (s *AutoRefServer) handleClientConnection(conn net.Conn) {
-	defer conn.Close()
+	defer func() {
+		if err := conn.Close(); err != nil {
+			log.Printf("Could not close autoRef client connection: %v", err)
+		}
+	}()
 
 	client := AutoRefClient{Client: &Client{Conn: conn, Token: uuid.New()}}
 	client.reply(client.Ok())
@@ -114,7 +120,7 @@ func (s *AutoRefServer) handleClientConnection(conn net.Conn) {
 	}
 
 	s.Clients[client.Id] = client.Client
-	defer s.CloseConnection(conn, client.Id)
+	defer s.CloseConnection(client.Id)
 	log.Printf("Client %v connected", client.Id)
 	for _, observer := range s.ClientsChangedObservers {
 		observer()
@@ -135,7 +141,7 @@ func (s *AutoRefServer) handleClientConnection(conn net.Conn) {
 				continue
 			}
 		}
-		if err := s.ProcessRequest(client.Id, req); err != nil {
+		if err := s.processRequest(client.Id, req); err != nil {
 			client.reply(client.Reject(err.Error()))
 		} else {
 			client.reply(client.Ok())
@@ -149,4 +155,19 @@ func (c *AutoRefClient) reply(reply ControllerReply) {
 	if err := sslconn.SendMessage(c.Conn, &response); err != nil {
 		log.Print("Failed to send reply: ", err)
 	}
+}
+
+func (s *AutoRefServer) processRequest(id string, request AutoRefToController) error {
+
+	if request.GameEvent != nil {
+		s.gcEngine.Enqueue(&statemachine.Change{
+			Origin: &id,
+			Change: &statemachine.Change_AddGameEvent{
+				AddGameEvent: &statemachine.AddGameEvent{
+					GameEvent: request.GameEvent,
+				}},
+		})
+	}
+
+	return nil
 }
