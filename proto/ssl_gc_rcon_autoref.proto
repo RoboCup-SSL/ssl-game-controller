@@ -47,11 +47,19 @@ message GameStateMetadata {
     // Used by the GC to determine if there is still progress
     optional uint64 last_progress = 3;
 
-    // number of yellow robots currently visible on the field
-    optional uint32 number_of_robots_yellow = 4;
+    // Metadata of team blue
+    optional GameStateMetadataTeam team_blue = 4;
+    // Metadata of team yellow
+    optional GameStateMetadataTeam team_yellow = 5;
+}
 
-    // number of blue robots currently visible on the field
-    optional uint32 number_of_robots_blue = 5;
+// Metadata of a single team
+message GameStateMetadataTeam {
+    // Number of robots currently on the field
+    optional uint32 number_of_robots = 1;
+
+    // When the ball is in play, this flag indicates, if this team may change the keeper in confirmation with the rules
+    optional bool may_change_keeper = 2;
 }
 
 // ControllerToAutoRef is the wrapper message for all messages from controller to autoRef
