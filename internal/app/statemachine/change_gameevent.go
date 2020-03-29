@@ -267,18 +267,25 @@ func addsRedCard(gameEvent state.GameEvent_Type) bool {
 	return false
 }
 
-// addsYellowCard checks if the game event adds a yellow card
+// stopsTheGame checks if the game event should stop the game
 func stopsTheGame(gameEvent state.GameEvent_Type) bool {
 	switch gameEvent {
 	case
+		// ball out of field
+		state.GameEvent_BALL_LEFT_FIELD_TOUCH_LINE,
+		state.GameEvent_BALL_LEFT_FIELD_GOAL_LINE,
+		state.GameEvent_AIMLESS_KICK,
+		// stopping fouls
 		state.GameEvent_ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA,
-		state.GameEvent_BOT_PUSHED_BOT,
-		state.GameEvent_BOT_HELD_BALL_DELIBERATELY,
-		state.GameEvent_BOT_TIPPED_OVER,
 		state.GameEvent_DEFENDER_IN_DEFENSE_AREA,
 		state.GameEvent_BOUNDARY_CROSSING,
 		state.GameEvent_KEEPER_HELD_BALL,
 		state.GameEvent_BOT_DRIBBLED_BALL_TOO_FAR,
+		// manual fouls
+		state.GameEvent_BOT_PUSHED_BOT,
+		state.GameEvent_BOT_HELD_BALL_DELIBERATELY,
+		state.GameEvent_BOT_TIPPED_OVER,
+		// others
 		state.GameEvent_PLACEMENT_SUCCEEDED:
 		return true
 	}

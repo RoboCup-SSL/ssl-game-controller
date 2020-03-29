@@ -141,6 +141,21 @@ func (e *Engine) processChange(change *statemachine.Change) {
 			return
 		} else {
 			entry.State = entryToRevert.StatePre
+			if *entry.State.Command.Type != state.Command_HALT {
+				// halt the game after a revert - just to be save
+				haltChange := statemachine.Change{
+					Change: &statemachine.Change_NewCommand{
+						NewCommand: &statemachine.NewCommand{
+							Command: state.NewCommandNeutral(state.Command_HALT),
+						},
+					},
+				}
+				revertible := false
+				origin := changeOriginEngine
+				haltChange.Revertible = &revertible
+				haltChange.Origin = &origin
+				newChanges = append(newChanges, &haltChange)
+			}
 		}
 	} else {
 		entry.State, newChanges = e.stateMachine.Process(e.currentState, change)
