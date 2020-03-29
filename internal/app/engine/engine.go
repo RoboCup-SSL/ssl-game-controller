@@ -91,9 +91,11 @@ func (e *Engine) Stop() {
 	close(e.queue)
 }
 
-// CurrentState returns the current state
-func (e *Engine) CurrentState() *state.State {
-	return e.currentState
+// CurrentState returns a deep copy of the current state
+func (e *Engine) CurrentState() (s *state.State) {
+	s = new(state.State)
+	proto.Merge(s, e.currentState)
+	return
 }
 
 // LatestChangesUntil returns all changes with a id larger than the given id

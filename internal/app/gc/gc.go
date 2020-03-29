@@ -16,7 +16,9 @@ type GameController struct {
 	apiServer        *api.Server
 	autoRefServer    *rcon.AutoRefServer
 	autoRefServerTls *rcon.AutoRefServer
-	//visionReceiver *vision.Receiver
+	teamServer       *rcon.TeamServer
+	teamServerTls    *rcon.TeamServer
+	//visionReceiver *vision.Receiver TODO
 }
 
 // NewGameController creates a new GameController
@@ -29,6 +31,9 @@ func NewGameController(cfg config.Controller) (c *GameController) {
 	c.autoRefServer = rcon.NewAutoRefServer(cfg.Server.AutoRef.Address, c.gcEngine)
 	c.autoRefServerTls = rcon.NewAutoRefServer(cfg.Server.AutoRef.AddressTls, c.gcEngine)
 	c.autoRefServerTls.Server.Tls = true
+	c.teamServer = rcon.NewTeamServer(cfg.Server.Team.Address, c.gcEngine)
+	c.teamServerTls = rcon.NewTeamServer(cfg.Server.Team.AddressTls, c.gcEngine)
+	c.teamServerTls.Tls = true
 	return
 }
 
@@ -40,10 +45,16 @@ func (c *GameController) Start() {
 	c.publisher.Start()
 	c.autoRefServer.Server.Start()
 	c.autoRefServerTls.Server.Start()
+	c.teamServer.Server.Start()
+	c.teamServerTls.Server.Start()
 }
 
 // Stop stops all go routines
 func (c *GameController) Stop() {
+	c.autoRefServer.Server.Stop()
+	c.autoRefServerTls.Server.Stop()
+	c.teamServer.Server.Stop()
+	c.teamServerTls.Server.Stop()
 	c.publisher.Stop()
 	c.gcEngine.Stop()
 }

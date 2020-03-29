@@ -23,6 +23,7 @@ type Server struct {
 	TrustedKeys             map[string]*rsa.PublicKey
 	ConnectionHandler       func(net.Conn)
 	ClientsChangedObservers []func()
+	listener                net.Listener
 }
 
 type Client struct {
@@ -42,25 +43,33 @@ func NewServer(address string) (s *Server) {
 }
 
 func (s *Server) Start() {
-	var listener net.Listener
 	var err error
 	if s.Tls {
-		listener, err = s.createTlsListener()
+		s.listener, err = s.createTlsListener()
 	} else {
-		listener, err = s.createListener()
+		s.listener, err = s.createListener()
 	}
 	if err != nil {
 		log.Printf("Failed to listen on %v: %v", s.address, err)
 		return
 	}
-	go s.listen(listener)
+	go s.listen()
 }
 
-func (s *Server) listen(listener net.Listener) {
+func (s *Server) Stop() {
+	if err := s.listener.Close(); err != nil {
+		log.Printf("Could not close listener: %v", err)
+	}
+	for id := range s.Clients {
+		s.CloseConnection(id)
+	}
+}
+
+func (s *Server) listen() {
 	log.Print("Listening on ", s.address)
 
 	for {
-		conn, err := listener.Accept()
+		conn, err := s.listener.Accept()
 		if err != nil {
 			log.Print("Could not accept connection: ", err)
 		} else {

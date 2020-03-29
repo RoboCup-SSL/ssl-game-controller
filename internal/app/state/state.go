@@ -47,6 +47,16 @@ func (m *State) TeamInfo(team Team) *TeamInfo {
 	return m.TeamState[team.String()]
 }
 
+// TeamByName returns the team for the given team name
+func (m *State) TeamByName(name string) Team {
+	for teamColor, teamInfo := range m.TeamState {
+		if *teamInfo.Name == name {
+			return Team(Team_value[teamColor])
+		}
+	}
+	return Team_UNKNOWN
+}
+
 func (x *State_Division) Div() config.Division {
 	return config.Division(x.String())
 }

@@ -43,7 +43,11 @@ func main() {
 	if err != nil {
 		log.Fatal("could not connect to game-controller at ", *refBoxAddr)
 	}
-	defer conn.Close()
+	defer func() {
+		if err := conn.Close(); err != nil {
+			log.Printf("Could not close connection: %v", err)
+		}
+	}()
 	log.Printf("Connected to game-controller at %v", *refBoxAddr)
 	c := Client{}
 	c.conn = conn
@@ -51,10 +55,6 @@ func main() {
 	c.register()
 	for !c.sendDesiredKeeper(3) {
 		time.Sleep(time.Second)
-	}
-
-	for {
-		c.ReplyToChoices()
 	}
 }
 
@@ -101,19 +101,6 @@ func (c *Client) sendDesiredKeeper(id int32) (accepted bool) {
 	message := rcon.TeamToController_DesiredKeeper{DesiredKeeper: id}
 	request := rcon.TeamToController{Msg: &message}
 	return c.sendRequest(&request)
-}
-
-func (c *Client) ReplyToChoices() {
-	request := rcon.ControllerToTeam{}
-	if err := sslconn.ReceiveMessage(c.conn, &request); err != nil {
-		log.Fatal("Failed receiving controller request: ", err)
-	}
-	if request.GetAdvantageChoice() != nil {
-		log.Printf("Received choice for: %v", *request.GetAdvantageChoice().Foul)
-	}
-	reply := rcon.TeamToController_AdvantageResponse_{AdvantageResponse: rcon.TeamToController_CONTINUE}
-	response := rcon.TeamToController{Msg: &reply}
-	c.sendRequest(&response)
 }
 
 func (c *Client) sendRequest(request *rcon.TeamToController) (accepted bool) {

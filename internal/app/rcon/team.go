@@ -1,6 +1,9 @@
 package rcon
 
 import (
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/engine"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"github.com/RoboCup-SSL/ssl-go-tools/pkg/sslconn"
 	"github.com/odeke-em/go-uuid"
 	"github.com/pkg/errors"
@@ -10,8 +13,7 @@ import (
 )
 
 type TeamServer struct {
-	ProcessTeamRequest func(teamName string, request TeamToController) error
-	AllowedTeamNames   []string
+	gcEngine *engine.Engine
 	*Server
 }
 
@@ -19,9 +21,9 @@ type TeamClient struct {
 	*Client
 }
 
-func NewTeamServer(address string) (s *TeamServer) {
+func NewTeamServer(address string, gcEngine *engine.Engine) (s *TeamServer) {
 	s = new(TeamServer)
-	s.ProcessTeamRequest = func(string, TeamToController) error { return nil }
+	s.gcEngine = gcEngine
 	s.Server = NewServer(address)
 	s.ConnectionHandler = s.handleClientConnection
 	return
@@ -33,11 +35,16 @@ func (c *TeamClient) receiveRegistration(server *TeamServer) error {
 		return err
 	}
 
+	var allowedTeamNames []string
+	for _, teamInfo := range server.gcEngine.CurrentState().TeamState {
+		allowedTeamNames = append(allowedTeamNames, *teamInfo.Name)
+	}
+
 	if registration.TeamName == nil {
 		return errors.New("No team name specified")
 	}
-	if !isAllowedTeamName(*registration.TeamName, server.AllowedTeamNames) {
-		return errors.Errorf("Invalid team name: '%v'. Expecting one of these: %v", *registration.TeamName, server.AllowedTeamNames)
+	if !isAllowedTeamName(*registration.TeamName, allowedTeamNames) {
+		return errors.Errorf("Invalid team name: '%v'. Expecting one of these: %v", *registration.TeamName, allowedTeamNames)
 	}
 	c.Id = *registration.TeamName
 	if _, exists := server.Clients[c.Id]; exists {
@@ -151,7 +158,7 @@ func (s *TeamServer) handleClientConnection(conn net.Conn) {
 				continue
 			}
 		}
-		if err := s.ProcessTeamRequest(client.Id, req); err != nil {
+		if err := s.processRequest(client.Id, req); err != nil {
 			client.reply(client.Reject(err.Error()))
 		} else {
 			client.reply(client.Ok())
@@ -176,4 +183,57 @@ func (c *Client) reply(reply ControllerReply) {
 	if err := sslconn.SendMessage(c.Conn, &response); err != nil {
 		log.Print("Failed to send reply: ", err)
 	}
+}
+
+func (s *TeamServer) processRequest(teamName string, request TeamToController) error {
+
+	if request.GetPing() {
+		return nil
+	}
+
+	log.Print("Received request from team: ", request)
+
+	currentState := s.gcEngine.CurrentState()
+	team := currentState.TeamByName(teamName)
+	if team == state.Team_UNKNOWN {
+		return errors.New("Your team is not playing?!")
+	}
+
+	teamState := *currentState.TeamInfo(team)
+
+	if x, ok := request.GetMsg().(*TeamToController_SubstituteBot); ok {
+		if *teamState.BotSubstitutionIntent != x.SubstituteBot {
+			log.Printf("Team %v requests to change bot substituation intent to %v", team, x.SubstituteBot)
+			s.gcEngine.Enqueue(&statemachine.Change{
+				Origin: &teamName,
+				Change: &statemachine.Change_UpdateTeamState{
+					UpdateTeamState: &statemachine.UpdateTeamState{
+						ForTeam:               &team,
+						BotSubstitutionIntent: &x.SubstituteBot,
+					}},
+			})
+		}
+		return nil
+	}
+
+	if *currentState.Command.Type != state.Command_STOP {
+		// TODO also check if the ball is on the opponent half of the field which is now also valid
+		return errors.New("Game is not stopped.")
+	}
+
+	if x, ok := request.GetMsg().(*TeamToController_DesiredKeeper); ok {
+		if *teamState.Goalkeeper != x.DesiredKeeper {
+			log.Printf("Team %v requests to change keeper to %v", team, x.DesiredKeeper)
+			s.gcEngine.Enqueue(&statemachine.Change{
+				Origin: &teamName,
+				Change: &statemachine.Change_UpdateTeamState{
+					UpdateTeamState: &statemachine.UpdateTeamState{
+						ForTeam:    &team,
+						Goalkeeper: &x.DesiredKeeper,
+					}},
+			})
+		}
+	}
+
+	return nil
 }
