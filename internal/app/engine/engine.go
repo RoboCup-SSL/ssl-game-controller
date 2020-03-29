@@ -6,6 +6,7 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/store"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/timer"
+	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/pkg/errors"
 	"log"
@@ -43,6 +44,11 @@ func NewEngine(gameConfig config.Game) (s *Engine) {
 
 // Enqueue adds the change to the change queue
 func (e *Engine) Enqueue(change *statemachine.Change) {
+	if change.Revertible == nil {
+		change.Revertible = new(bool)
+		// Assume that changes from outside are by default revertible, except if the flag is already set
+		*change.Revertible = true
+	}
 	e.queue <- change
 }
 
@@ -92,7 +98,7 @@ func (e *Engine) CurrentState() *state.State {
 
 // LatestChangesUntil returns all changes with a id larger than the given id
 func (e *Engine) LatestChangesUntil(id int32) (changes []*statemachine.StateChange) {
-	for _, change := range e.stateStore.States() {
+	for _, change := range e.stateStore.Entries() {
 		if *change.Id > id {
 			changes = append(changes, change)
 		}
@@ -108,29 +114,51 @@ func (e *Engine) processChanges() {
 			if !ok {
 				return
 			}
-			entry := statemachine.StateChange{}
-			entry.Change = change
-			entry.Timestamp, _ = ptypes.TimestampProto(e.timeProvider())
-			var newChanges []*statemachine.Change
-			entry.State, newChanges = e.stateMachine.Process(e.currentState, change)
-			e.currentState = entry.State
-
-			e.postProcessChange(change)
-
-			for _, newChange := range newChanges {
-				e.queue <- newChange
-			}
-
-			// do not save state for ticks
-			if err := e.stateStore.Add(&entry); err != nil {
-				log.Println("Could not add new state to store: ", err)
-			}
-			for _, hook := range e.hooks {
-				hook <- &entry
-			}
+			e.processChange(change)
 		case <-time.After(10 * time.Millisecond):
 			e.Tick()
 		}
+	}
+}
+
+func (e *Engine) processChange(change *statemachine.Change) {
+
+	var newChanges []*statemachine.Change
+	entry := statemachine.StateChange{}
+	entry.Change = change
+	entry.StatePre = new(state.State)
+	entry.Timestamp, _ = ptypes.TimestampProto(e.timeProvider())
+	proto.Merge(entry.StatePre, e.currentState)
+
+	if change.GetRevert() != nil {
+		if change.GetRevert().ChangeId == nil {
+			log.Printf("Missing change id in revert change")
+			return
+		}
+		entryToRevert := e.stateStore.FindEntry(*change.GetRevert().ChangeId)
+		if entryToRevert == nil {
+			log.Printf("Could not find state id %v. Can not revert.", *change.GetRevert().ChangeId)
+			return
+		} else {
+			entry.State = entryToRevert.StatePre
+		}
+	} else {
+		entry.State, newChanges = e.stateMachine.Process(e.currentState, change)
+	}
+
+	e.currentState = entry.State
+
+	e.postProcessChange(change)
+
+	for _, newChange := range newChanges {
+		e.queue <- newChange
+	}
+
+	if err := e.stateStore.Add(&entry); err != nil {
+		log.Println("Could not add new state to store: ", err)
+	}
+	for _, hook := range e.hooks {
+		hook <- &entry
 	}
 }
 

@@ -13774,6 +13774,7 @@ export const Change = $root.Change = (() => {
      * @exports IChange
      * @interface IChange
      * @property {string|null} [origin] Change origin
+     * @property {boolean|null} [revertible] Change revertible
      * @property {INewCommand|null} [newCommand] Change newCommand
      * @property {IChangeStage|null} [changeStage] Change changeStage
      * @property {ISetBallPlacementPos|null} [setBallPlacementPos] Change setBallPlacementPos
@@ -13812,6 +13813,14 @@ export const Change = $root.Change = (() => {
      * @instance
      */
     Change.prototype.origin = "";
+
+    /**
+     * Change revertible.
+     * @member {boolean} revertible
+     * @memberof Change
+     * @instance
+     */
+    Change.prototype.revertible = false;
 
     /**
      * Change newCommand.
@@ -13993,6 +14002,8 @@ export const Change = $root.Change = (() => {
             $root.SwitchColors.encode(message.switchColors, writer.uint32(/* id 14, wireType 2 =*/114).fork()).ldelim();
         if (message.revert != null && message.hasOwnProperty("revert"))
             $root.Revert.encode(message.revert, writer.uint32(/* id 15, wireType 2 =*/122).fork()).ldelim();
+        if (message.revertible != null && message.hasOwnProperty("revertible"))
+            writer.uint32(/* id 16, wireType 0 =*/128).bool(message.revertible);
         return writer;
     };
 
@@ -14029,6 +14040,9 @@ export const Change = $root.Change = (() => {
             switch (tag >>> 3) {
             case 1:
                 message.origin = reader.string();
+                break;
+            case 16:
+                message.revertible = reader.bool();
                 break;
             case 2:
                 message.newCommand = $root.NewCommand.decode(reader, reader.uint32());
@@ -14111,6 +14125,9 @@ export const Change = $root.Change = (() => {
         if (message.origin != null && message.hasOwnProperty("origin"))
             if (!$util.isString(message.origin))
                 return "origin: string expected";
+        if (message.revertible != null && message.hasOwnProperty("revertible"))
+            if (typeof message.revertible !== "boolean")
+                return "revertible: boolean expected";
         if (message.newCommand != null && message.hasOwnProperty("newCommand")) {
             properties.change = 1;
             {
@@ -14266,6 +14283,8 @@ export const Change = $root.Change = (() => {
         let message = new $root.Change();
         if (object.origin != null)
             message.origin = String(object.origin);
+        if (object.revertible != null)
+            message.revertible = Boolean(object.revertible);
         if (object.newCommand != null) {
             if (typeof object.newCommand !== "object")
                 throw TypeError(".Change.newCommand: object expected");
@@ -14352,8 +14371,10 @@ export const Change = $root.Change = (() => {
         if (!options)
             options = {};
         let object = {};
-        if (options.defaults)
+        if (options.defaults) {
             object.origin = "";
+            object.revertible = false;
+        }
         if (message.origin != null && message.hasOwnProperty("origin"))
             object.origin = message.origin;
         if (message.newCommand != null && message.hasOwnProperty("newCommand")) {
@@ -14426,6 +14447,8 @@ export const Change = $root.Change = (() => {
             if (options.oneofs)
                 object.change = "revert";
         }
+        if (message.revertible != null && message.hasOwnProperty("revertible"))
+            object.revertible = message.revertible;
         return object;
     };
 
@@ -17515,7 +17538,7 @@ export const Revert = $root.Revert = (() => {
      * Properties of a Revert.
      * @exports IRevert
      * @interface IRevert
-     * @property {number|null} [stateId] Revert stateId
+     * @property {number|null} [changeId] Revert changeId
      */
 
     /**
@@ -17534,12 +17557,12 @@ export const Revert = $root.Revert = (() => {
     }
 
     /**
-     * Revert stateId.
-     * @member {number} stateId
+     * Revert changeId.
+     * @member {number} changeId
      * @memberof Revert
      * @instance
      */
-    Revert.prototype.stateId = 0;
+    Revert.prototype.changeId = 0;
 
     /**
      * Creates a new Revert instance using the specified properties.
@@ -17565,8 +17588,8 @@ export const Revert = $root.Revert = (() => {
     Revert.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.stateId != null && message.hasOwnProperty("stateId"))
-            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.stateId);
+        if (message.changeId != null && message.hasOwnProperty("changeId"))
+            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.changeId);
         return writer;
     };
 
@@ -17602,7 +17625,7 @@ export const Revert = $root.Revert = (() => {
             let tag = reader.uint32();
             switch (tag >>> 3) {
             case 1:
-                message.stateId = reader.int32();
+                message.changeId = reader.int32();
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -17639,9 +17662,9 @@ export const Revert = $root.Revert = (() => {
     Revert.verify = function verify(message) {
         if (typeof message !== "object" || message === null)
             return "object expected";
-        if (message.stateId != null && message.hasOwnProperty("stateId"))
-            if (!$util.isInteger(message.stateId))
-                return "stateId: integer expected";
+        if (message.changeId != null && message.hasOwnProperty("changeId"))
+            if (!$util.isInteger(message.changeId))
+                return "changeId: integer expected";
         return null;
     };
 
@@ -17657,8 +17680,8 @@ export const Revert = $root.Revert = (() => {
         if (object instanceof $root.Revert)
             return object;
         let message = new $root.Revert();
-        if (object.stateId != null)
-            message.stateId = object.stateId | 0;
+        if (object.changeId != null)
+            message.changeId = object.changeId | 0;
         return message;
     };
 
@@ -17676,9 +17699,9 @@ export const Revert = $root.Revert = (() => {
             options = {};
         let object = {};
         if (options.defaults)
-            object.stateId = 0;
-        if (message.stateId != null && message.hasOwnProperty("stateId"))
-            object.stateId = message.stateId;
+            object.changeId = 0;
+        if (message.changeId != null && message.hasOwnProperty("changeId"))
+            object.changeId = message.changeId;
         return object;
     };
 

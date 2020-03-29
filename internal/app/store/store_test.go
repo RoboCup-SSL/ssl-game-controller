@@ -36,7 +36,7 @@ func TestStore(t *testing.T) {
 		t.Fatalf("Could not save state %v: %v", s2, err)
 	}
 
-	createdStates := d.States()
+	createdStates := d.Entries()
 	if len(createdStates) != 2 {
 		t.Errorf("Expected 2 states: %v", createdStates)
 	}
@@ -53,7 +53,7 @@ func TestStore(t *testing.T) {
 		t.Fatal("Could not open db: ", err)
 	}
 
-	loadedStates := d.States()
+	loadedStates := d.Entries()
 	if len(loadedStates) != 2 {
 		t.Errorf("Expected 2 states: %v", loadedStates)
 	}
@@ -62,7 +62,7 @@ func TestStore(t *testing.T) {
 		loadedState := loadedStates[i]
 		diffs := deep.Equal(loadedState, createdState)
 		if len(diffs) > 0 {
-			t.Error("States differ: ", diffs)
+			t.Error("Entries differ: ", diffs)
 		}
 	}
 }

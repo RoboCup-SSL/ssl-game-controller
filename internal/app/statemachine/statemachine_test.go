@@ -69,7 +69,7 @@ func Test_Statemachine(t *testing.T) {
 			gotNewState, _ := sm.Process(currentState, tt.args.change)
 			diffs := deep.Equal(gotNewState, newState)
 			if len(diffs) > 0 {
-				t.Error("States differ: ", diffs)
+				t.Error("Entries differ: ", diffs)
 			}
 		})
 	}

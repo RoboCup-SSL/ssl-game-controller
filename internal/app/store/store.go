@@ -28,9 +28,19 @@ func NewStore(filename string) (s *Store) {
 	return
 }
 
-// States returns a list of all entries
-func (s *Store) States() []*statemachine.StateChange {
+// Entries returns a list of all entries
+func (s *Store) Entries() []*statemachine.StateChange {
 	return s.entries
+}
+
+// FindEntry searches for an entry with the given id and returns it, if found
+func (s *Store) FindEntry(id int32) *statemachine.StateChange {
+	for _, change := range s.entries {
+		if *change.Id == id {
+			return change
+		}
+	}
+	return nil
 }
 
 // LatestEntry returns the latest entry in the store or nil if there is none yet

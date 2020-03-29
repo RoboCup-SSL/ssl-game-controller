@@ -17,6 +17,7 @@ message StateChange {
 
 message Change {
     optional string origin = 1;
+    optional bool revertible = 16;
 
     oneof change {
         NewCommand new_command = 2;
@@ -107,5 +108,5 @@ message SwitchColors {
 }
 
 message Revert {
-    optional int32 state_id = 1;
+    optional int32 change_id = 1;
 }

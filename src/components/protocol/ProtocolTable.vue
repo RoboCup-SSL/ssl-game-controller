@@ -28,7 +28,7 @@
             </template>
             <template v-slot:cell(revert)="data">
                 <div class="btn-revert"
-                     v-if="data.item.previousState"
+                     v-if="data.item.change.revertible"
                      v-b-tooltip.hover.d500.righttop="'Revert this event'">
                     <a @click="revertProtocolEntry(data.item.id)">
                         <font-awesome-icon icon="history" class="fa-sm"></font-awesome-icon>
@@ -38,6 +38,7 @@
 
             <template v-slot:row-details="data">
                 <div class="row-details">
+                    <p>Change {{data.item.id}} by {{data.item.change.origin}}</p>
                     <pre v-html="entryDetails(data.item)"/>
                 </div>
             </template>
@@ -47,6 +48,7 @@
 
 <script>
     import "../../date.format";
+    import {submitChange} from "../../submit";
 
     export default {
         name: "EventTable",
@@ -78,20 +80,23 @@
                 row._showDetails = !row._showDetails;
             },
             revertProtocolEntry(id) {
-                this.$socket.sendObj({
-                    'revertProtocolEntry': id
-                })
+                submitChange({
+                    revert: {
+                        changeId: id
+                    }
+                });
             },
             protocolType(entry) {
                 for (let key of Object.keys(entry.change)) {
-                    if (key !== 'origin') {
+                    if (key !== 'origin' && key !== 'revertible') {
                         return key;
                     }
                 }
                 return '';
             },
             entryDetails(entry) {
-                return JSON.stringify(entry.change, null, 2);
+                let type = this.protocolType(entry);
+                return JSON.stringify(entry.change[type], null, 2);
             },
             protocolForTeam(entry) {
                 let type = this.protocolType(entry);

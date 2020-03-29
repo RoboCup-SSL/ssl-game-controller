@@ -53,6 +53,12 @@ func loadStageTimes(gameConfig config.Game) (s map[state.Referee_Stage]time.Dura
 
 // Process translates a state and a change into a new state and resulting new changes
 func (s *StateMachine) Process(currentState *state.State, change *Change) (newState *state.State, newChanges []*Change) {
+	if change.Revertible == nil {
+		change.Revertible = new(bool)
+		// By default, changes are not revertible
+		*change.Revertible = false
+	}
+
 	newState = new(state.State)
 	proto.Merge(newState, currentState)
 	log.Printf("Processing change: %v", change)
@@ -94,9 +100,6 @@ func (s *StateMachine) Process(currentState *state.State, change *Change) (newSt
 	}
 	if change.GetAddProposedGameEvent() != nil {
 		newChanges = s.AddProposedGameEvent(newState, change.GetAddProposedGameEvent())
-	}
-	if change.GetRevert() != nil {
-		newChanges = s.Revert(newState, change.GetRevert())
 	}
 
 	for i := range newChanges {
