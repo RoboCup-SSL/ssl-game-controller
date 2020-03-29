@@ -5,12 +5,14 @@ option go_package = "github.com/RoboCup-SSL/ssl-game-controller/internal/app/sta
 import "ssl_game_controller_state.proto";
 import "ssl_game_event.proto";
 import "ssl_referee.proto";
+import "google/protobuf/timestamp.proto";
 
 message StateChange {
-    optional uint32 id = 1;
+    optional int32 id = 1;
     optional State state_pre = 2;
     optional State state = 3;
     optional Change change = 4;
+    optional google.protobuf.Timestamp timestamp = 5;
 }
 
 message Change {
@@ -57,6 +59,7 @@ message AddRedCard {
 }
 
 message YellowCardOver {
+    optional Team for_team = 1;
 }
 
 message AddGameEvent {

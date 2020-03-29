@@ -13481,6 +13481,7 @@ export const StateChange = $root.StateChange = (() => {
      * @property {IState|null} [statePre] StateChange statePre
      * @property {IState|null} [state] StateChange state
      * @property {IChange|null} [change] StateChange change
+     * @property {google.protobuf.ITimestamp|null} [timestamp] StateChange timestamp
      */
 
     /**
@@ -13531,6 +13532,14 @@ export const StateChange = $root.StateChange = (() => {
     StateChange.prototype.change = null;
 
     /**
+     * StateChange timestamp.
+     * @member {google.protobuf.ITimestamp|null|undefined} timestamp
+     * @memberof StateChange
+     * @instance
+     */
+    StateChange.prototype.timestamp = null;
+
+    /**
      * Creates a new StateChange instance using the specified properties.
      * @function create
      * @memberof StateChange
@@ -13555,13 +13564,15 @@ export const StateChange = $root.StateChange = (() => {
         if (!writer)
             writer = $Writer.create();
         if (message.id != null && message.hasOwnProperty("id"))
-            writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.id);
+            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.id);
         if (message.statePre != null && message.hasOwnProperty("statePre"))
             $root.State.encode(message.statePre, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
         if (message.state != null && message.hasOwnProperty("state"))
             $root.State.encode(message.state, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
         if (message.change != null && message.hasOwnProperty("change"))
             $root.Change.encode(message.change, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+        if (message.timestamp != null && message.hasOwnProperty("timestamp"))
+            $root.google.protobuf.Timestamp.encode(message.timestamp, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
         return writer;
     };
 
@@ -13597,7 +13608,7 @@ export const StateChange = $root.StateChange = (() => {
             let tag = reader.uint32();
             switch (tag >>> 3) {
             case 1:
-                message.id = reader.uint32();
+                message.id = reader.int32();
                 break;
             case 2:
                 message.statePre = $root.State.decode(reader, reader.uint32());
@@ -13607,6 +13618,9 @@ export const StateChange = $root.StateChange = (() => {
                 break;
             case 4:
                 message.change = $root.Change.decode(reader, reader.uint32());
+                break;
+            case 5:
+                message.timestamp = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -13661,6 +13675,11 @@ export const StateChange = $root.StateChange = (() => {
             if (error)
                 return "change." + error;
         }
+        if (message.timestamp != null && message.hasOwnProperty("timestamp")) {
+            let error = $root.google.protobuf.Timestamp.verify(message.timestamp);
+            if (error)
+                return "timestamp." + error;
+        }
         return null;
     };
 
@@ -13677,7 +13696,7 @@ export const StateChange = $root.StateChange = (() => {
             return object;
         let message = new $root.StateChange();
         if (object.id != null)
-            message.id = object.id >>> 0;
+            message.id = object.id | 0;
         if (object.statePre != null) {
             if (typeof object.statePre !== "object")
                 throw TypeError(".StateChange.statePre: object expected");
@@ -13692,6 +13711,11 @@ export const StateChange = $root.StateChange = (() => {
             if (typeof object.change !== "object")
                 throw TypeError(".StateChange.change: object expected");
             message.change = $root.Change.fromObject(object.change);
+        }
+        if (object.timestamp != null) {
+            if (typeof object.timestamp !== "object")
+                throw TypeError(".StateChange.timestamp: object expected");
+            message.timestamp = $root.google.protobuf.Timestamp.fromObject(object.timestamp);
         }
         return message;
     };
@@ -13714,6 +13738,7 @@ export const StateChange = $root.StateChange = (() => {
             object.statePre = null;
             object.state = null;
             object.change = null;
+            object.timestamp = null;
         }
         if (message.id != null && message.hasOwnProperty("id"))
             object.id = message.id;
@@ -13723,6 +13748,8 @@ export const StateChange = $root.StateChange = (() => {
             object.state = $root.State.toObject(message.state, options);
         if (message.change != null && message.hasOwnProperty("change"))
             object.change = $root.Change.toObject(message.change, options);
+        if (message.timestamp != null && message.hasOwnProperty("timestamp"))
+            object.timestamp = $root.google.protobuf.Timestamp.toObject(message.timestamp, options);
         return object;
     };
 
@@ -15532,6 +15559,7 @@ export const YellowCardOver = $root.YellowCardOver = (() => {
      * Properties of a YellowCardOver.
      * @exports IYellowCardOver
      * @interface IYellowCardOver
+     * @property {Team|null} [forTeam] YellowCardOver forTeam
      */
 
     /**
@@ -15548,6 +15576,14 @@ export const YellowCardOver = $root.YellowCardOver = (() => {
                 if (properties[keys[i]] != null)
                     this[keys[i]] = properties[keys[i]];
     }
+
+    /**
+     * YellowCardOver forTeam.
+     * @member {Team} forTeam
+     * @memberof YellowCardOver
+     * @instance
+     */
+    YellowCardOver.prototype.forTeam = 0;
 
     /**
      * Creates a new YellowCardOver instance using the specified properties.
@@ -15573,6 +15609,8 @@ export const YellowCardOver = $root.YellowCardOver = (() => {
     YellowCardOver.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
+        if (message.forTeam != null && message.hasOwnProperty("forTeam"))
+            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.forTeam);
         return writer;
     };
 
@@ -15607,6 +15645,9 @@ export const YellowCardOver = $root.YellowCardOver = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
+            case 1:
+                message.forTeam = reader.int32();
+                break;
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -15642,6 +15683,15 @@ export const YellowCardOver = $root.YellowCardOver = (() => {
     YellowCardOver.verify = function verify(message) {
         if (typeof message !== "object" || message === null)
             return "object expected";
+        if (message.forTeam != null && message.hasOwnProperty("forTeam"))
+            switch (message.forTeam) {
+            default:
+                return "forTeam: enum value expected";
+            case 0:
+            case 1:
+            case 2:
+                break;
+            }
         return null;
     };
 
@@ -15656,7 +15706,22 @@ export const YellowCardOver = $root.YellowCardOver = (() => {
     YellowCardOver.fromObject = function fromObject(object) {
         if (object instanceof $root.YellowCardOver)
             return object;
-        return new $root.YellowCardOver();
+        let message = new $root.YellowCardOver();
+        switch (object.forTeam) {
+        case "UNKNOWN":
+        case 0:
+            message.forTeam = 0;
+            break;
+        case "YELLOW":
+        case 1:
+            message.forTeam = 1;
+            break;
+        case "BLUE":
+        case 2:
+            message.forTeam = 2;
+            break;
+        }
+        return message;
     };
 
     /**
@@ -15668,8 +15733,15 @@ export const YellowCardOver = $root.YellowCardOver = (() => {
      * @param {$protobuf.IConversionOptions} [options] Conversion options
      * @returns {Object.<string,*>} Plain object
      */
-    YellowCardOver.toObject = function toObject() {
-        return {};
+    YellowCardOver.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        let object = {};
+        if (options.defaults)
+            object.forTeam = options.enums === String ? "UNKNOWN" : 0;
+        if (message.forTeam != null && message.hasOwnProperty("forTeam"))
+            object.forTeam = options.enums === String ? $root.Team[message.forTeam] : message.forTeam;
+        return object;
     };
 
     /**
@@ -20430,6 +20502,7 @@ export const Output = $root.Output = (() => {
      * @interface IOutput
      * @property {IState|null} [matchState] Output matchState
      * @property {IGameControllerState|null} [gcState] Output gcState
+     * @property {Array.<IProtocol>|null} [protocol] Output protocol
      */
 
     /**
@@ -20441,6 +20514,7 @@ export const Output = $root.Output = (() => {
      * @param {IOutput=} [properties] Properties to set
      */
     function Output(properties) {
+        this.protocol = [];
         if (properties)
             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
@@ -20462,6 +20536,14 @@ export const Output = $root.Output = (() => {
      * @instance
      */
     Output.prototype.gcState = null;
+
+    /**
+     * Output protocol.
+     * @member {Array.<IProtocol>} protocol
+     * @memberof Output
+     * @instance
+     */
+    Output.prototype.protocol = $util.emptyArray;
 
     /**
      * Creates a new Output instance using the specified properties.
@@ -20491,6 +20573,9 @@ export const Output = $root.Output = (() => {
             $root.State.encode(message.matchState, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
         if (message.gcState != null && message.hasOwnProperty("gcState"))
             $root.GameControllerState.encode(message.gcState, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+        if (message.protocol != null && message.protocol.length)
+            for (let i = 0; i < message.protocol.length; ++i)
+                $root.Protocol.encode(message.protocol[i], writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
         return writer;
     };
 
@@ -20530,6 +20615,11 @@ export const Output = $root.Output = (() => {
                 break;
             case 2:
                 message.gcState = $root.GameControllerState.decode(reader, reader.uint32());
+                break;
+            case 3:
+                if (!(message.protocol && message.protocol.length))
+                    message.protocol = [];
+                message.protocol.push($root.Protocol.decode(reader, reader.uint32()));
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -20576,6 +20666,15 @@ export const Output = $root.Output = (() => {
             if (error)
                 return "gcState." + error;
         }
+        if (message.protocol != null && message.hasOwnProperty("protocol")) {
+            if (!Array.isArray(message.protocol))
+                return "protocol: array expected";
+            for (let i = 0; i < message.protocol.length; ++i) {
+                let error = $root.Protocol.verify(message.protocol[i]);
+                if (error)
+                    return "protocol." + error;
+            }
+        }
         return null;
     };
 
@@ -20601,6 +20700,16 @@ export const Output = $root.Output = (() => {
                 throw TypeError(".Output.gcState: object expected");
             message.gcState = $root.GameControllerState.fromObject(object.gcState);
         }
+        if (object.protocol) {
+            if (!Array.isArray(object.protocol))
+                throw TypeError(".Output.protocol: array expected");
+            message.protocol = [];
+            for (let i = 0; i < object.protocol.length; ++i) {
+                if (typeof object.protocol[i] !== "object")
+                    throw TypeError(".Output.protocol: object expected");
+                message.protocol[i] = $root.Protocol.fromObject(object.protocol[i]);
+            }
+        }
         return message;
     };
 
@@ -20617,6 +20726,8 @@ export const Output = $root.Output = (() => {
         if (!options)
             options = {};
         let object = {};
+        if (options.arrays || options.defaults)
+            object.protocol = [];
         if (options.defaults) {
             object.matchState = null;
             object.gcState = null;
@@ -20625,6 +20736,11 @@ export const Output = $root.Output = (() => {
             object.matchState = $root.State.toObject(message.matchState, options);
         if (message.gcState != null && message.hasOwnProperty("gcState"))
             object.gcState = $root.GameControllerState.toObject(message.gcState, options);
+        if (message.protocol && message.protocol.length) {
+            object.protocol = [];
+            for (let j = 0; j < message.protocol.length; ++j)
+                object.protocol[j] = $root.Protocol.toObject(message.protocol[j], options);
+        }
         return object;
     };
 
@@ -20640,6 +20756,275 @@ export const Output = $root.Output = (() => {
     };
 
     return Output;
+})();
+
+export const Protocol = $root.Protocol = (() => {
+
+    /**
+     * Properties of a Protocol.
+     * @exports IProtocol
+     * @interface IProtocol
+     * @property {number|null} [id] Protocol id
+     * @property {IChange|null} [change] Protocol change
+     * @property {google.protobuf.IDuration|null} [matchTimeElapsed] Protocol matchTimeElapsed
+     * @property {google.protobuf.IDuration|null} [stageTimeElapsed] Protocol stageTimeElapsed
+     */
+
+    /**
+     * Constructs a new Protocol.
+     * @exports Protocol
+     * @classdesc Represents a Protocol.
+     * @implements IProtocol
+     * @constructor
+     * @param {IProtocol=} [properties] Properties to set
+     */
+    function Protocol(properties) {
+        if (properties)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * Protocol id.
+     * @member {number} id
+     * @memberof Protocol
+     * @instance
+     */
+    Protocol.prototype.id = 0;
+
+    /**
+     * Protocol change.
+     * @member {IChange|null|undefined} change
+     * @memberof Protocol
+     * @instance
+     */
+    Protocol.prototype.change = null;
+
+    /**
+     * Protocol matchTimeElapsed.
+     * @member {google.protobuf.IDuration|null|undefined} matchTimeElapsed
+     * @memberof Protocol
+     * @instance
+     */
+    Protocol.prototype.matchTimeElapsed = null;
+
+    /**
+     * Protocol stageTimeElapsed.
+     * @member {google.protobuf.IDuration|null|undefined} stageTimeElapsed
+     * @memberof Protocol
+     * @instance
+     */
+    Protocol.prototype.stageTimeElapsed = null;
+
+    /**
+     * Creates a new Protocol instance using the specified properties.
+     * @function create
+     * @memberof Protocol
+     * @static
+     * @param {IProtocol=} [properties] Properties to set
+     * @returns {Protocol} Protocol instance
+     */
+    Protocol.create = function create(properties) {
+        return new Protocol(properties);
+    };
+
+    /**
+     * Encodes the specified Protocol message. Does not implicitly {@link Protocol.verify|verify} messages.
+     * @function encode
+     * @memberof Protocol
+     * @static
+     * @param {IProtocol} message Protocol message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    Protocol.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.id != null && message.hasOwnProperty("id"))
+            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.id);
+        if (message.change != null && message.hasOwnProperty("change"))
+            $root.Change.encode(message.change, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+        if (message.matchTimeElapsed != null && message.hasOwnProperty("matchTimeElapsed"))
+            $root.google.protobuf.Duration.encode(message.matchTimeElapsed, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+        if (message.stageTimeElapsed != null && message.hasOwnProperty("stageTimeElapsed"))
+            $root.google.protobuf.Duration.encode(message.stageTimeElapsed, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+        return writer;
+    };
+
+    /**
+     * Encodes the specified Protocol message, length delimited. Does not implicitly {@link Protocol.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof Protocol
+     * @static
+     * @param {IProtocol} message Protocol message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    Protocol.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a Protocol message from the specified reader or buffer.
+     * @function decode
+     * @memberof Protocol
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {Protocol} Protocol
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    Protocol.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Protocol();
+        while (reader.pos < end) {
+            let tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1:
+                message.id = reader.int32();
+                break;
+            case 2:
+                message.change = $root.Change.decode(reader, reader.uint32());
+                break;
+            case 3:
+                message.matchTimeElapsed = $root.google.protobuf.Duration.decode(reader, reader.uint32());
+                break;
+            case 4:
+                message.stageTimeElapsed = $root.google.protobuf.Duration.decode(reader, reader.uint32());
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes a Protocol message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof Protocol
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {Protocol} Protocol
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    Protocol.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a Protocol message.
+     * @function verify
+     * @memberof Protocol
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    Protocol.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (message.id != null && message.hasOwnProperty("id"))
+            if (!$util.isInteger(message.id))
+                return "id: integer expected";
+        if (message.change != null && message.hasOwnProperty("change")) {
+            let error = $root.Change.verify(message.change);
+            if (error)
+                return "change." + error;
+        }
+        if (message.matchTimeElapsed != null && message.hasOwnProperty("matchTimeElapsed")) {
+            let error = $root.google.protobuf.Duration.verify(message.matchTimeElapsed);
+            if (error)
+                return "matchTimeElapsed." + error;
+        }
+        if (message.stageTimeElapsed != null && message.hasOwnProperty("stageTimeElapsed")) {
+            let error = $root.google.protobuf.Duration.verify(message.stageTimeElapsed);
+            if (error)
+                return "stageTimeElapsed." + error;
+        }
+        return null;
+    };
+
+    /**
+     * Creates a Protocol message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof Protocol
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {Protocol} Protocol
+     */
+    Protocol.fromObject = function fromObject(object) {
+        if (object instanceof $root.Protocol)
+            return object;
+        let message = new $root.Protocol();
+        if (object.id != null)
+            message.id = object.id | 0;
+        if (object.change != null) {
+            if (typeof object.change !== "object")
+                throw TypeError(".Protocol.change: object expected");
+            message.change = $root.Change.fromObject(object.change);
+        }
+        if (object.matchTimeElapsed != null) {
+            if (typeof object.matchTimeElapsed !== "object")
+                throw TypeError(".Protocol.matchTimeElapsed: object expected");
+            message.matchTimeElapsed = $root.google.protobuf.Duration.fromObject(object.matchTimeElapsed);
+        }
+        if (object.stageTimeElapsed != null) {
+            if (typeof object.stageTimeElapsed !== "object")
+                throw TypeError(".Protocol.stageTimeElapsed: object expected");
+            message.stageTimeElapsed = $root.google.protobuf.Duration.fromObject(object.stageTimeElapsed);
+        }
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a Protocol message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof Protocol
+     * @static
+     * @param {Protocol} message Protocol
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    Protocol.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        let object = {};
+        if (options.defaults) {
+            object.id = 0;
+            object.change = null;
+            object.matchTimeElapsed = null;
+            object.stageTimeElapsed = null;
+        }
+        if (message.id != null && message.hasOwnProperty("id"))
+            object.id = message.id;
+        if (message.change != null && message.hasOwnProperty("change"))
+            object.change = $root.Change.toObject(message.change, options);
+        if (message.matchTimeElapsed != null && message.hasOwnProperty("matchTimeElapsed"))
+            object.matchTimeElapsed = $root.google.protobuf.Duration.toObject(message.matchTimeElapsed, options);
+        if (message.stageTimeElapsed != null && message.hasOwnProperty("stageTimeElapsed"))
+            object.stageTimeElapsed = $root.google.protobuf.Duration.toObject(message.stageTimeElapsed, options);
+        return object;
+    };
+
+    /**
+     * Converts this Protocol to JSON.
+     * @function toJSON
+     * @memberof Protocol
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    Protocol.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    return Protocol;
 })();
 
 export const GameControllerState = $root.GameControllerState = (() => {

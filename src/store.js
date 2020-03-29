@@ -12,7 +12,8 @@ export default new Vuex.Store({
         initialized: false
     },
     mutations: {
-        SOCKET_ONOPEN() {
+        SOCKET_ONOPEN(state) {
+            state.protocol = []
         },
         SOCKET_ONCLOSE() {
         },
@@ -20,7 +21,7 @@ export default new Vuex.Store({
         },
         SOCKET_ONMESSAGE(state, message) {
             if (message.protocol) {
-                state.protocol = message.protocol;
+                state.protocol = message.protocol.concat(state.protocol);
             }
             if (message.gcState) {
                 state.gcState = message.gcState;
@@ -30,7 +31,8 @@ export default new Vuex.Store({
                 state.initialized = true;
             }
         },
-        SOCKET_RECONNECT() {
+        SOCKET_RECONNECT(state) {
+            state.protocol = []
         },
         SOCKET_RECONNECT_ERROR() {
         },

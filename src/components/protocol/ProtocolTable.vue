@@ -1,43 +1,48 @@
 <template>
-    <b-table striped hover small
-             responsive="true"
-             :per-page="perPage"
-             :current-page="currentPage"
-             :items="events"
-             :fields="fields">
-        <template slot="HEAD_name" slot-scope="data">
-            <div style="text-align: left; width: 100%;">Description</div>
-        </template>
-        <template slot="type" slot-scope="data">
-            <span v-b-tooltip.hover.d500 :title="data.item.type">
-                <font-awesome-icon class="fa-sm" :icon="iconForType(data.item.type)"/>
-            </span>
-        </template>
-        <template slot="stageTime" slot-scope="data">
-            <span v-format-ns-duration="data.item.stageTime"></span>
-        </template>
-        <template slot="name" slot-scope="data">
-            <div style="text-align: left; width: 100%;"
-                 :class="{'team-blue': data.item.team === 'Blue', 'team-yellow': data.item.team === 'Yellow'}">
-                {{data.item.name}}
-            </div>
-        </template>
-        <template slot="details" slot-scope="data">
-            <span v-b-tooltip.hover.d500 :title="`Time: ${formatTimestamp(data.item.timestamp)}
-            Details: ${data.item.description}`">
-                <font-awesome-icon class="fa-sm" icon="info-circle"/>
-            </span>
-        </template>
-        <template slot="revert" slot-scope="data">
-            <div class="btn-revert"
-                 v-if="data.item.previousState !== null"
-                 v-b-tooltip.hover.d500.righttop="'Revert this event'">
-                <a @click="revertProtocolEntry(data.item.id)">
-                    <font-awesome-icon icon="history" class="fa-sm"></font-awesome-icon>
-                </a>
-            </div>
-        </template>
-    </b-table>
+    <div>
+        <b-table striped hover small
+                 responsive="true"
+                 sticky-header="100%"
+                 selectable
+                 @row-clicked="onRowClicked"
+                 :items="protocol"
+                 :fields="fields">
+            <template slot="HEAD_name">
+                <div style="text-align: left; width: 100%;">Description</div>
+            </template>
+            <template v-slot:cell(type)="data">
+                <span v-b-tooltip.hover.d500 :title="protocolType(data.item)">
+                    <font-awesome-icon class="fa-sm" :icon="iconForType(protocolType(data.item))"/>
+                </span>
+            </template>
+            <template v-slot:cell(time)="data">
+                <span v-format-ns-duration="data.item.matchTimeElapsed"></span>
+                <span> | </span>
+                <span v-format-ns-duration="data.item.stageTimeElapsed"></span>
+            </template>
+            <template v-slot:cell(title)="data">
+                <div style="text-align: left; width: 100%;"
+                     :class="{'team-blue': protocolForTeam(data.item) === 'BLUE', 'team-yellow': protocolForTeam(data.item) === 'YELLOW'}">
+                    {{titleForEntry(data.item)}}
+                </div>
+            </template>
+            <template v-slot:cell(revert)="data">
+                <div class="btn-revert"
+                     v-if="data.item.previousState"
+                     v-b-tooltip.hover.d500.righttop="'Revert this event'">
+                    <a @click="revertProtocolEntry(data.item.id)">
+                        <font-awesome-icon icon="history" class="fa-sm"></font-awesome-icon>
+                    </a>
+                </div>
+            </template>
+
+            <template v-slot:row-details="data">
+                <div class="row-details">
+                    <pre v-html="entryDetails(data.item)"/>
+                </div>
+            </template>
+        </b-table>
+    </div>
 </template>
 
 <script>
@@ -45,33 +50,17 @@
 
     export default {
         name: "EventTable",
-        props: {
-            currentPage: {
-                type: Number,
-                default: 1
-            },
-            perPage: {
-                type: Number,
-                default: 5
-            },
-            events: {
-                type: Array
-            }
-        },
         data() {
             return {
                 fields: [
                     {
-                        key: 'stageTime',
-                    },
-                    {
                         key: 'type',
                     },
                     {
-                        key: 'name',
+                        key: 'time',
                     },
                     {
-                        key: 'details',
+                        key: 'title',
                     },
                     {
                         key: 'revert',
@@ -79,40 +68,119 @@
                 ],
             }
         },
+        computed: {
+            protocol() {
+                return this.$store.state.protocol;
+            }
+        },
         methods: {
-            formatTimestamp(timestamp) {
-                let date = new Date(timestamp / 1000000);
-                return date.format("HH:MM:ss,l");
+            onRowClicked(row) {
+                row._showDetails = !row._showDetails;
             },
             revertProtocolEntry(id) {
                 this.$socket.sendObj({
                     'revertProtocolEntry': id
                 })
             },
+            protocolType(entry) {
+                for (let key of Object.keys(entry.change)) {
+                    if (key !== 'origin') {
+                        return key;
+                    }
+                }
+                return '';
+            },
+            entryDetails(entry) {
+                return JSON.stringify(entry.change, null, 2);
+            },
+            protocolForTeam(entry) {
+                let type = this.protocolType(entry);
+                switch (type) {
+                    case 'newCommand':
+                        return entry.change.newCommand.command.forTeam;
+                    case 'addYellowCard':
+                        return entry.change.addYellowCard.forTeam;
+                    case 'addRedCard':
+                        return entry.change.addRedCard.forTeam;
+                    case 'yellowCardOver':
+                        return entry.change.yellowCardOver.forTeam;
+                    case 'addGameEvent':
+                        return entry.change.addGameEvent.gameEvent.forTeam;
+                    case 'addProposedGameEvent':
+                        return entry.change.addProposedGameEvent.gameEvent.forTeam;
+                    case 'updateTeamState':
+                        return entry.change.updateTeamState.forTeam;
+                    default:
+                        return undefined;
+                }
+            },
             iconForType(type) {
                 switch (type) {
-                    case 'command':
+                    case 'newCommand':
                         return 'terminal';
-                    case 'stage':
+                    case 'changeStage':
                         return 'gavel';
-                    case 'card':
+                    case 'addYellowCard':
                         return 'chess-board';
-                    case 'time':
+                    case 'addRedCard':
+                        return 'chess-board';
+                    case 'yellowCardOver':
                         return 'clock';
-                    case 'gameEvent':
+                    case 'addGameEvent':
                         return 'exclamation-triangle';
-                    case 'ignoredGameEvent':
-                        return 'exclamation';
-                    case 'gameEventQueued':
+                    case 'addProposedGameEvent':
                         return 'recycle';
-                    case 'modify':
-                        return 'edit';
-                    case 'teamAction':
-                        return 'users';
-                    case 'hint':
+                    case 'startBallPlacement':
+                        return 'futbol';
+                    case 'setBallPlacementPos':
+                        return 'futbol';
+                    case 'continue':
                         return 'bullhorn';
+                    case 'updateConfig':
+                        return 'edit';
+                    case 'updateTeamState':
+                        return 'edit';
+                    case 'switchColors':
+                        return 'edit';
+                    case 'revert':
+                        return 'exclamation';
                     default:
                         return 'question-circle';
+                }
+            },
+            titleForEntry(entry) {
+                let type = this.protocolType(entry);
+                switch (type) {
+                    case 'newCommand':
+                        return 'New command: ' + entry.change.newCommand.command.type;
+                    case 'changeStage':
+                        return 'New stage: ' + entry.change.changeStage.newStage;
+                    case 'addYellowCard':
+                        return 'Yellow card';
+                    case 'addRedCard':
+                        return 'Red card';
+                    case 'yellowCardOver':
+                        return 'Yellow card over';
+                    case 'addGameEvent':
+                        return 'New game event: ' + entry.change.addGameEvent.gameEvent.type;
+                    case 'addProposedGameEvent':
+                        return 'New proposed game event: ' + entry.change.addProposedGameEvent.gameEvent.type;
+                    case 'startBallPlacement':
+                        return 'Start ball placement';
+                    case 'setBallPlacementPos':
+                        return 'New ball placement pos';
+                    case 'continue':
+                        return 'Continue';
+                    case 'updateConfig':
+                        return 'Update config';
+                    case 'updateTeamState':
+                        return 'Update team state';
+                    case 'switchColors':
+                        return 'Switch colors';
+                    case 'revert':
+                        return 'Revert';
+                    default:
+                        return type;
                 }
             }
         }
@@ -120,5 +188,8 @@
 </script>
 
 <style scoped>
-
+    .row-details {
+        text-align: left;
+        margin-left: 50px;
+    }
 </style>

@@ -7,6 +7,7 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/golang/protobuf/proto"
+	"github.com/golang/protobuf/ptypes"
 	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
@@ -24,6 +25,7 @@ type ServerConnection struct {
 	conn               *websocket.Conn
 	gcEngine           *engine.Engine
 	lastPublishedState *state.State
+	lastProtocolId     int32
 	marshaler          jsonpb.Marshaler
 }
 
@@ -39,6 +41,7 @@ func NewServerConnection(gcEngine *engine.Engine, conn *websocket.Conn) (s *Serv
 	s.quit = make(chan int)
 	s.conn = conn
 	s.gcEngine = gcEngine
+	s.lastProtocolId = -1
 	return
 }
 
@@ -72,7 +75,9 @@ func (s *ServerConnection) publish() {
 		close(hook)
 	}()
 
+	s.publishGcState()
 	s.publishState(s.gcEngine.CurrentState())
+	s.publishProtocol()
 
 	for {
 		select {
@@ -80,6 +85,7 @@ func (s *ServerConnection) publish() {
 			return
 		case change := <-hook:
 			s.publishState(change.State)
+			s.publishProtocol()
 		case <-time.After(100 * time.Millisecond):
 			s.publishState(s.gcEngine.CurrentState())
 		}
@@ -92,17 +98,53 @@ func (s *ServerConnection) publishState(matchState *state.State) {
 		return
 	}
 
+	out := Output{MatchState: matchState}
+	s.publishOutput(&out)
+
+	s.lastPublishedState = &state.State{}
+	proto.Merge(s.lastPublishedState, matchState)
+}
+
+func (s *ServerConnection) publishGcState() {
+
 	gcState := GameControllerState{
 		AutoRefsConnected:      []string{},
 		TeamConnected:          map[string]bool{},
 		TeamConnectionVerified: map[string]bool{},
 	}
 
-	out := Output{MatchState: matchState, GcState: &gcState}
+	out := Output{GcState: &gcState}
 	s.publishOutput(&out)
+}
 
-	s.lastPublishedState = &state.State{}
-	proto.Merge(s.lastPublishedState, matchState)
+func (s *ServerConnection) publishProtocol() {
+
+	changes := s.gcEngine.LatestChangesUntil(s.lastProtocolId)
+
+	if len(changes) == 0 {
+		return
+	}
+
+	protocol := make([]*Protocol, len(changes))
+	for i, change := range changes {
+		var matchTimeElapsed time.Duration
+		if change.State.MatchTimeStart.Seconds != 0 {
+			tChange, _ := ptypes.Timestamp(change.Timestamp)
+			tStart, _ := ptypes.Timestamp(change.State.MatchTimeStart)
+			matchTimeElapsed = tChange.Sub(tStart)
+		}
+
+		protocol[len(changes)-1-i] = &Protocol{
+			Id:               change.Id,
+			Change:           change.Change,
+			MatchTimeElapsed: ptypes.DurationProto(matchTimeElapsed),
+			StageTimeElapsed: change.State.StageTimeElapsed,
+		}
+	}
+
+	out := Output{Protocol: protocol}
+	s.publishOutput(&out)
+	s.lastProtocolId = *changes[len(changes)-1].Id
 }
 
 func (s *ServerConnection) publishOutput(wrapper *Output) {

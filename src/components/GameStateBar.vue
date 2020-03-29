@@ -8,7 +8,7 @@
             |
             </span>
         <span v-b-tooltip.hover.d500 title="Next command">
-            <span v-if="state.nextCommand !== null"
+            <span v-if="state.nextCommand"
                   :class="teamColorClassNextCommand">
             {{state.nextCommand.type}}
             </span>

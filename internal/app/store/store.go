@@ -97,10 +97,10 @@ func (s *Store) Load() error {
 	return nil
 }
 
-// Add add a new entry to the store
+// Add adds a new entry to the store
 func (s *Store) Add(entry *statemachine.StateChange) error {
-	entry.Id = new(uint32)
-	*entry.Id = uint32(len(s.entries))
+	entry.Id = new(int32)
+	*entry.Id = int32(len(s.entries))
 	s.entries = append(s.entries, entry)
 
 	jsonState, err := s.marshaler.MarshalToString(entry)

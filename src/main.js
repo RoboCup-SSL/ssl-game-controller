@@ -41,9 +41,9 @@ library.add(
     fa.faChessBoard,
     fa.faClock,
     fa.faExclamation,
-    fa.faUsers,
     fa.faBullhorn,
-    fa.faRecycle
+    fa.faRecycle,
+    fa.faFutbol,
 );
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 

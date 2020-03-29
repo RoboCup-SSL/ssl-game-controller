@@ -90,6 +90,16 @@ func (e *Engine) CurrentState() *state.State {
 	return e.currentState
 }
 
+// LatestChangesUntil returns all changes with a id larger than the given id
+func (e *Engine) LatestChangesUntil(id int32) (changes []*statemachine.StateChange) {
+	for _, change := range e.stateStore.States() {
+		if *change.Id > id {
+			changes = append(changes, change)
+		}
+	}
+	return
+}
+
 // processChanges listens for new changes on the queue and triggers ticks when there are no changes
 func (e *Engine) processChanges() {
 	for {
@@ -100,6 +110,7 @@ func (e *Engine) processChanges() {
 			}
 			entry := statemachine.StateChange{}
 			entry.Change = change
+			entry.Timestamp, _ = ptypes.TimestampProto(e.timeProvider())
 			var newChanges []*statemachine.Change
 			entry.State, newChanges = e.stateMachine.Process(e.currentState, change)
 			e.currentState = entry.State
