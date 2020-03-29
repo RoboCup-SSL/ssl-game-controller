@@ -92,10 +92,12 @@ message UpdateTeamState {
     optional int32 ball_placement_failures = 8;
     optional bool can_place_ball = 9;
     optional bool bot_substitution_intent = 10;
-    map<uint32, YellowCard> yellow_cards = 11;
-    optional uint32 yellow_cards_remove = 12;
-    map<uint32, RedCard> red_cards = 13;
-    optional uint32 red_cards_remove = 14;
+    optional YellowCard yellow_card = 11;
+    optional RedCard red_card = 12;
+    optional Foul foul = 13;
+    optional uint32 remove_yellow_card = 14;
+    optional uint32 remove_red_card = 15;
+    optional uint32 remove_foul = 16;
 }
 
 message SwitchColors {

@@ -16742,10 +16742,12 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
      * @property {number|null} [ballPlacementFailures] UpdateTeamState ballPlacementFailures
      * @property {boolean|null} [canPlaceBall] UpdateTeamState canPlaceBall
      * @property {boolean|null} [botSubstitutionIntent] UpdateTeamState botSubstitutionIntent
-     * @property {Object.<string,IYellowCard>|null} [yellowCards] UpdateTeamState yellowCards
-     * @property {number|null} [yellowCardsRemove] UpdateTeamState yellowCardsRemove
-     * @property {Object.<string,IRedCard>|null} [redCards] UpdateTeamState redCards
-     * @property {number|null} [redCardsRemove] UpdateTeamState redCardsRemove
+     * @property {IYellowCard|null} [yellowCard] UpdateTeamState yellowCard
+     * @property {IRedCard|null} [redCard] UpdateTeamState redCard
+     * @property {IFoul|null} [foul] UpdateTeamState foul
+     * @property {number|null} [removeYellowCard] UpdateTeamState removeYellowCard
+     * @property {number|null} [removeRedCard] UpdateTeamState removeRedCard
+     * @property {number|null} [removeFoul] UpdateTeamState removeFoul
      */
 
     /**
@@ -16757,8 +16759,6 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
      * @param {IUpdateTeamState=} [properties] Properties to set
      */
     function UpdateTeamState(properties) {
-        this.yellowCards = {};
-        this.redCards = {};
         if (properties)
             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
@@ -16846,36 +16846,52 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
     UpdateTeamState.prototype.botSubstitutionIntent = false;
 
     /**
-     * UpdateTeamState yellowCards.
-     * @member {Object.<string,IYellowCard>} yellowCards
+     * UpdateTeamState yellowCard.
+     * @member {IYellowCard|null|undefined} yellowCard
      * @memberof UpdateTeamState
      * @instance
      */
-    UpdateTeamState.prototype.yellowCards = $util.emptyObject;
+    UpdateTeamState.prototype.yellowCard = null;
 
     /**
-     * UpdateTeamState yellowCardsRemove.
-     * @member {number} yellowCardsRemove
+     * UpdateTeamState redCard.
+     * @member {IRedCard|null|undefined} redCard
      * @memberof UpdateTeamState
      * @instance
      */
-    UpdateTeamState.prototype.yellowCardsRemove = 0;
+    UpdateTeamState.prototype.redCard = null;
 
     /**
-     * UpdateTeamState redCards.
-     * @member {Object.<string,IRedCard>} redCards
+     * UpdateTeamState foul.
+     * @member {IFoul|null|undefined} foul
      * @memberof UpdateTeamState
      * @instance
      */
-    UpdateTeamState.prototype.redCards = $util.emptyObject;
+    UpdateTeamState.prototype.foul = null;
 
     /**
-     * UpdateTeamState redCardsRemove.
-     * @member {number} redCardsRemove
+     * UpdateTeamState removeYellowCard.
+     * @member {number} removeYellowCard
      * @memberof UpdateTeamState
      * @instance
      */
-    UpdateTeamState.prototype.redCardsRemove = 0;
+    UpdateTeamState.prototype.removeYellowCard = 0;
+
+    /**
+     * UpdateTeamState removeRedCard.
+     * @member {number} removeRedCard
+     * @memberof UpdateTeamState
+     * @instance
+     */
+    UpdateTeamState.prototype.removeRedCard = 0;
+
+    /**
+     * UpdateTeamState removeFoul.
+     * @member {number} removeFoul
+     * @memberof UpdateTeamState
+     * @instance
+     */
+    UpdateTeamState.prototype.removeFoul = 0;
 
     /**
      * Creates a new UpdateTeamState instance using the specified properties.
@@ -16921,20 +16937,18 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
             writer.uint32(/* id 9, wireType 0 =*/72).bool(message.canPlaceBall);
         if (message.botSubstitutionIntent != null && message.hasOwnProperty("botSubstitutionIntent"))
             writer.uint32(/* id 10, wireType 0 =*/80).bool(message.botSubstitutionIntent);
-        if (message.yellowCards != null && message.hasOwnProperty("yellowCards"))
-            for (let keys = Object.keys(message.yellowCards), i = 0; i < keys.length; ++i) {
-                writer.uint32(/* id 11, wireType 2 =*/90).fork().uint32(/* id 1, wireType 0 =*/8).uint32(keys[i]);
-                $root.YellowCard.encode(message.yellowCards[keys[i]], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim().ldelim();
-            }
-        if (message.yellowCardsRemove != null && message.hasOwnProperty("yellowCardsRemove"))
-            writer.uint32(/* id 12, wireType 0 =*/96).uint32(message.yellowCardsRemove);
-        if (message.redCards != null && message.hasOwnProperty("redCards"))
-            for (let keys = Object.keys(message.redCards), i = 0; i < keys.length; ++i) {
-                writer.uint32(/* id 13, wireType 2 =*/106).fork().uint32(/* id 1, wireType 0 =*/8).uint32(keys[i]);
-                $root.RedCard.encode(message.redCards[keys[i]], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim().ldelim();
-            }
-        if (message.redCardsRemove != null && message.hasOwnProperty("redCardsRemove"))
-            writer.uint32(/* id 14, wireType 0 =*/112).uint32(message.redCardsRemove);
+        if (message.yellowCard != null && message.hasOwnProperty("yellowCard"))
+            $root.YellowCard.encode(message.yellowCard, writer.uint32(/* id 11, wireType 2 =*/90).fork()).ldelim();
+        if (message.redCard != null && message.hasOwnProperty("redCard"))
+            $root.RedCard.encode(message.redCard, writer.uint32(/* id 12, wireType 2 =*/98).fork()).ldelim();
+        if (message.foul != null && message.hasOwnProperty("foul"))
+            $root.Foul.encode(message.foul, writer.uint32(/* id 13, wireType 2 =*/106).fork()).ldelim();
+        if (message.removeYellowCard != null && message.hasOwnProperty("removeYellowCard"))
+            writer.uint32(/* id 14, wireType 0 =*/112).uint32(message.removeYellowCard);
+        if (message.removeRedCard != null && message.hasOwnProperty("removeRedCard"))
+            writer.uint32(/* id 15, wireType 0 =*/120).uint32(message.removeRedCard);
+        if (message.removeFoul != null && message.hasOwnProperty("removeFoul"))
+            writer.uint32(/* id 16, wireType 0 =*/128).uint32(message.removeFoul);
         return writer;
     };
 
@@ -16965,7 +16979,7 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
     UpdateTeamState.decode = function decode(reader, length) {
         if (!(reader instanceof $Reader))
             reader = $Reader.create(reader);
-        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.UpdateTeamState(), key;
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.UpdateTeamState();
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
@@ -17000,26 +17014,22 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
                 message.botSubstitutionIntent = reader.bool();
                 break;
             case 11:
-                reader.skip().pos++;
-                if (message.yellowCards === $util.emptyObject)
-                    message.yellowCards = {};
-                key = reader.uint32();
-                reader.pos++;
-                message.yellowCards[key] = $root.YellowCard.decode(reader, reader.uint32());
+                message.yellowCard = $root.YellowCard.decode(reader, reader.uint32());
                 break;
             case 12:
-                message.yellowCardsRemove = reader.uint32();
+                message.redCard = $root.RedCard.decode(reader, reader.uint32());
                 break;
             case 13:
-                reader.skip().pos++;
-                if (message.redCards === $util.emptyObject)
-                    message.redCards = {};
-                key = reader.uint32();
-                reader.pos++;
-                message.redCards[key] = $root.RedCard.decode(reader, reader.uint32());
+                message.foul = $root.Foul.decode(reader, reader.uint32());
                 break;
             case 14:
-                message.redCardsRemove = reader.uint32();
+                message.removeYellowCard = reader.uint32();
+                break;
+            case 15:
+                message.removeRedCard = reader.uint32();
+                break;
+            case 16:
+                message.removeFoul = reader.uint32();
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -17092,40 +17102,30 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
         if (message.botSubstitutionIntent != null && message.hasOwnProperty("botSubstitutionIntent"))
             if (typeof message.botSubstitutionIntent !== "boolean")
                 return "botSubstitutionIntent: boolean expected";
-        if (message.yellowCards != null && message.hasOwnProperty("yellowCards")) {
-            if (!$util.isObject(message.yellowCards))
-                return "yellowCards: object expected";
-            let key = Object.keys(message.yellowCards);
-            for (let i = 0; i < key.length; ++i) {
-                if (!$util.key32Re.test(key[i]))
-                    return "yellowCards: integer key{k:uint32} expected";
-                {
-                    let error = $root.YellowCard.verify(message.yellowCards[key[i]]);
-                    if (error)
-                        return "yellowCards." + error;
-                }
-            }
+        if (message.yellowCard != null && message.hasOwnProperty("yellowCard")) {
+            let error = $root.YellowCard.verify(message.yellowCard);
+            if (error)
+                return "yellowCard." + error;
         }
-        if (message.yellowCardsRemove != null && message.hasOwnProperty("yellowCardsRemove"))
-            if (!$util.isInteger(message.yellowCardsRemove))
-                return "yellowCardsRemove: integer expected";
-        if (message.redCards != null && message.hasOwnProperty("redCards")) {
-            if (!$util.isObject(message.redCards))
-                return "redCards: object expected";
-            let key = Object.keys(message.redCards);
-            for (let i = 0; i < key.length; ++i) {
-                if (!$util.key32Re.test(key[i]))
-                    return "redCards: integer key{k:uint32} expected";
-                {
-                    let error = $root.RedCard.verify(message.redCards[key[i]]);
-                    if (error)
-                        return "redCards." + error;
-                }
-            }
+        if (message.redCard != null && message.hasOwnProperty("redCard")) {
+            let error = $root.RedCard.verify(message.redCard);
+            if (error)
+                return "redCard." + error;
         }
-        if (message.redCardsRemove != null && message.hasOwnProperty("redCardsRemove"))
-            if (!$util.isInteger(message.redCardsRemove))
-                return "redCardsRemove: integer expected";
+        if (message.foul != null && message.hasOwnProperty("foul")) {
+            let error = $root.Foul.verify(message.foul);
+            if (error)
+                return "foul." + error;
+        }
+        if (message.removeYellowCard != null && message.hasOwnProperty("removeYellowCard"))
+            if (!$util.isInteger(message.removeYellowCard))
+                return "removeYellowCard: integer expected";
+        if (message.removeRedCard != null && message.hasOwnProperty("removeRedCard"))
+            if (!$util.isInteger(message.removeRedCard))
+                return "removeRedCard: integer expected";
+        if (message.removeFoul != null && message.hasOwnProperty("removeFoul"))
+            if (!$util.isInteger(message.removeFoul))
+                return "removeFoul: integer expected";
         return null;
     };
 
@@ -17173,30 +17173,27 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
             message.canPlaceBall = Boolean(object.canPlaceBall);
         if (object.botSubstitutionIntent != null)
             message.botSubstitutionIntent = Boolean(object.botSubstitutionIntent);
-        if (object.yellowCards) {
-            if (typeof object.yellowCards !== "object")
-                throw TypeError(".UpdateTeamState.yellowCards: object expected");
-            message.yellowCards = {};
-            for (let keys = Object.keys(object.yellowCards), i = 0; i < keys.length; ++i) {
-                if (typeof object.yellowCards[keys[i]] !== "object")
-                    throw TypeError(".UpdateTeamState.yellowCards: object expected");
-                message.yellowCards[keys[i]] = $root.YellowCard.fromObject(object.yellowCards[keys[i]]);
-            }
+        if (object.yellowCard != null) {
+            if (typeof object.yellowCard !== "object")
+                throw TypeError(".UpdateTeamState.yellowCard: object expected");
+            message.yellowCard = $root.YellowCard.fromObject(object.yellowCard);
         }
-        if (object.yellowCardsRemove != null)
-            message.yellowCardsRemove = object.yellowCardsRemove >>> 0;
-        if (object.redCards) {
-            if (typeof object.redCards !== "object")
-                throw TypeError(".UpdateTeamState.redCards: object expected");
-            message.redCards = {};
-            for (let keys = Object.keys(object.redCards), i = 0; i < keys.length; ++i) {
-                if (typeof object.redCards[keys[i]] !== "object")
-                    throw TypeError(".UpdateTeamState.redCards: object expected");
-                message.redCards[keys[i]] = $root.RedCard.fromObject(object.redCards[keys[i]]);
-            }
+        if (object.redCard != null) {
+            if (typeof object.redCard !== "object")
+                throw TypeError(".UpdateTeamState.redCard: object expected");
+            message.redCard = $root.RedCard.fromObject(object.redCard);
         }
-        if (object.redCardsRemove != null)
-            message.redCardsRemove = object.redCardsRemove >>> 0;
+        if (object.foul != null) {
+            if (typeof object.foul !== "object")
+                throw TypeError(".UpdateTeamState.foul: object expected");
+            message.foul = $root.Foul.fromObject(object.foul);
+        }
+        if (object.removeYellowCard != null)
+            message.removeYellowCard = object.removeYellowCard >>> 0;
+        if (object.removeRedCard != null)
+            message.removeRedCard = object.removeRedCard >>> 0;
+        if (object.removeFoul != null)
+            message.removeFoul = object.removeFoul >>> 0;
         return message;
     };
 
@@ -17213,10 +17210,6 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
         if (!options)
             options = {};
         let object = {};
-        if (options.objects || options.defaults) {
-            object.yellowCards = {};
-            object.redCards = {};
-        }
         if (options.defaults) {
             object.forTeam = options.enums === String ? "UNKNOWN" : 0;
             object.teamName = "";
@@ -17228,8 +17221,12 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
             object.ballPlacementFailures = 0;
             object.canPlaceBall = false;
             object.botSubstitutionIntent = false;
-            object.yellowCardsRemove = 0;
-            object.redCardsRemove = 0;
+            object.yellowCard = null;
+            object.redCard = null;
+            object.foul = null;
+            object.removeYellowCard = 0;
+            object.removeRedCard = 0;
+            object.removeFoul = 0;
         }
         if (message.forTeam != null && message.hasOwnProperty("forTeam"))
             object.forTeam = options.enums === String ? $root.Team[message.forTeam] : message.forTeam;
@@ -17251,21 +17248,18 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
             object.canPlaceBall = message.canPlaceBall;
         if (message.botSubstitutionIntent != null && message.hasOwnProperty("botSubstitutionIntent"))
             object.botSubstitutionIntent = message.botSubstitutionIntent;
-        let keys2;
-        if (message.yellowCards && (keys2 = Object.keys(message.yellowCards)).length) {
-            object.yellowCards = {};
-            for (let j = 0; j < keys2.length; ++j)
-                object.yellowCards[keys2[j]] = $root.YellowCard.toObject(message.yellowCards[keys2[j]], options);
-        }
-        if (message.yellowCardsRemove != null && message.hasOwnProperty("yellowCardsRemove"))
-            object.yellowCardsRemove = message.yellowCardsRemove;
-        if (message.redCards && (keys2 = Object.keys(message.redCards)).length) {
-            object.redCards = {};
-            for (let j = 0; j < keys2.length; ++j)
-                object.redCards[keys2[j]] = $root.RedCard.toObject(message.redCards[keys2[j]], options);
-        }
-        if (message.redCardsRemove != null && message.hasOwnProperty("redCardsRemove"))
-            object.redCardsRemove = message.redCardsRemove;
+        if (message.yellowCard != null && message.hasOwnProperty("yellowCard"))
+            object.yellowCard = $root.YellowCard.toObject(message.yellowCard, options);
+        if (message.redCard != null && message.hasOwnProperty("redCard"))
+            object.redCard = $root.RedCard.toObject(message.redCard, options);
+        if (message.foul != null && message.hasOwnProperty("foul"))
+            object.foul = $root.Foul.toObject(message.foul, options);
+        if (message.removeYellowCard != null && message.hasOwnProperty("removeYellowCard"))
+            object.removeYellowCard = message.removeYellowCard;
+        if (message.removeRedCard != null && message.hasOwnProperty("removeRedCard"))
+            object.removeRedCard = message.removeRedCard;
+        if (message.removeFoul != null && message.hasOwnProperty("removeFoul"))
+            object.removeFoul = message.removeFoul;
         return object;
     };
 

@@ -34,7 +34,7 @@ func (s *StateMachine) UpdateTeamState(newState *state.State, change *UpdateTeam
 	}
 	if change.BallPlacementFailures != nil {
 		*teamState.BallPlacementFailures = *change.BallPlacementFailures
-		*teamState.BallPlacementFailuresReached = *teamState.BallPlacementFailures >= int32(s.gameConfig.MultiplePlacementFailures)
+		*teamState.BallPlacementFailuresReached = *teamState.BallPlacementFailures >= s.gameConfig.MultiplePlacementFailures
 	}
 	if change.CanPlaceBall != nil {
 		*teamState.CanPlaceBall = *change.CanPlaceBall
@@ -42,43 +42,59 @@ func (s *StateMachine) UpdateTeamState(newState *state.State, change *UpdateTeam
 	if change.BotSubstitutionIntent != nil {
 		*teamState.BotSubstitutionIntent = *change.BotSubstitutionIntent
 	}
-
-	for id, newCard := range change.YellowCards {
+	if change.YellowCard != nil && change.YellowCard.Id != nil {
 		for i, existingCard := range teamState.YellowCards {
-			if id == *existingCard.Id {
-				teamState.YellowCards[i].TimeRemaining = newCard.TimeRemaining
-				if newCard.CausedByGameEvent != nil {
-					teamState.YellowCards[i].CausedByGameEvent = newCard.CausedByGameEvent
+			if *change.YellowCard.Id == *existingCard.Id {
+				if change.YellowCard.TimeRemaining != nil {
+					teamState.YellowCards[i].TimeRemaining = change.YellowCard.TimeRemaining
+				}
+				if change.YellowCard.CausedByGameEvent != nil {
+					teamState.YellowCards[i].CausedByGameEvent = change.YellowCard.CausedByGameEvent
 				}
 				break
 			}
 		}
 	}
-
-	if change.YellowCardsRemove != nil {
+	if change.RedCard != nil && change.RedCard.Id != nil {
+		for i, existingCard := range teamState.RedCards {
+			if *change.RedCard.Id == *existingCard.Id {
+				if change.RedCard.CausedByGameEvent != nil {
+					teamState.RedCards[i].CausedByGameEvent = change.RedCard.CausedByGameEvent
+				}
+				break
+			}
+		}
+	}
+	if change.Foul != nil && change.Foul.Id != nil {
+		for i, existingFoul := range teamState.Fouls {
+			if *change.Foul.Id == *existingFoul.Id {
+				if change.Foul.CausedByGameEvent != nil {
+					teamState.Fouls[i].CausedByGameEvent = change.Foul.CausedByGameEvent
+				}
+				break
+			}
+		}
+	}
+	if change.RemoveYellowCard != nil {
 		for i, card := range teamState.YellowCards {
-			if *card.Id == *change.YellowCardsRemove {
+			if *card.Id == *change.RemoveYellowCard {
 				teamState.YellowCards = append(teamState.YellowCards[:i], teamState.YellowCards[i+1:]...)
 				break
 			}
 		}
 	}
-
-	for id, newCard := range change.RedCards {
-		for i, existingCard := range teamState.RedCards {
-			if id == *existingCard.Id {
-				if newCard.CausedByGameEvent != nil {
-					teamState.RedCards[i].CausedByGameEvent = newCard.CausedByGameEvent
-				}
+	if change.RemoveRedCard != nil {
+		for i, card := range teamState.RedCards {
+			if *card.Id == *change.RemoveRedCard {
+				teamState.RedCards = append(teamState.RedCards[:i], teamState.RedCards[i+1:]...)
 				break
 			}
 		}
 	}
-
-	if change.RedCardsRemove != nil {
-		for i, card := range teamState.RedCards {
-			if *card.Id == *change.RedCardsRemove {
-				teamState.RedCards = append(teamState.RedCards[:i], teamState.RedCards[i+1:]...)
+	if change.RemoveFoul != nil {
+		for i, foul := range teamState.Fouls {
+			if *foul.Id == *change.RemoveFoul {
+				teamState.Fouls = append(teamState.Fouls[:i], teamState.Fouls[i+1:]...)
 				break
 			}
 		}
