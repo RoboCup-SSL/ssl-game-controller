@@ -1,8 +1,6 @@
 <template>
     <div>
         <TeamSelection :model="model" label="By: "/>
-        <BotSelection :model="model" label="By Bot: "/>
-        <LocationSelection :model="model.location" label="Location [m]: "/>
         <b-button variant="primary"
                   @click="sendEvent()"
                   :disabled="model.team === null">
@@ -13,31 +11,24 @@
 
 <script>
     import TeamSelection from "@/components/common/TeamSelection";
-    import BotSelection from "@/components/common/BotSelection";
-    import LocationSelection from "@/components/common/LocationSelection";
-    import {convertStringLocation} from "@/refereeState";
     import {submitGameEvent} from "../../../submit";
 
     export default {
-        name: "AttackerTouchedOpponentInDefenseArea",
-        components: {BotSelection, TeamSelection, LocationSelection},
+        name: "BoundaryCrossing",
+        components: {TeamSelection},
         data() {
             return {
                 model: {
                     team: null,
-                    id: null,
-                    location: {x: null, y: null}
                 }
             }
         },
         methods: {
             sendEvent: function () {
                 submitGameEvent({
-                    type: 'ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA',
-                    attackerTouchedOpponentInDefenseArea: {
+                    type: 'BOUNDARY_CROSSING',
+                    boundaryCrossing: {
                         by_team: this.model.team.toLocaleUpperCase(),
-                        by_bot: parseInt(this.model.id),
-                        location: convertStringLocation(this.model.location)
                     }
                 });
                 this.$root.$emit('bv::hide::modal', 'new-event-modal');

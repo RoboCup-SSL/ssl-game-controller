@@ -19,7 +19,6 @@
     import AttackerDoubleTouchedBall from "./inputs/AttackerDoubleTouchedBall"
     import AttackerTouchedBallInDefenseArea from "./inputs/AttackerTouchedBallInDefenseArea"
     import AttackerTooCloseToDefenseArea from "./inputs/AttackerTooCloseToDefenseArea"
-    import AttackerTouchedOpponentInDefenseArea from "./inputs/AttackerTouchedOpponentInDefenseArea"
     import BallLeftFieldGoalLine from "./inputs/BallLeftFieldGoalLine"
     import BallLeftFieldTouchLine from "./inputs/BallLeftFieldTouchLine"
     import BotCrashDrawn from "./inputs/BotCrashDrawn"
@@ -31,26 +30,18 @@
     import BotPushedBot from "./inputs/BotPushedBot"
     import BotTippedOver from "./inputs/BotTippedOver"
     import BotTooFastInStop from "./inputs/BotTooFastInStop"
-    import ChippedGoal from "./inputs/ChippedGoal"
     import DefenderInDefenseArea from "./inputs/DefenderInDefenseArea"
-    import DefenderInDefenseAreaPartially from "./inputs/DefenderInDefenseAreaPartially"
     import DefenderTooCloseToKickPoint from "./inputs/DefenderTooCloseToKickPoint"
     import PossibleGoal from "./inputs/PossibleGoal"
     import Goal from "./inputs/Goal"
     import AimlessKick from "./inputs/AimlessKick"
-    import IndirectGoal from "./inputs/IndirectGoal"
     import KeeperHeldBall from "./inputs/KeeperHeldBall"
-    import KickTimeout from "./inputs/KickTimeout"
-    import MultipleFouls from "./inputs/MultipleFouls"
-    import MultipleCards from "./inputs/MultipleCards"
-    import MultiplePlacementFailures from "./inputs/MultiplePlacementFailures"
     import NoProgressInGame from "./inputs/NoProgressInGame"
     import PlacementFailed from "./inputs/PlacementFailed"
     import UnsportingBehaviorMajor from "./inputs/UnsportingBehaviorMajor"
     import UnsportingBehaviorMinor from "./inputs/UnsportingBehaviorMinor"
     import PlacementSucceeded from "./inputs/PlacementSucceeded"
-    import Prepared from "./inputs/Prepared"
-    import TooManyRobots from "./inputs/TooManyRobots"
+    import BoundaryCrossing from "./inputs/BoundaryCrossing";
 
     export default {
         name: "EventAccordion",
@@ -58,7 +49,6 @@
             AttackerDoubleTouchedBall,
             AttackerTouchedBallInDefenseArea,
             AttackerTooCloseToDefenseArea,
-            AttackerTouchedOpponentInDefenseArea,
             BallLeftFieldGoalLine,
             BallLeftFieldTouchLine,
             BotCrashDrawn,
@@ -70,26 +60,18 @@
             BotPushedBot,
             BotTippedOver,
             BotTooFastInStop,
-            ChippedGoal,
+            BoundaryCrossing,
             DefenderInDefenseArea,
-            DefenderInDefenseAreaPartially,
             DefenderTooCloseToKickPoint,
             Goal,
             PossibleGoal,
             AimlessKick,
-            IndirectGoal,
             KeeperHeldBall,
-            KickTimeout,
-            MultipleFouls,
-            MultipleCards,
-            MultiplePlacementFailures,
             NoProgressInGame,
             PlacementFailed,
             UnsportingBehaviorMajor,
             UnsportingBehaviorMinor,
             PlacementSucceeded,
-            Prepared,
-            TooManyRobots,
         },
         props: {
             accordionName: {

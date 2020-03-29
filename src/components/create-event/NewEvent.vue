@@ -39,38 +39,12 @@
             </b-card>
             <b-card no-body class="mb-1">
                 <b-card-header header-tag="header" class="p-1" role="tab">
-                    <b-btn block href="#" v-b-toggle.accordion-event-minor-offense variant="primary">Minor Offense
-                    </b-btn>
-                </b-card-header>
-                <b-collapse id="accordion-event-minor-offense" accordion="accordion-event-category" role="tabpanel">
-                    <b-card-body>
-                        <p class="card-text">
-                            <EventAccordion accordion-name="minor-offense" :categories="minorOffenseEvents"/>
-                        </p>
-                    </b-card-body>
-                </b-collapse>
-            </b-card>
-            <b-card no-body class="mb-1">
-                <b-card-header header-tag="header" class="p-1" role="tab">
                     <b-btn block href="#" v-b-toggle.accordion-event-foul variant="primary">Foul</b-btn>
                 </b-card-header>
                 <b-collapse id="accordion-event-foul" accordion="accordion-event-category" role="tabpanel">
                     <b-card-body>
                         <p class="card-text">
                             <EventAccordion accordion-name="foul" :categories="foulEvents"/>
-                        </p>
-                    </b-card-body>
-                </b-collapse>
-            </b-card>
-            <b-card no-body class="mb-1">
-                <b-card-header header-tag="header" class="p-1" role="tab">
-                    <b-btn block href="#" v-b-toggle.accordion-event-repeated-foul variant="primary">Repeated Events
-                    </b-btn>
-                </b-card-header>
-                <b-collapse id="accordion-event-repeated-foul" accordion="accordion-event-category" role="tabpanel">
-                    <b-card-body>
-                        <p class="card-text">
-                            <EventAccordion accordion-name="repeated-foul" :categories="repeatedEvents"/>
                         </p>
                     </b-card-body>
                 </b-collapse>
@@ -101,8 +75,6 @@
         ballLeftFieldEvents,
         foulEvents,
         matchProceedingEvents,
-        minorOffenseEvents,
-        repeatedEvents,
         unsportingBehaviorEvents
     } from "./gameEvents";
 
@@ -114,15 +86,13 @@
                 showAll: false,
                 matchProceedingEvents: matchProceedingEvents,
                 ballLeftFieldEvents: ballLeftFieldEvents,
-                minorOffenseEvents: minorOffenseEvents,
                 foulEvents: foulEvents,
-                repeatedEvents: repeatedEvents,
                 unsportingBehaviorEvents: unsportingBehaviorEvents,
             }
         },
         computed: {
             allEvents() {
-                return matchProceedingEvents.concat(ballLeftFieldEvents, minorOffenseEvents, foulEvents, repeatedEvents, unsportingBehaviorEvents);
+                return matchProceedingEvents.concat(ballLeftFieldEvents, foulEvents, unsportingBehaviorEvents);
             },
             allManualEvents() {
                 return this.allEvents.filter(function (category) {

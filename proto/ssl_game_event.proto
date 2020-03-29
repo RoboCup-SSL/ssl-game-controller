@@ -494,12 +494,12 @@ message GameEvent {
 
         NO_PROGRESS_IN_GAME = 2;
         ATTACKER_DOUBLE_TOUCHED_BALL = 14;
-        BOUNDARY_CROSSING = 41;
 
         // Stopping Fouls
 
         ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA = 19;
         DEFENDER_IN_DEFENSE_AREA = 31;
+        BOUNDARY_CROSSING = 41;
         KEEPER_HELD_BALL = 13;
         BOT_DRIBBLED_BALL_TOO_FAR = 17;
 

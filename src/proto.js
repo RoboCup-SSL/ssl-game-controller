@@ -1209,9 +1209,9 @@ export const GameEvent = $root.GameEvent = (() => {
         case 39:
         case 2:
         case 14:
-        case 41:
         case 19:
         case 31:
+        case 41:
         case 13:
         case 17:
         case 15:
@@ -1705,10 +1705,6 @@ export const GameEvent = $root.GameEvent = (() => {
         case 14:
             message.type = 14;
             break;
-        case "BOUNDARY_CROSSING":
-        case 41:
-            message.type = 41;
-            break;
         case "ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA":
         case 19:
             message.type = 19;
@@ -1716,6 +1712,10 @@ export const GameEvent = $root.GameEvent = (() => {
         case "DEFENDER_IN_DEFENSE_AREA":
         case 31:
             message.type = 31;
+            break;
+        case "BOUNDARY_CROSSING":
+        case 41:
+            message.type = 41;
             break;
         case "KEEPER_HELD_BALL":
         case 13:
@@ -11518,9 +11518,9 @@ export const GameEvent = $root.GameEvent = (() => {
      * @property {number} POSSIBLE_GOAL=39 POSSIBLE_GOAL value
      * @property {number} NO_PROGRESS_IN_GAME=2 NO_PROGRESS_IN_GAME value
      * @property {number} ATTACKER_DOUBLE_TOUCHED_BALL=14 ATTACKER_DOUBLE_TOUCHED_BALL value
-     * @property {number} BOUNDARY_CROSSING=41 BOUNDARY_CROSSING value
      * @property {number} ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA=19 ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA value
      * @property {number} DEFENDER_IN_DEFENSE_AREA=31 DEFENDER_IN_DEFENSE_AREA value
+     * @property {number} BOUNDARY_CROSSING=41 BOUNDARY_CROSSING value
      * @property {number} KEEPER_HELD_BALL=13 KEEPER_HELD_BALL value
      * @property {number} BOT_DRIBBLED_BALL_TOO_FAR=17 BOT_DRIBBLED_BALL_TOO_FAR value
      * @property {number} ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA=15 ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA value
@@ -11563,9 +11563,9 @@ export const GameEvent = $root.GameEvent = (() => {
         values[valuesById[39] = "POSSIBLE_GOAL"] = 39;
         values[valuesById[2] = "NO_PROGRESS_IN_GAME"] = 2;
         values[valuesById[14] = "ATTACKER_DOUBLE_TOUCHED_BALL"] = 14;
-        values[valuesById[41] = "BOUNDARY_CROSSING"] = 41;
         values[valuesById[19] = "ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA"] = 19;
         values[valuesById[31] = "DEFENDER_IN_DEFENSE_AREA"] = 31;
+        values[valuesById[41] = "BOUNDARY_CROSSING"] = 41;
         values[valuesById[13] = "KEEPER_HELD_BALL"] = 13;
         values[valuesById[17] = "BOT_DRIBBLED_BALL_TOO_FAR"] = 17;
         values[valuesById[15] = "ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA"] = 15;
