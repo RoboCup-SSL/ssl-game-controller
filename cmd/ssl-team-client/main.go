@@ -56,6 +56,10 @@ func main() {
 	for !c.sendDesiredKeeper(3) {
 		time.Sleep(time.Second)
 	}
+
+	for {
+		time.Sleep(time.Second)
+	}
 }
 
 func (c *Client) register() {

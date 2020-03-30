@@ -4,12 +4,13 @@ option go_package = "github.com/RoboCup-SSL/ssl-game-controller/internal/app/api
 
 import "ssl_gc_state.proto";
 import "ssl_gc_change.proto";
+import "ssl_gc_engine.proto";
 
 import "google/protobuf/duration.proto";
 
 message Output {
     optional State match_state = 1;
-    optional GameControllerState gc_state = 2;
+    optional GcState gc_state = 2;
     repeated Protocol protocol = 3;
 }
 
@@ -18,12 +19,6 @@ message Protocol {
     optional Change change = 2;
     optional google.protobuf.Duration match_time_elapsed = 3;
     optional google.protobuf.Duration stage_time_elapsed = 4;
-}
-
-message GameControllerState {
-    repeated string auto_refs_connected = 1;
-    map<string, bool> team_connected = 2;
-    map<string, bool> team_connection_verified = 3;
 }
 
 message Input {

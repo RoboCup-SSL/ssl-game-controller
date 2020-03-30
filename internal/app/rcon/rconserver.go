@@ -17,28 +17,27 @@ import (
 )
 
 type Server struct {
-	address                 string
-	Tls                     bool
-	Clients                 map[string]*Client
-	TrustedKeys             map[string]*rsa.PublicKey
-	ConnectionHandler       func(net.Conn)
-	ClientsChangedObservers []func()
-	listener                net.Listener
+	Tls               bool
+	address           string
+	clients           map[string]*Client
+	trustedKeys       map[string]*rsa.PublicKey
+	connectionHandler func(net.Conn)
+	listener          net.Listener
 }
 
 type Client struct {
-	Id                 string
-	Conn               net.Conn
-	Token              string
-	PubKey             *rsa.PublicKey
-	VerifiedConnection bool
+	id                 string
+	conn               net.Conn
+	token              string
+	pubKey             *rsa.PublicKey
+	verifiedConnection bool
 }
 
 func NewServer(address string) (s *Server) {
 	s = new(Server)
 	s.address = address
-	s.Clients = map[string]*Client{}
-	s.TrustedKeys = map[string]*rsa.PublicKey{}
+	s.clients = map[string]*Client{}
+	s.trustedKeys = map[string]*rsa.PublicKey{}
 	return
 }
 
@@ -60,7 +59,7 @@ func (s *Server) Stop() {
 	if err := s.listener.Close(); err != nil {
 		log.Printf("Could not close listener: %v", err)
 	}
-	for id := range s.Clients {
+	for id := range s.clients {
 		s.CloseConnection(id)
 	}
 }
@@ -73,7 +72,7 @@ func (s *Server) listen() {
 		if err != nil {
 			log.Print("Could not accept connection: ", err)
 		} else {
-			go s.ConnectionHandler(conn)
+			go s.connectionHandler(conn)
 		}
 	}
 }
@@ -109,11 +108,8 @@ func (s *Server) loadTlsConfig() (*tls.Config, error) {
 }
 
 func (s *Server) CloseConnection(id string) {
-	delete(s.Clients, id)
+	delete(s.clients, id)
 	log.Printf("Connection to %v closed", id)
-	for _, observer := range s.ClientsChangedObservers {
-		observer()
-	}
 }
 
 func (c *Client) Ok() (reply ControllerReply) {
@@ -125,14 +121,14 @@ func (c *Client) Ok() (reply ControllerReply) {
 
 func (c *Client) addVerification(reply *ControllerReply) {
 	reply.Verification = new(ControllerReply_Verification)
-	if c.Token != "" {
+	if c.token != "" {
 		reply.NextToken = new(string)
-		*reply.NextToken = c.Token
+		*reply.NextToken = c.token
 		*reply.Verification = ControllerReply_VERIFIED
-		c.VerifiedConnection = true
+		c.verifiedConnection = true
 	} else {
 		*reply.Verification = ControllerReply_UNVERIFIED
-		c.VerifiedConnection = false
+		c.verifiedConnection = false
 	}
 }
 
@@ -157,12 +153,12 @@ func (s *Server) LoadTrustedKeys(trustedKeysDir string) {
 			pubKey := readPublicKey(trustedKeysDir + "/" + file.Name())
 			if pubKey != nil {
 				name := strings.Replace(file.Name(), ".pub.pem", "", 1)
-				s.TrustedKeys[name] = pubKey
+				s.trustedKeys[name] = pubKey
 				log.Printf("Loaded public key for %v", name)
 			}
 		}
 	}
-	log.Printf("Loaded %v public keys", len(s.TrustedKeys))
+	log.Printf("Loaded %v public keys", len(s.trustedKeys))
 }
 
 func readPublicKey(filename string) *rsa.PublicKey {

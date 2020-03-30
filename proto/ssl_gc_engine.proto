@@ -1,0 +1,18 @@
+syntax = "proto2";
+
+option go_package = "github.com/RoboCup-SSL/ssl-game-controller/internal/app/engine";
+
+message GcState {
+    map<string, GcStateTeam> team_state = 1;
+    repeated string auto_refs_connected = 2;
+    optional bool ready_to_continue = 3;
+    optional bool ball_placed = 4;
+    optional uint64 last_progress = 5;
+}
+
+message GcStateTeam {
+    optional uint32 number_of_robots = 1;
+    optional bool may_change_keeper = 2;
+    optional bool connected = 3;
+    optional bool connection_verified = 4;
+}

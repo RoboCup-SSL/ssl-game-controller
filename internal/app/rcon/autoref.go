@@ -9,6 +9,7 @@ import (
 	"io"
 	"log"
 	"net"
+	"sort"
 )
 
 type AutoRefServer struct {
@@ -24,34 +25,34 @@ func NewAutoRefServer(address string, gcEngine *engine.Engine) (s *AutoRefServer
 	s = new(AutoRefServer)
 	s.gcEngine = gcEngine
 	s.Server = NewServer(address)
-	s.ConnectionHandler = s.handleClientConnection
+	s.connectionHandler = s.handleClientConnection
 	return
 }
 
 func (c *AutoRefClient) receiveRegistration(server *AutoRefServer) error {
 	registration := AutoRefRegistration{}
-	if err := sslconn.ReceiveMessage(c.Conn, &registration); err != nil {
+	if err := sslconn.ReceiveMessage(c.conn, &registration); err != nil {
 		return err
 	}
 
 	if registration.Identifier == nil || len(*registration.Identifier) < 1 {
 		return errors.New("No identifier specified")
 	}
-	c.Id = *registration.Identifier
-	if _, exists := server.Clients[c.Id]; exists {
+	c.id = *registration.Identifier
+	if _, exists := server.clients[c.id]; exists {
 		var clients []string
-		for k := range server.Clients {
+		for k := range server.clients {
 			clients = append(clients, k)
 		}
 		return errors.Errorf("Client with given identifier already registered: %v", clients)
 	}
-	c.PubKey = server.TrustedKeys[c.Id]
-	if c.PubKey != nil {
+	c.pubKey = server.trustedKeys[c.id]
+	if c.pubKey != nil {
 		if err := c.verifyRegistration(registration); err != nil {
 			return err
 		}
 	} else {
-		c.Token = ""
+		c.token = ""
 	}
 
 	c.reply(c.Ok())
@@ -63,21 +64,21 @@ func (c *AutoRefClient) verifyRegistration(registration AutoRefRegistration) err
 	if registration.Signature == nil {
 		return errors.New("Missing signature")
 	}
-	if registration.Signature.Token == nil || *registration.Signature.Token != c.Token {
+	if registration.Signature.Token == nil || *registration.Signature.Token != c.token {
 		sendToken := ""
 		if registration.Signature.Token != nil {
 			sendToken = *registration.Signature.Token
 		}
-		return errors.Errorf("Client %v sent an invalid token: %v != %v", c.Id, sendToken, c.Token)
+		return errors.Errorf("Client %v sent an invalid token: %v != %v", c.id, sendToken, c.token)
 	}
 	signature := registration.Signature.Pkcs1V15
 	registration.Signature.Pkcs1V15 = []byte{}
-	err := VerifySignature(c.PubKey, &registration, signature)
+	err := VerifySignature(c.pubKey, &registration, signature)
 	registration.Signature.Pkcs1V15 = signature
 	if err != nil {
 		return errors.New("Invalid signature")
 	}
-	c.Token = uuid.New()
+	c.token = uuid.New()
 	return nil
 }
 
@@ -85,21 +86,21 @@ func (c *AutoRefClient) verifyRequest(req AutoRefToController) error {
 	if req.Signature == nil {
 		return errors.New("Missing signature")
 	}
-	if req.Signature.Token == nil || *req.Signature.Token != c.Token {
+	if req.Signature.Token == nil || *req.Signature.Token != c.token {
 		sendToken := ""
 		if req.Signature.Token != nil {
 			sendToken = *req.Signature.Token
 		}
-		return errors.Errorf("Invalid token: %v != %v", sendToken, c.Token)
+		return errors.Errorf("Invalid token: %v != %v", sendToken, c.token)
 	}
 	signature := req.Signature.Pkcs1V15
 	req.Signature.Pkcs1V15 = []byte{}
-	err := VerifySignature(c.PubKey, &req, signature)
+	err := VerifySignature(c.pubKey, &req, signature)
 	req.Signature.Pkcs1V15 = signature
 	if err != nil {
 		return errors.Wrap(err, "Verification failed.")
 	}
-	c.Token = uuid.New()
+	c.token = uuid.New()
 	return nil
 }
 
@@ -110,7 +111,7 @@ func (s *AutoRefServer) handleClientConnection(conn net.Conn) {
 		}
 	}()
 
-	client := AutoRefClient{Client: &Client{Conn: conn, Token: uuid.New()}}
+	client := AutoRefClient{Client: &Client{conn: conn, token: uuid.New()}}
 	client.reply(client.Ok())
 
 	err := client.receiveRegistration(s)
@@ -119,12 +120,23 @@ func (s *AutoRefServer) handleClientConnection(conn net.Conn) {
 		return
 	}
 
-	s.Clients[client.Id] = client.Client
-	defer s.CloseConnection(client.Id)
-	log.Printf("Client %v connected", client.Id)
-	for _, observer := range s.ClientsChangedObservers {
-		observer()
-	}
+	s.clients[client.id] = client.Client
+	defer func() {
+		s.gcEngine.UpdateGcState(func(gcState *engine.GcState) {
+			for i, v := range gcState.AutoRefsConnected {
+				if v == client.id {
+					gcState.AutoRefsConnected = append(gcState.AutoRefsConnected[:i], gcState.AutoRefsConnected[i+1:]...)
+				}
+			}
+		})
+		s.CloseConnection(client.id)
+	}()
+
+	log.Printf("Client %v connected", client.id)
+	s.gcEngine.UpdateGcState(func(gcState *engine.GcState) {
+		gcState.AutoRefsConnected = append(gcState.AutoRefsConnected, client.id)
+		sort.Strings(gcState.AutoRefsConnected)
+	})
 
 	for {
 		req := AutoRefToController{}
@@ -135,13 +147,13 @@ func (s *AutoRefServer) handleClientConnection(conn net.Conn) {
 			log.Print(err)
 			continue
 		}
-		if client.PubKey != nil {
+		if client.pubKey != nil {
 			if err := client.verifyRequest(req); err != nil {
 				client.reply(client.Reject(err.Error()))
 				continue
 			}
 		}
-		if err := s.processRequest(client.Id, req); err != nil {
+		if err := s.processRequest(client.id, req); err != nil {
 			client.reply(client.Reject(err.Error()))
 		} else {
 			client.reply(client.Ok())
@@ -152,7 +164,7 @@ func (s *AutoRefServer) handleClientConnection(conn net.Conn) {
 func (c *AutoRefClient) reply(reply ControllerReply) {
 	msg := ControllerToAutoRef_ControllerReply{ControllerReply: &reply}
 	response := ControllerToAutoRef{Msg: &msg}
-	if err := sslconn.SendMessage(c.Conn, &response); err != nil {
+	if err := sslconn.SendMessage(c.conn, &response); err != nil {
 		log.Print("Failed to send reply: ", err)
 	}
 }

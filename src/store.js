@@ -1,12 +1,12 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import {GameControllerState, State} from "./proto";
+import {GcState, State} from "./proto";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        gcState: GameControllerState.create(),
+        gcState: GcState.create(),
         matchState: State.create(),
         protocol: [],
         initialized: false

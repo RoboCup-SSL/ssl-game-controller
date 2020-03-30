@@ -44,3 +44,12 @@ func (m Command) IsRunning() bool {
 	}
 	return false
 }
+
+func (m Command) IsPrepare() bool {
+	switch *m.Type {
+	case Command_PENALTY,
+		Command_KICKOFF:
+		return true
+	}
+	return false
+}

@@ -5,6 +5,7 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"github.com/RoboCup-SSL/ssl-go-tools/pkg/sslconn"
+	"github.com/golang/protobuf/proto"
 	"github.com/odeke-em/go-uuid"
 	"github.com/pkg/errors"
 	"io"
@@ -25,13 +26,13 @@ func NewTeamServer(address string, gcEngine *engine.Engine) (s *TeamServer) {
 	s = new(TeamServer)
 	s.gcEngine = gcEngine
 	s.Server = NewServer(address)
-	s.ConnectionHandler = s.handleClientConnection
+	s.connectionHandler = s.handleClientConnection
 	return
 }
 
 func (c *TeamClient) receiveRegistration(server *TeamServer) error {
 	registration := TeamRegistration{}
-	if err := sslconn.ReceiveMessage(c.Conn, &registration); err != nil {
+	if err := sslconn.ReceiveMessage(c.conn, &registration); err != nil {
 		return err
 	}
 
@@ -46,18 +47,18 @@ func (c *TeamClient) receiveRegistration(server *TeamServer) error {
 	if !isAllowedTeamName(*registration.TeamName, allowedTeamNames) {
 		return errors.Errorf("Invalid team name: '%v'. Expecting one of these: %v", *registration.TeamName, allowedTeamNames)
 	}
-	c.Id = *registration.TeamName
-	if _, exists := server.Clients[c.Id]; exists {
-		return errors.New("Team with given name already registered: " + c.Id)
+	c.id = *registration.TeamName
+	if _, exists := server.clients[c.id]; exists {
+		return errors.New("Team with given name already registered: " + c.id)
 	}
-	c.PubKey = server.TrustedKeys[c.Id]
-	if c.PubKey != nil {
+	c.pubKey = server.trustedKeys[c.id]
+	if c.pubKey != nil {
 		err := c.verifyRegistration(registration)
 		if err != nil {
 			return err
 		}
 	} else {
-		c.Token = ""
+		c.token = ""
 	}
 
 	c.reply(c.Ok())
@@ -80,21 +81,21 @@ func (c *TeamClient) verifyRegistration(registration TeamRegistration) error {
 	if registration.Signature == nil {
 		return errors.New("Missing signature")
 	}
-	if registration.Signature.Token == nil || *registration.Signature.Token != c.Token {
+	if registration.Signature.Token == nil || *registration.Signature.Token != c.token {
 		sendToken := ""
 		if registration.Signature.Token != nil {
 			sendToken = *registration.Signature.Token
 		}
-		return errors.Errorf("Client %v sent an invalid token: %v != %v", c.Id, sendToken, c.Token)
+		return errors.Errorf("Client %v sent an invalid token: %v != %v", c.id, sendToken, c.token)
 	}
 	signature := registration.Signature.Pkcs1V15
 	registration.Signature.Pkcs1V15 = []byte{}
-	err := VerifySignature(c.PubKey, &registration, signature)
+	err := VerifySignature(c.pubKey, &registration, signature)
 	registration.Signature.Pkcs1V15 = signature
 	if err != nil {
 		return errors.New("Invalid signature")
 	}
-	c.Token = uuid.New()
+	c.token = uuid.New()
 	return nil
 }
 
@@ -102,21 +103,21 @@ func (c *TeamClient) verifyRequest(req TeamToController) error {
 	if req.Signature == nil {
 		return errors.New("Missing signature")
 	}
-	if req.Signature.Token == nil || *req.Signature.Token != c.Token {
+	if req.Signature.Token == nil || *req.Signature.Token != c.token {
 		sendToken := ""
 		if req.Signature.Token != nil {
 			sendToken = *req.Signature.Token
 		}
-		return errors.Errorf("Invalid token: %v != %v", sendToken, c.Token)
+		return errors.Errorf("Invalid token: %v != %v", sendToken, c.token)
 	}
 	signature := req.Signature.Pkcs1V15
 	req.Signature.Pkcs1V15 = []byte{}
-	err := VerifySignature(c.PubKey, &req, signature)
+	err := VerifySignature(c.pubKey, &req, signature)
 	req.Signature.Pkcs1V15 = signature
 	if err != nil {
 		return errors.Wrap(err, "Verification failed.")
 	}
-	c.Token = uuid.New()
+	c.token = uuid.New()
 	return nil
 }
 
@@ -127,7 +128,7 @@ func (s *TeamServer) handleClientConnection(conn net.Conn) {
 		}
 	}()
 
-	client := TeamClient{Client: &Client{Conn: conn, Token: uuid.New()}}
+	client := TeamClient{Client: &Client{conn: conn, token: uuid.New()}}
 	client.reply(client.Ok())
 
 	err := client.receiveRegistration(s)
@@ -136,12 +137,28 @@ func (s *TeamServer) handleClientConnection(conn net.Conn) {
 		return
 	}
 
-	s.Clients[client.Id] = client.Client
-	defer s.CloseConnection(client.Id)
-	log.Printf("Client %v connected", client.Id)
-	for _, observer := range s.ClientsChangedObservers {
-		observer()
-	}
+	s.clients[client.id] = client.Client
+	defer func() {
+		s.gcEngine.UpdateGcState(func(gcState *engine.GcState) {
+			team := s.gcEngine.CurrentState().TeamByName(client.id)
+			if teamState, ok := gcState.TeamState[team.String()]; ok {
+				connected := false
+				teamState.Connected = &connected
+				teamState.ConnectionVerified = &connected
+			}
+		})
+		s.CloseConnection(client.id)
+	}()
+
+	log.Printf("Client %v connected", client.id)
+	s.gcEngine.UpdateGcState(func(gcState *engine.GcState) {
+		team := s.gcEngine.CurrentState().TeamByName(client.id)
+		if teamState, ok := gcState.TeamState[team.String()]; ok {
+			connected := true
+			teamState.Connected = &connected
+			teamState.ConnectionVerified = &client.verifiedConnection
+		}
+	})
 
 	for {
 		req := TeamToController{}
@@ -152,13 +169,13 @@ func (s *TeamServer) handleClientConnection(conn net.Conn) {
 			log.Print(err)
 			continue
 		}
-		if client.PubKey != nil {
+		if client.pubKey != nil {
 			if err := client.verifyRequest(req); err != nil {
 				client.reply(client.Reject(err.Error()))
 				continue
 			}
 		}
-		if err := s.processRequest(client.Id, req); err != nil {
+		if err := s.processRequest(client.id, req); err != nil {
 			client.reply(client.Reject(err.Error()))
 		} else {
 			client.reply(client.Ok())
@@ -167,20 +184,20 @@ func (s *TeamServer) handleClientConnection(conn net.Conn) {
 }
 
 func (s *TeamServer) SendRequest(teamName string, request ControllerToTeam) error {
-	if client, ok := s.Clients[teamName]; ok {
+	if client, ok := s.clients[teamName]; ok {
 		return client.SendRequest(request)
 	}
 	return errors.Errorf("Client '%v' not connected", teamName)
 }
 
 func (c *Client) SendRequest(request ControllerToTeam) error {
-	return sslconn.SendMessage(c.Conn, &request)
+	return sslconn.SendMessage(c.conn, &request)
 }
 
 func (c *Client) reply(reply ControllerReply) {
 	msg := ControllerToTeam_ControllerReply{ControllerReply: &reply}
 	response := ControllerToTeam{Msg: &msg}
-	if err := sslconn.SendMessage(c.Conn, &response); err != nil {
+	if err := sslconn.SendMessage(c.conn, &response); err != nil {
 		log.Print("Failed to send reply: ", err)
 	}
 }
@@ -191,7 +208,7 @@ func (s *TeamServer) processRequest(teamName string, request TeamToController) e
 		return nil
 	}
 
-	log.Print("Received request from team: ", request)
+	log.Print("Received request from team: ", proto.MarshalTextString(&request))
 
 	currentState := s.gcEngine.CurrentState()
 	team := currentState.TeamByName(teamName)
@@ -216,9 +233,10 @@ func (s *TeamServer) processRequest(teamName string, request TeamToController) e
 		return nil
 	}
 
-	if *currentState.Command.Type != state.Command_STOP {
-		// TODO also check if the ball is on the opponent half of the field which is now also valid
-		return errors.New("Game is not stopped.")
+	mayChangeKeeper := s.gcEngine.CurrentGcState().TeamState[team.String()].MayChangeKeeper
+	if (currentState.Command.IsRunning() || currentState.Command.IsPrepare()) &&
+		mayChangeKeeper != nil && *mayChangeKeeper {
+		return errors.New("Ball is in play and not at a position that allows changing the keeper.")
 	}
 
 	if x, ok := request.GetMsg().(*TeamToController_DesiredKeeper); ok {

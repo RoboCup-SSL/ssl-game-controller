@@ -28,6 +28,7 @@ protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_rcon_team
 protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_state.proto
 protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_change.proto
 protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_api.proto
+protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_engine.proto
 
 # generate javascript code
 pbjs -t static-module -w es6 -o src/proto.js proto/ssl_game_event.proto proto/ssl_referee.proto proto/ssl_gc_change.proto proto/ssl_gc_state.proto proto/ssl_gc_api.proto

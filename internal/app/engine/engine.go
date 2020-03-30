@@ -10,6 +10,7 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	"github.com/pkg/errors"
 	"log"
+	"sync"
 	"time"
 )
 
@@ -17,16 +18,16 @@ var changeOriginEngine = "Engine"
 
 // Engine listens for changes and runs ticks to update the current state using the state machine
 type Engine struct {
-	gameConfig      config.Game
-	stateStore      *store.Store
-	currentState    *state.State
-	stateMachine    *statemachine.StateMachine
-	queue           chan *statemachine.Change
-	hooks           []chan *statemachine.StateChange
-	timeProvider    timer.TimeProvider
-	lastTimeUpdate  time.Time
-	readyToContinue *bool
-	ballPlaced      *bool
+	gameConfig     config.Game
+	stateStore     *store.Store
+	currentState   *state.State
+	stateMachine   *statemachine.StateMachine
+	queue          chan *statemachine.Change
+	hooks          []chan *statemachine.StateChange
+	timeProvider   timer.TimeProvider
+	lastTimeUpdate time.Time
+	gcState        *GcState
+	gcStateMutex   sync.Mutex
 }
 
 // NewEngine creates a new engine
@@ -39,6 +40,11 @@ func NewEngine(gameConfig config.Game) (s *Engine) {
 	s.hooks = []chan *statemachine.StateChange{}
 	s.timeProvider = func() time.Time { return time.Now() }
 	s.lastTimeUpdate = s.timeProvider()
+	s.gcState = new(GcState)
+	s.gcState.TeamState = map[string]*GcStateTeam{
+		state.Team_YELLOW.String(): new(GcStateTeam),
+		state.Team_BLUE.String():   new(GcStateTeam),
+	}
 	return
 }
 
@@ -96,6 +102,19 @@ func (e *Engine) CurrentState() (s *state.State) {
 	s = new(state.State)
 	proto.Merge(s, e.currentState)
 	return
+}
+
+// CurrentGcState returns a deep copy of the current GC state
+func (e *Engine) CurrentGcState() (s *GcState) {
+	s = new(GcState)
+	proto.Merge(s, e.gcState)
+	return
+}
+
+func (e *Engine) UpdateGcState(fn func(gcState *GcState)) {
+	e.gcStateMutex.Lock()
+	defer e.gcStateMutex.Unlock()
+	fn(e.gcState)
 }
 
 // LatestChangesUntil returns all changes with a id larger than the given id

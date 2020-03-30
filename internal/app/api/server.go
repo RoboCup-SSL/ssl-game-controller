@@ -87,6 +87,7 @@ func (s *ServerConnection) publish() {
 			s.publishState(change.State)
 			s.publishProtocol()
 		case <-time.After(100 * time.Millisecond):
+			s.publishGcState()
 			s.publishState(s.gcEngine.CurrentState())
 		}
 	}
@@ -106,14 +107,7 @@ func (s *ServerConnection) publishState(matchState *state.State) {
 }
 
 func (s *ServerConnection) publishGcState() {
-
-	gcState := GameControllerState{
-		AutoRefsConnected:      []string{},
-		TeamConnected:          map[string]bool{},
-		TeamConnectionVerified: map[string]bool{},
-	}
-
-	out := Output{GcState: &gcState}
+	out := Output{GcState: s.gcEngine.CurrentGcState()}
 	s.publishOutput(&out)
 }
 

@@ -20524,7 +20524,7 @@ export const Output = $root.Output = (() => {
      * @exports IOutput
      * @interface IOutput
      * @property {IState|null} [matchState] Output matchState
-     * @property {IGameControllerState|null} [gcState] Output gcState
+     * @property {IGcState|null} [gcState] Output gcState
      * @property {Array.<IProtocol>|null} [protocol] Output protocol
      */
 
@@ -20554,7 +20554,7 @@ export const Output = $root.Output = (() => {
 
     /**
      * Output gcState.
-     * @member {IGameControllerState|null|undefined} gcState
+     * @member {IGcState|null|undefined} gcState
      * @memberof Output
      * @instance
      */
@@ -20595,7 +20595,7 @@ export const Output = $root.Output = (() => {
         if (message.matchState != null && message.hasOwnProperty("matchState"))
             $root.State.encode(message.matchState, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
         if (message.gcState != null && message.hasOwnProperty("gcState"))
-            $root.GameControllerState.encode(message.gcState, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+            $root.GcState.encode(message.gcState, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
         if (message.protocol != null && message.protocol.length)
             for (let i = 0; i < message.protocol.length; ++i)
                 $root.Protocol.encode(message.protocol[i], writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
@@ -20637,7 +20637,7 @@ export const Output = $root.Output = (() => {
                 message.matchState = $root.State.decode(reader, reader.uint32());
                 break;
             case 2:
-                message.gcState = $root.GameControllerState.decode(reader, reader.uint32());
+                message.gcState = $root.GcState.decode(reader, reader.uint32());
                 break;
             case 3:
                 if (!(message.protocol && message.protocol.length))
@@ -20685,7 +20685,7 @@ export const Output = $root.Output = (() => {
                 return "matchState." + error;
         }
         if (message.gcState != null && message.hasOwnProperty("gcState")) {
-            let error = $root.GameControllerState.verify(message.gcState);
+            let error = $root.GcState.verify(message.gcState);
             if (error)
                 return "gcState." + error;
         }
@@ -20721,7 +20721,7 @@ export const Output = $root.Output = (() => {
         if (object.gcState != null) {
             if (typeof object.gcState !== "object")
                 throw TypeError(".Output.gcState: object expected");
-            message.gcState = $root.GameControllerState.fromObject(object.gcState);
+            message.gcState = $root.GcState.fromObject(object.gcState);
         }
         if (object.protocol) {
             if (!Array.isArray(object.protocol))
@@ -20758,7 +20758,7 @@ export const Output = $root.Output = (() => {
         if (message.matchState != null && message.hasOwnProperty("matchState"))
             object.matchState = $root.State.toObject(message.matchState, options);
         if (message.gcState != null && message.hasOwnProperty("gcState"))
-            object.gcState = $root.GameControllerState.toObject(message.gcState, options);
+            object.gcState = $root.GcState.toObject(message.gcState, options);
         if (message.protocol && message.protocol.length) {
             object.protocol = [];
             for (let j = 0; j < message.protocol.length; ++j)
@@ -21050,296 +21050,6 @@ export const Protocol = $root.Protocol = (() => {
     return Protocol;
 })();
 
-export const GameControllerState = $root.GameControllerState = (() => {
-
-    /**
-     * Properties of a GameControllerState.
-     * @exports IGameControllerState
-     * @interface IGameControllerState
-     * @property {Array.<string>|null} [autoRefsConnected] GameControllerState autoRefsConnected
-     * @property {Object.<string,boolean>|null} [teamConnected] GameControllerState teamConnected
-     * @property {Object.<string,boolean>|null} [teamConnectionVerified] GameControllerState teamConnectionVerified
-     */
-
-    /**
-     * Constructs a new GameControllerState.
-     * @exports GameControllerState
-     * @classdesc Represents a GameControllerState.
-     * @implements IGameControllerState
-     * @constructor
-     * @param {IGameControllerState=} [properties] Properties to set
-     */
-    function GameControllerState(properties) {
-        this.autoRefsConnected = [];
-        this.teamConnected = {};
-        this.teamConnectionVerified = {};
-        if (properties)
-            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                if (properties[keys[i]] != null)
-                    this[keys[i]] = properties[keys[i]];
-    }
-
-    /**
-     * GameControllerState autoRefsConnected.
-     * @member {Array.<string>} autoRefsConnected
-     * @memberof GameControllerState
-     * @instance
-     */
-    GameControllerState.prototype.autoRefsConnected = $util.emptyArray;
-
-    /**
-     * GameControllerState teamConnected.
-     * @member {Object.<string,boolean>} teamConnected
-     * @memberof GameControllerState
-     * @instance
-     */
-    GameControllerState.prototype.teamConnected = $util.emptyObject;
-
-    /**
-     * GameControllerState teamConnectionVerified.
-     * @member {Object.<string,boolean>} teamConnectionVerified
-     * @memberof GameControllerState
-     * @instance
-     */
-    GameControllerState.prototype.teamConnectionVerified = $util.emptyObject;
-
-    /**
-     * Creates a new GameControllerState instance using the specified properties.
-     * @function create
-     * @memberof GameControllerState
-     * @static
-     * @param {IGameControllerState=} [properties] Properties to set
-     * @returns {GameControllerState} GameControllerState instance
-     */
-    GameControllerState.create = function create(properties) {
-        return new GameControllerState(properties);
-    };
-
-    /**
-     * Encodes the specified GameControllerState message. Does not implicitly {@link GameControllerState.verify|verify} messages.
-     * @function encode
-     * @memberof GameControllerState
-     * @static
-     * @param {IGameControllerState} message GameControllerState message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    GameControllerState.encode = function encode(message, writer) {
-        if (!writer)
-            writer = $Writer.create();
-        if (message.autoRefsConnected != null && message.autoRefsConnected.length)
-            for (let i = 0; i < message.autoRefsConnected.length; ++i)
-                writer.uint32(/* id 1, wireType 2 =*/10).string(message.autoRefsConnected[i]);
-        if (message.teamConnected != null && message.hasOwnProperty("teamConnected"))
-            for (let keys = Object.keys(message.teamConnected), i = 0; i < keys.length; ++i)
-                writer.uint32(/* id 2, wireType 2 =*/18).fork().uint32(/* id 1, wireType 2 =*/10).string(keys[i]).uint32(/* id 2, wireType 0 =*/16).bool(message.teamConnected[keys[i]]).ldelim();
-        if (message.teamConnectionVerified != null && message.hasOwnProperty("teamConnectionVerified"))
-            for (let keys = Object.keys(message.teamConnectionVerified), i = 0; i < keys.length; ++i)
-                writer.uint32(/* id 3, wireType 2 =*/26).fork().uint32(/* id 1, wireType 2 =*/10).string(keys[i]).uint32(/* id 2, wireType 0 =*/16).bool(message.teamConnectionVerified[keys[i]]).ldelim();
-        return writer;
-    };
-
-    /**
-     * Encodes the specified GameControllerState message, length delimited. Does not implicitly {@link GameControllerState.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof GameControllerState
-     * @static
-     * @param {IGameControllerState} message GameControllerState message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    GameControllerState.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
-    };
-
-    /**
-     * Decodes a GameControllerState message from the specified reader or buffer.
-     * @function decode
-     * @memberof GameControllerState
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @param {number} [length] Message length if known beforehand
-     * @returns {GameControllerState} GameControllerState
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    GameControllerState.decode = function decode(reader, length) {
-        if (!(reader instanceof $Reader))
-            reader = $Reader.create(reader);
-        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.GameControllerState(), key;
-        while (reader.pos < end) {
-            let tag = reader.uint32();
-            switch (tag >>> 3) {
-            case 1:
-                if (!(message.autoRefsConnected && message.autoRefsConnected.length))
-                    message.autoRefsConnected = [];
-                message.autoRefsConnected.push(reader.string());
-                break;
-            case 2:
-                reader.skip().pos++;
-                if (message.teamConnected === $util.emptyObject)
-                    message.teamConnected = {};
-                key = reader.string();
-                reader.pos++;
-                message.teamConnected[key] = reader.bool();
-                break;
-            case 3:
-                reader.skip().pos++;
-                if (message.teamConnectionVerified === $util.emptyObject)
-                    message.teamConnectionVerified = {};
-                key = reader.string();
-                reader.pos++;
-                message.teamConnectionVerified[key] = reader.bool();
-                break;
-            default:
-                reader.skipType(tag & 7);
-                break;
-            }
-        }
-        return message;
-    };
-
-    /**
-     * Decodes a GameControllerState message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof GameControllerState
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {GameControllerState} GameControllerState
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    GameControllerState.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
-
-    /**
-     * Verifies a GameControllerState message.
-     * @function verify
-     * @memberof GameControllerState
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    GameControllerState.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        if (message.autoRefsConnected != null && message.hasOwnProperty("autoRefsConnected")) {
-            if (!Array.isArray(message.autoRefsConnected))
-                return "autoRefsConnected: array expected";
-            for (let i = 0; i < message.autoRefsConnected.length; ++i)
-                if (!$util.isString(message.autoRefsConnected[i]))
-                    return "autoRefsConnected: string[] expected";
-        }
-        if (message.teamConnected != null && message.hasOwnProperty("teamConnected")) {
-            if (!$util.isObject(message.teamConnected))
-                return "teamConnected: object expected";
-            let key = Object.keys(message.teamConnected);
-            for (let i = 0; i < key.length; ++i)
-                if (typeof message.teamConnected[key[i]] !== "boolean")
-                    return "teamConnected: boolean{k:string} expected";
-        }
-        if (message.teamConnectionVerified != null && message.hasOwnProperty("teamConnectionVerified")) {
-            if (!$util.isObject(message.teamConnectionVerified))
-                return "teamConnectionVerified: object expected";
-            let key = Object.keys(message.teamConnectionVerified);
-            for (let i = 0; i < key.length; ++i)
-                if (typeof message.teamConnectionVerified[key[i]] !== "boolean")
-                    return "teamConnectionVerified: boolean{k:string} expected";
-        }
-        return null;
-    };
-
-    /**
-     * Creates a GameControllerState message from a plain object. Also converts values to their respective internal types.
-     * @function fromObject
-     * @memberof GameControllerState
-     * @static
-     * @param {Object.<string,*>} object Plain object
-     * @returns {GameControllerState} GameControllerState
-     */
-    GameControllerState.fromObject = function fromObject(object) {
-        if (object instanceof $root.GameControllerState)
-            return object;
-        let message = new $root.GameControllerState();
-        if (object.autoRefsConnected) {
-            if (!Array.isArray(object.autoRefsConnected))
-                throw TypeError(".GameControllerState.autoRefsConnected: array expected");
-            message.autoRefsConnected = [];
-            for (let i = 0; i < object.autoRefsConnected.length; ++i)
-                message.autoRefsConnected[i] = String(object.autoRefsConnected[i]);
-        }
-        if (object.teamConnected) {
-            if (typeof object.teamConnected !== "object")
-                throw TypeError(".GameControllerState.teamConnected: object expected");
-            message.teamConnected = {};
-            for (let keys = Object.keys(object.teamConnected), i = 0; i < keys.length; ++i)
-                message.teamConnected[keys[i]] = Boolean(object.teamConnected[keys[i]]);
-        }
-        if (object.teamConnectionVerified) {
-            if (typeof object.teamConnectionVerified !== "object")
-                throw TypeError(".GameControllerState.teamConnectionVerified: object expected");
-            message.teamConnectionVerified = {};
-            for (let keys = Object.keys(object.teamConnectionVerified), i = 0; i < keys.length; ++i)
-                message.teamConnectionVerified[keys[i]] = Boolean(object.teamConnectionVerified[keys[i]]);
-        }
-        return message;
-    };
-
-    /**
-     * Creates a plain object from a GameControllerState message. Also converts values to other types if specified.
-     * @function toObject
-     * @memberof GameControllerState
-     * @static
-     * @param {GameControllerState} message GameControllerState
-     * @param {$protobuf.IConversionOptions} [options] Conversion options
-     * @returns {Object.<string,*>} Plain object
-     */
-    GameControllerState.toObject = function toObject(message, options) {
-        if (!options)
-            options = {};
-        let object = {};
-        if (options.arrays || options.defaults)
-            object.autoRefsConnected = [];
-        if (options.objects || options.defaults) {
-            object.teamConnected = {};
-            object.teamConnectionVerified = {};
-        }
-        if (message.autoRefsConnected && message.autoRefsConnected.length) {
-            object.autoRefsConnected = [];
-            for (let j = 0; j < message.autoRefsConnected.length; ++j)
-                object.autoRefsConnected[j] = message.autoRefsConnected[j];
-        }
-        let keys2;
-        if (message.teamConnected && (keys2 = Object.keys(message.teamConnected)).length) {
-            object.teamConnected = {};
-            for (let j = 0; j < keys2.length; ++j)
-                object.teamConnected[keys2[j]] = message.teamConnected[keys2[j]];
-        }
-        if (message.teamConnectionVerified && (keys2 = Object.keys(message.teamConnectionVerified)).length) {
-            object.teamConnectionVerified = {};
-            for (let j = 0; j < keys2.length; ++j)
-                object.teamConnectionVerified[keys2[j]] = message.teamConnectionVerified[keys2[j]];
-        }
-        return object;
-    };
-
-    /**
-     * Converts this GameControllerState to JSON.
-     * @function toJSON
-     * @memberof GameControllerState
-     * @instance
-     * @returns {Object.<string,*>} JSON object
-     */
-    GameControllerState.prototype.toJSON = function toJSON() {
-        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-    };
-
-    return GameControllerState;
-})();
-
 export const Input = $root.Input = (() => {
 
     /**
@@ -21530,6 +21240,596 @@ export const Input = $root.Input = (() => {
     };
 
     return Input;
+})();
+
+export const GcState = $root.GcState = (() => {
+
+    /**
+     * Properties of a GcState.
+     * @exports IGcState
+     * @interface IGcState
+     * @property {Object.<string,IGcStateTeam>|null} [teamState] GcState teamState
+     * @property {Array.<string>|null} [autoRefsConnected] GcState autoRefsConnected
+     * @property {boolean|null} [readyToContinue] GcState readyToContinue
+     * @property {boolean|null} [ballPlaced] GcState ballPlaced
+     * @property {number|Long|null} [lastProgress] GcState lastProgress
+     */
+
+    /**
+     * Constructs a new GcState.
+     * @exports GcState
+     * @classdesc Represents a GcState.
+     * @implements IGcState
+     * @constructor
+     * @param {IGcState=} [properties] Properties to set
+     */
+    function GcState(properties) {
+        this.teamState = {};
+        this.autoRefsConnected = [];
+        if (properties)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * GcState teamState.
+     * @member {Object.<string,IGcStateTeam>} teamState
+     * @memberof GcState
+     * @instance
+     */
+    GcState.prototype.teamState = $util.emptyObject;
+
+    /**
+     * GcState autoRefsConnected.
+     * @member {Array.<string>} autoRefsConnected
+     * @memberof GcState
+     * @instance
+     */
+    GcState.prototype.autoRefsConnected = $util.emptyArray;
+
+    /**
+     * GcState readyToContinue.
+     * @member {boolean} readyToContinue
+     * @memberof GcState
+     * @instance
+     */
+    GcState.prototype.readyToContinue = false;
+
+    /**
+     * GcState ballPlaced.
+     * @member {boolean} ballPlaced
+     * @memberof GcState
+     * @instance
+     */
+    GcState.prototype.ballPlaced = false;
+
+    /**
+     * GcState lastProgress.
+     * @member {number|Long} lastProgress
+     * @memberof GcState
+     * @instance
+     */
+    GcState.prototype.lastProgress = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+    /**
+     * Creates a new GcState instance using the specified properties.
+     * @function create
+     * @memberof GcState
+     * @static
+     * @param {IGcState=} [properties] Properties to set
+     * @returns {GcState} GcState instance
+     */
+    GcState.create = function create(properties) {
+        return new GcState(properties);
+    };
+
+    /**
+     * Encodes the specified GcState message. Does not implicitly {@link GcState.verify|verify} messages.
+     * @function encode
+     * @memberof GcState
+     * @static
+     * @param {IGcState} message GcState message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    GcState.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.teamState != null && message.hasOwnProperty("teamState"))
+            for (let keys = Object.keys(message.teamState), i = 0; i < keys.length; ++i) {
+                writer.uint32(/* id 1, wireType 2 =*/10).fork().uint32(/* id 1, wireType 2 =*/10).string(keys[i]);
+                $root.GcStateTeam.encode(message.teamState[keys[i]], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim().ldelim();
+            }
+        if (message.autoRefsConnected != null && message.autoRefsConnected.length)
+            for (let i = 0; i < message.autoRefsConnected.length; ++i)
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.autoRefsConnected[i]);
+        if (message.readyToContinue != null && message.hasOwnProperty("readyToContinue"))
+            writer.uint32(/* id 3, wireType 0 =*/24).bool(message.readyToContinue);
+        if (message.ballPlaced != null && message.hasOwnProperty("ballPlaced"))
+            writer.uint32(/* id 4, wireType 0 =*/32).bool(message.ballPlaced);
+        if (message.lastProgress != null && message.hasOwnProperty("lastProgress"))
+            writer.uint32(/* id 5, wireType 0 =*/40).uint64(message.lastProgress);
+        return writer;
+    };
+
+    /**
+     * Encodes the specified GcState message, length delimited. Does not implicitly {@link GcState.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof GcState
+     * @static
+     * @param {IGcState} message GcState message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    GcState.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a GcState message from the specified reader or buffer.
+     * @function decode
+     * @memberof GcState
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {GcState} GcState
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    GcState.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.GcState(), key;
+        while (reader.pos < end) {
+            let tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1:
+                reader.skip().pos++;
+                if (message.teamState === $util.emptyObject)
+                    message.teamState = {};
+                key = reader.string();
+                reader.pos++;
+                message.teamState[key] = $root.GcStateTeam.decode(reader, reader.uint32());
+                break;
+            case 2:
+                if (!(message.autoRefsConnected && message.autoRefsConnected.length))
+                    message.autoRefsConnected = [];
+                message.autoRefsConnected.push(reader.string());
+                break;
+            case 3:
+                message.readyToContinue = reader.bool();
+                break;
+            case 4:
+                message.ballPlaced = reader.bool();
+                break;
+            case 5:
+                message.lastProgress = reader.uint64();
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes a GcState message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof GcState
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {GcState} GcState
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    GcState.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a GcState message.
+     * @function verify
+     * @memberof GcState
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    GcState.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (message.teamState != null && message.hasOwnProperty("teamState")) {
+            if (!$util.isObject(message.teamState))
+                return "teamState: object expected";
+            let key = Object.keys(message.teamState);
+            for (let i = 0; i < key.length; ++i) {
+                let error = $root.GcStateTeam.verify(message.teamState[key[i]]);
+                if (error)
+                    return "teamState." + error;
+            }
+        }
+        if (message.autoRefsConnected != null && message.hasOwnProperty("autoRefsConnected")) {
+            if (!Array.isArray(message.autoRefsConnected))
+                return "autoRefsConnected: array expected";
+            for (let i = 0; i < message.autoRefsConnected.length; ++i)
+                if (!$util.isString(message.autoRefsConnected[i]))
+                    return "autoRefsConnected: string[] expected";
+        }
+        if (message.readyToContinue != null && message.hasOwnProperty("readyToContinue"))
+            if (typeof message.readyToContinue !== "boolean")
+                return "readyToContinue: boolean expected";
+        if (message.ballPlaced != null && message.hasOwnProperty("ballPlaced"))
+            if (typeof message.ballPlaced !== "boolean")
+                return "ballPlaced: boolean expected";
+        if (message.lastProgress != null && message.hasOwnProperty("lastProgress"))
+            if (!$util.isInteger(message.lastProgress) && !(message.lastProgress && $util.isInteger(message.lastProgress.low) && $util.isInteger(message.lastProgress.high)))
+                return "lastProgress: integer|Long expected";
+        return null;
+    };
+
+    /**
+     * Creates a GcState message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof GcState
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {GcState} GcState
+     */
+    GcState.fromObject = function fromObject(object) {
+        if (object instanceof $root.GcState)
+            return object;
+        let message = new $root.GcState();
+        if (object.teamState) {
+            if (typeof object.teamState !== "object")
+                throw TypeError(".GcState.teamState: object expected");
+            message.teamState = {};
+            for (let keys = Object.keys(object.teamState), i = 0; i < keys.length; ++i) {
+                if (typeof object.teamState[keys[i]] !== "object")
+                    throw TypeError(".GcState.teamState: object expected");
+                message.teamState[keys[i]] = $root.GcStateTeam.fromObject(object.teamState[keys[i]]);
+            }
+        }
+        if (object.autoRefsConnected) {
+            if (!Array.isArray(object.autoRefsConnected))
+                throw TypeError(".GcState.autoRefsConnected: array expected");
+            message.autoRefsConnected = [];
+            for (let i = 0; i < object.autoRefsConnected.length; ++i)
+                message.autoRefsConnected[i] = String(object.autoRefsConnected[i]);
+        }
+        if (object.readyToContinue != null)
+            message.readyToContinue = Boolean(object.readyToContinue);
+        if (object.ballPlaced != null)
+            message.ballPlaced = Boolean(object.ballPlaced);
+        if (object.lastProgress != null)
+            if ($util.Long)
+                (message.lastProgress = $util.Long.fromValue(object.lastProgress)).unsigned = true;
+            else if (typeof object.lastProgress === "string")
+                message.lastProgress = parseInt(object.lastProgress, 10);
+            else if (typeof object.lastProgress === "number")
+                message.lastProgress = object.lastProgress;
+            else if (typeof object.lastProgress === "object")
+                message.lastProgress = new $util.LongBits(object.lastProgress.low >>> 0, object.lastProgress.high >>> 0).toNumber(true);
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a GcState message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof GcState
+     * @static
+     * @param {GcState} message GcState
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    GcState.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        let object = {};
+        if (options.arrays || options.defaults)
+            object.autoRefsConnected = [];
+        if (options.objects || options.defaults)
+            object.teamState = {};
+        if (options.defaults) {
+            object.readyToContinue = false;
+            object.ballPlaced = false;
+            if ($util.Long) {
+                let long = new $util.Long(0, 0, true);
+                object.lastProgress = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+            } else
+                object.lastProgress = options.longs === String ? "0" : 0;
+        }
+        let keys2;
+        if (message.teamState && (keys2 = Object.keys(message.teamState)).length) {
+            object.teamState = {};
+            for (let j = 0; j < keys2.length; ++j)
+                object.teamState[keys2[j]] = $root.GcStateTeam.toObject(message.teamState[keys2[j]], options);
+        }
+        if (message.autoRefsConnected && message.autoRefsConnected.length) {
+            object.autoRefsConnected = [];
+            for (let j = 0; j < message.autoRefsConnected.length; ++j)
+                object.autoRefsConnected[j] = message.autoRefsConnected[j];
+        }
+        if (message.readyToContinue != null && message.hasOwnProperty("readyToContinue"))
+            object.readyToContinue = message.readyToContinue;
+        if (message.ballPlaced != null && message.hasOwnProperty("ballPlaced"))
+            object.ballPlaced = message.ballPlaced;
+        if (message.lastProgress != null && message.hasOwnProperty("lastProgress"))
+            if (typeof message.lastProgress === "number")
+                object.lastProgress = options.longs === String ? String(message.lastProgress) : message.lastProgress;
+            else
+                object.lastProgress = options.longs === String ? $util.Long.prototype.toString.call(message.lastProgress) : options.longs === Number ? new $util.LongBits(message.lastProgress.low >>> 0, message.lastProgress.high >>> 0).toNumber(true) : message.lastProgress;
+        return object;
+    };
+
+    /**
+     * Converts this GcState to JSON.
+     * @function toJSON
+     * @memberof GcState
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    GcState.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    return GcState;
+})();
+
+export const GcStateTeam = $root.GcStateTeam = (() => {
+
+    /**
+     * Properties of a GcStateTeam.
+     * @exports IGcStateTeam
+     * @interface IGcStateTeam
+     * @property {number|null} [numberOfRobots] GcStateTeam numberOfRobots
+     * @property {boolean|null} [mayChangeKeeper] GcStateTeam mayChangeKeeper
+     * @property {boolean|null} [connected] GcStateTeam connected
+     * @property {boolean|null} [connectionVerified] GcStateTeam connectionVerified
+     */
+
+    /**
+     * Constructs a new GcStateTeam.
+     * @exports GcStateTeam
+     * @classdesc Represents a GcStateTeam.
+     * @implements IGcStateTeam
+     * @constructor
+     * @param {IGcStateTeam=} [properties] Properties to set
+     */
+    function GcStateTeam(properties) {
+        if (properties)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * GcStateTeam numberOfRobots.
+     * @member {number} numberOfRobots
+     * @memberof GcStateTeam
+     * @instance
+     */
+    GcStateTeam.prototype.numberOfRobots = 0;
+
+    /**
+     * GcStateTeam mayChangeKeeper.
+     * @member {boolean} mayChangeKeeper
+     * @memberof GcStateTeam
+     * @instance
+     */
+    GcStateTeam.prototype.mayChangeKeeper = false;
+
+    /**
+     * GcStateTeam connected.
+     * @member {boolean} connected
+     * @memberof GcStateTeam
+     * @instance
+     */
+    GcStateTeam.prototype.connected = false;
+
+    /**
+     * GcStateTeam connectionVerified.
+     * @member {boolean} connectionVerified
+     * @memberof GcStateTeam
+     * @instance
+     */
+    GcStateTeam.prototype.connectionVerified = false;
+
+    /**
+     * Creates a new GcStateTeam instance using the specified properties.
+     * @function create
+     * @memberof GcStateTeam
+     * @static
+     * @param {IGcStateTeam=} [properties] Properties to set
+     * @returns {GcStateTeam} GcStateTeam instance
+     */
+    GcStateTeam.create = function create(properties) {
+        return new GcStateTeam(properties);
+    };
+
+    /**
+     * Encodes the specified GcStateTeam message. Does not implicitly {@link GcStateTeam.verify|verify} messages.
+     * @function encode
+     * @memberof GcStateTeam
+     * @static
+     * @param {IGcStateTeam} message GcStateTeam message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    GcStateTeam.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.numberOfRobots != null && message.hasOwnProperty("numberOfRobots"))
+            writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.numberOfRobots);
+        if (message.mayChangeKeeper != null && message.hasOwnProperty("mayChangeKeeper"))
+            writer.uint32(/* id 2, wireType 0 =*/16).bool(message.mayChangeKeeper);
+        if (message.connected != null && message.hasOwnProperty("connected"))
+            writer.uint32(/* id 3, wireType 0 =*/24).bool(message.connected);
+        if (message.connectionVerified != null && message.hasOwnProperty("connectionVerified"))
+            writer.uint32(/* id 4, wireType 0 =*/32).bool(message.connectionVerified);
+        return writer;
+    };
+
+    /**
+     * Encodes the specified GcStateTeam message, length delimited. Does not implicitly {@link GcStateTeam.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof GcStateTeam
+     * @static
+     * @param {IGcStateTeam} message GcStateTeam message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    GcStateTeam.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a GcStateTeam message from the specified reader or buffer.
+     * @function decode
+     * @memberof GcStateTeam
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {GcStateTeam} GcStateTeam
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    GcStateTeam.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.GcStateTeam();
+        while (reader.pos < end) {
+            let tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1:
+                message.numberOfRobots = reader.uint32();
+                break;
+            case 2:
+                message.mayChangeKeeper = reader.bool();
+                break;
+            case 3:
+                message.connected = reader.bool();
+                break;
+            case 4:
+                message.connectionVerified = reader.bool();
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes a GcStateTeam message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof GcStateTeam
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {GcStateTeam} GcStateTeam
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    GcStateTeam.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a GcStateTeam message.
+     * @function verify
+     * @memberof GcStateTeam
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    GcStateTeam.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (message.numberOfRobots != null && message.hasOwnProperty("numberOfRobots"))
+            if (!$util.isInteger(message.numberOfRobots))
+                return "numberOfRobots: integer expected";
+        if (message.mayChangeKeeper != null && message.hasOwnProperty("mayChangeKeeper"))
+            if (typeof message.mayChangeKeeper !== "boolean")
+                return "mayChangeKeeper: boolean expected";
+        if (message.connected != null && message.hasOwnProperty("connected"))
+            if (typeof message.connected !== "boolean")
+                return "connected: boolean expected";
+        if (message.connectionVerified != null && message.hasOwnProperty("connectionVerified"))
+            if (typeof message.connectionVerified !== "boolean")
+                return "connectionVerified: boolean expected";
+        return null;
+    };
+
+    /**
+     * Creates a GcStateTeam message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof GcStateTeam
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {GcStateTeam} GcStateTeam
+     */
+    GcStateTeam.fromObject = function fromObject(object) {
+        if (object instanceof $root.GcStateTeam)
+            return object;
+        let message = new $root.GcStateTeam();
+        if (object.numberOfRobots != null)
+            message.numberOfRobots = object.numberOfRobots >>> 0;
+        if (object.mayChangeKeeper != null)
+            message.mayChangeKeeper = Boolean(object.mayChangeKeeper);
+        if (object.connected != null)
+            message.connected = Boolean(object.connected);
+        if (object.connectionVerified != null)
+            message.connectionVerified = Boolean(object.connectionVerified);
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a GcStateTeam message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof GcStateTeam
+     * @static
+     * @param {GcStateTeam} message GcStateTeam
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    GcStateTeam.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        let object = {};
+        if (options.defaults) {
+            object.numberOfRobots = 0;
+            object.mayChangeKeeper = false;
+            object.connected = false;
+            object.connectionVerified = false;
+        }
+        if (message.numberOfRobots != null && message.hasOwnProperty("numberOfRobots"))
+            object.numberOfRobots = message.numberOfRobots;
+        if (message.mayChangeKeeper != null && message.hasOwnProperty("mayChangeKeeper"))
+            object.mayChangeKeeper = message.mayChangeKeeper;
+        if (message.connected != null && message.hasOwnProperty("connected"))
+            object.connected = message.connected;
+        if (message.connectionVerified != null && message.hasOwnProperty("connectionVerified"))
+            object.connectionVerified = message.connectionVerified;
+        return object;
+    };
+
+    /**
+     * Converts this GcStateTeam to JSON.
+     * @function toJSON
+     * @memberof GcStateTeam
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    GcStateTeam.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    return GcStateTeam;
 })();
 
 export { $root as default };
