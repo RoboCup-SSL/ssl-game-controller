@@ -4,15 +4,25 @@ option go_package = "github.com/RoboCup-SSL/ssl-game-controller/internal/app/eng
 
 message GcState {
     map<string, GcStateTeam> team_state = 1;
-    repeated string auto_refs_connected = 2;
-    optional bool ready_to_continue = 3;
-    optional bool ball_placed = 4;
-    optional uint64 last_progress = 5;
+    map<string, GcStateAutoRef> auto_ref_state = 2;
 }
 
 message GcStateTeam {
+    optional bool connected = 1;
+    optional bool connection_verified = 2;
+}
+
+message GcStateAutoRef {
+    optional bool connection_verified = 1;
+
+    optional bool ready_to_continue = 2;
+    optional bool ball_placed = 3;
+    optional uint64 last_progress = 4;
+
+    map<string, GcStateAutoRefTeam> team_state = 5;
+}
+
+message GcStateAutoRefTeam {
     optional uint32 number_of_robots = 1;
     optional bool may_change_keeper = 2;
-    optional bool connected = 3;
-    optional bool connection_verified = 4;
 }

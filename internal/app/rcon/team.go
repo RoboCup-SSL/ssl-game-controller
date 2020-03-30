@@ -233,9 +233,16 @@ func (s *TeamServer) processRequest(teamName string, request TeamToController) e
 		return nil
 	}
 
-	mayChangeKeeper := s.gcEngine.CurrentGcState().TeamState[team.String()].MayChangeKeeper
+	var mayChangeKeeper *bool
+	for _, t := range s.gcEngine.CurrentGcState().AutoRefState {
+		aMayChangeKeeper := t.TeamState[team.String()].MayChangeKeeper
+		if aMayChangeKeeper != nil && *aMayChangeKeeper {
+			mayChangeKeeper = aMayChangeKeeper
+		}
+	}
+
 	if (currentState.Command.IsRunning() || currentState.Command.IsPrepare()) &&
-		mayChangeKeeper != nil && *mayChangeKeeper {
+		mayChangeKeeper != nil && !*mayChangeKeeper {
 		return errors.New("Ball is in play and not at a position that allows changing the keeper.")
 	}
 

@@ -30,9 +30,10 @@
             autoRefs() {
                 if (this.autoRefsConnected) {
                     let autoRefs = '';
-                    for (let i = 0; i < this.gcState.autoRefsConnected.length; i++) {
-                        autoRefs += this.gcState.autoRefsConnected[i];
-                        if (i !== (this.gcState.autoRefsConnected.length - 1)) {
+                    let autoRefNames = Object.keys(this.gcState.autoRefState);
+                    for (let i = 0; i < autoRefNames.length; i++) {
+                        autoRefs += autoRefNames[i];
+                        if (i !== (autoRefNames.length - 1)) {
                             autoRefs += ', '
                         }
                     }
@@ -40,8 +41,8 @@
                 }
             },
             autoRefsConnected() {
-                if (this.gcState.autoRefsConnected != null) {
-                    return this.gcState.autoRefsConnected.length;
+                if (this.gcState.autoRefState) {
+                    return Object.keys(this.gcState.autoRefState).length;
                 }
                 return 0;
             },

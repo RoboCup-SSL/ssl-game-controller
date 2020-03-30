@@ -45,6 +45,7 @@ func NewEngine(gameConfig config.Game) (s *Engine) {
 		state.Team_YELLOW.String(): new(GcStateTeam),
 		state.Team_BLUE.String():   new(GcStateTeam),
 	}
+	s.gcState.AutoRefState = map[string]*GcStateAutoRef{}
 	return
 }
 

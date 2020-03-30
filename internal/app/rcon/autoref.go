@@ -2,6 +2,7 @@ package rcon
 
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/engine"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"github.com/RoboCup-SSL/ssl-go-tools/pkg/sslconn"
 	"github.com/odeke-em/go-uuid"
@@ -9,7 +10,6 @@ import (
 	"io"
 	"log"
 	"net"
-	"sort"
 )
 
 type AutoRefServer struct {
@@ -123,19 +123,18 @@ func (s *AutoRefServer) handleClientConnection(conn net.Conn) {
 	s.clients[client.id] = client.Client
 	defer func() {
 		s.gcEngine.UpdateGcState(func(gcState *engine.GcState) {
-			for i, v := range gcState.AutoRefsConnected {
-				if v == client.id {
-					gcState.AutoRefsConnected = append(gcState.AutoRefsConnected[:i], gcState.AutoRefsConnected[i+1:]...)
-				}
-			}
+			delete(gcState.AutoRefState, client.id)
 		})
 		s.CloseConnection(client.id)
 	}()
 
 	log.Printf("Client %v connected", client.id)
 	s.gcEngine.UpdateGcState(func(gcState *engine.GcState) {
-		gcState.AutoRefsConnected = append(gcState.AutoRefsConnected, client.id)
-		sort.Strings(gcState.AutoRefsConnected)
+		s := new(engine.GcStateAutoRef)
+		s.TeamState = map[string]*engine.GcStateAutoRefTeam{}
+		s.TeamState[state.Team_YELLOW.String()] = new(engine.GcStateAutoRefTeam)
+		s.TeamState[state.Team_BLUE.String()] = new(engine.GcStateAutoRefTeam)
+		gcState.AutoRefState[client.id] = s
 	})
 
 	for {
@@ -170,6 +169,23 @@ func (c *AutoRefClient) reply(reply ControllerReply) {
 }
 
 func (s *AutoRefServer) processRequest(id string, request AutoRefToController) error {
+
+	if request.GameStateMetadata != nil {
+		s.gcEngine.UpdateGcState(func(gcState *engine.GcState) {
+			s := gcState.AutoRefState[id]
+			s.ReadyToContinue = request.GameStateMetadata.ReadyToContinue
+			s.BallPlaced = request.GameStateMetadata.BallPlaced
+			s.LastProgress = request.GameStateMetadata.LastProgress
+			if request.GameStateMetadata.TeamBlue != nil {
+				s.TeamState[state.Team_BLUE.String()].NumberOfRobots = request.GameStateMetadata.TeamBlue.NumberOfRobots
+				s.TeamState[state.Team_BLUE.String()].MayChangeKeeper = request.GameStateMetadata.TeamBlue.MayChangeKeeper
+			}
+			if request.GameStateMetadata.TeamYellow != nil {
+				s.TeamState[state.Team_YELLOW.String()].NumberOfRobots = request.GameStateMetadata.TeamYellow.NumberOfRobots
+				s.TeamState[state.Team_YELLOW.String()].MayChangeKeeper = request.GameStateMetadata.TeamYellow.MayChangeKeeper
+			}
+		})
+	}
 
 	if request.GameEvent != nil {
 		s.gcEngine.Enqueue(&statemachine.Change{

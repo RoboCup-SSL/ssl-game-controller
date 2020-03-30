@@ -25,6 +25,7 @@ type ServerConnection struct {
 	conn               *websocket.Conn
 	gcEngine           *engine.Engine
 	lastPublishedState *state.State
+	lastGcState        *engine.GcState
 	lastProtocolId     int32
 	marshaler          jsonpb.Marshaler
 }
@@ -107,8 +108,14 @@ func (s *ServerConnection) publishState(matchState *state.State) {
 }
 
 func (s *ServerConnection) publishGcState() {
-	out := Output{GcState: s.gcEngine.CurrentGcState()}
-	s.publishOutput(&out)
+	gcState := s.gcEngine.CurrentGcState()
+
+	if !reflect.DeepEqual(gcState, s.lastGcState) {
+		out := Output{GcState: gcState}
+		s.publishOutput(&out)
+		s.lastGcState = &engine.GcState{}
+		proto.Merge(s.lastGcState, gcState)
+	}
 }
 
 func (s *ServerConnection) publishProtocol() {
