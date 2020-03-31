@@ -69,7 +69,7 @@ message AddGameEvent {
 }
 
 message AddProposedGameEvent {
-    optional GameEvent game_event = 1;
+    optional ProposedGameEvent game_event = 1;
 }
 
 message StartBallPlacement {

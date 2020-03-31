@@ -15979,7 +15979,7 @@ export const AddProposedGameEvent = $root.AddProposedGameEvent = (() => {
      * Properties of an AddProposedGameEvent.
      * @exports IAddProposedGameEvent
      * @interface IAddProposedGameEvent
-     * @property {IGameEvent|null} [gameEvent] AddProposedGameEvent gameEvent
+     * @property {IProposedGameEvent|null} [gameEvent] AddProposedGameEvent gameEvent
      */
 
     /**
@@ -15999,7 +15999,7 @@ export const AddProposedGameEvent = $root.AddProposedGameEvent = (() => {
 
     /**
      * AddProposedGameEvent gameEvent.
-     * @member {IGameEvent|null|undefined} gameEvent
+     * @member {IProposedGameEvent|null|undefined} gameEvent
      * @memberof AddProposedGameEvent
      * @instance
      */
@@ -16030,7 +16030,7 @@ export const AddProposedGameEvent = $root.AddProposedGameEvent = (() => {
         if (!writer)
             writer = $Writer.create();
         if (message.gameEvent != null && message.hasOwnProperty("gameEvent"))
-            $root.GameEvent.encode(message.gameEvent, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            $root.ProposedGameEvent.encode(message.gameEvent, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
         return writer;
     };
 
@@ -16066,7 +16066,7 @@ export const AddProposedGameEvent = $root.AddProposedGameEvent = (() => {
             let tag = reader.uint32();
             switch (tag >>> 3) {
             case 1:
-                message.gameEvent = $root.GameEvent.decode(reader, reader.uint32());
+                message.gameEvent = $root.ProposedGameEvent.decode(reader, reader.uint32());
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -16104,7 +16104,7 @@ export const AddProposedGameEvent = $root.AddProposedGameEvent = (() => {
         if (typeof message !== "object" || message === null)
             return "object expected";
         if (message.gameEvent != null && message.hasOwnProperty("gameEvent")) {
-            let error = $root.GameEvent.verify(message.gameEvent);
+            let error = $root.ProposedGameEvent.verify(message.gameEvent);
             if (error)
                 return "gameEvent." + error;
         }
@@ -16126,7 +16126,7 @@ export const AddProposedGameEvent = $root.AddProposedGameEvent = (() => {
         if (object.gameEvent != null) {
             if (typeof object.gameEvent !== "object")
                 throw TypeError(".AddProposedGameEvent.gameEvent: object expected");
-            message.gameEvent = $root.GameEvent.fromObject(object.gameEvent);
+            message.gameEvent = $root.ProposedGameEvent.fromObject(object.gameEvent);
         }
         return message;
     };
@@ -16147,7 +16147,7 @@ export const AddProposedGameEvent = $root.AddProposedGameEvent = (() => {
         if (options.defaults)
             object.gameEvent = null;
         if (message.gameEvent != null && message.hasOwnProperty("gameEvent"))
-            object.gameEvent = $root.GameEvent.toObject(message.gameEvent, options);
+            object.gameEvent = $root.ProposedGameEvent.toObject(message.gameEvent, options);
         return object;
     };
 
