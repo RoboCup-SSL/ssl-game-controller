@@ -79,6 +79,16 @@ func (e *Engine) UnregisterHook(hook chan *statemachine.StateChange) bool {
 	return false
 }
 
+// SetGeometry sets a new geometry
+func (e *Engine) SetGeometry(geometry config.Geometry) {
+	e.stateMachine.Geometry = geometry
+}
+
+// GetGeometry returns the current geometry
+func (e *Engine) GetGeometry() config.Geometry {
+	return e.stateMachine.Geometry
+}
+
 // Start loads the state store and runs a go routine that consumes the change queue
 func (e *Engine) Start() error {
 	if err := e.stateStore.Open(); err != nil {
@@ -88,7 +98,7 @@ func (e *Engine) Start() error {
 		return errors.Wrap(err, "Could not load state store")
 	}
 	e.currentState = e.initialStateFromStore()
-	e.stateMachine.UpdateGeometry(e.gameConfig.DefaultGeometry[e.currentState.Division.Div()])
+	e.stateMachine.Geometry = e.gameConfig.DefaultGeometry[e.currentState.Division.Div()]
 	go e.processChanges()
 	return nil
 }

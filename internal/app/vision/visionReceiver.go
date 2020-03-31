@@ -10,16 +10,23 @@ import (
 const maxDatagramSize = 8192
 
 type Receiver struct {
+	address           string
 	DetectionCallback func(*SSL_DetectionFrame)
 	GeometryCallback  func(*SSL_GeometryData)
 }
 
+// NewReceiver creates a new receiver
 func NewReceiver(address string) (v *Receiver) {
 	v = new(Receiver)
+	v.address = address
 	v.DetectionCallback = func(*SSL_DetectionFrame) {}
 	v.GeometryCallback = func(data *SSL_GeometryData) {}
+	return
+}
 
-	addr, err := net.ResolveUDPAddr("udp", address)
+// Start starts the receiver
+func (v *Receiver) Start() {
+	addr, err := net.ResolveUDPAddr("udp", v.address)
 	if err != nil {
 		log.Print(err)
 		return
@@ -33,10 +40,14 @@ func NewReceiver(address string) (v *Receiver) {
 	if err := conn.SetReadBuffer(maxDatagramSize); err != nil {
 		log.Printf("Could not set read buffer to %v.", maxDatagramSize)
 	}
-	log.Println("Receiving vision from", address)
+	log.Println("Receiving vision from", v.address)
 
 	go v.receive(conn)
-	return
+}
+
+// Stop stops the receiver
+func (v *Receiver) Stop() {
+	// TODO
 }
 
 func (v *Receiver) receive(conn *net.UDPConn) {

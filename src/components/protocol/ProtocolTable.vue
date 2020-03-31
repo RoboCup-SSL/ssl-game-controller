@@ -110,6 +110,7 @@
                     case 'yellowCardOver':
                         return entry.change.yellowCardOver.forTeam;
                     case 'addGameEvent':
+                        // TODO this does not work
                         return entry.change.addGameEvent.gameEvent.forTeam;
                     case 'addProposedGameEvent':
                         return entry.change.addProposedGameEvent.gameEvent.forTeam;

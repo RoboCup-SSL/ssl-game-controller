@@ -102,7 +102,7 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 	// ball placement position
 	placementPosDeterminer := ballplace.BallPlacementPosDeterminer{
 		Event:               gameEvent,
-		Geometry:            s.geometry,
+		Geometry:            s.Geometry,
 		CurrentPlacementPos: newState.PlacementPos,
 		OnPositiveHalf: map[state.Team]bool{
 			state.Team_BLUE:   *newState.TeamInfo(state.Team_BLUE).OnPositiveHalf,

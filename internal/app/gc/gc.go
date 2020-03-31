@@ -6,6 +6,7 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/engine"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/publish"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/rcon"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/vision"
 )
 
 // GameController contains all the different connected modules of the game controller
@@ -18,7 +19,7 @@ type GameController struct {
 	autoRefServerTls *rcon.AutoRefServer
 	teamServer       *rcon.TeamServer
 	teamServerTls    *rcon.TeamServer
-	//visionReceiver *vision.Receiver TODO
+	visionReceiver   *vision.Receiver
 }
 
 // NewGameController creates a new GameController
@@ -34,6 +35,8 @@ func NewGameController(cfg config.Controller) (c *GameController) {
 	c.teamServer = rcon.NewTeamServer(cfg.Server.Team.Address, c.gcEngine)
 	c.teamServerTls = rcon.NewTeamServer(cfg.Server.Team.AddressTls, c.gcEngine)
 	c.teamServerTls.Tls = true
+	c.visionReceiver = vision.NewReceiver(cfg.Network.VisionAddress)
+	c.visionReceiver.GeometryCallback = c.ProcessGeometry
 	return
 }
 
@@ -47,10 +50,12 @@ func (c *GameController) Start() {
 	c.autoRefServerTls.Server.Start()
 	c.teamServer.Server.Start()
 	c.teamServerTls.Server.Start()
+	c.visionReceiver.Start()
 }
 
 // Stop stops all go routines
 func (c *GameController) Stop() {
+	c.visionReceiver.Stop()
 	c.autoRefServer.Server.Stop()
 	c.autoRefServerTls.Server.Stop()
 	c.teamServer.Server.Stop()

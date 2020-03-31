@@ -14,7 +14,7 @@ const changeOriginStateMachine = "StateMachine"
 // StateMachine describes the state machine that translates changes into new states
 type StateMachine struct {
 	gameConfig config.Game
-	geometry   config.Geometry
+	Geometry   config.Geometry
 	stageTimes map[state.Referee_Stage]time.Duration
 	rand       *rand.Rand
 }
@@ -23,15 +23,10 @@ type StateMachine struct {
 func NewStateMachine(gameConfig config.Game) (s *StateMachine) {
 	s = new(StateMachine)
 	s.gameConfig = gameConfig
-	s.geometry = gameConfig.DefaultGeometry[config.DivA]
+	s.Geometry = gameConfig.DefaultGeometry[config.DivA]
 	s.stageTimes = loadStageTimes(gameConfig)
 	s.rand = rand.New(rand.NewSource(time.Now().Unix()))
 	return
-}
-
-// UpdateGeometry sets a new geometry
-func (s *StateMachine) UpdateGeometry(geometry config.Geometry) {
-	s.geometry = geometry
 }
 
 // loadStageTimes loads the stage time durations from the game config into a map
