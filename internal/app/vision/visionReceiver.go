@@ -13,6 +13,7 @@ type Receiver struct {
 	address           string
 	DetectionCallback func(*SSL_DetectionFrame)
 	GeometryCallback  func(*SSL_GeometryData)
+	conn              *net.UDPConn
 }
 
 // NewReceiver creates a new receiver
@@ -42,18 +43,21 @@ func (v *Receiver) Start() {
 	}
 	log.Println("Receiving vision from", v.address)
 
-	go v.receive(conn)
+	v.conn = conn
+	go v.receive()
 }
 
 // Stop stops the receiver
 func (v *Receiver) Stop() {
-	// TODO
+	if err := v.conn.Close(); err != nil {
+		log.Printf("Could not close vision receiver: %v", err)
+	}
 }
 
-func (v *Receiver) receive(conn *net.UDPConn) {
+func (v *Receiver) receive() {
 	b := make([]byte, maxDatagramSize)
 	for {
-		n, err := conn.Read(b)
+		n, err := v.conn.Read(b)
 		if err != nil {
 			log.Print("Could not read", err)
 			time.Sleep(1 * time.Second)
