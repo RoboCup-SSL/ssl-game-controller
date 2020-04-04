@@ -5,10 +5,7 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/pkg/errors"
-	"log"
 	"os"
-	"os/signal"
-	"syscall"
 	"time"
 )
 
@@ -59,20 +56,6 @@ func (s *Store) Open() error {
 	}
 	s.file = f
 	return nil
-}
-
-// CloseOnExit makes sure to close the file when program exits
-func (s *Store) CloseOnExit() {
-	var gracefulStop = make(chan os.Signal)
-	signal.Notify(gracefulStop, syscall.SIGTERM)
-	signal.Notify(gracefulStop, syscall.SIGINT)
-	go func() {
-		<-gracefulStop
-		if err := s.Close(); err != nil {
-			log.Print(err)
-		}
-		os.Exit(0)
-	}()
 }
 
 // Close closes the store and underlying file

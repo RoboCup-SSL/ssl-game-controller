@@ -106,6 +106,9 @@ func (e *Engine) Start() error {
 // Stop stops the go routine that processes the change queue
 func (e *Engine) Stop() {
 	close(e.queue)
+	if err := e.stateStore.Close(); err != nil {
+		log.Printf("Could not close store: %v", err)
+	}
 }
 
 // CurrentState returns a deep copy of the current state
