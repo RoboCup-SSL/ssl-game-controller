@@ -5,11 +5,11 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/pkg/errors"
-	"io"
 	"log"
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 )
 
 // Store streams entries into a file store
@@ -133,22 +133,17 @@ func (s *Store) Add(entry *statemachine.StateChange) error {
 	return nil
 }
 
-// Backup copies the current store file to the given backup file
-func (s *Store) Backup(backupFilename string) error {
-	if s.file == nil {
-		return errors.New("Store is not open")
+func (s *Store) Reset() error {
+	if err := s.Close(); err != nil {
+		return errors.Wrap(err, "Could not close current store file")
 	}
-	backupFile, err := os.Create(backupFilename)
-	if err != nil {
-		return errors.Wrapf(err, "Could not create backup file %v", backupFilename)
+	backupFile := time.Now().Format("2006-01-02_15-04-05-MST") + "_" + s.filename
+	if err := os.Rename(s.filename, backupFile); err != nil {
+		return errors.Wrap(err, "Could not rename store file")
 	}
-	defer func() {
-		if err := backupFile.Close(); err != nil {
-			log.Println("Could not close backup file")
-		}
-	}()
-	if _, err := io.Copy(backupFile, s.file); err != nil {
-		return errors.Wrapf(err, "Could not copy store file (%v) to backup file (%v)", s.filename, backupFilename)
+	if err := s.Open(); err != nil {
+		return errors.Wrap(err, "Could not reopen new empty store")
 	}
+	s.entries = []*statemachine.StateChange{}
 	return nil
 }

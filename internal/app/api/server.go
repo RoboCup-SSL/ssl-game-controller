@@ -78,7 +78,7 @@ func (s *ServerConnection) publish() {
 
 	s.publishGcState()
 	s.publishState(s.gcEngine.CurrentState())
-	s.publishProtocol()
+	s.publishProtocolFull()
 
 	for {
 		select {
@@ -86,10 +86,13 @@ func (s *ServerConnection) publish() {
 			return
 		case change := <-hook:
 			s.publishState(change.State)
-			s.publishProtocol()
+			s.publishProtocolDelta()
 		case <-time.After(100 * time.Millisecond):
 			s.publishGcState()
 			s.publishState(s.gcEngine.CurrentState())
+			if s.gcEngine.LatestChangeId() != s.lastProtocolId {
+				s.publishProtocolFull()
+			}
 		}
 	}
 }
@@ -118,7 +121,21 @@ func (s *ServerConnection) publishGcState() {
 	}
 }
 
-func (s *ServerConnection) publishProtocol() {
+func (s *ServerConnection) publishProtocolFull() {
+	changes := s.gcEngine.LatestChangesUntil(-1)
+	entries := s.changesToProtocolEntries(changes)
+	delta := false
+	protocol := Protocol{Delta: &delta, Entry: entries}
+	out := Output{Protocol: &protocol}
+	s.publishOutput(&out)
+	if len(changes) > 0 {
+		s.lastProtocolId = *changes[len(changes)-1].Id
+	} else {
+		s.lastProtocolId = -1
+	}
+}
+
+func (s *ServerConnection) publishProtocolDelta() {
 
 	changes := s.gcEngine.LatestChangesUntil(s.lastProtocolId)
 
@@ -126,7 +143,16 @@ func (s *ServerConnection) publishProtocol() {
 		return
 	}
 
-	protocol := make([]*Protocol, len(changes))
+	entries := s.changesToProtocolEntries(changes)
+	delta := true
+	protocol := Protocol{Delta: &delta, Entry: entries}
+	out := Output{Protocol: &protocol}
+	s.publishOutput(&out)
+	s.lastProtocolId = *changes[len(changes)-1].Id
+}
+
+func (s *ServerConnection) changesToProtocolEntries(changes []*statemachine.StateChange) []*ProtocolEntry {
+	entries := make([]*ProtocolEntry, len(changes))
 	for i, change := range changes {
 		var matchTimeElapsed time.Duration
 		if change.State.MatchTimeStart.Seconds != 0 {
@@ -135,17 +161,14 @@ func (s *ServerConnection) publishProtocol() {
 			matchTimeElapsed = tChange.Sub(tStart)
 		}
 
-		protocol[len(changes)-1-i] = &Protocol{
+		entries[len(changes)-1-i] = &ProtocolEntry{
 			Id:               change.Id,
 			Change:           change.Change,
 			MatchTimeElapsed: ptypes.DurationProto(matchTimeElapsed),
 			StageTimeElapsed: change.State.StageTimeElapsed,
 		}
 	}
-
-	out := Output{Protocol: protocol}
-	s.publishOutput(&out)
-	s.lastProtocolId = *changes[len(changes)-1].Id
+	return entries
 }
 
 func (s *ServerConnection) publishOutput(wrapper *Output) {
@@ -197,6 +220,9 @@ func (a *Server) handleNewEventMessage(b []byte) {
 
 	if in.Change != nil {
 		a.gcEngine.Enqueue(in.Change)
+	}
+	if in.ResetMatch != nil && *in.ResetMatch {
+		a.gcEngine.ResetMatch()
 	}
 }
 

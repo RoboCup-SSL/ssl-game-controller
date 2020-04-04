@@ -138,6 +138,15 @@ func (e *Engine) LatestChangesUntil(id int32) (changes []*statemachine.StateChan
 	return
 }
 
+// LatestChangeId returns the latest change id or -1, if there is no change
+func (e *Engine) LatestChangeId() int32 {
+	entries := e.stateStore.Entries()
+	if len(entries) > 0 {
+		return *entries[len(entries)-1].Id
+	}
+	return -1
+}
+
 // processChanges listens for new changes on the queue and triggers ticks when there are no changes
 func (e *Engine) processChanges() {
 	for {
@@ -150,6 +159,17 @@ func (e *Engine) processChanges() {
 		case <-time.After(10 * time.Millisecond):
 			e.Tick()
 		}
+	}
+}
+
+// ResetMatch creates a backup of the current state store, removes it and starts with a fresh state
+func (e *Engine) ResetMatch() {
+	e.gcStateMutex.Lock()
+	defer e.gcStateMutex.Unlock()
+	if err := e.stateStore.Reset(); err != nil {
+		log.Printf("Could not reset store: %v", err)
+	} else {
+		e.currentState = e.initialStateFromStore()
 	}
 }
 

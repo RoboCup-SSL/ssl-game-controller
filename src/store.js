@@ -21,7 +21,11 @@ export default new Vuex.Store({
         },
         SOCKET_ONMESSAGE(state, message) {
             if (message.protocol) {
-                state.protocol = message.protocol.concat(state.protocol);
+                if (message.protocol.delta) {
+                    state.protocol = message.protocol.entry.concat(state.protocol);
+                } else {
+                    state.protocol = message.protocol.entry;
+                }
             }
             if (message.gcState) {
                 state.gcState = message.gcState;

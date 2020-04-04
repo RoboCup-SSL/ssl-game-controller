@@ -11,10 +11,15 @@ import "google/protobuf/duration.proto";
 message Output {
     optional State match_state = 1;
     optional GcState gc_state = 2;
-    repeated Protocol protocol = 3;
+    optional Protocol protocol = 3;
 }
 
 message Protocol {
+    optional bool delta = 1;
+    repeated ProtocolEntry entry = 2;
+}
+
+message ProtocolEntry {
     optional int32 id = 1;
     optional Change change = 2;
     optional google.protobuf.Duration match_time_elapsed = 3;
@@ -23,4 +28,5 @@ message Protocol {
 
 message Input {
     optional Change change = 1;
+    optional bool reset_match = 2;
 }

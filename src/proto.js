@@ -20525,7 +20525,7 @@ export const Output = $root.Output = (() => {
      * @interface IOutput
      * @property {IState|null} [matchState] Output matchState
      * @property {IGcState|null} [gcState] Output gcState
-     * @property {Array.<IProtocol>|null} [protocol] Output protocol
+     * @property {IProtocol|null} [protocol] Output protocol
      */
 
     /**
@@ -20537,7 +20537,6 @@ export const Output = $root.Output = (() => {
      * @param {IOutput=} [properties] Properties to set
      */
     function Output(properties) {
-        this.protocol = [];
         if (properties)
             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
@@ -20562,11 +20561,11 @@ export const Output = $root.Output = (() => {
 
     /**
      * Output protocol.
-     * @member {Array.<IProtocol>} protocol
+     * @member {IProtocol|null|undefined} protocol
      * @memberof Output
      * @instance
      */
-    Output.prototype.protocol = $util.emptyArray;
+    Output.prototype.protocol = null;
 
     /**
      * Creates a new Output instance using the specified properties.
@@ -20596,9 +20595,8 @@ export const Output = $root.Output = (() => {
             $root.State.encode(message.matchState, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
         if (message.gcState != null && message.hasOwnProperty("gcState"))
             $root.GcState.encode(message.gcState, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-        if (message.protocol != null && message.protocol.length)
-            for (let i = 0; i < message.protocol.length; ++i)
-                $root.Protocol.encode(message.protocol[i], writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+        if (message.protocol != null && message.hasOwnProperty("protocol"))
+            $root.Protocol.encode(message.protocol, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
         return writer;
     };
 
@@ -20640,9 +20638,7 @@ export const Output = $root.Output = (() => {
                 message.gcState = $root.GcState.decode(reader, reader.uint32());
                 break;
             case 3:
-                if (!(message.protocol && message.protocol.length))
-                    message.protocol = [];
-                message.protocol.push($root.Protocol.decode(reader, reader.uint32()));
+                message.protocol = $root.Protocol.decode(reader, reader.uint32());
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -20690,13 +20686,9 @@ export const Output = $root.Output = (() => {
                 return "gcState." + error;
         }
         if (message.protocol != null && message.hasOwnProperty("protocol")) {
-            if (!Array.isArray(message.protocol))
-                return "protocol: array expected";
-            for (let i = 0; i < message.protocol.length; ++i) {
-                let error = $root.Protocol.verify(message.protocol[i]);
-                if (error)
-                    return "protocol." + error;
-            }
+            let error = $root.Protocol.verify(message.protocol);
+            if (error)
+                return "protocol." + error;
         }
         return null;
     };
@@ -20723,15 +20715,10 @@ export const Output = $root.Output = (() => {
                 throw TypeError(".Output.gcState: object expected");
             message.gcState = $root.GcState.fromObject(object.gcState);
         }
-        if (object.protocol) {
-            if (!Array.isArray(object.protocol))
-                throw TypeError(".Output.protocol: array expected");
-            message.protocol = [];
-            for (let i = 0; i < object.protocol.length; ++i) {
-                if (typeof object.protocol[i] !== "object")
-                    throw TypeError(".Output.protocol: object expected");
-                message.protocol[i] = $root.Protocol.fromObject(object.protocol[i]);
-            }
+        if (object.protocol != null) {
+            if (typeof object.protocol !== "object")
+                throw TypeError(".Output.protocol: object expected");
+            message.protocol = $root.Protocol.fromObject(object.protocol);
         }
         return message;
     };
@@ -20749,21 +20736,17 @@ export const Output = $root.Output = (() => {
         if (!options)
             options = {};
         let object = {};
-        if (options.arrays || options.defaults)
-            object.protocol = [];
         if (options.defaults) {
             object.matchState = null;
             object.gcState = null;
+            object.protocol = null;
         }
         if (message.matchState != null && message.hasOwnProperty("matchState"))
             object.matchState = $root.State.toObject(message.matchState, options);
         if (message.gcState != null && message.hasOwnProperty("gcState"))
             object.gcState = $root.GcState.toObject(message.gcState, options);
-        if (message.protocol && message.protocol.length) {
-            object.protocol = [];
-            for (let j = 0; j < message.protocol.length; ++j)
-                object.protocol[j] = $root.Protocol.toObject(message.protocol[j], options);
-        }
+        if (message.protocol != null && message.hasOwnProperty("protocol"))
+            object.protocol = $root.Protocol.toObject(message.protocol, options);
         return object;
     };
 
@@ -20787,10 +20770,8 @@ export const Protocol = $root.Protocol = (() => {
      * Properties of a Protocol.
      * @exports IProtocol
      * @interface IProtocol
-     * @property {number|null} [id] Protocol id
-     * @property {IChange|null} [change] Protocol change
-     * @property {google.protobuf.IDuration|null} [matchTimeElapsed] Protocol matchTimeElapsed
-     * @property {google.protobuf.IDuration|null} [stageTimeElapsed] Protocol stageTimeElapsed
+     * @property {boolean|null} [delta] Protocol delta
+     * @property {Array.<IProtocolEntry>|null} [entry] Protocol entry
      */
 
     /**
@@ -20802,6 +20783,7 @@ export const Protocol = $root.Protocol = (() => {
      * @param {IProtocol=} [properties] Properties to set
      */
     function Protocol(properties) {
+        this.entry = [];
         if (properties)
             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
@@ -20809,36 +20791,20 @@ export const Protocol = $root.Protocol = (() => {
     }
 
     /**
-     * Protocol id.
-     * @member {number} id
+     * Protocol delta.
+     * @member {boolean} delta
      * @memberof Protocol
      * @instance
      */
-    Protocol.prototype.id = 0;
+    Protocol.prototype.delta = false;
 
     /**
-     * Protocol change.
-     * @member {IChange|null|undefined} change
+     * Protocol entry.
+     * @member {Array.<IProtocolEntry>} entry
      * @memberof Protocol
      * @instance
      */
-    Protocol.prototype.change = null;
-
-    /**
-     * Protocol matchTimeElapsed.
-     * @member {google.protobuf.IDuration|null|undefined} matchTimeElapsed
-     * @memberof Protocol
-     * @instance
-     */
-    Protocol.prototype.matchTimeElapsed = null;
-
-    /**
-     * Protocol stageTimeElapsed.
-     * @member {google.protobuf.IDuration|null|undefined} stageTimeElapsed
-     * @memberof Protocol
-     * @instance
-     */
-    Protocol.prototype.stageTimeElapsed = null;
+    Protocol.prototype.entry = $util.emptyArray;
 
     /**
      * Creates a new Protocol instance using the specified properties.
@@ -20864,14 +20830,11 @@ export const Protocol = $root.Protocol = (() => {
     Protocol.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.id != null && message.hasOwnProperty("id"))
-            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.id);
-        if (message.change != null && message.hasOwnProperty("change"))
-            $root.Change.encode(message.change, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-        if (message.matchTimeElapsed != null && message.hasOwnProperty("matchTimeElapsed"))
-            $root.google.protobuf.Duration.encode(message.matchTimeElapsed, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-        if (message.stageTimeElapsed != null && message.hasOwnProperty("stageTimeElapsed"))
-            $root.google.protobuf.Duration.encode(message.stageTimeElapsed, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+        if (message.delta != null && message.hasOwnProperty("delta"))
+            writer.uint32(/* id 1, wireType 0 =*/8).bool(message.delta);
+        if (message.entry != null && message.entry.length)
+            for (let i = 0; i < message.entry.length; ++i)
+                $root.ProtocolEntry.encode(message.entry[i], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
         return writer;
     };
 
@@ -20907,16 +20870,12 @@ export const Protocol = $root.Protocol = (() => {
             let tag = reader.uint32();
             switch (tag >>> 3) {
             case 1:
-                message.id = reader.int32();
+                message.delta = reader.bool();
                 break;
             case 2:
-                message.change = $root.Change.decode(reader, reader.uint32());
-                break;
-            case 3:
-                message.matchTimeElapsed = $root.google.protobuf.Duration.decode(reader, reader.uint32());
-                break;
-            case 4:
-                message.stageTimeElapsed = $root.google.protobuf.Duration.decode(reader, reader.uint32());
+                if (!(message.entry && message.entry.length))
+                    message.entry = [];
+                message.entry.push($root.ProtocolEntry.decode(reader, reader.uint32()));
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -20953,6 +20912,261 @@ export const Protocol = $root.Protocol = (() => {
     Protocol.verify = function verify(message) {
         if (typeof message !== "object" || message === null)
             return "object expected";
+        if (message.delta != null && message.hasOwnProperty("delta"))
+            if (typeof message.delta !== "boolean")
+                return "delta: boolean expected";
+        if (message.entry != null && message.hasOwnProperty("entry")) {
+            if (!Array.isArray(message.entry))
+                return "entry: array expected";
+            for (let i = 0; i < message.entry.length; ++i) {
+                let error = $root.ProtocolEntry.verify(message.entry[i]);
+                if (error)
+                    return "entry." + error;
+            }
+        }
+        return null;
+    };
+
+    /**
+     * Creates a Protocol message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof Protocol
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {Protocol} Protocol
+     */
+    Protocol.fromObject = function fromObject(object) {
+        if (object instanceof $root.Protocol)
+            return object;
+        let message = new $root.Protocol();
+        if (object.delta != null)
+            message.delta = Boolean(object.delta);
+        if (object.entry) {
+            if (!Array.isArray(object.entry))
+                throw TypeError(".Protocol.entry: array expected");
+            message.entry = [];
+            for (let i = 0; i < object.entry.length; ++i) {
+                if (typeof object.entry[i] !== "object")
+                    throw TypeError(".Protocol.entry: object expected");
+                message.entry[i] = $root.ProtocolEntry.fromObject(object.entry[i]);
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a Protocol message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof Protocol
+     * @static
+     * @param {Protocol} message Protocol
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    Protocol.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        let object = {};
+        if (options.arrays || options.defaults)
+            object.entry = [];
+        if (options.defaults)
+            object.delta = false;
+        if (message.delta != null && message.hasOwnProperty("delta"))
+            object.delta = message.delta;
+        if (message.entry && message.entry.length) {
+            object.entry = [];
+            for (let j = 0; j < message.entry.length; ++j)
+                object.entry[j] = $root.ProtocolEntry.toObject(message.entry[j], options);
+        }
+        return object;
+    };
+
+    /**
+     * Converts this Protocol to JSON.
+     * @function toJSON
+     * @memberof Protocol
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    Protocol.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    return Protocol;
+})();
+
+export const ProtocolEntry = $root.ProtocolEntry = (() => {
+
+    /**
+     * Properties of a ProtocolEntry.
+     * @exports IProtocolEntry
+     * @interface IProtocolEntry
+     * @property {number|null} [id] ProtocolEntry id
+     * @property {IChange|null} [change] ProtocolEntry change
+     * @property {google.protobuf.IDuration|null} [matchTimeElapsed] ProtocolEntry matchTimeElapsed
+     * @property {google.protobuf.IDuration|null} [stageTimeElapsed] ProtocolEntry stageTimeElapsed
+     */
+
+    /**
+     * Constructs a new ProtocolEntry.
+     * @exports ProtocolEntry
+     * @classdesc Represents a ProtocolEntry.
+     * @implements IProtocolEntry
+     * @constructor
+     * @param {IProtocolEntry=} [properties] Properties to set
+     */
+    function ProtocolEntry(properties) {
+        if (properties)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * ProtocolEntry id.
+     * @member {number} id
+     * @memberof ProtocolEntry
+     * @instance
+     */
+    ProtocolEntry.prototype.id = 0;
+
+    /**
+     * ProtocolEntry change.
+     * @member {IChange|null|undefined} change
+     * @memberof ProtocolEntry
+     * @instance
+     */
+    ProtocolEntry.prototype.change = null;
+
+    /**
+     * ProtocolEntry matchTimeElapsed.
+     * @member {google.protobuf.IDuration|null|undefined} matchTimeElapsed
+     * @memberof ProtocolEntry
+     * @instance
+     */
+    ProtocolEntry.prototype.matchTimeElapsed = null;
+
+    /**
+     * ProtocolEntry stageTimeElapsed.
+     * @member {google.protobuf.IDuration|null|undefined} stageTimeElapsed
+     * @memberof ProtocolEntry
+     * @instance
+     */
+    ProtocolEntry.prototype.stageTimeElapsed = null;
+
+    /**
+     * Creates a new ProtocolEntry instance using the specified properties.
+     * @function create
+     * @memberof ProtocolEntry
+     * @static
+     * @param {IProtocolEntry=} [properties] Properties to set
+     * @returns {ProtocolEntry} ProtocolEntry instance
+     */
+    ProtocolEntry.create = function create(properties) {
+        return new ProtocolEntry(properties);
+    };
+
+    /**
+     * Encodes the specified ProtocolEntry message. Does not implicitly {@link ProtocolEntry.verify|verify} messages.
+     * @function encode
+     * @memberof ProtocolEntry
+     * @static
+     * @param {IProtocolEntry} message ProtocolEntry message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    ProtocolEntry.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.id != null && message.hasOwnProperty("id"))
+            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.id);
+        if (message.change != null && message.hasOwnProperty("change"))
+            $root.Change.encode(message.change, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+        if (message.matchTimeElapsed != null && message.hasOwnProperty("matchTimeElapsed"))
+            $root.google.protobuf.Duration.encode(message.matchTimeElapsed, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+        if (message.stageTimeElapsed != null && message.hasOwnProperty("stageTimeElapsed"))
+            $root.google.protobuf.Duration.encode(message.stageTimeElapsed, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+        return writer;
+    };
+
+    /**
+     * Encodes the specified ProtocolEntry message, length delimited. Does not implicitly {@link ProtocolEntry.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof ProtocolEntry
+     * @static
+     * @param {IProtocolEntry} message ProtocolEntry message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    ProtocolEntry.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a ProtocolEntry message from the specified reader or buffer.
+     * @function decode
+     * @memberof ProtocolEntry
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {ProtocolEntry} ProtocolEntry
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    ProtocolEntry.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.ProtocolEntry();
+        while (reader.pos < end) {
+            let tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1:
+                message.id = reader.int32();
+                break;
+            case 2:
+                message.change = $root.Change.decode(reader, reader.uint32());
+                break;
+            case 3:
+                message.matchTimeElapsed = $root.google.protobuf.Duration.decode(reader, reader.uint32());
+                break;
+            case 4:
+                message.stageTimeElapsed = $root.google.protobuf.Duration.decode(reader, reader.uint32());
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes a ProtocolEntry message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof ProtocolEntry
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {ProtocolEntry} ProtocolEntry
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    ProtocolEntry.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a ProtocolEntry message.
+     * @function verify
+     * @memberof ProtocolEntry
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    ProtocolEntry.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
         if (message.id != null && message.hasOwnProperty("id"))
             if (!$util.isInteger(message.id))
                 return "id: integer expected";
@@ -20975,47 +21189,47 @@ export const Protocol = $root.Protocol = (() => {
     };
 
     /**
-     * Creates a Protocol message from a plain object. Also converts values to their respective internal types.
+     * Creates a ProtocolEntry message from a plain object. Also converts values to their respective internal types.
      * @function fromObject
-     * @memberof Protocol
+     * @memberof ProtocolEntry
      * @static
      * @param {Object.<string,*>} object Plain object
-     * @returns {Protocol} Protocol
+     * @returns {ProtocolEntry} ProtocolEntry
      */
-    Protocol.fromObject = function fromObject(object) {
-        if (object instanceof $root.Protocol)
+    ProtocolEntry.fromObject = function fromObject(object) {
+        if (object instanceof $root.ProtocolEntry)
             return object;
-        let message = new $root.Protocol();
+        let message = new $root.ProtocolEntry();
         if (object.id != null)
             message.id = object.id | 0;
         if (object.change != null) {
             if (typeof object.change !== "object")
-                throw TypeError(".Protocol.change: object expected");
+                throw TypeError(".ProtocolEntry.change: object expected");
             message.change = $root.Change.fromObject(object.change);
         }
         if (object.matchTimeElapsed != null) {
             if (typeof object.matchTimeElapsed !== "object")
-                throw TypeError(".Protocol.matchTimeElapsed: object expected");
+                throw TypeError(".ProtocolEntry.matchTimeElapsed: object expected");
             message.matchTimeElapsed = $root.google.protobuf.Duration.fromObject(object.matchTimeElapsed);
         }
         if (object.stageTimeElapsed != null) {
             if (typeof object.stageTimeElapsed !== "object")
-                throw TypeError(".Protocol.stageTimeElapsed: object expected");
+                throw TypeError(".ProtocolEntry.stageTimeElapsed: object expected");
             message.stageTimeElapsed = $root.google.protobuf.Duration.fromObject(object.stageTimeElapsed);
         }
         return message;
     };
 
     /**
-     * Creates a plain object from a Protocol message. Also converts values to other types if specified.
+     * Creates a plain object from a ProtocolEntry message. Also converts values to other types if specified.
      * @function toObject
-     * @memberof Protocol
+     * @memberof ProtocolEntry
      * @static
-     * @param {Protocol} message Protocol
+     * @param {ProtocolEntry} message ProtocolEntry
      * @param {$protobuf.IConversionOptions} [options] Conversion options
      * @returns {Object.<string,*>} Plain object
      */
-    Protocol.toObject = function toObject(message, options) {
+    ProtocolEntry.toObject = function toObject(message, options) {
         if (!options)
             options = {};
         let object = {};
@@ -21037,17 +21251,17 @@ export const Protocol = $root.Protocol = (() => {
     };
 
     /**
-     * Converts this Protocol to JSON.
+     * Converts this ProtocolEntry to JSON.
      * @function toJSON
-     * @memberof Protocol
+     * @memberof ProtocolEntry
      * @instance
      * @returns {Object.<string,*>} JSON object
      */
-    Protocol.prototype.toJSON = function toJSON() {
+    ProtocolEntry.prototype.toJSON = function toJSON() {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
-    return Protocol;
+    return ProtocolEntry;
 })();
 
 export const Input = $root.Input = (() => {
@@ -21057,6 +21271,7 @@ export const Input = $root.Input = (() => {
      * @exports IInput
      * @interface IInput
      * @property {IChange|null} [change] Input change
+     * @property {boolean|null} [resetMatch] Input resetMatch
      */
 
     /**
@@ -21081,6 +21296,14 @@ export const Input = $root.Input = (() => {
      * @instance
      */
     Input.prototype.change = null;
+
+    /**
+     * Input resetMatch.
+     * @member {boolean} resetMatch
+     * @memberof Input
+     * @instance
+     */
+    Input.prototype.resetMatch = false;
 
     /**
      * Creates a new Input instance using the specified properties.
@@ -21108,6 +21331,8 @@ export const Input = $root.Input = (() => {
             writer = $Writer.create();
         if (message.change != null && message.hasOwnProperty("change"))
             $root.Change.encode(message.change, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+        if (message.resetMatch != null && message.hasOwnProperty("resetMatch"))
+            writer.uint32(/* id 2, wireType 0 =*/16).bool(message.resetMatch);
         return writer;
     };
 
@@ -21144,6 +21369,9 @@ export const Input = $root.Input = (() => {
             switch (tag >>> 3) {
             case 1:
                 message.change = $root.Change.decode(reader, reader.uint32());
+                break;
+            case 2:
+                message.resetMatch = reader.bool();
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -21185,6 +21413,9 @@ export const Input = $root.Input = (() => {
             if (error)
                 return "change." + error;
         }
+        if (message.resetMatch != null && message.hasOwnProperty("resetMatch"))
+            if (typeof message.resetMatch !== "boolean")
+                return "resetMatch: boolean expected";
         return null;
     };
 
@@ -21205,6 +21436,8 @@ export const Input = $root.Input = (() => {
                 throw TypeError(".Input.change: object expected");
             message.change = $root.Change.fromObject(object.change);
         }
+        if (object.resetMatch != null)
+            message.resetMatch = Boolean(object.resetMatch);
         return message;
     };
 
@@ -21221,10 +21454,14 @@ export const Input = $root.Input = (() => {
         if (!options)
             options = {};
         let object = {};
-        if (options.defaults)
+        if (options.defaults) {
             object.change = null;
+            object.resetMatch = false;
+        }
         if (message.change != null && message.hasOwnProperty("change"))
             object.change = $root.Change.toObject(message.change, options);
+        if (message.resetMatch != null && message.hasOwnProperty("resetMatch"))
+            object.resetMatch = message.resetMatch;
         return object;
     };
 

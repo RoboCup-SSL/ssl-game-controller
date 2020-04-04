@@ -44,7 +44,7 @@
 <script>
     import TeamSelection from "../common/TeamSelection";
     import DualSwitch from "../common/DualSwitch";
-    import {submitChange} from "../../submit";
+    import {resetMatch, submitChange} from "../../submit";
     import {TEAM_YELLOW} from "../../refereeState";
 
     export default {
@@ -59,7 +59,7 @@
         },
         methods: {
             resetMatch: function () {
-                // TODO
+                resetMatch();
             },
             switchColor: function () {
                 submitChange({switchColors: {}});
@@ -74,7 +74,7 @@
                 submitChange({updateConfig: {firstKickoffTeam: team}});
             },
             showMsgBoxConfirmResetGame() {
-                this.$bvModal.msgBoxConfirm('Are sure to start a new game and reset the whole state? This can NOT be reverted (easily).', {
+                this.$bvModal.msgBoxConfirm('Are sure to start a new game and reset the whole state? A backup file of the current state will be created.', {
                     title: 'Please Confirm',
                     size: 'sm',
                     buttonSize: 'sm',
@@ -88,6 +88,7 @@
                     .then(value => {
                         if (value) {
                             this.resetMatch();
+                            this.$root.$emit('bv::hide::modal', 'settings-modal');
                         }
                     })
                     .catch(err => {
