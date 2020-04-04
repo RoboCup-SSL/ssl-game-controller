@@ -94,6 +94,14 @@
                 }
                 return '';
             },
+            gameEventDetails(event) {
+                for (let key of Object.keys(event)) {
+                    if (key !== 'origin' && key !== 'type') {
+                        return event[key];
+                    }
+                }
+                return {};
+            },
             entryDetails(entry) {
                 let type = this.protocolType(entry);
                 return JSON.stringify(entry.change[type], null, 2);
@@ -110,10 +118,9 @@
                     case 'yellowCardOver':
                         return entry.change.yellowCardOver.forTeam;
                     case 'addGameEvent':
-                        // TODO this does not work
-                        return entry.change.addGameEvent.gameEvent.forTeam;
+                        return this.gameEventDetails(entry.change.addGameEvent.gameEvent).byTeam;
                     case 'addProposedGameEvent':
-                        return entry.change.addProposedGameEvent.gameEvent.forTeam;
+                        return this.gameEventDetails(entry.change.addProposedGameEvent.gameEvent).byTeam;
                     case 'updateTeamState':
                         return entry.change.updateTeamState.forTeam;
                     default:
