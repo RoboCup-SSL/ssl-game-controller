@@ -24,6 +24,8 @@ var clientIdentifier = flag.String("identifier", "test", "The identifier of the 
 
 var privateKey *rsa.PrivateKey
 
+var metadata *rcon.GameStateMetadata
+
 type Client struct {
 	conn  net.Conn
 	token string
@@ -33,6 +35,9 @@ func main() {
 	flag.Parse()
 
 	privateKey = client.LoadPrivateKey(*privateKeyLocation)
+	metadata = new(rcon.GameStateMetadata)
+	metadata.TeamYellow = new(rcon.GameStateMetadataTeam)
+	metadata.TeamBlue = new(rcon.GameStateMetadataTeam)
 
 	if *autoDetectAddress {
 		log.Print("Trying to detect host based on incoming referee messages...")
@@ -47,7 +52,11 @@ func main() {
 	if err != nil {
 		log.Fatal("could not connect to game-controller at ", *refBoxAddr)
 	}
-	defer conn.Close()
+	defer func() {
+		if err := conn.Close(); err != nil {
+			log.Printf("Could not close connection: %v", err)
+		}
+	}()
 	log.Printf("Connected to game-controller at %v", *refBoxAddr)
 	c := Client{}
 	c.conn = conn
@@ -61,6 +70,20 @@ func main() {
 		}
 	}()
 
+	commands := map[string]func([]string){}
+	commands["ballLeftField"] = func(_ []string) {
+		c.sendBallLeftField()
+	}
+	commands["botCrashUnique"] = func(_ []string) {
+		c.sendBotCrashUnique()
+	}
+	commands["doubleTouch"] = func(_ []string) {
+		c.sendDoubleTouch()
+	}
+	commands["ready"] = func(args []string) {
+		c.sendReady(args)
+	}
+
 	reader := bufio.NewReader(os.Stdin)
 	for {
 		fmt.Print("-> ")
@@ -73,19 +96,14 @@ func main() {
 		}
 		// convert CRLF to LF
 		text = strings.Replace(text, "\n", "", -1)
-
-		if strings.Compare("ballLeftField", text) == 0 {
-			c.sendBallLeftField()
-		} else if strings.Compare("botCrashUnique", text) == 0 {
-			c.sendBotCrashUnique()
-		} else if strings.Compare("doubleTouch", text) == 0 {
-			c.sendDoubleTouch()
+		cmd := strings.Split(text, " ")
+		if fn, ok := commands[cmd[0]]; ok {
+			fn(cmd[1:])
 		} else {
-			fmt.Println("Available commands: ")
-			fmt.Printf("  %-20s: %s\n", "help", "Show this help text")
-			fmt.Printf("  %-20s: %s\n", "ballLeftField", "Send game event")
-			fmt.Printf("  %-20s: %s\n", "botCrashUnique", "Send game event")
-			fmt.Printf("  %-20s: %s\n", "doubleTouch", "Send game event")
+			fmt.Println("Available commands:")
+			for cmd := range commands {
+				fmt.Printf("  %-20s\n", cmd)
+			}
 		}
 	}
 }
@@ -210,6 +228,24 @@ func (c *Client) sendRequest(request *rcon.AutoRefToController, doLog bool) {
 	} else {
 		c.token = ""
 	}
+}
+
+func (c *Client) sendReady(args []string) {
+	if len(args) > 0 {
+		metadata.ReadyToContinue = new(bool)
+		if args[0] == "true" {
+			*metadata.ReadyToContinue = true
+		} else {
+			*metadata.ReadyToContinue = false
+		}
+	} else {
+		metadata.ReadyToContinue = nil
+	}
+
+	request := rcon.AutoRefToController{
+		GameStateMetadata: metadata,
+	}
+	c.sendRequest(&request, true)
 }
 
 func logIf(doLog bool, v ...interface{}) {
