@@ -10,8 +10,8 @@ import (
 	"time"
 )
 
-// Tick updates the timers of the state and triggers changes if required
-func (e *Engine) Tick() {
+// tick updates the timers of the state and triggers changes if required
+func (e *Engine) tick() {
 	currentTime := e.timeProvider()
 	delta := currentTime.Sub(e.lastTimeUpdate)
 	e.lastTimeUpdate = currentTime

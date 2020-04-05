@@ -160,7 +160,8 @@ func (e *Engine) processChanges() {
 			}
 			e.processChange(change)
 		case <-time.After(10 * time.Millisecond):
-			e.Tick()
+			e.tick()
+			e.processAutoRefFlags()
 		}
 	}
 }
