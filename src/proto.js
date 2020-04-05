@@ -21487,6 +21487,7 @@ export const GcState = $root.GcState = (() => {
      * @interface IGcState
      * @property {Object.<string,IGcStateTeam>|null} [teamState] GcState teamState
      * @property {Object.<string,IGcStateAutoRef>|null} [autoRefState] GcState autoRefState
+     * @property {Object.<string,IGcStateTracker>|null} [trackerState] GcState trackerState
      */
 
     /**
@@ -21500,6 +21501,7 @@ export const GcState = $root.GcState = (() => {
     function GcState(properties) {
         this.teamState = {};
         this.autoRefState = {};
+        this.trackerState = {};
         if (properties)
             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
@@ -21521,6 +21523,14 @@ export const GcState = $root.GcState = (() => {
      * @instance
      */
     GcState.prototype.autoRefState = $util.emptyObject;
+
+    /**
+     * GcState trackerState.
+     * @member {Object.<string,IGcStateTracker>} trackerState
+     * @memberof GcState
+     * @instance
+     */
+    GcState.prototype.trackerState = $util.emptyObject;
 
     /**
      * Creates a new GcState instance using the specified properties.
@@ -21555,6 +21565,11 @@ export const GcState = $root.GcState = (() => {
             for (let keys = Object.keys(message.autoRefState), i = 0; i < keys.length; ++i) {
                 writer.uint32(/* id 2, wireType 2 =*/18).fork().uint32(/* id 1, wireType 2 =*/10).string(keys[i]);
                 $root.GcStateAutoRef.encode(message.autoRefState[keys[i]], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim().ldelim();
+            }
+        if (message.trackerState != null && message.hasOwnProperty("trackerState"))
+            for (let keys = Object.keys(message.trackerState), i = 0; i < keys.length; ++i) {
+                writer.uint32(/* id 3, wireType 2 =*/26).fork().uint32(/* id 1, wireType 2 =*/10).string(keys[i]);
+                $root.GcStateTracker.encode(message.trackerState[keys[i]], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim().ldelim();
             }
         return writer;
     };
@@ -21605,6 +21620,14 @@ export const GcState = $root.GcState = (() => {
                 key = reader.string();
                 reader.pos++;
                 message.autoRefState[key] = $root.GcStateAutoRef.decode(reader, reader.uint32());
+                break;
+            case 3:
+                reader.skip().pos++;
+                if (message.trackerState === $util.emptyObject)
+                    message.trackerState = {};
+                key = reader.string();
+                reader.pos++;
+                message.trackerState[key] = $root.GcStateTracker.decode(reader, reader.uint32());
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -21661,6 +21684,16 @@ export const GcState = $root.GcState = (() => {
                     return "autoRefState." + error;
             }
         }
+        if (message.trackerState != null && message.hasOwnProperty("trackerState")) {
+            if (!$util.isObject(message.trackerState))
+                return "trackerState: object expected";
+            let key = Object.keys(message.trackerState);
+            for (let i = 0; i < key.length; ++i) {
+                let error = $root.GcStateTracker.verify(message.trackerState[key[i]]);
+                if (error)
+                    return "trackerState." + error;
+            }
+        }
         return null;
     };
 
@@ -21696,6 +21729,16 @@ export const GcState = $root.GcState = (() => {
                 message.autoRefState[keys[i]] = $root.GcStateAutoRef.fromObject(object.autoRefState[keys[i]]);
             }
         }
+        if (object.trackerState) {
+            if (typeof object.trackerState !== "object")
+                throw TypeError(".GcState.trackerState: object expected");
+            message.trackerState = {};
+            for (let keys = Object.keys(object.trackerState), i = 0; i < keys.length; ++i) {
+                if (typeof object.trackerState[keys[i]] !== "object")
+                    throw TypeError(".GcState.trackerState: object expected");
+                message.trackerState[keys[i]] = $root.GcStateTracker.fromObject(object.trackerState[keys[i]]);
+            }
+        }
         return message;
     };
 
@@ -21715,6 +21758,7 @@ export const GcState = $root.GcState = (() => {
         if (options.objects || options.defaults) {
             object.teamState = {};
             object.autoRefState = {};
+            object.trackerState = {};
         }
         let keys2;
         if (message.teamState && (keys2 = Object.keys(message.teamState)).length) {
@@ -21726,6 +21770,11 @@ export const GcState = $root.GcState = (() => {
             object.autoRefState = {};
             for (let j = 0; j < keys2.length; ++j)
                 object.autoRefState[keys2[j]] = $root.GcStateAutoRef.toObject(message.autoRefState[keys2[j]], options);
+        }
+        if (message.trackerState && (keys2 = Object.keys(message.trackerState)).length) {
+            object.trackerState = {};
+            for (let j = 0; j < keys2.length; ++j)
+                object.trackerState[keys2[j]] = $root.GcStateTracker.toObject(message.trackerState[keys2[j]], options);
         }
         return object;
     };
@@ -22481,6 +22530,226 @@ export const GcStateAutoRefTeam = $root.GcStateAutoRefTeam = (() => {
     };
 
     return GcStateAutoRefTeam;
+})();
+
+export const GcStateTracker = $root.GcStateTracker = (() => {
+
+    /**
+     * Properties of a GcStateTracker.
+     * @exports IGcStateTracker
+     * @interface IGcStateTracker
+     * @property {ILocation|null} [ballPos] GcStateTracker ballPos
+     * @property {ILocation|null} [ballVel] GcStateTracker ballVel
+     */
+
+    /**
+     * Constructs a new GcStateTracker.
+     * @exports GcStateTracker
+     * @classdesc Represents a GcStateTracker.
+     * @implements IGcStateTracker
+     * @constructor
+     * @param {IGcStateTracker=} [properties] Properties to set
+     */
+    function GcStateTracker(properties) {
+        if (properties)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * GcStateTracker ballPos.
+     * @member {ILocation|null|undefined} ballPos
+     * @memberof GcStateTracker
+     * @instance
+     */
+    GcStateTracker.prototype.ballPos = null;
+
+    /**
+     * GcStateTracker ballVel.
+     * @member {ILocation|null|undefined} ballVel
+     * @memberof GcStateTracker
+     * @instance
+     */
+    GcStateTracker.prototype.ballVel = null;
+
+    /**
+     * Creates a new GcStateTracker instance using the specified properties.
+     * @function create
+     * @memberof GcStateTracker
+     * @static
+     * @param {IGcStateTracker=} [properties] Properties to set
+     * @returns {GcStateTracker} GcStateTracker instance
+     */
+    GcStateTracker.create = function create(properties) {
+        return new GcStateTracker(properties);
+    };
+
+    /**
+     * Encodes the specified GcStateTracker message. Does not implicitly {@link GcStateTracker.verify|verify} messages.
+     * @function encode
+     * @memberof GcStateTracker
+     * @static
+     * @param {IGcStateTracker} message GcStateTracker message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    GcStateTracker.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.ballPos != null && message.hasOwnProperty("ballPos"))
+            $root.Location.encode(message.ballPos, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+        if (message.ballVel != null && message.hasOwnProperty("ballVel"))
+            $root.Location.encode(message.ballVel, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+        return writer;
+    };
+
+    /**
+     * Encodes the specified GcStateTracker message, length delimited. Does not implicitly {@link GcStateTracker.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof GcStateTracker
+     * @static
+     * @param {IGcStateTracker} message GcStateTracker message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    GcStateTracker.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a GcStateTracker message from the specified reader or buffer.
+     * @function decode
+     * @memberof GcStateTracker
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {GcStateTracker} GcStateTracker
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    GcStateTracker.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.GcStateTracker();
+        while (reader.pos < end) {
+            let tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1:
+                message.ballPos = $root.Location.decode(reader, reader.uint32());
+                break;
+            case 2:
+                message.ballVel = $root.Location.decode(reader, reader.uint32());
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes a GcStateTracker message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof GcStateTracker
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {GcStateTracker} GcStateTracker
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    GcStateTracker.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a GcStateTracker message.
+     * @function verify
+     * @memberof GcStateTracker
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    GcStateTracker.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (message.ballPos != null && message.hasOwnProperty("ballPos")) {
+            let error = $root.Location.verify(message.ballPos);
+            if (error)
+                return "ballPos." + error;
+        }
+        if (message.ballVel != null && message.hasOwnProperty("ballVel")) {
+            let error = $root.Location.verify(message.ballVel);
+            if (error)
+                return "ballVel." + error;
+        }
+        return null;
+    };
+
+    /**
+     * Creates a GcStateTracker message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof GcStateTracker
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {GcStateTracker} GcStateTracker
+     */
+    GcStateTracker.fromObject = function fromObject(object) {
+        if (object instanceof $root.GcStateTracker)
+            return object;
+        let message = new $root.GcStateTracker();
+        if (object.ballPos != null) {
+            if (typeof object.ballPos !== "object")
+                throw TypeError(".GcStateTracker.ballPos: object expected");
+            message.ballPos = $root.Location.fromObject(object.ballPos);
+        }
+        if (object.ballVel != null) {
+            if (typeof object.ballVel !== "object")
+                throw TypeError(".GcStateTracker.ballVel: object expected");
+            message.ballVel = $root.Location.fromObject(object.ballVel);
+        }
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a GcStateTracker message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof GcStateTracker
+     * @static
+     * @param {GcStateTracker} message GcStateTracker
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    GcStateTracker.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        let object = {};
+        if (options.defaults) {
+            object.ballPos = null;
+            object.ballVel = null;
+        }
+        if (message.ballPos != null && message.hasOwnProperty("ballPos"))
+            object.ballPos = $root.Location.toObject(message.ballPos, options);
+        if (message.ballVel != null && message.hasOwnProperty("ballVel"))
+            object.ballVel = $root.Location.toObject(message.ballVel, options);
+        return object;
+    };
+
+    /**
+     * Converts this GcStateTracker to JSON.
+     * @function toJSON
+     * @memberof GcStateTracker
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    GcStateTracker.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    return GcStateTracker;
 })();
 
 export { $root as default };
