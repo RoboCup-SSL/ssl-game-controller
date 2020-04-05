@@ -13,9 +13,9 @@ func (s *StateMachine) NewCommand(newState *state.State, newCommand *NewCommand)
 	case state.Command_BALL_PLACEMENT:
 		newState.CurrentActionTimeRemaining = ptypes.DurationProto(s.gameConfig.BallPlacementTime)
 	case state.Command_DIRECT, state.Command_INDIRECT:
-		newState.CurrentActionTimeRemaining = ptypes.DurationProto(s.gameConfig.FreeKickTime[newState.Division.Div()])
+		newState.CurrentActionTimeRemaining = ptypes.DurationProto(s.gameConfig.FreeKickTimeout[newState.Division.Div()])
 	case state.Command_KICKOFF, state.Command_PENALTY:
-		newState.CurrentActionTimeRemaining = ptypes.DurationProto(s.gameConfig.GeneralTime)
+		newState.CurrentActionTimeRemaining = ptypes.DurationProto(s.gameConfig.PrepareTimeout)
 	case state.Command_TIMEOUT:
 		*newState.TeamInfo(*newState.Command.ForTeam).TimeoutsLeft--
 	}

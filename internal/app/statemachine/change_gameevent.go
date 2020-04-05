@@ -143,7 +143,7 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 	// defender too close to kick point
 	if *gameEvent.Type == state.GameEvent_DEFENDER_TOO_CLOSE_TO_KICK_POINT {
 		log.Printf("Reset current action time because defender of team %v was too close to kick point", byTeam)
-		newState.CurrentActionTimeRemaining = ptypes.DurationProto(s.gameConfig.GeneralTime)
+		newState.CurrentActionTimeRemaining = ptypes.DurationProto(s.gameConfig.PrepareTimeout)
 	}
 
 	// stop the game if needed

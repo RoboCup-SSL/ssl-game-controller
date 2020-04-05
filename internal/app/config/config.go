@@ -45,8 +45,9 @@ type Game struct {
 	MultiplePlacementFailures int32                      `yaml:"multiple-placement-failures"`
 	MaxBots                   map[Division]int32         `yaml:"max-bots"`
 	AutoRefProposalTimeout    time.Duration              `yaml:"auto-ref-proposal-timeout"`
-	FreeKickTime              map[Division]time.Duration `yaml:"free-kick-time"`
-	GeneralTime               time.Duration              `yaml:"general-time"`
+	PrepareTimeout            time.Duration              `yaml:"prepare-timeout"`
+	FreeKickTimeout           map[Division]time.Duration `yaml:"free-kick-timeout"`
+	NoProgressTimeout         map[Division]time.Duration `yaml:"no-progress-timeout"`
 	BallPlacementTime         time.Duration              `yaml:"ball-placement-time"`
 	BallPlacementTimeTopUp    time.Duration              `yaml:"ball-placement-time-top-up"`
 	StateStoreFile            string                     `yaml:"state-store-file"`
@@ -148,8 +149,9 @@ func DefaultControllerConfig() (c Controller) {
 	c.Game.MultipleFoulStep = 3
 	c.Game.MultiplePlacementFailures = 5
 	c.Game.AutoRefProposalTimeout = 5 * time.Second
-	c.Game.GeneralTime = time.Second * 10
-	c.Game.FreeKickTime = map[Division]time.Duration{DivA: time.Second * 5, DivB: time.Second * 10}
+	c.Game.PrepareTimeout = time.Second * 10
+	c.Game.FreeKickTimeout = map[Division]time.Duration{DivA: time.Second * 5, DivB: time.Second * 10}
+	c.Game.NoProgressTimeout = map[Division]time.Duration{DivA: time.Second * 5, DivB: time.Second * 10}
 	c.Game.BallPlacementTime = time.Second * 30
 	c.Game.BallPlacementTimeTopUp = time.Second * 10
 

@@ -21,10 +21,13 @@ game:
   multiple-placement-failures: 5
   auto-ref-proposal-timeout: 5s
   default-division: DIV_A
-  free-kick-time:
+  prepare-timeout: 10s
+  free-kick-timeout:
     DIV_A: 5s
     DIV_B: 10s
-  general-time: 10s
+  no-progress-timeout:
+    DIV_A: 5s
+    DIV_B: 10s
   ball-placement-time: 30s
   ball-placement-time-top-up: 10s
   normal:
