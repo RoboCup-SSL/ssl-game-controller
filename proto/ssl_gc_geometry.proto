@@ -1,0 +1,8 @@
+syntax = "proto2";
+
+option go_package = "github.com/RoboCup-SSL/ssl-game-controller/internal/app/geom";
+
+message Vector2 {
+    required double x = 1;
+    required double y = 2;
+}

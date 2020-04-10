@@ -21488,6 +21488,7 @@ export const GcState = $root.GcState = (() => {
      * @property {Object.<string,IGcStateTeam>|null} [teamState] GcState teamState
      * @property {Object.<string,IGcStateAutoRef>|null} [autoRefState] GcState autoRefState
      * @property {Object.<string,IGcStateTracker>|null} [trackerState] GcState trackerState
+     * @property {IGcStateTracker|null} [trackerStateGc] GcState trackerStateGc
      */
 
     /**
@@ -21533,6 +21534,14 @@ export const GcState = $root.GcState = (() => {
     GcState.prototype.trackerState = $util.emptyObject;
 
     /**
+     * GcState trackerStateGc.
+     * @member {IGcStateTracker|null|undefined} trackerStateGc
+     * @memberof GcState
+     * @instance
+     */
+    GcState.prototype.trackerStateGc = null;
+
+    /**
      * Creates a new GcState instance using the specified properties.
      * @function create
      * @memberof GcState
@@ -21571,6 +21580,8 @@ export const GcState = $root.GcState = (() => {
                 writer.uint32(/* id 3, wireType 2 =*/26).fork().uint32(/* id 1, wireType 2 =*/10).string(keys[i]);
                 $root.GcStateTracker.encode(message.trackerState[keys[i]], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim().ldelim();
             }
+        if (message.trackerStateGc != null && message.hasOwnProperty("trackerStateGc"))
+            $root.GcStateTracker.encode(message.trackerStateGc, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
         return writer;
     };
 
@@ -21628,6 +21639,9 @@ export const GcState = $root.GcState = (() => {
                 key = reader.string();
                 reader.pos++;
                 message.trackerState[key] = $root.GcStateTracker.decode(reader, reader.uint32());
+                break;
+            case 4:
+                message.trackerStateGc = $root.GcStateTracker.decode(reader, reader.uint32());
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -21694,6 +21708,11 @@ export const GcState = $root.GcState = (() => {
                     return "trackerState." + error;
             }
         }
+        if (message.trackerStateGc != null && message.hasOwnProperty("trackerStateGc")) {
+            let error = $root.GcStateTracker.verify(message.trackerStateGc);
+            if (error)
+                return "trackerStateGc." + error;
+        }
         return null;
     };
 
@@ -21739,6 +21758,11 @@ export const GcState = $root.GcState = (() => {
                 message.trackerState[keys[i]] = $root.GcStateTracker.fromObject(object.trackerState[keys[i]]);
             }
         }
+        if (object.trackerStateGc != null) {
+            if (typeof object.trackerStateGc !== "object")
+                throw TypeError(".GcState.trackerStateGc: object expected");
+            message.trackerStateGc = $root.GcStateTracker.fromObject(object.trackerStateGc);
+        }
         return message;
     };
 
@@ -21760,6 +21784,8 @@ export const GcState = $root.GcState = (() => {
             object.autoRefState = {};
             object.trackerState = {};
         }
+        if (options.defaults)
+            object.trackerStateGc = null;
         let keys2;
         if (message.teamState && (keys2 = Object.keys(message.teamState)).length) {
             object.teamState = {};
@@ -21776,6 +21802,8 @@ export const GcState = $root.GcState = (() => {
             for (let j = 0; j < keys2.length; ++j)
                 object.trackerState[keys2[j]] = $root.GcStateTracker.toObject(message.trackerState[keys2[j]], options);
         }
+        if (message.trackerStateGc != null && message.hasOwnProperty("trackerStateGc"))
+            object.trackerStateGc = $root.GcStateTracker.toObject(message.trackerStateGc, options);
         return object;
     };
 
@@ -22538,8 +22566,8 @@ export const GcStateTracker = $root.GcStateTracker = (() => {
      * Properties of a GcStateTracker.
      * @exports IGcStateTracker
      * @interface IGcStateTracker
-     * @property {ILocation|null} [ballPos] GcStateTracker ballPos
-     * @property {ILocation|null} [ballVel] GcStateTracker ballVel
+     * @property {IVector2|null} [ballPos] GcStateTracker ballPos
+     * @property {IVector2|null} [ballVel] GcStateTracker ballVel
      */
 
     /**
@@ -22559,7 +22587,7 @@ export const GcStateTracker = $root.GcStateTracker = (() => {
 
     /**
      * GcStateTracker ballPos.
-     * @member {ILocation|null|undefined} ballPos
+     * @member {IVector2|null|undefined} ballPos
      * @memberof GcStateTracker
      * @instance
      */
@@ -22567,7 +22595,7 @@ export const GcStateTracker = $root.GcStateTracker = (() => {
 
     /**
      * GcStateTracker ballVel.
-     * @member {ILocation|null|undefined} ballVel
+     * @member {IVector2|null|undefined} ballVel
      * @memberof GcStateTracker
      * @instance
      */
@@ -22598,9 +22626,9 @@ export const GcStateTracker = $root.GcStateTracker = (() => {
         if (!writer)
             writer = $Writer.create();
         if (message.ballPos != null && message.hasOwnProperty("ballPos"))
-            $root.Location.encode(message.ballPos, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            $root.Vector2.encode(message.ballPos, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
         if (message.ballVel != null && message.hasOwnProperty("ballVel"))
-            $root.Location.encode(message.ballVel, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+            $root.Vector2.encode(message.ballVel, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
         return writer;
     };
 
@@ -22636,10 +22664,10 @@ export const GcStateTracker = $root.GcStateTracker = (() => {
             let tag = reader.uint32();
             switch (tag >>> 3) {
             case 1:
-                message.ballPos = $root.Location.decode(reader, reader.uint32());
+                message.ballPos = $root.Vector2.decode(reader, reader.uint32());
                 break;
             case 2:
-                message.ballVel = $root.Location.decode(reader, reader.uint32());
+                message.ballVel = $root.Vector2.decode(reader, reader.uint32());
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -22677,12 +22705,12 @@ export const GcStateTracker = $root.GcStateTracker = (() => {
         if (typeof message !== "object" || message === null)
             return "object expected";
         if (message.ballPos != null && message.hasOwnProperty("ballPos")) {
-            let error = $root.Location.verify(message.ballPos);
+            let error = $root.Vector2.verify(message.ballPos);
             if (error)
                 return "ballPos." + error;
         }
         if (message.ballVel != null && message.hasOwnProperty("ballVel")) {
-            let error = $root.Location.verify(message.ballVel);
+            let error = $root.Vector2.verify(message.ballVel);
             if (error)
                 return "ballVel." + error;
         }
@@ -22704,12 +22732,12 @@ export const GcStateTracker = $root.GcStateTracker = (() => {
         if (object.ballPos != null) {
             if (typeof object.ballPos !== "object")
                 throw TypeError(".GcStateTracker.ballPos: object expected");
-            message.ballPos = $root.Location.fromObject(object.ballPos);
+            message.ballPos = $root.Vector2.fromObject(object.ballPos);
         }
         if (object.ballVel != null) {
             if (typeof object.ballVel !== "object")
                 throw TypeError(".GcStateTracker.ballVel: object expected");
-            message.ballVel = $root.Location.fromObject(object.ballVel);
+            message.ballVel = $root.Vector2.fromObject(object.ballVel);
         }
         return message;
     };
@@ -22732,9 +22760,9 @@ export const GcStateTracker = $root.GcStateTracker = (() => {
             object.ballVel = null;
         }
         if (message.ballPos != null && message.hasOwnProperty("ballPos"))
-            object.ballPos = $root.Location.toObject(message.ballPos, options);
+            object.ballPos = $root.Vector2.toObject(message.ballPos, options);
         if (message.ballVel != null && message.hasOwnProperty("ballVel"))
-            object.ballVel = $root.Location.toObject(message.ballVel, options);
+            object.ballVel = $root.Vector2.toObject(message.ballVel, options);
         return object;
     };
 
@@ -22750,6 +22778,216 @@ export const GcStateTracker = $root.GcStateTracker = (() => {
     };
 
     return GcStateTracker;
+})();
+
+export const Vector2 = $root.Vector2 = (() => {
+
+    /**
+     * Properties of a Vector2.
+     * @exports IVector2
+     * @interface IVector2
+     * @property {number} x Vector2 x
+     * @property {number} y Vector2 y
+     */
+
+    /**
+     * Constructs a new Vector2.
+     * @exports Vector2
+     * @classdesc Represents a Vector2.
+     * @implements IVector2
+     * @constructor
+     * @param {IVector2=} [properties] Properties to set
+     */
+    function Vector2(properties) {
+        if (properties)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * Vector2 x.
+     * @member {number} x
+     * @memberof Vector2
+     * @instance
+     */
+    Vector2.prototype.x = 0;
+
+    /**
+     * Vector2 y.
+     * @member {number} y
+     * @memberof Vector2
+     * @instance
+     */
+    Vector2.prototype.y = 0;
+
+    /**
+     * Creates a new Vector2 instance using the specified properties.
+     * @function create
+     * @memberof Vector2
+     * @static
+     * @param {IVector2=} [properties] Properties to set
+     * @returns {Vector2} Vector2 instance
+     */
+    Vector2.create = function create(properties) {
+        return new Vector2(properties);
+    };
+
+    /**
+     * Encodes the specified Vector2 message. Does not implicitly {@link Vector2.verify|verify} messages.
+     * @function encode
+     * @memberof Vector2
+     * @static
+     * @param {IVector2} message Vector2 message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    Vector2.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        writer.uint32(/* id 1, wireType 1 =*/9).double(message.x);
+        writer.uint32(/* id 2, wireType 1 =*/17).double(message.y);
+        return writer;
+    };
+
+    /**
+     * Encodes the specified Vector2 message, length delimited. Does not implicitly {@link Vector2.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof Vector2
+     * @static
+     * @param {IVector2} message Vector2 message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    Vector2.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a Vector2 message from the specified reader or buffer.
+     * @function decode
+     * @memberof Vector2
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {Vector2} Vector2
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    Vector2.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Vector2();
+        while (reader.pos < end) {
+            let tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1:
+                message.x = reader.double();
+                break;
+            case 2:
+                message.y = reader.double();
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        if (!message.hasOwnProperty("x"))
+            throw $util.ProtocolError("missing required 'x'", { instance: message });
+        if (!message.hasOwnProperty("y"))
+            throw $util.ProtocolError("missing required 'y'", { instance: message });
+        return message;
+    };
+
+    /**
+     * Decodes a Vector2 message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof Vector2
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {Vector2} Vector2
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    Vector2.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a Vector2 message.
+     * @function verify
+     * @memberof Vector2
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    Vector2.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (typeof message.x !== "number")
+            return "x: number expected";
+        if (typeof message.y !== "number")
+            return "y: number expected";
+        return null;
+    };
+
+    /**
+     * Creates a Vector2 message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof Vector2
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {Vector2} Vector2
+     */
+    Vector2.fromObject = function fromObject(object) {
+        if (object instanceof $root.Vector2)
+            return object;
+        let message = new $root.Vector2();
+        if (object.x != null)
+            message.x = Number(object.x);
+        if (object.y != null)
+            message.y = Number(object.y);
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a Vector2 message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof Vector2
+     * @static
+     * @param {Vector2} message Vector2
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    Vector2.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        let object = {};
+        if (options.defaults) {
+            object.x = 0;
+            object.y = 0;
+        }
+        if (message.x != null && message.hasOwnProperty("x"))
+            object.x = options.json && !isFinite(message.x) ? String(message.x) : message.x;
+        if (message.y != null && message.hasOwnProperty("y"))
+            object.y = options.json && !isFinite(message.y) ? String(message.y) : message.y;
+        return object;
+    };
+
+    /**
+     * Converts this Vector2 to JSON.
+     * @function toJSON
+     * @memberof Vector2
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    Vector2.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    return Vector2;
 })();
 
 export { $root as default };

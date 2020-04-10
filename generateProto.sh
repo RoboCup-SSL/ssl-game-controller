@@ -19,6 +19,9 @@ protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_game_event.p
 # referee message
 protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_referee.proto
 
+# geometry
+protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_geometry.proto
+
 # remote communication
 protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_rcon.proto
 protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_rcon_autoref.proto
