@@ -18,34 +18,38 @@ var changeOriginEngine = "Engine"
 
 // Engine listens for changes and runs ticks to update the current state using the state machine
 type Engine struct {
-	gameConfig     config.Game
-	stateStore     *store.Store
-	currentState   *state.State
-	stateMachine   *statemachine.StateMachine
-	queue          chan *statemachine.Change
-	hooks          []chan *statemachine.StateChange
-	timeProvider   timer.TimeProvider
-	lastTimeUpdate time.Time
-	gcState        *GcState
-	gcStateMutex   sync.Mutex
+	gameConfig               config.Game
+	stateStore               *store.Store
+	currentState             *state.State
+	stateMachine             *statemachine.StateMachine
+	queue                    chan *statemachine.Change
+	hooks                    []chan *statemachine.StateChange
+	timeProvider             timer.TimeProvider
+	lastTimeUpdate           time.Time
+	gcState                  *GcState
+	gcStateMutex             sync.Mutex
+	noProgressDetector       NoProgressDetector
+	ballPlacementCoordinator BallPlacementCoordinator
 }
 
 // NewEngine creates a new engine
-func NewEngine(gameConfig config.Game) (s *Engine) {
-	s = new(Engine)
-	s.gameConfig = gameConfig
-	s.stateStore = store.NewStore(gameConfig.StateStoreFile)
-	s.stateMachine = statemachine.NewStateMachine(gameConfig)
-	s.queue = make(chan *statemachine.Change, 100)
-	s.hooks = []chan *statemachine.StateChange{}
-	s.timeProvider = func() time.Time { return time.Now() }
-	s.lastTimeUpdate = s.timeProvider()
-	s.gcState = new(GcState)
-	s.gcState.TeamState = map[string]*GcStateTeam{
+func NewEngine(gameConfig config.Game) (e *Engine) {
+	e = new(Engine)
+	e.gameConfig = gameConfig
+	e.stateStore = store.NewStore(gameConfig.StateStoreFile)
+	e.stateMachine = statemachine.NewStateMachine(gameConfig)
+	e.queue = make(chan *statemachine.Change, 100)
+	e.hooks = []chan *statemachine.StateChange{}
+	e.timeProvider = func() time.Time { return time.Now() }
+	e.lastTimeUpdate = e.timeProvider()
+	e.gcState = new(GcState)
+	e.gcState.TeamState = map[string]*GcStateTeam{
 		state.Team_YELLOW.String(): new(GcStateTeam),
 		state.Team_BLUE.String():   new(GcStateTeam),
 	}
-	s.gcState.AutoRefState = map[string]*GcStateAutoRef{}
+	e.gcState.AutoRefState = map[string]*GcStateAutoRef{}
+	e.noProgressDetector = NoProgressDetector{gcEngine: e}
+	e.ballPlacementCoordinator = BallPlacementCoordinator{gcEngine: e}
 	return
 }
 
@@ -161,7 +165,11 @@ func (e *Engine) processChanges() {
 			e.processChange(change)
 		case <-time.After(10 * time.Millisecond):
 			e.tick()
-			e.processAutoRefFlags()
+
+			e.noProgressDetector.process()
+			e.ballPlacementCoordinator.process()
+			e.processPrepare()
+			e.processBotRemoved()
 		}
 	}
 }
@@ -219,7 +227,7 @@ func (e *Engine) processChange(change *statemachine.Change) {
 
 	e.currentState = entry.State
 
-	e.postProcessChange(change)
+	e.postProcessChange(entry)
 
 	for _, newChange := range newChanges {
 		e.queue <- newChange
@@ -254,9 +262,15 @@ func (e *Engine) createInitialState() (s *state.State) {
 }
 
 // postProcessChange performs synchronous post processing steps
-func (e *Engine) postProcessChange(change *statemachine.Change) {
+func (e *Engine) postProcessChange(entry statemachine.StateChange) {
+	change := entry.Change
 	if change.GetChangeStage() != nil &&
 		*change.GetChangeStage().NewStage == state.Referee_NORMAL_FIRST_HALF {
 		e.currentState.MatchTimeStart, _ = ptypes.TimestampProto(e.timeProvider())
+	}
+	if change.GetNewCommand() != nil &&
+		*change.GetNewCommand().Command.Type == state.Command_STOP &&
+		entry.StatePre.Command.IsRunning() {
+		e.processRunningToStop()
 	}
 }

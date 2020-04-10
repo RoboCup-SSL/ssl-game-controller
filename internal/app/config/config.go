@@ -34,23 +34,26 @@ type Geometry struct {
 
 // Game holds configs that are valid for the whole game
 type Game struct {
-	YellowCardDuration        time.Duration              `yaml:"yellow-card-duration"`
-	DefaultDivision           Division                   `yaml:"default-division"`
-	Normal                    Special                    `yaml:"normal"`
-	Overtime                  Special                    `yaml:"overtime"`
-	TeamChoiceTimeout         time.Duration              `yaml:"team-choice-timeout"`
-	DefaultGeometry           map[Division]Geometry      `yaml:"default-geometry"`
-	MultipleCardStep          int32                      `yaml:"multiple-card-step"`
-	MultipleFoulStep          int32                      `yaml:"multiple-foul-step"`
-	MultiplePlacementFailures int32                      `yaml:"multiple-placement-failures"`
-	MaxBots                   map[Division]int32         `yaml:"max-bots"`
-	AutoRefProposalTimeout    time.Duration              `yaml:"auto-ref-proposal-timeout"`
-	PrepareTimeout            time.Duration              `yaml:"prepare-timeout"`
-	FreeKickTimeout           map[Division]time.Duration `yaml:"free-kick-timeout"`
-	NoProgressTimeout         map[Division]time.Duration `yaml:"no-progress-timeout"`
-	BallPlacementTime         time.Duration              `yaml:"ball-placement-time"`
-	BallPlacementTimeTopUp    time.Duration              `yaml:"ball-placement-time-top-up"`
-	StateStoreFile            string                     `yaml:"state-store-file"`
+	YellowCardDuration                    time.Duration              `yaml:"yellow-card-duration"`
+	DefaultDivision                       Division                   `yaml:"default-division"`
+	Normal                                Special                    `yaml:"normal"`
+	Overtime                              Special                    `yaml:"overtime"`
+	TeamChoiceTimeout                     time.Duration              `yaml:"team-choice-timeout"`
+	DefaultGeometry                       map[Division]Geometry      `yaml:"default-geometry"`
+	MultipleCardStep                      int32                      `yaml:"multiple-card-step"`
+	MultipleFoulStep                      int32                      `yaml:"multiple-foul-step"`
+	MultiplePlacementFailures             int32                      `yaml:"multiple-placement-failures"`
+	MaxBots                               map[Division]int32         `yaml:"max-bots"`
+	AutoRefProposalTimeout                time.Duration              `yaml:"auto-ref-proposal-timeout"`
+	PrepareTimeout                        time.Duration              `yaml:"prepare-timeout"`
+	FreeKickTimeout                       map[Division]time.Duration `yaml:"free-kick-timeout"`
+	NoProgressTimeout                     map[Division]time.Duration `yaml:"no-progress-timeout"`
+	BallPlacementTime                     time.Duration              `yaml:"ball-placement-time"`
+	BallPlacementTimeTopUp                time.Duration              `yaml:"ball-placement-time-top-up"`
+	StateStoreFile                        string                     `yaml:"state-store-file"`
+	BallPlacementRequiredDistance         float64                    `yaml:"ball-placement-required-distance"`
+	BallPlacementMinDistanceToDefenseArea float64                    `yaml:"ball-placement-min-distance-to-defense-area"`
+	BallPlacementTolerance                float64                    `yaml:"ball-placement-tolerance"`
 }
 
 // Network holds configs for network communication
@@ -154,6 +157,9 @@ func DefaultControllerConfig() (c Controller) {
 	c.Game.NoProgressTimeout = map[Division]time.Duration{DivA: time.Second * 5, DivB: time.Second * 10}
 	c.Game.BallPlacementTime = time.Second * 30
 	c.Game.BallPlacementTimeTopUp = time.Second * 10
+	c.Game.BallPlacementRequiredDistance = 1.0
+	c.Game.BallPlacementMinDistanceToDefenseArea = 0.7
+	c.Game.BallPlacementTolerance = 0.15
 
 	c.Game.Normal.HalfDuration = 5 * time.Minute
 	c.Game.Normal.HalfTimeDuration = 5 * time.Minute

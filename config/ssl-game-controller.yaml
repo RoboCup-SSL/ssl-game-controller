@@ -30,6 +30,9 @@ game:
     DIV_B: 10s
   ball-placement-time: 30s
   ball-placement-time-top-up: 10s
+  ball-placement-required-distance: 1.0
+  ball-placement-tolerance: 0.15
+  ball-placement-min-distance-to-defense-area: 0.7
   normal:
     half-duration: 5m
     half-time-duration: 5m
