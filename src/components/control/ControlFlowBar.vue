@@ -25,7 +25,10 @@
             </b-button>
         </div>
 
-        <div v-for="autoRefId of autoRefs" v-if="autoRefReady(autoRefId) !== undefined" class="auto-ref-meta">
+        <div v-for="autoRefId of autoRefs"
+             v-bind:key="autoRefId"
+             v-if="autoRefReady(autoRefId) !== undefined || autoRefBallPlaced(autoRefId) !== undefined"
+             class="auto-ref-meta">
             {{autoRefId}}
             <font-awesome-icon
                     v-b-tooltip.hover.d500
