@@ -18,11 +18,31 @@ func (e *Engine) processPrepare() {
 	}
 
 	if *e.currentState.Command.Type == state.Command_KICKOFF {
-		// TODO check if conditions met for kickoff
+		// ball in center circle
+		if e.gcState.TrackerStateGc.Ball.Pos.Length() > e.gameConfig.DistanceToBallInStop {
+			return
+		}
+
+		// bots on wrong side
+		for _, robot := range e.gcState.TrackerStateGc.Robots {
+			if *e.currentState.TeamState[robot.Id.Team.String()].OnPositiveHalf {
+				if *robot.Pos.X < robotRadius {
+					return
+				}
+			} else if *robot.Pos.X > -robotRadius {
+				return
+			}
+		}
 	}
 
 	if *e.currentState.Command.Type == state.Command_PENALTY {
 		// TODO check if conditions met for penalty
+		// keeper pos
+
+		// kicking team positions correct
+
+		// opponent team positions correct
+
 	}
 
 	e.Enqueue(&statemachine.Change{
