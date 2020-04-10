@@ -24,13 +24,13 @@ func (d *NoProgressDetector) process() {
 	}
 
 	if d.lastBallPos == nil {
-		d.lastBallPos = d.gcEngine.gcState.TrackerStateGc.BallPos
+		d.lastBallPos = d.gcEngine.gcState.TrackerStateGc.Ball.Pos
 		return
 	}
 
-	if d.lastBallPos.DistanceTo(d.gcEngine.gcState.TrackerStateGc.BallPos) > distanceTolerance {
+	if d.lastBallPos.DistanceTo(d.gcEngine.gcState.TrackerStateGc.Ball.Pos) > distanceTolerance {
 		d.lastTime = nil
-		d.lastBallPos = d.gcEngine.gcState.TrackerStateGc.BallPos
+		d.lastBallPos = d.gcEngine.gcState.TrackerStateGc.Ball.Pos
 		return
 	}
 
@@ -43,10 +43,10 @@ func (d *NoProgressDetector) process() {
 	timeSinceLastProgress := d.gcEngine.timeProvider().Sub(*d.lastTime)
 	if timeSinceLastProgress > d.gcEngine.gameConfig.NoProgressTimeout[d.gcEngine.currentState.Division.Div()] {
 		duration := float32(timeSinceLastProgress.Seconds())
-		location := vector2ToLocation(d.gcEngine.gcState.TrackerStateGc.BallPos)
+		location := vector2ToLocation(d.gcEngine.gcState.TrackerStateGc.Ball.Pos)
 		for _, team := range state.BothTeams() {
 			defenseArea := geom.NewDefenseArea(d.gcEngine.GetGeometry(), *d.gcEngine.currentState.TeamState[team.String()].OnPositiveHalf)
-			if defenseArea.IsPointInside(d.gcEngine.gcState.TrackerStateGc.BallPos) {
+			if defenseArea.IsPointInside(d.gcEngine.gcState.TrackerStateGc.Ball.Pos) {
 				d.gcEngine.Enqueue(createGameEventChange(state.GameEvent_KEEPER_HELD_BALL, state.GameEvent{
 					Event: &state.GameEvent_KeeperHeldBall_{
 						KeeperHeldBall: &state.GameEvent_KeeperHeldBall{

@@ -3,6 +3,7 @@ syntax = "proto2";
 option go_package = "github.com/RoboCup-SSL/ssl-game-controller/internal/app/engine";
 
 import "ssl_gc_geometry.proto";
+import "ssl_game_event.proto";
 
 message GcState {
     map<string, GcStateTeam> team_state = 1;
@@ -56,9 +57,25 @@ message GcStateAutoRefTeam {
 }
 
 message GcStateTracker {
-    // Current ball position [m]
-    optional Vector2 ball_pos = 1;
+    // Current ball
+    optional Ball ball = 1;
 
-    // Current ball velocity [m/s]
-    optional Vector2 ball_vel = 2;
+    // Current robots
+    repeated Robot robots = 2;
+}
+
+message Ball {
+    // ball position [m]
+    optional Vector2 pos = 1;
+
+    // ball velocity [m/s]
+    optional Vector2 vel = 2;
+}
+
+message Robot {
+    // robot id and team
+    optional BotId id = 1;
+
+    // robot position [m]
+    optional Vector2 pos = 2;
 }

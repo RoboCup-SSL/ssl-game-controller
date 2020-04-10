@@ -8,6 +8,8 @@ import (
 )
 
 const ballSteadyThreshold = 0.2
+const robotRadius = 0.09
+const distanceThreshold = 0.03
 
 func createGameEventChange(eventType state.GameEvent_Type, event state.GameEvent) *statemachine.Change {
 	event.Type = &eventType
@@ -22,14 +24,14 @@ func createGameEventChange(eventType state.GameEvent_Type, event state.GameEvent
 	}
 }
 
-func (e *Engine) readyToContinue() bool {
-	// robot to ball distance
-	// forTeam: > 0.05m
-	// opponent: > 0.5m
+func (e *Engine) robotsInsideRadius(robots []*Robot, pos *geom.Vector2, radius float64) bool {
+	for _, robot := range robots {
+		distance := robot.Pos.DistanceTo(pos)
+		if distance < radius {
+			return true
+		}
+	}
 
-	// ball is stationary
-
-	// TODO
 	return false
 }
 

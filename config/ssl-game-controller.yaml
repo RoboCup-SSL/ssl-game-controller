@@ -33,6 +33,8 @@ game:
   ball-placement-required-distance: 1.0
   ball-placement-tolerance: 0.15
   ball-placement-min-distance-to-defense-area: 0.7
+  ball-placement-min-robot-distance: 0.05
+  distance-to-ball-in-stop: 0.5
   normal:
     half-duration: 5m
     half-time-duration: 5m

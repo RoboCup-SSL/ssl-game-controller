@@ -22566,8 +22566,8 @@ export const GcStateTracker = $root.GcStateTracker = (() => {
      * Properties of a GcStateTracker.
      * @exports IGcStateTracker
      * @interface IGcStateTracker
-     * @property {IVector2|null} [ballPos] GcStateTracker ballPos
-     * @property {IVector2|null} [ballVel] GcStateTracker ballVel
+     * @property {IBall|null} [ball] GcStateTracker ball
+     * @property {Array.<IRobot>|null} [robots] GcStateTracker robots
      */
 
     /**
@@ -22579,6 +22579,7 @@ export const GcStateTracker = $root.GcStateTracker = (() => {
      * @param {IGcStateTracker=} [properties] Properties to set
      */
     function GcStateTracker(properties) {
+        this.robots = [];
         if (properties)
             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
@@ -22586,20 +22587,20 @@ export const GcStateTracker = $root.GcStateTracker = (() => {
     }
 
     /**
-     * GcStateTracker ballPos.
-     * @member {IVector2|null|undefined} ballPos
+     * GcStateTracker ball.
+     * @member {IBall|null|undefined} ball
      * @memberof GcStateTracker
      * @instance
      */
-    GcStateTracker.prototype.ballPos = null;
+    GcStateTracker.prototype.ball = null;
 
     /**
-     * GcStateTracker ballVel.
-     * @member {IVector2|null|undefined} ballVel
+     * GcStateTracker robots.
+     * @member {Array.<IRobot>} robots
      * @memberof GcStateTracker
      * @instance
      */
-    GcStateTracker.prototype.ballVel = null;
+    GcStateTracker.prototype.robots = $util.emptyArray;
 
     /**
      * Creates a new GcStateTracker instance using the specified properties.
@@ -22625,10 +22626,11 @@ export const GcStateTracker = $root.GcStateTracker = (() => {
     GcStateTracker.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.ballPos != null && message.hasOwnProperty("ballPos"))
-            $root.Vector2.encode(message.ballPos, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-        if (message.ballVel != null && message.hasOwnProperty("ballVel"))
-            $root.Vector2.encode(message.ballVel, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+        if (message.ball != null && message.hasOwnProperty("ball"))
+            $root.Ball.encode(message.ball, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+        if (message.robots != null && message.robots.length)
+            for (let i = 0; i < message.robots.length; ++i)
+                $root.Robot.encode(message.robots[i], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
         return writer;
     };
 
@@ -22664,10 +22666,12 @@ export const GcStateTracker = $root.GcStateTracker = (() => {
             let tag = reader.uint32();
             switch (tag >>> 3) {
             case 1:
-                message.ballPos = $root.Vector2.decode(reader, reader.uint32());
+                message.ball = $root.Ball.decode(reader, reader.uint32());
                 break;
             case 2:
-                message.ballVel = $root.Vector2.decode(reader, reader.uint32());
+                if (!(message.robots && message.robots.length))
+                    message.robots = [];
+                message.robots.push($root.Robot.decode(reader, reader.uint32()));
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -22704,15 +22708,19 @@ export const GcStateTracker = $root.GcStateTracker = (() => {
     GcStateTracker.verify = function verify(message) {
         if (typeof message !== "object" || message === null)
             return "object expected";
-        if (message.ballPos != null && message.hasOwnProperty("ballPos")) {
-            let error = $root.Vector2.verify(message.ballPos);
+        if (message.ball != null && message.hasOwnProperty("ball")) {
+            let error = $root.Ball.verify(message.ball);
             if (error)
-                return "ballPos." + error;
+                return "ball." + error;
         }
-        if (message.ballVel != null && message.hasOwnProperty("ballVel")) {
-            let error = $root.Vector2.verify(message.ballVel);
-            if (error)
-                return "ballVel." + error;
+        if (message.robots != null && message.hasOwnProperty("robots")) {
+            if (!Array.isArray(message.robots))
+                return "robots: array expected";
+            for (let i = 0; i < message.robots.length; ++i) {
+                let error = $root.Robot.verify(message.robots[i]);
+                if (error)
+                    return "robots." + error;
+            }
         }
         return null;
     };
@@ -22729,15 +22737,20 @@ export const GcStateTracker = $root.GcStateTracker = (() => {
         if (object instanceof $root.GcStateTracker)
             return object;
         let message = new $root.GcStateTracker();
-        if (object.ballPos != null) {
-            if (typeof object.ballPos !== "object")
-                throw TypeError(".GcStateTracker.ballPos: object expected");
-            message.ballPos = $root.Vector2.fromObject(object.ballPos);
+        if (object.ball != null) {
+            if (typeof object.ball !== "object")
+                throw TypeError(".GcStateTracker.ball: object expected");
+            message.ball = $root.Ball.fromObject(object.ball);
         }
-        if (object.ballVel != null) {
-            if (typeof object.ballVel !== "object")
-                throw TypeError(".GcStateTracker.ballVel: object expected");
-            message.ballVel = $root.Vector2.fromObject(object.ballVel);
+        if (object.robots) {
+            if (!Array.isArray(object.robots))
+                throw TypeError(".GcStateTracker.robots: array expected");
+            message.robots = [];
+            for (let i = 0; i < object.robots.length; ++i) {
+                if (typeof object.robots[i] !== "object")
+                    throw TypeError(".GcStateTracker.robots: object expected");
+                message.robots[i] = $root.Robot.fromObject(object.robots[i]);
+            }
         }
         return message;
     };
@@ -22755,14 +22768,17 @@ export const GcStateTracker = $root.GcStateTracker = (() => {
         if (!options)
             options = {};
         let object = {};
-        if (options.defaults) {
-            object.ballPos = null;
-            object.ballVel = null;
+        if (options.arrays || options.defaults)
+            object.robots = [];
+        if (options.defaults)
+            object.ball = null;
+        if (message.ball != null && message.hasOwnProperty("ball"))
+            object.ball = $root.Ball.toObject(message.ball, options);
+        if (message.robots && message.robots.length) {
+            object.robots = [];
+            for (let j = 0; j < message.robots.length; ++j)
+                object.robots[j] = $root.Robot.toObject(message.robots[j], options);
         }
-        if (message.ballPos != null && message.hasOwnProperty("ballPos"))
-            object.ballPos = $root.Vector2.toObject(message.ballPos, options);
-        if (message.ballVel != null && message.hasOwnProperty("ballVel"))
-            object.ballVel = $root.Vector2.toObject(message.ballVel, options);
         return object;
     };
 
@@ -22778,6 +22794,446 @@ export const GcStateTracker = $root.GcStateTracker = (() => {
     };
 
     return GcStateTracker;
+})();
+
+export const Ball = $root.Ball = (() => {
+
+    /**
+     * Properties of a Ball.
+     * @exports IBall
+     * @interface IBall
+     * @property {IVector2|null} [pos] Ball pos
+     * @property {IVector2|null} [vel] Ball vel
+     */
+
+    /**
+     * Constructs a new Ball.
+     * @exports Ball
+     * @classdesc Represents a Ball.
+     * @implements IBall
+     * @constructor
+     * @param {IBall=} [properties] Properties to set
+     */
+    function Ball(properties) {
+        if (properties)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * Ball pos.
+     * @member {IVector2|null|undefined} pos
+     * @memberof Ball
+     * @instance
+     */
+    Ball.prototype.pos = null;
+
+    /**
+     * Ball vel.
+     * @member {IVector2|null|undefined} vel
+     * @memberof Ball
+     * @instance
+     */
+    Ball.prototype.vel = null;
+
+    /**
+     * Creates a new Ball instance using the specified properties.
+     * @function create
+     * @memberof Ball
+     * @static
+     * @param {IBall=} [properties] Properties to set
+     * @returns {Ball} Ball instance
+     */
+    Ball.create = function create(properties) {
+        return new Ball(properties);
+    };
+
+    /**
+     * Encodes the specified Ball message. Does not implicitly {@link Ball.verify|verify} messages.
+     * @function encode
+     * @memberof Ball
+     * @static
+     * @param {IBall} message Ball message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    Ball.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.pos != null && message.hasOwnProperty("pos"))
+            $root.Vector2.encode(message.pos, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+        if (message.vel != null && message.hasOwnProperty("vel"))
+            $root.Vector2.encode(message.vel, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+        return writer;
+    };
+
+    /**
+     * Encodes the specified Ball message, length delimited. Does not implicitly {@link Ball.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof Ball
+     * @static
+     * @param {IBall} message Ball message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    Ball.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a Ball message from the specified reader or buffer.
+     * @function decode
+     * @memberof Ball
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {Ball} Ball
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    Ball.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Ball();
+        while (reader.pos < end) {
+            let tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1:
+                message.pos = $root.Vector2.decode(reader, reader.uint32());
+                break;
+            case 2:
+                message.vel = $root.Vector2.decode(reader, reader.uint32());
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes a Ball message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof Ball
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {Ball} Ball
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    Ball.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a Ball message.
+     * @function verify
+     * @memberof Ball
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    Ball.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (message.pos != null && message.hasOwnProperty("pos")) {
+            let error = $root.Vector2.verify(message.pos);
+            if (error)
+                return "pos." + error;
+        }
+        if (message.vel != null && message.hasOwnProperty("vel")) {
+            let error = $root.Vector2.verify(message.vel);
+            if (error)
+                return "vel." + error;
+        }
+        return null;
+    };
+
+    /**
+     * Creates a Ball message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof Ball
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {Ball} Ball
+     */
+    Ball.fromObject = function fromObject(object) {
+        if (object instanceof $root.Ball)
+            return object;
+        let message = new $root.Ball();
+        if (object.pos != null) {
+            if (typeof object.pos !== "object")
+                throw TypeError(".Ball.pos: object expected");
+            message.pos = $root.Vector2.fromObject(object.pos);
+        }
+        if (object.vel != null) {
+            if (typeof object.vel !== "object")
+                throw TypeError(".Ball.vel: object expected");
+            message.vel = $root.Vector2.fromObject(object.vel);
+        }
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a Ball message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof Ball
+     * @static
+     * @param {Ball} message Ball
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    Ball.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        let object = {};
+        if (options.defaults) {
+            object.pos = null;
+            object.vel = null;
+        }
+        if (message.pos != null && message.hasOwnProperty("pos"))
+            object.pos = $root.Vector2.toObject(message.pos, options);
+        if (message.vel != null && message.hasOwnProperty("vel"))
+            object.vel = $root.Vector2.toObject(message.vel, options);
+        return object;
+    };
+
+    /**
+     * Converts this Ball to JSON.
+     * @function toJSON
+     * @memberof Ball
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    Ball.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    return Ball;
+})();
+
+export const Robot = $root.Robot = (() => {
+
+    /**
+     * Properties of a Robot.
+     * @exports IRobot
+     * @interface IRobot
+     * @property {IBotId|null} [id] Robot id
+     * @property {IVector2|null} [pos] Robot pos
+     */
+
+    /**
+     * Constructs a new Robot.
+     * @exports Robot
+     * @classdesc Represents a Robot.
+     * @implements IRobot
+     * @constructor
+     * @param {IRobot=} [properties] Properties to set
+     */
+    function Robot(properties) {
+        if (properties)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * Robot id.
+     * @member {IBotId|null|undefined} id
+     * @memberof Robot
+     * @instance
+     */
+    Robot.prototype.id = null;
+
+    /**
+     * Robot pos.
+     * @member {IVector2|null|undefined} pos
+     * @memberof Robot
+     * @instance
+     */
+    Robot.prototype.pos = null;
+
+    /**
+     * Creates a new Robot instance using the specified properties.
+     * @function create
+     * @memberof Robot
+     * @static
+     * @param {IRobot=} [properties] Properties to set
+     * @returns {Robot} Robot instance
+     */
+    Robot.create = function create(properties) {
+        return new Robot(properties);
+    };
+
+    /**
+     * Encodes the specified Robot message. Does not implicitly {@link Robot.verify|verify} messages.
+     * @function encode
+     * @memberof Robot
+     * @static
+     * @param {IRobot} message Robot message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    Robot.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.id != null && message.hasOwnProperty("id"))
+            $root.BotId.encode(message.id, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+        if (message.pos != null && message.hasOwnProperty("pos"))
+            $root.Vector2.encode(message.pos, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+        return writer;
+    };
+
+    /**
+     * Encodes the specified Robot message, length delimited. Does not implicitly {@link Robot.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof Robot
+     * @static
+     * @param {IRobot} message Robot message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    Robot.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a Robot message from the specified reader or buffer.
+     * @function decode
+     * @memberof Robot
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {Robot} Robot
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    Robot.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Robot();
+        while (reader.pos < end) {
+            let tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1:
+                message.id = $root.BotId.decode(reader, reader.uint32());
+                break;
+            case 2:
+                message.pos = $root.Vector2.decode(reader, reader.uint32());
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes a Robot message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof Robot
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {Robot} Robot
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    Robot.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a Robot message.
+     * @function verify
+     * @memberof Robot
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    Robot.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (message.id != null && message.hasOwnProperty("id")) {
+            let error = $root.BotId.verify(message.id);
+            if (error)
+                return "id." + error;
+        }
+        if (message.pos != null && message.hasOwnProperty("pos")) {
+            let error = $root.Vector2.verify(message.pos);
+            if (error)
+                return "pos." + error;
+        }
+        return null;
+    };
+
+    /**
+     * Creates a Robot message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof Robot
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {Robot} Robot
+     */
+    Robot.fromObject = function fromObject(object) {
+        if (object instanceof $root.Robot)
+            return object;
+        let message = new $root.Robot();
+        if (object.id != null) {
+            if (typeof object.id !== "object")
+                throw TypeError(".Robot.id: object expected");
+            message.id = $root.BotId.fromObject(object.id);
+        }
+        if (object.pos != null) {
+            if (typeof object.pos !== "object")
+                throw TypeError(".Robot.pos: object expected");
+            message.pos = $root.Vector2.fromObject(object.pos);
+        }
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a Robot message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof Robot
+     * @static
+     * @param {Robot} message Robot
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    Robot.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        let object = {};
+        if (options.defaults) {
+            object.id = null;
+            object.pos = null;
+        }
+        if (message.id != null && message.hasOwnProperty("id"))
+            object.id = $root.BotId.toObject(message.id, options);
+        if (message.pos != null && message.hasOwnProperty("pos"))
+            object.pos = $root.Vector2.toObject(message.pos, options);
+        return object;
+    };
+
+    /**
+     * Converts this Robot to JSON.
+     * @function toJSON
+     * @memberof Robot
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    Robot.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    return Robot;
 })();
 
 export const Vector2 = $root.Vector2 = (() => {

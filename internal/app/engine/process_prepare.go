@@ -32,3 +32,12 @@ func (e *Engine) processPrepare() {
 		},
 	})
 }
+
+func (e *Engine) readyToContinue() bool {
+	radius := e.gameConfig.DistanceToBallInStop + robotRadius + distanceThreshold
+	if !e.ballSteady() ||
+		e.robotsInsideRadius(e.gcState.TrackerStateGc.Robots, e.gcState.TrackerStateGc.Ball.Pos, radius) {
+		return false
+	}
+	return false
+}

@@ -54,6 +54,8 @@ type Game struct {
 	BallPlacementRequiredDistance         float64                    `yaml:"ball-placement-required-distance"`
 	BallPlacementMinDistanceToDefenseArea float64                    `yaml:"ball-placement-min-distance-to-defense-area"`
 	BallPlacementTolerance                float64                    `yaml:"ball-placement-tolerance"`
+	BallPlacementMinRobotDistance         float64                    `yaml:"ball-placement-min-robot-distance"`
+	DistanceToBallInStop                  float64                    `yaml:"distance-to-ball-in-stop"`
 }
 
 // Network holds configs for network communication
@@ -160,6 +162,8 @@ func DefaultControllerConfig() (c Controller) {
 	c.Game.BallPlacementRequiredDistance = 1.0
 	c.Game.BallPlacementMinDistanceToDefenseArea = 0.7
 	c.Game.BallPlacementTolerance = 0.15
+	c.Game.BallPlacementMinRobotDistance = 0.05
+	c.Game.DistanceToBallInStop = 0.5
 
 	c.Game.Normal.HalfDuration = 5 * time.Minute
 	c.Game.Normal.HalfTimeDuration = 5 * time.Minute
