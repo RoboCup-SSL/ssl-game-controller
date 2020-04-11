@@ -6,6 +6,7 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/engine"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/publish"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/rcon"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/tracker"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/vision"
 )
 
@@ -20,6 +21,7 @@ type GameController struct {
 	teamServer       *rcon.TeamServer
 	teamServerTls    *rcon.TeamServer
 	visionReceiver   *vision.Receiver
+	trackerReceiver  *tracker.Receiver
 }
 
 // NewGameController creates a new GameController
@@ -37,6 +39,8 @@ func NewGameController(cfg config.Controller) (c *GameController) {
 	c.teamServerTls.Tls = true
 	c.visionReceiver = vision.NewReceiver(cfg.Network.VisionAddress)
 	c.visionReceiver.GeometryCallback = c.ProcessGeometry
+	c.trackerReceiver = tracker.NewReceiver(cfg.Network.TrackerAddress)
+	c.trackerReceiver.Callback = c.gcEngine.ProcessTrackerFrame
 	return
 }
 

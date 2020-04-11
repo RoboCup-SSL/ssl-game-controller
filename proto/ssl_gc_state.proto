@@ -2,8 +2,10 @@ syntax = "proto2";
 
 option go_package = "github.com/RoboCup-SSL/ssl-game-controller/internal/app/state";
 
-import "ssl_game_event.proto";
-import "ssl_referee.proto";
+import "ssl_gc_common.proto";
+import "ssl_gc_geometry.proto";
+import "ssl_gc_game_event.proto";
+import "ssl_gc_referee_message.proto";
 
 import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
@@ -67,7 +69,7 @@ message State {
     optional google.protobuf.Duration stage_time_left = 5;
     optional google.protobuf.Timestamp match_time_start = 6;
     map<string, TeamInfo> team_state = 8;
-    optional Location placement_pos = 9;
+    optional Vector2 placement_pos = 9;
     optional Command next_command = 10;
     optional google.protobuf.Duration current_action_time_remaining = 12;
     repeated GameEvent game_events = 13;

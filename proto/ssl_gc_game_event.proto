@@ -2,31 +2,8 @@ syntax = "proto2";
 
 option go_package = "github.com/RoboCup-SSL/ssl-game-controller/internal/app/state";
 
-// Team is either blue or yellow
-enum Team {
-    // team not set
-    UNKNOWN = 0;
-    // yellow team
-    YELLOW = 1;
-    // blue team
-    BLUE = 2;
-}
-
-// BotId is the combination of a team and a robot id
-message BotId {
-    // the robot id - a negative value indicates that the id is not set
-    optional int32 id = 1;
-    // the team that the robot belongs to
-    optional Team team = 2;
-}
-
-// Location is a 2d-coordinate on the field in ssl-vision coordinate system. Units are in meters.
-message Location {
-    // the x-coordinate in [m] in the ssl-vision coordinate system
-    required float x = 1;
-    // the y-coordinate in [m] in the ssl-vision coordinate system
-    required float y = 2;
-}
+import "ssl_gc_common.proto";
+import "ssl_gc_geometry.proto";
 
 // GameEvent contains exactly one game event
 // Each game event has optional and required fields. The required fields are mandatory to process the event.
@@ -134,7 +111,7 @@ message GameEvent {
         // the bot that last touched the ball
         optional uint32 by_bot = 2;
         // the location where the ball left the field
-        optional Location location = 3;
+        optional Vector2 location = 3;
     }
     // the ball left the field via goal line and a team committed an aimless kick
     message AimlessKick {
@@ -143,9 +120,9 @@ message GameEvent {
         // the bot that last touched the ball
         optional uint32 by_bot = 2;
         // the location where the ball left the field
-        optional Location location = 3;
+        optional Vector2 location = 3;
         // the location where the ball was last touched
-        optional Location kick_location = 4;
+        optional Vector2 kick_location = 4;
     }
     // a team shot a goal
     message Goal {
@@ -156,9 +133,9 @@ message GameEvent {
         // the bot that shot the goal
         optional uint32 kicking_bot = 2;
         // the location where the ball entered the goal
-        optional Location location = 3;
+        optional Vector2 location = 3;
         // the location where the ball was kicked (for deciding if this was a valid goal)
-        optional Location kick_location = 4;
+        optional Vector2 kick_location = 4;
         // the kick speed of the goal shot (for deciding if this was a valid goal)
         optional float kick_speed = 5;
         // the maximum height the ball reached during the goal kick (for deciding if this was a valid goal)
@@ -171,9 +148,9 @@ message GameEvent {
         // the bot that kicked the ball - at least the team must be set
         optional uint32 by_bot = 2;
         // the location where the ball entered the goal
-        optional Location location = 3;
+        optional Vector2 location = 3;
         // the location where the ball was kicked
-        optional Location kick_location = 4;
+        optional Vector2 kick_location = 4;
     }
     // the ball entered the goal, but was initially chipped
     message ChippedGoal {
@@ -182,9 +159,9 @@ message GameEvent {
         // the bot that kicked the ball
         optional uint32 by_bot = 2;
         // the location where the ball entered the goal
-        optional Location location = 3;
+        optional Vector2 location = 3;
         // the location where the ball was kicked
-        optional Location kick_location = 4;
+        optional Vector2 kick_location = 4;
         // the maximum height [m] of the ball, before it entered the goal and since the last kick
         optional float max_ball_height = 5;
     }
@@ -195,7 +172,7 @@ message GameEvent {
         // the bot that was too fast
         optional uint32 by_bot = 2;
         // the location of the bot
-        optional Location location = 3;
+        optional Vector2 location = 3;
         // the bot speed [m/s]
         optional float speed = 4;
     }
@@ -206,7 +183,7 @@ message GameEvent {
         // the bot that violates the distance to the kick point
         optional uint32 by_bot = 2;
         // the location of the bot
-        optional Location location = 3;
+        optional Vector2 location = 3;
         // the distance [m] from bot to the kick point (including the minimum radius)
         optional float distance = 4;
     }
@@ -217,7 +194,7 @@ message GameEvent {
         // the bot of the blue team
         optional uint32 bot_blue = 2;
         // the location of the crash (center between both bots)
-        optional Location location = 3;
+        optional Vector2 location = 3;
         // the calculated crash speed [m/s] of the two bots
         optional float crash_speed = 4;
         // the difference [m/s] of the velocity of the two bots
@@ -236,7 +213,7 @@ message GameEvent {
         // the bot of the opposite team that was involved in the crash
         optional uint32 victim = 3;
         // the location of the crash (center between both bots)
-        optional Location location = 4;
+        optional Vector2 location = 4;
         // the calculated crash speed vector [m/s] of the two bots
         optional float crash_speed = 5;
         // the difference [m/s] of the velocity of the two bots
@@ -255,7 +232,7 @@ message GameEvent {
         // the bot of the opposite team that was pushed
         optional uint32 victim = 3;
         // the location of the push (center between both bots)
-        optional Location location = 4;
+        optional Vector2 location = 4;
         // the pushed distance [m]
         optional float pushed_distance = 5;
     }
@@ -266,9 +243,9 @@ message GameEvent {
         // the bot that tipped over
         optional uint32 by_bot = 2;
         // the location of the bot
-        optional Location location = 3;
+        optional Vector2 location = 3;
         // the location of the ball at the moment when this foul occurred
-        optional Location ball_location = 4;
+        optional Vector2 ball_location = 4;
     }
     // a defender other than the keeper was fully located inside its own defense and touched the ball
     message DefenderInDefenseArea {
@@ -277,7 +254,7 @@ message GameEvent {
         // the bot that is inside the penalty area
         optional uint32 by_bot = 2;
         // the location of the bot
-        optional Location location = 3;
+        optional Vector2 location = 3;
         // the distance [m] from bot case to the nearest point outside the defense area
         optional float distance = 4;
     }
@@ -288,11 +265,11 @@ message GameEvent {
         // the bot that is partially inside the penalty area
         optional uint32 by_bot = 2;
         // the location of the bot
-        optional Location location = 3;
+        optional Vector2 location = 3;
         // the distance [m] that the bot is inside the penalty area
         optional float distance = 4;
         // the location of the ball at the moment when this foul occurred
-        optional Location ball_location = 5;
+        optional Vector2 ball_location = 5;
     }
     // an attacker touched the ball inside the opponent defense area
     message AttackerTouchedBallInDefenseArea {
@@ -301,7 +278,7 @@ message GameEvent {
         // the bot that is inside the penalty area
         optional uint32 by_bot = 2;
         // the location of the bot
-        optional Location location = 3;
+        optional Vector2 location = 3;
         // the distance [m] that the bot is inside the penalty area
         optional float distance = 4;
     }
@@ -312,7 +289,7 @@ message GameEvent {
         // the bot that kicked too fast
         optional uint32 by_bot = 2;
         // the location of the ball at the time of the highest speed
-        optional Location location = 3;
+        optional Vector2 location = 3;
         // the absolute initial ball speed (kick speed) [m/s]
         optional float initial_ball_speed = 4;
         // was the ball chipped?
@@ -325,9 +302,9 @@ message GameEvent {
         // the bot that dribbled too far
         optional uint32 by_bot = 2;
         // the location where the dribbling started
-        optional Location start = 3;
+        optional Vector2 start = 3;
         // the location where the maximum dribbling distance was reached
-        optional Location end = 4;
+        optional Vector2 end = 4;
     }
     // an attacker touched the opponent robot inside defense area
     message AttackerTouchedOpponentInDefenseArea {
@@ -338,7 +315,7 @@ message GameEvent {
         // the bot of the opposite team that was touched
         optional uint32 victim = 4;
         // the location of the contact point between both bots
-        optional Location location = 3;
+        optional Vector2 location = 3;
     }
     // an attacker touched the ball multiple times when it was not allowed to
     message AttackerDoubleTouchedBall {
@@ -347,7 +324,7 @@ message GameEvent {
         // the bot that touched the ball twice
         optional uint32 by_bot = 2;
         // the location of the ball when it was first touched
-        optional Location location = 3;
+        optional Vector2 location = 3;
     }
     // an attacker was located too near to the opponent defense area during stop or free kick
     message AttackerTooCloseToDefenseArea {
@@ -356,11 +333,11 @@ message GameEvent {
         // the bot that is too close to the defense area
         optional uint32 by_bot = 2;
         // the location of the bot
-        optional Location location = 3;
+        optional Vector2 location = 3;
         // the distance [m] of the bot to the penalty area
         optional float distance = 4;
         // the location of the ball at the moment when this foul occurred
-        optional Location ball_location = 5;
+        optional Vector2 ball_location = 5;
     }
     // a bot held the ball for too long
     message BotHeldBallDeliberately {
@@ -369,7 +346,7 @@ message GameEvent {
         // the bot that holds the ball
         optional uint32 by_bot = 2;
         // the location of the ball
-        optional Location location = 3;
+        optional Vector2 location = 3;
         // the duration [s] that the bot hold the ball
         optional float duration = 4;
     }
@@ -380,7 +357,7 @@ message GameEvent {
         // the bot that interfered the placement
         optional uint32 by_bot = 2;
         // the location of the bot
-        optional Location location = 3;
+        optional Vector2 location = 3;
     }
     // a team collected multiple cards (yellow and red), which results in a penalty kick
     message MultipleCards {
@@ -402,14 +379,14 @@ message GameEvent {
         // the team that that should have kicked
         required Team by_team = 1;
         // the location of the ball
-        optional Location location = 2;
+        optional Vector2 location = 2;
         // the time [s] that was waited
         optional float time = 3;
     }
     // game was stuck
     message NoProgressInGame {
         // the location of the ball
-        optional Location location = 1;
+        optional Vector2 location = 1;
         // the time [s] that was waited
         optional float time = 2;
     }
@@ -439,7 +416,7 @@ message GameEvent {
         // the team that found guilty
         required Team by_team = 1;
         // the location of the ball
-        optional Location location = 2;
+        optional Vector2 location = 2;
         // the duration [s] that the keeper hold the ball
         optional float duration = 3;
     }
@@ -474,7 +451,7 @@ message GameEvent {
         // the team that has too many robots
         required Team by_team = 1;
         // the location of the ball
-        optional Location location = 2;
+        optional Vector2 location = 2;
     }
 
     enum Type {

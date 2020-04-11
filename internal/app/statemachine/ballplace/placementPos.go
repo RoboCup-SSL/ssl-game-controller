@@ -2,6 +2,7 @@ package ballplace
 
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/geom"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"math"
 )
@@ -9,12 +10,12 @@ import (
 type BallPlacementPosDeterminer struct {
 	Event               *state.GameEvent
 	Geometry            config.Geometry
-	CurrentPlacementPos *state.Location
+	CurrentPlacementPos *geom.Vector2
 	OnPositiveHalf      map[state.Team]bool
 }
 
 // BallPlacementPos determines the ball placement position based on the primary game event
-func (s *BallPlacementPosDeterminer) Location() *state.Location {
+func (s *BallPlacementPosDeterminer) Location() *geom.Vector2 {
 	switch *s.Event.Type {
 	case state.GameEvent_BALL_LEFT_FIELD_TOUCH_LINE:
 		if s.Event.GetBallLeftFieldTouchLine().Location != nil {
@@ -43,8 +44,8 @@ func (s *BallPlacementPosDeterminer) Location() *state.Location {
 	case state.GameEvent_AIMLESS_KICK:
 		return s.validateLocation(s.Event.GetAimlessKick().KickLocation)
 	case state.GameEvent_GOAL:
-		center := state.NewLocation(0.0, 0.0)
-		return s.validateLocation(&center)
+		center := geom.NewVector2(0.0, 0.0)
+		return s.validateLocation(center)
 	case state.GameEvent_BOT_TIPPED_OVER:
 		return s.validateLocation(s.Event.GetBotTippedOver().Location)
 	case state.GameEvent_BOT_INTERFERED_PLACEMENT:
@@ -69,12 +70,12 @@ func (s *BallPlacementPosDeterminer) Location() *state.Location {
 		return s.validateLocation(s.CurrentPlacementPos)
 	case state.GameEvent_DEFENDER_IN_DEFENSE_AREA, state.GameEvent_MULTIPLE_CARDS:
 		teamInFavor := s.Event.ByTeam().Opposite()
-		location := state.NewLocation(0, 0)
+		location := geom.NewVector2(0, 0)
 		*location.X = float32((s.Geometry.FieldLength / 2.0) - s.Geometry.PenaltyKickDistToGoal)
 		if s.OnPositiveHalf[teamInFavor] {
 			*location.X *= -1
 		}
-		return &location
+		return location
 	case state.GameEvent_KEEPER_HELD_BALL:
 		return s.validateLocation(s.Event.GetKeeperHeldBall().Location)
 	case state.GameEvent_NO_PROGRESS_IN_GAME:
@@ -87,7 +88,7 @@ func (s *BallPlacementPosDeterminer) Location() *state.Location {
 }
 
 // ballPlacementLocationGoalLine determines the placement location for the case that the ball left the field via goal line
-func (s *BallPlacementPosDeterminer) ballPlacementLocationGoalLine(lastBallLocation *state.Location) *state.Location {
+func (s *BallPlacementPosDeterminer) ballPlacementLocationGoalLine(lastBallLocation *geom.Vector2) *geom.Vector2 {
 	var x float64
 	if s.isGoalKick() {
 		x = s.Geometry.FieldLength/2 - s.Geometry.PlacementOffsetGoalLineGoalKick
@@ -96,11 +97,11 @@ func (s *BallPlacementPosDeterminer) ballPlacementLocationGoalLine(lastBallLocat
 	}
 
 	y := s.Geometry.FieldWidth/2 - s.Geometry.PlacementOffsetTouchLine
-	placementLocation := state.NewLocation64(
+	placementLocation := geom.NewVector2(
 		math.Copysign(x, float64(*lastBallLocation.X)),
 		math.Copysign(y, float64(*lastBallLocation.Y)),
 	)
-	return s.validateLocation(&placementLocation)
+	return s.validateLocation(placementLocation)
 }
 
 // isGoalKick returns true if a goal kick is required. This depends on where the ball left the field.
@@ -122,7 +123,7 @@ func (s *BallPlacementPosDeterminer) isGoalKick() bool {
 
 // validateLocation will move the location to a valid location or will return the current placement pos
 // if given location is nil
-func (s *BallPlacementPosDeterminer) validateLocation(location *state.Location) *state.Location {
+func (s *BallPlacementPosDeterminer) validateLocation(location *geom.Vector2) *geom.Vector2 {
 	if location == nil {
 		return s.CurrentPlacementPos
 	}
@@ -134,7 +135,7 @@ func (s *BallPlacementPosDeterminer) validateLocation(location *state.Location) 
 }
 
 // movePositionOutOfDefenseArea will move the given location outside of the defense area if required
-func (s *BallPlacementPosDeterminer) movePositionOutOfDefenseArea(location *state.Location) {
+func (s *BallPlacementPosDeterminer) movePositionOutOfDefenseArea(location *geom.Vector2) {
 	maxX := s.Geometry.FieldLength/2 - s.Geometry.DefenseAreaDepth - s.Geometry.PlacementOffsetDefenseArea
 	minY := s.Geometry.DefenseAreaWidth/2 + s.Geometry.PlacementOffsetDefenseArea
 	if math.Abs(float64(*location.X)) > maxX && math.Abs(float64(*location.Y)) < minY {
@@ -149,7 +150,7 @@ func (s *BallPlacementPosDeterminer) movePositionOutOfDefenseArea(location *stat
 }
 
 // movePositionInsideField will move the given location into the field if required
-func (s *BallPlacementPosDeterminer) movePositionInsideField(location *state.Location) {
+func (s *BallPlacementPosDeterminer) movePositionInsideField(location *geom.Vector2) {
 	maxX := s.Geometry.FieldLength/2 - s.Geometry.PlacementOffsetGoalLine
 	if math.Abs(float64(*location.X)) > maxX {
 		*location.X = float32(math.Copysign(maxX, float64(*location.X)))

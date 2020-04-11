@@ -23,25 +23,25 @@ $root.Team = (function() {
     return values;
 })();
 
-export const BotId = $root.BotId = (() => {
+export const RobotId = $root.RobotId = (() => {
 
     /**
-     * Properties of a BotId.
-     * @exports IBotId
-     * @interface IBotId
-     * @property {number|null} [id] BotId id
-     * @property {Team|null} [team] BotId team
+     * Properties of a RobotId.
+     * @exports IRobotId
+     * @interface IRobotId
+     * @property {number|null} [id] RobotId id
+     * @property {Team|null} [team] RobotId team
      */
 
     /**
-     * Constructs a new BotId.
-     * @exports BotId
-     * @classdesc Represents a BotId.
-     * @implements IBotId
+     * Constructs a new RobotId.
+     * @exports RobotId
+     * @classdesc Represents a RobotId.
+     * @implements IRobotId
      * @constructor
-     * @param {IBotId=} [properties] Properties to set
+     * @param {IRobotId=} [properties] Properties to set
      */
-    function BotId(properties) {
+    function RobotId(properties) {
         if (properties)
             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
@@ -49,85 +49,85 @@ export const BotId = $root.BotId = (() => {
     }
 
     /**
-     * BotId id.
+     * RobotId id.
      * @member {number} id
-     * @memberof BotId
+     * @memberof RobotId
      * @instance
      */
-    BotId.prototype.id = 0;
+    RobotId.prototype.id = 0;
 
     /**
-     * BotId team.
+     * RobotId team.
      * @member {Team} team
-     * @memberof BotId
+     * @memberof RobotId
      * @instance
      */
-    BotId.prototype.team = 0;
+    RobotId.prototype.team = 0;
 
     /**
-     * Creates a new BotId instance using the specified properties.
+     * Creates a new RobotId instance using the specified properties.
      * @function create
-     * @memberof BotId
+     * @memberof RobotId
      * @static
-     * @param {IBotId=} [properties] Properties to set
-     * @returns {BotId} BotId instance
+     * @param {IRobotId=} [properties] Properties to set
+     * @returns {RobotId} RobotId instance
      */
-    BotId.create = function create(properties) {
-        return new BotId(properties);
+    RobotId.create = function create(properties) {
+        return new RobotId(properties);
     };
 
     /**
-     * Encodes the specified BotId message. Does not implicitly {@link BotId.verify|verify} messages.
+     * Encodes the specified RobotId message. Does not implicitly {@link RobotId.verify|verify} messages.
      * @function encode
-     * @memberof BotId
+     * @memberof RobotId
      * @static
-     * @param {IBotId} message BotId message or plain object to encode
+     * @param {IRobotId} message RobotId message or plain object to encode
      * @param {$protobuf.Writer} [writer] Writer to encode to
      * @returns {$protobuf.Writer} Writer
      */
-    BotId.encode = function encode(message, writer) {
+    RobotId.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
         if (message.id != null && message.hasOwnProperty("id"))
-            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.id);
+            writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.id);
         if (message.team != null && message.hasOwnProperty("team"))
             writer.uint32(/* id 2, wireType 0 =*/16).int32(message.team);
         return writer;
     };
 
     /**
-     * Encodes the specified BotId message, length delimited. Does not implicitly {@link BotId.verify|verify} messages.
+     * Encodes the specified RobotId message, length delimited. Does not implicitly {@link RobotId.verify|verify} messages.
      * @function encodeDelimited
-     * @memberof BotId
+     * @memberof RobotId
      * @static
-     * @param {IBotId} message BotId message or plain object to encode
+     * @param {IRobotId} message RobotId message or plain object to encode
      * @param {$protobuf.Writer} [writer] Writer to encode to
      * @returns {$protobuf.Writer} Writer
      */
-    BotId.encodeDelimited = function encodeDelimited(message, writer) {
+    RobotId.encodeDelimited = function encodeDelimited(message, writer) {
         return this.encode(message, writer).ldelim();
     };
 
     /**
-     * Decodes a BotId message from the specified reader or buffer.
+     * Decodes a RobotId message from the specified reader or buffer.
      * @function decode
-     * @memberof BotId
+     * @memberof RobotId
      * @static
      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
      * @param {number} [length] Message length if known beforehand
-     * @returns {BotId} BotId
+     * @returns {RobotId} RobotId
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    BotId.decode = function decode(reader, length) {
+    RobotId.decode = function decode(reader, length) {
         if (!(reader instanceof $Reader))
             reader = $Reader.create(reader);
-        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.BotId();
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.RobotId();
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
             case 1:
-                message.id = reader.int32();
+                message.id = reader.uint32();
                 break;
             case 2:
                 message.team = reader.int32();
@@ -141,30 +141,30 @@ export const BotId = $root.BotId = (() => {
     };
 
     /**
-     * Decodes a BotId message from the specified reader or buffer, length delimited.
+     * Decodes a RobotId message from the specified reader or buffer, length delimited.
      * @function decodeDelimited
-     * @memberof BotId
+     * @memberof RobotId
      * @static
      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {BotId} BotId
+     * @returns {RobotId} RobotId
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    BotId.decodeDelimited = function decodeDelimited(reader) {
+    RobotId.decodeDelimited = function decodeDelimited(reader) {
         if (!(reader instanceof $Reader))
             reader = new $Reader(reader);
         return this.decode(reader, reader.uint32());
     };
 
     /**
-     * Verifies a BotId message.
+     * Verifies a RobotId message.
      * @function verify
-     * @memberof BotId
+     * @memberof RobotId
      * @static
      * @param {Object.<string,*>} message Plain object to verify
      * @returns {string|null} `null` if valid, otherwise the reason why it is not
      */
-    BotId.verify = function verify(message) {
+    RobotId.verify = function verify(message) {
         if (typeof message !== "object" || message === null)
             return "object expected";
         if (message.id != null && message.hasOwnProperty("id"))
@@ -183,19 +183,19 @@ export const BotId = $root.BotId = (() => {
     };
 
     /**
-     * Creates a BotId message from a plain object. Also converts values to their respective internal types.
+     * Creates a RobotId message from a plain object. Also converts values to their respective internal types.
      * @function fromObject
-     * @memberof BotId
+     * @memberof RobotId
      * @static
      * @param {Object.<string,*>} object Plain object
-     * @returns {BotId} BotId
+     * @returns {RobotId} RobotId
      */
-    BotId.fromObject = function fromObject(object) {
-        if (object instanceof $root.BotId)
+    RobotId.fromObject = function fromObject(object) {
+        if (object instanceof $root.RobotId)
             return object;
-        let message = new $root.BotId();
+        let message = new $root.RobotId();
         if (object.id != null)
-            message.id = object.id | 0;
+            message.id = object.id >>> 0;
         switch (object.team) {
         case "UNKNOWN":
         case 0:
@@ -214,15 +214,15 @@ export const BotId = $root.BotId = (() => {
     };
 
     /**
-     * Creates a plain object from a BotId message. Also converts values to other types if specified.
+     * Creates a plain object from a RobotId message. Also converts values to other types if specified.
      * @function toObject
-     * @memberof BotId
+     * @memberof RobotId
      * @static
-     * @param {BotId} message BotId
+     * @param {RobotId} message RobotId
      * @param {$protobuf.IConversionOptions} [options] Conversion options
      * @returns {Object.<string,*>} Plain object
      */
-    BotId.toObject = function toObject(message, options) {
+    RobotId.toObject = function toObject(message, options) {
         if (!options)
             options = {};
         let object = {};
@@ -238,38 +238,38 @@ export const BotId = $root.BotId = (() => {
     };
 
     /**
-     * Converts this BotId to JSON.
+     * Converts this RobotId to JSON.
      * @function toJSON
-     * @memberof BotId
+     * @memberof RobotId
      * @instance
      * @returns {Object.<string,*>} JSON object
      */
-    BotId.prototype.toJSON = function toJSON() {
+    RobotId.prototype.toJSON = function toJSON() {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
-    return BotId;
+    return RobotId;
 })();
 
-export const Location = $root.Location = (() => {
+export const Vector2 = $root.Vector2 = (() => {
 
     /**
-     * Properties of a Location.
-     * @exports ILocation
-     * @interface ILocation
-     * @property {number} x Location x
-     * @property {number} y Location y
+     * Properties of a Vector2.
+     * @exports IVector2
+     * @interface IVector2
+     * @property {number} x Vector2 x
+     * @property {number} y Vector2 y
      */
 
     /**
-     * Constructs a new Location.
-     * @exports Location
-     * @classdesc Represents a Location.
-     * @implements ILocation
+     * Constructs a new Vector2.
+     * @exports Vector2
+     * @classdesc Represents a Vector2.
+     * @implements IVector2
      * @constructor
-     * @param {ILocation=} [properties] Properties to set
+     * @param {IVector2=} [properties] Properties to set
      */
-    function Location(properties) {
+    function Vector2(properties) {
         if (properties)
             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
@@ -277,43 +277,43 @@ export const Location = $root.Location = (() => {
     }
 
     /**
-     * Location x.
+     * Vector2 x.
      * @member {number} x
-     * @memberof Location
+     * @memberof Vector2
      * @instance
      */
-    Location.prototype.x = 0;
+    Vector2.prototype.x = 0;
 
     /**
-     * Location y.
+     * Vector2 y.
      * @member {number} y
-     * @memberof Location
+     * @memberof Vector2
      * @instance
      */
-    Location.prototype.y = 0;
+    Vector2.prototype.y = 0;
 
     /**
-     * Creates a new Location instance using the specified properties.
+     * Creates a new Vector2 instance using the specified properties.
      * @function create
-     * @memberof Location
+     * @memberof Vector2
      * @static
-     * @param {ILocation=} [properties] Properties to set
-     * @returns {Location} Location instance
+     * @param {IVector2=} [properties] Properties to set
+     * @returns {Vector2} Vector2 instance
      */
-    Location.create = function create(properties) {
-        return new Location(properties);
+    Vector2.create = function create(properties) {
+        return new Vector2(properties);
     };
 
     /**
-     * Encodes the specified Location message. Does not implicitly {@link Location.verify|verify} messages.
+     * Encodes the specified Vector2 message. Does not implicitly {@link Vector2.verify|verify} messages.
      * @function encode
-     * @memberof Location
+     * @memberof Vector2
      * @static
-     * @param {ILocation} message Location message or plain object to encode
+     * @param {IVector2} message Vector2 message or plain object to encode
      * @param {$protobuf.Writer} [writer] Writer to encode to
      * @returns {$protobuf.Writer} Writer
      */
-    Location.encode = function encode(message, writer) {
+    Vector2.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
         writer.uint32(/* id 1, wireType 5 =*/13).float(message.x);
@@ -322,33 +322,33 @@ export const Location = $root.Location = (() => {
     };
 
     /**
-     * Encodes the specified Location message, length delimited. Does not implicitly {@link Location.verify|verify} messages.
+     * Encodes the specified Vector2 message, length delimited. Does not implicitly {@link Vector2.verify|verify} messages.
      * @function encodeDelimited
-     * @memberof Location
+     * @memberof Vector2
      * @static
-     * @param {ILocation} message Location message or plain object to encode
+     * @param {IVector2} message Vector2 message or plain object to encode
      * @param {$protobuf.Writer} [writer] Writer to encode to
      * @returns {$protobuf.Writer} Writer
      */
-    Location.encodeDelimited = function encodeDelimited(message, writer) {
+    Vector2.encodeDelimited = function encodeDelimited(message, writer) {
         return this.encode(message, writer).ldelim();
     };
 
     /**
-     * Decodes a Location message from the specified reader or buffer.
+     * Decodes a Vector2 message from the specified reader or buffer.
      * @function decode
-     * @memberof Location
+     * @memberof Vector2
      * @static
      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
      * @param {number} [length] Message length if known beforehand
-     * @returns {Location} Location
+     * @returns {Vector2} Vector2
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    Location.decode = function decode(reader, length) {
+    Vector2.decode = function decode(reader, length) {
         if (!(reader instanceof $Reader))
             reader = $Reader.create(reader);
-        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Location();
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Vector2();
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
@@ -371,30 +371,30 @@ export const Location = $root.Location = (() => {
     };
 
     /**
-     * Decodes a Location message from the specified reader or buffer, length delimited.
+     * Decodes a Vector2 message from the specified reader or buffer, length delimited.
      * @function decodeDelimited
-     * @memberof Location
+     * @memberof Vector2
      * @static
      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {Location} Location
+     * @returns {Vector2} Vector2
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    Location.decodeDelimited = function decodeDelimited(reader) {
+    Vector2.decodeDelimited = function decodeDelimited(reader) {
         if (!(reader instanceof $Reader))
             reader = new $Reader(reader);
         return this.decode(reader, reader.uint32());
     };
 
     /**
-     * Verifies a Location message.
+     * Verifies a Vector2 message.
      * @function verify
-     * @memberof Location
+     * @memberof Vector2
      * @static
      * @param {Object.<string,*>} message Plain object to verify
      * @returns {string|null} `null` if valid, otherwise the reason why it is not
      */
-    Location.verify = function verify(message) {
+    Vector2.verify = function verify(message) {
         if (typeof message !== "object" || message === null)
             return "object expected";
         if (typeof message.x !== "number")
@@ -405,17 +405,17 @@ export const Location = $root.Location = (() => {
     };
 
     /**
-     * Creates a Location message from a plain object. Also converts values to their respective internal types.
+     * Creates a Vector2 message from a plain object. Also converts values to their respective internal types.
      * @function fromObject
-     * @memberof Location
+     * @memberof Vector2
      * @static
      * @param {Object.<string,*>} object Plain object
-     * @returns {Location} Location
+     * @returns {Vector2} Vector2
      */
-    Location.fromObject = function fromObject(object) {
-        if (object instanceof $root.Location)
+    Vector2.fromObject = function fromObject(object) {
+        if (object instanceof $root.Vector2)
             return object;
-        let message = new $root.Location();
+        let message = new $root.Vector2();
         if (object.x != null)
             message.x = Number(object.x);
         if (object.y != null)
@@ -424,15 +424,15 @@ export const Location = $root.Location = (() => {
     };
 
     /**
-     * Creates a plain object from a Location message. Also converts values to other types if specified.
+     * Creates a plain object from a Vector2 message. Also converts values to other types if specified.
      * @function toObject
-     * @memberof Location
+     * @memberof Vector2
      * @static
-     * @param {Location} message Location
+     * @param {Vector2} message Vector2
      * @param {$protobuf.IConversionOptions} [options] Conversion options
      * @returns {Object.<string,*>} Plain object
      */
-    Location.toObject = function toObject(message, options) {
+    Vector2.toObject = function toObject(message, options) {
         if (!options)
             options = {};
         let object = {};
@@ -448,17 +448,249 @@ export const Location = $root.Location = (() => {
     };
 
     /**
-     * Converts this Location to JSON.
+     * Converts this Vector2 to JSON.
      * @function toJSON
-     * @memberof Location
+     * @memberof Vector2
      * @instance
      * @returns {Object.<string,*>} JSON object
      */
-    Location.prototype.toJSON = function toJSON() {
+    Vector2.prototype.toJSON = function toJSON() {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
-    return Location;
+    return Vector2;
+})();
+
+export const Vector3 = $root.Vector3 = (() => {
+
+    /**
+     * Properties of a Vector3.
+     * @exports IVector3
+     * @interface IVector3
+     * @property {number} x Vector3 x
+     * @property {number} y Vector3 y
+     * @property {number} z Vector3 z
+     */
+
+    /**
+     * Constructs a new Vector3.
+     * @exports Vector3
+     * @classdesc Represents a Vector3.
+     * @implements IVector3
+     * @constructor
+     * @param {IVector3=} [properties] Properties to set
+     */
+    function Vector3(properties) {
+        if (properties)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * Vector3 x.
+     * @member {number} x
+     * @memberof Vector3
+     * @instance
+     */
+    Vector3.prototype.x = 0;
+
+    /**
+     * Vector3 y.
+     * @member {number} y
+     * @memberof Vector3
+     * @instance
+     */
+    Vector3.prototype.y = 0;
+
+    /**
+     * Vector3 z.
+     * @member {number} z
+     * @memberof Vector3
+     * @instance
+     */
+    Vector3.prototype.z = 0;
+
+    /**
+     * Creates a new Vector3 instance using the specified properties.
+     * @function create
+     * @memberof Vector3
+     * @static
+     * @param {IVector3=} [properties] Properties to set
+     * @returns {Vector3} Vector3 instance
+     */
+    Vector3.create = function create(properties) {
+        return new Vector3(properties);
+    };
+
+    /**
+     * Encodes the specified Vector3 message. Does not implicitly {@link Vector3.verify|verify} messages.
+     * @function encode
+     * @memberof Vector3
+     * @static
+     * @param {IVector3} message Vector3 message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    Vector3.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        writer.uint32(/* id 1, wireType 5 =*/13).float(message.x);
+        writer.uint32(/* id 2, wireType 5 =*/21).float(message.y);
+        writer.uint32(/* id 3, wireType 5 =*/29).float(message.z);
+        return writer;
+    };
+
+    /**
+     * Encodes the specified Vector3 message, length delimited. Does not implicitly {@link Vector3.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof Vector3
+     * @static
+     * @param {IVector3} message Vector3 message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    Vector3.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a Vector3 message from the specified reader or buffer.
+     * @function decode
+     * @memberof Vector3
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {Vector3} Vector3
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    Vector3.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Vector3();
+        while (reader.pos < end) {
+            let tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1:
+                message.x = reader.float();
+                break;
+            case 2:
+                message.y = reader.float();
+                break;
+            case 3:
+                message.z = reader.float();
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        if (!message.hasOwnProperty("x"))
+            throw $util.ProtocolError("missing required 'x'", { instance: message });
+        if (!message.hasOwnProperty("y"))
+            throw $util.ProtocolError("missing required 'y'", { instance: message });
+        if (!message.hasOwnProperty("z"))
+            throw $util.ProtocolError("missing required 'z'", { instance: message });
+        return message;
+    };
+
+    /**
+     * Decodes a Vector3 message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof Vector3
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {Vector3} Vector3
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    Vector3.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a Vector3 message.
+     * @function verify
+     * @memberof Vector3
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    Vector3.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (typeof message.x !== "number")
+            return "x: number expected";
+        if (typeof message.y !== "number")
+            return "y: number expected";
+        if (typeof message.z !== "number")
+            return "z: number expected";
+        return null;
+    };
+
+    /**
+     * Creates a Vector3 message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof Vector3
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {Vector3} Vector3
+     */
+    Vector3.fromObject = function fromObject(object) {
+        if (object instanceof $root.Vector3)
+            return object;
+        let message = new $root.Vector3();
+        if (object.x != null)
+            message.x = Number(object.x);
+        if (object.y != null)
+            message.y = Number(object.y);
+        if (object.z != null)
+            message.z = Number(object.z);
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a Vector3 message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof Vector3
+     * @static
+     * @param {Vector3} message Vector3
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    Vector3.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        let object = {};
+        if (options.defaults) {
+            object.x = 0;
+            object.y = 0;
+            object.z = 0;
+        }
+        if (message.x != null && message.hasOwnProperty("x"))
+            object.x = options.json && !isFinite(message.x) ? String(message.x) : message.x;
+        if (message.y != null && message.hasOwnProperty("y"))
+            object.y = options.json && !isFinite(message.y) ? String(message.y) : message.y;
+        if (message.z != null && message.hasOwnProperty("z"))
+            object.z = options.json && !isFinite(message.z) ? String(message.z) : message.z;
+        return object;
+    };
+
+    /**
+     * Converts this Vector3 to JSON.
+     * @function toJSON
+     * @memberof Vector3
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    Vector3.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    return Vector3;
 })();
 
 export const GameEvent = $root.GameEvent = (() => {
@@ -2312,7 +2544,7 @@ export const GameEvent = $root.GameEvent = (() => {
          * @interface IBallLeftField
          * @property {Team} byTeam BallLeftField byTeam
          * @property {number|null} [byBot] BallLeftField byBot
-         * @property {ILocation|null} [location] BallLeftField location
+         * @property {IVector2|null} [location] BallLeftField location
          */
 
         /**
@@ -2348,7 +2580,7 @@ export const GameEvent = $root.GameEvent = (() => {
 
         /**
          * BallLeftField location.
-         * @member {ILocation|null|undefined} location
+         * @member {IVector2|null|undefined} location
          * @memberof GameEvent.BallLeftField
          * @instance
          */
@@ -2382,7 +2614,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byBot != null && message.hasOwnProperty("byBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.byBot);
             if (message.location != null && message.hasOwnProperty("location"))
-                $root.Location.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
             return writer;
         };
 
@@ -2424,7 +2656,7 @@ export const GameEvent = $root.GameEvent = (() => {
                     message.byBot = reader.uint32();
                     break;
                 case 3:
-                    message.location = $root.Location.decode(reader, reader.uint32());
+                    message.location = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -2475,7 +2707,7 @@ export const GameEvent = $root.GameEvent = (() => {
                 if (!$util.isInteger(message.byBot))
                     return "byBot: integer expected";
             if (message.location != null && message.hasOwnProperty("location")) {
-                let error = $root.Location.verify(message.location);
+                let error = $root.Vector2.verify(message.location);
                 if (error)
                     return "location." + error;
             }
@@ -2513,7 +2745,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (object.location != null) {
                 if (typeof object.location !== "object")
                     throw TypeError(".GameEvent.BallLeftField.location: object expected");
-                message.location = $root.Location.fromObject(object.location);
+                message.location = $root.Vector2.fromObject(object.location);
             }
             return message;
         };
@@ -2541,7 +2773,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byBot != null && message.hasOwnProperty("byBot"))
                 object.byBot = message.byBot;
             if (message.location != null && message.hasOwnProperty("location"))
-                object.location = $root.Location.toObject(message.location, options);
+                object.location = $root.Vector2.toObject(message.location, options);
             return object;
         };
 
@@ -2567,8 +2799,8 @@ export const GameEvent = $root.GameEvent = (() => {
          * @interface IAimlessKick
          * @property {Team} byTeam AimlessKick byTeam
          * @property {number|null} [byBot] AimlessKick byBot
-         * @property {ILocation|null} [location] AimlessKick location
-         * @property {ILocation|null} [kickLocation] AimlessKick kickLocation
+         * @property {IVector2|null} [location] AimlessKick location
+         * @property {IVector2|null} [kickLocation] AimlessKick kickLocation
          */
 
         /**
@@ -2604,7 +2836,7 @@ export const GameEvent = $root.GameEvent = (() => {
 
         /**
          * AimlessKick location.
-         * @member {ILocation|null|undefined} location
+         * @member {IVector2|null|undefined} location
          * @memberof GameEvent.AimlessKick
          * @instance
          */
@@ -2612,7 +2844,7 @@ export const GameEvent = $root.GameEvent = (() => {
 
         /**
          * AimlessKick kickLocation.
-         * @member {ILocation|null|undefined} kickLocation
+         * @member {IVector2|null|undefined} kickLocation
          * @memberof GameEvent.AimlessKick
          * @instance
          */
@@ -2646,9 +2878,9 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byBot != null && message.hasOwnProperty("byBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.byBot);
             if (message.location != null && message.hasOwnProperty("location"))
-                $root.Location.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
             if (message.kickLocation != null && message.hasOwnProperty("kickLocation"))
-                $root.Location.encode(message.kickLocation, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+                $root.Vector2.encode(message.kickLocation, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
             return writer;
         };
 
@@ -2690,10 +2922,10 @@ export const GameEvent = $root.GameEvent = (() => {
                     message.byBot = reader.uint32();
                     break;
                 case 3:
-                    message.location = $root.Location.decode(reader, reader.uint32());
+                    message.location = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 case 4:
-                    message.kickLocation = $root.Location.decode(reader, reader.uint32());
+                    message.kickLocation = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -2744,12 +2976,12 @@ export const GameEvent = $root.GameEvent = (() => {
                 if (!$util.isInteger(message.byBot))
                     return "byBot: integer expected";
             if (message.location != null && message.hasOwnProperty("location")) {
-                let error = $root.Location.verify(message.location);
+                let error = $root.Vector2.verify(message.location);
                 if (error)
                     return "location." + error;
             }
             if (message.kickLocation != null && message.hasOwnProperty("kickLocation")) {
-                let error = $root.Location.verify(message.kickLocation);
+                let error = $root.Vector2.verify(message.kickLocation);
                 if (error)
                     return "kickLocation." + error;
             }
@@ -2787,12 +3019,12 @@ export const GameEvent = $root.GameEvent = (() => {
             if (object.location != null) {
                 if (typeof object.location !== "object")
                     throw TypeError(".GameEvent.AimlessKick.location: object expected");
-                message.location = $root.Location.fromObject(object.location);
+                message.location = $root.Vector2.fromObject(object.location);
             }
             if (object.kickLocation != null) {
                 if (typeof object.kickLocation !== "object")
                     throw TypeError(".GameEvent.AimlessKick.kickLocation: object expected");
-                message.kickLocation = $root.Location.fromObject(object.kickLocation);
+                message.kickLocation = $root.Vector2.fromObject(object.kickLocation);
             }
             return message;
         };
@@ -2821,9 +3053,9 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byBot != null && message.hasOwnProperty("byBot"))
                 object.byBot = message.byBot;
             if (message.location != null && message.hasOwnProperty("location"))
-                object.location = $root.Location.toObject(message.location, options);
+                object.location = $root.Vector2.toObject(message.location, options);
             if (message.kickLocation != null && message.hasOwnProperty("kickLocation"))
-                object.kickLocation = $root.Location.toObject(message.kickLocation, options);
+                object.kickLocation = $root.Vector2.toObject(message.kickLocation, options);
             return object;
         };
 
@@ -2850,8 +3082,8 @@ export const GameEvent = $root.GameEvent = (() => {
          * @property {Team} byTeam Goal byTeam
          * @property {Team|null} [kickingTeam] Goal kickingTeam
          * @property {number|null} [kickingBot] Goal kickingBot
-         * @property {ILocation|null} [location] Goal location
-         * @property {ILocation|null} [kickLocation] Goal kickLocation
+         * @property {IVector2|null} [location] Goal location
+         * @property {IVector2|null} [kickLocation] Goal kickLocation
          * @property {number|null} [kickSpeed] Goal kickSpeed
          * @property {number|null} [maxBallHeight] Goal maxBallHeight
          */
@@ -2897,7 +3129,7 @@ export const GameEvent = $root.GameEvent = (() => {
 
         /**
          * Goal location.
-         * @member {ILocation|null|undefined} location
+         * @member {IVector2|null|undefined} location
          * @memberof GameEvent.Goal
          * @instance
          */
@@ -2905,7 +3137,7 @@ export const GameEvent = $root.GameEvent = (() => {
 
         /**
          * Goal kickLocation.
-         * @member {ILocation|null|undefined} kickLocation
+         * @member {IVector2|null|undefined} kickLocation
          * @memberof GameEvent.Goal
          * @instance
          */
@@ -2955,9 +3187,9 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.kickingBot != null && message.hasOwnProperty("kickingBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.kickingBot);
             if (message.location != null && message.hasOwnProperty("location"))
-                $root.Location.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
             if (message.kickLocation != null && message.hasOwnProperty("kickLocation"))
-                $root.Location.encode(message.kickLocation, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+                $root.Vector2.encode(message.kickLocation, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
             if (message.kickSpeed != null && message.hasOwnProperty("kickSpeed"))
                 writer.uint32(/* id 5, wireType 5 =*/45).float(message.kickSpeed);
             if (message.kickingTeam != null && message.hasOwnProperty("kickingTeam"))
@@ -3008,10 +3240,10 @@ export const GameEvent = $root.GameEvent = (() => {
                     message.kickingBot = reader.uint32();
                     break;
                 case 3:
-                    message.location = $root.Location.decode(reader, reader.uint32());
+                    message.location = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 case 4:
-                    message.kickLocation = $root.Location.decode(reader, reader.uint32());
+                    message.kickLocation = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 case 5:
                     message.kickSpeed = reader.float();
@@ -3077,12 +3309,12 @@ export const GameEvent = $root.GameEvent = (() => {
                 if (!$util.isInteger(message.kickingBot))
                     return "kickingBot: integer expected";
             if (message.location != null && message.hasOwnProperty("location")) {
-                let error = $root.Location.verify(message.location);
+                let error = $root.Vector2.verify(message.location);
                 if (error)
                     return "location." + error;
             }
             if (message.kickLocation != null && message.hasOwnProperty("kickLocation")) {
-                let error = $root.Location.verify(message.kickLocation);
+                let error = $root.Vector2.verify(message.kickLocation);
                 if (error)
                     return "kickLocation." + error;
             }
@@ -3140,12 +3372,12 @@ export const GameEvent = $root.GameEvent = (() => {
             if (object.location != null) {
                 if (typeof object.location !== "object")
                     throw TypeError(".GameEvent.Goal.location: object expected");
-                message.location = $root.Location.fromObject(object.location);
+                message.location = $root.Vector2.fromObject(object.location);
             }
             if (object.kickLocation != null) {
                 if (typeof object.kickLocation !== "object")
                     throw TypeError(".GameEvent.Goal.kickLocation: object expected");
-                message.kickLocation = $root.Location.fromObject(object.kickLocation);
+                message.kickLocation = $root.Vector2.fromObject(object.kickLocation);
             }
             if (object.kickSpeed != null)
                 message.kickSpeed = Number(object.kickSpeed);
@@ -3181,9 +3413,9 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.kickingBot != null && message.hasOwnProperty("kickingBot"))
                 object.kickingBot = message.kickingBot;
             if (message.location != null && message.hasOwnProperty("location"))
-                object.location = $root.Location.toObject(message.location, options);
+                object.location = $root.Vector2.toObject(message.location, options);
             if (message.kickLocation != null && message.hasOwnProperty("kickLocation"))
-                object.kickLocation = $root.Location.toObject(message.kickLocation, options);
+                object.kickLocation = $root.Vector2.toObject(message.kickLocation, options);
             if (message.kickSpeed != null && message.hasOwnProperty("kickSpeed"))
                 object.kickSpeed = options.json && !isFinite(message.kickSpeed) ? String(message.kickSpeed) : message.kickSpeed;
             if (message.kickingTeam != null && message.hasOwnProperty("kickingTeam"))
@@ -3215,8 +3447,8 @@ export const GameEvent = $root.GameEvent = (() => {
          * @interface IIndirectGoal
          * @property {Team} byTeam IndirectGoal byTeam
          * @property {number|null} [byBot] IndirectGoal byBot
-         * @property {ILocation|null} [location] IndirectGoal location
-         * @property {ILocation|null} [kickLocation] IndirectGoal kickLocation
+         * @property {IVector2|null} [location] IndirectGoal location
+         * @property {IVector2|null} [kickLocation] IndirectGoal kickLocation
          */
 
         /**
@@ -3252,7 +3484,7 @@ export const GameEvent = $root.GameEvent = (() => {
 
         /**
          * IndirectGoal location.
-         * @member {ILocation|null|undefined} location
+         * @member {IVector2|null|undefined} location
          * @memberof GameEvent.IndirectGoal
          * @instance
          */
@@ -3260,7 +3492,7 @@ export const GameEvent = $root.GameEvent = (() => {
 
         /**
          * IndirectGoal kickLocation.
-         * @member {ILocation|null|undefined} kickLocation
+         * @member {IVector2|null|undefined} kickLocation
          * @memberof GameEvent.IndirectGoal
          * @instance
          */
@@ -3294,9 +3526,9 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byBot != null && message.hasOwnProperty("byBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.byBot);
             if (message.location != null && message.hasOwnProperty("location"))
-                $root.Location.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
             if (message.kickLocation != null && message.hasOwnProperty("kickLocation"))
-                $root.Location.encode(message.kickLocation, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+                $root.Vector2.encode(message.kickLocation, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
             return writer;
         };
 
@@ -3338,10 +3570,10 @@ export const GameEvent = $root.GameEvent = (() => {
                     message.byBot = reader.uint32();
                     break;
                 case 3:
-                    message.location = $root.Location.decode(reader, reader.uint32());
+                    message.location = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 case 4:
-                    message.kickLocation = $root.Location.decode(reader, reader.uint32());
+                    message.kickLocation = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -3392,12 +3624,12 @@ export const GameEvent = $root.GameEvent = (() => {
                 if (!$util.isInteger(message.byBot))
                     return "byBot: integer expected";
             if (message.location != null && message.hasOwnProperty("location")) {
-                let error = $root.Location.verify(message.location);
+                let error = $root.Vector2.verify(message.location);
                 if (error)
                     return "location." + error;
             }
             if (message.kickLocation != null && message.hasOwnProperty("kickLocation")) {
-                let error = $root.Location.verify(message.kickLocation);
+                let error = $root.Vector2.verify(message.kickLocation);
                 if (error)
                     return "kickLocation." + error;
             }
@@ -3435,12 +3667,12 @@ export const GameEvent = $root.GameEvent = (() => {
             if (object.location != null) {
                 if (typeof object.location !== "object")
                     throw TypeError(".GameEvent.IndirectGoal.location: object expected");
-                message.location = $root.Location.fromObject(object.location);
+                message.location = $root.Vector2.fromObject(object.location);
             }
             if (object.kickLocation != null) {
                 if (typeof object.kickLocation !== "object")
                     throw TypeError(".GameEvent.IndirectGoal.kickLocation: object expected");
-                message.kickLocation = $root.Location.fromObject(object.kickLocation);
+                message.kickLocation = $root.Vector2.fromObject(object.kickLocation);
             }
             return message;
         };
@@ -3469,9 +3701,9 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byBot != null && message.hasOwnProperty("byBot"))
                 object.byBot = message.byBot;
             if (message.location != null && message.hasOwnProperty("location"))
-                object.location = $root.Location.toObject(message.location, options);
+                object.location = $root.Vector2.toObject(message.location, options);
             if (message.kickLocation != null && message.hasOwnProperty("kickLocation"))
-                object.kickLocation = $root.Location.toObject(message.kickLocation, options);
+                object.kickLocation = $root.Vector2.toObject(message.kickLocation, options);
             return object;
         };
 
@@ -3497,8 +3729,8 @@ export const GameEvent = $root.GameEvent = (() => {
          * @interface IChippedGoal
          * @property {Team} byTeam ChippedGoal byTeam
          * @property {number|null} [byBot] ChippedGoal byBot
-         * @property {ILocation|null} [location] ChippedGoal location
-         * @property {ILocation|null} [kickLocation] ChippedGoal kickLocation
+         * @property {IVector2|null} [location] ChippedGoal location
+         * @property {IVector2|null} [kickLocation] ChippedGoal kickLocation
          * @property {number|null} [maxBallHeight] ChippedGoal maxBallHeight
          */
 
@@ -3535,7 +3767,7 @@ export const GameEvent = $root.GameEvent = (() => {
 
         /**
          * ChippedGoal location.
-         * @member {ILocation|null|undefined} location
+         * @member {IVector2|null|undefined} location
          * @memberof GameEvent.ChippedGoal
          * @instance
          */
@@ -3543,7 +3775,7 @@ export const GameEvent = $root.GameEvent = (() => {
 
         /**
          * ChippedGoal kickLocation.
-         * @member {ILocation|null|undefined} kickLocation
+         * @member {IVector2|null|undefined} kickLocation
          * @memberof GameEvent.ChippedGoal
          * @instance
          */
@@ -3585,9 +3817,9 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byBot != null && message.hasOwnProperty("byBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.byBot);
             if (message.location != null && message.hasOwnProperty("location"))
-                $root.Location.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
             if (message.kickLocation != null && message.hasOwnProperty("kickLocation"))
-                $root.Location.encode(message.kickLocation, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+                $root.Vector2.encode(message.kickLocation, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
             if (message.maxBallHeight != null && message.hasOwnProperty("maxBallHeight"))
                 writer.uint32(/* id 5, wireType 5 =*/45).float(message.maxBallHeight);
             return writer;
@@ -3631,10 +3863,10 @@ export const GameEvent = $root.GameEvent = (() => {
                     message.byBot = reader.uint32();
                     break;
                 case 3:
-                    message.location = $root.Location.decode(reader, reader.uint32());
+                    message.location = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 case 4:
-                    message.kickLocation = $root.Location.decode(reader, reader.uint32());
+                    message.kickLocation = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 case 5:
                     message.maxBallHeight = reader.float();
@@ -3688,12 +3920,12 @@ export const GameEvent = $root.GameEvent = (() => {
                 if (!$util.isInteger(message.byBot))
                     return "byBot: integer expected";
             if (message.location != null && message.hasOwnProperty("location")) {
-                let error = $root.Location.verify(message.location);
+                let error = $root.Vector2.verify(message.location);
                 if (error)
                     return "location." + error;
             }
             if (message.kickLocation != null && message.hasOwnProperty("kickLocation")) {
-                let error = $root.Location.verify(message.kickLocation);
+                let error = $root.Vector2.verify(message.kickLocation);
                 if (error)
                     return "kickLocation." + error;
             }
@@ -3734,12 +3966,12 @@ export const GameEvent = $root.GameEvent = (() => {
             if (object.location != null) {
                 if (typeof object.location !== "object")
                     throw TypeError(".GameEvent.ChippedGoal.location: object expected");
-                message.location = $root.Location.fromObject(object.location);
+                message.location = $root.Vector2.fromObject(object.location);
             }
             if (object.kickLocation != null) {
                 if (typeof object.kickLocation !== "object")
                     throw TypeError(".GameEvent.ChippedGoal.kickLocation: object expected");
-                message.kickLocation = $root.Location.fromObject(object.kickLocation);
+                message.kickLocation = $root.Vector2.fromObject(object.kickLocation);
             }
             if (object.maxBallHeight != null)
                 message.maxBallHeight = Number(object.maxBallHeight);
@@ -3771,9 +4003,9 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byBot != null && message.hasOwnProperty("byBot"))
                 object.byBot = message.byBot;
             if (message.location != null && message.hasOwnProperty("location"))
-                object.location = $root.Location.toObject(message.location, options);
+                object.location = $root.Vector2.toObject(message.location, options);
             if (message.kickLocation != null && message.hasOwnProperty("kickLocation"))
-                object.kickLocation = $root.Location.toObject(message.kickLocation, options);
+                object.kickLocation = $root.Vector2.toObject(message.kickLocation, options);
             if (message.maxBallHeight != null && message.hasOwnProperty("maxBallHeight"))
                 object.maxBallHeight = options.json && !isFinite(message.maxBallHeight) ? String(message.maxBallHeight) : message.maxBallHeight;
             return object;
@@ -3801,7 +4033,7 @@ export const GameEvent = $root.GameEvent = (() => {
          * @interface IBotTooFastInStop
          * @property {Team} byTeam BotTooFastInStop byTeam
          * @property {number|null} [byBot] BotTooFastInStop byBot
-         * @property {ILocation|null} [location] BotTooFastInStop location
+         * @property {IVector2|null} [location] BotTooFastInStop location
          * @property {number|null} [speed] BotTooFastInStop speed
          */
 
@@ -3838,7 +4070,7 @@ export const GameEvent = $root.GameEvent = (() => {
 
         /**
          * BotTooFastInStop location.
-         * @member {ILocation|null|undefined} location
+         * @member {IVector2|null|undefined} location
          * @memberof GameEvent.BotTooFastInStop
          * @instance
          */
@@ -3880,7 +4112,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byBot != null && message.hasOwnProperty("byBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.byBot);
             if (message.location != null && message.hasOwnProperty("location"))
-                $root.Location.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
             if (message.speed != null && message.hasOwnProperty("speed"))
                 writer.uint32(/* id 4, wireType 5 =*/37).float(message.speed);
             return writer;
@@ -3924,7 +4156,7 @@ export const GameEvent = $root.GameEvent = (() => {
                     message.byBot = reader.uint32();
                     break;
                 case 3:
-                    message.location = $root.Location.decode(reader, reader.uint32());
+                    message.location = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 case 4:
                     message.speed = reader.float();
@@ -3978,7 +4210,7 @@ export const GameEvent = $root.GameEvent = (() => {
                 if (!$util.isInteger(message.byBot))
                     return "byBot: integer expected";
             if (message.location != null && message.hasOwnProperty("location")) {
-                let error = $root.Location.verify(message.location);
+                let error = $root.Vector2.verify(message.location);
                 if (error)
                     return "location." + error;
             }
@@ -4019,7 +4251,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (object.location != null) {
                 if (typeof object.location !== "object")
                     throw TypeError(".GameEvent.BotTooFastInStop.location: object expected");
-                message.location = $root.Location.fromObject(object.location);
+                message.location = $root.Vector2.fromObject(object.location);
             }
             if (object.speed != null)
                 message.speed = Number(object.speed);
@@ -4050,7 +4282,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byBot != null && message.hasOwnProperty("byBot"))
                 object.byBot = message.byBot;
             if (message.location != null && message.hasOwnProperty("location"))
-                object.location = $root.Location.toObject(message.location, options);
+                object.location = $root.Vector2.toObject(message.location, options);
             if (message.speed != null && message.hasOwnProperty("speed"))
                 object.speed = options.json && !isFinite(message.speed) ? String(message.speed) : message.speed;
             return object;
@@ -4078,7 +4310,7 @@ export const GameEvent = $root.GameEvent = (() => {
          * @interface IDefenderTooCloseToKickPoint
          * @property {Team} byTeam DefenderTooCloseToKickPoint byTeam
          * @property {number|null} [byBot] DefenderTooCloseToKickPoint byBot
-         * @property {ILocation|null} [location] DefenderTooCloseToKickPoint location
+         * @property {IVector2|null} [location] DefenderTooCloseToKickPoint location
          * @property {number|null} [distance] DefenderTooCloseToKickPoint distance
          */
 
@@ -4115,7 +4347,7 @@ export const GameEvent = $root.GameEvent = (() => {
 
         /**
          * DefenderTooCloseToKickPoint location.
-         * @member {ILocation|null|undefined} location
+         * @member {IVector2|null|undefined} location
          * @memberof GameEvent.DefenderTooCloseToKickPoint
          * @instance
          */
@@ -4157,7 +4389,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byBot != null && message.hasOwnProperty("byBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.byBot);
             if (message.location != null && message.hasOwnProperty("location"))
-                $root.Location.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
             if (message.distance != null && message.hasOwnProperty("distance"))
                 writer.uint32(/* id 4, wireType 5 =*/37).float(message.distance);
             return writer;
@@ -4201,7 +4433,7 @@ export const GameEvent = $root.GameEvent = (() => {
                     message.byBot = reader.uint32();
                     break;
                 case 3:
-                    message.location = $root.Location.decode(reader, reader.uint32());
+                    message.location = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 case 4:
                     message.distance = reader.float();
@@ -4255,7 +4487,7 @@ export const GameEvent = $root.GameEvent = (() => {
                 if (!$util.isInteger(message.byBot))
                     return "byBot: integer expected";
             if (message.location != null && message.hasOwnProperty("location")) {
-                let error = $root.Location.verify(message.location);
+                let error = $root.Vector2.verify(message.location);
                 if (error)
                     return "location." + error;
             }
@@ -4296,7 +4528,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (object.location != null) {
                 if (typeof object.location !== "object")
                     throw TypeError(".GameEvent.DefenderTooCloseToKickPoint.location: object expected");
-                message.location = $root.Location.fromObject(object.location);
+                message.location = $root.Vector2.fromObject(object.location);
             }
             if (object.distance != null)
                 message.distance = Number(object.distance);
@@ -4327,7 +4559,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byBot != null && message.hasOwnProperty("byBot"))
                 object.byBot = message.byBot;
             if (message.location != null && message.hasOwnProperty("location"))
-                object.location = $root.Location.toObject(message.location, options);
+                object.location = $root.Vector2.toObject(message.location, options);
             if (message.distance != null && message.hasOwnProperty("distance"))
                 object.distance = options.json && !isFinite(message.distance) ? String(message.distance) : message.distance;
             return object;
@@ -4355,7 +4587,7 @@ export const GameEvent = $root.GameEvent = (() => {
          * @interface IBotCrashDrawn
          * @property {number|null} [botYellow] BotCrashDrawn botYellow
          * @property {number|null} [botBlue] BotCrashDrawn botBlue
-         * @property {ILocation|null} [location] BotCrashDrawn location
+         * @property {IVector2|null} [location] BotCrashDrawn location
          * @property {number|null} [crashSpeed] BotCrashDrawn crashSpeed
          * @property {number|null} [speedDiff] BotCrashDrawn speedDiff
          * @property {number|null} [crashAngle] BotCrashDrawn crashAngle
@@ -4394,7 +4626,7 @@ export const GameEvent = $root.GameEvent = (() => {
 
         /**
          * BotCrashDrawn location.
-         * @member {ILocation|null|undefined} location
+         * @member {IVector2|null|undefined} location
          * @memberof GameEvent.BotCrashDrawn
          * @instance
          */
@@ -4453,7 +4685,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.botBlue != null && message.hasOwnProperty("botBlue"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.botBlue);
             if (message.location != null && message.hasOwnProperty("location"))
-                $root.Location.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
             if (message.crashSpeed != null && message.hasOwnProperty("crashSpeed"))
                 writer.uint32(/* id 4, wireType 5 =*/37).float(message.crashSpeed);
             if (message.speedDiff != null && message.hasOwnProperty("speedDiff"))
@@ -4501,7 +4733,7 @@ export const GameEvent = $root.GameEvent = (() => {
                     message.botBlue = reader.uint32();
                     break;
                 case 3:
-                    message.location = $root.Location.decode(reader, reader.uint32());
+                    message.location = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 case 4:
                     message.crashSpeed = reader.float();
@@ -4554,7 +4786,7 @@ export const GameEvent = $root.GameEvent = (() => {
                 if (!$util.isInteger(message.botBlue))
                     return "botBlue: integer expected";
             if (message.location != null && message.hasOwnProperty("location")) {
-                let error = $root.Location.verify(message.location);
+                let error = $root.Vector2.verify(message.location);
                 if (error)
                     return "location." + error;
             }
@@ -4589,7 +4821,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (object.location != null) {
                 if (typeof object.location !== "object")
                     throw TypeError(".GameEvent.BotCrashDrawn.location: object expected");
-                message.location = $root.Location.fromObject(object.location);
+                message.location = $root.Vector2.fromObject(object.location);
             }
             if (object.crashSpeed != null)
                 message.crashSpeed = Number(object.crashSpeed);
@@ -4626,7 +4858,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.botBlue != null && message.hasOwnProperty("botBlue"))
                 object.botBlue = message.botBlue;
             if (message.location != null && message.hasOwnProperty("location"))
-                object.location = $root.Location.toObject(message.location, options);
+                object.location = $root.Vector2.toObject(message.location, options);
             if (message.crashSpeed != null && message.hasOwnProperty("crashSpeed"))
                 object.crashSpeed = options.json && !isFinite(message.crashSpeed) ? String(message.crashSpeed) : message.crashSpeed;
             if (message.speedDiff != null && message.hasOwnProperty("speedDiff"))
@@ -4659,7 +4891,7 @@ export const GameEvent = $root.GameEvent = (() => {
          * @property {Team} byTeam BotCrashUnique byTeam
          * @property {number|null} [violator] BotCrashUnique violator
          * @property {number|null} [victim] BotCrashUnique victim
-         * @property {ILocation|null} [location] BotCrashUnique location
+         * @property {IVector2|null} [location] BotCrashUnique location
          * @property {number|null} [crashSpeed] BotCrashUnique crashSpeed
          * @property {number|null} [speedDiff] BotCrashUnique speedDiff
          * @property {number|null} [crashAngle] BotCrashUnique crashAngle
@@ -4706,7 +4938,7 @@ export const GameEvent = $root.GameEvent = (() => {
 
         /**
          * BotCrashUnique location.
-         * @member {ILocation|null|undefined} location
+         * @member {IVector2|null|undefined} location
          * @memberof GameEvent.BotCrashUnique
          * @instance
          */
@@ -4766,7 +4998,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.victim != null && message.hasOwnProperty("victim"))
                 writer.uint32(/* id 3, wireType 0 =*/24).uint32(message.victim);
             if (message.location != null && message.hasOwnProperty("location"))
-                $root.Location.encode(message.location, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+                $root.Vector2.encode(message.location, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
             if (message.crashSpeed != null && message.hasOwnProperty("crashSpeed"))
                 writer.uint32(/* id 5, wireType 5 =*/45).float(message.crashSpeed);
             if (message.speedDiff != null && message.hasOwnProperty("speedDiff"))
@@ -4817,7 +5049,7 @@ export const GameEvent = $root.GameEvent = (() => {
                     message.victim = reader.uint32();
                     break;
                 case 4:
-                    message.location = $root.Location.decode(reader, reader.uint32());
+                    message.location = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 case 5:
                     message.crashSpeed = reader.float();
@@ -4880,7 +5112,7 @@ export const GameEvent = $root.GameEvent = (() => {
                 if (!$util.isInteger(message.victim))
                     return "victim: integer expected";
             if (message.location != null && message.hasOwnProperty("location")) {
-                let error = $root.Location.verify(message.location);
+                let error = $root.Vector2.verify(message.location);
                 if (error)
                     return "location." + error;
             }
@@ -4929,7 +5161,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (object.location != null) {
                 if (typeof object.location !== "object")
                     throw TypeError(".GameEvent.BotCrashUnique.location: object expected");
-                message.location = $root.Location.fromObject(object.location);
+                message.location = $root.Vector2.fromObject(object.location);
             }
             if (object.crashSpeed != null)
                 message.crashSpeed = Number(object.crashSpeed);
@@ -4969,7 +5201,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.victim != null && message.hasOwnProperty("victim"))
                 object.victim = message.victim;
             if (message.location != null && message.hasOwnProperty("location"))
-                object.location = $root.Location.toObject(message.location, options);
+                object.location = $root.Vector2.toObject(message.location, options);
             if (message.crashSpeed != null && message.hasOwnProperty("crashSpeed"))
                 object.crashSpeed = options.json && !isFinite(message.crashSpeed) ? String(message.crashSpeed) : message.crashSpeed;
             if (message.speedDiff != null && message.hasOwnProperty("speedDiff"))
@@ -5002,7 +5234,7 @@ export const GameEvent = $root.GameEvent = (() => {
          * @property {Team} byTeam BotPushedBot byTeam
          * @property {number|null} [violator] BotPushedBot violator
          * @property {number|null} [victim] BotPushedBot victim
-         * @property {ILocation|null} [location] BotPushedBot location
+         * @property {IVector2|null} [location] BotPushedBot location
          * @property {number|null} [pushedDistance] BotPushedBot pushedDistance
          */
 
@@ -5047,7 +5279,7 @@ export const GameEvent = $root.GameEvent = (() => {
 
         /**
          * BotPushedBot location.
-         * @member {ILocation|null|undefined} location
+         * @member {IVector2|null|undefined} location
          * @memberof GameEvent.BotPushedBot
          * @instance
          */
@@ -5091,7 +5323,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.victim != null && message.hasOwnProperty("victim"))
                 writer.uint32(/* id 3, wireType 0 =*/24).uint32(message.victim);
             if (message.location != null && message.hasOwnProperty("location"))
-                $root.Location.encode(message.location, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+                $root.Vector2.encode(message.location, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
             if (message.pushedDistance != null && message.hasOwnProperty("pushedDistance"))
                 writer.uint32(/* id 5, wireType 5 =*/45).float(message.pushedDistance);
             return writer;
@@ -5138,7 +5370,7 @@ export const GameEvent = $root.GameEvent = (() => {
                     message.victim = reader.uint32();
                     break;
                 case 4:
-                    message.location = $root.Location.decode(reader, reader.uint32());
+                    message.location = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 case 5:
                     message.pushedDistance = reader.float();
@@ -5195,7 +5427,7 @@ export const GameEvent = $root.GameEvent = (() => {
                 if (!$util.isInteger(message.victim))
                     return "victim: integer expected";
             if (message.location != null && message.hasOwnProperty("location")) {
-                let error = $root.Location.verify(message.location);
+                let error = $root.Vector2.verify(message.location);
                 if (error)
                     return "location." + error;
             }
@@ -5238,7 +5470,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (object.location != null) {
                 if (typeof object.location !== "object")
                     throw TypeError(".GameEvent.BotPushedBot.location: object expected");
-                message.location = $root.Location.fromObject(object.location);
+                message.location = $root.Vector2.fromObject(object.location);
             }
             if (object.pushedDistance != null)
                 message.pushedDistance = Number(object.pushedDistance);
@@ -5272,7 +5504,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.victim != null && message.hasOwnProperty("victim"))
                 object.victim = message.victim;
             if (message.location != null && message.hasOwnProperty("location"))
-                object.location = $root.Location.toObject(message.location, options);
+                object.location = $root.Vector2.toObject(message.location, options);
             if (message.pushedDistance != null && message.hasOwnProperty("pushedDistance"))
                 object.pushedDistance = options.json && !isFinite(message.pushedDistance) ? String(message.pushedDistance) : message.pushedDistance;
             return object;
@@ -5300,8 +5532,8 @@ export const GameEvent = $root.GameEvent = (() => {
          * @interface IBotTippedOver
          * @property {Team} byTeam BotTippedOver byTeam
          * @property {number|null} [byBot] BotTippedOver byBot
-         * @property {ILocation|null} [location] BotTippedOver location
-         * @property {ILocation|null} [ballLocation] BotTippedOver ballLocation
+         * @property {IVector2|null} [location] BotTippedOver location
+         * @property {IVector2|null} [ballLocation] BotTippedOver ballLocation
          */
 
         /**
@@ -5337,7 +5569,7 @@ export const GameEvent = $root.GameEvent = (() => {
 
         /**
          * BotTippedOver location.
-         * @member {ILocation|null|undefined} location
+         * @member {IVector2|null|undefined} location
          * @memberof GameEvent.BotTippedOver
          * @instance
          */
@@ -5345,7 +5577,7 @@ export const GameEvent = $root.GameEvent = (() => {
 
         /**
          * BotTippedOver ballLocation.
-         * @member {ILocation|null|undefined} ballLocation
+         * @member {IVector2|null|undefined} ballLocation
          * @memberof GameEvent.BotTippedOver
          * @instance
          */
@@ -5379,9 +5611,9 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byBot != null && message.hasOwnProperty("byBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.byBot);
             if (message.location != null && message.hasOwnProperty("location"))
-                $root.Location.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
             if (message.ballLocation != null && message.hasOwnProperty("ballLocation"))
-                $root.Location.encode(message.ballLocation, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+                $root.Vector2.encode(message.ballLocation, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
             return writer;
         };
 
@@ -5423,10 +5655,10 @@ export const GameEvent = $root.GameEvent = (() => {
                     message.byBot = reader.uint32();
                     break;
                 case 3:
-                    message.location = $root.Location.decode(reader, reader.uint32());
+                    message.location = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 case 4:
-                    message.ballLocation = $root.Location.decode(reader, reader.uint32());
+                    message.ballLocation = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -5477,12 +5709,12 @@ export const GameEvent = $root.GameEvent = (() => {
                 if (!$util.isInteger(message.byBot))
                     return "byBot: integer expected";
             if (message.location != null && message.hasOwnProperty("location")) {
-                let error = $root.Location.verify(message.location);
+                let error = $root.Vector2.verify(message.location);
                 if (error)
                     return "location." + error;
             }
             if (message.ballLocation != null && message.hasOwnProperty("ballLocation")) {
-                let error = $root.Location.verify(message.ballLocation);
+                let error = $root.Vector2.verify(message.ballLocation);
                 if (error)
                     return "ballLocation." + error;
             }
@@ -5520,12 +5752,12 @@ export const GameEvent = $root.GameEvent = (() => {
             if (object.location != null) {
                 if (typeof object.location !== "object")
                     throw TypeError(".GameEvent.BotTippedOver.location: object expected");
-                message.location = $root.Location.fromObject(object.location);
+                message.location = $root.Vector2.fromObject(object.location);
             }
             if (object.ballLocation != null) {
                 if (typeof object.ballLocation !== "object")
                     throw TypeError(".GameEvent.BotTippedOver.ballLocation: object expected");
-                message.ballLocation = $root.Location.fromObject(object.ballLocation);
+                message.ballLocation = $root.Vector2.fromObject(object.ballLocation);
             }
             return message;
         };
@@ -5554,9 +5786,9 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byBot != null && message.hasOwnProperty("byBot"))
                 object.byBot = message.byBot;
             if (message.location != null && message.hasOwnProperty("location"))
-                object.location = $root.Location.toObject(message.location, options);
+                object.location = $root.Vector2.toObject(message.location, options);
             if (message.ballLocation != null && message.hasOwnProperty("ballLocation"))
-                object.ballLocation = $root.Location.toObject(message.ballLocation, options);
+                object.ballLocation = $root.Vector2.toObject(message.ballLocation, options);
             return object;
         };
 
@@ -5582,7 +5814,7 @@ export const GameEvent = $root.GameEvent = (() => {
          * @interface IDefenderInDefenseArea
          * @property {Team} byTeam DefenderInDefenseArea byTeam
          * @property {number|null} [byBot] DefenderInDefenseArea byBot
-         * @property {ILocation|null} [location] DefenderInDefenseArea location
+         * @property {IVector2|null} [location] DefenderInDefenseArea location
          * @property {number|null} [distance] DefenderInDefenseArea distance
          */
 
@@ -5619,7 +5851,7 @@ export const GameEvent = $root.GameEvent = (() => {
 
         /**
          * DefenderInDefenseArea location.
-         * @member {ILocation|null|undefined} location
+         * @member {IVector2|null|undefined} location
          * @memberof GameEvent.DefenderInDefenseArea
          * @instance
          */
@@ -5661,7 +5893,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byBot != null && message.hasOwnProperty("byBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.byBot);
             if (message.location != null && message.hasOwnProperty("location"))
-                $root.Location.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
             if (message.distance != null && message.hasOwnProperty("distance"))
                 writer.uint32(/* id 4, wireType 5 =*/37).float(message.distance);
             return writer;
@@ -5705,7 +5937,7 @@ export const GameEvent = $root.GameEvent = (() => {
                     message.byBot = reader.uint32();
                     break;
                 case 3:
-                    message.location = $root.Location.decode(reader, reader.uint32());
+                    message.location = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 case 4:
                     message.distance = reader.float();
@@ -5759,7 +5991,7 @@ export const GameEvent = $root.GameEvent = (() => {
                 if (!$util.isInteger(message.byBot))
                     return "byBot: integer expected";
             if (message.location != null && message.hasOwnProperty("location")) {
-                let error = $root.Location.verify(message.location);
+                let error = $root.Vector2.verify(message.location);
                 if (error)
                     return "location." + error;
             }
@@ -5800,7 +6032,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (object.location != null) {
                 if (typeof object.location !== "object")
                     throw TypeError(".GameEvent.DefenderInDefenseArea.location: object expected");
-                message.location = $root.Location.fromObject(object.location);
+                message.location = $root.Vector2.fromObject(object.location);
             }
             if (object.distance != null)
                 message.distance = Number(object.distance);
@@ -5831,7 +6063,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byBot != null && message.hasOwnProperty("byBot"))
                 object.byBot = message.byBot;
             if (message.location != null && message.hasOwnProperty("location"))
-                object.location = $root.Location.toObject(message.location, options);
+                object.location = $root.Vector2.toObject(message.location, options);
             if (message.distance != null && message.hasOwnProperty("distance"))
                 object.distance = options.json && !isFinite(message.distance) ? String(message.distance) : message.distance;
             return object;
@@ -5859,9 +6091,9 @@ export const GameEvent = $root.GameEvent = (() => {
          * @interface IDefenderInDefenseAreaPartially
          * @property {Team} byTeam DefenderInDefenseAreaPartially byTeam
          * @property {number|null} [byBot] DefenderInDefenseAreaPartially byBot
-         * @property {ILocation|null} [location] DefenderInDefenseAreaPartially location
+         * @property {IVector2|null} [location] DefenderInDefenseAreaPartially location
          * @property {number|null} [distance] DefenderInDefenseAreaPartially distance
-         * @property {ILocation|null} [ballLocation] DefenderInDefenseAreaPartially ballLocation
+         * @property {IVector2|null} [ballLocation] DefenderInDefenseAreaPartially ballLocation
          */
 
         /**
@@ -5897,7 +6129,7 @@ export const GameEvent = $root.GameEvent = (() => {
 
         /**
          * DefenderInDefenseAreaPartially location.
-         * @member {ILocation|null|undefined} location
+         * @member {IVector2|null|undefined} location
          * @memberof GameEvent.DefenderInDefenseAreaPartially
          * @instance
          */
@@ -5913,7 +6145,7 @@ export const GameEvent = $root.GameEvent = (() => {
 
         /**
          * DefenderInDefenseAreaPartially ballLocation.
-         * @member {ILocation|null|undefined} ballLocation
+         * @member {IVector2|null|undefined} ballLocation
          * @memberof GameEvent.DefenderInDefenseAreaPartially
          * @instance
          */
@@ -5947,11 +6179,11 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byBot != null && message.hasOwnProperty("byBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.byBot);
             if (message.location != null && message.hasOwnProperty("location"))
-                $root.Location.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
             if (message.distance != null && message.hasOwnProperty("distance"))
                 writer.uint32(/* id 4, wireType 5 =*/37).float(message.distance);
             if (message.ballLocation != null && message.hasOwnProperty("ballLocation"))
-                $root.Location.encode(message.ballLocation, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
+                $root.Vector2.encode(message.ballLocation, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
             return writer;
         };
 
@@ -5993,13 +6225,13 @@ export const GameEvent = $root.GameEvent = (() => {
                     message.byBot = reader.uint32();
                     break;
                 case 3:
-                    message.location = $root.Location.decode(reader, reader.uint32());
+                    message.location = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 case 4:
                     message.distance = reader.float();
                     break;
                 case 5:
-                    message.ballLocation = $root.Location.decode(reader, reader.uint32());
+                    message.ballLocation = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -6050,7 +6282,7 @@ export const GameEvent = $root.GameEvent = (() => {
                 if (!$util.isInteger(message.byBot))
                     return "byBot: integer expected";
             if (message.location != null && message.hasOwnProperty("location")) {
-                let error = $root.Location.verify(message.location);
+                let error = $root.Vector2.verify(message.location);
                 if (error)
                     return "location." + error;
             }
@@ -6058,7 +6290,7 @@ export const GameEvent = $root.GameEvent = (() => {
                 if (typeof message.distance !== "number")
                     return "distance: number expected";
             if (message.ballLocation != null && message.hasOwnProperty("ballLocation")) {
-                let error = $root.Location.verify(message.ballLocation);
+                let error = $root.Vector2.verify(message.ballLocation);
                 if (error)
                     return "ballLocation." + error;
             }
@@ -6096,14 +6328,14 @@ export const GameEvent = $root.GameEvent = (() => {
             if (object.location != null) {
                 if (typeof object.location !== "object")
                     throw TypeError(".GameEvent.DefenderInDefenseAreaPartially.location: object expected");
-                message.location = $root.Location.fromObject(object.location);
+                message.location = $root.Vector2.fromObject(object.location);
             }
             if (object.distance != null)
                 message.distance = Number(object.distance);
             if (object.ballLocation != null) {
                 if (typeof object.ballLocation !== "object")
                     throw TypeError(".GameEvent.DefenderInDefenseAreaPartially.ballLocation: object expected");
-                message.ballLocation = $root.Location.fromObject(object.ballLocation);
+                message.ballLocation = $root.Vector2.fromObject(object.ballLocation);
             }
             return message;
         };
@@ -6133,11 +6365,11 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byBot != null && message.hasOwnProperty("byBot"))
                 object.byBot = message.byBot;
             if (message.location != null && message.hasOwnProperty("location"))
-                object.location = $root.Location.toObject(message.location, options);
+                object.location = $root.Vector2.toObject(message.location, options);
             if (message.distance != null && message.hasOwnProperty("distance"))
                 object.distance = options.json && !isFinite(message.distance) ? String(message.distance) : message.distance;
             if (message.ballLocation != null && message.hasOwnProperty("ballLocation"))
-                object.ballLocation = $root.Location.toObject(message.ballLocation, options);
+                object.ballLocation = $root.Vector2.toObject(message.ballLocation, options);
             return object;
         };
 
@@ -6163,7 +6395,7 @@ export const GameEvent = $root.GameEvent = (() => {
          * @interface IAttackerTouchedBallInDefenseArea
          * @property {Team} byTeam AttackerTouchedBallInDefenseArea byTeam
          * @property {number|null} [byBot] AttackerTouchedBallInDefenseArea byBot
-         * @property {ILocation|null} [location] AttackerTouchedBallInDefenseArea location
+         * @property {IVector2|null} [location] AttackerTouchedBallInDefenseArea location
          * @property {number|null} [distance] AttackerTouchedBallInDefenseArea distance
          */
 
@@ -6200,7 +6432,7 @@ export const GameEvent = $root.GameEvent = (() => {
 
         /**
          * AttackerTouchedBallInDefenseArea location.
-         * @member {ILocation|null|undefined} location
+         * @member {IVector2|null|undefined} location
          * @memberof GameEvent.AttackerTouchedBallInDefenseArea
          * @instance
          */
@@ -6242,7 +6474,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byBot != null && message.hasOwnProperty("byBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.byBot);
             if (message.location != null && message.hasOwnProperty("location"))
-                $root.Location.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
             if (message.distance != null && message.hasOwnProperty("distance"))
                 writer.uint32(/* id 4, wireType 5 =*/37).float(message.distance);
             return writer;
@@ -6286,7 +6518,7 @@ export const GameEvent = $root.GameEvent = (() => {
                     message.byBot = reader.uint32();
                     break;
                 case 3:
-                    message.location = $root.Location.decode(reader, reader.uint32());
+                    message.location = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 case 4:
                     message.distance = reader.float();
@@ -6340,7 +6572,7 @@ export const GameEvent = $root.GameEvent = (() => {
                 if (!$util.isInteger(message.byBot))
                     return "byBot: integer expected";
             if (message.location != null && message.hasOwnProperty("location")) {
-                let error = $root.Location.verify(message.location);
+                let error = $root.Vector2.verify(message.location);
                 if (error)
                     return "location." + error;
             }
@@ -6381,7 +6613,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (object.location != null) {
                 if (typeof object.location !== "object")
                     throw TypeError(".GameEvent.AttackerTouchedBallInDefenseArea.location: object expected");
-                message.location = $root.Location.fromObject(object.location);
+                message.location = $root.Vector2.fromObject(object.location);
             }
             if (object.distance != null)
                 message.distance = Number(object.distance);
@@ -6412,7 +6644,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byBot != null && message.hasOwnProperty("byBot"))
                 object.byBot = message.byBot;
             if (message.location != null && message.hasOwnProperty("location"))
-                object.location = $root.Location.toObject(message.location, options);
+                object.location = $root.Vector2.toObject(message.location, options);
             if (message.distance != null && message.hasOwnProperty("distance"))
                 object.distance = options.json && !isFinite(message.distance) ? String(message.distance) : message.distance;
             return object;
@@ -6440,7 +6672,7 @@ export const GameEvent = $root.GameEvent = (() => {
          * @interface IBotKickedBallTooFast
          * @property {Team} byTeam BotKickedBallTooFast byTeam
          * @property {number|null} [byBot] BotKickedBallTooFast byBot
-         * @property {ILocation|null} [location] BotKickedBallTooFast location
+         * @property {IVector2|null} [location] BotKickedBallTooFast location
          * @property {number|null} [initialBallSpeed] BotKickedBallTooFast initialBallSpeed
          * @property {boolean|null} [chipped] BotKickedBallTooFast chipped
          */
@@ -6478,7 +6710,7 @@ export const GameEvent = $root.GameEvent = (() => {
 
         /**
          * BotKickedBallTooFast location.
-         * @member {ILocation|null|undefined} location
+         * @member {IVector2|null|undefined} location
          * @memberof GameEvent.BotKickedBallTooFast
          * @instance
          */
@@ -6528,7 +6760,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byBot != null && message.hasOwnProperty("byBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.byBot);
             if (message.location != null && message.hasOwnProperty("location"))
-                $root.Location.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
             if (message.initialBallSpeed != null && message.hasOwnProperty("initialBallSpeed"))
                 writer.uint32(/* id 4, wireType 5 =*/37).float(message.initialBallSpeed);
             if (message.chipped != null && message.hasOwnProperty("chipped"))
@@ -6574,7 +6806,7 @@ export const GameEvent = $root.GameEvent = (() => {
                     message.byBot = reader.uint32();
                     break;
                 case 3:
-                    message.location = $root.Location.decode(reader, reader.uint32());
+                    message.location = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 case 4:
                     message.initialBallSpeed = reader.float();
@@ -6631,7 +6863,7 @@ export const GameEvent = $root.GameEvent = (() => {
                 if (!$util.isInteger(message.byBot))
                     return "byBot: integer expected";
             if (message.location != null && message.hasOwnProperty("location")) {
-                let error = $root.Location.verify(message.location);
+                let error = $root.Vector2.verify(message.location);
                 if (error)
                     return "location." + error;
             }
@@ -6675,7 +6907,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (object.location != null) {
                 if (typeof object.location !== "object")
                     throw TypeError(".GameEvent.BotKickedBallTooFast.location: object expected");
-                message.location = $root.Location.fromObject(object.location);
+                message.location = $root.Vector2.fromObject(object.location);
             }
             if (object.initialBallSpeed != null)
                 message.initialBallSpeed = Number(object.initialBallSpeed);
@@ -6709,7 +6941,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byBot != null && message.hasOwnProperty("byBot"))
                 object.byBot = message.byBot;
             if (message.location != null && message.hasOwnProperty("location"))
-                object.location = $root.Location.toObject(message.location, options);
+                object.location = $root.Vector2.toObject(message.location, options);
             if (message.initialBallSpeed != null && message.hasOwnProperty("initialBallSpeed"))
                 object.initialBallSpeed = options.json && !isFinite(message.initialBallSpeed) ? String(message.initialBallSpeed) : message.initialBallSpeed;
             if (message.chipped != null && message.hasOwnProperty("chipped"))
@@ -6739,8 +6971,8 @@ export const GameEvent = $root.GameEvent = (() => {
          * @interface IBotDribbledBallTooFar
          * @property {Team} byTeam BotDribbledBallTooFar byTeam
          * @property {number|null} [byBot] BotDribbledBallTooFar byBot
-         * @property {ILocation|null} [start] BotDribbledBallTooFar start
-         * @property {ILocation|null} [end] BotDribbledBallTooFar end
+         * @property {IVector2|null} [start] BotDribbledBallTooFar start
+         * @property {IVector2|null} [end] BotDribbledBallTooFar end
          */
 
         /**
@@ -6776,7 +7008,7 @@ export const GameEvent = $root.GameEvent = (() => {
 
         /**
          * BotDribbledBallTooFar start.
-         * @member {ILocation|null|undefined} start
+         * @member {IVector2|null|undefined} start
          * @memberof GameEvent.BotDribbledBallTooFar
          * @instance
          */
@@ -6784,7 +7016,7 @@ export const GameEvent = $root.GameEvent = (() => {
 
         /**
          * BotDribbledBallTooFar end.
-         * @member {ILocation|null|undefined} end
+         * @member {IVector2|null|undefined} end
          * @memberof GameEvent.BotDribbledBallTooFar
          * @instance
          */
@@ -6818,9 +7050,9 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byBot != null && message.hasOwnProperty("byBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.byBot);
             if (message.start != null && message.hasOwnProperty("start"))
-                $root.Location.encode(message.start, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                $root.Vector2.encode(message.start, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
             if (message.end != null && message.hasOwnProperty("end"))
-                $root.Location.encode(message.end, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+                $root.Vector2.encode(message.end, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
             return writer;
         };
 
@@ -6862,10 +7094,10 @@ export const GameEvent = $root.GameEvent = (() => {
                     message.byBot = reader.uint32();
                     break;
                 case 3:
-                    message.start = $root.Location.decode(reader, reader.uint32());
+                    message.start = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 case 4:
-                    message.end = $root.Location.decode(reader, reader.uint32());
+                    message.end = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -6916,12 +7148,12 @@ export const GameEvent = $root.GameEvent = (() => {
                 if (!$util.isInteger(message.byBot))
                     return "byBot: integer expected";
             if (message.start != null && message.hasOwnProperty("start")) {
-                let error = $root.Location.verify(message.start);
+                let error = $root.Vector2.verify(message.start);
                 if (error)
                     return "start." + error;
             }
             if (message.end != null && message.hasOwnProperty("end")) {
-                let error = $root.Location.verify(message.end);
+                let error = $root.Vector2.verify(message.end);
                 if (error)
                     return "end." + error;
             }
@@ -6959,12 +7191,12 @@ export const GameEvent = $root.GameEvent = (() => {
             if (object.start != null) {
                 if (typeof object.start !== "object")
                     throw TypeError(".GameEvent.BotDribbledBallTooFar.start: object expected");
-                message.start = $root.Location.fromObject(object.start);
+                message.start = $root.Vector2.fromObject(object.start);
             }
             if (object.end != null) {
                 if (typeof object.end !== "object")
                     throw TypeError(".GameEvent.BotDribbledBallTooFar.end: object expected");
-                message.end = $root.Location.fromObject(object.end);
+                message.end = $root.Vector2.fromObject(object.end);
             }
             return message;
         };
@@ -6993,9 +7225,9 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byBot != null && message.hasOwnProperty("byBot"))
                 object.byBot = message.byBot;
             if (message.start != null && message.hasOwnProperty("start"))
-                object.start = $root.Location.toObject(message.start, options);
+                object.start = $root.Vector2.toObject(message.start, options);
             if (message.end != null && message.hasOwnProperty("end"))
-                object.end = $root.Location.toObject(message.end, options);
+                object.end = $root.Vector2.toObject(message.end, options);
             return object;
         };
 
@@ -7022,7 +7254,7 @@ export const GameEvent = $root.GameEvent = (() => {
          * @property {Team} byTeam AttackerTouchedOpponentInDefenseArea byTeam
          * @property {number|null} [byBot] AttackerTouchedOpponentInDefenseArea byBot
          * @property {number|null} [victim] AttackerTouchedOpponentInDefenseArea victim
-         * @property {ILocation|null} [location] AttackerTouchedOpponentInDefenseArea location
+         * @property {IVector2|null} [location] AttackerTouchedOpponentInDefenseArea location
          */
 
         /**
@@ -7066,7 +7298,7 @@ export const GameEvent = $root.GameEvent = (() => {
 
         /**
          * AttackerTouchedOpponentInDefenseArea location.
-         * @member {ILocation|null|undefined} location
+         * @member {IVector2|null|undefined} location
          * @memberof GameEvent.AttackerTouchedOpponentInDefenseArea
          * @instance
          */
@@ -7100,7 +7332,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byBot != null && message.hasOwnProperty("byBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.byBot);
             if (message.location != null && message.hasOwnProperty("location"))
-                $root.Location.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
             if (message.victim != null && message.hasOwnProperty("victim"))
                 writer.uint32(/* id 4, wireType 0 =*/32).uint32(message.victim);
             return writer;
@@ -7147,7 +7379,7 @@ export const GameEvent = $root.GameEvent = (() => {
                     message.victim = reader.uint32();
                     break;
                 case 3:
-                    message.location = $root.Location.decode(reader, reader.uint32());
+                    message.location = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -7201,7 +7433,7 @@ export const GameEvent = $root.GameEvent = (() => {
                 if (!$util.isInteger(message.victim))
                     return "victim: integer expected";
             if (message.location != null && message.hasOwnProperty("location")) {
-                let error = $root.Location.verify(message.location);
+                let error = $root.Vector2.verify(message.location);
                 if (error)
                     return "location." + error;
             }
@@ -7241,7 +7473,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (object.location != null) {
                 if (typeof object.location !== "object")
                     throw TypeError(".GameEvent.AttackerTouchedOpponentInDefenseArea.location: object expected");
-                message.location = $root.Location.fromObject(object.location);
+                message.location = $root.Vector2.fromObject(object.location);
             }
             return message;
         };
@@ -7270,7 +7502,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byBot != null && message.hasOwnProperty("byBot"))
                 object.byBot = message.byBot;
             if (message.location != null && message.hasOwnProperty("location"))
-                object.location = $root.Location.toObject(message.location, options);
+                object.location = $root.Vector2.toObject(message.location, options);
             if (message.victim != null && message.hasOwnProperty("victim"))
                 object.victim = message.victim;
             return object;
@@ -7298,7 +7530,7 @@ export const GameEvent = $root.GameEvent = (() => {
          * @interface IAttackerDoubleTouchedBall
          * @property {Team} byTeam AttackerDoubleTouchedBall byTeam
          * @property {number|null} [byBot] AttackerDoubleTouchedBall byBot
-         * @property {ILocation|null} [location] AttackerDoubleTouchedBall location
+         * @property {IVector2|null} [location] AttackerDoubleTouchedBall location
          */
 
         /**
@@ -7334,7 +7566,7 @@ export const GameEvent = $root.GameEvent = (() => {
 
         /**
          * AttackerDoubleTouchedBall location.
-         * @member {ILocation|null|undefined} location
+         * @member {IVector2|null|undefined} location
          * @memberof GameEvent.AttackerDoubleTouchedBall
          * @instance
          */
@@ -7368,7 +7600,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byBot != null && message.hasOwnProperty("byBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.byBot);
             if (message.location != null && message.hasOwnProperty("location"))
-                $root.Location.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
             return writer;
         };
 
@@ -7410,7 +7642,7 @@ export const GameEvent = $root.GameEvent = (() => {
                     message.byBot = reader.uint32();
                     break;
                 case 3:
-                    message.location = $root.Location.decode(reader, reader.uint32());
+                    message.location = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -7461,7 +7693,7 @@ export const GameEvent = $root.GameEvent = (() => {
                 if (!$util.isInteger(message.byBot))
                     return "byBot: integer expected";
             if (message.location != null && message.hasOwnProperty("location")) {
-                let error = $root.Location.verify(message.location);
+                let error = $root.Vector2.verify(message.location);
                 if (error)
                     return "location." + error;
             }
@@ -7499,7 +7731,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (object.location != null) {
                 if (typeof object.location !== "object")
                     throw TypeError(".GameEvent.AttackerDoubleTouchedBall.location: object expected");
-                message.location = $root.Location.fromObject(object.location);
+                message.location = $root.Vector2.fromObject(object.location);
             }
             return message;
         };
@@ -7527,7 +7759,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byBot != null && message.hasOwnProperty("byBot"))
                 object.byBot = message.byBot;
             if (message.location != null && message.hasOwnProperty("location"))
-                object.location = $root.Location.toObject(message.location, options);
+                object.location = $root.Vector2.toObject(message.location, options);
             return object;
         };
 
@@ -7553,9 +7785,9 @@ export const GameEvent = $root.GameEvent = (() => {
          * @interface IAttackerTooCloseToDefenseArea
          * @property {Team} byTeam AttackerTooCloseToDefenseArea byTeam
          * @property {number|null} [byBot] AttackerTooCloseToDefenseArea byBot
-         * @property {ILocation|null} [location] AttackerTooCloseToDefenseArea location
+         * @property {IVector2|null} [location] AttackerTooCloseToDefenseArea location
          * @property {number|null} [distance] AttackerTooCloseToDefenseArea distance
-         * @property {ILocation|null} [ballLocation] AttackerTooCloseToDefenseArea ballLocation
+         * @property {IVector2|null} [ballLocation] AttackerTooCloseToDefenseArea ballLocation
          */
 
         /**
@@ -7591,7 +7823,7 @@ export const GameEvent = $root.GameEvent = (() => {
 
         /**
          * AttackerTooCloseToDefenseArea location.
-         * @member {ILocation|null|undefined} location
+         * @member {IVector2|null|undefined} location
          * @memberof GameEvent.AttackerTooCloseToDefenseArea
          * @instance
          */
@@ -7607,7 +7839,7 @@ export const GameEvent = $root.GameEvent = (() => {
 
         /**
          * AttackerTooCloseToDefenseArea ballLocation.
-         * @member {ILocation|null|undefined} ballLocation
+         * @member {IVector2|null|undefined} ballLocation
          * @memberof GameEvent.AttackerTooCloseToDefenseArea
          * @instance
          */
@@ -7641,11 +7873,11 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byBot != null && message.hasOwnProperty("byBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.byBot);
             if (message.location != null && message.hasOwnProperty("location"))
-                $root.Location.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
             if (message.distance != null && message.hasOwnProperty("distance"))
                 writer.uint32(/* id 4, wireType 5 =*/37).float(message.distance);
             if (message.ballLocation != null && message.hasOwnProperty("ballLocation"))
-                $root.Location.encode(message.ballLocation, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
+                $root.Vector2.encode(message.ballLocation, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
             return writer;
         };
 
@@ -7687,13 +7919,13 @@ export const GameEvent = $root.GameEvent = (() => {
                     message.byBot = reader.uint32();
                     break;
                 case 3:
-                    message.location = $root.Location.decode(reader, reader.uint32());
+                    message.location = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 case 4:
                     message.distance = reader.float();
                     break;
                 case 5:
-                    message.ballLocation = $root.Location.decode(reader, reader.uint32());
+                    message.ballLocation = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -7744,7 +7976,7 @@ export const GameEvent = $root.GameEvent = (() => {
                 if (!$util.isInteger(message.byBot))
                     return "byBot: integer expected";
             if (message.location != null && message.hasOwnProperty("location")) {
-                let error = $root.Location.verify(message.location);
+                let error = $root.Vector2.verify(message.location);
                 if (error)
                     return "location." + error;
             }
@@ -7752,7 +7984,7 @@ export const GameEvent = $root.GameEvent = (() => {
                 if (typeof message.distance !== "number")
                     return "distance: number expected";
             if (message.ballLocation != null && message.hasOwnProperty("ballLocation")) {
-                let error = $root.Location.verify(message.ballLocation);
+                let error = $root.Vector2.verify(message.ballLocation);
                 if (error)
                     return "ballLocation." + error;
             }
@@ -7790,14 +8022,14 @@ export const GameEvent = $root.GameEvent = (() => {
             if (object.location != null) {
                 if (typeof object.location !== "object")
                     throw TypeError(".GameEvent.AttackerTooCloseToDefenseArea.location: object expected");
-                message.location = $root.Location.fromObject(object.location);
+                message.location = $root.Vector2.fromObject(object.location);
             }
             if (object.distance != null)
                 message.distance = Number(object.distance);
             if (object.ballLocation != null) {
                 if (typeof object.ballLocation !== "object")
                     throw TypeError(".GameEvent.AttackerTooCloseToDefenseArea.ballLocation: object expected");
-                message.ballLocation = $root.Location.fromObject(object.ballLocation);
+                message.ballLocation = $root.Vector2.fromObject(object.ballLocation);
             }
             return message;
         };
@@ -7827,11 +8059,11 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byBot != null && message.hasOwnProperty("byBot"))
                 object.byBot = message.byBot;
             if (message.location != null && message.hasOwnProperty("location"))
-                object.location = $root.Location.toObject(message.location, options);
+                object.location = $root.Vector2.toObject(message.location, options);
             if (message.distance != null && message.hasOwnProperty("distance"))
                 object.distance = options.json && !isFinite(message.distance) ? String(message.distance) : message.distance;
             if (message.ballLocation != null && message.hasOwnProperty("ballLocation"))
-                object.ballLocation = $root.Location.toObject(message.ballLocation, options);
+                object.ballLocation = $root.Vector2.toObject(message.ballLocation, options);
             return object;
         };
 
@@ -7857,7 +8089,7 @@ export const GameEvent = $root.GameEvent = (() => {
          * @interface IBotHeldBallDeliberately
          * @property {Team} byTeam BotHeldBallDeliberately byTeam
          * @property {number|null} [byBot] BotHeldBallDeliberately byBot
-         * @property {ILocation|null} [location] BotHeldBallDeliberately location
+         * @property {IVector2|null} [location] BotHeldBallDeliberately location
          * @property {number|null} [duration] BotHeldBallDeliberately duration
          */
 
@@ -7894,7 +8126,7 @@ export const GameEvent = $root.GameEvent = (() => {
 
         /**
          * BotHeldBallDeliberately location.
-         * @member {ILocation|null|undefined} location
+         * @member {IVector2|null|undefined} location
          * @memberof GameEvent.BotHeldBallDeliberately
          * @instance
          */
@@ -7936,7 +8168,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byBot != null && message.hasOwnProperty("byBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.byBot);
             if (message.location != null && message.hasOwnProperty("location"))
-                $root.Location.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
             if (message.duration != null && message.hasOwnProperty("duration"))
                 writer.uint32(/* id 4, wireType 5 =*/37).float(message.duration);
             return writer;
@@ -7980,7 +8212,7 @@ export const GameEvent = $root.GameEvent = (() => {
                     message.byBot = reader.uint32();
                     break;
                 case 3:
-                    message.location = $root.Location.decode(reader, reader.uint32());
+                    message.location = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 case 4:
                     message.duration = reader.float();
@@ -8034,7 +8266,7 @@ export const GameEvent = $root.GameEvent = (() => {
                 if (!$util.isInteger(message.byBot))
                     return "byBot: integer expected";
             if (message.location != null && message.hasOwnProperty("location")) {
-                let error = $root.Location.verify(message.location);
+                let error = $root.Vector2.verify(message.location);
                 if (error)
                     return "location." + error;
             }
@@ -8075,7 +8307,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (object.location != null) {
                 if (typeof object.location !== "object")
                     throw TypeError(".GameEvent.BotHeldBallDeliberately.location: object expected");
-                message.location = $root.Location.fromObject(object.location);
+                message.location = $root.Vector2.fromObject(object.location);
             }
             if (object.duration != null)
                 message.duration = Number(object.duration);
@@ -8106,7 +8338,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byBot != null && message.hasOwnProperty("byBot"))
                 object.byBot = message.byBot;
             if (message.location != null && message.hasOwnProperty("location"))
-                object.location = $root.Location.toObject(message.location, options);
+                object.location = $root.Vector2.toObject(message.location, options);
             if (message.duration != null && message.hasOwnProperty("duration"))
                 object.duration = options.json && !isFinite(message.duration) ? String(message.duration) : message.duration;
             return object;
@@ -8134,7 +8366,7 @@ export const GameEvent = $root.GameEvent = (() => {
          * @interface IBotInterferedPlacement
          * @property {Team} byTeam BotInterferedPlacement byTeam
          * @property {number|null} [byBot] BotInterferedPlacement byBot
-         * @property {ILocation|null} [location] BotInterferedPlacement location
+         * @property {IVector2|null} [location] BotInterferedPlacement location
          */
 
         /**
@@ -8170,7 +8402,7 @@ export const GameEvent = $root.GameEvent = (() => {
 
         /**
          * BotInterferedPlacement location.
-         * @member {ILocation|null|undefined} location
+         * @member {IVector2|null|undefined} location
          * @memberof GameEvent.BotInterferedPlacement
          * @instance
          */
@@ -8204,7 +8436,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byBot != null && message.hasOwnProperty("byBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.byBot);
             if (message.location != null && message.hasOwnProperty("location"))
-                $root.Location.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
             return writer;
         };
 
@@ -8246,7 +8478,7 @@ export const GameEvent = $root.GameEvent = (() => {
                     message.byBot = reader.uint32();
                     break;
                 case 3:
-                    message.location = $root.Location.decode(reader, reader.uint32());
+                    message.location = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -8297,7 +8529,7 @@ export const GameEvent = $root.GameEvent = (() => {
                 if (!$util.isInteger(message.byBot))
                     return "byBot: integer expected";
             if (message.location != null && message.hasOwnProperty("location")) {
-                let error = $root.Location.verify(message.location);
+                let error = $root.Vector2.verify(message.location);
                 if (error)
                     return "location." + error;
             }
@@ -8335,7 +8567,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (object.location != null) {
                 if (typeof object.location !== "object")
                     throw TypeError(".GameEvent.BotInterferedPlacement.location: object expected");
-                message.location = $root.Location.fromObject(object.location);
+                message.location = $root.Vector2.fromObject(object.location);
             }
             return message;
         };
@@ -8363,7 +8595,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byBot != null && message.hasOwnProperty("byBot"))
                 object.byBot = message.byBot;
             if (message.location != null && message.hasOwnProperty("location"))
-                object.location = $root.Location.toObject(message.location, options);
+                object.location = $root.Vector2.toObject(message.location, options);
             return object;
         };
 
@@ -9003,7 +9235,7 @@ export const GameEvent = $root.GameEvent = (() => {
          * @memberof GameEvent
          * @interface IKickTimeout
          * @property {Team} byTeam KickTimeout byTeam
-         * @property {ILocation|null} [location] KickTimeout location
+         * @property {IVector2|null} [location] KickTimeout location
          * @property {number|null} [time] KickTimeout time
          */
 
@@ -9032,7 +9264,7 @@ export const GameEvent = $root.GameEvent = (() => {
 
         /**
          * KickTimeout location.
-         * @member {ILocation|null|undefined} location
+         * @member {IVector2|null|undefined} location
          * @memberof GameEvent.KickTimeout
          * @instance
          */
@@ -9072,7 +9304,7 @@ export const GameEvent = $root.GameEvent = (() => {
                 writer = $Writer.create();
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
             if (message.location != null && message.hasOwnProperty("location"))
-                $root.Location.encode(message.location, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                $root.Vector2.encode(message.location, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
             if (message.time != null && message.hasOwnProperty("time"))
                 writer.uint32(/* id 3, wireType 5 =*/29).float(message.time);
             return writer;
@@ -9113,7 +9345,7 @@ export const GameEvent = $root.GameEvent = (() => {
                     message.byTeam = reader.int32();
                     break;
                 case 2:
-                    message.location = $root.Location.decode(reader, reader.uint32());
+                    message.location = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 case 3:
                     message.time = reader.float();
@@ -9164,7 +9396,7 @@ export const GameEvent = $root.GameEvent = (() => {
                 break;
             }
             if (message.location != null && message.hasOwnProperty("location")) {
-                let error = $root.Location.verify(message.location);
+                let error = $root.Vector2.verify(message.location);
                 if (error)
                     return "location." + error;
             }
@@ -9203,7 +9435,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (object.location != null) {
                 if (typeof object.location !== "object")
                     throw TypeError(".GameEvent.KickTimeout.location: object expected");
-                message.location = $root.Location.fromObject(object.location);
+                message.location = $root.Vector2.fromObject(object.location);
             }
             if (object.time != null)
                 message.time = Number(object.time);
@@ -9231,7 +9463,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byTeam != null && message.hasOwnProperty("byTeam"))
                 object.byTeam = options.enums === String ? $root.Team[message.byTeam] : message.byTeam;
             if (message.location != null && message.hasOwnProperty("location"))
-                object.location = $root.Location.toObject(message.location, options);
+                object.location = $root.Vector2.toObject(message.location, options);
             if (message.time != null && message.hasOwnProperty("time"))
                 object.time = options.json && !isFinite(message.time) ? String(message.time) : message.time;
             return object;
@@ -9257,7 +9489,7 @@ export const GameEvent = $root.GameEvent = (() => {
          * Properties of a NoProgressInGame.
          * @memberof GameEvent
          * @interface INoProgressInGame
-         * @property {ILocation|null} [location] NoProgressInGame location
+         * @property {IVector2|null} [location] NoProgressInGame location
          * @property {number|null} [time] NoProgressInGame time
          */
 
@@ -9278,7 +9510,7 @@ export const GameEvent = $root.GameEvent = (() => {
 
         /**
          * NoProgressInGame location.
-         * @member {ILocation|null|undefined} location
+         * @member {IVector2|null|undefined} location
          * @memberof GameEvent.NoProgressInGame
          * @instance
          */
@@ -9317,7 +9549,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (!writer)
                 writer = $Writer.create();
             if (message.location != null && message.hasOwnProperty("location"))
-                $root.Location.encode(message.location, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                $root.Vector2.encode(message.location, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
             if (message.time != null && message.hasOwnProperty("time"))
                 writer.uint32(/* id 2, wireType 5 =*/21).float(message.time);
             return writer;
@@ -9355,7 +9587,7 @@ export const GameEvent = $root.GameEvent = (() => {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
-                    message.location = $root.Location.decode(reader, reader.uint32());
+                    message.location = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 case 2:
                     message.time = reader.float();
@@ -9396,7 +9628,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             if (message.location != null && message.hasOwnProperty("location")) {
-                let error = $root.Location.verify(message.location);
+                let error = $root.Vector2.verify(message.location);
                 if (error)
                     return "location." + error;
             }
@@ -9421,7 +9653,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (object.location != null) {
                 if (typeof object.location !== "object")
                     throw TypeError(".GameEvent.NoProgressInGame.location: object expected");
-                message.location = $root.Location.fromObject(object.location);
+                message.location = $root.Vector2.fromObject(object.location);
             }
             if (object.time != null)
                 message.time = Number(object.time);
@@ -9446,7 +9678,7 @@ export const GameEvent = $root.GameEvent = (() => {
                 object.time = 0;
             }
             if (message.location != null && message.hasOwnProperty("location"))
-                object.location = $root.Location.toObject(message.location, options);
+                object.location = $root.Vector2.toObject(message.location, options);
             if (message.time != null && message.hasOwnProperty("time"))
                 object.time = options.json && !isFinite(message.time) ? String(message.time) : message.time;
             return object;
@@ -10157,7 +10389,7 @@ export const GameEvent = $root.GameEvent = (() => {
          * @memberof GameEvent
          * @interface IKeeperHeldBall
          * @property {Team} byTeam KeeperHeldBall byTeam
-         * @property {ILocation|null} [location] KeeperHeldBall location
+         * @property {IVector2|null} [location] KeeperHeldBall location
          * @property {number|null} [duration] KeeperHeldBall duration
          */
 
@@ -10186,7 +10418,7 @@ export const GameEvent = $root.GameEvent = (() => {
 
         /**
          * KeeperHeldBall location.
-         * @member {ILocation|null|undefined} location
+         * @member {IVector2|null|undefined} location
          * @memberof GameEvent.KeeperHeldBall
          * @instance
          */
@@ -10226,7 +10458,7 @@ export const GameEvent = $root.GameEvent = (() => {
                 writer = $Writer.create();
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
             if (message.location != null && message.hasOwnProperty("location"))
-                $root.Location.encode(message.location, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                $root.Vector2.encode(message.location, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
             if (message.duration != null && message.hasOwnProperty("duration"))
                 writer.uint32(/* id 3, wireType 5 =*/29).float(message.duration);
             return writer;
@@ -10267,7 +10499,7 @@ export const GameEvent = $root.GameEvent = (() => {
                     message.byTeam = reader.int32();
                     break;
                 case 2:
-                    message.location = $root.Location.decode(reader, reader.uint32());
+                    message.location = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 case 3:
                     message.duration = reader.float();
@@ -10318,7 +10550,7 @@ export const GameEvent = $root.GameEvent = (() => {
                 break;
             }
             if (message.location != null && message.hasOwnProperty("location")) {
-                let error = $root.Location.verify(message.location);
+                let error = $root.Vector2.verify(message.location);
                 if (error)
                     return "location." + error;
             }
@@ -10357,7 +10589,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (object.location != null) {
                 if (typeof object.location !== "object")
                     throw TypeError(".GameEvent.KeeperHeldBall.location: object expected");
-                message.location = $root.Location.fromObject(object.location);
+                message.location = $root.Vector2.fromObject(object.location);
             }
             if (object.duration != null)
                 message.duration = Number(object.duration);
@@ -10385,7 +10617,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byTeam != null && message.hasOwnProperty("byTeam"))
                 object.byTeam = options.enums === String ? $root.Team[message.byTeam] : message.byTeam;
             if (message.location != null && message.hasOwnProperty("location"))
-                object.location = $root.Location.toObject(message.location, options);
+                object.location = $root.Vector2.toObject(message.location, options);
             if (message.duration != null && message.hasOwnProperty("duration"))
                 object.duration = options.json && !isFinite(message.duration) ? String(message.duration) : message.duration;
             return object;
@@ -11281,7 +11513,7 @@ export const GameEvent = $root.GameEvent = (() => {
          * @memberof GameEvent
          * @interface IBoundaryCrossing
          * @property {Team} byTeam BoundaryCrossing byTeam
-         * @property {ILocation|null} [location] BoundaryCrossing location
+         * @property {IVector2|null} [location] BoundaryCrossing location
          */
 
         /**
@@ -11309,7 +11541,7 @@ export const GameEvent = $root.GameEvent = (() => {
 
         /**
          * BoundaryCrossing location.
-         * @member {ILocation|null|undefined} location
+         * @member {IVector2|null|undefined} location
          * @memberof GameEvent.BoundaryCrossing
          * @instance
          */
@@ -11341,7 +11573,7 @@ export const GameEvent = $root.GameEvent = (() => {
                 writer = $Writer.create();
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
             if (message.location != null && message.hasOwnProperty("location"))
-                $root.Location.encode(message.location, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                $root.Vector2.encode(message.location, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
             return writer;
         };
 
@@ -11380,7 +11612,7 @@ export const GameEvent = $root.GameEvent = (() => {
                     message.byTeam = reader.int32();
                     break;
                 case 2:
-                    message.location = $root.Location.decode(reader, reader.uint32());
+                    message.location = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -11428,7 +11660,7 @@ export const GameEvent = $root.GameEvent = (() => {
                 break;
             }
             if (message.location != null && message.hasOwnProperty("location")) {
-                let error = $root.Location.verify(message.location);
+                let error = $root.Vector2.verify(message.location);
                 if (error)
                     return "location." + error;
             }
@@ -11464,7 +11696,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (object.location != null) {
                 if (typeof object.location !== "object")
                     throw TypeError(".GameEvent.BoundaryCrossing.location: object expected");
-                message.location = $root.Location.fromObject(object.location);
+                message.location = $root.Vector2.fromObject(object.location);
             }
             return message;
         };
@@ -11489,7 +11721,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (message.byTeam != null && message.hasOwnProperty("byTeam"))
                 object.byTeam = options.enums === String ? $root.Team[message.byTeam] : message.byTeam;
             if (message.location != null && message.hasOwnProperty("location"))
-                object.location = $root.Location.toObject(message.location, options);
+                object.location = $root.Vector2.toObject(message.location, options);
             return object;
         };
 
@@ -14924,7 +15156,7 @@ export const SetBallPlacementPos = $root.SetBallPlacementPos = (() => {
      * Properties of a SetBallPlacementPos.
      * @exports ISetBallPlacementPos
      * @interface ISetBallPlacementPos
-     * @property {ILocation|null} [pos] SetBallPlacementPos pos
+     * @property {IVector2|null} [pos] SetBallPlacementPos pos
      */
 
     /**
@@ -14944,7 +15176,7 @@ export const SetBallPlacementPos = $root.SetBallPlacementPos = (() => {
 
     /**
      * SetBallPlacementPos pos.
-     * @member {ILocation|null|undefined} pos
+     * @member {IVector2|null|undefined} pos
      * @memberof SetBallPlacementPos
      * @instance
      */
@@ -14975,7 +15207,7 @@ export const SetBallPlacementPos = $root.SetBallPlacementPos = (() => {
         if (!writer)
             writer = $Writer.create();
         if (message.pos != null && message.hasOwnProperty("pos"))
-            $root.Location.encode(message.pos, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            $root.Vector2.encode(message.pos, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
         return writer;
     };
 
@@ -15011,7 +15243,7 @@ export const SetBallPlacementPos = $root.SetBallPlacementPos = (() => {
             let tag = reader.uint32();
             switch (tag >>> 3) {
             case 1:
-                message.pos = $root.Location.decode(reader, reader.uint32());
+                message.pos = $root.Vector2.decode(reader, reader.uint32());
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -15049,7 +15281,7 @@ export const SetBallPlacementPos = $root.SetBallPlacementPos = (() => {
         if (typeof message !== "object" || message === null)
             return "object expected";
         if (message.pos != null && message.hasOwnProperty("pos")) {
-            let error = $root.Location.verify(message.pos);
+            let error = $root.Vector2.verify(message.pos);
             if (error)
                 return "pos." + error;
         }
@@ -15071,7 +15303,7 @@ export const SetBallPlacementPos = $root.SetBallPlacementPos = (() => {
         if (object.pos != null) {
             if (typeof object.pos !== "object")
                 throw TypeError(".SetBallPlacementPos.pos: object expected");
-            message.pos = $root.Location.fromObject(object.pos);
+            message.pos = $root.Vector2.fromObject(object.pos);
         }
         return message;
     };
@@ -15092,7 +15324,7 @@ export const SetBallPlacementPos = $root.SetBallPlacementPos = (() => {
         if (options.defaults)
             object.pos = null;
         if (message.pos != null && message.hasOwnProperty("pos"))
-            object.pos = $root.Location.toObject(message.pos, options);
+            object.pos = $root.Vector2.toObject(message.pos, options);
         return object;
     };
 
@@ -19265,7 +19497,7 @@ export const State = $root.State = (() => {
      * @property {google.protobuf.IDuration|null} [stageTimeLeft] State stageTimeLeft
      * @property {google.protobuf.ITimestamp|null} [matchTimeStart] State matchTimeStart
      * @property {Object.<string,ITeamInfo>|null} [teamState] State teamState
-     * @property {ILocation|null} [placementPos] State placementPos
+     * @property {IVector2|null} [placementPos] State placementPos
      * @property {ICommand|null} [nextCommand] State nextCommand
      * @property {google.protobuf.IDuration|null} [currentActionTimeRemaining] State currentActionTimeRemaining
      * @property {Array.<IGameEvent>|null} [gameEvents] State gameEvents
@@ -19345,7 +19577,7 @@ export const State = $root.State = (() => {
 
     /**
      * State placementPos.
-     * @member {ILocation|null|undefined} placementPos
+     * @member {IVector2|null|undefined} placementPos
      * @memberof State
      * @instance
      */
@@ -19455,7 +19687,7 @@ export const State = $root.State = (() => {
                 $root.TeamInfo.encode(message.teamState[keys[i]], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim().ldelim();
             }
         if (message.placementPos != null && message.hasOwnProperty("placementPos"))
-            $root.Location.encode(message.placementPos, writer.uint32(/* id 9, wireType 2 =*/74).fork()).ldelim();
+            $root.Vector2.encode(message.placementPos, writer.uint32(/* id 9, wireType 2 =*/74).fork()).ldelim();
         if (message.nextCommand != null && message.hasOwnProperty("nextCommand"))
             $root.Command.encode(message.nextCommand, writer.uint32(/* id 10, wireType 2 =*/82).fork()).ldelim();
         if (message.currentActionTimeRemaining != null && message.hasOwnProperty("currentActionTimeRemaining"))
@@ -19533,7 +19765,7 @@ export const State = $root.State = (() => {
                 message.teamState[key] = $root.TeamInfo.decode(reader, reader.uint32());
                 break;
             case 9:
-                message.placementPos = $root.Location.decode(reader, reader.uint32());
+                message.placementPos = $root.Vector2.decode(reader, reader.uint32());
                 break;
             case 10:
                 message.nextCommand = $root.Command.decode(reader, reader.uint32());
@@ -19654,7 +19886,7 @@ export const State = $root.State = (() => {
             }
         }
         if (message.placementPos != null && message.hasOwnProperty("placementPos")) {
-            let error = $root.Location.verify(message.placementPos);
+            let error = $root.Vector2.verify(message.placementPos);
             if (error)
                 return "placementPos." + error;
         }
@@ -19828,7 +20060,7 @@ export const State = $root.State = (() => {
         if (object.placementPos != null) {
             if (typeof object.placementPos !== "object")
                 throw TypeError(".State.placementPos: object expected");
-            message.placementPos = $root.Location.fromObject(object.placementPos);
+            message.placementPos = $root.Vector2.fromObject(object.placementPos);
         }
         if (object.nextCommand != null) {
             if (typeof object.nextCommand !== "object")
@@ -19968,7 +20200,7 @@ export const State = $root.State = (() => {
                 object.teamState[keys2[j]] = $root.TeamInfo.toObject(message.teamState[keys2[j]], options);
         }
         if (message.placementPos != null && message.hasOwnProperty("placementPos"))
-            object.placementPos = $root.Location.toObject(message.placementPos, options);
+            object.placementPos = $root.Vector2.toObject(message.placementPos, options);
         if (message.nextCommand != null && message.hasOwnProperty("nextCommand"))
             object.nextCommand = $root.Command.toObject(message.nextCommand, options);
         if (message.currentActionTimeRemaining != null && message.hasOwnProperty("currentActionTimeRemaining"))
@@ -22566,6 +22798,7 @@ export const GcStateTracker = $root.GcStateTracker = (() => {
      * Properties of a GcStateTracker.
      * @exports IGcStateTracker
      * @interface IGcStateTracker
+     * @property {string|null} [sourceName] GcStateTracker sourceName
      * @property {IBall|null} [ball] GcStateTracker ball
      * @property {Array.<IRobot>|null} [robots] GcStateTracker robots
      */
@@ -22585,6 +22818,14 @@ export const GcStateTracker = $root.GcStateTracker = (() => {
                 if (properties[keys[i]] != null)
                     this[keys[i]] = properties[keys[i]];
     }
+
+    /**
+     * GcStateTracker sourceName.
+     * @member {string} sourceName
+     * @memberof GcStateTracker
+     * @instance
+     */
+    GcStateTracker.prototype.sourceName = "";
 
     /**
      * GcStateTracker ball.
@@ -22626,11 +22867,13 @@ export const GcStateTracker = $root.GcStateTracker = (() => {
     GcStateTracker.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
+        if (message.sourceName != null && message.hasOwnProperty("sourceName"))
+            writer.uint32(/* id 1, wireType 2 =*/10).string(message.sourceName);
         if (message.ball != null && message.hasOwnProperty("ball"))
-            $root.Ball.encode(message.ball, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            $root.Ball.encode(message.ball, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
         if (message.robots != null && message.robots.length)
             for (let i = 0; i < message.robots.length; ++i)
-                $root.Robot.encode(message.robots[i], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                $root.Robot.encode(message.robots[i], writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
         return writer;
     };
 
@@ -22666,9 +22909,12 @@ export const GcStateTracker = $root.GcStateTracker = (() => {
             let tag = reader.uint32();
             switch (tag >>> 3) {
             case 1:
-                message.ball = $root.Ball.decode(reader, reader.uint32());
+                message.sourceName = reader.string();
                 break;
             case 2:
+                message.ball = $root.Ball.decode(reader, reader.uint32());
+                break;
+            case 3:
                 if (!(message.robots && message.robots.length))
                     message.robots = [];
                 message.robots.push($root.Robot.decode(reader, reader.uint32()));
@@ -22708,6 +22954,9 @@ export const GcStateTracker = $root.GcStateTracker = (() => {
     GcStateTracker.verify = function verify(message) {
         if (typeof message !== "object" || message === null)
             return "object expected";
+        if (message.sourceName != null && message.hasOwnProperty("sourceName"))
+            if (!$util.isString(message.sourceName))
+                return "sourceName: string expected";
         if (message.ball != null && message.hasOwnProperty("ball")) {
             let error = $root.Ball.verify(message.ball);
             if (error)
@@ -22737,6 +22986,8 @@ export const GcStateTracker = $root.GcStateTracker = (() => {
         if (object instanceof $root.GcStateTracker)
             return object;
         let message = new $root.GcStateTracker();
+        if (object.sourceName != null)
+            message.sourceName = String(object.sourceName);
         if (object.ball != null) {
             if (typeof object.ball !== "object")
                 throw TypeError(".GcStateTracker.ball: object expected");
@@ -22770,8 +23021,12 @@ export const GcStateTracker = $root.GcStateTracker = (() => {
         let object = {};
         if (options.arrays || options.defaults)
             object.robots = [];
-        if (options.defaults)
+        if (options.defaults) {
+            object.sourceName = "";
             object.ball = null;
+        }
+        if (message.sourceName != null && message.hasOwnProperty("sourceName"))
+            object.sourceName = message.sourceName;
         if (message.ball != null && message.hasOwnProperty("ball"))
             object.ball = $root.Ball.toObject(message.ball, options);
         if (message.robots && message.robots.length) {
@@ -22802,8 +23057,8 @@ export const Ball = $root.Ball = (() => {
      * Properties of a Ball.
      * @exports IBall
      * @interface IBall
-     * @property {IVector2|null} [pos] Ball pos
-     * @property {IVector2|null} [vel] Ball vel
+     * @property {IVector3|null} [pos] Ball pos
+     * @property {IVector3|null} [vel] Ball vel
      */
 
     /**
@@ -22823,7 +23078,7 @@ export const Ball = $root.Ball = (() => {
 
     /**
      * Ball pos.
-     * @member {IVector2|null|undefined} pos
+     * @member {IVector3|null|undefined} pos
      * @memberof Ball
      * @instance
      */
@@ -22831,7 +23086,7 @@ export const Ball = $root.Ball = (() => {
 
     /**
      * Ball vel.
-     * @member {IVector2|null|undefined} vel
+     * @member {IVector3|null|undefined} vel
      * @memberof Ball
      * @instance
      */
@@ -22862,9 +23117,9 @@ export const Ball = $root.Ball = (() => {
         if (!writer)
             writer = $Writer.create();
         if (message.pos != null && message.hasOwnProperty("pos"))
-            $root.Vector2.encode(message.pos, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            $root.Vector3.encode(message.pos, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
         if (message.vel != null && message.hasOwnProperty("vel"))
-            $root.Vector2.encode(message.vel, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+            $root.Vector3.encode(message.vel, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
         return writer;
     };
 
@@ -22900,10 +23155,10 @@ export const Ball = $root.Ball = (() => {
             let tag = reader.uint32();
             switch (tag >>> 3) {
             case 1:
-                message.pos = $root.Vector2.decode(reader, reader.uint32());
+                message.pos = $root.Vector3.decode(reader, reader.uint32());
                 break;
             case 2:
-                message.vel = $root.Vector2.decode(reader, reader.uint32());
+                message.vel = $root.Vector3.decode(reader, reader.uint32());
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -22941,12 +23196,12 @@ export const Ball = $root.Ball = (() => {
         if (typeof message !== "object" || message === null)
             return "object expected";
         if (message.pos != null && message.hasOwnProperty("pos")) {
-            let error = $root.Vector2.verify(message.pos);
+            let error = $root.Vector3.verify(message.pos);
             if (error)
                 return "pos." + error;
         }
         if (message.vel != null && message.hasOwnProperty("vel")) {
-            let error = $root.Vector2.verify(message.vel);
+            let error = $root.Vector3.verify(message.vel);
             if (error)
                 return "vel." + error;
         }
@@ -22968,12 +23223,12 @@ export const Ball = $root.Ball = (() => {
         if (object.pos != null) {
             if (typeof object.pos !== "object")
                 throw TypeError(".Ball.pos: object expected");
-            message.pos = $root.Vector2.fromObject(object.pos);
+            message.pos = $root.Vector3.fromObject(object.pos);
         }
         if (object.vel != null) {
             if (typeof object.vel !== "object")
                 throw TypeError(".Ball.vel: object expected");
-            message.vel = $root.Vector2.fromObject(object.vel);
+            message.vel = $root.Vector3.fromObject(object.vel);
         }
         return message;
     };
@@ -22996,9 +23251,9 @@ export const Ball = $root.Ball = (() => {
             object.vel = null;
         }
         if (message.pos != null && message.hasOwnProperty("pos"))
-            object.pos = $root.Vector2.toObject(message.pos, options);
+            object.pos = $root.Vector3.toObject(message.pos, options);
         if (message.vel != null && message.hasOwnProperty("vel"))
-            object.vel = $root.Vector2.toObject(message.vel, options);
+            object.vel = $root.Vector3.toObject(message.vel, options);
         return object;
     };
 
@@ -23022,7 +23277,7 @@ export const Robot = $root.Robot = (() => {
      * Properties of a Robot.
      * @exports IRobot
      * @interface IRobot
-     * @property {IBotId|null} [id] Robot id
+     * @property {IRobotId|null} [id] Robot id
      * @property {IVector2|null} [pos] Robot pos
      */
 
@@ -23043,7 +23298,7 @@ export const Robot = $root.Robot = (() => {
 
     /**
      * Robot id.
-     * @member {IBotId|null|undefined} id
+     * @member {IRobotId|null|undefined} id
      * @memberof Robot
      * @instance
      */
@@ -23082,7 +23337,7 @@ export const Robot = $root.Robot = (() => {
         if (!writer)
             writer = $Writer.create();
         if (message.id != null && message.hasOwnProperty("id"))
-            $root.BotId.encode(message.id, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            $root.RobotId.encode(message.id, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
         if (message.pos != null && message.hasOwnProperty("pos"))
             $root.Vector2.encode(message.pos, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
         return writer;
@@ -23120,7 +23375,7 @@ export const Robot = $root.Robot = (() => {
             let tag = reader.uint32();
             switch (tag >>> 3) {
             case 1:
-                message.id = $root.BotId.decode(reader, reader.uint32());
+                message.id = $root.RobotId.decode(reader, reader.uint32());
                 break;
             case 2:
                 message.pos = $root.Vector2.decode(reader, reader.uint32());
@@ -23161,7 +23416,7 @@ export const Robot = $root.Robot = (() => {
         if (typeof message !== "object" || message === null)
             return "object expected";
         if (message.id != null && message.hasOwnProperty("id")) {
-            let error = $root.BotId.verify(message.id);
+            let error = $root.RobotId.verify(message.id);
             if (error)
                 return "id." + error;
         }
@@ -23188,7 +23443,7 @@ export const Robot = $root.Robot = (() => {
         if (object.id != null) {
             if (typeof object.id !== "object")
                 throw TypeError(".Robot.id: object expected");
-            message.id = $root.BotId.fromObject(object.id);
+            message.id = $root.RobotId.fromObject(object.id);
         }
         if (object.pos != null) {
             if (typeof object.pos !== "object")
@@ -23216,7 +23471,7 @@ export const Robot = $root.Robot = (() => {
             object.pos = null;
         }
         if (message.id != null && message.hasOwnProperty("id"))
-            object.id = $root.BotId.toObject(message.id, options);
+            object.id = $root.RobotId.toObject(message.id, options);
         if (message.pos != null && message.hasOwnProperty("pos"))
             object.pos = $root.Vector2.toObject(message.pos, options);
         return object;
@@ -23234,216 +23489,6 @@ export const Robot = $root.Robot = (() => {
     };
 
     return Robot;
-})();
-
-export const Vector2 = $root.Vector2 = (() => {
-
-    /**
-     * Properties of a Vector2.
-     * @exports IVector2
-     * @interface IVector2
-     * @property {number} x Vector2 x
-     * @property {number} y Vector2 y
-     */
-
-    /**
-     * Constructs a new Vector2.
-     * @exports Vector2
-     * @classdesc Represents a Vector2.
-     * @implements IVector2
-     * @constructor
-     * @param {IVector2=} [properties] Properties to set
-     */
-    function Vector2(properties) {
-        if (properties)
-            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                if (properties[keys[i]] != null)
-                    this[keys[i]] = properties[keys[i]];
-    }
-
-    /**
-     * Vector2 x.
-     * @member {number} x
-     * @memberof Vector2
-     * @instance
-     */
-    Vector2.prototype.x = 0;
-
-    /**
-     * Vector2 y.
-     * @member {number} y
-     * @memberof Vector2
-     * @instance
-     */
-    Vector2.prototype.y = 0;
-
-    /**
-     * Creates a new Vector2 instance using the specified properties.
-     * @function create
-     * @memberof Vector2
-     * @static
-     * @param {IVector2=} [properties] Properties to set
-     * @returns {Vector2} Vector2 instance
-     */
-    Vector2.create = function create(properties) {
-        return new Vector2(properties);
-    };
-
-    /**
-     * Encodes the specified Vector2 message. Does not implicitly {@link Vector2.verify|verify} messages.
-     * @function encode
-     * @memberof Vector2
-     * @static
-     * @param {IVector2} message Vector2 message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    Vector2.encode = function encode(message, writer) {
-        if (!writer)
-            writer = $Writer.create();
-        writer.uint32(/* id 1, wireType 1 =*/9).double(message.x);
-        writer.uint32(/* id 2, wireType 1 =*/17).double(message.y);
-        return writer;
-    };
-
-    /**
-     * Encodes the specified Vector2 message, length delimited. Does not implicitly {@link Vector2.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof Vector2
-     * @static
-     * @param {IVector2} message Vector2 message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    Vector2.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
-    };
-
-    /**
-     * Decodes a Vector2 message from the specified reader or buffer.
-     * @function decode
-     * @memberof Vector2
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @param {number} [length] Message length if known beforehand
-     * @returns {Vector2} Vector2
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    Vector2.decode = function decode(reader, length) {
-        if (!(reader instanceof $Reader))
-            reader = $Reader.create(reader);
-        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Vector2();
-        while (reader.pos < end) {
-            let tag = reader.uint32();
-            switch (tag >>> 3) {
-            case 1:
-                message.x = reader.double();
-                break;
-            case 2:
-                message.y = reader.double();
-                break;
-            default:
-                reader.skipType(tag & 7);
-                break;
-            }
-        }
-        if (!message.hasOwnProperty("x"))
-            throw $util.ProtocolError("missing required 'x'", { instance: message });
-        if (!message.hasOwnProperty("y"))
-            throw $util.ProtocolError("missing required 'y'", { instance: message });
-        return message;
-    };
-
-    /**
-     * Decodes a Vector2 message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof Vector2
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {Vector2} Vector2
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    Vector2.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
-
-    /**
-     * Verifies a Vector2 message.
-     * @function verify
-     * @memberof Vector2
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    Vector2.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        if (typeof message.x !== "number")
-            return "x: number expected";
-        if (typeof message.y !== "number")
-            return "y: number expected";
-        return null;
-    };
-
-    /**
-     * Creates a Vector2 message from a plain object. Also converts values to their respective internal types.
-     * @function fromObject
-     * @memberof Vector2
-     * @static
-     * @param {Object.<string,*>} object Plain object
-     * @returns {Vector2} Vector2
-     */
-    Vector2.fromObject = function fromObject(object) {
-        if (object instanceof $root.Vector2)
-            return object;
-        let message = new $root.Vector2();
-        if (object.x != null)
-            message.x = Number(object.x);
-        if (object.y != null)
-            message.y = Number(object.y);
-        return message;
-    };
-
-    /**
-     * Creates a plain object from a Vector2 message. Also converts values to other types if specified.
-     * @function toObject
-     * @memberof Vector2
-     * @static
-     * @param {Vector2} message Vector2
-     * @param {$protobuf.IConversionOptions} [options] Conversion options
-     * @returns {Object.<string,*>} Plain object
-     */
-    Vector2.toObject = function toObject(message, options) {
-        if (!options)
-            options = {};
-        let object = {};
-        if (options.defaults) {
-            object.x = 0;
-            object.y = 0;
-        }
-        if (message.x != null && message.hasOwnProperty("x"))
-            object.x = options.json && !isFinite(message.x) ? String(message.x) : message.x;
-        if (message.y != null && message.hasOwnProperty("y"))
-            object.y = options.json && !isFinite(message.y) ? String(message.y) : message.y;
-        return object;
-    };
-
-    /**
-     * Converts this Vector2 to JSON.
-     * @function toJSON
-     * @memberof Vector2
-     * @instance
-     * @returns {Object.<string,*>} JSON object
-     */
-    Vector2.prototype.toJSON = function toJSON() {
-        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-    };
-
-    return Vector2;
 })();
 
 export { $root as default };

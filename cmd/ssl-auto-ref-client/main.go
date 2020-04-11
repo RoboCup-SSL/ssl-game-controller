@@ -6,6 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/client"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/geom"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/rcon"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-go-tools/pkg/sslconn"
@@ -154,7 +155,7 @@ func (c *Client) sendBallLeftField() {
 	*event.BallLeftFieldTouchLine.ByBot = 2
 	event.BallLeftFieldTouchLine.ByTeam = new(state.Team)
 	*event.BallLeftFieldTouchLine.ByTeam = state.Team_BLUE
-	event.BallLeftFieldTouchLine.Location = &state.Location{X: new(float32), Y: new(float32)}
+	event.BallLeftFieldTouchLine.Location = &geom.Vector2{X: new(float32), Y: new(float32)}
 	*event.BallLeftFieldTouchLine.Location.X = 1
 	*event.BallLeftFieldTouchLine.Location.Y = 4.5
 	gameEvent := state.GameEvent{Event: &event, Type: new(state.GameEvent_Type)}
@@ -170,7 +171,7 @@ func (c *Client) sendDoubleTouch() {
 	*event.AttackerDoubleTouchedBall.ByBot = 2
 	event.AttackerDoubleTouchedBall.ByTeam = new(state.Team)
 	*event.AttackerDoubleTouchedBall.ByTeam = state.Team_BLUE
-	event.AttackerDoubleTouchedBall.Location = &state.Location{X: new(float32), Y: new(float32)}
+	event.AttackerDoubleTouchedBall.Location = &geom.Vector2{X: new(float32), Y: new(float32)}
 	*event.AttackerDoubleTouchedBall.Location.X = 1
 	*event.AttackerDoubleTouchedBall.Location.Y = 4.5
 	gameEvent := state.GameEvent{Event: &event, Type: new(state.GameEvent_Type)}
@@ -188,7 +189,7 @@ func (c *Client) sendBotCrashUnique() {
 	*event.BotCrashUnique.Victim = 5
 	event.BotCrashUnique.ByTeam = new(state.Team)
 	*event.BotCrashUnique.ByTeam = state.Team_BLUE
-	event.BotCrashUnique.Location = &state.Location{X: new(float32), Y: new(float32)}
+	event.BotCrashUnique.Location = &geom.Vector2{X: new(float32), Y: new(float32)}
 	*event.BotCrashUnique.Location.X = 1
 	*event.BotCrashUnique.Location.Y = 4.5
 	gameEvent := state.GameEvent{Event: &event, Type: new(state.GameEvent_Type)}

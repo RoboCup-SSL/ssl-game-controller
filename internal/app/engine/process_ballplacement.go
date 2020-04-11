@@ -15,12 +15,13 @@ type BallPlacementCoordinator struct {
 func (c *BallPlacementCoordinator) process() {
 	e := c.gcEngine
 
-	if *e.currentState.Command.Type != state.Command_BALL_PLACEMENT {
+	if *e.currentState.Command.Type != state.Command_BALL_PLACEMENT ||
+		e.gcState.TrackerStateGc.Ball == nil {
 		return
 	}
 
 	if c.ballPlacementStartPos == nil || c.ballPlacementStartTime == nil {
-		c.ballPlacementStartPos = e.gcState.TrackerStateGc.Ball.Pos
+		c.ballPlacementStartPos = e.gcState.TrackerStateGc.Ball.Pos.ToVector2()
 		c.ballPlacementStartTime = new(time.Time)
 		*c.ballPlacementStartTime = e.timeProvider()
 	}
@@ -36,7 +37,7 @@ func (c *BallPlacementCoordinator) process() {
 			var distance *float32
 			if c.ballPlacementStartPos != nil && e.gcState.TrackerStateGc.Ball.Pos != nil {
 				distance = new(float32)
-				*distance = float32(c.ballPlacementStartPos.DistanceTo(e.gcState.TrackerStateGc.Ball.Pos))
+				*distance = float32(c.ballPlacementStartPos.DistanceTo(e.gcState.TrackerStateGc.Ball.Pos.ToVector2()))
 			}
 			e.Enqueue(createGameEventChange(state.GameEvent_PLACEMENT_SUCCEEDED, state.GameEvent{
 				Event: &state.GameEvent_PlacementSucceeded_{
@@ -65,8 +66,8 @@ func (c *BallPlacementCoordinator) remainingPlacementDistance() float32 {
 	if c.gcEngine.currentState.PlacementPos == nil || c.gcEngine.gcState.TrackerStateGc.Ball.Pos == nil {
 		return -1
 	}
-	placementPos := locationToVector2(c.gcEngine.currentState.PlacementPos)
-	ballPos := c.gcEngine.gcState.TrackerStateGc.Ball.Pos
+	placementPos := c.gcEngine.currentState.PlacementPos
+	ballPos := c.gcEngine.gcState.TrackerStateGc.Ball.Pos.ToVector2()
 	return float32(placementPos.DistanceTo(ballPos))
 }
 
@@ -83,7 +84,7 @@ func (e *Engine) teamInFavorKeepsSufficientDistance() bool {
 		}
 	}
 
-	return !e.robotsInsideRadius(robots, e.gcState.TrackerStateGc.Ball.Pos, radius)
+	return !e.robotsInsideRadius(robots, e.gcState.TrackerStateGc.Ball.Pos.ToVector2(), radius)
 }
 
 func (e *Engine) opponentTeamKeepsSufficientDistance() bool {
@@ -96,5 +97,5 @@ func (e *Engine) opponentTeamKeepsSufficientDistance() bool {
 		}
 	}
 
-	return !e.robotsInsideRadius(robots, e.gcState.TrackerStateGc.Ball.Pos, radius)
+	return !e.robotsInsideRadius(robots, e.gcState.TrackerStateGc.Ball.Pos.ToVector2(), radius)
 }

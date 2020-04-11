@@ -18,11 +18,11 @@ func NewRectangleFromCenter(center *Vector2, xExtent, yExtent float64) (r *Recta
 
 func NewRectangleFromPoints(p1, p2 *Vector2) (r *Rectangle) {
 	r = new(Rectangle)
-	r.xExtent = math.Abs(*p1.X - *p2.X)
-	r.yExtent = math.Abs(*p1.Y - *p2.Y)
+	r.xExtent = math.Abs(p1.X64() - p2.X64())
+	r.yExtent = math.Abs(p1.Y64() - p2.Y64())
 	r.center = NewVector2(
-		math.Min(*p1.X, *p2.X)+r.xExtent/2.0,
-		math.Min(*p1.Y, *p2.Y)+r.yExtent/2.0,
+		math.Min(p1.X64(), p2.X64())+r.xExtent/2.0,
+		math.Min(p1.Y64(), p2.Y64())+r.yExtent/2.0,
 	)
 	return
 }
@@ -36,24 +36,24 @@ func (r *Rectangle) WithMargin(margin float64) *Rectangle {
 }
 
 func (r *Rectangle) MaxX() float64 {
-	return *r.center.X + r.xExtent/2.0
+	return r.center.X64() + r.xExtent/2.0
 }
 
 func (r *Rectangle) MinX() float64 {
-	return *r.center.X - r.xExtent/2.0
+	return r.center.X64() - r.xExtent/2.0
 }
 
 func (r *Rectangle) MaxY() float64 {
-	return *r.center.Y + r.yExtent/2.0
+	return r.center.Y64() + r.yExtent/2.0
 }
 
 func (r *Rectangle) MinY() float64 {
-	return *r.center.Y + r.yExtent/2.0
+	return r.center.Y64() + r.yExtent/2.0
 }
 
 func (r *Rectangle) IsPointInside(p *Vector2) bool {
-	return isBetween(*p.X, r.MinX(), r.MaxX()) &&
-		isBetween(*p.Y, r.MinY(), r.MaxY())
+	return isBetween(p.X64(), r.MinX(), r.MaxX()) &&
+		isBetween(p.Y64(), r.MinY(), r.MaxY())
 }
 
 func isBetween(x, min, max float64) bool {

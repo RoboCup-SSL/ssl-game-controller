@@ -8,19 +8,24 @@ set -x
 echo "Update to latest Go protobuf compiler"
 go get -u github.com/golang/protobuf/protoc-gen-go
 
+# common GC
+protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_common.proto
+protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_geometry.proto
+
 # vision
 protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_vision_detection.proto
 protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_vision_geometry.proto
 protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_vision_wrapper.proto
 
+# tracked vision
+protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_vision_detection_tracked.proto
+protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_vision_wrapper_tracked.proto
+
 # game events
-protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_game_event.proto
+protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_game_event.proto
 
 # referee message
-protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_referee.proto
-
-# geometry
-protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_geometry.proto
+protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_referee_message.proto
 
 # remote communication
 protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_rcon.proto
@@ -34,4 +39,12 @@ protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_api.proto
 protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_engine.proto
 
 # generate javascript code
-pbjs -t static-module -w es6 -o src/proto.js proto/ssl_game_event.proto proto/ssl_referee.proto proto/ssl_gc_change.proto proto/ssl_gc_state.proto proto/ssl_gc_api.proto
+pbjs -t static-module -w es6 -o src/proto.js \
+  proto/ssl_gc_common.proto \
+  proto/ssl_gc_geometry.proto \
+  proto/ssl_gc_game_event.proto \
+  proto/ssl_gc_referee_message.proto \
+  proto/ssl_gc_change.proto \
+  proto/ssl_gc_state.proto \
+  proto/ssl_gc_api.proto \
+  proto/ssl_gc_engine.proto

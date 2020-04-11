@@ -17,6 +17,7 @@ type NoProgressDetector struct {
 func (d *NoProgressDetector) process() {
 
 	if !d.gcEngine.currentState.Command.IsRunning() ||
+		d.gcEngine.gcState.TrackerStateGc.Ball == nil ||
 		(d.gcEngine.currentState.CurrentActionTimeRemaining != nil && goDur(d.gcEngine.currentState.CurrentActionTimeRemaining) > 0) {
 		d.lastBallPos = nil
 		d.lastTime = nil
@@ -24,13 +25,13 @@ func (d *NoProgressDetector) process() {
 	}
 
 	if d.lastBallPos == nil {
-		d.lastBallPos = d.gcEngine.gcState.TrackerStateGc.Ball.Pos
+		d.lastBallPos = d.gcEngine.gcState.TrackerStateGc.Ball.Pos.ToVector2()
 		return
 	}
 
-	if d.lastBallPos.DistanceTo(d.gcEngine.gcState.TrackerStateGc.Ball.Pos) > distanceTolerance {
+	if d.lastBallPos.DistanceTo(d.gcEngine.gcState.TrackerStateGc.Ball.Pos.ToVector2()) > distanceTolerance {
 		d.lastTime = nil
-		d.lastBallPos = d.gcEngine.gcState.TrackerStateGc.Ball.Pos
+		d.lastBallPos = d.gcEngine.gcState.TrackerStateGc.Ball.Pos.ToVector2()
 		return
 	}
 
@@ -43,15 +44,15 @@ func (d *NoProgressDetector) process() {
 	timeSinceLastProgress := d.gcEngine.timeProvider().Sub(*d.lastTime)
 	if timeSinceLastProgress > d.gcEngine.gameConfig.NoProgressTimeout[d.gcEngine.currentState.Division.Div()] {
 		duration := float32(timeSinceLastProgress.Seconds())
-		location := vector2ToLocation(d.gcEngine.gcState.TrackerStateGc.Ball.Pos)
+		location := d.gcEngine.gcState.TrackerStateGc.Ball.Pos.ToVector2()
 		for _, team := range state.BothTeams() {
 			defenseArea := geom.NewDefenseArea(d.gcEngine.GetGeometry(), *d.gcEngine.currentState.TeamState[team.String()].OnPositiveHalf)
-			if defenseArea.IsPointInside(d.gcEngine.gcState.TrackerStateGc.Ball.Pos) {
+			if defenseArea.IsPointInside(d.gcEngine.gcState.TrackerStateGc.Ball.Pos.ToVector2()) {
 				d.gcEngine.Enqueue(createGameEventChange(state.GameEvent_KEEPER_HELD_BALL, state.GameEvent{
 					Event: &state.GameEvent_KeeperHeldBall_{
 						KeeperHeldBall: &state.GameEvent_KeeperHeldBall{
 							ByTeam:   &team,
-							Location: &location,
+							Location: location,
 							Duration: &duration,
 						},
 					},
@@ -62,7 +63,7 @@ func (d *NoProgressDetector) process() {
 		d.gcEngine.Enqueue(createGameEventChange(state.GameEvent_NO_PROGRESS_IN_GAME, state.GameEvent{
 			Event: &state.GameEvent_NoProgressInGame_{
 				NoProgressInGame: &state.GameEvent_NoProgressInGame{
-					Location: &location,
+					Location: location,
 					Time:     &duration,
 				},
 			},

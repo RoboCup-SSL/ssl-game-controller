@@ -1,6 +1,7 @@
 package publish
 
 import (
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/geom"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/golang/protobuf/ptypes"
 	"log"
@@ -74,7 +75,7 @@ func mapTime(duration time.Duration) uint32 {
 	return 0
 }
 
-func mapLocation(location *state.Location) *state.Referee_Point {
+func mapLocation(location *geom.Vector2) *state.Referee_Point {
 	if location == nil {
 		return nil
 	}

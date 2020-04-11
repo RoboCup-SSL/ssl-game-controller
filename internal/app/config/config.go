@@ -62,6 +62,7 @@ type Game struct {
 type Network struct {
 	PublishAddress string `yaml:"publish-address"`
 	VisionAddress  string `yaml:"vision-address"`
+	TrackerAddress string `yaml:"tracker-address"`
 }
 
 // Server holds configs for the available server services
@@ -147,6 +148,7 @@ func (c *Controller) WriteTo(fileName string) (err error) {
 func DefaultControllerConfig() (c Controller) {
 	c.Network.PublishAddress = "224.5.23.1:10003"
 	c.Network.VisionAddress = "224.5.23.2:10006"
+	c.Network.TrackerAddress = "224.5.23.2:10010"
 	c.Game.StateStoreFile = "state-store.json.stream"
 	c.Game.YellowCardDuration = 2 * time.Minute
 	c.Game.TeamChoiceTimeout = 200 * time.Millisecond

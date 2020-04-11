@@ -2,7 +2,7 @@ syntax = "proto2";
 
 option go_package = "github.com/RoboCup-SSL/ssl-game-controller/internal/app/state";
 
-import "ssl_game_event.proto";
+import "ssl_gc_game_event.proto";
 
 // Each UDP packet contains one of these messages.
 message Referee {

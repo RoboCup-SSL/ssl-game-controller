@@ -35,14 +35,6 @@ func (e *Engine) robotsInsideRadius(robots []*Robot, pos *geom.Vector2, radius f
 	return false
 }
 
-func vector2ToLocation(v *geom.Vector2) state.Location {
-	return state.NewLocation64(*v.X, *v.Y)
-}
-
-func locationToVector2(l *state.Location) *geom.Vector2 {
-	return geom.NewVector2(float64(*l.X), float64(*l.Y))
-}
-
 func (e *Engine) timeSinceLastChange() time.Duration {
 	if e.stateStore.LatestEntry() != nil {
 		lastChangeTs := goTime(e.stateStore.LatestEntry().Timestamp)

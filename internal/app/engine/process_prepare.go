@@ -10,6 +10,7 @@ const minPreparationTime = time.Second * 2
 
 func (e *Engine) processPrepare() {
 	if !e.currentState.Command.IsPrepare() ||
+		e.gcState.TrackerStateGc.Ball == nil ||
 		!e.readyToContinue() ||
 		e.currentState.NextCommand == nil ||
 		!e.currentState.GetAutoContinue() ||
@@ -19,7 +20,7 @@ func (e *Engine) processPrepare() {
 
 	if *e.currentState.Command.Type == state.Command_KICKOFF {
 		// ball in center circle
-		if e.gcState.TrackerStateGc.Ball.Pos.Length() > e.gameConfig.DistanceToBallInStop {
+		if e.gcState.TrackerStateGc.Ball.Pos.ToVector2().Length() > e.gameConfig.DistanceToBallInStop {
 			return
 		}
 
@@ -56,7 +57,7 @@ func (e *Engine) processPrepare() {
 func (e *Engine) readyToContinue() bool {
 	radius := e.gameConfig.DistanceToBallInStop + robotRadius + distanceThreshold
 	if !e.ballSteady() ||
-		e.robotsInsideRadius(e.gcState.TrackerStateGc.Robots, e.gcState.TrackerStateGc.Ball.Pos, radius) {
+		e.robotsInsideRadius(e.gcState.TrackerStateGc.Robots, e.gcState.TrackerStateGc.Ball.Pos.ToVector2(), radius) {
 		return false
 	}
 	return false

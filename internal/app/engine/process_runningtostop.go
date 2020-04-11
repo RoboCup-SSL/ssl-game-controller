@@ -31,12 +31,12 @@ func (e *Engine) processRunningToStop() {
 }
 
 func (e *Engine) ballPlacementRequired() bool {
-	if e.currentState.PlacementPos == nil || e.gcState.TrackerStateGc.Ball.Pos == nil {
+	if e.currentState.PlacementPos == nil || e.gcState.TrackerStateGc.Ball == nil {
 		// fallback if the fields are not set
 		return false
 	}
-	placementPos := locationToVector2(e.currentState.PlacementPos)
-	ballPos := e.gcState.TrackerStateGc.Ball.Pos
+	placementPos := e.currentState.PlacementPos
+	ballPos := e.gcState.TrackerStateGc.Ball.Pos.ToVector2()
 
 	// The ball is closer than 1m to the designated position.
 	if ballPos.DistanceTo(placementPos) > e.gameConfig.BallPlacementRequiredDistance {
@@ -70,5 +70,5 @@ func (e *Engine) ballSteady() bool {
 	if e.gcState.TrackerStateGc.Ball.Vel == nil {
 		return true
 	}
-	return e.gcState.TrackerStateGc.Ball.Vel.Length() < ballSteadyThreshold
+	return e.gcState.TrackerStateGc.Ball.Vel.ToVector2().Length() < ballSteadyThreshold
 }
