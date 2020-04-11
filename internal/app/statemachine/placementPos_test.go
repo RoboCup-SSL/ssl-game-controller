@@ -1,4 +1,4 @@
-package ballplace
+package statemachine
 
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"

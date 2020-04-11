@@ -38,7 +38,7 @@ func NewGameController(cfg config.Controller) (c *GameController) {
 	c.teamServerTls = rcon.NewTeamServer(cfg.Server.Team.AddressTls, c.gcEngine)
 	c.teamServerTls.Tls = true
 	c.visionReceiver = vision.NewReceiver(cfg.Network.VisionAddress)
-	c.visionReceiver.GeometryCallback = c.ProcessGeometry
+	c.visionReceiver.GeometryCallback = c.gcEngine.ProcessGeometry
 	c.trackerReceiver = tracker.NewReceiver(cfg.Network.TrackerAddress)
 	c.trackerReceiver.Callback = c.gcEngine.ProcessTrackerFrame
 	return
@@ -55,10 +55,12 @@ func (c *GameController) Start() {
 	c.teamServer.Server.Start()
 	c.teamServerTls.Server.Start()
 	c.visionReceiver.Start()
+	c.trackerReceiver.Start()
 }
 
 // Stop stops all go routines
 func (c *GameController) Stop() {
+	c.trackerReceiver.Stop()
 	c.visionReceiver.Stop()
 	c.autoRefServer.Server.Stop()
 	c.autoRefServerTls.Server.Stop()

@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func (s *StateMachine) ChangeStage(newState *state.State, change *ChangeStage) (changes []*Change) {
+func (s *StateMachine) processChangeChangeStage(newState *state.State, change *ChangeStage) (changes []*Change) {
 
 	// update stage time
 	newState.StageTimeLeft = ptypes.DurationProto(s.stageTimes[*change.NewStage])

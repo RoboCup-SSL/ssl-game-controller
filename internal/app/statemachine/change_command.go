@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-func (s *StateMachine) NewCommand(newState *state.State, newCommand *NewCommand) (changes []*Change) {
+func (s *StateMachine) processChangeNewCommand(newState *state.State, newCommand *NewCommand) (changes []*Change) {
 	newState.Command = newCommand.Command
 
 	switch *newState.Command.Type {

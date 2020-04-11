@@ -166,7 +166,7 @@ func (e *Engine) processChanges() {
 			}
 			e.processChange(change)
 		case <-time.After(10 * time.Millisecond):
-			e.tick()
+			e.processTick()
 
 			e.noProgressDetector.process()
 			e.ballPlacementCoordinator.process()

@@ -4,6 +4,10 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/geom"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
+	"github.com/golang/protobuf/ptypes"
+	"github.com/golang/protobuf/ptypes/duration"
+	"github.com/golang/protobuf/ptypes/timestamp"
+	"log"
 	"time"
 )
 
@@ -42,4 +46,35 @@ func (e *Engine) timeSinceLastChange() time.Duration {
 		return now.Sub(lastChangeTs)
 	}
 	return 0
+}
+
+func goDur(duration *duration.Duration) time.Duration {
+	goDur, err := ptypes.Duration(duration)
+	if err != nil {
+		log.Printf("Could not parse duration: %v", duration)
+	}
+	return goDur
+}
+
+func goTime(timestamp *timestamp.Timestamp) time.Time {
+	goTime, err := ptypes.Timestamp(timestamp)
+	if err != nil {
+		log.Printf("Could not parse timestamp: %v", timestamp)
+	}
+	return goTime
+}
+
+func addDur(duration *duration.Duration, delta time.Duration) {
+	goDur, err := ptypes.Duration(duration)
+	if err != nil {
+		log.Printf("Could not parse duration: %v", duration)
+	}
+	*duration = *ptypes.DurationProto(goDur + delta)
+}
+
+func (e *Engine) ballSteady() bool {
+	if e.gcState.TrackerStateGc.Ball.Vel == nil {
+		return true
+	}
+	return e.gcState.TrackerStateGc.Ball.Vel.ToVector2().Length() < ballSteadyThreshold
 }

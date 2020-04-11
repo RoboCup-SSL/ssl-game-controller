@@ -65,10 +65,3 @@ func (e *Engine) ballPlacementRequired() bool {
 
 	return false
 }
-
-func (e *Engine) ballSteady() bool {
-	if e.gcState.TrackerStateGc.Ball.Vel == nil {
-		return true
-	}
-	return e.gcState.TrackerStateGc.Ball.Vel.ToVector2().Length() < ballSteadyThreshold
-}

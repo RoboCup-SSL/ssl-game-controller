@@ -57,10 +57,12 @@ func (m *State) TeamByName(name string) Team {
 	return Team_UNKNOWN
 }
 
+// Div converts the protobuf division into the config division
 func (x *State_Division) Div() config.Division {
 	return config.Division(x.String())
 }
 
+// ToDiv converts the config division into the protobuf division
 func ToDiv(div config.Division) *State_Division {
 	protoDiv := State_Division(State_Division_value[string(div)])
 	return &protoDiv

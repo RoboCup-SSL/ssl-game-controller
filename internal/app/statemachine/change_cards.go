@@ -5,19 +5,19 @@ import (
 	"github.com/golang/protobuf/ptypes"
 )
 
-func (s *StateMachine) AddYellowCard(newState *state.State, change *AddYellowCard) (changes []*Change) {
+func (s *StateMachine) processChangeAddYellowCard(newState *state.State, change *AddYellowCard) (changes []*Change) {
 	newState.TeamInfo(*change.ForTeam).AddYellowCard(s.gameConfig.YellowCardDuration, change.CausedByGameEvent)
 	s.updateMaxBots(newState)
 	return
 }
 
-func (s *StateMachine) AddRedCard(newState *state.State, change *AddRedCard) (changes []*Change) {
+func (s *StateMachine) processChangeAddRedCard(newState *state.State, change *AddRedCard) (changes []*Change) {
 	newState.TeamInfo(*change.ForTeam).AddRedCard(change.CausedByGameEvent)
 	s.updateMaxBots(newState)
 	return
 }
 
-func (s *StateMachine) YellowCardOver(newState *state.State) (changes []*Change) {
+func (s *StateMachine) processChangeYellowCardOver(newState *state.State) (changes []*Change) {
 	s.updateMaxBots(newState)
 	return
 }

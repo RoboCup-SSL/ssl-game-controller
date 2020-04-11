@@ -3,8 +3,8 @@ package main
 import (
 	"crypto/rsa"
 	"flag"
-	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/client"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/rcon"
+	"github.com/RoboCup-SSL/ssl-game-controller/pkg/client"
 	"github.com/RoboCup-SSL/ssl-go-tools/pkg/sslconn"
 	"github.com/golang/protobuf/proto"
 	"log"

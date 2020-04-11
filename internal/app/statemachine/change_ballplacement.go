@@ -5,7 +5,7 @@ import (
 	"log"
 )
 
-func (s *StateMachine) StartBallPlacement(newState *state.State) (changes []*Change) {
+func (s *StateMachine) processChangeStartBallPlacement(newState *state.State) (changes []*Change) {
 
 	if newState.PlacementPos == nil || noTeamCanPlaceBall(newState) {
 		log.Print("placement not possible, human ref must help out")

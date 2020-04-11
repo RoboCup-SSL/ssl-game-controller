@@ -34,6 +34,7 @@ func (m Command) NeedsTeam() bool {
 	}
 }
 
+// IsRunning returns true, if the current commands indicates that the game is running (the ball is in play)
 func (m Command) IsRunning() bool {
 	switch *m.Type {
 	case Command_DIRECT,
@@ -45,6 +46,7 @@ func (m Command) IsRunning() bool {
 	return false
 }
 
+// IsPrepare returns true, if the current command is a prepare command
 func (m Command) IsPrepare() bool {
 	switch *m.Type {
 	case Command_PENALTY,

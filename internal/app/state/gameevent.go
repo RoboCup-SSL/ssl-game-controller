@@ -24,6 +24,7 @@ func (m GameEvent) ByTeam() Team {
 	return Team_UNKNOWN
 }
 
+// AllGameEvents returns a list with all known game event types
 func AllGameEvents() (a []GameEvent_Type) {
 	for t := range GameEvent_Type_name {
 		a = append(a, GameEvent_Type(t))

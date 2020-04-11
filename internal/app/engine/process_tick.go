@@ -4,14 +4,11 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"github.com/golang/protobuf/ptypes"
-	"github.com/golang/protobuf/ptypes/duration"
-	"github.com/golang/protobuf/ptypes/timestamp"
-	"log"
 	"time"
 )
 
-// tick updates the timers of the state and triggers changes if required
-func (e *Engine) tick() {
+// processTick updates the timers of the state and triggers changes if required
+func (e *Engine) processTick() {
 	currentTime := e.timeProvider()
 	delta := currentTime.Sub(e.lastTimeUpdate)
 	e.lastTimeUpdate = currentTime
@@ -63,28 +60,4 @@ func (e *Engine) updateYellowCardTimes(teamState *state.TeamInfo, delta time.Dur
 			}
 		}
 	}
-}
-
-func goDur(duration *duration.Duration) time.Duration {
-	goDur, err := ptypes.Duration(duration)
-	if err != nil {
-		log.Printf("Could not parse duration: %v", duration)
-	}
-	return goDur
-}
-
-func goTime(timestamp *timestamp.Timestamp) time.Time {
-	goTime, err := ptypes.Timestamp(timestamp)
-	if err != nil {
-		log.Printf("Could not parse timestamp: %v", timestamp)
-	}
-	return goTime
-}
-
-func addDur(duration *duration.Duration, delta time.Duration) {
-	goDur, err := ptypes.Duration(duration)
-	if err != nil {
-		log.Printf("Could not parse duration: %v", duration)
-	}
-	*duration = *ptypes.DurationProto(goDur + delta)
 }

@@ -116,6 +116,7 @@ func (s *Store) Add(entry *statemachine.StateChange) error {
 	return nil
 }
 
+// Reset closes the store, creates a backup and initializes the store with an empty state
 func (s *Store) Reset() error {
 	if err := s.Close(); err != nil {
 		return errors.Wrap(err, "Could not close current store file")

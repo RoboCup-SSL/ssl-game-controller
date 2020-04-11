@@ -1,4 +1,4 @@
-package gc
+package engine
 
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/vision"
@@ -6,9 +6,9 @@ import (
 	"math"
 )
 
-func (c *GameController) ProcessGeometry(data *vision.SSL_GeometryData) {
+func (e *Engine) ProcessGeometry(data *vision.SSL_GeometryData) {
 
-	currentGeometry := c.gcEngine.GetGeometry()
+	currentGeometry := e.GetGeometry()
 	newGeometry := currentGeometry
 
 	newGeometry.FieldWidth = float64(*data.Field.FieldWidth) / 1000.0
@@ -21,7 +21,7 @@ func (c *GameController) ProcessGeometry(data *vision.SSL_GeometryData) {
 		}
 	}
 
-	c.gcEngine.SetGeometry(newGeometry)
+	e.SetGeometry(newGeometry)
 
 	if currentGeometry != newGeometry {
 		log.Printf("Geometry changed from %v to %v", currentGeometry, newGeometry)

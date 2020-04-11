@@ -3,12 +3,11 @@ package statemachine
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
-	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine/ballplace"
 	"github.com/golang/protobuf/ptypes"
 	"log"
 )
 
-func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent) (changes []*Change) {
+func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *AddGameEvent) (changes []*Change) {
 
 	gameEvent := change.GameEvent
 	byTeam := gameEvent.ByTeam()
@@ -100,7 +99,7 @@ func (s *StateMachine) AddGameEvent(newState *state.State, change *AddGameEvent)
 	}
 
 	// ball placement position
-	placementPosDeterminer := ballplace.BallPlacementPosDeterminer{
+	placementPosDeterminer := BallPlacementPosDeterminer{
 		Event:               gameEvent,
 		Geometry:            s.Geometry,
 		CurrentPlacementPos: newState.PlacementPos,

@@ -58,43 +58,33 @@ func (s *StateMachine) Process(currentState *state.State, change *Change) (newSt
 	proto.Merge(newState, currentState)
 	log.Printf("Processing change: %v", change)
 	if change.GetNewCommand() != nil {
-		newChanges = s.NewCommand(newState, change.GetNewCommand())
-	}
-	if change.GetChangeStage() != nil {
-		newChanges = s.ChangeStage(newState, change.GetChangeStage())
-	}
-	if change.GetSetBallPlacementPos() != nil {
-		newChanges = s.SetBallPlacementPos(newState, change.GetSetBallPlacementPos())
-	}
-	if change.GetAddYellowCard() != nil {
-		newChanges = s.AddYellowCard(newState, change.GetAddYellowCard())
-	}
-	if change.GetAddRedCard() != nil {
-		newChanges = s.AddRedCard(newState, change.GetAddRedCard())
-	}
-	if change.GetYellowCardOver() != nil {
-		newChanges = s.YellowCardOver(newState)
-	}
-	if change.GetUpdateConfig() != nil {
-		newChanges = s.UpdateConfig(newState, change.GetUpdateConfig())
-	}
-	if change.GetUpdateTeamState() != nil {
-		newChanges = s.UpdateTeamState(newState, change.GetUpdateTeamState())
-	}
-	if change.GetSwitchColors() != nil {
-		newChanges = s.SwitchColors(newState)
-	}
-	if change.GetAddGameEvent() != nil {
-		newChanges = s.AddGameEvent(newState, change.GetAddGameEvent())
-	}
-	if change.GetStartBallPlacement() != nil {
-		newChanges = s.StartBallPlacement(newState)
-	}
-	if change.GetContinue() != nil {
-		newChanges = s.Continue(newState)
-	}
-	if change.GetAddProposedGameEvent() != nil {
-		newChanges = s.AddProposedGameEvent(newState, change.GetAddProposedGameEvent())
+		newChanges = s.processChangeNewCommand(newState, change.GetNewCommand())
+	} else if change.GetChangeStage() != nil {
+		newChanges = s.processChangeChangeStage(newState, change.GetChangeStage())
+	} else if change.GetSetBallPlacementPos() != nil {
+		newChanges = s.processChangeSetBallPlacementPos(newState, change.GetSetBallPlacementPos())
+	} else if change.GetAddYellowCard() != nil {
+		newChanges = s.processChangeAddYellowCard(newState, change.GetAddYellowCard())
+	} else if change.GetAddRedCard() != nil {
+		newChanges = s.processChangeAddRedCard(newState, change.GetAddRedCard())
+	} else if change.GetYellowCardOver() != nil {
+		newChanges = s.processChangeYellowCardOver(newState)
+	} else if change.GetUpdateConfig() != nil {
+		newChanges = s.processChangeUpdateConfig(newState, change.GetUpdateConfig())
+	} else if change.GetUpdateTeamState() != nil {
+		newChanges = s.processChangeUpdateTeamState(newState, change.GetUpdateTeamState())
+	} else if change.GetSwitchColors() != nil {
+		newChanges = s.processChangeSwitchColors(newState)
+	} else if change.GetAddGameEvent() != nil {
+		newChanges = s.processChangeAddGameEvent(newState, change.GetAddGameEvent())
+	} else if change.GetStartBallPlacement() != nil {
+		newChanges = s.processChangeStartBallPlacement(newState)
+	} else if change.GetContinue() != nil {
+		newChanges = s.processChangeContinue(newState)
+	} else if change.GetAddProposedGameEvent() != nil {
+		newChanges = s.processChangeAddProposedGameEvent(newState, change.GetAddProposedGameEvent())
+	} else {
+		log.Println("Unhandled change in state machine: ", change)
 	}
 
 	for i := range newChanges {

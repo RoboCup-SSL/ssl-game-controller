@@ -5,7 +5,7 @@ import (
 	"log"
 )
 
-func (s *StateMachine) Continue(newState *state.State) (changes []*Change) {
+func (s *StateMachine) processChangeContinue(newState *state.State) (changes []*Change) {
 	substituteBots := false
 	for _, team := range state.BothTeams() {
 		if *newState.TeamInfo(team).BotSubstitutionIntent {
@@ -34,6 +34,7 @@ func (s *StateMachine) Continue(newState *state.State) (changes []*Change) {
 	return
 }
 
+// botSubstitutionIntentEventChange creates a new change for bot substitution
 func (s *StateMachine) botSubstitutionIntentEventChange(byTeam state.Team) *Change {
 	eventType := state.GameEvent_BOT_SUBSTITUTION
 	return &Change{

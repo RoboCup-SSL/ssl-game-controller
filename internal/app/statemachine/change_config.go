@@ -5,7 +5,7 @@ import (
 	"log"
 )
 
-func (s *StateMachine) UpdateConfig(newState *state.State, change *UpdateConfig) (changes []*Change) {
+func (s *StateMachine) processChangeUpdateConfig(newState *state.State, change *UpdateConfig) (changes []*Change) {
 	if change.Division != nil {
 		log.Printf("Change division to %v", *change.Division)
 		newState.Division = change.Division
