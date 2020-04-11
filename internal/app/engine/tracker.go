@@ -14,10 +14,13 @@ func (e *Engine) ProcessTrackerFrame(wrapperFrame *tracker.TrackerWrapperPacket)
 		Ball:       convertBalls(wrapperFrame.TrackedFrame.Balls),
 		Robots:     convertRobots(wrapperFrame.TrackedFrame.Robots),
 	}
-	e.gcState.TrackerState[*wrapperFrame.Uuid] = &state
 
-	// for now, all tracker sources update the GC state
-	e.gcState.TrackerStateGc = &state
+	e.UpdateGcState(func(gcState *GcState) {
+		gcState.TrackerState[*wrapperFrame.Uuid] = &state
+
+		// for now, all tracker sources update the GC state
+		e.gcState.TrackerStateGc = &state
+	})
 }
 
 func convertRobots(robots []*tracker.TrackedRobot) (rs []*Robot) {

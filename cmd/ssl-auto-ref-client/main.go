@@ -25,8 +25,6 @@ var clientIdentifier = flag.String("identifier", "test", "The identifier of the 
 
 var privateKey *rsa.PrivateKey
 
-var metadata *rcon.GameStateMetadata
-
 type Client struct {
 	conn  net.Conn
 	token string
@@ -36,9 +34,6 @@ func main() {
 	flag.Parse()
 
 	privateKey = client.LoadPrivateKey(*privateKeyLocation)
-	metadata = new(rcon.GameStateMetadata)
-	metadata.TeamYellow = new(rcon.GameStateMetadataTeam)
-	metadata.TeamBlue = new(rcon.GameStateMetadataTeam)
 
 	if *autoDetectAddress {
 		log.Print("Trying to detect host based on incoming referee messages...")
@@ -80,9 +75,6 @@ func main() {
 	}
 	commands["doubleTouch"] = func(_ []string) {
 		c.sendDoubleTouch()
-	}
-	commands["ready"] = func(args []string) {
-		c.sendReady(args)
 	}
 
 	reader := bufio.NewReader(os.Stdin)
@@ -229,24 +221,6 @@ func (c *Client) sendRequest(request *rcon.AutoRefToController, doLog bool) {
 	} else {
 		c.token = ""
 	}
-}
-
-func (c *Client) sendReady(args []string) {
-	if len(args) > 0 {
-		metadata.ReadyToContinue = new(bool)
-		if args[0] == "true" {
-			*metadata.ReadyToContinue = true
-		} else {
-			*metadata.ReadyToContinue = false
-		}
-	} else {
-		metadata.ReadyToContinue = nil
-	}
-
-	request := rcon.AutoRefToController{
-		GameStateMetadata: metadata,
-	}
-	c.sendRequest(&request, true)
 }
 
 func logIf(doLog bool, v ...interface{}) {

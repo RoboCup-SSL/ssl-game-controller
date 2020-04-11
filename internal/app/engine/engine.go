@@ -124,6 +124,8 @@ func (e *Engine) CurrentState() (s *state.State) {
 
 // CurrentGcState returns a deep copy of the current GC state
 func (e *Engine) CurrentGcState() (s *GcState) {
+	e.gcStateMutex.Lock()
+	defer e.gcStateMutex.Unlock()
 	s = new(GcState)
 	proto.Merge(s, e.gcState)
 	return

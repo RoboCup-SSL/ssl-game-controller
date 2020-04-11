@@ -233,32 +233,36 @@ func (s *TeamServer) processRequest(teamName string, request TeamToController) e
 		return nil
 	}
 
-	var mayChangeKeeper *bool
-	for _, t := range s.gcEngine.CurrentGcState().AutoRefState {
-		aMayChangeKeeper := t.TeamState[team.String()].MayChangeKeeper
-		if aMayChangeKeeper != nil && *aMayChangeKeeper {
-			mayChangeKeeper = aMayChangeKeeper
+	if x, ok := request.GetMsg().(*TeamToController_DesiredKeeper); ok && *teamState.Goalkeeper != x.DesiredKeeper {
+		if currentState.Command.IsRunning() || currentState.Command.IsPrepare() {
+			return errors.New("Can not change keeper while game is running.")
 		}
-	}
 
-	if (currentState.Command.IsRunning() || currentState.Command.IsPrepare()) &&
-		mayChangeKeeper != nil && !*mayChangeKeeper {
-		return errors.New("Ball is in play and not at a position that allows changing the keeper.")
-	}
-
-	if x, ok := request.GetMsg().(*TeamToController_DesiredKeeper); ok {
-		if *teamState.Goalkeeper != x.DesiredKeeper {
-			log.Printf("Team %v requests to change keeper to %v", team, x.DesiredKeeper)
-			s.gcEngine.Enqueue(&statemachine.Change{
-				Origin: &teamName,
-				Change: &statemachine.Change_UpdateTeamState{
-					UpdateTeamState: &statemachine.UpdateTeamState{
-						ForTeam:    &team,
-						Goalkeeper: &x.DesiredKeeper,
-					}},
-			})
+		if err := mayChangeKeeper(s.gcEngine.CurrentGcState(), &teamState); err != nil {
+			return errors.Wrap(err, "Team requests to change keeper, but: ")
 		}
+		log.Printf("Team %v requests to change keeper to %v", team, x.DesiredKeeper)
+		s.gcEngine.Enqueue(&statemachine.Change{
+			Origin: &teamName,
+			Change: &statemachine.Change_UpdateTeamState{
+				UpdateTeamState: &statemachine.UpdateTeamState{
+					ForTeam:    &team,
+					Goalkeeper: &x.DesiredKeeper,
+				}},
+		})
 	}
 
+	return nil
+}
+
+func mayChangeKeeper(gcState *engine.GcState, teamState *state.TeamInfo) error {
+	ball := gcState.TrackerStateGc.Ball
+	if ball == nil {
+		return errors.New("GC does not know the ball position.")
+	}
+	if (*teamState.OnPositiveHalf && *ball.Pos.X > 0) ||
+		(!*teamState.OnPositiveHalf && *ball.Pos.X < 0) {
+		return errors.New("Ball is not in the opponents half.")
+	}
 	return nil
 }
