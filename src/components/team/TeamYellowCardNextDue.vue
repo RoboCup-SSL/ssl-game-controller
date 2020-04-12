@@ -25,7 +25,12 @@
             },
             latestCardTime() {
                 if (this.activeYellowCards.length > 0) {
-                    return this.activeYellowCards[0].timeRemaining;
+                    let cards = [];
+                    for (let card of this.activeYellowCards) {
+                        cards.push(card.timeRemaining)
+                    }
+                    cards.sort()
+                    return cards[0];
                 }
                 return 0;
             },
