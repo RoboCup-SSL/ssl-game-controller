@@ -12,7 +12,6 @@
         components: {EditableLabelNumber},
         props: {
             teamColor: String,
-            editMode: Object,
         },
         computed: {
             teamState: function () {

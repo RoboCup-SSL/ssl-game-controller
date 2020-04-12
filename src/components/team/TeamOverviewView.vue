@@ -27,47 +27,65 @@
             <tr>
                 <td>
                     <TeamTimeouts :edit-mode="editMode" :team-color="TEAM_YELLOW"/>
-                    |
+                    <br/>
                     <TeamTimeoutTime :edit-mode="editMode" :team-color="TEAM_YELLOW"/>
                 </td>
                 <td class="label-column">Timeouts left</td>
                 <td>
                     <TeamTimeouts :edit-mode="editMode" :team-color="TEAM_BLUE"/>
-                    |
+                    <br/>
                     <TeamTimeoutTime :edit-mode="editMode" :team-color="TEAM_BLUE"/>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <TeamYellowCards :edit-mode="editMode" :team-color="TEAM_YELLOW"/>
-                    |
-                    <TeamRedCards :edit-mode="editMode" :team-color="TEAM_YELLOW"/>
+                    <TeamRedCards :team-color="TEAM_YELLOW"/>
+                    <TeamRedCardsEdit :edit-mode="editMode" :team-color="TEAM_YELLOW"/>
                 </td>
-                <td class="label-column">Yellow / Red Cards</td>
+                <td class="label-column">Red Cards</td>
                 <td>
-                    <TeamYellowCards :edit-mode="editMode" :team-color="TEAM_BLUE"/>
-                    |
-                    <TeamRedCards :edit-mode="editMode" :team-color="TEAM_BLUE"/>
+                    <TeamRedCards :team-color="TEAM_BLUE"/>
+                    <TeamRedCardsEdit :edit-mode="editMode" :team-color="TEAM_BLUE"/>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <TeamYellowCardsActive :edit-mode="editMode" :team-color="TEAM_YELLOW"/>
+                    <TeamYellowCards :team-color="TEAM_YELLOW"/>
+                    <TeamYellowCardsEdit :edit-mode="editMode" :team-color="TEAM_YELLOW"/>
+                </td>
+                <td class="label-column">Yellow Cards</td>
+                <td>
+                    <TeamYellowCards :team-color="TEAM_BLUE"/>
+                    <TeamYellowCardsEdit :edit-mode="editMode" :team-color="TEAM_BLUE"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <TeamYellowCardsActive :team-color="TEAM_YELLOW"/>
+                </td>
+                <td class="label-column">Active Cards</td>
+                <td>
+                    <TeamYellowCardsActive :team-color="TEAM_BLUE"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <TeamYellowCardNextDue :team-color="TEAM_YELLOW"/>
                 </td>
                 <td class="label-column">
-                    Active Yellow Cards
+                    Next due
                 </td>
                 <td>
-                    <TeamYellowCardsActive :edit-mode="editMode" :team-color="TEAM_BLUE"/>
+                    <TeamYellowCardNextDue :team-color="TEAM_BLUE"/>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <TeamFoulCounter :edit-mode="editMode" :team-color="TEAM_YELLOW"/>
+                    <TeamFoulCounter :team-color="TEAM_YELLOW"/>
                 </td>
-                <td class="label-column">Foul Counter</td>
+                <td class="label-column">Fouls</td>
                 <td>
-                    <TeamFoulCounter :edit-mode="editMode" :team-color="TEAM_BLUE"/>
+                    <TeamFoulCounter :team-color="TEAM_BLUE"/>
                 </td>
             </tr>
             <tr>
@@ -116,15 +134,17 @@
     import TeamFoulCounter from "./TeamFoulCounter";
     import TeamPlacementFailures from "./TeamPlacementFailures";
     import TeamTimeoutTime from "./TeamTimeoutTime";
-    import TeamYellowCardTimes from "./TeamYellowCardTimes";
+    import TeamYellowCardNextDue from "./TeamYellowCardNextDue";
     import TeamYellowCardsActive from "./TeamYellowCardsActive";
     import {TEAM_BLUE, TEAM_YELLOW} from "../../refereeState";
+    import TeamYellowCardsEdit from "./TeamYellowCardsEdit";
+    import TeamRedCardsEdit from "./TeamRedCardsEdit";
 
     export default {
         name: "TeamOverviewView",
         components: {
+            TeamRedCardsEdit,
             TeamYellowCardsActive,
-            TeamYellowCardTimes,
             TeamTimeoutTime,
             TeamPlacementFailures,
             TeamFoulCounter,
@@ -134,6 +154,8 @@
             TeamYellowCards,
             TeamGoalkeeper,
             TeamTimeouts,
+            TeamYellowCardNextDue,
+            TeamYellowCardsEdit,
         },
         data() {
             return {

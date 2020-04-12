@@ -100,6 +100,8 @@ func (s *StateMachine) processChangeUpdateTeamState(newState *state.State, chang
 		}
 	}
 
+	s.updateMaxBots(newState)
+
 	return
 }
 

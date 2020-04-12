@@ -1,7 +1,7 @@
 <template>
         <span v-b-tooltip.hover.d500
-              title="Active yellow cards">
-            {{activeYellowCards.length}}
+              title="Next yellow card due"
+              v-format-ns-duration="latestCardTime">
         </span>
 </template>
 
@@ -9,7 +9,7 @@
     import {TEAM_BLUE, TEAM_YELLOW} from "../../refereeState";
 
     export default {
-        name: "TeamYellowCardsActive",
+        name: "TeamYellowCardNextDue",
         props: {
             teamColor: String,
         },
@@ -23,8 +23,11 @@
             team() {
                 return this.$store.state.matchState.teamState[this.teamColor]
             },
-            modalId() {
-                return `yellow-card-times-${this.teamColor}-modal`;
+            latestCardTime() {
+                if (this.activeYellowCards.length > 0) {
+                    return this.activeYellowCards[0].timeRemaining;
+                }
+                return 0;
             },
             activeYellowCards() {
                 return this.team.yellowCards.filter(e => e.timeRemaining !== '0s');

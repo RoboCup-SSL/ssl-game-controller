@@ -10,7 +10,7 @@
                size="5"
                ref="input"
         />
-        <a class="btn-edit" v-on:click="edit()" v-show="editMode.active && !g.edit">
+        <a class="btn-edit" v-on:click="edit" v-show="editMode.active && !g.edit">
             <img alt="pen" src="@/assets/img/icons8-ball-point-pen-16.png">
         </a>
     </span>

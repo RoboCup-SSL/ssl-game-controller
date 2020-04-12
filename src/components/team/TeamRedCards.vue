@@ -13,7 +13,6 @@
         components: {EditableLabelDuration, EditableLabelNumber},
         props: {
             teamColor: String,
-            editMode: Object,
         },
         computed: {
             team() {
