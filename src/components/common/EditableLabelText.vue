@@ -54,13 +54,15 @@
                     this.$refs.input.focus();
                 })
             },
+        },
+        computed: {
             inputId() {
                 if (this.id) {
                     return this.id;
                 }
                 return 'edit-input';
-            }
-        },
+            },
+        }
     }
 </script>
 
@@ -68,6 +70,7 @@
     input {
         text-align: center;
     }
+
     label {
         margin-bottom: 0;
     }

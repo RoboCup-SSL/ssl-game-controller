@@ -13,6 +13,7 @@
                 </td>
                 <td>
                     <EditableLabelText
+                            :id="'yellow-card-' + card.id"
                             :edit-mode="editMode"
                             :value="card.timeRemaining"
                             :callback="(v) => updateCardTime(v, card.id)"/>

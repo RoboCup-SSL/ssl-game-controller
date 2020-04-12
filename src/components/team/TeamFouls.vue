@@ -1,14 +1,14 @@
 <template>
-    <div>
+    <span>
         <a>{{teamState.fouls.length}}</a>
-    </div>
+    </span>
 </template>
 
 <script>
     import EditableLabelNumber from "../common/EditableLabelNumber";
 
     export default {
-        name: "TeamFoulCounter",
+        name: "TeamFouls",
         components: {EditableLabelNumber},
         props: {
             teamColor: String,

@@ -81,11 +81,13 @@
             </tr>
             <tr>
                 <td>
-                    <TeamFoulCounter :team-color="TEAM_YELLOW"/>
+                    <TeamFouls :team-color="TEAM_YELLOW"/>
+                    <TeamFoulsEdit :edit-mode="editMode" :team-color="TEAM_YELLOW"/>
                 </td>
                 <td class="label-column">Fouls</td>
                 <td>
-                    <TeamFoulCounter :team-color="TEAM_BLUE"/>
+                    <TeamFouls :team-color="TEAM_BLUE"/>
+                    <TeamFoulsEdit :edit-mode="editMode" :team-color="TEAM_BLUE"/>
                 </td>
             </tr>
             <tr>
@@ -131,7 +133,7 @@
     import TeamRedCards from "./TeamRedCards";
     import TeamBotSubstitution from "./TeamBotSubstitution";
     import TeamConnection from "./TeamConnection";
-    import TeamFoulCounter from "./TeamFoulCounter";
+    import TeamFouls from "./TeamFouls";
     import TeamPlacementFailures from "./TeamPlacementFailures";
     import TeamTimeoutTime from "./TeamTimeoutTime";
     import TeamYellowCardNextDue from "./TeamYellowCardNextDue";
@@ -139,15 +141,17 @@
     import {TEAM_BLUE, TEAM_YELLOW} from "../../refereeState";
     import TeamYellowCardsEdit from "./TeamYellowCardsEdit";
     import TeamRedCardsEdit from "./TeamRedCardsEdit";
+    import TeamFoulsEdit from "./TeamFoulsEdit";
 
     export default {
         name: "TeamOverviewView",
         components: {
+            TeamFoulsEdit,
             TeamRedCardsEdit,
             TeamYellowCardsActive,
             TeamTimeoutTime,
             TeamPlacementFailures,
-            TeamFoulCounter,
+            TeamFouls,
             TeamConnection,
             TeamBotSubstitution,
             TeamRedCards,
