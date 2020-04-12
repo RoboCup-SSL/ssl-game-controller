@@ -1,12 +1,14 @@
 package engine
 
 import (
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/geom"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"time"
 )
 
 const minPreparationTime = time.Second * 2
+const distanceToBallDuringPenalty = 1.0
 
 func (e *Engine) processPrepare() {
 	if !e.currentState.Command.IsPrepare() ||
@@ -38,13 +40,39 @@ func (e *Engine) processPrepare() {
 	}
 
 	if *e.currentState.Command.Type == state.Command_PENALTY {
-		// TODO check if conditions met for penalty
-		// keeper pos
+		keeperId := e.penaltyKeeperId()
+		if keeperId == nil {
+			return
+		}
+		keeperPos := e.robotPos(keeperId)
+		if keeperPos == nil || !e.posInsideGoal(keeperPos) {
+			return
+		}
 
-		// kicking team positions correct
+		keeperTeamInfo := e.currentState.TeamState[keeperId.Team.String()]
+		ballPos := e.gcState.TrackerStateGc.Ball.Pos
 
-		// opponent team positions correct
-
+		numAttackersInFrontOfBall := 0
+		for _, robot := range e.gcState.TrackerStateGc.Robots {
+			if *robot.Id.Id == *keeperId.Id && *robot.Id.Team == *keeperId.Team {
+				// its the keeper
+				continue
+			}
+			if *keeperTeamInfo.OnPositiveHalf &&
+				*robot.Pos.X < *ballPos.X-distanceToBallDuringPenalty {
+				continue
+			} else if !*keeperTeamInfo.OnPositiveHalf &&
+				*robot.Pos.X > *ballPos.X+distanceToBallDuringPenalty {
+				continue
+			}
+			if *robot.Id.Team == *keeperId.Team {
+				return
+			} else if numAttackersInFrontOfBall >= 1 {
+				return
+			} else {
+				numAttackersInFrontOfBall++
+			}
+		}
 	}
 
 	e.Enqueue(&statemachine.Change{
@@ -53,4 +81,31 @@ func (e *Engine) processPrepare() {
 			Continue: &statemachine.Continue{},
 		},
 	})
+}
+
+func (e *Engine) penaltyKeeperId() *state.RobotId {
+	forTeam := e.currentState.Command.ForTeam.Opposite()
+	teamInfo := e.currentState.TeamState[forTeam.String()]
+	keeperId := uint32(*teamInfo.Goalkeeper)
+	return &state.RobotId{
+		Id:   &keeperId,
+		Team: &forTeam,
+	}
+}
+
+func (e *Engine) robotPos(robotId *state.RobotId) *geom.Vector2 {
+	for _, robot := range e.gcState.TrackerStateGc.Robots {
+		if *robot.Id.Id == *robotId.Id && *robot.Id.Team == *robotId.Team {
+			return robot.Pos
+		}
+	}
+	return nil
+}
+
+func (e *Engine) posInsideGoal(pos *geom.Vector2) bool {
+	forTeam := *e.currentState.Command.ForTeam
+	teamInfo := e.currentState.TeamState[forTeam.String()]
+	goalCenter := geom.GoalCenter(e.GetGeometry(), *teamInfo.OnPositiveHalf)
+	goalArea := geom.NewRectangleFromCenter(goalCenter, robotRadius*2, e.GetGeometry().GoalWidth)
+	return goalArea.IsPointInside(pos)
 }
