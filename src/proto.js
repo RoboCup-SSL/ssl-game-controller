@@ -21721,6 +21721,7 @@ export const GcState = $root.GcState = (() => {
      * @property {Object.<string,IGcStateAutoRef>|null} [autoRefState] GcState autoRefState
      * @property {Object.<string,IGcStateTracker>|null} [trackerState] GcState trackerState
      * @property {IGcStateTracker|null} [trackerStateGc] GcState trackerStateGc
+     * @property {boolean|null} [readyToContinue] GcState readyToContinue
      */
 
     /**
@@ -21774,6 +21775,14 @@ export const GcState = $root.GcState = (() => {
     GcState.prototype.trackerStateGc = null;
 
     /**
+     * GcState readyToContinue.
+     * @member {boolean} readyToContinue
+     * @memberof GcState
+     * @instance
+     */
+    GcState.prototype.readyToContinue = false;
+
+    /**
      * Creates a new GcState instance using the specified properties.
      * @function create
      * @memberof GcState
@@ -21814,6 +21823,8 @@ export const GcState = $root.GcState = (() => {
             }
         if (message.trackerStateGc != null && message.hasOwnProperty("trackerStateGc"))
             $root.GcStateTracker.encode(message.trackerStateGc, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+        if (message.readyToContinue != null && message.hasOwnProperty("readyToContinue"))
+            writer.uint32(/* id 5, wireType 0 =*/40).bool(message.readyToContinue);
         return writer;
     };
 
@@ -21874,6 +21885,9 @@ export const GcState = $root.GcState = (() => {
                 break;
             case 4:
                 message.trackerStateGc = $root.GcStateTracker.decode(reader, reader.uint32());
+                break;
+            case 5:
+                message.readyToContinue = reader.bool();
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -21945,6 +21959,9 @@ export const GcState = $root.GcState = (() => {
             if (error)
                 return "trackerStateGc." + error;
         }
+        if (message.readyToContinue != null && message.hasOwnProperty("readyToContinue"))
+            if (typeof message.readyToContinue !== "boolean")
+                return "readyToContinue: boolean expected";
         return null;
     };
 
@@ -21995,6 +22012,8 @@ export const GcState = $root.GcState = (() => {
                 throw TypeError(".GcState.trackerStateGc: object expected");
             message.trackerStateGc = $root.GcStateTracker.fromObject(object.trackerStateGc);
         }
+        if (object.readyToContinue != null)
+            message.readyToContinue = Boolean(object.readyToContinue);
         return message;
     };
 
@@ -22016,8 +22035,10 @@ export const GcState = $root.GcState = (() => {
             object.autoRefState = {};
             object.trackerState = {};
         }
-        if (options.defaults)
+        if (options.defaults) {
             object.trackerStateGc = null;
+            object.readyToContinue = false;
+        }
         let keys2;
         if (message.teamState && (keys2 = Object.keys(message.teamState)).length) {
             object.teamState = {};
@@ -22036,6 +22057,8 @@ export const GcState = $root.GcState = (() => {
         }
         if (message.trackerStateGc != null && message.hasOwnProperty("trackerStateGc"))
             object.trackerStateGc = $root.GcStateTracker.toObject(message.trackerStateGc, options);
+        if (message.readyToContinue != null && message.hasOwnProperty("readyToContinue"))
+            object.readyToContinue = message.readyToContinue;
         return object;
     };
 

@@ -10,6 +10,7 @@ message GcState {
     map<string, GcStateAutoRef> auto_ref_state = 2;
     map<string, GcStateTracker> tracker_state = 3;
     optional GcStateTracker tracker_state_gc = 4;
+    optional bool ready_to_continue = 5;
 }
 
 message GcStateTeam {

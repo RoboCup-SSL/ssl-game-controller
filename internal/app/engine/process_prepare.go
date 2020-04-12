@@ -11,7 +11,8 @@ const minPreparationTime = time.Second * 2
 func (e *Engine) processPrepare() {
 	if !e.currentState.Command.IsPrepare() ||
 		e.gcState.TrackerStateGc.Ball == nil ||
-		!e.readyToContinue() ||
+		e.gcState.ReadyToContinue == nil ||
+		!*e.gcState.ReadyToContinue ||
 		e.currentState.NextCommand == nil ||
 		!e.currentState.GetAutoContinue() ||
 		e.timeSinceLastChange() < minPreparationTime {
@@ -52,13 +53,4 @@ func (e *Engine) processPrepare() {
 			Continue: &statemachine.Continue{},
 		},
 	})
-}
-
-func (e *Engine) readyToContinue() bool {
-	radius := e.gameConfig.DistanceToBallInStop + robotRadius + distanceThreshold
-	if !e.ballSteady() ||
-		e.robotsInsideRadius(e.gcState.TrackerStateGc.Robots, e.gcState.TrackerStateGc.Ball.Pos.ToVector2(), radius) {
-		return false
-	}
-	return false
 }

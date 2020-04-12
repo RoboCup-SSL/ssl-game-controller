@@ -14,6 +14,7 @@
              :title="'Continue based on last game event (' + Object.keys(keymapContinue)[0] + ')'">
             <b-button v-hotkey="keymapContinue"
                       ref="btnContinue"
+                      :class="continueButtonClass"
                       v-on:click="triggerContinue"
                       v-bind:disabled="continueDisabled">
                 Continue
@@ -23,25 +24,6 @@
                     {{nextCommand.type}}
                 </span>
             </b-button>
-        </div>
-
-        <div v-for="autoRefId of autoRefs"
-             v-bind:key="autoRefId"
-             v-if="autoRefReady(autoRefId) !== undefined || autoRefBallPlaced(autoRefId) !== undefined"
-             class="auto-ref-meta">
-            {{autoRefId}}
-            <font-awesome-icon
-                    v-b-tooltip.hover.d500
-                    title="Ready to continue"
-                    v-if="autoRefReady(autoRefId)"
-                    class="fa-xs"
-                    icon="check-circle"/>
-            <font-awesome-icon
-                    v-b-tooltip.hover.d500
-                    title="Not ready to continue yet"
-                    v-else
-                    class="fa-xs"
-                    icon="times-circle"/>
         </div>
     </div>
 </template>
@@ -59,9 +41,6 @@
             triggerContinue() {
                 submitChange({continue: {}});
             },
-            autoRefReady(id) {
-                return this.$store.state.gcState.autoRefState[id].readyToContinue;
-            }
         },
         computed: {
             keymapHalt() {
@@ -110,8 +89,14 @@
                     'team-yellow': this.nextCommand && this.nextCommand.forTeam === TEAM_YELLOW
                 }
             },
-            autoRefs() {
-                return Object.keys(this.$store.state.gcState.autoRefState);
+            continueButtonClass() {
+                if (!this.$store.state.gcState.hasOwnProperty('readyToContinue')) {
+                    return '';
+                }
+                if (this.$store.state.gcState.readyToContinue) {
+                    return 'continue-btn-ready';
+                }
+                return 'continue-btn-not-ready';
             }
         }
     }
@@ -128,9 +113,12 @@
         justify-content: center;
     }
 
-    .auto-ref-meta {
-        font-size: 1.2em;
-        margin: auto .2em;
+    .continue-btn-ready {
+        background-color: green;
+    }
+
+    .continue-btn-not-ready {
+        background-color: red;
     }
 
 </style>
