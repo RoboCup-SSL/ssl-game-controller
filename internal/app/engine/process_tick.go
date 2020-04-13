@@ -34,6 +34,15 @@ func (e *Engine) processTick() {
 	if *e.currentState.Command.Type == state.Command_TIMEOUT {
 		addDur(e.currentState.TeamInfo(*e.currentState.Command.ForTeam).TimeoutTimeLeft, -delta)
 	}
+
+	e.noProgressDetector.process()
+	e.ballPlacementCoordinator.process()
+	e.processPrepare()
+	e.processBotNumber()
+
+	for _, hook := range e.hooks {
+		hook <- HookOut{State: e.CurrentState()}
+	}
 }
 
 func (e *Engine) countStageTime() bool {
@@ -46,7 +55,7 @@ func (e *Engine) countCardTime() bool {
 
 func (e *Engine) updateYellowCardTimes(teamState *state.TeamInfo, delta time.Duration) {
 	for i := range teamState.YellowCards {
-		if goDur(teamState.YellowCards[i].TimeRemaining) < 0 {
+		if goDur(teamState.YellowCards[i].TimeRemaining) <= 0 {
 			continue
 		}
 		addDur(teamState.YellowCards[i].TimeRemaining, -delta)

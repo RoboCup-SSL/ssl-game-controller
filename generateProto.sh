@@ -38,6 +38,9 @@ protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_change.pr
 protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_api.proto
 protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_engine.proto
 
+# continuous integration communication
+protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_ci.proto
+
 # generate javascript code
 pbjs -t static-module -w es6 -o src/proto.js \
   proto/ssl_gc_common.proto \

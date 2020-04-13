@@ -33,3 +33,9 @@ func NewFixedTimeProviderFromSeconds(timestamp float64) TimeProvider {
 		return time.Unix(sec, nSec)
 	}
 }
+
+func TimestampToTime(timestamp float64) time.Time {
+	sec := int64(timestamp)
+	nSec := int64((timestamp - float64(sec)) * 1e9)
+	return time.Unix(sec, nSec)
+}

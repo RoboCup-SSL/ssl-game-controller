@@ -1,6 +1,7 @@
 package vision
 
 import (
+	"github.com/RoboCup-SSL/ssl-game-controller/pkg/timer"
 	"github.com/golang/protobuf/proto"
 	"log"
 	"net"
@@ -14,6 +15,7 @@ type Receiver struct {
 	DetectionCallback func(*SSL_DetectionFrame)
 	GeometryCallback  func(*SSL_GeometryData)
 	conn              *net.UDPConn
+	latestTimestamp   time.Time
 }
 
 // NewReceiver creates a new receiver
@@ -76,7 +78,12 @@ func (v *Receiver) receive() {
 			v.GeometryCallback(wrapper.Geometry)
 		}
 		if wrapper.Detection != nil {
+			v.latestTimestamp = timer.TimestampToTime(*wrapper.Detection.TCapture)
 			v.DetectionCallback(wrapper.Detection)
 		}
 	}
+}
+
+func (v *Receiver) Time() time.Time {
+	return v.latestTimestamp
 }

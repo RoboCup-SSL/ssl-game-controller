@@ -23,13 +23,14 @@ type Engine struct {
 	currentState             *state.State
 	stateMachine             *statemachine.StateMachine
 	queue                    chan *statemachine.Change
-	hooks                    []chan *statemachine.StateChange
+	hooks                    []chan HookOut
 	timeProvider             timer.TimeProvider
 	lastTimeUpdate           time.Time
 	gcState                  *GcState
 	gcStateMutex             sync.Mutex
 	noProgressDetector       NoProgressDetector
 	ballPlacementCoordinator BallPlacementCoordinator
+	tickChanProvider         func() <-chan time.Time
 }
 
 // NewEngine creates a new engine
@@ -39,9 +40,8 @@ func NewEngine(gameConfig config.Game) (e *Engine) {
 	e.stateStore = store.NewStore(gameConfig.StateStoreFile)
 	e.stateMachine = statemachine.NewStateMachine(gameConfig)
 	e.queue = make(chan *statemachine.Change, 100)
-	e.hooks = []chan *statemachine.StateChange{}
-	e.timeProvider = func() time.Time { return time.Now() }
-	e.lastTimeUpdate = e.timeProvider()
+	e.hooks = []chan HookOut{}
+	e.SetTimeProvider(func() time.Time { return time.Now() })
 	e.gcState = new(GcState)
 	e.gcState.TeamState = map[string]*GcStateTeam{
 		state.Team_YELLOW.String(): new(GcStateTeam),
@@ -51,6 +51,9 @@ func NewEngine(gameConfig config.Game) (e *Engine) {
 	e.gcState.TrackerStateGc = new(GcStateTracker)
 	e.noProgressDetector = NoProgressDetector{gcEngine: e}
 	e.ballPlacementCoordinator = BallPlacementCoordinator{gcEngine: e}
+	e.tickChanProvider = func() <-chan time.Time {
+		return time.After(25 * time.Millisecond)
+	}
 	return
 }
 
@@ -64,26 +67,6 @@ func (e *Engine) Enqueue(change *statemachine.Change) {
 	e.queue <- change
 }
 
-// RegisterHook registers given hook for post processing after each change
-func (e *Engine) RegisterHook(hook chan *statemachine.StateChange) {
-	e.hooks = append(e.hooks, hook)
-}
-
-// UnregisterHook unregisters hooks that were registered before
-func (e *Engine) UnregisterHook(hook chan *statemachine.StateChange) bool {
-	for i, h := range e.hooks {
-		if h == hook {
-			e.hooks = append(e.hooks[:i], e.hooks[i+1:]...)
-			select {
-			case <-hook:
-			case <-time.After(10 * time.Millisecond):
-			}
-			return true
-		}
-	}
-	return false
-}
-
 // SetGeometry sets a new geometry
 func (e *Engine) SetGeometry(geometry config.Geometry) {
 	e.stateMachine.Geometry = geometry
@@ -92,6 +75,17 @@ func (e *Engine) SetGeometry(geometry config.Geometry) {
 // GetGeometry returns the current geometry
 func (e *Engine) GetGeometry() config.Geometry {
 	return e.stateMachine.Geometry
+}
+
+// SetTimeProvider sets a new time provider for this engine
+func (e *Engine) SetTimeProvider(provider timer.TimeProvider) {
+	e.timeProvider = provider
+	e.lastTimeUpdate = e.timeProvider()
+}
+
+// SetTickChanProvider sets an alternative provider for the tick channel
+func (e *Engine) SetTickChanProvider(provider func() <-chan time.Time) {
+	e.tickChanProvider = provider
 }
 
 // Start loads the state store and runs a go routine that consumes the change queue
@@ -166,13 +160,8 @@ func (e *Engine) processChanges() {
 				return
 			}
 			e.processChange(change)
-		case <-time.After(10 * time.Millisecond):
+		case <-e.tickChanProvider():
 			e.processTick()
-
-			e.noProgressDetector.process()
-			e.ballPlacementCoordinator.process()
-			e.processPrepare()
-			e.processBotNumber()
 		}
 	}
 }
@@ -240,7 +229,7 @@ func (e *Engine) processChange(change *statemachine.Change) {
 		log.Println("Could not add new state to store: ", err)
 	}
 	for _, hook := range e.hooks {
-		hook <- &entry
+		hook <- HookOut{Change: entry.Change, State: e.CurrentState()}
 	}
 }
 

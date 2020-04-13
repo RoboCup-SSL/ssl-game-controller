@@ -1,6 +1,7 @@
 package publish
 
 import (
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/engine"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"testing"
@@ -8,7 +9,7 @@ import (
 
 func Test_generateMessages(t *testing.T) {
 	s := state.NewState()
-	c := statemachine.StateChange{
+	hookOut := engine.HookOut{
 		State: s,
 		Change: &statemachine.Change{
 			Change: &statemachine.Change_YellowCardOver{
@@ -18,7 +19,7 @@ func Test_generateMessages(t *testing.T) {
 	}
 
 	g := NewMessageGenerator()
-	rs := g.GenerateRefereeMessages(&c)
+	rs := g.GenerateRefereeMessages(hookOut)
 	if len(rs) != 1 {
 		t.Errorf("Expected only one referee message, got: %v", rs)
 	}

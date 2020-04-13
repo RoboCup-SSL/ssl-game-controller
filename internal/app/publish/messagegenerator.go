@@ -1,8 +1,8 @@
 package publish
 
 import (
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/engine"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
-	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"github.com/golang/protobuf/ptypes"
 	"time"
 )
@@ -11,11 +11,16 @@ type MessageGenerator struct {
 	goal             map[state.Team]bool
 	commandCounter   uint32
 	commandTimestamp uint64
+	quit             chan int
+	gcEngine         *engine.Engine
+	MessageConsumer  func(*state.Referee)
+	EngineHook       chan engine.HookOut
 }
 
 // NewPublisher creates a new publisher that publishes referee messages via UDP to the teams
 func NewMessageGenerator() (m *MessageGenerator) {
 	m = new(MessageGenerator)
+	m.EngineHook = make(chan engine.HookOut)
 	m.goal = map[state.Team]bool{}
 	m.goal[state.Team_BLUE] = false
 	m.goal[state.Team_YELLOW] = false
@@ -23,8 +28,37 @@ func NewMessageGenerator() (m *MessageGenerator) {
 	return
 }
 
+// Start starts a new goroutine that listens for state changes on the queue
+func (g *MessageGenerator) Start() {
+	go g.listen()
+}
+
+// Stop stops listening on state changes
+func (g *MessageGenerator) Stop() {
+	g.quit <- 0
+}
+
+func (g *MessageGenerator) listen() {
+	for {
+		select {
+		case <-g.quit:
+			return
+		case hookOut := <-g.EngineHook:
+			if hookOut.Change != nil {
+				refereeMessages := g.GenerateRefereeMessages(hookOut)
+				for _, refereeMsg := range refereeMessages {
+					g.MessageConsumer(refereeMsg)
+				}
+			} else if hookOut.State != nil {
+				refMsg := g.StateToRefereeMessage(hookOut.State)
+				g.MessageConsumer(refMsg)
+			}
+		}
+	}
+}
+
 // GenerateRefereeMessages generates a list of referee messages that result from the given state change
-func (g *MessageGenerator) GenerateRefereeMessages(change *statemachine.StateChange) (rs []*state.Referee) {
+func (g *MessageGenerator) GenerateRefereeMessages(change engine.HookOut) (rs []*state.Referee) {
 	// send the GOAL command based on the team score for compatibility with old behavior
 	if change.Change.GetAddGameEvent() != nil &&
 		*change.Change.GetAddGameEvent().GameEvent.Type == state.GameEvent_GOAL {

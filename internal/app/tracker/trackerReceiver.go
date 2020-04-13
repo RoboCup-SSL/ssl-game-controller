@@ -39,7 +39,7 @@ func (v *Receiver) Start() {
 	if err := conn.SetReadBuffer(maxDatagramSize); err != nil {
 		log.Printf("Could not set read buffer to %v.", maxDatagramSize)
 	}
-	log.Println("Receiving vision from", v.address)
+	log.Println("Receiving tracking from", v.address)
 
 	v.conn = conn
 	go v.receive()

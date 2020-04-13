@@ -69,7 +69,7 @@ func (a *Server) WsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *ServerConnection) publish() {
-	hook := make(chan *statemachine.StateChange)
+	hook := make(chan engine.HookOut)
 	s.gcEngine.RegisterHook(hook)
 	defer func() {
 		s.gcEngine.UnregisterHook(hook)
@@ -84,14 +84,16 @@ func (s *ServerConnection) publish() {
 		select {
 		case <-s.quit:
 			return
-		case change := <-hook:
-			s.publishState(change.State)
-			s.publishProtocolDelta()
-		case <-time.After(100 * time.Millisecond):
-			s.publishGcState()
-			s.publishState(s.gcEngine.CurrentState())
-			if s.gcEngine.LatestChangeId() != s.lastProtocolId {
-				s.publishProtocolFull()
+		case hookOut := <-hook:
+			if hookOut.Change != nil {
+				s.publishState(hookOut.State)
+				s.publishProtocolDelta()
+			} else if hookOut.State != nil {
+				s.publishGcState()
+				s.publishState(hookOut.State)
+				if s.gcEngine.LatestChangeId() != s.lastProtocolId {
+					s.publishProtocolFull()
+				}
 			}
 		}
 	}

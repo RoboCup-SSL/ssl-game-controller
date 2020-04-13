@@ -17,17 +17,25 @@ const isNumeric = function (n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 };
 
+const convertDurationToTimestamp = function (duration) {
+    let parts = duration.substring(0, duration.length - 1).split('.');
+    if (parts.length === 1) {
+        return parseInt(parts[0]) * 1000000000;
+    } else if (parts.length === 2) {
+        let leftPart = parseInt(parts[0]) * 1000000000;
+        let rightPart = Math.sign(leftPart) * parseInt(parts[1]);
+        return leftPart + rightPart;
+    }
+    return null;
+}
+
 const process = function (el, binding) {
     let timestamp;
     if (isNumeric(binding.value)) {
         timestamp = binding.value;
     } else if (typeof binding.value === 'string' && binding.value.endsWith('s')) {
-        let parts = binding.value.substring(0, binding.value.length - 1).split('.');
-        if (parts.length === 1) {
-            timestamp = parseInt(parts[0]) * 1000000000;
-        } else if (parts.length === 2) {
-            timestamp = parseInt(parts[0]) * 1000000000 + parseInt(parts[1]);
-        } else {
+        timestamp = convertDurationToTimestamp(binding.value);
+        if (timestamp === null) {
             timestamp = el.innerHTML;
         }
     } else {
