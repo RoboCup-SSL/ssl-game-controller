@@ -14,7 +14,7 @@ type BallPlacementPosDeterminer struct {
 	OnPositiveHalf      map[state.Team]bool
 }
 
-// BallPlacementPos determines the ball placement position based on the primary game event
+// Location determines the ball placement position based on the game event type
 func (s *BallPlacementPosDeterminer) Location() *geom.Vector2 {
 	switch *s.Event.Type {
 	case state.GameEvent_BALL_LEFT_FIELD_TOUCH_LINE:
@@ -47,15 +47,13 @@ func (s *BallPlacementPosDeterminer) Location() *geom.Vector2 {
 		center := geom.NewVector2(0.0, 0.0)
 		return s.validateLocation(center)
 	case state.GameEvent_BOT_TIPPED_OVER:
-		return s.validateLocation(s.Event.GetBotTippedOver().Location)
+		return s.validateLocation(s.Event.GetBotTippedOver().BallLocation)
 	case state.GameEvent_BOT_INTERFERED_PLACEMENT:
 		return s.validateLocation(s.CurrentPlacementPos)
 	case state.GameEvent_BOT_KICKED_BALL_TOO_FAST:
 		return s.validateLocation(s.Event.GetBotKickedBallTooFast().Location)
 	case state.GameEvent_BOT_DRIBBLED_BALL_TOO_FAR:
 		return s.validateLocation(s.Event.GetBotDribbledBallTooFar().Start)
-	case state.GameEvent_BOT_CRASH_UNIQUE:
-		return s.validateLocation(s.Event.GetBotCrashUnique().Location)
 	case state.GameEvent_BOT_PUSHED_BOT:
 		return s.validateLocation(s.Event.GetBotPushedBot().Location)
 	case state.GameEvent_BOT_HELD_BALL_DELIBERATELY:
@@ -63,9 +61,11 @@ func (s *BallPlacementPosDeterminer) Location() *geom.Vector2 {
 	case state.GameEvent_ATTACKER_DOUBLE_TOUCHED_BALL:
 		return s.validateLocation(s.Event.GetAttackerDoubleTouchedBall().Location)
 	case state.GameEvent_ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA:
-		return s.validateLocation(s.Event.GetAttackerTooCloseToDefenseArea().Location)
+		return s.validateLocation(s.Event.GetAttackerTooCloseToDefenseArea().BallLocation)
 	case state.GameEvent_ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA:
 		return s.validateLocation(s.Event.GetAttackerTouchedBallInDefenseArea().Location)
+	case state.GameEvent_BOUNDARY_CROSSING:
+		return s.validateLocation(s.Event.GetBoundaryCrossing().Location)
 	case state.GameEvent_DEFENDER_TOO_CLOSE_TO_KICK_POINT:
 		return s.validateLocation(s.CurrentPlacementPos)
 	case state.GameEvent_DEFENDER_IN_DEFENSE_AREA, state.GameEvent_MULTIPLE_CARDS:
