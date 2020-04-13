@@ -257,11 +257,12 @@ func addsYellowCard(gameEvent state.GameEvent_Type) bool {
 	return false
 }
 
-// addsYellowCard checks if the game event adds a yellow card
+// addsRedCard checks if the game event adds a red card
 func addsRedCard(gameEvent state.GameEvent_Type) bool {
 	switch gameEvent {
 	case
 		state.GameEvent_DEFENDER_IN_DEFENSE_AREA,
+		state.GameEvent_MULTIPLE_CARDS,
 		state.GameEvent_UNSPORTING_BEHAVIOR_MAJOR:
 		return true
 	}

@@ -6,8 +6,13 @@ import (
 )
 
 func (s *StateMachine) processChangeAddYellowCard(newState *state.State, change *AddYellowCard) (changes []*Change) {
-	newState.TeamInfo(*change.ForTeam).AddYellowCard(s.gameConfig.YellowCardDuration, change.CausedByGameEvent)
-	s.updateMaxBots(newState)
+	if activeYellowCards(newState.TeamInfo(*change.ForTeam).YellowCards) >= 2 {
+		changes = append(changes, s.multipleYellowCardsChange(*change.ForTeam))
+	} else {
+		newState.TeamInfo(*change.ForTeam).AddYellowCard(s.gameConfig.YellowCardDuration, change.CausedByGameEvent)
+		s.updateMaxBots(newState)
+	}
+
 	return
 }
 
@@ -39,4 +44,23 @@ func activeYellowCards(cards []*state.YellowCard) (count int32) {
 		}
 	}
 	return
+}
+
+// multipleYellowCardsChange creates a multiple cards event change
+func (s *StateMachine) multipleYellowCardsChange(byTeam state.Team) *Change {
+	eventType := state.GameEvent_MULTIPLE_CARDS
+	return &Change{
+		Change: &Change_AddGameEvent{
+			AddGameEvent: &AddGameEvent{
+				GameEvent: &state.GameEvent{
+					Type: &eventType,
+					Event: &state.GameEvent_MultipleCards_{
+						MultipleCards: &state.GameEvent_MultipleCards{
+							ByTeam: &byTeam,
+						},
+					},
+				},
+			},
+		},
+	}
 }
