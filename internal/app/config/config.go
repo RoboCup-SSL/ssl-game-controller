@@ -153,7 +153,7 @@ func DefaultControllerConfig() (c Controller) {
 	c.Game.StateStoreFile = "state-store.json.stream"
 	c.Game.YellowCardDuration = 2 * time.Minute
 	c.Game.TeamChoiceTimeout = 200 * time.Millisecond
-	c.Game.MultipleCardStep = 3
+	c.Game.MultipleCardStep = 2
 	c.Game.MultipleFoulStep = 3
 	c.Game.MultiplePlacementFailures = 5
 	c.Game.AutoRefProposalTimeout = 5 * time.Second
@@ -194,10 +194,10 @@ func DefaultControllerConfig() (c Controller) {
 	c.Game.DefaultGeometry[DivA] = Geometry{
 		FieldLength:                     12,
 		FieldWidth:                      9,
-		DefenseAreaDepth:                1.2,
-		DefenseAreaWidth:                2.4,
+		DefenseAreaDepth:                1.8,
+		DefenseAreaWidth:                3.6,
 		PenaltyKickDistToGoal:           8.0,
-		GoalWidth:                       1.2,
+		GoalWidth:                       1.8,
 		PlacementOffsetTouchLine:        0.2,
 		PlacementOffsetGoalLine:         0.2,
 		PlacementOffsetGoalLineGoalKick: 1.0,
@@ -216,7 +216,7 @@ func DefaultControllerConfig() (c Controller) {
 		PlacementOffsetDefenseArea:      1.0,
 	}
 
-	c.Game.MaxBots = map[Division]int32{DivA: 8, DivB: 6}
+	c.Game.MaxBots = map[Division]int32{DivA: 11, DivB: 6}
 
 	c.TimeAcquisitionMode = TimeAcquisitionModeSystem
 

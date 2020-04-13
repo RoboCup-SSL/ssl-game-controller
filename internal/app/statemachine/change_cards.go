@@ -6,7 +6,7 @@ import (
 )
 
 func (s *StateMachine) processChangeAddYellowCard(newState *state.State, change *AddYellowCard) (changes []*Change) {
-	if activeYellowCards(newState.TeamInfo(*change.ForTeam).YellowCards) >= 2 {
+	if activeYellowCards(newState.TeamInfo(*change.ForTeam).YellowCards) >= s.gameConfig.MultipleCardStep {
 		changes = append(changes, s.multipleYellowCardsChange(*change.ForTeam))
 	} else {
 		newState.TeamInfo(*change.ForTeam).AddYellowCard(s.gameConfig.YellowCardDuration, change.CausedByGameEvent)

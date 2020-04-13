@@ -2,6 +2,7 @@ time-acquisition-mode: system
 network:
   publish-address: 224.5.23.1:10003
   vision-address: 224.5.23.2:10006
+  tracker-address: 224.5.23.2:10010
 server:
   auto-ref:
     address: :10007
@@ -16,7 +17,7 @@ server:
 game:
   state-store-file: state-store.json.stream
   yellow-card-duration: 2m
-  multiple-card-step: 3
+  multiple-card-step: 2
   multiple-foul-step: 3
   multiple-placement-failures: 5
   auto-ref-proposal-timeout: 5s
@@ -52,10 +53,10 @@ game:
     DIV_A:
       field-length: 12.0
       field-width: 9.0
-      defense-area-depth: 1.2
-      defense-area-width: 2.4
+      defense-area-depth: 1.8
+      defense-area-width: 3.6
       penalty-kick-dist-to-goal: 8.0
-      goal-width: 1.2
+      goal-width: 1.8
       placement-offset-touch-line: 0.2
       placement-offset-goal-line: 0.2
       placement-offset-goal-line-goal-kick: 1.0
@@ -72,5 +73,5 @@ game:
       placement-offset-goal-line-goal-kick: 1.0
       placement-offset-defense-area: 1.0
   max-bots:
-    DIV_A: 8
+    DIV_A: 11
     DIV_B: 6
