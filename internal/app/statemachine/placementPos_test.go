@@ -105,48 +105,48 @@ func Test_BallPlacementPos(t *testing.T) {
 			want:  geom.NewVector2(fl/2-og, -(fw/2 - ot)),
 		},
 		{
-			name:  "bot crash unique 1",
-			event: createBotCrashUnique(geom.NewVector2(0, 0)),
+			name:  "bot kicked ball too fast 1",
+			event: createBotKickedBallToFastEvent(geom.NewVector2(0, 0)),
 			want:  geom.NewVector2(0, 0),
 		},
 		{
-			name:  "bot crash unique 2",
-			event: createBotCrashUnique(geom.NewVector2(1, -2)),
+			name:  "bot kicked ball too fast 2",
+			event: createBotKickedBallToFastEvent(geom.NewVector2(1, -2)),
 			want:  geom.NewVector2(1, -2),
 		},
 		{
-			name:  "bot crash unique 3",
-			event: createBotCrashUnique(geom.NewVector2(1, -42)),
+			name:  "bot kicked ball too fast 3",
+			event: createBotKickedBallToFastEvent(geom.NewVector2(1, -42)),
 			want:  geom.NewVector2(1, -(fw/2 - ot)),
 		},
 		{
-			name:  "bot crash unique 4",
-			event: createBotCrashUnique(geom.NewVector2(1, 42)),
+			name:  "bot kicked ball too fast 4",
+			event: createBotKickedBallToFastEvent(geom.NewVector2(1, 42)),
 			want:  geom.NewVector2(1, fw/2-ot),
 		},
 		{
-			name:  "bot crash unique 5",
-			event: createBotCrashUnique(geom.NewVector2(fl/2, -42)),
+			name:  "bot kicked ball too fast 5",
+			event: createBotKickedBallToFastEvent(geom.NewVector2(fl/2, -42)),
 			want:  geom.NewVector2(fl/2-og, -(fw/2 - ot)),
 		},
 		{
-			name:  "bot crash unique 6",
-			event: createBotCrashUnique(geom.NewVector2(-fl/2, -42)),
+			name:  "bot kicked ball too fast 6",
+			event: createBotKickedBallToFastEvent(geom.NewVector2(-fl/2, -42)),
 			want:  geom.NewVector2(-(fl/2 - og), -(fw/2 - ot)),
 		},
 		{
-			name:  "bot crash unique 7",
-			event: createBotCrashUnique(geom.NewVector2(42, 0)),
+			name:  "bot kicked ball too fast 7",
+			event: createBotKickedBallToFastEvent(geom.NewVector2(42, 0)),
 			want:  geom.NewVector2(fl/2-dd-od, 0),
 		},
 		{
-			name:  "bot crash unique 8",
-			event: createBotCrashUnique(geom.NewVector2(fl/2-0.1, dw/2-0.1)),
+			name:  "bot kicked ball too fast 8",
+			event: createBotKickedBallToFastEvent(geom.NewVector2(fl/2-0.1, dw/2-0.1)),
 			want:  geom.NewVector2(fl/2-og, dw/2+od),
 		},
 		{
-			name:  "bot crash unique 9",
-			event: createBotCrashUnique(geom.NewVector2(fl/2-dd, dw/2-0.1)),
+			name:  "bot kicked ball too fast 9",
+			event: createBotKickedBallToFastEvent(geom.NewVector2(fl/2-dd, dw/2-0.1)),
 			want:  geom.NewVector2(fl/2-dd-od, dw/2-0.1),
 		},
 	}
@@ -190,13 +190,13 @@ func createBallLeftFieldGoalLine(eventLocation *geom.Vector2, placingTeam state.
 		},
 	}
 }
-func createBotCrashUnique(eventLocation *geom.Vector2) *state.GameEvent {
+func createBotKickedBallToFastEvent(eventLocation *geom.Vector2) *state.GameEvent {
 	var byTeam = state.Team_YELLOW
-	eventType := state.GameEvent_BOT_CRASH_UNIQUE
+	eventType := state.GameEvent_BOT_KICKED_BALL_TOO_FAST
 	return &state.GameEvent{
 		Type: &eventType,
-		Event: &state.GameEvent_BotCrashUnique_{
-			BotCrashUnique: &state.GameEvent_BotCrashUnique{
+		Event: &state.GameEvent_BotKickedBallTooFast_{
+			BotKickedBallTooFast: &state.GameEvent_BotKickedBallTooFast{
 				ByTeam:   &byTeam,
 				Location: eventLocation,
 			},
