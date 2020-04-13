@@ -172,7 +172,7 @@ func (e *Engine) processChanges() {
 			e.noProgressDetector.process()
 			e.ballPlacementCoordinator.process()
 			e.processPrepare()
-			e.processBotRemoved()
+			e.processBotNumber()
 		}
 	}
 }

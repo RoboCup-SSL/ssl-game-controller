@@ -36,6 +36,7 @@ type Geometry struct {
 // Game holds configs that are valid for the whole game
 type Game struct {
 	YellowCardDuration                    time.Duration              `yaml:"yellow-card-duration"`
+	YellowCardBotRemovalTime              time.Duration              `yaml:"yellow-card-bot-removal-time"`
 	DefaultDivision                       Division                   `yaml:"default-division"`
 	Normal                                Special                    `yaml:"normal"`
 	Overtime                              Special                    `yaml:"overtime"`
@@ -152,6 +153,7 @@ func DefaultControllerConfig() (c Controller) {
 	c.Network.TrackerAddress = "224.5.23.2:10010"
 	c.Game.StateStoreFile = "state-store.json.stream"
 	c.Game.YellowCardDuration = 2 * time.Minute
+	c.Game.YellowCardBotRemovalTime = 10 * time.Second
 	c.Game.TeamChoiceTimeout = 200 * time.Millisecond
 	c.Game.MultipleCardStep = 2
 	c.Game.MultipleFoulStep = 3

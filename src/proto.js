@@ -726,13 +726,13 @@ export const GameEvent = $root.GameEvent = (() => {
      * @property {GameEvent.IMultipleCards|null} [multipleCards] GameEvent multipleCards
      * @property {GameEvent.IMultipleFouls|null} [multipleFouls] GameEvent multipleFouls
      * @property {GameEvent.IBotSubstitution|null} [botSubstitution] GameEvent botSubstitution
+     * @property {GameEvent.ITooManyRobots|null} [tooManyRobots] GameEvent tooManyRobots
      * @property {GameEvent.IUnsportingBehaviorMinor|null} [unsportingBehaviorMinor] GameEvent unsportingBehaviorMinor
      * @property {GameEvent.IUnsportingBehaviorMajor|null} [unsportingBehaviorMajor] GameEvent unsportingBehaviorMajor
      * @property {GameEvent.IBotPushedBot|null} [botPushedBot] GameEvent botPushedBot
      * @property {GameEvent.IBotHeldBallDeliberately|null} [botHeldBallDeliberately] GameEvent botHeldBallDeliberately
      * @property {GameEvent.IBotTippedOver|null} [botTippedOver] GameEvent botTippedOver
      * @property {GameEvent.IPrepared|null} [prepared] GameEvent prepared
-     * @property {GameEvent.ITooManyRobots|null} [tooManyRobots] GameEvent tooManyRobots
      * @property {GameEvent.IIndirectGoal|null} [indirectGoal] GameEvent indirectGoal
      * @property {GameEvent.IChippedGoal|null} [chippedGoal] GameEvent chippedGoal
      * @property {GameEvent.IKickTimeout|null} [kickTimeout] GameEvent kickTimeout
@@ -977,6 +977,14 @@ export const GameEvent = $root.GameEvent = (() => {
     GameEvent.prototype.botSubstitution = null;
 
     /**
+     * GameEvent tooManyRobots.
+     * @member {GameEvent.ITooManyRobots|null|undefined} tooManyRobots
+     * @memberof GameEvent
+     * @instance
+     */
+    GameEvent.prototype.tooManyRobots = null;
+
+    /**
      * GameEvent unsportingBehaviorMinor.
      * @member {GameEvent.IUnsportingBehaviorMinor|null|undefined} unsportingBehaviorMinor
      * @memberof GameEvent
@@ -1023,14 +1031,6 @@ export const GameEvent = $root.GameEvent = (() => {
      * @instance
      */
     GameEvent.prototype.prepared = null;
-
-    /**
-     * GameEvent tooManyRobots.
-     * @member {GameEvent.ITooManyRobots|null|undefined} tooManyRobots
-     * @memberof GameEvent
-     * @instance
-     */
-    GameEvent.prototype.tooManyRobots = null;
 
     /**
      * GameEvent indirectGoal.
@@ -1109,12 +1109,12 @@ export const GameEvent = $root.GameEvent = (() => {
 
     /**
      * GameEvent event.
-     * @member {"ballLeftFieldTouchLine"|"ballLeftFieldGoalLine"|"aimlessKick"|"possibleGoal"|"noProgressInGame"|"attackerDoubleTouchedBall"|"attackerTooCloseToDefenseArea"|"defenderInDefenseArea"|"boundaryCrossing"|"keeperHeldBall"|"botDribbledBallTooFar"|"attackerTouchedBallInDefenseArea"|"botKickedBallTooFast"|"botCrashUnique"|"botCrashDrawn"|"defenderTooCloseToKickPoint"|"botTooFastInStop"|"botInterferedPlacement"|"goal"|"invalidGoal"|"placementFailed"|"placementSucceeded"|"multipleCards"|"multipleFouls"|"botSubstitution"|"unsportingBehaviorMinor"|"unsportingBehaviorMajor"|"botPushedBot"|"botHeldBallDeliberately"|"botTippedOver"|"prepared"|"tooManyRobots"|"indirectGoal"|"chippedGoal"|"kickTimeout"|"attackerTouchedOpponentInDefenseArea"|"attackerTouchedOpponentInDefenseAreaSkipped"|"botCrashUniqueSkipped"|"botPushedBotSkipped"|"defenderInDefenseAreaPartially"|"multiplePlacementFailures"|undefined} event
+     * @member {"ballLeftFieldTouchLine"|"ballLeftFieldGoalLine"|"aimlessKick"|"possibleGoal"|"noProgressInGame"|"attackerDoubleTouchedBall"|"attackerTooCloseToDefenseArea"|"defenderInDefenseArea"|"boundaryCrossing"|"keeperHeldBall"|"botDribbledBallTooFar"|"attackerTouchedBallInDefenseArea"|"botKickedBallTooFast"|"botCrashUnique"|"botCrashDrawn"|"defenderTooCloseToKickPoint"|"botTooFastInStop"|"botInterferedPlacement"|"goal"|"invalidGoal"|"placementFailed"|"placementSucceeded"|"multipleCards"|"multipleFouls"|"botSubstitution"|"tooManyRobots"|"unsportingBehaviorMinor"|"unsportingBehaviorMajor"|"botPushedBot"|"botHeldBallDeliberately"|"botTippedOver"|"prepared"|"indirectGoal"|"chippedGoal"|"kickTimeout"|"attackerTouchedOpponentInDefenseArea"|"attackerTouchedOpponentInDefenseAreaSkipped"|"botCrashUniqueSkipped"|"botPushedBotSkipped"|"defenderInDefenseAreaPartially"|"multiplePlacementFailures"|undefined} event
      * @memberof GameEvent
      * @instance
      */
     Object.defineProperty(GameEvent.prototype, "event", {
-        get: $util.oneOfGetter($oneOfFields = ["ballLeftFieldTouchLine", "ballLeftFieldGoalLine", "aimlessKick", "possibleGoal", "noProgressInGame", "attackerDoubleTouchedBall", "attackerTooCloseToDefenseArea", "defenderInDefenseArea", "boundaryCrossing", "keeperHeldBall", "botDribbledBallTooFar", "attackerTouchedBallInDefenseArea", "botKickedBallTooFast", "botCrashUnique", "botCrashDrawn", "defenderTooCloseToKickPoint", "botTooFastInStop", "botInterferedPlacement", "goal", "invalidGoal", "placementFailed", "placementSucceeded", "multipleCards", "multipleFouls", "botSubstitution", "unsportingBehaviorMinor", "unsportingBehaviorMajor", "botPushedBot", "botHeldBallDeliberately", "botTippedOver", "prepared", "tooManyRobots", "indirectGoal", "chippedGoal", "kickTimeout", "attackerTouchedOpponentInDefenseArea", "attackerTouchedOpponentInDefenseAreaSkipped", "botCrashUniqueSkipped", "botPushedBotSkipped", "defenderInDefenseAreaPartially", "multiplePlacementFailures"]),
+        get: $util.oneOfGetter($oneOfFields = ["ballLeftFieldTouchLine", "ballLeftFieldGoalLine", "aimlessKick", "possibleGoal", "noProgressInGame", "attackerDoubleTouchedBall", "attackerTooCloseToDefenseArea", "defenderInDefenseArea", "boundaryCrossing", "keeperHeldBall", "botDribbledBallTooFar", "attackerTouchedBallInDefenseArea", "botKickedBallTooFast", "botCrashUnique", "botCrashDrawn", "defenderTooCloseToKickPoint", "botTooFastInStop", "botInterferedPlacement", "goal", "invalidGoal", "placementFailed", "placementSucceeded", "multipleCards", "multipleFouls", "botSubstitution", "tooManyRobots", "unsportingBehaviorMinor", "unsportingBehaviorMajor", "botPushedBot", "botHeldBallDeliberately", "botTippedOver", "prepared", "indirectGoal", "chippedGoal", "kickTimeout", "attackerTouchedOpponentInDefenseArea", "attackerTouchedOpponentInDefenseAreaSkipped", "botCrashUniqueSkipped", "botPushedBotSkipped", "defenderInDefenseAreaPartially", "multiplePlacementFailures"]),
         set: $util.oneOfSetter($oneOfFields)
     });
 
@@ -1345,6 +1345,9 @@ export const GameEvent = $root.GameEvent = (() => {
             case 37:
                 message.botSubstitution = $root.GameEvent.BotSubstitution.decode(reader, reader.uint32());
                 break;
+            case 38:
+                message.tooManyRobots = $root.GameEvent.TooManyRobots.decode(reader, reader.uint32());
+                break;
             case 35:
                 message.unsportingBehaviorMinor = $root.GameEvent.UnsportingBehaviorMinor.decode(reader, reader.uint32());
                 break;
@@ -1362,9 +1365,6 @@ export const GameEvent = $root.GameEvent = (() => {
                 break;
             case 1:
                 message.prepared = $root.GameEvent.Prepared.decode(reader, reader.uint32());
-                break;
-            case 38:
-                message.tooManyRobots = $root.GameEvent.TooManyRobots.decode(reader, reader.uint32());
                 break;
             case 9:
                 message.indirectGoal = $root.GameEvent.IndirectGoal.decode(reader, reader.uint32());
@@ -1460,13 +1460,13 @@ export const GameEvent = $root.GameEvent = (() => {
         case 32:
         case 34:
         case 37:
+        case 38:
         case 35:
         case 36:
         case 24:
         case 26:
         case 27:
         case 1:
-        case 38:
         case 9:
         case 10:
         case 12:
@@ -1733,6 +1733,16 @@ export const GameEvent = $root.GameEvent = (() => {
                     return "botSubstitution." + error;
             }
         }
+        if (message.tooManyRobots != null && message.hasOwnProperty("tooManyRobots")) {
+            if (properties.event === 1)
+                return "event: multiple values";
+            properties.event = 1;
+            {
+                let error = $root.GameEvent.TooManyRobots.verify(message.tooManyRobots);
+                if (error)
+                    return "tooManyRobots." + error;
+            }
+        }
         if (message.unsportingBehaviorMinor != null && message.hasOwnProperty("unsportingBehaviorMinor")) {
             if (properties.event === 1)
                 return "event: multiple values";
@@ -1791,16 +1801,6 @@ export const GameEvent = $root.GameEvent = (() => {
                 let error = $root.GameEvent.Prepared.verify(message.prepared);
                 if (error)
                     return "prepared." + error;
-            }
-        }
-        if (message.tooManyRobots != null && message.hasOwnProperty("tooManyRobots")) {
-            if (properties.event === 1)
-                return "event: multiple values";
-            properties.event = 1;
-            {
-                let error = $root.GameEvent.TooManyRobots.verify(message.tooManyRobots);
-                if (error)
-                    return "tooManyRobots." + error;
             }
         }
         if (message.indirectGoal != null && message.hasOwnProperty("indirectGoal")) {
@@ -2013,6 +2013,10 @@ export const GameEvent = $root.GameEvent = (() => {
         case 37:
             message.type = 37;
             break;
+        case "TOO_MANY_ROBOTS":
+        case 38:
+            message.type = 38;
+            break;
         case "UNSPORTING_BEHAVIOR_MINOR":
         case 35:
             message.type = 35;
@@ -2036,10 +2040,6 @@ export const GameEvent = $root.GameEvent = (() => {
         case "PREPARED":
         case 1:
             message.type = 1;
-            break;
-        case "TOO_MANY_ROBOTS":
-        case 38:
-            message.type = 38;
             break;
         case "INDIRECT_GOAL":
         case 9:
@@ -2210,6 +2210,11 @@ export const GameEvent = $root.GameEvent = (() => {
                 throw TypeError(".GameEvent.botSubstitution: object expected");
             message.botSubstitution = $root.GameEvent.BotSubstitution.fromObject(object.botSubstitution);
         }
+        if (object.tooManyRobots != null) {
+            if (typeof object.tooManyRobots !== "object")
+                throw TypeError(".GameEvent.tooManyRobots: object expected");
+            message.tooManyRobots = $root.GameEvent.TooManyRobots.fromObject(object.tooManyRobots);
+        }
         if (object.unsportingBehaviorMinor != null) {
             if (typeof object.unsportingBehaviorMinor !== "object")
                 throw TypeError(".GameEvent.unsportingBehaviorMinor: object expected");
@@ -2239,11 +2244,6 @@ export const GameEvent = $root.GameEvent = (() => {
             if (typeof object.prepared !== "object")
                 throw TypeError(".GameEvent.prepared: object expected");
             message.prepared = $root.GameEvent.Prepared.fromObject(object.prepared);
-        }
-        if (object.tooManyRobots != null) {
-            if (typeof object.tooManyRobots !== "object")
-                throw TypeError(".GameEvent.tooManyRobots: object expected");
-            message.tooManyRobots = $root.GameEvent.TooManyRobots.fromObject(object.tooManyRobots);
         }
         if (object.indirectGoal != null) {
             if (typeof object.indirectGoal !== "object")
@@ -11308,6 +11308,9 @@ export const GameEvent = $root.GameEvent = (() => {
          * @memberof GameEvent
          * @interface ITooManyRobots
          * @property {Team} byTeam TooManyRobots byTeam
+         * @property {number|null} [numRobotsAllowed] TooManyRobots numRobotsAllowed
+         * @property {number|null} [numRobotsOnField] TooManyRobots numRobotsOnField
+         * @property {IVector2|null} [ballLocation] TooManyRobots ballLocation
          */
 
         /**
@@ -11334,6 +11337,30 @@ export const GameEvent = $root.GameEvent = (() => {
         TooManyRobots.prototype.byTeam = 0;
 
         /**
+         * TooManyRobots numRobotsAllowed.
+         * @member {number} numRobotsAllowed
+         * @memberof GameEvent.TooManyRobots
+         * @instance
+         */
+        TooManyRobots.prototype.numRobotsAllowed = 0;
+
+        /**
+         * TooManyRobots numRobotsOnField.
+         * @member {number} numRobotsOnField
+         * @memberof GameEvent.TooManyRobots
+         * @instance
+         */
+        TooManyRobots.prototype.numRobotsOnField = 0;
+
+        /**
+         * TooManyRobots ballLocation.
+         * @member {IVector2|null|undefined} ballLocation
+         * @memberof GameEvent.TooManyRobots
+         * @instance
+         */
+        TooManyRobots.prototype.ballLocation = null;
+
+        /**
          * Creates a new TooManyRobots instance using the specified properties.
          * @function create
          * @memberof GameEvent.TooManyRobots
@@ -11358,6 +11385,12 @@ export const GameEvent = $root.GameEvent = (() => {
             if (!writer)
                 writer = $Writer.create();
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
+            if (message.numRobotsAllowed != null && message.hasOwnProperty("numRobotsAllowed"))
+                writer.uint32(/* id 2, wireType 0 =*/16).int32(message.numRobotsAllowed);
+            if (message.numRobotsOnField != null && message.hasOwnProperty("numRobotsOnField"))
+                writer.uint32(/* id 3, wireType 0 =*/24).int32(message.numRobotsOnField);
+            if (message.ballLocation != null && message.hasOwnProperty("ballLocation"))
+                $root.Vector2.encode(message.ballLocation, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
             return writer;
         };
 
@@ -11394,6 +11427,15 @@ export const GameEvent = $root.GameEvent = (() => {
                 switch (tag >>> 3) {
                 case 1:
                     message.byTeam = reader.int32();
+                    break;
+                case 2:
+                    message.numRobotsAllowed = reader.int32();
+                    break;
+                case 3:
+                    message.numRobotsOnField = reader.int32();
+                    break;
+                case 4:
+                    message.ballLocation = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -11440,6 +11482,17 @@ export const GameEvent = $root.GameEvent = (() => {
             case 2:
                 break;
             }
+            if (message.numRobotsAllowed != null && message.hasOwnProperty("numRobotsAllowed"))
+                if (!$util.isInteger(message.numRobotsAllowed))
+                    return "numRobotsAllowed: integer expected";
+            if (message.numRobotsOnField != null && message.hasOwnProperty("numRobotsOnField"))
+                if (!$util.isInteger(message.numRobotsOnField))
+                    return "numRobotsOnField: integer expected";
+            if (message.ballLocation != null && message.hasOwnProperty("ballLocation")) {
+                let error = $root.Vector2.verify(message.ballLocation);
+                if (error)
+                    return "ballLocation." + error;
+            }
             return null;
         };
 
@@ -11469,6 +11522,15 @@ export const GameEvent = $root.GameEvent = (() => {
                 message.byTeam = 2;
                 break;
             }
+            if (object.numRobotsAllowed != null)
+                message.numRobotsAllowed = object.numRobotsAllowed | 0;
+            if (object.numRobotsOnField != null)
+                message.numRobotsOnField = object.numRobotsOnField | 0;
+            if (object.ballLocation != null) {
+                if (typeof object.ballLocation !== "object")
+                    throw TypeError(".GameEvent.TooManyRobots.ballLocation: object expected");
+                message.ballLocation = $root.Vector2.fromObject(object.ballLocation);
+            }
             return message;
         };
 
@@ -11485,10 +11547,20 @@ export const GameEvent = $root.GameEvent = (() => {
             if (!options)
                 options = {};
             let object = {};
-            if (options.defaults)
+            if (options.defaults) {
                 object.byTeam = options.enums === String ? "UNKNOWN" : 0;
+                object.numRobotsAllowed = 0;
+                object.numRobotsOnField = 0;
+                object.ballLocation = null;
+            }
             if (message.byTeam != null && message.hasOwnProperty("byTeam"))
                 object.byTeam = options.enums === String ? $root.Team[message.byTeam] : message.byTeam;
+            if (message.numRobotsAllowed != null && message.hasOwnProperty("numRobotsAllowed"))
+                object.numRobotsAllowed = message.numRobotsAllowed;
+            if (message.numRobotsOnField != null && message.hasOwnProperty("numRobotsOnField"))
+                object.numRobotsOnField = message.numRobotsOnField;
+            if (message.ballLocation != null && message.hasOwnProperty("ballLocation"))
+                object.ballLocation = $root.Vector2.toObject(message.ballLocation, options);
             return object;
         };
 
@@ -11769,13 +11841,13 @@ export const GameEvent = $root.GameEvent = (() => {
      * @property {number} MULTIPLE_CARDS=32 MULTIPLE_CARDS value
      * @property {number} MULTIPLE_FOULS=34 MULTIPLE_FOULS value
      * @property {number} BOT_SUBSTITUTION=37 BOT_SUBSTITUTION value
+     * @property {number} TOO_MANY_ROBOTS=38 TOO_MANY_ROBOTS value
      * @property {number} UNSPORTING_BEHAVIOR_MINOR=35 UNSPORTING_BEHAVIOR_MINOR value
      * @property {number} UNSPORTING_BEHAVIOR_MAJOR=36 UNSPORTING_BEHAVIOR_MAJOR value
      * @property {number} BOT_PUSHED_BOT=24 BOT_PUSHED_BOT value
      * @property {number} BOT_HELD_BALL_DELIBERATELY=26 BOT_HELD_BALL_DELIBERATELY value
      * @property {number} BOT_TIPPED_OVER=27 BOT_TIPPED_OVER value
      * @property {number} PREPARED=1 PREPARED value
-     * @property {number} TOO_MANY_ROBOTS=38 TOO_MANY_ROBOTS value
      * @property {number} INDIRECT_GOAL=9 INDIRECT_GOAL value
      * @property {number} CHIPPED_GOAL=10 CHIPPED_GOAL value
      * @property {number} KICK_TIMEOUT=12 KICK_TIMEOUT value
@@ -11814,13 +11886,13 @@ export const GameEvent = $root.GameEvent = (() => {
         values[valuesById[32] = "MULTIPLE_CARDS"] = 32;
         values[valuesById[34] = "MULTIPLE_FOULS"] = 34;
         values[valuesById[37] = "BOT_SUBSTITUTION"] = 37;
+        values[valuesById[38] = "TOO_MANY_ROBOTS"] = 38;
         values[valuesById[35] = "UNSPORTING_BEHAVIOR_MINOR"] = 35;
         values[valuesById[36] = "UNSPORTING_BEHAVIOR_MAJOR"] = 36;
         values[valuesById[24] = "BOT_PUSHED_BOT"] = 24;
         values[valuesById[26] = "BOT_HELD_BALL_DELIBERATELY"] = 26;
         values[valuesById[27] = "BOT_TIPPED_OVER"] = 27;
         values[valuesById[1] = "PREPARED"] = 1;
-        values[valuesById[38] = "TOO_MANY_ROBOTS"] = 38;
         values[valuesById[9] = "INDIRECT_GOAL"] = 9;
         values[valuesById[10] = "CHIPPED_GOAL"] = 10;
         values[valuesById[12] = "KICK_TIMEOUT"] = 12;

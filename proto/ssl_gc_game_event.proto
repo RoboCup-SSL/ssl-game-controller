@@ -69,6 +69,7 @@ message GameEvent {
         MultipleCards multiple_cards = 32;
         MultipleFouls multiple_fouls = 34;
         BotSubstitution bot_substitution = 37;
+        TooManyRobots too_many_robots = 38;
 
         // Events triggered by the human referee through the GC only
 
@@ -82,8 +83,6 @@ message GameEvent {
 
         // replaced by ready_to_continue flag
         Prepared prepared = 1 [deprecated = true];
-        // event not raised explicitly
-        TooManyRobots too_many_robots = 38 [deprecated = true];
         // obsolete
         IndirectGoal indirect_goal = 9 [deprecated = true];
         // replaced by the meta-information in the possible_goal event
@@ -445,6 +444,12 @@ message GameEvent {
     message TooManyRobots {
         // the team that has too many robots
         required Team by_team = 1;
+        // number of robots allowed at the moment
+        optional int32 num_robots_allowed = 2;
+        // number of robots currently on the field
+        optional int32 num_robots_on_field = 3;
+        // the location of the ball at the moment when this foul occurred
+        optional Vector2 ball_location = 4;
     }
     // a robot chipped the ball over the field boundary out of the playing surface
     message BoundaryCrossing {
@@ -502,6 +507,7 @@ message GameEvent {
         MULTIPLE_CARDS = 32;
         MULTIPLE_FOULS = 34;
         BOT_SUBSTITUTION = 37;
+        TOO_MANY_ROBOTS = 38;
 
         // Events triggered by the human referee through the GC only
 
@@ -514,7 +520,6 @@ message GameEvent {
         // Deprecated events
 
         PREPARED = 1 [deprecated = true];
-        TOO_MANY_ROBOTS = 38 [deprecated = true];
         INDIRECT_GOAL = 9 [deprecated = true];
         CHIPPED_GOAL = 10 [deprecated = true];
         KICK_TIMEOUT = 12 [deprecated = true];

@@ -82,6 +82,8 @@ func (s *BallPlacementPosDeterminer) Location() *geom.Vector2 {
 		return s.validateLocation(s.Event.GetNoProgressInGame().Location)
 	case state.GameEvent_PLACEMENT_FAILED:
 		return s.validateLocation(s.CurrentPlacementPos)
+	case state.GameEvent_TOO_MANY_ROBOTS:
+		return s.validateLocation(s.Event.GetTooManyRobots().BallLocation)
 	default:
 		return s.validateLocation(nil)
 	}

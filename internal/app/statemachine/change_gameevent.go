@@ -215,7 +215,8 @@ func (s *StateMachine) nextCommandForEvent(newState *state.State, gameEvent *sta
 		return state.NewCommand(state.Command_PENALTY, gameEvent.ByTeam().Opposite())
 	case state.GameEvent_GOAL:
 		return state.NewCommand(state.Command_KICKOFF, gameEvent.ByTeam().Opposite())
-	case state.GameEvent_NO_PROGRESS_IN_GAME:
+	case state.GameEvent_NO_PROGRESS_IN_GAME,
+		state.GameEvent_TOO_MANY_ROBOTS:
 		return state.NewCommand(state.Command_FORCE_START, state.Team_UNKNOWN)
 	default:
 		return newState.NextCommand
@@ -288,6 +289,7 @@ func stopsTheGame(gameEvent state.GameEvent_Type) bool {
 		state.GameEvent_BOT_HELD_BALL_DELIBERATELY,
 		state.GameEvent_BOT_TIPPED_OVER,
 		// others
+		state.GameEvent_TOO_MANY_ROBOTS,
 		state.GameEvent_PLACEMENT_SUCCEEDED:
 		return true
 	}
