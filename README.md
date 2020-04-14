@@ -6,7 +6,7 @@
 
 # ssl-game-controller
 
-The [ssl-refbox](https://github.com/RoboCup-SSL/ssl-refbox) replacement that will be introduced at RoboCup 2019.
+The [ssl-refbox](https://github.com/RoboCup-SSL/ssl-refbox) replacement that was introduced at RoboCup 2019.
 
 ![Screenshot of Interface](./doc/screenshot_interface.png)
 
@@ -17,9 +17,9 @@ The controller will generate a default config file to [config/ssl-game-controlle
 
 ### Runtime Requirements
  * No software dependencies (except for development, see below)
- * 64bit Linux, Windows, OSX (32bit would be possible too, but come on, we are in 2018...)
+ * 64bit Linux, Windows, OSX (build your 32bit binaries yourself...)
  * Display Resolution of 1920x1080 is recommended
- * A reasonable Web-Browser (mostly tested on Chrome, please do not try IE...)
+ * A reasonable Web-Browser (mostly tested on Chrome)
  * (optional) To view the field, you need the [ssl-vision-client](https://github.com/RoboCup-SSL/ssl-vision-client)
 
 ### Reference Clients
@@ -33,7 +33,7 @@ The ssl-game-controller replaces the ssl-refbox. With the introduction of automa
 
 The referee message, that is send to the teams, has no breaking changes. Teams do not need to change their systems. Additional data will be send with the referee messages though. To read those changes, teams can update their `.proto` files from this repository to take advantage of it.
 
-Teams will also have the possibility to connect to a new interface, where they can change their goalkeeper number during Stoppage. Additionally, there will be an advantage rule, where teams can decide to let the game continue on certain fouls.
+Teams will also have the possibility to connect to a new interface, where they can change their goalkeeper number.
 
 List of new features:
  * Modern, scalable Web-UI
@@ -42,7 +42,7 @@ List of new features:
  * State history with undo button
  * Includes state that was previously located in all autoRefs
  * New Game Event concept for better interaction with multiple autoRefs
- * Game Log that documents commands and events
+ * Game protocol that documents all changes in the state
  * New interfaces for autoRefs and teams
  * A graphical client can be integrated
  
@@ -65,7 +65,7 @@ List of new features:
 Purpose: Notify team AI about end of game and log it in log files.
 
 #### How to give a goal?
-If an autoRef has send a 'possible goal', this event can be accepted on the right.
+If an autoRef has sent a 'possible goal', this event can be accepted on the right.
 
 To add a goal manually:   
 * New Event (on the top) 
@@ -78,7 +78,7 @@ Most of the state can be changed with the edit buttons. Either in the settings m
 This should only be used in case of misbehavior! Goals, yellow cards, etc. should be given through the respective events ('New event' button) or in the manual view.
 
 #### How to revert a change?
-The game control allows to revert certain actions like game events or stage changes. For these actions, a revert button will show up in the protocol table.
+The game control allows reverting certain actions like game events or stage changes. For these actions, a revert button will show up in the protocol table.
 The button reverts this line and all following.
 
 #### How to disable certain game events?
@@ -97,7 +97,7 @@ The button shows the command that it will trigger.
 Active connections to teams are shown as an icon in the team overview.
 
 #### The controller crashes on start. What can I do?
-Try deleting the gc-state.json file in the working directory. It may got corrupted.
+Try deleting the `state-store.json.stream` file in the working directory. It may got corrupted.
 
 ## Integration into your own framework
 The game-controller can easily be integrated into your own AI framework, if you do not want to implement your own controller for testing purposes.
@@ -105,7 +105,7 @@ The game-controller can easily be integrated into your own AI framework, if you 
 Download the release binary from the Github release and run it from inside your framework. Then, attach to the WebSocket API that is used by the UI as well. 
 The API is defined in [internal/app/controller/events.go](internal/app/controller/events.go).
 
-If you don't want to run the controller in real time, you can change the time acquisition mode:
+If you don't want to run the controller in real time, you can change the time acquisition mode in the `ssl-game-controller.yaml` file:
 
 1. `system` (default): Use system time
 1. `vision`: Receive messages from ssl-vision and use the timestamps from these messages as the time source. This is mostly useful, when you produce your own ssl-vision frames from simulation. 

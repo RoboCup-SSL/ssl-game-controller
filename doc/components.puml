@@ -1,0 +1,81 @@
+@startuml
+skinparam componentStyle uml2
+
+node "UI" {
+[UI Client] as UiClient
+}
+
+node "AutoRef" {
+[AutoRef Client] as AutoRefClient
+}
+
+node "Teams" {
+[Team Client] as TeamClient
+}
+
+node "Game Controller" {
+
+    package "Producer API" {
+        [Message Publisher] as MessagePub
+        interface "Publish" as PublishMessage
+        PublishMessage -- MessagePub
+        interface "UdpMulticastSocket" as PublishSocket
+        MessagePub -- PublishSocket
+
+        [State Store] as StateStore
+        interface "Add" as AddToStateStore
+        AddToStateStore -- StateStore
+
+    }
+
+    package "Main" {
+        [State Machine] as StateMachine
+        interface "Change"
+        Change - StateMachine
+
+        [Message Generator] as MessageGen
+        interface "Generate" as GenerateMessage
+        MessageGen - GenerateMessage
+        MessageGen --> PublishMessage
+
+        [Engine] as Engine
+        interface "Enqueue"
+        Enqueue -- Engine
+        Engine -> Change
+        Engine --> AddToStateStore
+        GenerateMessage <- Engine
+    }
+
+    package "Consumer API" {
+        [API Server] as ApiServer
+        interface "WebSocket" as ApiSocket
+        ApiSocket -- ApiServer
+        ApiServer --> Enqueue
+
+        [CI Server] as CiServer
+        interface "TcpSocket" as CiSocket
+        CiSocket -- CiServer
+
+        [AutoRef Remote Connection] as AutoRefRConn
+        interface "TcpSocket" as AutoRefSocket
+        AutoRefSocket -- AutoRefRConn
+
+        [Team Remote Connection] as TeamRConn
+        interface "TcpSocket" as TeamSocket
+        TeamSocket -- TeamRConn
+
+        [Tracker receiver] as TrackerReceiver
+        interface "UdpMulticastSocket" as TrackerSocket
+        TrackerSocket -- TrackerReceiver
+
+        [Vision receiver] as VisionReceiver
+        interface "UdpMulticastSocket" as VisionSocket
+        VisionSocket -- VisionReceiver
+    }
+}
+
+UiClient --> ApiSocket
+AutoRefClient --> AutoRefSocket
+TeamClient --> TeamSocket
+
+@enduml
