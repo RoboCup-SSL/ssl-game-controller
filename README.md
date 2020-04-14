@@ -120,7 +120,7 @@ If you don't want to run the controller in real time, you can change the time ac
 
 ### Requirements
 You need to install following dependencies first: 
- * Go >= 1.10
+ * Go >= 1.13
  * Node
  * Yarn
 

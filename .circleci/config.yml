@@ -21,7 +21,7 @@ jobs:
 
   backend:
     docker:
-      - image: circleci/golang:1.10
+      - image: cimg/go:1.13
     working_directory: /go/src/github.com/RoboCup-SSL/ssl-game-controller
     steps:
       - checkout
@@ -47,7 +47,7 @@ jobs:
 
   publish-github-release:
     docker:
-      - image: circleci/golang:1.10
+      - image: cimg/go:1.13
     steps:
       - attach_workspace:
           at: .
