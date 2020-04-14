@@ -5,7 +5,7 @@ This folder contains a sample client that connects to the team interface of the 
 ## Protocol
 The communication is established with a bidirectional TCP connection. Messages are encoded with [Protocol Buffers](https://developers.google.com/protocol-buffers/). Each message is preceded by an uvarint containing the message size in bytes, see https://cwiki.apache.org/confluence/display/GEODE/Delimiting+Protobuf+Messages for details.
 
-The .proto files can be found [here](../../pkg/refproto).
+The .proto files can be found in [../../proto](../../proto).
 
 The default port is `10008` for plain connections and 10108 for TLS encrypted connections. The IP to connect to can be determined using the multicast referee messages.
 
