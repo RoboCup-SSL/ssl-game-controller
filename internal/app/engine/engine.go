@@ -48,6 +48,7 @@ func NewEngine(gameConfig config.Game) (e *Engine) {
 		state.Team_BLUE.String():   new(GcStateTeam),
 	}
 	e.gcState.AutoRefState = map[string]*GcStateAutoRef{}
+	e.gcState.TrackerState = map[string]*GcStateTracker{}
 	e.gcState.TrackerStateGc = new(GcStateTracker)
 	e.noProgressDetector = NoProgressDetector{gcEngine: e}
 	e.ballPlacementCoordinator = BallPlacementCoordinator{gcEngine: e}

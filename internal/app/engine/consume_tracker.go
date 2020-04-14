@@ -15,6 +15,8 @@ func (e *Engine) ProcessTrackerFrame(wrapperFrame *tracker.TrackerWrapperPacket)
 		Robots:     convertRobots(wrapperFrame.TrackedFrame.Robots),
 	}
 
+	readyToContinue := e.readyToContinue()
+
 	e.UpdateGcState(func(gcState *GcState) {
 		gcState.TrackerState[*wrapperFrame.Uuid] = &state
 
@@ -24,7 +26,7 @@ func (e *Engine) ProcessTrackerFrame(wrapperFrame *tracker.TrackerWrapperPacket)
 		if e.gcState.ReadyToContinue == nil {
 			e.gcState.ReadyToContinue = new(bool)
 		}
-		*e.gcState.ReadyToContinue = e.readyToContinue()
+		*e.gcState.ReadyToContinue = readyToContinue
 	})
 }
 
@@ -51,7 +53,8 @@ func convertBalls(balls []*tracker.TrackedBall) *Ball {
 
 func (e *Engine) readyToContinue() bool {
 	radius := e.gameConfig.DistanceToBallInStop + robotRadius + distanceThreshold
-	if !e.ballSteady() ||
+	if e.gcState.TrackerStateGc.Ball == nil ||
+		!e.ballSteady() ||
 		e.robotsInsideRadius(e.gcState.TrackerStateGc.Robots, e.gcState.TrackerStateGc.Ball.Pos.ToVector2(), radius) {
 		return false
 	}

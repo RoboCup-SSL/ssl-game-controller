@@ -73,7 +73,7 @@ func addDur(duration *duration.Duration, delta time.Duration) {
 }
 
 func (e *Engine) ballSteady() bool {
-	if e.gcState.TrackerStateGc.Ball.Vel == nil {
+	if e.gcState.TrackerStateGc.Ball == nil || e.gcState.TrackerStateGc.Ball.Vel == nil {
 		return true
 	}
 	return e.gcState.TrackerStateGc.Ball.Vel.ToVector2().Length() < ballSteadyThreshold
