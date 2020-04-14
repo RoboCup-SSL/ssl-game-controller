@@ -11,12 +11,9 @@ func newTeamInfo() (t *TeamInfo) {
 	t.Name = new(string)
 	t.Goals = new(int32)
 	t.Goalkeeper = new(int32)
-	t.YellowCards = []*YellowCard{}
-	t.RedCards = []*RedCard{}
 	t.TimeoutsLeft = new(int32)
 	t.TimeoutTimeLeft = new(duration.Duration)
 	t.OnPositiveHalf = new(bool)
-	t.Fouls = []*Foul{}
 	t.BallPlacementFailures = new(int32)
 	t.BallPlacementFailuresReached = new(bool)
 	t.CanPlaceBall = new(bool)

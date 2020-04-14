@@ -36,8 +36,8 @@ func (s *StateMachine) processChangeNewCommand(newState *state.State, newCommand
 		}
 
 		// reset game events and proposals
-		newState.ProposedGameEvents = []*state.ProposedGameEvent{}
-		newState.GameEvents = []*state.GameEvent{}
+		newState.ProposedGameEvents = nil
+		newState.GameEvents = nil
 
 		// reset ball placement pos and follow ups
 		newState.PlacementPos = nil

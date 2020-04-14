@@ -43,6 +43,7 @@ func NewServerConnection(gcEngine *engine.Engine, conn *websocket.Conn) (s *Serv
 	s.conn = conn
 	s.gcEngine = gcEngine
 	s.lastProtocolId = -1
+	s.marshaler.EmitDefaults = true
 	return
 }
 

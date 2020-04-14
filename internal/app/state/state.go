@@ -27,9 +27,6 @@ func NewState() (s *State) {
 	s.TeamState[Team_BLUE.String()] = newTeamInfo()
 	*s.TeamState[Team_BLUE.String()].OnPositiveHalf = !*s.TeamState[Team_YELLOW.String()].OnPositiveHalf
 
-	s.GameEvents = []*GameEvent{}
-	s.ProposedGameEvents = []*ProposedGameEvent{}
-
 	*s.Division = State_DIV_A
 	*s.FirstKickoffTeam = Team_YELLOW
 	*s.AutoContinue = true

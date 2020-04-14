@@ -90,7 +90,7 @@
                 }
             },
             continueButtonClass() {
-                if (!this.$store.state.gcState.hasOwnProperty('readyToContinue')) {
+                if (this.$store.state.gcState.readyToContinue === null) {
                     return '';
                 }
                 if (this.$store.state.gcState.readyToContinue) {
