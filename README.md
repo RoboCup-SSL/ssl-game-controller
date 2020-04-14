@@ -27,6 +27,7 @@ There are some reference clients:
  * [ssl-ref-client](./cmd/ssl-ref-client): A client that receives referee messages
  * [ssl-auto-ref-client](./cmd/ssl-auto-ref-client/README.md): A client that connects to the controller as an autoRef
  * [ssl-team-client](./cmd/ssl-team-client/README.md): A client that connects to the controller as a team
+ * [ssl-ci-test-client](./cmd/ssl-ci-test-client/README.md): A client that connects to the CI interface of the controller
  
 ### Comparison to ssl-refbox
 The ssl-game-controller replaces the ssl-refbox. With the introduction of automatic referees, there was demand for several new features. To accommodate these, the ssl-refbox has been rewritten to take advantage of modern technologies.
@@ -164,3 +165,8 @@ go get github.com/gobuffalo/packr/packr
 cd cmd/ssl-game-controller
 packr install
 ```
+
+### Update generated protobuf code
+Generate the code for the `.proto` files with [./generateProto.sh](./generateProto.sh), 
+after you've changed anything in a `.proto` file.
+  
