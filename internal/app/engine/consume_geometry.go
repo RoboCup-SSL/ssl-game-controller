@@ -7,8 +7,10 @@ import (
 )
 
 func (e *Engine) ProcessGeometry(data *vision.SSL_GeometryData) {
+	e.mutex.Lock()
+	defer e.mutex.Unlock()
 
-	currentGeometry := e.GetGeometry()
+	currentGeometry := e.stateMachine.Geometry
 	newGeometry := currentGeometry
 
 	newGeometry.FieldWidth = float64(*data.Field.FieldWidth) / 1000.0
@@ -22,7 +24,7 @@ func (e *Engine) ProcessGeometry(data *vision.SSL_GeometryData) {
 		}
 	}
 
-	e.SetGeometry(newGeometry)
+	e.stateMachine.Geometry = newGeometry
 
 	if currentGeometry != newGeometry {
 		log.Printf("Geometry changed from %v to %v", currentGeometry, newGeometry)

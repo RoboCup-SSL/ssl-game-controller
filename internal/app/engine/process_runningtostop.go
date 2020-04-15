@@ -44,14 +44,14 @@ func (e *Engine) ballPlacementRequired() bool {
 	}
 
 	// The ball is inside the field.
-	field := geom.NewRectangleFromCenter(geom.NewVector2(0, 0), e.GetGeometry().FieldLength, e.GetGeometry().FieldWidth)
+	field := geom.NewRectangleFromCenter(geom.NewVector2(0, 0), e.getGeometry().FieldLength, e.getGeometry().FieldWidth)
 	if !field.IsPointInside(ballPos) {
 		return true
 	}
 
 	// The ball is at least 0.7m away from any defense area.
 	for _, sign := range []float64{1, -1} {
-		defenseArea := geom.NewDefenseAreaBySign(e.GetGeometry(), sign)
+		defenseArea := geom.NewDefenseAreaBySign(e.getGeometry(), sign)
 		forbiddenArea := defenseArea.WithMargin(e.gameConfig.BallPlacementMinDistanceToDefenseArea)
 		if forbiddenArea.IsPointInside(ballPos) {
 			return true

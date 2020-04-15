@@ -5,6 +5,9 @@ import (
 )
 
 func (e *Engine) ProcessTrackerFrame(wrapperFrame *tracker.TrackerWrapperPacket) {
+	e.mutex.Lock()
+	defer e.mutex.Unlock()
+
 	if wrapperFrame.TrackedFrame == nil {
 		return
 	}
@@ -17,17 +20,15 @@ func (e *Engine) ProcessTrackerFrame(wrapperFrame *tracker.TrackerWrapperPacket)
 
 	readyToContinue := e.readyToContinue()
 
-	e.UpdateGcState(func(gcState *GcState) {
-		gcState.TrackerState[*wrapperFrame.Uuid] = &state
+	e.gcState.TrackerState[*wrapperFrame.Uuid] = &state
 
-		// for now, all tracker sources update the GC state
-		e.gcState.TrackerStateGc = &state
+	// for now, all tracker sources update the GC state
+	e.gcState.TrackerStateGc = &state
 
-		if e.gcState.ReadyToContinue == nil {
-			e.gcState.ReadyToContinue = new(bool)
-		}
-		*e.gcState.ReadyToContinue = readyToContinue
-	})
+	if e.gcState.ReadyToContinue == nil {
+		e.gcState.ReadyToContinue = new(bool)
+	}
+	*e.gcState.ReadyToContinue = readyToContinue
 }
 
 func convertRobots(robots []*tracker.TrackedRobot) (rs []*Robot) {

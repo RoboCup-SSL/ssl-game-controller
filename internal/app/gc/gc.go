@@ -51,9 +51,6 @@ func NewGameController(cfg config.Controller) (c *GameController) {
 
 // Start starts all go routines
 func (c *GameController) Start() {
-	if err := c.gcEngine.Start(); err != nil {
-		panic(err)
-	}
 
 	switch c.config.TimeAcquisitionMode {
 	case config.TimeAcquisitionModeSystem:
@@ -80,6 +77,10 @@ func (c *GameController) Start() {
 	c.autoRefServerTls.Server.Start()
 	c.teamServer.Server.Start()
 	c.teamServerTls.Server.Start()
+
+	if err := c.gcEngine.Start(); err != nil {
+		panic(err)
+	}
 }
 
 // Stop stops all go routines

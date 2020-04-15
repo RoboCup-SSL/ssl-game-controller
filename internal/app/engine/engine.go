@@ -27,7 +27,7 @@ type Engine struct {
 	timeProvider             timer.TimeProvider
 	lastTimeUpdate           time.Time
 	gcState                  *GcState
-	gcStateMutex             sync.Mutex
+	mutex                    sync.Mutex
 	noProgressDetector       NoProgressDetector
 	ballPlacementCoordinator BallPlacementCoordinator
 	tickChanProvider         func() <-chan time.Time
@@ -68,29 +68,30 @@ func (e *Engine) Enqueue(change *statemachine.Change) {
 	e.queue <- change
 }
 
-// SetGeometry sets a new geometry
-func (e *Engine) SetGeometry(geometry config.Geometry) {
-	e.stateMachine.Geometry = geometry
-}
-
-// GetGeometry returns the current geometry
-func (e *Engine) GetGeometry() config.Geometry {
+// getGeometry returns the current geometry
+func (e *Engine) getGeometry() config.Geometry {
 	return e.stateMachine.Geometry
 }
 
 // SetTimeProvider sets a new time provider for this engine
 func (e *Engine) SetTimeProvider(provider timer.TimeProvider) {
+	e.mutex.Lock()
+	defer e.mutex.Unlock()
 	e.timeProvider = provider
 	e.lastTimeUpdate = e.timeProvider()
 }
 
 // SetTickChanProvider sets an alternative provider for the tick channel
 func (e *Engine) SetTickChanProvider(provider func() <-chan time.Time) {
+	e.mutex.Lock()
+	defer e.mutex.Unlock()
 	e.tickChanProvider = provider
 }
 
 // Start loads the state store and runs a go routine that consumes the change queue
 func (e *Engine) Start() error {
+	e.mutex.Lock()
+	defer e.mutex.Unlock()
 	if err := e.stateStore.Open(); err != nil {
 		return errors.Wrap(err, "Could not open state store")
 	}
@@ -105,6 +106,8 @@ func (e *Engine) Start() error {
 
 // Stop stops the go routine that processes the change queue
 func (e *Engine) Stop() {
+	e.mutex.Lock()
+	defer e.mutex.Unlock()
 	close(e.queue)
 	if err := e.stateStore.Close(); err != nil {
 		log.Printf("Could not close store: %v", err)
@@ -113,28 +116,30 @@ func (e *Engine) Stop() {
 
 // CurrentState returns a deep copy of the current state
 func (e *Engine) CurrentState() (s *state.State) {
-	s = new(state.State)
-	proto.Merge(s, e.currentState)
-	return
+	e.mutex.Lock()
+	defer e.mutex.Unlock()
+	return e.currentState.Clone()
 }
 
 // CurrentGcState returns a deep copy of the current GC state
 func (e *Engine) CurrentGcState() (s *GcState) {
-	e.gcStateMutex.Lock()
-	defer e.gcStateMutex.Unlock()
+	e.mutex.Lock()
+	defer e.mutex.Unlock()
 	s = new(GcState)
 	proto.Merge(s, e.gcState)
 	return
 }
 
 func (e *Engine) UpdateGcState(fn func(gcState *GcState)) {
-	e.gcStateMutex.Lock()
-	defer e.gcStateMutex.Unlock()
+	e.mutex.Lock()
+	defer e.mutex.Unlock()
 	fn(e.gcState)
 }
 
 // LatestChangesUntil returns all changes with a id larger than the given id
 func (e *Engine) LatestChangesUntil(id int32) (changes []*statemachine.StateChange) {
+	e.mutex.Lock()
+	defer e.mutex.Unlock()
 	for _, change := range e.stateStore.Entries() {
 		if *change.Id > id {
 			changes = append(changes, change)
@@ -145,6 +150,8 @@ func (e *Engine) LatestChangesUntil(id int32) (changes []*statemachine.StateChan
 
 // LatestChangeId returns the latest change id or -1, if there is no change
 func (e *Engine) LatestChangeId() int32 {
+	e.mutex.Lock()
+	defer e.mutex.Unlock()
 	entries := e.stateStore.Entries()
 	if len(entries) > 0 {
 		return *entries[len(entries)-1].Id
@@ -169,8 +176,8 @@ func (e *Engine) processChanges() {
 
 // ResetMatch creates a backup of the current state store, removes it and starts with a fresh state
 func (e *Engine) ResetMatch() {
-	e.gcStateMutex.Lock()
-	defer e.gcStateMutex.Unlock()
+	e.mutex.Lock()
+	defer e.mutex.Unlock()
 	if err := e.stateStore.Reset(); err != nil {
 		log.Printf("Could not reset store: %v", err)
 	} else {
@@ -179,6 +186,8 @@ func (e *Engine) ResetMatch() {
 }
 
 func (e *Engine) processChange(change *statemachine.Change) {
+	e.mutex.Lock()
+	defer e.mutex.Unlock()
 
 	var newChanges []*statemachine.Change
 	entry := statemachine.StateChange{}
@@ -218,7 +227,7 @@ func (e *Engine) processChange(change *statemachine.Change) {
 		entry.State, newChanges = e.stateMachine.Process(e.currentState, change)
 	}
 
-	e.currentState = entry.State
+	e.currentState = entry.State.Clone()
 
 	e.postProcessChange(entry)
 
@@ -229,8 +238,12 @@ func (e *Engine) processChange(change *statemachine.Change) {
 	if err := e.stateStore.Add(&entry); err != nil {
 		log.Println("Could not add new state to store: ", err)
 	}
+	stateCopy := e.currentState.Clone()
 	for _, hook := range e.hooks {
-		hook <- HookOut{Change: entry.Change, State: e.CurrentState()}
+		select {
+		case hook <- HookOut{Change: entry.Change, State: stateCopy}:
+		default:
+		}
 	}
 }
 

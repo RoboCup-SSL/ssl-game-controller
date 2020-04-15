@@ -105,7 +105,7 @@ func (e *Engine) robotPos(robotId *state.RobotId) *geom.Vector2 {
 func (e *Engine) posInsideGoal(pos *geom.Vector2) bool {
 	forTeam := *e.currentState.Command.ForTeam
 	teamInfo := e.currentState.TeamState[forTeam.String()]
-	goalCenter := geom.GoalCenter(e.GetGeometry(), *teamInfo.OnPositiveHalf)
-	goalArea := geom.NewRectangleFromCenter(goalCenter, robotRadius*2, e.GetGeometry().GoalWidth)
+	goalCenter := geom.GoalCenter(e.getGeometry(), *teamInfo.OnPositiveHalf)
+	goalArea := geom.NewRectangleFromCenter(goalCenter, robotRadius*2, e.getGeometry().GoalWidth)
 	return goalArea.IsPointInside(pos)
 }

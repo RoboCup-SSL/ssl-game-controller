@@ -2,6 +2,7 @@ package state
 
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
+	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes/duration"
 	"github.com/golang/protobuf/ptypes/timestamp"
 )
@@ -39,14 +40,20 @@ func NewState() (s *State) {
 	return
 }
 
+func (x *State) Clone() *State {
+	s := new(State)
+	proto.Merge(s, x)
+	return s
+}
+
 // TeamInfo returns the team info for the given team
-func (m *State) TeamInfo(team Team) *TeamInfo {
-	return m.TeamState[team.String()]
+func (x *State) TeamInfo(team Team) *TeamInfo {
+	return x.TeamState[team.String()]
 }
 
 // TeamByName returns the team for the given team name
-func (m *State) TeamByName(name string) Team {
-	for teamColor, teamInfo := range m.TeamState {
+func (x *State) TeamByName(name string) Team {
+	for teamColor, teamInfo := range x.TeamState {
 		if *teamInfo.Name == name {
 			return Team(Team_value[teamColor])
 		}

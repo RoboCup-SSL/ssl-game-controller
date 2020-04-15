@@ -12,11 +12,15 @@ type HookOut struct {
 
 // RegisterHook registers given hook for post processing after each change
 func (e *Engine) RegisterHook(hook chan HookOut) {
+	e.mutex.Lock()
+	defer e.mutex.Unlock()
 	e.hooks = append(e.hooks, hook)
 }
 
 // UnregisterHook unregisters hooks that were registered before
 func (e *Engine) UnregisterHook(hook chan HookOut) bool {
+	e.mutex.Lock()
+	defer e.mutex.Unlock()
 	for i, h := range e.hooks {
 		if h == hook {
 			e.hooks = append(e.hooks[:i], e.hooks[i+1:]...)

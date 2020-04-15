@@ -6,6 +6,7 @@ import (
 	"github.com/RoboCup-SSL/ssl-go-tools/pkg/sslconn"
 	"log"
 	"net"
+	"sync"
 	"time"
 )
 
@@ -17,6 +18,7 @@ type Server struct {
 	conn            net.Conn
 	latestTime      time.Time
 	tickChan        chan time.Time
+	mutex           sync.Mutex
 	TrackerConsumer func(*tracker.TrackerWrapperPacket)
 }
 
@@ -77,7 +79,9 @@ func (s *Server) serve(conn net.Conn) {
 		if input.Timestamp != nil {
 			sec := *input.Timestamp / 1e9
 			nSec := *input.Timestamp - sec*1e9
+			s.mutex.Lock()
 			s.latestTime = time.Unix(sec, nSec)
+			s.mutex.Unlock()
 			select {
 			case s.tickChan <- time.Now():
 			default:
@@ -99,6 +103,8 @@ func (s *Server) SendMessage(refMsg *state.Referee) {
 }
 
 func (s *Server) Time() time.Time {
+	s.mutex.Lock()
+	defer s.mutex.Unlock()
 	return s.latestTime
 }
 

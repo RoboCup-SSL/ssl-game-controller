@@ -46,7 +46,7 @@ func (d *NoProgressDetector) process() {
 		duration := float32(timeSinceLastProgress.Seconds())
 		location := d.gcEngine.gcState.TrackerStateGc.Ball.Pos.ToVector2()
 		for _, team := range state.BothTeams() {
-			defenseArea := geom.NewDefenseArea(d.gcEngine.GetGeometry(), *d.gcEngine.currentState.TeamState[team.String()].OnPositiveHalf)
+			defenseArea := geom.NewDefenseArea(d.gcEngine.getGeometry(), *d.gcEngine.currentState.TeamState[team.String()].OnPositiveHalf)
 			if defenseArea.IsPointInside(d.gcEngine.gcState.TrackerStateGc.Ball.Pos.ToVector2()) {
 				d.gcEngine.Enqueue(createGameEventChange(state.GameEvent_KEEPER_HELD_BALL, state.GameEvent{
 					Event: &state.GameEvent_KeeperHeldBall_{

@@ -9,6 +9,9 @@ import (
 
 // processTick updates the timers of the state and triggers changes if required
 func (e *Engine) processTick() {
+	e.mutex.Lock()
+	defer e.mutex.Unlock()
+
 	currentTime := e.timeProvider()
 	delta := currentTime.Sub(e.lastTimeUpdate)
 	e.lastTimeUpdate = currentTime
@@ -40,8 +43,12 @@ func (e *Engine) processTick() {
 	e.processPrepare()
 	e.processBotNumber()
 
+	stateCopy := e.currentState.Clone()
 	for _, hook := range e.hooks {
-		hook <- HookOut{State: e.CurrentState()}
+		select {
+		case hook <- HookOut{State: stateCopy}:
+		default:
+		}
 	}
 }
 
