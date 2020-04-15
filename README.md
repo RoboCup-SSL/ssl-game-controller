@@ -107,14 +107,24 @@ See instructions for the client part in the reference clients mentioned above.
 ## Integration into your own framework
 The game-controller can easily be integrated into your own AI framework, if you do not want to implement your own controller for testing purposes.
 
-Download the release binary from the Github release and run it from inside your framework. Then, attach to the WebSocket API that is used by the UI as well. 
-The API is defined in [internal/app/controller/events.go](internal/app/controller/events.go).
+Download the release binary from the Github release and run it from inside your framework. 
+Then, attach to the WebSocket API that is used by the UI as well to control the game.
+The API is defined in [proto/ssl_gc_api.proto](./proto/ssl_gc_api.proto).
 
 If you don't want to run the controller in real time, you can change the time acquisition mode in the `ssl-game-controller.yaml` file:
 
 1. `system` (default): Use system time
 1. `vision`: Receive messages from ssl-vision and use the timestamps from these messages as the time source. This is mostly useful, when you produce your own ssl-vision frames from simulation. 
-1. `ci`: Connect your software directly with TCP. You can send the current timestamp [ns] and will receive the resulting referee message. This also avoids the use of multicast. This is especially useful, if you run integration tests on your build server in parallel. For details, see: [internal/app/rcon/ciServer.go](internal/app/rcon/ciServer.go)
+1. `ci`: Connect your software directly to the GC via TCP. You can send the current timestamp and tracker packets and will receive the resulting referee message. 
+
+The `ci` mode also disables all multicast messages.
+This is especially useful, if you run integration tests on your build server in parallel and/or in a container. 
+The GC does not receive vision or tracker packages and does not produce referee messages.
+Instead, you should set the correct geometry in `ssl-game-controller.yaml` and send the tracker packages via the CI protocol along the timestamp.
+The referee messages are send from the GC to you via the CI protocol as well.
+The communication is asynchronous.
+
+For details, see: [ssl-ci-test-client](./cmd/ssl-ci-test-client/README.md)
 
 ### Examples
  * Integration of the binary: https://github.com/TIGERs-Mannheim/AutoReferee/blob/master/modules/moduli-referee/src/main/java/edu/tigers/sumatra/referee/SslGameControllerProcess.java
