@@ -1,6 +1,6 @@
 <template>
     <div class="game-state-bar">
-        <span v-if="state.currentActionTimeRemaining >= 0">
+        <span v-if="currentActionTimePositive">
             <span v-format-ns-duration="state.currentActionTimeRemaining"
                   v-b-tooltip.hover.d500
                   title="Remaining time until lack of progress">
@@ -102,6 +102,9 @@
             },
             stageText() {
                 return stageNames[this.state.stage];
+            },
+            currentActionTimePositive() {
+                return !this.state.currentActionTimeRemaining.toString().startsWith('-');
             }
         }
     }
