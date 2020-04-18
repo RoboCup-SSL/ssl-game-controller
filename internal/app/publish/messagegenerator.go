@@ -102,7 +102,7 @@ func (g *MessageGenerator) StateToRefereeMessage(matchState *state.State) (r *st
 	*r.StageTimeLeft = matchState.StageTimeLeft.Nanos / 1000
 	*r.BlueTeamOnPositiveHalf = *matchState.TeamInfo(state.Team_BLUE).OnPositiveHalf
 	r.NextCommand = mapCommand(matchState.NextCommand)
-	*r.CurrentActionTimeRemaining = matchState.CurrentActionTimeRemaining.Nanos / 1000
+	*r.CurrentActionTimeRemaining = int32(matchState.CurrentActionTimeRemaining.Seconds)*1_000_000 + matchState.CurrentActionTimeRemaining.Nanos/1000
 
 	updateTeam(r.Yellow, matchState.TeamInfo(state.Team_YELLOW))
 	updateTeam(r.Blue, matchState.TeamInfo(state.Team_BLUE))
