@@ -129,10 +129,12 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 
 	// ball placement succeeded
 	if *gameEvent.Type == state.GameEvent_PLACEMENT_SUCCEEDED &&
-		byTeam.Known() &&
-		*newState.TeamInfo(byTeam).BallPlacementFailures > 0 {
-		*newState.TeamInfo(byTeam).BallPlacementFailures--
-		if byTeam == *newState.NextCommand.ForTeam && newState.GetAutoContinue() {
+		byTeam.Known() {
+		if *newState.TeamInfo(byTeam).BallPlacementFailures > 0 {
+			*newState.TeamInfo(byTeam).BallPlacementFailures--
+		}
+
+		if newState.GetAutoContinue() && newState.NextCommand != nil && byTeam == *newState.NextCommand.ForTeam {
 			log.Printf("Placement succeeded by team %v, which is also in favor. Can continue.", byTeam)
 			changes = append(changes, &Change{
 				Change: &Change_Continue{

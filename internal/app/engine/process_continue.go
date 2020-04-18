@@ -12,8 +12,7 @@ const distanceToBallDuringPenalty = 1.0
 
 func (e *Engine) processContinue() {
 	if !(e.currentState.Command.IsPrepare() || *e.currentState.Command.Type == state.Command_STOP) ||
-		e.gcState.TrackerStateGc.Ball == nil ||
-		e.currentState.NextCommand == nil {
+		e.gcState.TrackerStateGc.Ball == nil {
 		e.gcState.ReadyToContinue = nil
 		return
 	}
