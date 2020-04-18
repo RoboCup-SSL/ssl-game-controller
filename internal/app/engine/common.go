@@ -39,15 +39,6 @@ func (e *Engine) robotsInsideRadius(robots []*Robot, pos *geom.Vector2, radius f
 	return false
 }
 
-func (e *Engine) timeSinceLastChange() time.Duration {
-	if e.stateStore.LatestEntry() != nil {
-		lastChangeTs := goTime(e.stateStore.LatestEntry().Timestamp)
-		now := e.timeProvider()
-		return now.Sub(lastChangeTs)
-	}
-	return 0
-}
-
 func goDur(duration *duration.Duration) time.Duration {
 	goDur, err := ptypes.Duration(duration)
 	if err != nil {

@@ -40,7 +40,7 @@ func (e *Engine) processTick() {
 
 	e.noProgressDetector.process()
 	e.ballPlacementCoordinator.process()
-	e.processPrepare()
+	e.processContinue()
 	e.processBotNumber()
 
 	stateCopy := e.currentState.Clone()

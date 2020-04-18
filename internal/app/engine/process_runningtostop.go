@@ -2,6 +2,7 @@ package engine
 
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/geom"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"log"
 )
@@ -21,12 +22,23 @@ func (e *Engine) processRunningToStop() {
 		})
 	} else {
 		log.Printf("Ball is already placed, no need for ball placement")
-		e.Enqueue(&statemachine.Change{
-			Origin: &changeOriginEngine,
-			Change: &statemachine.Change_Continue{
-				Continue: &statemachine.Continue{},
-			},
-		})
+		if e.currentState.GetAutoContinue() {
+			e.Enqueue(&statemachine.Change{
+				Origin: &changeOriginEngine,
+				Change: &statemachine.Change_Continue{
+					Continue: &statemachine.Continue{},
+				},
+			})
+		} else {
+			e.Enqueue(&statemachine.Change{
+				Origin: &changeOriginEngine,
+				Change: &statemachine.Change_NewCommand{
+					NewCommand: &statemachine.NewCommand{
+						Command: state.NewCommandNeutral(state.Command_STOP),
+					},
+				},
+			})
+		}
 	}
 }
 
