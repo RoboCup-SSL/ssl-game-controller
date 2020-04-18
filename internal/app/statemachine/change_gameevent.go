@@ -78,6 +78,9 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 		log.Printf("Halt the game, because team %v might have scored a goal", byTeam)
 		// halt the game to let the human referee decide if this was a valid goal
 		changes = append(changes, s.newCommandChange(state.NewCommandNeutral(state.Command_HALT)))
+		if s.gameConfig.AutoApproveGoals {
+			changes = append(changes, createGameEventChange(state.GameEvent_GOAL, *gameEvent))
+		}
 	}
 
 	// bot substitution
@@ -157,18 +160,24 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 
 // multipleFoulsChange creates a multiple fouls event change
 func (s *StateMachine) multipleFoulsChange(byTeam state.Team) *Change {
-	eventType := state.GameEvent_MULTIPLE_FOULS
+	return createGameEventChange(state.GameEvent_MULTIPLE_FOULS, state.GameEvent{
+		Event: &state.GameEvent_MultipleFouls_{
+			MultipleFouls: &state.GameEvent_MultipleFouls{
+				ByTeam: &byTeam,
+			},
+		},
+	},
+	)
+}
+
+func createGameEventChange(eventType state.GameEvent_Type, event state.GameEvent) *Change {
+	event.Type = &eventType
+	event.Origin = []string{changeOriginStateMachine}
 	return &Change{
+		Origin: &changeOriginStateMachine,
 		Change: &Change_AddGameEvent{
 			AddGameEvent: &AddGameEvent{
-				GameEvent: &state.GameEvent{
-					Type: &eventType,
-					Event: &state.GameEvent_MultipleFouls_{
-						MultipleFouls: &state.GameEvent_MultipleFouls{
-							ByTeam: &byTeam,
-						},
-					},
-				},
+				GameEvent: &event,
 			},
 		},
 	}

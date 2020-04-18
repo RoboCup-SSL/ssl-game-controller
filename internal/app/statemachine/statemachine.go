@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-const changeOriginStateMachine = "StateMachine"
+var changeOriginStateMachine = "StateMachine"
 
 // StateMachine describes the state machine that translates changes into new states
 type StateMachine struct {

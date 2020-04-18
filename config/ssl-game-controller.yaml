@@ -37,6 +37,7 @@ game:
   ball-placement-min-distance-to-defense-area: 0.7
   ball-placement-min-robot-distance: 0.05
   distance-to-ball-in-stop: 0.5
+  auto-approve-goals: false
   normal:
     half-duration: 5m
     half-time-duration: 5m
