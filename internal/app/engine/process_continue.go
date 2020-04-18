@@ -84,7 +84,8 @@ func (e *Engine) processContinue() {
 	}
 
 	if *e.currentState.Command.Type == state.Command_STOP &&
-		!e.readyToContinueFromStop() {
+		(e.currentState.NextCommand == nil ||
+			!e.readyToContinueFromStop()) {
 		return
 	}
 
@@ -120,8 +121,8 @@ func (e *Engine) robotPos(robotId *state.RobotId) *geom.Vector2 {
 }
 
 func (e *Engine) posInsideGoal(pos *geom.Vector2) bool {
-	forTeam := *e.currentState.Command.ForTeam
-	teamInfo := e.currentState.TeamState[forTeam.String()]
+	goalTeam := e.currentState.Command.ForTeam.Opposite()
+	teamInfo := e.currentState.TeamState[goalTeam.String()]
 	goalCenter := geom.GoalCenter(e.getGeometry(), *teamInfo.OnPositiveHalf)
 	goalArea := geom.NewRectangleFromCenter(goalCenter, robotRadius*2, e.getGeometry().GoalWidth)
 	return goalArea.IsPointInside(pos)

@@ -55,7 +55,7 @@ func (r *Rectangle) MaxY() float64 {
 
 // MaxX returns the smallest y value
 func (r *Rectangle) MinY() float64 {
-	return r.center.Y64() + r.yExtent/2.0
+	return r.center.Y64() - r.yExtent/2.0
 }
 
 // IsPointInside returns true if the given point is inside the rectangle
