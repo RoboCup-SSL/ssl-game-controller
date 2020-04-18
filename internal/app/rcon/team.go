@@ -139,8 +139,8 @@ func (s *TeamServer) handleClientConnection(conn net.Conn) {
 
 	s.clients[client.id] = client.Client
 	defer func() {
+		team := s.gcEngine.CurrentState().TeamByName(client.id)
 		s.gcEngine.UpdateGcState(func(gcState *engine.GcState) {
-			team := s.gcEngine.CurrentState().TeamByName(client.id)
 			if teamState, ok := gcState.TeamState[team.String()]; ok {
 				connected := false
 				teamState.Connected = &connected
@@ -151,8 +151,8 @@ func (s *TeamServer) handleClientConnection(conn net.Conn) {
 	}()
 
 	log.Printf("Client %v connected", client.id)
+	team := s.gcEngine.CurrentState().TeamByName(client.id)
 	s.gcEngine.UpdateGcState(func(gcState *engine.GcState) {
-		team := s.gcEngine.CurrentState().TeamByName(client.id)
 		if teamState, ok := gcState.TeamState[team.String()]; ok {
 			connected := true
 			teamState.Connected = &connected
