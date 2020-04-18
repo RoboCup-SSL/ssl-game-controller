@@ -109,7 +109,7 @@ The game-controller can easily be integrated into your own AI framework, if you 
 
 Download the release binary from the Github release and run it from inside your framework. 
 Then, attach to the WebSocket API that is used by the UI as well to control the game.
-The API is defined in [proto/ssl_gc_api.proto](./proto/ssl_gc_api.proto).
+The API is defined in [proto/ssl_gc_api.proto](./proto/ssl_gc_api.proto) and available at the path `/api/control`.
 
 If you don't want to run the controller in real time, you can change the time acquisition mode in the `ssl-game-controller.yaml` file:
 
@@ -122,7 +122,9 @@ This is especially useful, if you run integration tests on your build server in 
 The GC does not receive vision or tracker packages and does not produce referee messages.
 Instead, you should set the correct geometry in `ssl-game-controller.yaml` and send the tracker packages via the CI protocol along the timestamp.
 The referee messages are send from the GC to you via the CI protocol as well.
-The communication is asynchronous.
+For every `CiInput` there will be one or more `CiOutput` responses.
+This is, because some changes will generate multiple messages.
+`CiOutput` messages will also be pushed to the CI client for manual changes from the UI or UI API.
 
 For details, see: [ssl-ci-test-client](./cmd/ssl-ci-test-client/README.md)
 
