@@ -6,6 +6,7 @@ import (
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/pkg/errors"
 	"os"
+	"path/filepath"
 	"time"
 )
 
@@ -103,15 +104,15 @@ func (s *Store) Add(entry *statemachine.StateChange) error {
 
 	_, err = s.file.WriteString(jsonState)
 	if err != nil {
-		return errors.Wrap(err, "Could not write to store")
+		return errors.Wrapf(err, "Could not write '%v' to store", jsonState)
 	}
 	_, err = s.file.WriteString("\n")
 	if err != nil {
-		return errors.Wrap(err, "Could not write to store")
+		return errors.Wrap(err, "Could not write '\n' to store")
 	}
 	err = s.file.Sync()
 	if err != nil {
-		return errors.Wrap(err, "Could not write to store")
+		return errors.Wrap(err, "Could not sync store")
 	}
 	return nil
 }
@@ -121,9 +122,13 @@ func (s *Store) Reset() error {
 	if err := s.Close(); err != nil {
 		return errors.Wrap(err, "Could not close current store file")
 	}
-	backupFile := time.Now().Format("2006-01-02_15-04-05-MST") + "_" + s.filename
-	if err := os.Rename(s.filename, backupFile); err != nil {
-		return errors.Wrap(err, "Could not rename store file")
+	if len(s.entries) > 0 {
+		base := filepath.Base(s.filename)
+		path := filepath.Dir(s.filename)
+		backupFile := filepath.Join(path, time.Now().Format("2006-01-02_15-04-05-MST")+"_"+base)
+		if err := os.Rename(s.filename, backupFile); err != nil {
+			return errors.Wrap(err, "Could not rename store file")
+		}
 	}
 	if err := s.Open(); err != nil {
 		return errors.Wrap(err, "Could not reopen new empty store")
