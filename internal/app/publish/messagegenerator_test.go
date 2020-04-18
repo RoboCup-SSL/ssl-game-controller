@@ -43,7 +43,7 @@ func Test_generateMessages(t *testing.T) {
 	if *r.CommandTimestamp != 0 {
 		t.Errorf("Wrong CommandTimestamp: %v", *r.CommandTimestamp)
 	}
-	if !*r.BlueTeamOnPositiveHalf {
+	if *r.BlueTeamOnPositiveHalf {
 		t.Errorf("Wrong half: %v", *r.BlueTeamOnPositiveHalf)
 	}
 	if r.Yellow == nil {
