@@ -21,7 +21,7 @@ jobs:
 
   backend:
     docker:
-      - image: circleci/golang:1.13
+      - image: circleci/golang:1.14
     working_directory: /go/src/github.com/RoboCup-SSL/ssl-game-controller
     steps:
       - checkout
@@ -33,7 +33,6 @@ jobs:
       - run:
           working_directory: cmd/ssl-game-controller
           command: |
-            go get -v github.com/gobuffalo/packr/packr
             GOOS=linux GOARCH=amd64 packr build -o ../../release/ssl-game-controller_linux_amd64
             GOOS=darwin GOARCH=amd64 packr build -o ../../release/ssl-game-controller_darwin_amd64
             GOOS=windows GOARCH=amd64 packr build -o ../../release/ssl-game-controller_windows_amd64.exe
@@ -47,7 +46,7 @@ jobs:
 
   publish-github-release:
     docker:
-      - image: circleci/golang:1.13
+      - image: circleci/golang:1.14
     steps:
       - attach_workspace:
           at: .
@@ -61,7 +60,7 @@ jobs:
       - run:
           name: "Publish Release on GitHub"
           command: |
-            go get github.com/tcnksm/ghr
+            go get github.com/tcnksm/ghr@v0.13.0
             ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_TAG} ./release/
 
 workflows:
