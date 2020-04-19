@@ -19,7 +19,9 @@ func (e *Engine) processTick() {
 	if e.countStageTime() {
 		addDur(e.currentState.StageTimeElapsed, delta)
 		addDur(e.currentState.StageTimeLeft, -delta)
+	}
 
+	if e.countCurrentActionTime() {
 		addDur(e.currentState.CurrentActionTimeRemaining, -delta)
 		minimumTimeRemaining := -time.Minute * 30
 		if goDur(e.currentState.CurrentActionTimeRemaining) < minimumTimeRemaining {
@@ -54,6 +56,10 @@ func (e *Engine) processTick() {
 
 func (e *Engine) countStageTime() bool {
 	return e.currentState.Stage.IsPausedStage() || e.currentState.Command.IsRunning()
+}
+
+func (e *Engine) countCurrentActionTime() bool {
+	return e.countStageTime() || *e.currentState.Command.Type == state.Command_BALL_PLACEMENT
 }
 
 func (e *Engine) countCardTime() bool {
