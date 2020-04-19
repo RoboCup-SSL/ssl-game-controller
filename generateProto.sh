@@ -5,9 +5,6 @@ set -e
 # Print commands
 set -x
 
-echo "Update to latest Go protobuf compiler"
-go get -u github.com/golang/protobuf/protoc-gen-go
-
 # common GC
 protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_common.proto
 protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_geometry.proto
