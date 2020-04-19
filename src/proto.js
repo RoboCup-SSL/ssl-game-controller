@@ -707,6 +707,7 @@ export const GameEvent = $root.GameEvent = (() => {
      * @property {GameEvent.IGoal|null} [possibleGoal] GameEvent possibleGoal
      * @property {GameEvent.INoProgressInGame|null} [noProgressInGame] GameEvent noProgressInGame
      * @property {GameEvent.IAttackerDoubleTouchedBall|null} [attackerDoubleTouchedBall] GameEvent attackerDoubleTouchedBall
+     * @property {GameEvent.IPenaltyKickFailed|null} [penaltyKickFailed] GameEvent penaltyKickFailed
      * @property {GameEvent.IAttackerTooCloseToDefenseArea|null} [attackerTooCloseToDefenseArea] GameEvent attackerTooCloseToDefenseArea
      * @property {GameEvent.IDefenderInDefenseArea|null} [defenderInDefenseArea] GameEvent defenderInDefenseArea
      * @property {GameEvent.IBoundaryCrossing|null} [boundaryCrossing] GameEvent boundaryCrossing
@@ -823,6 +824,14 @@ export const GameEvent = $root.GameEvent = (() => {
      * @instance
      */
     GameEvent.prototype.attackerDoubleTouchedBall = null;
+
+    /**
+     * GameEvent penaltyKickFailed.
+     * @member {GameEvent.IPenaltyKickFailed|null|undefined} penaltyKickFailed
+     * @memberof GameEvent
+     * @instance
+     */
+    GameEvent.prototype.penaltyKickFailed = null;
 
     /**
      * GameEvent attackerTooCloseToDefenseArea.
@@ -1109,12 +1118,12 @@ export const GameEvent = $root.GameEvent = (() => {
 
     /**
      * GameEvent event.
-     * @member {"ballLeftFieldTouchLine"|"ballLeftFieldGoalLine"|"aimlessKick"|"possibleGoal"|"noProgressInGame"|"attackerDoubleTouchedBall"|"attackerTooCloseToDefenseArea"|"defenderInDefenseArea"|"boundaryCrossing"|"keeperHeldBall"|"botDribbledBallTooFar"|"attackerTouchedBallInDefenseArea"|"botKickedBallTooFast"|"botCrashUnique"|"botCrashDrawn"|"defenderTooCloseToKickPoint"|"botTooFastInStop"|"botInterferedPlacement"|"goal"|"invalidGoal"|"placementFailed"|"placementSucceeded"|"multipleCards"|"multipleFouls"|"botSubstitution"|"tooManyRobots"|"unsportingBehaviorMinor"|"unsportingBehaviorMajor"|"botPushedBot"|"botHeldBallDeliberately"|"botTippedOver"|"prepared"|"indirectGoal"|"chippedGoal"|"kickTimeout"|"attackerTouchedOpponentInDefenseArea"|"attackerTouchedOpponentInDefenseAreaSkipped"|"botCrashUniqueSkipped"|"botPushedBotSkipped"|"defenderInDefenseAreaPartially"|"multiplePlacementFailures"|undefined} event
+     * @member {"ballLeftFieldTouchLine"|"ballLeftFieldGoalLine"|"aimlessKick"|"possibleGoal"|"noProgressInGame"|"attackerDoubleTouchedBall"|"penaltyKickFailed"|"attackerTooCloseToDefenseArea"|"defenderInDefenseArea"|"boundaryCrossing"|"keeperHeldBall"|"botDribbledBallTooFar"|"attackerTouchedBallInDefenseArea"|"botKickedBallTooFast"|"botCrashUnique"|"botCrashDrawn"|"defenderTooCloseToKickPoint"|"botTooFastInStop"|"botInterferedPlacement"|"goal"|"invalidGoal"|"placementFailed"|"placementSucceeded"|"multipleCards"|"multipleFouls"|"botSubstitution"|"tooManyRobots"|"unsportingBehaviorMinor"|"unsportingBehaviorMajor"|"botPushedBot"|"botHeldBallDeliberately"|"botTippedOver"|"prepared"|"indirectGoal"|"chippedGoal"|"kickTimeout"|"attackerTouchedOpponentInDefenseArea"|"attackerTouchedOpponentInDefenseAreaSkipped"|"botCrashUniqueSkipped"|"botPushedBotSkipped"|"defenderInDefenseAreaPartially"|"multiplePlacementFailures"|undefined} event
      * @memberof GameEvent
      * @instance
      */
     Object.defineProperty(GameEvent.prototype, "event", {
-        get: $util.oneOfGetter($oneOfFields = ["ballLeftFieldTouchLine", "ballLeftFieldGoalLine", "aimlessKick", "possibleGoal", "noProgressInGame", "attackerDoubleTouchedBall", "attackerTooCloseToDefenseArea", "defenderInDefenseArea", "boundaryCrossing", "keeperHeldBall", "botDribbledBallTooFar", "attackerTouchedBallInDefenseArea", "botKickedBallTooFast", "botCrashUnique", "botCrashDrawn", "defenderTooCloseToKickPoint", "botTooFastInStop", "botInterferedPlacement", "goal", "invalidGoal", "placementFailed", "placementSucceeded", "multipleCards", "multipleFouls", "botSubstitution", "tooManyRobots", "unsportingBehaviorMinor", "unsportingBehaviorMajor", "botPushedBot", "botHeldBallDeliberately", "botTippedOver", "prepared", "indirectGoal", "chippedGoal", "kickTimeout", "attackerTouchedOpponentInDefenseArea", "attackerTouchedOpponentInDefenseAreaSkipped", "botCrashUniqueSkipped", "botPushedBotSkipped", "defenderInDefenseAreaPartially", "multiplePlacementFailures"]),
+        get: $util.oneOfGetter($oneOfFields = ["ballLeftFieldTouchLine", "ballLeftFieldGoalLine", "aimlessKick", "possibleGoal", "noProgressInGame", "attackerDoubleTouchedBall", "penaltyKickFailed", "attackerTooCloseToDefenseArea", "defenderInDefenseArea", "boundaryCrossing", "keeperHeldBall", "botDribbledBallTooFar", "attackerTouchedBallInDefenseArea", "botKickedBallTooFast", "botCrashUnique", "botCrashDrawn", "defenderTooCloseToKickPoint", "botTooFastInStop", "botInterferedPlacement", "goal", "invalidGoal", "placementFailed", "placementSucceeded", "multipleCards", "multipleFouls", "botSubstitution", "tooManyRobots", "unsportingBehaviorMinor", "unsportingBehaviorMajor", "botPushedBot", "botHeldBallDeliberately", "botTippedOver", "prepared", "indirectGoal", "chippedGoal", "kickTimeout", "attackerTouchedOpponentInDefenseArea", "attackerTouchedOpponentInDefenseAreaSkipped", "botCrashUniqueSkipped", "botPushedBotSkipped", "defenderInDefenseAreaPartially", "multiplePlacementFailures"]),
         set: $util.oneOfSetter($oneOfFields)
     });
 
@@ -1228,6 +1237,8 @@ export const GameEvent = $root.GameEvent = (() => {
             $root.GameEvent.BoundaryCrossing.encode(message.boundaryCrossing, writer.uint32(/* id 43, wireType 2 =*/346).fork()).ldelim();
         if (message.invalidGoal != null && message.hasOwnProperty("invalidGoal"))
             $root.GameEvent.Goal.encode(message.invalidGoal, writer.uint32(/* id 44, wireType 2 =*/354).fork()).ldelim();
+        if (message.penaltyKickFailed != null && message.hasOwnProperty("penaltyKickFailed"))
+            $root.GameEvent.PenaltyKickFailed.encode(message.penaltyKickFailed, writer.uint32(/* id 45, wireType 2 =*/362).fork()).ldelim();
         return writer;
     };
 
@@ -1287,6 +1298,9 @@ export const GameEvent = $root.GameEvent = (() => {
                 break;
             case 14:
                 message.attackerDoubleTouchedBall = $root.GameEvent.AttackerDoubleTouchedBall.decode(reader, reader.uint32());
+                break;
+            case 45:
+                message.penaltyKickFailed = $root.GameEvent.PenaltyKickFailed.decode(reader, reader.uint32());
                 break;
             case 19:
                 message.attackerTooCloseToDefenseArea = $root.GameEvent.AttackerTooCloseToDefenseArea.decode(reader, reader.uint32());
@@ -1441,6 +1455,7 @@ export const GameEvent = $root.GameEvent = (() => {
         case 39:
         case 2:
         case 14:
+        case 43:
         case 19:
         case 31:
         case 41:
@@ -1541,6 +1556,16 @@ export const GameEvent = $root.GameEvent = (() => {
                 let error = $root.GameEvent.AttackerDoubleTouchedBall.verify(message.attackerDoubleTouchedBall);
                 if (error)
                     return "attackerDoubleTouchedBall." + error;
+            }
+        }
+        if (message.penaltyKickFailed != null && message.hasOwnProperty("penaltyKickFailed")) {
+            if (properties.event === 1)
+                return "event: multiple values";
+            properties.event = 1;
+            {
+                let error = $root.GameEvent.PenaltyKickFailed.verify(message.penaltyKickFailed);
+                if (error)
+                    return "penaltyKickFailed." + error;
             }
         }
         if (message.attackerTooCloseToDefenseArea != null && message.hasOwnProperty("attackerTooCloseToDefenseArea")) {
@@ -1937,6 +1962,10 @@ export const GameEvent = $root.GameEvent = (() => {
         case 14:
             message.type = 14;
             break;
+        case "PENALTY_KICK_FAILED":
+        case 43:
+            message.type = 43;
+            break;
         case "ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA":
         case 19:
             message.type = 19;
@@ -2114,6 +2143,11 @@ export const GameEvent = $root.GameEvent = (() => {
             if (typeof object.attackerDoubleTouchedBall !== "object")
                 throw TypeError(".GameEvent.attackerDoubleTouchedBall: object expected");
             message.attackerDoubleTouchedBall = $root.GameEvent.AttackerDoubleTouchedBall.fromObject(object.attackerDoubleTouchedBall);
+        }
+        if (object.penaltyKickFailed != null) {
+            if (typeof object.penaltyKickFailed !== "object")
+                throw TypeError(".GameEvent.penaltyKickFailed: object expected");
+            message.penaltyKickFailed = $root.GameEvent.PenaltyKickFailed.fromObject(object.penaltyKickFailed);
         }
         if (object.attackerTooCloseToDefenseArea != null) {
             if (typeof object.attackerTooCloseToDefenseArea !== "object")
@@ -2521,6 +2555,11 @@ export const GameEvent = $root.GameEvent = (() => {
             object.invalidGoal = $root.GameEvent.Goal.toObject(message.invalidGoal, options);
             if (options.oneofs)
                 object.event = "invalidGoal";
+        }
+        if (message.penaltyKickFailed != null && message.hasOwnProperty("penaltyKickFailed")) {
+            object.penaltyKickFailed = $root.GameEvent.PenaltyKickFailed.toObject(message.penaltyKickFailed, options);
+            if (options.oneofs)
+                object.event = "penaltyKickFailed";
         }
         return object;
     };
@@ -11811,6 +11850,239 @@ export const GameEvent = $root.GameEvent = (() => {
         return BoundaryCrossing;
     })();
 
+    GameEvent.PenaltyKickFailed = (function() {
+
+        /**
+         * Properties of a PenaltyKickFailed.
+         * @memberof GameEvent
+         * @interface IPenaltyKickFailed
+         * @property {Team} byTeam PenaltyKickFailed byTeam
+         * @property {IVector2|null} [location] PenaltyKickFailed location
+         */
+
+        /**
+         * Constructs a new PenaltyKickFailed.
+         * @memberof GameEvent
+         * @classdesc Represents a PenaltyKickFailed.
+         * @implements IPenaltyKickFailed
+         * @constructor
+         * @param {GameEvent.IPenaltyKickFailed=} [properties] Properties to set
+         */
+        function PenaltyKickFailed(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * PenaltyKickFailed byTeam.
+         * @member {Team} byTeam
+         * @memberof GameEvent.PenaltyKickFailed
+         * @instance
+         */
+        PenaltyKickFailed.prototype.byTeam = 0;
+
+        /**
+         * PenaltyKickFailed location.
+         * @member {IVector2|null|undefined} location
+         * @memberof GameEvent.PenaltyKickFailed
+         * @instance
+         */
+        PenaltyKickFailed.prototype.location = null;
+
+        /**
+         * Creates a new PenaltyKickFailed instance using the specified properties.
+         * @function create
+         * @memberof GameEvent.PenaltyKickFailed
+         * @static
+         * @param {GameEvent.IPenaltyKickFailed=} [properties] Properties to set
+         * @returns {GameEvent.PenaltyKickFailed} PenaltyKickFailed instance
+         */
+        PenaltyKickFailed.create = function create(properties) {
+            return new PenaltyKickFailed(properties);
+        };
+
+        /**
+         * Encodes the specified PenaltyKickFailed message. Does not implicitly {@link GameEvent.PenaltyKickFailed.verify|verify} messages.
+         * @function encode
+         * @memberof GameEvent.PenaltyKickFailed
+         * @static
+         * @param {GameEvent.IPenaltyKickFailed} message PenaltyKickFailed message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PenaltyKickFailed.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
+            if (message.location != null && message.hasOwnProperty("location"))
+                $root.Vector2.encode(message.location, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+            return writer;
+        };
+
+        /**
+         * Encodes the specified PenaltyKickFailed message, length delimited. Does not implicitly {@link GameEvent.PenaltyKickFailed.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof GameEvent.PenaltyKickFailed
+         * @static
+         * @param {GameEvent.IPenaltyKickFailed} message PenaltyKickFailed message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PenaltyKickFailed.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a PenaltyKickFailed message from the specified reader or buffer.
+         * @function decode
+         * @memberof GameEvent.PenaltyKickFailed
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {GameEvent.PenaltyKickFailed} PenaltyKickFailed
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PenaltyKickFailed.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.GameEvent.PenaltyKickFailed();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.byTeam = reader.int32();
+                    break;
+                case 2:
+                    message.location = $root.Vector2.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            if (!message.hasOwnProperty("byTeam"))
+                throw $util.ProtocolError("missing required 'byTeam'", { instance: message });
+            return message;
+        };
+
+        /**
+         * Decodes a PenaltyKickFailed message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof GameEvent.PenaltyKickFailed
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {GameEvent.PenaltyKickFailed} PenaltyKickFailed
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PenaltyKickFailed.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a PenaltyKickFailed message.
+         * @function verify
+         * @memberof GameEvent.PenaltyKickFailed
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        PenaltyKickFailed.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            switch (message.byTeam) {
+            default:
+                return "byTeam: enum value expected";
+            case 0:
+            case 1:
+            case 2:
+                break;
+            }
+            if (message.location != null && message.hasOwnProperty("location")) {
+                let error = $root.Vector2.verify(message.location);
+                if (error)
+                    return "location." + error;
+            }
+            return null;
+        };
+
+        /**
+         * Creates a PenaltyKickFailed message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof GameEvent.PenaltyKickFailed
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {GameEvent.PenaltyKickFailed} PenaltyKickFailed
+         */
+        PenaltyKickFailed.fromObject = function fromObject(object) {
+            if (object instanceof $root.GameEvent.PenaltyKickFailed)
+                return object;
+            let message = new $root.GameEvent.PenaltyKickFailed();
+            switch (object.byTeam) {
+            case "UNKNOWN":
+            case 0:
+                message.byTeam = 0;
+                break;
+            case "YELLOW":
+            case 1:
+                message.byTeam = 1;
+                break;
+            case "BLUE":
+            case 2:
+                message.byTeam = 2;
+                break;
+            }
+            if (object.location != null) {
+                if (typeof object.location !== "object")
+                    throw TypeError(".GameEvent.PenaltyKickFailed.location: object expected");
+                message.location = $root.Vector2.fromObject(object.location);
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a PenaltyKickFailed message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof GameEvent.PenaltyKickFailed
+         * @static
+         * @param {GameEvent.PenaltyKickFailed} message PenaltyKickFailed
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        PenaltyKickFailed.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.byTeam = options.enums === String ? "UNKNOWN" : 0;
+                object.location = null;
+            }
+            if (message.byTeam != null && message.hasOwnProperty("byTeam"))
+                object.byTeam = options.enums === String ? $root.Team[message.byTeam] : message.byTeam;
+            if (message.location != null && message.hasOwnProperty("location"))
+                object.location = $root.Vector2.toObject(message.location, options);
+            return object;
+        };
+
+        /**
+         * Converts this PenaltyKickFailed to JSON.
+         * @function toJSON
+         * @memberof GameEvent.PenaltyKickFailed
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        PenaltyKickFailed.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return PenaltyKickFailed;
+    })();
+
     /**
      * Type enum.
      * @name GameEvent.Type
@@ -11822,6 +12094,7 @@ export const GameEvent = $root.GameEvent = (() => {
      * @property {number} POSSIBLE_GOAL=39 POSSIBLE_GOAL value
      * @property {number} NO_PROGRESS_IN_GAME=2 NO_PROGRESS_IN_GAME value
      * @property {number} ATTACKER_DOUBLE_TOUCHED_BALL=14 ATTACKER_DOUBLE_TOUCHED_BALL value
+     * @property {number} PENALTY_KICK_FAILED=43 PENALTY_KICK_FAILED value
      * @property {number} ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA=19 ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA value
      * @property {number} DEFENDER_IN_DEFENSE_AREA=31 DEFENDER_IN_DEFENSE_AREA value
      * @property {number} BOUNDARY_CROSSING=41 BOUNDARY_CROSSING value
@@ -11867,6 +12140,7 @@ export const GameEvent = $root.GameEvent = (() => {
         values[valuesById[39] = "POSSIBLE_GOAL"] = 39;
         values[valuesById[2] = "NO_PROGRESS_IN_GAME"] = 2;
         values[valuesById[14] = "ATTACKER_DOUBLE_TOUCHED_BALL"] = 14;
+        values[valuesById[43] = "PENALTY_KICK_FAILED"] = 43;
         values[valuesById[19] = "ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA"] = 19;
         values[valuesById[31] = "DEFENDER_IN_DEFENSE_AREA"] = 31;
         values[valuesById[41] = "BOUNDARY_CROSSING"] = 41;
@@ -14093,6 +14367,7 @@ export const Change = $root.Change = (() => {
      * @property {IUpdateTeamState|null} [updateTeamState] Change updateTeamState
      * @property {ISwitchColors|null} [switchColors] Change switchColors
      * @property {IRevert|null} [revert] Change revert
+     * @property {INewGameState|null} [newGameState] Change newGameState
      */
 
     /**
@@ -14238,17 +14513,25 @@ export const Change = $root.Change = (() => {
      */
     Change.prototype.revert = null;
 
+    /**
+     * Change newGameState.
+     * @member {INewGameState|null|undefined} newGameState
+     * @memberof Change
+     * @instance
+     */
+    Change.prototype.newGameState = null;
+
     // OneOf field names bound to virtual getters and setters
     let $oneOfFields;
 
     /**
      * Change change.
-     * @member {"newCommand"|"changeStage"|"setBallPlacementPos"|"addYellowCard"|"addRedCard"|"yellowCardOver"|"addGameEvent"|"addProposedGameEvent"|"startBallPlacement"|"continue"|"updateConfig"|"updateTeamState"|"switchColors"|"revert"|undefined} change
+     * @member {"newCommand"|"changeStage"|"setBallPlacementPos"|"addYellowCard"|"addRedCard"|"yellowCardOver"|"addGameEvent"|"addProposedGameEvent"|"startBallPlacement"|"continue"|"updateConfig"|"updateTeamState"|"switchColors"|"revert"|"newGameState"|undefined} change
      * @memberof Change
      * @instance
      */
     Object.defineProperty(Change.prototype, "change", {
-        get: $util.oneOfGetter($oneOfFields = ["newCommand", "changeStage", "setBallPlacementPos", "addYellowCard", "addRedCard", "yellowCardOver", "addGameEvent", "addProposedGameEvent", "startBallPlacement", "continue", "updateConfig", "updateTeamState", "switchColors", "revert"]),
+        get: $util.oneOfGetter($oneOfFields = ["newCommand", "changeStage", "setBallPlacementPos", "addYellowCard", "addRedCard", "yellowCardOver", "addGameEvent", "addProposedGameEvent", "startBallPlacement", "continue", "updateConfig", "updateTeamState", "switchColors", "revert", "newGameState"]),
         set: $util.oneOfSetter($oneOfFields)
     });
 
@@ -14308,6 +14591,8 @@ export const Change = $root.Change = (() => {
             $root.Revert.encode(message.revert, writer.uint32(/* id 15, wireType 2 =*/122).fork()).ldelim();
         if (message.revertible != null && message.hasOwnProperty("revertible"))
             writer.uint32(/* id 16, wireType 0 =*/128).bool(message.revertible);
+        if (message.newGameState != null && message.hasOwnProperty("newGameState"))
+            $root.NewGameState.encode(message.newGameState, writer.uint32(/* id 17, wireType 2 =*/138).fork()).ldelim();
         return writer;
     };
 
@@ -14389,6 +14674,9 @@ export const Change = $root.Change = (() => {
                 break;
             case 15:
                 message.revert = $root.Revert.decode(reader, reader.uint32());
+                break;
+            case 17:
+                message.newGameState = $root.NewGameState.decode(reader, reader.uint32());
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -14570,6 +14858,16 @@ export const Change = $root.Change = (() => {
                     return "revert." + error;
             }
         }
+        if (message.newGameState != null && message.hasOwnProperty("newGameState")) {
+            if (properties.change === 1)
+                return "change: multiple values";
+            properties.change = 1;
+            {
+                let error = $root.NewGameState.verify(message.newGameState);
+                if (error)
+                    return "newGameState." + error;
+            }
+        }
         return null;
     };
 
@@ -14658,6 +14956,11 @@ export const Change = $root.Change = (() => {
             if (typeof object.revert !== "object")
                 throw TypeError(".Change.revert: object expected");
             message.revert = $root.Revert.fromObject(object.revert);
+        }
+        if (object.newGameState != null) {
+            if (typeof object.newGameState !== "object")
+                throw TypeError(".Change.newGameState: object expected");
+            message.newGameState = $root.NewGameState.fromObject(object.newGameState);
         }
         return message;
     };
@@ -14753,6 +15056,11 @@ export const Change = $root.Change = (() => {
         }
         if (message.revertible != null && message.hasOwnProperty("revertible"))
             object.revertible = message.revertible;
+        if (message.newGameState != null && message.hasOwnProperty("newGameState")) {
+            object.newGameState = $root.NewGameState.toObject(message.newGameState, options);
+            if (options.oneofs)
+                object.change = "newGameState";
+        }
         return object;
     };
 
@@ -18023,6 +18331,198 @@ export const Revert = $root.Revert = (() => {
     return Revert;
 })();
 
+export const NewGameState = $root.NewGameState = (() => {
+
+    /**
+     * Properties of a NewGameState.
+     * @exports INewGameState
+     * @interface INewGameState
+     * @property {IGameState|null} [gameState] NewGameState gameState
+     */
+
+    /**
+     * Constructs a new NewGameState.
+     * @exports NewGameState
+     * @classdesc Represents a NewGameState.
+     * @implements INewGameState
+     * @constructor
+     * @param {INewGameState=} [properties] Properties to set
+     */
+    function NewGameState(properties) {
+        if (properties)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * NewGameState gameState.
+     * @member {IGameState|null|undefined} gameState
+     * @memberof NewGameState
+     * @instance
+     */
+    NewGameState.prototype.gameState = null;
+
+    /**
+     * Creates a new NewGameState instance using the specified properties.
+     * @function create
+     * @memberof NewGameState
+     * @static
+     * @param {INewGameState=} [properties] Properties to set
+     * @returns {NewGameState} NewGameState instance
+     */
+    NewGameState.create = function create(properties) {
+        return new NewGameState(properties);
+    };
+
+    /**
+     * Encodes the specified NewGameState message. Does not implicitly {@link NewGameState.verify|verify} messages.
+     * @function encode
+     * @memberof NewGameState
+     * @static
+     * @param {INewGameState} message NewGameState message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    NewGameState.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.gameState != null && message.hasOwnProperty("gameState"))
+            $root.GameState.encode(message.gameState, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+        return writer;
+    };
+
+    /**
+     * Encodes the specified NewGameState message, length delimited. Does not implicitly {@link NewGameState.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof NewGameState
+     * @static
+     * @param {INewGameState} message NewGameState message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    NewGameState.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a NewGameState message from the specified reader or buffer.
+     * @function decode
+     * @memberof NewGameState
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {NewGameState} NewGameState
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    NewGameState.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.NewGameState();
+        while (reader.pos < end) {
+            let tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1:
+                message.gameState = $root.GameState.decode(reader, reader.uint32());
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes a NewGameState message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof NewGameState
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {NewGameState} NewGameState
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    NewGameState.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a NewGameState message.
+     * @function verify
+     * @memberof NewGameState
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    NewGameState.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (message.gameState != null && message.hasOwnProperty("gameState")) {
+            let error = $root.GameState.verify(message.gameState);
+            if (error)
+                return "gameState." + error;
+        }
+        return null;
+    };
+
+    /**
+     * Creates a NewGameState message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof NewGameState
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {NewGameState} NewGameState
+     */
+    NewGameState.fromObject = function fromObject(object) {
+        if (object instanceof $root.NewGameState)
+            return object;
+        let message = new $root.NewGameState();
+        if (object.gameState != null) {
+            if (typeof object.gameState !== "object")
+                throw TypeError(".NewGameState.gameState: object expected");
+            message.gameState = $root.GameState.fromObject(object.gameState);
+        }
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a NewGameState message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof NewGameState
+     * @static
+     * @param {NewGameState} message NewGameState
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    NewGameState.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        let object = {};
+        if (options.defaults)
+            object.gameState = null;
+        if (message.gameState != null && message.hasOwnProperty("gameState"))
+            object.gameState = $root.GameState.toObject(message.gameState, options);
+        return object;
+    };
+
+    /**
+     * Converts this NewGameState to JSON.
+     * @function toJSON
+     * @memberof NewGameState
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    NewGameState.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    return NewGameState;
+})();
+
 export const YellowCard = $root.YellowCard = (() => {
 
     /**
@@ -19013,6 +19513,310 @@ export const Command = $root.Command = (() => {
     return Command;
 })();
 
+export const GameState = $root.GameState = (() => {
+
+    /**
+     * Properties of a GameState.
+     * @exports IGameState
+     * @interface IGameState
+     * @property {GameState.Type} type GameState type
+     * @property {Team|null} [forTeam] GameState forTeam
+     */
+
+    /**
+     * Constructs a new GameState.
+     * @exports GameState
+     * @classdesc Represents a GameState.
+     * @implements IGameState
+     * @constructor
+     * @param {IGameState=} [properties] Properties to set
+     */
+    function GameState(properties) {
+        if (properties)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * GameState type.
+     * @member {GameState.Type} type
+     * @memberof GameState
+     * @instance
+     */
+    GameState.prototype.type = 0;
+
+    /**
+     * GameState forTeam.
+     * @member {Team} forTeam
+     * @memberof GameState
+     * @instance
+     */
+    GameState.prototype.forTeam = 0;
+
+    /**
+     * Creates a new GameState instance using the specified properties.
+     * @function create
+     * @memberof GameState
+     * @static
+     * @param {IGameState=} [properties] Properties to set
+     * @returns {GameState} GameState instance
+     */
+    GameState.create = function create(properties) {
+        return new GameState(properties);
+    };
+
+    /**
+     * Encodes the specified GameState message. Does not implicitly {@link GameState.verify|verify} messages.
+     * @function encode
+     * @memberof GameState
+     * @static
+     * @param {IGameState} message GameState message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    GameState.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        writer.uint32(/* id 1, wireType 0 =*/8).int32(message.type);
+        if (message.forTeam != null && message.hasOwnProperty("forTeam"))
+            writer.uint32(/* id 2, wireType 0 =*/16).int32(message.forTeam);
+        return writer;
+    };
+
+    /**
+     * Encodes the specified GameState message, length delimited. Does not implicitly {@link GameState.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof GameState
+     * @static
+     * @param {IGameState} message GameState message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    GameState.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a GameState message from the specified reader or buffer.
+     * @function decode
+     * @memberof GameState
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {GameState} GameState
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    GameState.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.GameState();
+        while (reader.pos < end) {
+            let tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1:
+                message.type = reader.int32();
+                break;
+            case 2:
+                message.forTeam = reader.int32();
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        if (!message.hasOwnProperty("type"))
+            throw $util.ProtocolError("missing required 'type'", { instance: message });
+        return message;
+    };
+
+    /**
+     * Decodes a GameState message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof GameState
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {GameState} GameState
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    GameState.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a GameState message.
+     * @function verify
+     * @memberof GameState
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    GameState.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        switch (message.type) {
+        default:
+            return "type: enum value expected";
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+            break;
+        }
+        if (message.forTeam != null && message.hasOwnProperty("forTeam"))
+            switch (message.forTeam) {
+            default:
+                return "forTeam: enum value expected";
+            case 0:
+            case 1:
+            case 2:
+                break;
+            }
+        return null;
+    };
+
+    /**
+     * Creates a GameState message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof GameState
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {GameState} GameState
+     */
+    GameState.fromObject = function fromObject(object) {
+        if (object instanceof $root.GameState)
+            return object;
+        let message = new $root.GameState();
+        switch (object.type) {
+        case "UNKNOWN":
+        case 0:
+            message.type = 0;
+            break;
+        case "HALT":
+        case 1:
+            message.type = 1;
+            break;
+        case "STOP":
+        case 2:
+            message.type = 2;
+            break;
+        case "RUNNING":
+        case 3:
+            message.type = 3;
+            break;
+        case "FREE_KICK":
+        case 4:
+            message.type = 4;
+            break;
+        case "KICKOFF":
+        case 5:
+            message.type = 5;
+            break;
+        case "PENALTY":
+        case 6:
+            message.type = 6;
+            break;
+        case "TIMEOUT":
+        case 7:
+            message.type = 7;
+            break;
+        case "BALL_PLACEMENT":
+        case 8:
+            message.type = 8;
+            break;
+        }
+        switch (object.forTeam) {
+        case "UNKNOWN":
+        case 0:
+            message.forTeam = 0;
+            break;
+        case "YELLOW":
+        case 1:
+            message.forTeam = 1;
+            break;
+        case "BLUE":
+        case 2:
+            message.forTeam = 2;
+            break;
+        }
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a GameState message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof GameState
+     * @static
+     * @param {GameState} message GameState
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    GameState.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        let object = {};
+        if (options.defaults) {
+            object.type = options.enums === String ? "UNKNOWN" : 0;
+            object.forTeam = options.enums === String ? "UNKNOWN" : 0;
+        }
+        if (message.type != null && message.hasOwnProperty("type"))
+            object.type = options.enums === String ? $root.GameState.Type[message.type] : message.type;
+        if (message.forTeam != null && message.hasOwnProperty("forTeam"))
+            object.forTeam = options.enums === String ? $root.Team[message.forTeam] : message.forTeam;
+        return object;
+    };
+
+    /**
+     * Converts this GameState to JSON.
+     * @function toJSON
+     * @memberof GameState
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    GameState.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    /**
+     * Type enum.
+     * @name GameState.Type
+     * @enum {string}
+     * @property {number} UNKNOWN=0 UNKNOWN value
+     * @property {number} HALT=1 HALT value
+     * @property {number} STOP=2 STOP value
+     * @property {number} RUNNING=3 RUNNING value
+     * @property {number} FREE_KICK=4 FREE_KICK value
+     * @property {number} KICKOFF=5 KICKOFF value
+     * @property {number} PENALTY=6 PENALTY value
+     * @property {number} TIMEOUT=7 TIMEOUT value
+     * @property {number} BALL_PLACEMENT=8 BALL_PLACEMENT value
+     */
+    GameState.Type = (function() {
+        const valuesById = {}, values = Object.create(valuesById);
+        values[valuesById[0] = "UNKNOWN"] = 0;
+        values[valuesById[1] = "HALT"] = 1;
+        values[valuesById[2] = "STOP"] = 2;
+        values[valuesById[3] = "RUNNING"] = 3;
+        values[valuesById[4] = "FREE_KICK"] = 4;
+        values[valuesById[5] = "KICKOFF"] = 5;
+        values[valuesById[6] = "PENALTY"] = 6;
+        values[valuesById[7] = "TIMEOUT"] = 7;
+        values[valuesById[8] = "BALL_PLACEMENT"] = 8;
+        return values;
+    })();
+
+    return GameState;
+})();
+
 export const TeamInfo = $root.TeamInfo = (() => {
 
     /**
@@ -19565,6 +20369,7 @@ export const State = $root.State = (() => {
      * @interface IState
      * @property {Referee.Stage|null} [stage] State stage
      * @property {ICommand|null} [command] State command
+     * @property {IGameState|null} [gameState] State gameState
      * @property {google.protobuf.IDuration|null} [stageTimeElapsed] State stageTimeElapsed
      * @property {google.protobuf.IDuration|null} [stageTimeLeft] State stageTimeLeft
      * @property {google.protobuf.ITimestamp|null} [matchTimeStart] State matchTimeStart
@@ -19614,6 +20419,14 @@ export const State = $root.State = (() => {
      * @instance
      */
     State.prototype.command = null;
+
+    /**
+     * State gameState.
+     * @member {IGameState|null|undefined} gameState
+     * @memberof State
+     * @instance
+     */
+    State.prototype.gameState = null;
 
     /**
      * State stageTimeElapsed.
@@ -19779,6 +20592,8 @@ export const State = $root.State = (() => {
         if (message.gameEventBehavior != null && message.hasOwnProperty("gameEventBehavior"))
             for (let keys = Object.keys(message.gameEventBehavior), i = 0; i < keys.length; ++i)
                 writer.uint32(/* id 18, wireType 2 =*/146).fork().uint32(/* id 1, wireType 2 =*/10).string(keys[i]).uint32(/* id 2, wireType 0 =*/16).int32(message.gameEventBehavior[keys[i]]).ldelim();
+        if (message.gameState != null && message.hasOwnProperty("gameState"))
+            $root.GameState.encode(message.gameState, writer.uint32(/* id 19, wireType 2 =*/154).fork()).ldelim();
         return writer;
     };
 
@@ -19818,6 +20633,9 @@ export const State = $root.State = (() => {
                 break;
             case 2:
                 message.command = $root.Command.decode(reader, reader.uint32());
+                break;
+            case 19:
+                message.gameState = $root.GameState.decode(reader, reader.uint32());
                 break;
             case 4:
                 message.stageTimeElapsed = $root.google.protobuf.Duration.decode(reader, reader.uint32());
@@ -19931,6 +20749,11 @@ export const State = $root.State = (() => {
             let error = $root.Command.verify(message.command);
             if (error)
                 return "command." + error;
+        }
+        if (message.gameState != null && message.hasOwnProperty("gameState")) {
+            let error = $root.GameState.verify(message.gameState);
+            if (error)
+                return "gameState." + error;
         }
         if (message.stageTimeElapsed != null && message.hasOwnProperty("stageTimeElapsed")) {
             let error = $root.google.protobuf.Duration.verify(message.stageTimeElapsed);
@@ -20104,6 +20927,11 @@ export const State = $root.State = (() => {
                 throw TypeError(".State.command: object expected");
             message.command = $root.Command.fromObject(object.command);
         }
+        if (object.gameState != null) {
+            if (typeof object.gameState !== "object")
+                throw TypeError(".State.gameState: object expected");
+            message.gameState = $root.GameState.fromObject(object.gameState);
+        }
         if (object.stageTimeElapsed != null) {
             if (typeof object.stageTimeElapsed !== "object")
                 throw TypeError(".State.stageTimeElapsed: object expected");
@@ -20254,6 +21082,7 @@ export const State = $root.State = (() => {
             object.division = options.enums === String ? "DIV_UNKNOWN" : 0;
             object.autoContinue = false;
             object.firstKickoffTeam = options.enums === String ? "UNKNOWN" : 0;
+            object.gameState = null;
         }
         if (message.stage != null && message.hasOwnProperty("stage"))
             object.stage = options.enums === String ? $root.Referee.Stage[message.stage] : message.stage;
@@ -20298,6 +21127,8 @@ export const State = $root.State = (() => {
             for (let j = 0; j < keys2.length; ++j)
                 object.gameEventBehavior[keys2[j]] = options.enums === String ? $root.State.GameEventBehavior[message.gameEventBehavior[keys2[j]]] : message.gameEventBehavior[keys2[j]];
         }
+        if (message.gameState != null && message.hasOwnProperty("gameState"))
+            object.gameState = $root.GameState.toObject(message.gameState, options);
         return object;
     };
 

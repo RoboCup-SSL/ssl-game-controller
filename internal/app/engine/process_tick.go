@@ -40,10 +40,27 @@ func (e *Engine) processTick() {
 		addDur(e.currentState.TeamInfo(*e.currentState.Command.ForTeam).TimeoutTimeLeft, -delta)
 	}
 
+	if goDur(e.currentState.CurrentActionTimeRemaining) < 0 {
+		switch *e.currentState.GameState.Type {
+		case state.GameState_KICKOFF, state.GameState_FREE_KICK:
+			revertible := false
+			e.Enqueue(&statemachine.Change{
+				Origin:     &changeOriginEngine,
+				Revertible: &revertible,
+				Change: &statemachine.Change_NewGameState{
+					NewGameState: &statemachine.NewGameState{
+						GameState: state.NewGameStateNeutral(state.GameState_RUNNING),
+					},
+				},
+			})
+		}
+	}
+
 	e.noProgressDetector.process()
 	e.ballPlacementCoordinator.process()
 	e.processContinue()
 	e.processBotNumber()
+	e.processPenalty()
 
 	stateCopy := e.currentState.Clone()
 	for _, hook := range e.hooks {

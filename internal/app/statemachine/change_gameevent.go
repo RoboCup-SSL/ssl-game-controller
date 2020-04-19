@@ -2,6 +2,7 @@ package statemachine
 
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/geom"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/golang/protobuf/ptypes"
 	"log"
@@ -77,7 +78,7 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 	if *gameEvent.Type == state.GameEvent_POSSIBLE_GOAL {
 		log.Printf("Halt the game, because team %v might have scored a goal", byTeam)
 		// halt the game to let the human referee decide if this was a valid goal
-		changes = append(changes, s.newCommandChange(state.NewCommandNeutral(state.Command_HALT)))
+		changes = append(changes, s.createCommandChange(state.NewCommandNeutral(state.Command_HALT)))
 		if s.gameConfig.AutoApproveGoals {
 			changes = append(changes, createGameEventChange(state.GameEvent_GOAL, *gameEvent))
 		}
@@ -91,7 +92,7 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 			*newState.TeamInfo(team).BotSubstitutionIntent = false
 		}
 		// halt the game to allow teams to substitute robots
-		changes = append(changes, s.newCommandChange(state.NewCommandNeutral(state.Command_HALT)))
+		changes = append(changes, s.createCommandChange(state.NewCommandNeutral(state.Command_HALT)))
 	}
 
 	// ball placement interference
@@ -119,11 +120,11 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 		*newState.TeamInfo(byTeam).BallPlacementFailuresReached = *newState.TeamInfo(byTeam).BallPlacementFailures >= s.gameConfig.MultiplePlacementFailures
 		if s.allTeamsFailedPlacement(newState) {
 			log.Printf("Placement failed for all teams. The human ref must place the ball.")
-			changes = append(changes, s.newCommandChange(state.NewCommandNeutral(state.Command_HALT)))
+			changes = append(changes, s.createCommandChange(state.NewCommandNeutral(state.Command_HALT)))
 		} else {
 			log.Printf("Placement failed for team %v. Team %v is awarded a free kick and places the ball.", byTeam, byTeam.Opposite())
 			newState.NextCommand = state.NewCommand(state.Command_DIRECT, byTeam.Opposite())
-			changes = append(changes, s.newCommandChange(state.NewCommand(state.Command_BALL_PLACEMENT, byTeam.Opposite())))
+			changes = append(changes, s.createCommandChange(state.NewCommand(state.Command_BALL_PLACEMENT, byTeam.Opposite())))
 		}
 	}
 
@@ -150,11 +151,35 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 		newState.CurrentActionTimeRemaining = ptypes.DurationProto(s.gameConfig.PrepareTimeout)
 	}
 
+	if *newState.GameState.Type == state.GameState_PENALTY &&
+		isRuleViolationDuringPenalty(*gameEvent.Type) {
+		if byTeam == *newState.GameState.ForTeam {
+			// rule violation by attacking team -> no goal
+			changes = append(changes, createGameEventChange(state.GameEvent_PENALTY_KICK_FAILED, state.GameEvent{
+				Event: &state.GameEvent_PenaltyKickFailed_{
+					PenaltyKickFailed: &state.GameEvent_PenaltyKickFailed{
+						ByTeam:   &byTeam,
+						Location: locationForRuleViolation(gameEvent),
+					},
+				},
+			}))
+		} else if byTeam == newState.GameState.ForTeam.Opposite() {
+			// rule violation by defender team -> goal
+			changes = append(changes, createGameEventChange(state.GameEvent_GOAL, state.GameEvent{
+				Event: &state.GameEvent_Goal_{
+					Goal: &state.GameEvent_Goal{
+						ByTeam: &byTeam,
+					},
+				},
+			}))
+		}
+	}
+
 	// stop the game if needed
 	if *newState.Command.Type != state.Command_STOP &&
 		stopsTheGame(*gameEvent.Type) {
 		log.Printf("Stopping the game for event %v", *gameEvent.Type)
-		changes = append(changes, s.newCommandChange(state.NewCommandNeutral(state.Command_STOP)))
+		changes = append(changes, s.createCommandChange(state.NewCommandNeutral(state.Command_STOP)))
 	}
 
 	return
@@ -170,19 +195,6 @@ func (s *StateMachine) multipleFoulsChange(byTeam state.Team) *Change {
 		},
 	},
 	)
-}
-
-func createGameEventChange(eventType state.GameEvent_Type, event state.GameEvent) *Change {
-	event.Type = &eventType
-	event.Origin = []string{changeOriginStateMachine}
-	return &Change{
-		Origin: &changeOriginStateMachine,
-		Change: &Change_AddGameEvent{
-			AddGameEvent: &AddGameEvent{
-				GameEvent: &event,
-			},
-		},
-	}
 }
 
 // convertAimlessKick converts the aimless kick event into a ball left field via goal line event
@@ -220,6 +232,7 @@ func (s *StateMachine) nextCommandForEvent(newState *state.State, gameEvent *sta
 		state.GameEvent_BOUNDARY_CROSSING,
 		state.GameEvent_BOT_DRIBBLED_BALL_TOO_FAR,
 		state.GameEvent_ATTACKER_DOUBLE_TOUCHED_BALL,
+		state.GameEvent_PENALTY_KICK_FAILED,
 		state.GameEvent_POSSIBLE_GOAL:
 		return state.NewCommand(state.Command_DIRECT, gameEvent.ByTeam().Opposite())
 	case state.GameEvent_DEFENDER_IN_DEFENSE_AREA:
@@ -301,10 +314,47 @@ func stopsTheGame(gameEvent state.GameEvent_Type) bool {
 		state.GameEvent_BOT_TIPPED_OVER,
 		// others
 		state.GameEvent_TOO_MANY_ROBOTS,
+		state.GameEvent_PENALTY_KICK_FAILED,
 		state.GameEvent_PLACEMENT_SUCCEEDED:
 		return true
 	}
 	return false
+}
+
+func isRuleViolationDuringPenalty(gameEvent state.GameEvent_Type) bool {
+	switch gameEvent {
+	case state.GameEvent_BOUNDARY_CROSSING,
+		state.GameEvent_BOT_DRIBBLED_BALL_TOO_FAR,
+		state.GameEvent_ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA,
+		state.GameEvent_BOT_KICKED_BALL_TOO_FAST,
+		state.GameEvent_BOT_CRASH_UNIQUE,
+		state.GameEvent_BOT_CRASH_DRAWN,
+		state.GameEvent_BOT_PUSHED_BOT,
+		state.GameEvent_BOT_TIPPED_OVER:
+		return true
+	}
+	return false
+}
+
+func locationForRuleViolation(gameEvent *state.GameEvent) *geom.Vector2 {
+	if gameEvent.GetBoundaryCrossing() != nil {
+		return gameEvent.GetBoundaryCrossing().Location
+	} else if gameEvent.GetBotDribbledBallTooFar() != nil {
+		return gameEvent.GetBotDribbledBallTooFar().Start
+	} else if gameEvent.GetAttackerTouchedBallInDefenseArea() != nil {
+		return gameEvent.GetAttackerTouchedBallInDefenseArea().Location
+	} else if gameEvent.GetBotKickedBallTooFast() != nil {
+		return gameEvent.GetBotKickedBallTooFast().Location
+	} else if gameEvent.GetBotCrashUnique() != nil {
+		return gameEvent.GetBotCrashUnique().Location
+	} else if gameEvent.GetBotCrashDrawn() != nil {
+		return gameEvent.GetBotCrashDrawn().Location
+	} else if gameEvent.GetBotPushedBot() != nil {
+		return gameEvent.GetBotPushedBot().Location
+	} else if gameEvent.GetBotTippedOver() != nil {
+		return gameEvent.GetBotTippedOver().Location
+	}
+	return nil
 }
 
 // allTeamsFailedPlacement returns true if all teams failed placing the ball

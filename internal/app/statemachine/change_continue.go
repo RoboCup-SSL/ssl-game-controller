@@ -20,13 +20,13 @@ func (s *StateMachine) processChangeContinue(newState *state.State) (changes []*
 
 	if *newState.Command.Type == state.Command_HALT {
 		log.Printf("Continue with STOP after HALT")
-		changes = append(changes, s.newCommandChange(state.NewCommandNeutral(state.Command_STOP)))
+		changes = append(changes, s.createCommandChange(state.NewCommandNeutral(state.Command_STOP)))
 	} else if newState.NextCommand != nil {
 		log.Printf("Continue with next command: %v", *newState.NextCommand)
-		changes = append(changes, s.newCommandChange(newState.NextCommand))
+		changes = append(changes, s.createCommandChange(newState.NextCommand))
 	} else if *newState.Command.Type != state.Command_HALT {
 		log.Println("Halting the game as there is no known next command to continue with")
-		changes = append(changes, s.newCommandChange(state.NewCommandNeutral(state.Command_HALT)))
+		changes = append(changes, s.createCommandChange(state.NewCommandNeutral(state.Command_HALT)))
 	}
 	return
 }
@@ -34,18 +34,12 @@ func (s *StateMachine) processChangeContinue(newState *state.State) (changes []*
 // botSubstitutionIntentEventChange creates a new change for bot substitution
 func (s *StateMachine) botSubstitutionIntentEventChange(byTeam state.Team) *Change {
 	eventType := state.GameEvent_BOT_SUBSTITUTION
-	return &Change{
-		Change: &Change_AddGameEvent{
-			AddGameEvent: &AddGameEvent{
-				GameEvent: &state.GameEvent{
-					Type: &eventType,
-					Event: &state.GameEvent_BotSubstitution_{
-						BotSubstitution: &state.GameEvent_BotSubstitution{
-							ByTeam: &byTeam,
-						},
-					},
-				},
+	return createGameEventChange(state.GameEvent_BOT_SUBSTITUTION, state.GameEvent{
+		Type: &eventType,
+		Event: &state.GameEvent_BotSubstitution_{
+			BotSubstitution: &state.GameEvent_BotSubstitution{
+				ByTeam: &byTeam,
 			},
 		},
-	}
+	})
 }

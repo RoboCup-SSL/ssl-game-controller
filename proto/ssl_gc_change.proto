@@ -37,6 +37,7 @@ message Change {
         UpdateTeamState update_team_state = 13;
         SwitchColors switch_colors = 14;
         Revert revert = 15;
+        NewGameState new_game_state = 17;
     }
 }
 
@@ -112,4 +113,8 @@ message SwitchColors {
 
 message Revert {
     optional int32 change_id = 1;
+}
+
+message NewGameState {
+    optional GameState game_state = 1;
 }

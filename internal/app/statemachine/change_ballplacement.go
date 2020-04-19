@@ -7,16 +7,15 @@ import (
 
 func (s *StateMachine) processChangeStartBallPlacement(newState *state.State) (changes []*Change) {
 
-	if newState.PlacementPos == nil || noTeamCanPlaceBall(newState) {
+	if newState.NextCommand == nil || newState.PlacementPos == nil || noTeamCanPlaceBall(newState) {
 		log.Print("placement not possible, human ref must help out")
-		changes = append(changes, s.newCommandChange(state.NewCommandNeutral(state.Command_HALT)))
+		changes = append(changes, s.createCommandChange(state.NewCommandNeutral(state.Command_HALT)))
 		return
 	}
 
-	if newState.NextCommand != nil &&
-		(*newState.NextCommand.Type == state.Command_PENALTY || *newState.NextCommand.Type == state.Command_KICKOFF) {
+	if *newState.NextCommand.Type == state.Command_PENALTY || *newState.NextCommand.Type == state.Command_KICKOFF {
 		log.Printf("Human ref places the ball for %v", *newState.NextCommand)
-		changes = append(changes, s.newCommandChange(state.NewCommandNeutral(state.Command_HALT)))
+		changes = append(changes, s.createCommandChange(state.NewCommandNeutral(state.Command_HALT)))
 	}
 
 	var teamInFavor state.Team
@@ -31,17 +30,17 @@ func (s *StateMachine) processChangeStartBallPlacement(newState *state.State) (c
 
 	if !*newState.TeamInfo(teamInFavor).CanPlaceBall {
 		log.Printf("Placement for team %v is disabled, team %v places the ball for team %v", teamInFavor, teamInFavor.Opposite(), teamInFavor)
-		changes = append(changes, s.newCommandChange(state.NewCommand(state.Command_BALL_PLACEMENT, teamInFavor.Opposite())))
+		changes = append(changes, s.createCommandChange(state.NewCommand(state.Command_BALL_PLACEMENT, teamInFavor.Opposite())))
 	} else if !*newState.TeamInfo(teamInFavor).BallPlacementFailuresReached {
 		log.Printf("Team %v places the ball for itself", teamInFavor)
-		changes = append(changes, s.newCommandChange(state.NewCommand(state.Command_BALL_PLACEMENT, teamInFavor)))
+		changes = append(changes, s.createCommandChange(state.NewCommand(state.Command_BALL_PLACEMENT, teamInFavor)))
 	} else if ballLeftField(newState) {
 		log.Printf("Team %v reached the maximum allowed placement failures and ball left the field. Team %v places ball for its own free kick", teamInFavor, teamInFavor.Opposite())
 		newState.NextCommand = state.NewCommand(state.Command_DIRECT, teamInFavor.Opposite())
-		changes = append(changes, s.newCommandChange(state.NewCommand(state.Command_BALL_PLACEMENT, teamInFavor.Opposite())))
+		changes = append(changes, s.createCommandChange(state.NewCommand(state.Command_BALL_PLACEMENT, teamInFavor.Opposite())))
 	} else {
 		log.Printf("Team %v reached the maximum allowed placement failures, but ball has not left the field. Human ref places the ball for team %v", teamInFavor, teamInFavor)
-		changes = append(changes, s.newCommandChange(state.NewCommandNeutral(state.Command_HALT)))
+		changes = append(changes, s.createCommandChange(state.NewCommandNeutral(state.Command_HALT)))
 	}
 
 	return

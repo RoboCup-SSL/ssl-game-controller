@@ -36,6 +36,7 @@ func Test_Statemachine(t *testing.T) {
 			wantNewState: func(s *state.State) {
 				s.Command = state.NewCommand(state.Command_DIRECT, state.Team_BLUE)
 				s.CurrentActionTimeRemaining = ptypes.DurationProto(gameConfig.FreeKickTimeout[config.DivA])
+				s.GameState = state.NewGameStateWithTeam(state.GameState_FREE_KICK, state.Team_BLUE)
 			},
 		},
 		{

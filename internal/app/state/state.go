@@ -12,6 +12,7 @@ func NewState() (s *State) {
 	s = new(State)
 	s.Stage = new(Referee_Stage)
 	s.Command = NewCommandNeutral(Command_HALT)
+	s.GameState = NewGameStateNeutral(GameState_HALT)
 	s.StageTimeElapsed = new(duration.Duration)
 	s.StageTimeLeft = new(duration.Duration)
 	s.MatchTimeStart = new(timestamp.Timestamp)

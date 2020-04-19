@@ -38,6 +38,7 @@ message GameEvent {
 
         NoProgressInGame no_progress_in_game = 2;
         AttackerDoubleTouchedBall attacker_double_touched_ball = 14;
+        PenaltyKickFailed penalty_kick_failed = 45;
 
         // Stopping Fouls
 
@@ -96,7 +97,7 @@ message GameEvent {
         // obsolete
         BotCrashUnique bot_crash_unique_skipped = 23 [deprecated = true];
         // can not be used as long as autoRefs do not judge pushing
-        BotPushedBot bot_pushed_bot_skipped = 25;
+        BotPushedBot bot_pushed_bot_skipped = 25 [deprecated = true];
         // rule removed
         DefenderInDefenseAreaPartially defender_in_defense_area_partially = 30 [deprecated = true];
         // the referee msg already indicates this
@@ -458,6 +459,13 @@ message GameEvent {
         // the location of the ball
         optional Vector2 location = 2;
     }
+    // the penalty kick failed (by time or by keeper)
+    message PenaltyKickFailed {
+        // the team that last touched the ball
+        required Team by_team = 1;
+        // the location of the ball at the moment of this event
+        optional Vector2 location = 2;
+    }
 
     enum Type {
         UNKNOWN_GAME_EVENT_TYPE = 0;
@@ -476,6 +484,7 @@ message GameEvent {
 
         NO_PROGRESS_IN_GAME = 2;
         ATTACKER_DOUBLE_TOUCHED_BALL = 14;
+        PENALTY_KICK_FAILED = 43;
 
         // Stopping Fouls
 

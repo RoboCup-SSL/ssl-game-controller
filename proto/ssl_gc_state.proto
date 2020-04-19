@@ -45,6 +45,23 @@ message Command {
     }
 }
 
+message GameState {
+    required Type type = 1;
+    optional Team for_team = 2;
+
+    enum Type {
+        UNKNOWN = 0;
+        HALT = 1;
+        STOP = 2;
+        RUNNING = 3;
+        FREE_KICK = 4;
+        KICKOFF = 5;
+        PENALTY = 6;
+        TIMEOUT = 7;
+        BALL_PLACEMENT = 8;
+    }
+}
+
 message TeamInfo {
     optional string name = 1;
     optional int32 goals = 2;
@@ -65,6 +82,7 @@ message TeamInfo {
 message State {
     optional Referee.Stage stage = 1;
     optional Command command = 2;
+    optional GameState game_state = 19;
     optional google.protobuf.Duration stage_time_elapsed = 4;
     optional google.protobuf.Duration stage_time_left = 5;
     optional google.protobuf.Timestamp match_time_start = 6;
