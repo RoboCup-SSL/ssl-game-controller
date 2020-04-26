@@ -188,6 +188,7 @@ func (e *Engine) ResetMatch() {
 func (e *Engine) processChange(change *statemachine.Change) {
 	e.mutex.Lock()
 	defer e.mutex.Unlock()
+	log.Printf("Engine: Process change '%v'", change)
 
 	var newChanges []*statemachine.Change
 	entry := statemachine.StateChange{}
@@ -231,6 +232,7 @@ func (e *Engine) processChange(change *statemachine.Change) {
 
 	e.postProcessChange(entry)
 
+	log.Printf("Enqueue %d new changes", len(newChanges))
 	for _, newChange := range newChanges {
 		e.queue <- newChange
 	}
@@ -245,6 +247,8 @@ func (e *Engine) processChange(change *statemachine.Change) {
 		default:
 		}
 	}
+
+	log.Printf("Change '%v' processed", change)
 }
 
 // initialStateFromStore gets the current state or returns a new default state
