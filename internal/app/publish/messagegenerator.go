@@ -4,6 +4,7 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/engine"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/golang/protobuf/ptypes"
+	"github.com/golang/protobuf/ptypes/duration"
 	"time"
 )
 
@@ -99,10 +100,10 @@ func (g *MessageGenerator) StateToRefereeMessage(matchState *state.State) (r *st
 	*r.CommandTimestamp = g.commandTimestamp
 	*r.PacketTimestamp = uint64(time.Now().UnixNano() / 1000)
 	*r.Stage = *matchState.Stage
-	*r.StageTimeLeft = matchState.StageTimeLeft.Nanos / 1000
+	*r.StageTimeLeft = microseconds(*matchState.StageTimeLeft)
 	*r.BlueTeamOnPositiveHalf = *matchState.TeamInfo(state.Team_BLUE).OnPositiveHalf
 	r.NextCommand = mapCommand(matchState.NextCommand)
-	*r.CurrentActionTimeRemaining = int32(matchState.CurrentActionTimeRemaining.Seconds)*1_000_000 + matchState.CurrentActionTimeRemaining.Nanos/1000
+	*r.CurrentActionTimeRemaining = microseconds(*matchState.CurrentActionTimeRemaining)
 
 	updateTeam(r.Yellow, matchState.TeamInfo(state.Team_YELLOW))
 	updateTeam(r.Blue, matchState.TeamInfo(state.Team_BLUE))
@@ -172,4 +173,8 @@ func unsigned(v int) uint32 {
 		return 0
 	}
 	return uint32(v)
+}
+
+func microseconds(dur duration.Duration) int32 {
+	return int32(dur.Seconds)*1_000_000 + dur.Nanos/1000
 }
