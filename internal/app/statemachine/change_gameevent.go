@@ -1,11 +1,15 @@
 package statemachine
 
 import (
+	"fmt"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/geom"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
+	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
+	"github.com/golang/protobuf/ptypes/timestamp"
 	"log"
+	"time"
 )
 
 func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *AddGameEvent) (changes []*Change) {
@@ -79,8 +83,30 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 		log.Printf("Halt the game, because team %v might have scored a goal", byTeam)
 		// halt the game to let the human referee decide if this was a valid goal
 		changes = append(changes, s.createCommandChange(state.NewCommandNeutral(state.Command_HALT)))
-		if s.gameConfig.AutoApproveGoals {
-			changes = append(changes, createGameEventChange(state.GameEvent_GOAL, *gameEvent))
+
+		valid, message := s.isGoalValid(newState, gameEvent)
+
+		if valid && s.gameConfig.AutoApproveGoals {
+			goal := state.GameEvent_Goal{}
+			proto.Merge(&goal, gameEvent.GetPossibleGoal())
+			goal.Message = new(string)
+			*goal.Message = "Valid and auto approved"
+			goalEvent := state.GameEvent{
+				Event: &state.GameEvent_Goal_{
+					Goal: &goal,
+				},
+			}
+			changes = append(changes, createGameEventChange(state.GameEvent_GOAL, goalEvent))
+		} else if !valid {
+			goal := state.GameEvent_Goal{}
+			proto.Merge(&goal, gameEvent.GetPossibleGoal())
+			goal.Message = &message
+			goalEvent := state.GameEvent{
+				Event: &state.GameEvent_InvalidGoal{
+					InvalidGoal: &goal,
+				},
+			}
+			changes = append(changes, createGameEventChange(state.GameEvent_INVALID_GOAL, goalEvent))
 		}
 	}
 
@@ -182,6 +208,50 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 		changes = append(changes, s.createCommandChange(state.NewCommandNeutral(state.Command_STOP)))
 	}
 
+	return
+}
+
+func (s *StateMachine) isGoalValid(newState *state.State, gameEvent *state.GameEvent) (valid bool, message string) {
+	byTeam := gameEvent.ByTeam()
+
+	// 1. The team did not exceed the allowed number of robots when the ball entered the goal.
+	if gameEvent.GetPossibleGoal().NumRobotsByTeam != nil &&
+		int32(*gameEvent.GetPossibleGoal().NumRobotsByTeam) > *newState.TeamInfo(byTeam).MaxAllowedBots {
+		message = fmt.Sprintf("Scoring team had %d robots on the field, but only %d were allowed.",
+			*gameEvent.GetPossibleGoal().NumRobotsByTeam, *newState.TeamInfo(byTeam).MaxAllowedBots)
+		return
+	}
+
+	// 2. The height of the ball did not exceed 0.15 meters after the last touch of the teams robots.
+	if gameEvent.GetPossibleGoal().MaxBallHeight != nil &&
+		*gameEvent.GetPossibleGoal().MaxBallHeight > 0.15 {
+		message = fmt.Sprintf("Ball exceeded max ball height of 0.15 with %.3f", *gameEvent.GetPossibleGoal().MaxBallHeight)
+		return
+	}
+
+	// 3. The team did not commit any non stopping foul since the teams robots last touched the ball.
+	var recentlyCommittedFouls []state.GameEvent_Type
+	for _, foul := range newState.TeamInfo(byTeam).Fouls {
+		if foul.CausedByGameEvent != nil &&
+			foul.Timestamp != nil &&
+			gameEvent.GetPossibleGoal().LastTouchByTeam != nil &&
+			isNonStoppingFoul(*foul.CausedByGameEvent.Type) &&
+			goTime(foul.Timestamp).After(microTimestampToTime(*gameEvent.GetPossibleGoal().LastTouchByTeam)) {
+			recentlyCommittedFouls = append(recentlyCommittedFouls, *foul.CausedByGameEvent.Type)
+		}
+	}
+
+	if len(recentlyCommittedFouls) > 0 {
+		message = "Scoring team committed fouls after touching the ball: "
+		for i, foulType := range recentlyCommittedFouls {
+			message += foulType.String()
+			if i != len(recentlyCommittedFouls)-1 {
+				message += ","
+			}
+		}
+	}
+
+	valid = true
 	return
 }
 
@@ -336,6 +406,17 @@ func isRuleViolationDuringPenalty(gameEvent state.GameEvent_Type) bool {
 	return false
 }
 
+func isNonStoppingFoul(gameEvent state.GameEvent_Type) bool {
+	switch gameEvent {
+	case state.GameEvent_ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA,
+		state.GameEvent_BOT_KICKED_BALL_TOO_FAST,
+		state.GameEvent_BOT_CRASH_UNIQUE,
+		state.GameEvent_BOT_CRASH_DRAWN:
+		return true
+	}
+	return false
+}
+
 func locationForRuleViolation(gameEvent *state.GameEvent) *geom.Vector2 {
 	if gameEvent.GetBoundaryCrossing() != nil {
 		return gameEvent.GetBoundaryCrossing().Location
@@ -377,4 +458,18 @@ func (s *StateMachine) allTeamsFailedPlacement(newState *state.State) bool {
 		}
 	}
 	return false
+}
+
+func goTime(timestamp *timestamp.Timestamp) time.Time {
+	goTime, err := ptypes.Timestamp(timestamp)
+	if err != nil {
+		log.Printf("Could not parse timestamp: %v", timestamp)
+	}
+	return goTime
+}
+
+func microTimestampToTime(timestamp uint64) time.Time {
+	s := int64(timestamp / 1_000_000)
+	ns := (int64(timestamp) - s*1_000_000) * 1000
+	return time.Unix(s, ns)
 }

@@ -24,6 +24,7 @@ message RedCard {
 message Foul {
     optional uint32 id = 1;
     optional GameEvent caused_by_game_event = 2;
+    optional google.protobuf.Timestamp timestamp = 3;
 }
 
 message Command {

@@ -704,15 +704,14 @@ export const GameEvent = $root.GameEvent = (() => {
      * @property {GameEvent.IBallLeftField|null} [ballLeftFieldTouchLine] GameEvent ballLeftFieldTouchLine
      * @property {GameEvent.IBallLeftField|null} [ballLeftFieldGoalLine] GameEvent ballLeftFieldGoalLine
      * @property {GameEvent.IAimlessKick|null} [aimlessKick] GameEvent aimlessKick
-     * @property {GameEvent.IGoal|null} [possibleGoal] GameEvent possibleGoal
-     * @property {GameEvent.INoProgressInGame|null} [noProgressInGame] GameEvent noProgressInGame
-     * @property {GameEvent.IAttackerDoubleTouchedBall|null} [attackerDoubleTouchedBall] GameEvent attackerDoubleTouchedBall
-     * @property {GameEvent.IPenaltyKickFailed|null} [penaltyKickFailed] GameEvent penaltyKickFailed
      * @property {GameEvent.IAttackerTooCloseToDefenseArea|null} [attackerTooCloseToDefenseArea] GameEvent attackerTooCloseToDefenseArea
      * @property {GameEvent.IDefenderInDefenseArea|null} [defenderInDefenseArea] GameEvent defenderInDefenseArea
      * @property {GameEvent.IBoundaryCrossing|null} [boundaryCrossing] GameEvent boundaryCrossing
      * @property {GameEvent.IKeeperHeldBall|null} [keeperHeldBall] GameEvent keeperHeldBall
      * @property {GameEvent.IBotDribbledBallTooFar|null} [botDribbledBallTooFar] GameEvent botDribbledBallTooFar
+     * @property {GameEvent.IBotPushedBot|null} [botPushedBot] GameEvent botPushedBot
+     * @property {GameEvent.IBotHeldBallDeliberately|null} [botHeldBallDeliberately] GameEvent botHeldBallDeliberately
+     * @property {GameEvent.IBotTippedOver|null} [botTippedOver] GameEvent botTippedOver
      * @property {GameEvent.IAttackerTouchedBallInDefenseArea|null} [attackerTouchedBallInDefenseArea] GameEvent attackerTouchedBallInDefenseArea
      * @property {GameEvent.IBotKickedBallTooFast|null} [botKickedBallTooFast] GameEvent botKickedBallTooFast
      * @property {GameEvent.IBotCrashUnique|null} [botCrashUnique] GameEvent botCrashUnique
@@ -720,19 +719,20 @@ export const GameEvent = $root.GameEvent = (() => {
      * @property {GameEvent.IDefenderTooCloseToKickPoint|null} [defenderTooCloseToKickPoint] GameEvent defenderTooCloseToKickPoint
      * @property {GameEvent.IBotTooFastInStop|null} [botTooFastInStop] GameEvent botTooFastInStop
      * @property {GameEvent.IBotInterferedPlacement|null} [botInterferedPlacement] GameEvent botInterferedPlacement
+     * @property {GameEvent.IGoal|null} [possibleGoal] GameEvent possibleGoal
      * @property {GameEvent.IGoal|null} [goal] GameEvent goal
      * @property {GameEvent.IGoal|null} [invalidGoal] GameEvent invalidGoal
-     * @property {GameEvent.IPlacementFailed|null} [placementFailed] GameEvent placementFailed
+     * @property {GameEvent.IAttackerDoubleTouchedBall|null} [attackerDoubleTouchedBall] GameEvent attackerDoubleTouchedBall
      * @property {GameEvent.IPlacementSucceeded|null} [placementSucceeded] GameEvent placementSucceeded
+     * @property {GameEvent.IPenaltyKickFailed|null} [penaltyKickFailed] GameEvent penaltyKickFailed
+     * @property {GameEvent.INoProgressInGame|null} [noProgressInGame] GameEvent noProgressInGame
+     * @property {GameEvent.IPlacementFailed|null} [placementFailed] GameEvent placementFailed
      * @property {GameEvent.IMultipleCards|null} [multipleCards] GameEvent multipleCards
      * @property {GameEvent.IMultipleFouls|null} [multipleFouls] GameEvent multipleFouls
      * @property {GameEvent.IBotSubstitution|null} [botSubstitution] GameEvent botSubstitution
      * @property {GameEvent.ITooManyRobots|null} [tooManyRobots] GameEvent tooManyRobots
      * @property {GameEvent.IUnsportingBehaviorMinor|null} [unsportingBehaviorMinor] GameEvent unsportingBehaviorMinor
      * @property {GameEvent.IUnsportingBehaviorMajor|null} [unsportingBehaviorMajor] GameEvent unsportingBehaviorMajor
-     * @property {GameEvent.IBotPushedBot|null} [botPushedBot] GameEvent botPushedBot
-     * @property {GameEvent.IBotHeldBallDeliberately|null} [botHeldBallDeliberately] GameEvent botHeldBallDeliberately
-     * @property {GameEvent.IBotTippedOver|null} [botTippedOver] GameEvent botTippedOver
      * @property {GameEvent.IPrepared|null} [prepared] GameEvent prepared
      * @property {GameEvent.IIndirectGoal|null} [indirectGoal] GameEvent indirectGoal
      * @property {GameEvent.IChippedGoal|null} [chippedGoal] GameEvent chippedGoal
@@ -802,38 +802,6 @@ export const GameEvent = $root.GameEvent = (() => {
     GameEvent.prototype.aimlessKick = null;
 
     /**
-     * GameEvent possibleGoal.
-     * @member {GameEvent.IGoal|null|undefined} possibleGoal
-     * @memberof GameEvent
-     * @instance
-     */
-    GameEvent.prototype.possibleGoal = null;
-
-    /**
-     * GameEvent noProgressInGame.
-     * @member {GameEvent.INoProgressInGame|null|undefined} noProgressInGame
-     * @memberof GameEvent
-     * @instance
-     */
-    GameEvent.prototype.noProgressInGame = null;
-
-    /**
-     * GameEvent attackerDoubleTouchedBall.
-     * @member {GameEvent.IAttackerDoubleTouchedBall|null|undefined} attackerDoubleTouchedBall
-     * @memberof GameEvent
-     * @instance
-     */
-    GameEvent.prototype.attackerDoubleTouchedBall = null;
-
-    /**
-     * GameEvent penaltyKickFailed.
-     * @member {GameEvent.IPenaltyKickFailed|null|undefined} penaltyKickFailed
-     * @memberof GameEvent
-     * @instance
-     */
-    GameEvent.prototype.penaltyKickFailed = null;
-
-    /**
      * GameEvent attackerTooCloseToDefenseArea.
      * @member {GameEvent.IAttackerTooCloseToDefenseArea|null|undefined} attackerTooCloseToDefenseArea
      * @memberof GameEvent
@@ -872,6 +840,30 @@ export const GameEvent = $root.GameEvent = (() => {
      * @instance
      */
     GameEvent.prototype.botDribbledBallTooFar = null;
+
+    /**
+     * GameEvent botPushedBot.
+     * @member {GameEvent.IBotPushedBot|null|undefined} botPushedBot
+     * @memberof GameEvent
+     * @instance
+     */
+    GameEvent.prototype.botPushedBot = null;
+
+    /**
+     * GameEvent botHeldBallDeliberately.
+     * @member {GameEvent.IBotHeldBallDeliberately|null|undefined} botHeldBallDeliberately
+     * @memberof GameEvent
+     * @instance
+     */
+    GameEvent.prototype.botHeldBallDeliberately = null;
+
+    /**
+     * GameEvent botTippedOver.
+     * @member {GameEvent.IBotTippedOver|null|undefined} botTippedOver
+     * @memberof GameEvent
+     * @instance
+     */
+    GameEvent.prototype.botTippedOver = null;
 
     /**
      * GameEvent attackerTouchedBallInDefenseArea.
@@ -930,6 +922,14 @@ export const GameEvent = $root.GameEvent = (() => {
     GameEvent.prototype.botInterferedPlacement = null;
 
     /**
+     * GameEvent possibleGoal.
+     * @member {GameEvent.IGoal|null|undefined} possibleGoal
+     * @memberof GameEvent
+     * @instance
+     */
+    GameEvent.prototype.possibleGoal = null;
+
+    /**
      * GameEvent goal.
      * @member {GameEvent.IGoal|null|undefined} goal
      * @memberof GameEvent
@@ -946,12 +946,12 @@ export const GameEvent = $root.GameEvent = (() => {
     GameEvent.prototype.invalidGoal = null;
 
     /**
-     * GameEvent placementFailed.
-     * @member {GameEvent.IPlacementFailed|null|undefined} placementFailed
+     * GameEvent attackerDoubleTouchedBall.
+     * @member {GameEvent.IAttackerDoubleTouchedBall|null|undefined} attackerDoubleTouchedBall
      * @memberof GameEvent
      * @instance
      */
-    GameEvent.prototype.placementFailed = null;
+    GameEvent.prototype.attackerDoubleTouchedBall = null;
 
     /**
      * GameEvent placementSucceeded.
@@ -960,6 +960,30 @@ export const GameEvent = $root.GameEvent = (() => {
      * @instance
      */
     GameEvent.prototype.placementSucceeded = null;
+
+    /**
+     * GameEvent penaltyKickFailed.
+     * @member {GameEvent.IPenaltyKickFailed|null|undefined} penaltyKickFailed
+     * @memberof GameEvent
+     * @instance
+     */
+    GameEvent.prototype.penaltyKickFailed = null;
+
+    /**
+     * GameEvent noProgressInGame.
+     * @member {GameEvent.INoProgressInGame|null|undefined} noProgressInGame
+     * @memberof GameEvent
+     * @instance
+     */
+    GameEvent.prototype.noProgressInGame = null;
+
+    /**
+     * GameEvent placementFailed.
+     * @member {GameEvent.IPlacementFailed|null|undefined} placementFailed
+     * @memberof GameEvent
+     * @instance
+     */
+    GameEvent.prototype.placementFailed = null;
 
     /**
      * GameEvent multipleCards.
@@ -1008,30 +1032,6 @@ export const GameEvent = $root.GameEvent = (() => {
      * @instance
      */
     GameEvent.prototype.unsportingBehaviorMajor = null;
-
-    /**
-     * GameEvent botPushedBot.
-     * @member {GameEvent.IBotPushedBot|null|undefined} botPushedBot
-     * @memberof GameEvent
-     * @instance
-     */
-    GameEvent.prototype.botPushedBot = null;
-
-    /**
-     * GameEvent botHeldBallDeliberately.
-     * @member {GameEvent.IBotHeldBallDeliberately|null|undefined} botHeldBallDeliberately
-     * @memberof GameEvent
-     * @instance
-     */
-    GameEvent.prototype.botHeldBallDeliberately = null;
-
-    /**
-     * GameEvent botTippedOver.
-     * @member {GameEvent.IBotTippedOver|null|undefined} botTippedOver
-     * @memberof GameEvent
-     * @instance
-     */
-    GameEvent.prototype.botTippedOver = null;
 
     /**
      * GameEvent prepared.
@@ -1118,12 +1118,12 @@ export const GameEvent = $root.GameEvent = (() => {
 
     /**
      * GameEvent event.
-     * @member {"ballLeftFieldTouchLine"|"ballLeftFieldGoalLine"|"aimlessKick"|"possibleGoal"|"noProgressInGame"|"attackerDoubleTouchedBall"|"penaltyKickFailed"|"attackerTooCloseToDefenseArea"|"defenderInDefenseArea"|"boundaryCrossing"|"keeperHeldBall"|"botDribbledBallTooFar"|"attackerTouchedBallInDefenseArea"|"botKickedBallTooFast"|"botCrashUnique"|"botCrashDrawn"|"defenderTooCloseToKickPoint"|"botTooFastInStop"|"botInterferedPlacement"|"goal"|"invalidGoal"|"placementFailed"|"placementSucceeded"|"multipleCards"|"multipleFouls"|"botSubstitution"|"tooManyRobots"|"unsportingBehaviorMinor"|"unsportingBehaviorMajor"|"botPushedBot"|"botHeldBallDeliberately"|"botTippedOver"|"prepared"|"indirectGoal"|"chippedGoal"|"kickTimeout"|"attackerTouchedOpponentInDefenseArea"|"attackerTouchedOpponentInDefenseAreaSkipped"|"botCrashUniqueSkipped"|"botPushedBotSkipped"|"defenderInDefenseAreaPartially"|"multiplePlacementFailures"|undefined} event
+     * @member {"ballLeftFieldTouchLine"|"ballLeftFieldGoalLine"|"aimlessKick"|"attackerTooCloseToDefenseArea"|"defenderInDefenseArea"|"boundaryCrossing"|"keeperHeldBall"|"botDribbledBallTooFar"|"botPushedBot"|"botHeldBallDeliberately"|"botTippedOver"|"attackerTouchedBallInDefenseArea"|"botKickedBallTooFast"|"botCrashUnique"|"botCrashDrawn"|"defenderTooCloseToKickPoint"|"botTooFastInStop"|"botInterferedPlacement"|"possibleGoal"|"goal"|"invalidGoal"|"attackerDoubleTouchedBall"|"placementSucceeded"|"penaltyKickFailed"|"noProgressInGame"|"placementFailed"|"multipleCards"|"multipleFouls"|"botSubstitution"|"tooManyRobots"|"unsportingBehaviorMinor"|"unsportingBehaviorMajor"|"prepared"|"indirectGoal"|"chippedGoal"|"kickTimeout"|"attackerTouchedOpponentInDefenseArea"|"attackerTouchedOpponentInDefenseAreaSkipped"|"botCrashUniqueSkipped"|"botPushedBotSkipped"|"defenderInDefenseAreaPartially"|"multiplePlacementFailures"|undefined} event
      * @memberof GameEvent
      * @instance
      */
     Object.defineProperty(GameEvent.prototype, "event", {
-        get: $util.oneOfGetter($oneOfFields = ["ballLeftFieldTouchLine", "ballLeftFieldGoalLine", "aimlessKick", "possibleGoal", "noProgressInGame", "attackerDoubleTouchedBall", "penaltyKickFailed", "attackerTooCloseToDefenseArea", "defenderInDefenseArea", "boundaryCrossing", "keeperHeldBall", "botDribbledBallTooFar", "attackerTouchedBallInDefenseArea", "botKickedBallTooFast", "botCrashUnique", "botCrashDrawn", "defenderTooCloseToKickPoint", "botTooFastInStop", "botInterferedPlacement", "goal", "invalidGoal", "placementFailed", "placementSucceeded", "multipleCards", "multipleFouls", "botSubstitution", "tooManyRobots", "unsportingBehaviorMinor", "unsportingBehaviorMajor", "botPushedBot", "botHeldBallDeliberately", "botTippedOver", "prepared", "indirectGoal", "chippedGoal", "kickTimeout", "attackerTouchedOpponentInDefenseArea", "attackerTouchedOpponentInDefenseAreaSkipped", "botCrashUniqueSkipped", "botPushedBotSkipped", "defenderInDefenseAreaPartially", "multiplePlacementFailures"]),
+        get: $util.oneOfGetter($oneOfFields = ["ballLeftFieldTouchLine", "ballLeftFieldGoalLine", "aimlessKick", "attackerTooCloseToDefenseArea", "defenderInDefenseArea", "boundaryCrossing", "keeperHeldBall", "botDribbledBallTooFar", "botPushedBot", "botHeldBallDeliberately", "botTippedOver", "attackerTouchedBallInDefenseArea", "botKickedBallTooFast", "botCrashUnique", "botCrashDrawn", "defenderTooCloseToKickPoint", "botTooFastInStop", "botInterferedPlacement", "possibleGoal", "goal", "invalidGoal", "attackerDoubleTouchedBall", "placementSucceeded", "penaltyKickFailed", "noProgressInGame", "placementFailed", "multipleCards", "multipleFouls", "botSubstitution", "tooManyRobots", "unsportingBehaviorMinor", "unsportingBehaviorMajor", "prepared", "indirectGoal", "chippedGoal", "kickTimeout", "attackerTouchedOpponentInDefenseArea", "attackerTouchedOpponentInDefenseAreaSkipped", "botCrashUniqueSkipped", "botPushedBotSkipped", "defenderInDefenseAreaPartially", "multiplePlacementFailures"]),
         set: $util.oneOfSetter($oneOfFields)
     });
 
@@ -1290,18 +1290,6 @@ export const GameEvent = $root.GameEvent = (() => {
             case 11:
                 message.aimlessKick = $root.GameEvent.AimlessKick.decode(reader, reader.uint32());
                 break;
-            case 39:
-                message.possibleGoal = $root.GameEvent.Goal.decode(reader, reader.uint32());
-                break;
-            case 2:
-                message.noProgressInGame = $root.GameEvent.NoProgressInGame.decode(reader, reader.uint32());
-                break;
-            case 14:
-                message.attackerDoubleTouchedBall = $root.GameEvent.AttackerDoubleTouchedBall.decode(reader, reader.uint32());
-                break;
-            case 45:
-                message.penaltyKickFailed = $root.GameEvent.PenaltyKickFailed.decode(reader, reader.uint32());
-                break;
             case 19:
                 message.attackerTooCloseToDefenseArea = $root.GameEvent.AttackerTooCloseToDefenseArea.decode(reader, reader.uint32());
                 break;
@@ -1316,6 +1304,15 @@ export const GameEvent = $root.GameEvent = (() => {
                 break;
             case 17:
                 message.botDribbledBallTooFar = $root.GameEvent.BotDribbledBallTooFar.decode(reader, reader.uint32());
+                break;
+            case 24:
+                message.botPushedBot = $root.GameEvent.BotPushedBot.decode(reader, reader.uint32());
+                break;
+            case 26:
+                message.botHeldBallDeliberately = $root.GameEvent.BotHeldBallDeliberately.decode(reader, reader.uint32());
+                break;
+            case 27:
+                message.botTippedOver = $root.GameEvent.BotTippedOver.decode(reader, reader.uint32());
                 break;
             case 15:
                 message.attackerTouchedBallInDefenseArea = $root.GameEvent.AttackerTouchedBallInDefenseArea.decode(reader, reader.uint32());
@@ -1338,17 +1335,29 @@ export const GameEvent = $root.GameEvent = (() => {
             case 20:
                 message.botInterferedPlacement = $root.GameEvent.BotInterferedPlacement.decode(reader, reader.uint32());
                 break;
+            case 39:
+                message.possibleGoal = $root.GameEvent.Goal.decode(reader, reader.uint32());
+                break;
             case 8:
                 message.goal = $root.GameEvent.Goal.decode(reader, reader.uint32());
                 break;
             case 44:
                 message.invalidGoal = $root.GameEvent.Goal.decode(reader, reader.uint32());
                 break;
-            case 3:
-                message.placementFailed = $root.GameEvent.PlacementFailed.decode(reader, reader.uint32());
+            case 14:
+                message.attackerDoubleTouchedBall = $root.GameEvent.AttackerDoubleTouchedBall.decode(reader, reader.uint32());
                 break;
             case 5:
                 message.placementSucceeded = $root.GameEvent.PlacementSucceeded.decode(reader, reader.uint32());
+                break;
+            case 45:
+                message.penaltyKickFailed = $root.GameEvent.PenaltyKickFailed.decode(reader, reader.uint32());
+                break;
+            case 2:
+                message.noProgressInGame = $root.GameEvent.NoProgressInGame.decode(reader, reader.uint32());
+                break;
+            case 3:
+                message.placementFailed = $root.GameEvent.PlacementFailed.decode(reader, reader.uint32());
                 break;
             case 32:
                 message.multipleCards = $root.GameEvent.MultipleCards.decode(reader, reader.uint32());
@@ -1367,15 +1376,6 @@ export const GameEvent = $root.GameEvent = (() => {
                 break;
             case 36:
                 message.unsportingBehaviorMajor = $root.GameEvent.UnsportingBehaviorMajor.decode(reader, reader.uint32());
-                break;
-            case 24:
-                message.botPushedBot = $root.GameEvent.BotPushedBot.decode(reader, reader.uint32());
-                break;
-            case 26:
-                message.botHeldBallDeliberately = $root.GameEvent.BotHeldBallDeliberately.decode(reader, reader.uint32());
-                break;
-            case 27:
-                message.botTippedOver = $root.GameEvent.BotTippedOver.decode(reader, reader.uint32());
                 break;
             case 1:
                 message.prepared = $root.GameEvent.Prepared.decode(reader, reader.uint32());
@@ -1452,15 +1452,14 @@ export const GameEvent = $root.GameEvent = (() => {
         case 6:
         case 7:
         case 11:
-        case 39:
-        case 2:
-        case 14:
-        case 43:
         case 19:
         case 31:
         case 41:
         case 13:
         case 17:
+        case 24:
+        case 26:
+        case 27:
         case 15:
         case 18:
         case 22:
@@ -1468,19 +1467,20 @@ export const GameEvent = $root.GameEvent = (() => {
         case 29:
         case 28:
         case 20:
+        case 39:
         case 8:
         case 42:
-        case 3:
+        case 14:
         case 5:
+        case 43:
+        case 2:
+        case 3:
         case 32:
         case 34:
         case 37:
         case 38:
         case 35:
         case 36:
-        case 24:
-        case 26:
-        case 27:
         case 1:
         case 9:
         case 10:
@@ -1526,46 +1526,6 @@ export const GameEvent = $root.GameEvent = (() => {
                 let error = $root.GameEvent.AimlessKick.verify(message.aimlessKick);
                 if (error)
                     return "aimlessKick." + error;
-            }
-        }
-        if (message.possibleGoal != null && message.hasOwnProperty("possibleGoal")) {
-            if (properties.event === 1)
-                return "event: multiple values";
-            properties.event = 1;
-            {
-                let error = $root.GameEvent.Goal.verify(message.possibleGoal);
-                if (error)
-                    return "possibleGoal." + error;
-            }
-        }
-        if (message.noProgressInGame != null && message.hasOwnProperty("noProgressInGame")) {
-            if (properties.event === 1)
-                return "event: multiple values";
-            properties.event = 1;
-            {
-                let error = $root.GameEvent.NoProgressInGame.verify(message.noProgressInGame);
-                if (error)
-                    return "noProgressInGame." + error;
-            }
-        }
-        if (message.attackerDoubleTouchedBall != null && message.hasOwnProperty("attackerDoubleTouchedBall")) {
-            if (properties.event === 1)
-                return "event: multiple values";
-            properties.event = 1;
-            {
-                let error = $root.GameEvent.AttackerDoubleTouchedBall.verify(message.attackerDoubleTouchedBall);
-                if (error)
-                    return "attackerDoubleTouchedBall." + error;
-            }
-        }
-        if (message.penaltyKickFailed != null && message.hasOwnProperty("penaltyKickFailed")) {
-            if (properties.event === 1)
-                return "event: multiple values";
-            properties.event = 1;
-            {
-                let error = $root.GameEvent.PenaltyKickFailed.verify(message.penaltyKickFailed);
-                if (error)
-                    return "penaltyKickFailed." + error;
             }
         }
         if (message.attackerTooCloseToDefenseArea != null && message.hasOwnProperty("attackerTooCloseToDefenseArea")) {
@@ -1616,6 +1576,36 @@ export const GameEvent = $root.GameEvent = (() => {
                 let error = $root.GameEvent.BotDribbledBallTooFar.verify(message.botDribbledBallTooFar);
                 if (error)
                     return "botDribbledBallTooFar." + error;
+            }
+        }
+        if (message.botPushedBot != null && message.hasOwnProperty("botPushedBot")) {
+            if (properties.event === 1)
+                return "event: multiple values";
+            properties.event = 1;
+            {
+                let error = $root.GameEvent.BotPushedBot.verify(message.botPushedBot);
+                if (error)
+                    return "botPushedBot." + error;
+            }
+        }
+        if (message.botHeldBallDeliberately != null && message.hasOwnProperty("botHeldBallDeliberately")) {
+            if (properties.event === 1)
+                return "event: multiple values";
+            properties.event = 1;
+            {
+                let error = $root.GameEvent.BotHeldBallDeliberately.verify(message.botHeldBallDeliberately);
+                if (error)
+                    return "botHeldBallDeliberately." + error;
+            }
+        }
+        if (message.botTippedOver != null && message.hasOwnProperty("botTippedOver")) {
+            if (properties.event === 1)
+                return "event: multiple values";
+            properties.event = 1;
+            {
+                let error = $root.GameEvent.BotTippedOver.verify(message.botTippedOver);
+                if (error)
+                    return "botTippedOver." + error;
             }
         }
         if (message.attackerTouchedBallInDefenseArea != null && message.hasOwnProperty("attackerTouchedBallInDefenseArea")) {
@@ -1688,6 +1678,16 @@ export const GameEvent = $root.GameEvent = (() => {
                     return "botInterferedPlacement." + error;
             }
         }
+        if (message.possibleGoal != null && message.hasOwnProperty("possibleGoal")) {
+            if (properties.event === 1)
+                return "event: multiple values";
+            properties.event = 1;
+            {
+                let error = $root.GameEvent.Goal.verify(message.possibleGoal);
+                if (error)
+                    return "possibleGoal." + error;
+            }
+        }
         if (message.goal != null && message.hasOwnProperty("goal")) {
             if (properties.event === 1)
                 return "event: multiple values";
@@ -1708,14 +1708,14 @@ export const GameEvent = $root.GameEvent = (() => {
                     return "invalidGoal." + error;
             }
         }
-        if (message.placementFailed != null && message.hasOwnProperty("placementFailed")) {
+        if (message.attackerDoubleTouchedBall != null && message.hasOwnProperty("attackerDoubleTouchedBall")) {
             if (properties.event === 1)
                 return "event: multiple values";
             properties.event = 1;
             {
-                let error = $root.GameEvent.PlacementFailed.verify(message.placementFailed);
+                let error = $root.GameEvent.AttackerDoubleTouchedBall.verify(message.attackerDoubleTouchedBall);
                 if (error)
-                    return "placementFailed." + error;
+                    return "attackerDoubleTouchedBall." + error;
             }
         }
         if (message.placementSucceeded != null && message.hasOwnProperty("placementSucceeded")) {
@@ -1726,6 +1726,36 @@ export const GameEvent = $root.GameEvent = (() => {
                 let error = $root.GameEvent.PlacementSucceeded.verify(message.placementSucceeded);
                 if (error)
                     return "placementSucceeded." + error;
+            }
+        }
+        if (message.penaltyKickFailed != null && message.hasOwnProperty("penaltyKickFailed")) {
+            if (properties.event === 1)
+                return "event: multiple values";
+            properties.event = 1;
+            {
+                let error = $root.GameEvent.PenaltyKickFailed.verify(message.penaltyKickFailed);
+                if (error)
+                    return "penaltyKickFailed." + error;
+            }
+        }
+        if (message.noProgressInGame != null && message.hasOwnProperty("noProgressInGame")) {
+            if (properties.event === 1)
+                return "event: multiple values";
+            properties.event = 1;
+            {
+                let error = $root.GameEvent.NoProgressInGame.verify(message.noProgressInGame);
+                if (error)
+                    return "noProgressInGame." + error;
+            }
+        }
+        if (message.placementFailed != null && message.hasOwnProperty("placementFailed")) {
+            if (properties.event === 1)
+                return "event: multiple values";
+            properties.event = 1;
+            {
+                let error = $root.GameEvent.PlacementFailed.verify(message.placementFailed);
+                if (error)
+                    return "placementFailed." + error;
             }
         }
         if (message.multipleCards != null && message.hasOwnProperty("multipleCards")) {
@@ -1786,36 +1816,6 @@ export const GameEvent = $root.GameEvent = (() => {
                 let error = $root.GameEvent.UnsportingBehaviorMajor.verify(message.unsportingBehaviorMajor);
                 if (error)
                     return "unsportingBehaviorMajor." + error;
-            }
-        }
-        if (message.botPushedBot != null && message.hasOwnProperty("botPushedBot")) {
-            if (properties.event === 1)
-                return "event: multiple values";
-            properties.event = 1;
-            {
-                let error = $root.GameEvent.BotPushedBot.verify(message.botPushedBot);
-                if (error)
-                    return "botPushedBot." + error;
-            }
-        }
-        if (message.botHeldBallDeliberately != null && message.hasOwnProperty("botHeldBallDeliberately")) {
-            if (properties.event === 1)
-                return "event: multiple values";
-            properties.event = 1;
-            {
-                let error = $root.GameEvent.BotHeldBallDeliberately.verify(message.botHeldBallDeliberately);
-                if (error)
-                    return "botHeldBallDeliberately." + error;
-            }
-        }
-        if (message.botTippedOver != null && message.hasOwnProperty("botTippedOver")) {
-            if (properties.event === 1)
-                return "event: multiple values";
-            properties.event = 1;
-            {
-                let error = $root.GameEvent.BotTippedOver.verify(message.botTippedOver);
-                if (error)
-                    return "botTippedOver." + error;
             }
         }
         if (message.prepared != null && message.hasOwnProperty("prepared")) {
@@ -1950,22 +1950,6 @@ export const GameEvent = $root.GameEvent = (() => {
         case 11:
             message.type = 11;
             break;
-        case "POSSIBLE_GOAL":
-        case 39:
-            message.type = 39;
-            break;
-        case "NO_PROGRESS_IN_GAME":
-        case 2:
-            message.type = 2;
-            break;
-        case "ATTACKER_DOUBLE_TOUCHED_BALL":
-        case 14:
-            message.type = 14;
-            break;
-        case "PENALTY_KICK_FAILED":
-        case 43:
-            message.type = 43;
-            break;
         case "ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA":
         case 19:
             message.type = 19;
@@ -1985,6 +1969,18 @@ export const GameEvent = $root.GameEvent = (() => {
         case "BOT_DRIBBLED_BALL_TOO_FAR":
         case 17:
             message.type = 17;
+            break;
+        case "BOT_PUSHED_BOT":
+        case 24:
+            message.type = 24;
+            break;
+        case "BOT_HELD_BALL_DELIBERATELY":
+        case 26:
+            message.type = 26;
+            break;
+        case "BOT_TIPPED_OVER":
+        case 27:
+            message.type = 27;
             break;
         case "ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA":
         case 15:
@@ -2014,6 +2010,10 @@ export const GameEvent = $root.GameEvent = (() => {
         case 20:
             message.type = 20;
             break;
+        case "POSSIBLE_GOAL":
+        case 39:
+            message.type = 39;
+            break;
         case "GOAL":
         case 8:
             message.type = 8;
@@ -2022,13 +2022,25 @@ export const GameEvent = $root.GameEvent = (() => {
         case 42:
             message.type = 42;
             break;
-        case "PLACEMENT_FAILED":
-        case 3:
-            message.type = 3;
+        case "ATTACKER_DOUBLE_TOUCHED_BALL":
+        case 14:
+            message.type = 14;
             break;
         case "PLACEMENT_SUCCEEDED":
         case 5:
             message.type = 5;
+            break;
+        case "PENALTY_KICK_FAILED":
+        case 43:
+            message.type = 43;
+            break;
+        case "NO_PROGRESS_IN_GAME":
+        case 2:
+            message.type = 2;
+            break;
+        case "PLACEMENT_FAILED":
+        case 3:
+            message.type = 3;
             break;
         case "MULTIPLE_CARDS":
         case 32:
@@ -2053,18 +2065,6 @@ export const GameEvent = $root.GameEvent = (() => {
         case "UNSPORTING_BEHAVIOR_MAJOR":
         case 36:
             message.type = 36;
-            break;
-        case "BOT_PUSHED_BOT":
-        case 24:
-            message.type = 24;
-            break;
-        case "BOT_HELD_BALL_DELIBERATELY":
-        case 26:
-            message.type = 26;
-            break;
-        case "BOT_TIPPED_OVER":
-        case 27:
-            message.type = 27;
             break;
         case "PREPARED":
         case 1:
@@ -2129,26 +2129,6 @@ export const GameEvent = $root.GameEvent = (() => {
                 throw TypeError(".GameEvent.aimlessKick: object expected");
             message.aimlessKick = $root.GameEvent.AimlessKick.fromObject(object.aimlessKick);
         }
-        if (object.possibleGoal != null) {
-            if (typeof object.possibleGoal !== "object")
-                throw TypeError(".GameEvent.possibleGoal: object expected");
-            message.possibleGoal = $root.GameEvent.Goal.fromObject(object.possibleGoal);
-        }
-        if (object.noProgressInGame != null) {
-            if (typeof object.noProgressInGame !== "object")
-                throw TypeError(".GameEvent.noProgressInGame: object expected");
-            message.noProgressInGame = $root.GameEvent.NoProgressInGame.fromObject(object.noProgressInGame);
-        }
-        if (object.attackerDoubleTouchedBall != null) {
-            if (typeof object.attackerDoubleTouchedBall !== "object")
-                throw TypeError(".GameEvent.attackerDoubleTouchedBall: object expected");
-            message.attackerDoubleTouchedBall = $root.GameEvent.AttackerDoubleTouchedBall.fromObject(object.attackerDoubleTouchedBall);
-        }
-        if (object.penaltyKickFailed != null) {
-            if (typeof object.penaltyKickFailed !== "object")
-                throw TypeError(".GameEvent.penaltyKickFailed: object expected");
-            message.penaltyKickFailed = $root.GameEvent.PenaltyKickFailed.fromObject(object.penaltyKickFailed);
-        }
         if (object.attackerTooCloseToDefenseArea != null) {
             if (typeof object.attackerTooCloseToDefenseArea !== "object")
                 throw TypeError(".GameEvent.attackerTooCloseToDefenseArea: object expected");
@@ -2173,6 +2153,21 @@ export const GameEvent = $root.GameEvent = (() => {
             if (typeof object.botDribbledBallTooFar !== "object")
                 throw TypeError(".GameEvent.botDribbledBallTooFar: object expected");
             message.botDribbledBallTooFar = $root.GameEvent.BotDribbledBallTooFar.fromObject(object.botDribbledBallTooFar);
+        }
+        if (object.botPushedBot != null) {
+            if (typeof object.botPushedBot !== "object")
+                throw TypeError(".GameEvent.botPushedBot: object expected");
+            message.botPushedBot = $root.GameEvent.BotPushedBot.fromObject(object.botPushedBot);
+        }
+        if (object.botHeldBallDeliberately != null) {
+            if (typeof object.botHeldBallDeliberately !== "object")
+                throw TypeError(".GameEvent.botHeldBallDeliberately: object expected");
+            message.botHeldBallDeliberately = $root.GameEvent.BotHeldBallDeliberately.fromObject(object.botHeldBallDeliberately);
+        }
+        if (object.botTippedOver != null) {
+            if (typeof object.botTippedOver !== "object")
+                throw TypeError(".GameEvent.botTippedOver: object expected");
+            message.botTippedOver = $root.GameEvent.BotTippedOver.fromObject(object.botTippedOver);
         }
         if (object.attackerTouchedBallInDefenseArea != null) {
             if (typeof object.attackerTouchedBallInDefenseArea !== "object")
@@ -2209,6 +2204,11 @@ export const GameEvent = $root.GameEvent = (() => {
                 throw TypeError(".GameEvent.botInterferedPlacement: object expected");
             message.botInterferedPlacement = $root.GameEvent.BotInterferedPlacement.fromObject(object.botInterferedPlacement);
         }
+        if (object.possibleGoal != null) {
+            if (typeof object.possibleGoal !== "object")
+                throw TypeError(".GameEvent.possibleGoal: object expected");
+            message.possibleGoal = $root.GameEvent.Goal.fromObject(object.possibleGoal);
+        }
         if (object.goal != null) {
             if (typeof object.goal !== "object")
                 throw TypeError(".GameEvent.goal: object expected");
@@ -2219,15 +2219,30 @@ export const GameEvent = $root.GameEvent = (() => {
                 throw TypeError(".GameEvent.invalidGoal: object expected");
             message.invalidGoal = $root.GameEvent.Goal.fromObject(object.invalidGoal);
         }
-        if (object.placementFailed != null) {
-            if (typeof object.placementFailed !== "object")
-                throw TypeError(".GameEvent.placementFailed: object expected");
-            message.placementFailed = $root.GameEvent.PlacementFailed.fromObject(object.placementFailed);
+        if (object.attackerDoubleTouchedBall != null) {
+            if (typeof object.attackerDoubleTouchedBall !== "object")
+                throw TypeError(".GameEvent.attackerDoubleTouchedBall: object expected");
+            message.attackerDoubleTouchedBall = $root.GameEvent.AttackerDoubleTouchedBall.fromObject(object.attackerDoubleTouchedBall);
         }
         if (object.placementSucceeded != null) {
             if (typeof object.placementSucceeded !== "object")
                 throw TypeError(".GameEvent.placementSucceeded: object expected");
             message.placementSucceeded = $root.GameEvent.PlacementSucceeded.fromObject(object.placementSucceeded);
+        }
+        if (object.penaltyKickFailed != null) {
+            if (typeof object.penaltyKickFailed !== "object")
+                throw TypeError(".GameEvent.penaltyKickFailed: object expected");
+            message.penaltyKickFailed = $root.GameEvent.PenaltyKickFailed.fromObject(object.penaltyKickFailed);
+        }
+        if (object.noProgressInGame != null) {
+            if (typeof object.noProgressInGame !== "object")
+                throw TypeError(".GameEvent.noProgressInGame: object expected");
+            message.noProgressInGame = $root.GameEvent.NoProgressInGame.fromObject(object.noProgressInGame);
+        }
+        if (object.placementFailed != null) {
+            if (typeof object.placementFailed !== "object")
+                throw TypeError(".GameEvent.placementFailed: object expected");
+            message.placementFailed = $root.GameEvent.PlacementFailed.fromObject(object.placementFailed);
         }
         if (object.multipleCards != null) {
             if (typeof object.multipleCards !== "object")
@@ -2258,21 +2273,6 @@ export const GameEvent = $root.GameEvent = (() => {
             if (typeof object.unsportingBehaviorMajor !== "object")
                 throw TypeError(".GameEvent.unsportingBehaviorMajor: object expected");
             message.unsportingBehaviorMajor = $root.GameEvent.UnsportingBehaviorMajor.fromObject(object.unsportingBehaviorMajor);
-        }
-        if (object.botPushedBot != null) {
-            if (typeof object.botPushedBot !== "object")
-                throw TypeError(".GameEvent.botPushedBot: object expected");
-            message.botPushedBot = $root.GameEvent.BotPushedBot.fromObject(object.botPushedBot);
-        }
-        if (object.botHeldBallDeliberately != null) {
-            if (typeof object.botHeldBallDeliberately !== "object")
-                throw TypeError(".GameEvent.botHeldBallDeliberately: object expected");
-            message.botHeldBallDeliberately = $root.GameEvent.BotHeldBallDeliberately.fromObject(object.botHeldBallDeliberately);
-        }
-        if (object.botTippedOver != null) {
-            if (typeof object.botTippedOver !== "object")
-                throw TypeError(".GameEvent.botTippedOver: object expected");
-            message.botTippedOver = $root.GameEvent.BotTippedOver.fromObject(object.botTippedOver);
         }
         if (object.prepared != null) {
             if (typeof object.prepared !== "object")
@@ -3123,8 +3123,10 @@ export const GameEvent = $root.GameEvent = (() => {
          * @property {number|null} [kickingBot] Goal kickingBot
          * @property {IVector2|null} [location] Goal location
          * @property {IVector2|null} [kickLocation] Goal kickLocation
-         * @property {number|null} [kickSpeed] Goal kickSpeed
          * @property {number|null} [maxBallHeight] Goal maxBallHeight
+         * @property {number|null} [numRobotsByTeam] Goal numRobotsByTeam
+         * @property {number|Long|null} [lastTouchByTeam] Goal lastTouchByTeam
+         * @property {string|null} [message] Goal message
          */
 
         /**
@@ -3183,20 +3185,36 @@ export const GameEvent = $root.GameEvent = (() => {
         Goal.prototype.kickLocation = null;
 
         /**
-         * Goal kickSpeed.
-         * @member {number} kickSpeed
-         * @memberof GameEvent.Goal
-         * @instance
-         */
-        Goal.prototype.kickSpeed = 0;
-
-        /**
          * Goal maxBallHeight.
          * @member {number} maxBallHeight
          * @memberof GameEvent.Goal
          * @instance
          */
         Goal.prototype.maxBallHeight = 0;
+
+        /**
+         * Goal numRobotsByTeam.
+         * @member {number} numRobotsByTeam
+         * @memberof GameEvent.Goal
+         * @instance
+         */
+        Goal.prototype.numRobotsByTeam = 0;
+
+        /**
+         * Goal lastTouchByTeam.
+         * @member {number|Long} lastTouchByTeam
+         * @memberof GameEvent.Goal
+         * @instance
+         */
+        Goal.prototype.lastTouchByTeam = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * Goal message.
+         * @member {string} message
+         * @memberof GameEvent.Goal
+         * @instance
+         */
+        Goal.prototype.message = "";
 
         /**
          * Creates a new Goal instance using the specified properties.
@@ -3229,12 +3247,16 @@ export const GameEvent = $root.GameEvent = (() => {
                 $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
             if (message.kickLocation != null && message.hasOwnProperty("kickLocation"))
                 $root.Vector2.encode(message.kickLocation, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
-            if (message.kickSpeed != null && message.hasOwnProperty("kickSpeed"))
-                writer.uint32(/* id 5, wireType 5 =*/45).float(message.kickSpeed);
+            if (message.maxBallHeight != null && message.hasOwnProperty("maxBallHeight"))
+                writer.uint32(/* id 5, wireType 5 =*/45).float(message.maxBallHeight);
             if (message.kickingTeam != null && message.hasOwnProperty("kickingTeam"))
                 writer.uint32(/* id 6, wireType 0 =*/48).int32(message.kickingTeam);
-            if (message.maxBallHeight != null && message.hasOwnProperty("maxBallHeight"))
-                writer.uint32(/* id 7, wireType 5 =*/61).float(message.maxBallHeight);
+            if (message.numRobotsByTeam != null && message.hasOwnProperty("numRobotsByTeam"))
+                writer.uint32(/* id 7, wireType 0 =*/56).uint32(message.numRobotsByTeam);
+            if (message.lastTouchByTeam != null && message.hasOwnProperty("lastTouchByTeam"))
+                writer.uint32(/* id 8, wireType 0 =*/64).uint64(message.lastTouchByTeam);
+            if (message.message != null && message.hasOwnProperty("message"))
+                writer.uint32(/* id 9, wireType 2 =*/74).string(message.message);
             return writer;
         };
 
@@ -3285,10 +3307,16 @@ export const GameEvent = $root.GameEvent = (() => {
                     message.kickLocation = $root.Vector2.decode(reader, reader.uint32());
                     break;
                 case 5:
-                    message.kickSpeed = reader.float();
+                    message.maxBallHeight = reader.float();
                     break;
                 case 7:
-                    message.maxBallHeight = reader.float();
+                    message.numRobotsByTeam = reader.uint32();
+                    break;
+                case 8:
+                    message.lastTouchByTeam = reader.uint64();
+                    break;
+                case 9:
+                    message.message = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -3357,12 +3385,18 @@ export const GameEvent = $root.GameEvent = (() => {
                 if (error)
                     return "kickLocation." + error;
             }
-            if (message.kickSpeed != null && message.hasOwnProperty("kickSpeed"))
-                if (typeof message.kickSpeed !== "number")
-                    return "kickSpeed: number expected";
             if (message.maxBallHeight != null && message.hasOwnProperty("maxBallHeight"))
                 if (typeof message.maxBallHeight !== "number")
                     return "maxBallHeight: number expected";
+            if (message.numRobotsByTeam != null && message.hasOwnProperty("numRobotsByTeam"))
+                if (!$util.isInteger(message.numRobotsByTeam))
+                    return "numRobotsByTeam: integer expected";
+            if (message.lastTouchByTeam != null && message.hasOwnProperty("lastTouchByTeam"))
+                if (!$util.isInteger(message.lastTouchByTeam) && !(message.lastTouchByTeam && $util.isInteger(message.lastTouchByTeam.low) && $util.isInteger(message.lastTouchByTeam.high)))
+                    return "lastTouchByTeam: integer|Long expected";
+            if (message.message != null && message.hasOwnProperty("message"))
+                if (!$util.isString(message.message))
+                    return "message: string expected";
             return null;
         };
 
@@ -3418,10 +3452,21 @@ export const GameEvent = $root.GameEvent = (() => {
                     throw TypeError(".GameEvent.Goal.kickLocation: object expected");
                 message.kickLocation = $root.Vector2.fromObject(object.kickLocation);
             }
-            if (object.kickSpeed != null)
-                message.kickSpeed = Number(object.kickSpeed);
             if (object.maxBallHeight != null)
                 message.maxBallHeight = Number(object.maxBallHeight);
+            if (object.numRobotsByTeam != null)
+                message.numRobotsByTeam = object.numRobotsByTeam >>> 0;
+            if (object.lastTouchByTeam != null)
+                if ($util.Long)
+                    (message.lastTouchByTeam = $util.Long.fromValue(object.lastTouchByTeam)).unsigned = true;
+                else if (typeof object.lastTouchByTeam === "string")
+                    message.lastTouchByTeam = parseInt(object.lastTouchByTeam, 10);
+                else if (typeof object.lastTouchByTeam === "number")
+                    message.lastTouchByTeam = object.lastTouchByTeam;
+                else if (typeof object.lastTouchByTeam === "object")
+                    message.lastTouchByTeam = new $util.LongBits(object.lastTouchByTeam.low >>> 0, object.lastTouchByTeam.high >>> 0).toNumber(true);
+            if (object.message != null)
+                message.message = String(object.message);
             return message;
         };
 
@@ -3443,9 +3488,15 @@ export const GameEvent = $root.GameEvent = (() => {
                 object.kickingBot = 0;
                 object.location = null;
                 object.kickLocation = null;
-                object.kickSpeed = 0;
-                object.kickingTeam = options.enums === String ? "UNKNOWN" : 0;
                 object.maxBallHeight = 0;
+                object.kickingTeam = options.enums === String ? "UNKNOWN" : 0;
+                object.numRobotsByTeam = 0;
+                if ($util.Long) {
+                    let long = new $util.Long(0, 0, true);
+                    object.lastTouchByTeam = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.lastTouchByTeam = options.longs === String ? "0" : 0;
+                object.message = "";
             }
             if (message.byTeam != null && message.hasOwnProperty("byTeam"))
                 object.byTeam = options.enums === String ? $root.Team[message.byTeam] : message.byTeam;
@@ -3455,12 +3506,19 @@ export const GameEvent = $root.GameEvent = (() => {
                 object.location = $root.Vector2.toObject(message.location, options);
             if (message.kickLocation != null && message.hasOwnProperty("kickLocation"))
                 object.kickLocation = $root.Vector2.toObject(message.kickLocation, options);
-            if (message.kickSpeed != null && message.hasOwnProperty("kickSpeed"))
-                object.kickSpeed = options.json && !isFinite(message.kickSpeed) ? String(message.kickSpeed) : message.kickSpeed;
-            if (message.kickingTeam != null && message.hasOwnProperty("kickingTeam"))
-                object.kickingTeam = options.enums === String ? $root.Team[message.kickingTeam] : message.kickingTeam;
             if (message.maxBallHeight != null && message.hasOwnProperty("maxBallHeight"))
                 object.maxBallHeight = options.json && !isFinite(message.maxBallHeight) ? String(message.maxBallHeight) : message.maxBallHeight;
+            if (message.kickingTeam != null && message.hasOwnProperty("kickingTeam"))
+                object.kickingTeam = options.enums === String ? $root.Team[message.kickingTeam] : message.kickingTeam;
+            if (message.numRobotsByTeam != null && message.hasOwnProperty("numRobotsByTeam"))
+                object.numRobotsByTeam = message.numRobotsByTeam;
+            if (message.lastTouchByTeam != null && message.hasOwnProperty("lastTouchByTeam"))
+                if (typeof message.lastTouchByTeam === "number")
+                    object.lastTouchByTeam = options.longs === String ? String(message.lastTouchByTeam) : message.lastTouchByTeam;
+                else
+                    object.lastTouchByTeam = options.longs === String ? $util.Long.prototype.toString.call(message.lastTouchByTeam) : options.longs === Number ? new $util.LongBits(message.lastTouchByTeam.low >>> 0, message.lastTouchByTeam.high >>> 0).toNumber(true) : message.lastTouchByTeam;
+            if (message.message != null && message.hasOwnProperty("message"))
+                object.message = message.message;
             return object;
         };
 
@@ -12091,15 +12149,14 @@ export const GameEvent = $root.GameEvent = (() => {
      * @property {number} BALL_LEFT_FIELD_TOUCH_LINE=6 BALL_LEFT_FIELD_TOUCH_LINE value
      * @property {number} BALL_LEFT_FIELD_GOAL_LINE=7 BALL_LEFT_FIELD_GOAL_LINE value
      * @property {number} AIMLESS_KICK=11 AIMLESS_KICK value
-     * @property {number} POSSIBLE_GOAL=39 POSSIBLE_GOAL value
-     * @property {number} NO_PROGRESS_IN_GAME=2 NO_PROGRESS_IN_GAME value
-     * @property {number} ATTACKER_DOUBLE_TOUCHED_BALL=14 ATTACKER_DOUBLE_TOUCHED_BALL value
-     * @property {number} PENALTY_KICK_FAILED=43 PENALTY_KICK_FAILED value
      * @property {number} ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA=19 ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA value
      * @property {number} DEFENDER_IN_DEFENSE_AREA=31 DEFENDER_IN_DEFENSE_AREA value
      * @property {number} BOUNDARY_CROSSING=41 BOUNDARY_CROSSING value
      * @property {number} KEEPER_HELD_BALL=13 KEEPER_HELD_BALL value
      * @property {number} BOT_DRIBBLED_BALL_TOO_FAR=17 BOT_DRIBBLED_BALL_TOO_FAR value
+     * @property {number} BOT_PUSHED_BOT=24 BOT_PUSHED_BOT value
+     * @property {number} BOT_HELD_BALL_DELIBERATELY=26 BOT_HELD_BALL_DELIBERATELY value
+     * @property {number} BOT_TIPPED_OVER=27 BOT_TIPPED_OVER value
      * @property {number} ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA=15 ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA value
      * @property {number} BOT_KICKED_BALL_TOO_FAST=18 BOT_KICKED_BALL_TOO_FAST value
      * @property {number} BOT_CRASH_UNIQUE=22 BOT_CRASH_UNIQUE value
@@ -12107,19 +12164,20 @@ export const GameEvent = $root.GameEvent = (() => {
      * @property {number} DEFENDER_TOO_CLOSE_TO_KICK_POINT=29 DEFENDER_TOO_CLOSE_TO_KICK_POINT value
      * @property {number} BOT_TOO_FAST_IN_STOP=28 BOT_TOO_FAST_IN_STOP value
      * @property {number} BOT_INTERFERED_PLACEMENT=20 BOT_INTERFERED_PLACEMENT value
+     * @property {number} POSSIBLE_GOAL=39 POSSIBLE_GOAL value
      * @property {number} GOAL=8 GOAL value
      * @property {number} INVALID_GOAL=42 INVALID_GOAL value
-     * @property {number} PLACEMENT_FAILED=3 PLACEMENT_FAILED value
+     * @property {number} ATTACKER_DOUBLE_TOUCHED_BALL=14 ATTACKER_DOUBLE_TOUCHED_BALL value
      * @property {number} PLACEMENT_SUCCEEDED=5 PLACEMENT_SUCCEEDED value
+     * @property {number} PENALTY_KICK_FAILED=43 PENALTY_KICK_FAILED value
+     * @property {number} NO_PROGRESS_IN_GAME=2 NO_PROGRESS_IN_GAME value
+     * @property {number} PLACEMENT_FAILED=3 PLACEMENT_FAILED value
      * @property {number} MULTIPLE_CARDS=32 MULTIPLE_CARDS value
      * @property {number} MULTIPLE_FOULS=34 MULTIPLE_FOULS value
      * @property {number} BOT_SUBSTITUTION=37 BOT_SUBSTITUTION value
      * @property {number} TOO_MANY_ROBOTS=38 TOO_MANY_ROBOTS value
      * @property {number} UNSPORTING_BEHAVIOR_MINOR=35 UNSPORTING_BEHAVIOR_MINOR value
      * @property {number} UNSPORTING_BEHAVIOR_MAJOR=36 UNSPORTING_BEHAVIOR_MAJOR value
-     * @property {number} BOT_PUSHED_BOT=24 BOT_PUSHED_BOT value
-     * @property {number} BOT_HELD_BALL_DELIBERATELY=26 BOT_HELD_BALL_DELIBERATELY value
-     * @property {number} BOT_TIPPED_OVER=27 BOT_TIPPED_OVER value
      * @property {number} PREPARED=1 PREPARED value
      * @property {number} INDIRECT_GOAL=9 INDIRECT_GOAL value
      * @property {number} CHIPPED_GOAL=10 CHIPPED_GOAL value
@@ -12137,15 +12195,14 @@ export const GameEvent = $root.GameEvent = (() => {
         values[valuesById[6] = "BALL_LEFT_FIELD_TOUCH_LINE"] = 6;
         values[valuesById[7] = "BALL_LEFT_FIELD_GOAL_LINE"] = 7;
         values[valuesById[11] = "AIMLESS_KICK"] = 11;
-        values[valuesById[39] = "POSSIBLE_GOAL"] = 39;
-        values[valuesById[2] = "NO_PROGRESS_IN_GAME"] = 2;
-        values[valuesById[14] = "ATTACKER_DOUBLE_TOUCHED_BALL"] = 14;
-        values[valuesById[43] = "PENALTY_KICK_FAILED"] = 43;
         values[valuesById[19] = "ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA"] = 19;
         values[valuesById[31] = "DEFENDER_IN_DEFENSE_AREA"] = 31;
         values[valuesById[41] = "BOUNDARY_CROSSING"] = 41;
         values[valuesById[13] = "KEEPER_HELD_BALL"] = 13;
         values[valuesById[17] = "BOT_DRIBBLED_BALL_TOO_FAR"] = 17;
+        values[valuesById[24] = "BOT_PUSHED_BOT"] = 24;
+        values[valuesById[26] = "BOT_HELD_BALL_DELIBERATELY"] = 26;
+        values[valuesById[27] = "BOT_TIPPED_OVER"] = 27;
         values[valuesById[15] = "ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA"] = 15;
         values[valuesById[18] = "BOT_KICKED_BALL_TOO_FAST"] = 18;
         values[valuesById[22] = "BOT_CRASH_UNIQUE"] = 22;
@@ -12153,19 +12210,20 @@ export const GameEvent = $root.GameEvent = (() => {
         values[valuesById[29] = "DEFENDER_TOO_CLOSE_TO_KICK_POINT"] = 29;
         values[valuesById[28] = "BOT_TOO_FAST_IN_STOP"] = 28;
         values[valuesById[20] = "BOT_INTERFERED_PLACEMENT"] = 20;
+        values[valuesById[39] = "POSSIBLE_GOAL"] = 39;
         values[valuesById[8] = "GOAL"] = 8;
         values[valuesById[42] = "INVALID_GOAL"] = 42;
-        values[valuesById[3] = "PLACEMENT_FAILED"] = 3;
+        values[valuesById[14] = "ATTACKER_DOUBLE_TOUCHED_BALL"] = 14;
         values[valuesById[5] = "PLACEMENT_SUCCEEDED"] = 5;
+        values[valuesById[43] = "PENALTY_KICK_FAILED"] = 43;
+        values[valuesById[2] = "NO_PROGRESS_IN_GAME"] = 2;
+        values[valuesById[3] = "PLACEMENT_FAILED"] = 3;
         values[valuesById[32] = "MULTIPLE_CARDS"] = 32;
         values[valuesById[34] = "MULTIPLE_FOULS"] = 34;
         values[valuesById[37] = "BOT_SUBSTITUTION"] = 37;
         values[valuesById[38] = "TOO_MANY_ROBOTS"] = 38;
         values[valuesById[35] = "UNSPORTING_BEHAVIOR_MINOR"] = 35;
         values[valuesById[36] = "UNSPORTING_BEHAVIOR_MAJOR"] = 36;
-        values[valuesById[24] = "BOT_PUSHED_BOT"] = 24;
-        values[valuesById[26] = "BOT_HELD_BALL_DELIBERATELY"] = 26;
-        values[valuesById[27] = "BOT_TIPPED_OVER"] = 27;
         values[valuesById[1] = "PREPARED"] = 1;
         values[valuesById[9] = "INDIRECT_GOAL"] = 9;
         values[valuesById[10] = "CHIPPED_GOAL"] = 10;
@@ -18988,6 +19046,7 @@ export const Foul = $root.Foul = (() => {
      * @interface IFoul
      * @property {number|null} [id] Foul id
      * @property {IGameEvent|null} [causedByGameEvent] Foul causedByGameEvent
+     * @property {google.protobuf.ITimestamp|null} [timestamp] Foul timestamp
      */
 
     /**
@@ -19022,6 +19081,14 @@ export const Foul = $root.Foul = (() => {
     Foul.prototype.causedByGameEvent = null;
 
     /**
+     * Foul timestamp.
+     * @member {google.protobuf.ITimestamp|null|undefined} timestamp
+     * @memberof Foul
+     * @instance
+     */
+    Foul.prototype.timestamp = null;
+
+    /**
      * Creates a new Foul instance using the specified properties.
      * @function create
      * @memberof Foul
@@ -19049,6 +19116,8 @@ export const Foul = $root.Foul = (() => {
             writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.id);
         if (message.causedByGameEvent != null && message.hasOwnProperty("causedByGameEvent"))
             $root.GameEvent.encode(message.causedByGameEvent, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+        if (message.timestamp != null && message.hasOwnProperty("timestamp"))
+            $root.google.protobuf.Timestamp.encode(message.timestamp, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
         return writer;
     };
 
@@ -19088,6 +19157,9 @@ export const Foul = $root.Foul = (() => {
                 break;
             case 2:
                 message.causedByGameEvent = $root.GameEvent.decode(reader, reader.uint32());
+                break;
+            case 3:
+                message.timestamp = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -19132,6 +19204,11 @@ export const Foul = $root.Foul = (() => {
             if (error)
                 return "causedByGameEvent." + error;
         }
+        if (message.timestamp != null && message.hasOwnProperty("timestamp")) {
+            let error = $root.google.protobuf.Timestamp.verify(message.timestamp);
+            if (error)
+                return "timestamp." + error;
+        }
         return null;
     };
 
@@ -19154,6 +19231,11 @@ export const Foul = $root.Foul = (() => {
                 throw TypeError(".Foul.causedByGameEvent: object expected");
             message.causedByGameEvent = $root.GameEvent.fromObject(object.causedByGameEvent);
         }
+        if (object.timestamp != null) {
+            if (typeof object.timestamp !== "object")
+                throw TypeError(".Foul.timestamp: object expected");
+            message.timestamp = $root.google.protobuf.Timestamp.fromObject(object.timestamp);
+        }
         return message;
     };
 
@@ -19173,11 +19255,14 @@ export const Foul = $root.Foul = (() => {
         if (options.defaults) {
             object.id = 0;
             object.causedByGameEvent = null;
+            object.timestamp = null;
         }
         if (message.id != null && message.hasOwnProperty("id"))
             object.id = message.id;
         if (message.causedByGameEvent != null && message.hasOwnProperty("causedByGameEvent"))
             object.causedByGameEvent = $root.GameEvent.toObject(message.causedByGameEvent, options);
+        if (message.timestamp != null && message.hasOwnProperty("timestamp"))
+            object.timestamp = $root.google.protobuf.Timestamp.toObject(message.timestamp, options);
         return object;
     };
 
