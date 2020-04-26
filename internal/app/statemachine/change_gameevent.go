@@ -174,7 +174,17 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 	// defender too close to kick point
 	if *gameEvent.Type == state.GameEvent_DEFENDER_TOO_CLOSE_TO_KICK_POINT {
 		log.Printf("Reset current action time because defender of team %v was too close to kick point", byTeam)
-		newState.CurrentActionTimeRemaining = ptypes.DurationProto(s.gameConfig.PrepareTimeout)
+
+		switch *newState.Command.Type {
+		case state.Command_DIRECT, state.Command_INDIRECT:
+			newState.CurrentActionTimeRemaining = ptypes.DurationProto(s.gameConfig.FreeKickTimeout[newState.Division.Div()])
+		case state.Command_NORMAL_START:
+			newState.CurrentActionTimeRemaining = ptypes.DurationProto(s.gameConfig.PrepareTimeout)
+		case state.Command_FORCE_START:
+			newState.CurrentActionTimeRemaining = ptypes.DurationProto(s.gameConfig.NoProgressTimeout[newState.Division.Div()])
+		default:
+			log.Printf("Unexpected command while handling defender too close to kick point: %v", *newState.Command.Type)
+		}
 	}
 
 	if *newState.GameState.Type == state.GameState_PENALTY &&
