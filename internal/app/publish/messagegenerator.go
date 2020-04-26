@@ -111,17 +111,17 @@ func (g *MessageGenerator) StateToRefereeMessage(matchState *state.State) (r *st
 
 func updateTeam(teamInfo *state.Referee_TeamInfo, teamState *state.TeamInfo) {
 	*teamInfo.Name = *teamState.Name
-	*teamInfo.Score = uint32(*teamState.Goals)
-	*teamInfo.RedCards = uint32(len(teamState.RedCards))
+	*teamInfo.Score = unsigned32(*teamState.Goals)
+	*teamInfo.RedCards = unsigned(len(teamState.RedCards))
 	teamInfo.YellowCardTimes = mapYellowCardTimes(teamState.YellowCards)
-	*teamInfo.YellowCards = uint32(len(teamState.YellowCards))
-	*teamInfo.Timeouts = uint32(*teamState.TimeoutsLeft)
-	*teamInfo.Goalkeeper = uint32(*teamState.Goalkeeper)
-	*teamInfo.FoulCounter = uint32(len(teamState.Fouls))
-	*teamInfo.BallPlacementFailures = uint32(*teamState.BallPlacementFailures)
+	*teamInfo.YellowCards = unsigned(len(teamState.YellowCards))
+	*teamInfo.Timeouts = unsigned32(*teamState.TimeoutsLeft)
+	*teamInfo.Goalkeeper = unsigned32(*teamState.Goalkeeper)
+	*teamInfo.FoulCounter = unsigned(len(teamState.Fouls))
+	*teamInfo.BallPlacementFailures = unsigned32(*teamState.BallPlacementFailures)
 	*teamInfo.BallPlacementFailuresReached = *teamState.BallPlacementFailuresReached
 	*teamInfo.CanPlaceBall = *teamState.CanPlaceBall
-	*teamInfo.MaxAllowedBots = uint32(*teamState.MaxAllowedBots)
+	*teamInfo.MaxAllowedBots = unsigned32(*teamState.MaxAllowedBots)
 	*teamInfo.BotSubstitutionIntent = *teamState.BotSubstitutionIntent
 	timeoutTime, _ := ptypes.Duration(teamState.TimeoutTimeLeft)
 	*teamInfo.TimeoutTime = mapTime(timeoutTime)
@@ -159,4 +159,17 @@ func newTeamInfo() (t *state.Referee_TeamInfo) {
 	t.MaxAllowedBots = new(uint32)
 	t.BotSubstitutionIntent = new(bool)
 	return
+}
+
+func unsigned32(v int32) uint32 {
+	if v < 0 {
+		return 0
+	}
+	return uint32(v)
+}
+func unsigned(v int) uint32 {
+	if v < 0 {
+		return 0
+	}
+	return uint32(v)
 }
