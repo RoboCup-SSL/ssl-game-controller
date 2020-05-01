@@ -129,7 +129,7 @@ func (e *Engine) posInsideGoal(pos *geom.Vector2) bool {
 }
 
 func (e *Engine) readyToContinueFromStop() bool {
-	radius := e.gameConfig.DistanceToBallInStop + robotRadius + distanceThreshold
+	radius := e.gameConfig.DistanceToBallInStop + robotRadius - distanceThreshold
 	if e.gcState.TrackerStateGc.Ball == nil ||
 		!e.ballSteady() ||
 		e.robotsInsideRadius(e.gcState.TrackerStateGc.Robots, e.gcState.TrackerStateGc.Ball.Pos.ToVector2(), radius) {
