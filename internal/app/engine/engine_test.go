@@ -26,7 +26,7 @@ func Test_Engine(t *testing.T) {
 	gameConfig.StateStoreFile = tmpDir + "/store.json.stream"
 	engine := NewEngine(gameConfig)
 	hook := make(chan HookOut)
-	engine.RegisterHook(hook)
+	engine.RegisterHook("engineTest", hook)
 	if err := engine.Start(); err != nil {
 		t.Fatal("Could not start engine")
 	}
@@ -41,7 +41,7 @@ func Test_Engine(t *testing.T) {
 	})
 	// wait for the changes to be processed
 	<-hook
-	engine.UnregisterHook(hook)
+	engine.UnregisterHook("engineTest")
 	engine.Stop()
 
 	wantNewState.Command = state.NewCommandNeutral(state.Command_HALT)

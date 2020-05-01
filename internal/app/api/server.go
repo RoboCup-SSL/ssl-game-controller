@@ -70,10 +70,10 @@ func (a *Server) WsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *ServerConnection) publish() {
-	hook := make(chan engine.HookOut)
-	s.gcEngine.RegisterHook(hook)
+	hook := make(chan engine.HookOut, 10)
+	s.gcEngine.RegisterHook("apiServer", hook)
 	defer func() {
-		s.gcEngine.UnregisterHook(hook)
+		s.gcEngine.UnregisterHook("apiServer")
 		close(hook)
 	}()
 

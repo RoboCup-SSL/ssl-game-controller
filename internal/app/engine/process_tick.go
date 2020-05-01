@@ -4,6 +4,7 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"github.com/golang/protobuf/ptypes"
+	"log"
 	"time"
 )
 
@@ -63,10 +64,12 @@ func (e *Engine) processTick() {
 	e.processPenalty()
 
 	stateCopy := e.currentState.Clone()
+	hookOut := HookOut{State: stateCopy}
 	for _, hook := range e.hooks {
 		select {
-		case hook <- HookOut{State: stateCopy}:
-		default:
+		case hook <- hookOut:
+		case <-time.After(1 * time.Second):
+			log.Printf("processTick: Hook unresponsive! Failed to sent %v", hookOut)
 		}
 	}
 }

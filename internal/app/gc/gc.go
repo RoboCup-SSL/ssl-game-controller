@@ -71,7 +71,7 @@ func (c *GameController) Start() {
 		c.ciServer.Start()
 	}
 
-	c.gcEngine.RegisterHook(c.messageGenerator.EngineHook)
+	c.gcEngine.RegisterHook("messageGen", c.messageGenerator.EngineHook)
 	c.messageGenerator.Start()
 	c.autoRefServer.Server.Start()
 	c.autoRefServerTls.Server.Start()
@@ -86,7 +86,7 @@ func (c *GameController) Start() {
 // Stop stops all go routines
 func (c *GameController) Stop() {
 	// Note: Stopping is not (yet) implemented correctly by all servers.
-	c.gcEngine.UnregisterHook(c.messageGenerator.EngineHook)
+	c.gcEngine.UnregisterHook("messageGen")
 	c.messageGenerator.Stop()
 	c.ciServer.Stop()
 	c.trackerReceiver.Stop()

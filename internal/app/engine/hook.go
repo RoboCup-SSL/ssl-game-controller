@@ -3,6 +3,7 @@ package engine
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
+	"log"
 )
 
 type HookOut struct {
@@ -11,25 +12,24 @@ type HookOut struct {
 }
 
 // RegisterHook registers given hook for post processing after each change
-func (e *Engine) RegisterHook(hook chan HookOut) {
+func (e *Engine) RegisterHook(name string, hook chan HookOut) {
 	e.mutex.Lock()
 	defer e.mutex.Unlock()
-	e.hooks = append(e.hooks, hook)
+	if _, ok := e.hooks[name]; ok {
+		log.Printf("Hook %v already registered!", name)
+	}
+	e.hooks[name] = hook
 }
 
 // UnregisterHook unregisters hooks that were registered before
-func (e *Engine) UnregisterHook(hook chan HookOut) bool {
+func (e *Engine) UnregisterHook(name string) {
 	e.mutex.Lock()
 	defer e.mutex.Unlock()
-	for i, h := range e.hooks {
-		if h == hook {
-			e.hooks = append(e.hooks[:i], e.hooks[i+1:]...)
-			select {
-			case <-hook:
-			default:
-			}
-			return true
+	if hook, ok := e.hooks[name]; ok {
+		select {
+		case <-hook:
+		default:
 		}
 	}
-	return false
+	delete(e.hooks, name)
 }

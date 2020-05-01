@@ -23,7 +23,7 @@ type Engine struct {
 	currentState             *state.State
 	stateMachine             *statemachine.StateMachine
 	queue                    chan *statemachine.Change
-	hooks                    []chan HookOut
+	hooks                    map[string]chan HookOut
 	timeProvider             timer.TimeProvider
 	lastTimeUpdate           time.Time
 	gcState                  *GcState
@@ -40,7 +40,7 @@ func NewEngine(gameConfig config.Game) (e *Engine) {
 	e.stateStore = store.NewStore(gameConfig.StateStoreFile)
 	e.stateMachine = statemachine.NewStateMachine(gameConfig)
 	e.queue = make(chan *statemachine.Change, 100)
-	e.hooks = []chan HookOut{}
+	e.hooks = map[string]chan HookOut{}
 	e.SetTimeProvider(func() time.Time { return time.Now() })
 	e.gcState = new(GcState)
 	e.gcState.TeamState = map[string]*GcStateTeam{
@@ -241,10 +241,12 @@ func (e *Engine) processChange(change *statemachine.Change) {
 		log.Println("Could not add new state to store: ", err)
 	}
 	stateCopy := e.currentState.Clone()
-	for _, hook := range e.hooks {
+	hookOut := HookOut{Change: entry.Change, State: stateCopy}
+	for name, hook := range e.hooks {
 		select {
-		case hook <- HookOut{Change: entry.Change, State: stateCopy}:
-		default:
+		case hook <- hookOut:
+		case <-time.After(1 * time.Second):
+			log.Printf("Hook %v unresponsive! Failed to sent %v", name, hookOut)
 		}
 	}
 

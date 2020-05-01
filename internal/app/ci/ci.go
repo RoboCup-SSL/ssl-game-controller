@@ -83,8 +83,9 @@ func (s *Server) serve(conn net.Conn) {
 			s.latestTime = time.Unix(sec, nSec)
 			s.mutex.Unlock()
 			select {
-			case s.tickChan <- time.Now():
-			default:
+			case s.tickChan <- s.latestTime:
+			case <-time.After(1 * time.Second):
+				log.Printf("tickChan unresponsive! Failed to sent %v", s.latestTime)
 			}
 		}
 	}
