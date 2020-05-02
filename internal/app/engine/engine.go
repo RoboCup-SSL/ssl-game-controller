@@ -18,6 +18,8 @@ var changeOriginEngine = "Engine"
 
 // Engine listens for changes and runs ticks to update the current state using the state machine
 type Engine struct {
+	engineConfig             config.Engine
+	config                   Config
 	gameConfig               config.Game
 	stateStore               *store.Store
 	currentState             *state.State
@@ -34,8 +36,10 @@ type Engine struct {
 }
 
 // NewEngine creates a new engine
-func NewEngine(gameConfig config.Game) (e *Engine) {
+func NewEngine(gameConfig config.Game, engineConfig config.Engine) (e *Engine) {
 	e = new(Engine)
+	e.engineConfig = engineConfig
+	e.config.LoadControllerConfig(engineConfig.ConfigFilename)
 	e.gameConfig = gameConfig
 	e.stateStore = store.NewStore(gameConfig.StateStoreFile)
 	e.stateMachine = statemachine.NewStateMachine(gameConfig)
@@ -284,5 +288,21 @@ func (e *Engine) postProcessChange(entry statemachine.StateChange) {
 		*change.GetNewCommand().Command.Type == state.Command_STOP &&
 		entry.StatePre.Command.IsRunning() {
 		e.processRunningToStop()
+	}
+}
+
+// GetConfig returns a deep copy of the current config
+func (e *Engine) GetConfig() *Config {
+	cfg := Config{}
+	proto.Merge(&cfg, &e.config)
+	return &cfg
+}
+
+// UpdateConfig updates the current engine config with the given delta
+func (e *Engine) UpdateConfig(delta *Config) {
+	proto.Merge(&e.config, delta)
+	log.Printf("Engine config updated to %v", e.config)
+	if err := e.config.WriteTo(e.engineConfig.ConfigFilename); err != nil {
+		log.Printf("Could not write engine config: %v", err)
 	}
 }

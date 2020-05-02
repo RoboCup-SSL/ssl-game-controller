@@ -24,7 +24,7 @@ func Test_Engine(t *testing.T) {
 
 	gameConfig := config.DefaultControllerConfig().Game
 	gameConfig.StateStoreFile = tmpDir + "/store.json.stream"
-	engine := NewEngine(gameConfig)
+	engine := NewEngine(gameConfig, config.Engine{ConfigFilename: tmpDir + "/engine.yaml"})
 	hook := make(chan HookOut)
 	engine.RegisterHook("engineTest", hook)
 	if err := engine.Start(); err != nil {

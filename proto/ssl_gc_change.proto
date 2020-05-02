@@ -82,10 +82,9 @@ message Continue {
 }
 
 message UpdateConfig {
-    optional State.Division division = 1;
+    optional Division division = 1;
     optional Team first_kickoff_team = 2;
     optional bool auto_continue = 3;
-    map<string, State.GameEventBehavior> game_event_behavior = 4;
 }
 
 message UpdateTeamState {

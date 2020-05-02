@@ -251,6 +251,22 @@ export const RobotId = $root.RobotId = (() => {
     return RobotId;
 })();
 
+/**
+ * Division enum.
+ * @exports Division
+ * @enum {string}
+ * @property {number} DIV_UNKNOWN=0 DIV_UNKNOWN value
+ * @property {number} DIV_A=1 DIV_A value
+ * @property {number} DIV_B=2 DIV_B value
+ */
+$root.Division = (function() {
+    const valuesById = {}, values = Object.create(valuesById);
+    values[valuesById[0] = "DIV_UNKNOWN"] = 0;
+    values[valuesById[1] = "DIV_A"] = 1;
+    values[valuesById[2] = "DIV_B"] = 2;
+    return values;
+})();
+
 export const Vector2 = $root.Vector2 = (() => {
 
     /**
@@ -17161,10 +17177,9 @@ export const UpdateConfig = $root.UpdateConfig = (() => {
      * Properties of an UpdateConfig.
      * @exports IUpdateConfig
      * @interface IUpdateConfig
-     * @property {State.Division|null} [division] UpdateConfig division
+     * @property {Division|null} [division] UpdateConfig division
      * @property {Team|null} [firstKickoffTeam] UpdateConfig firstKickoffTeam
      * @property {boolean|null} [autoContinue] UpdateConfig autoContinue
-     * @property {Object.<string,State.GameEventBehavior>|null} [gameEventBehavior] UpdateConfig gameEventBehavior
      */
 
     /**
@@ -17176,7 +17191,6 @@ export const UpdateConfig = $root.UpdateConfig = (() => {
      * @param {IUpdateConfig=} [properties] Properties to set
      */
     function UpdateConfig(properties) {
-        this.gameEventBehavior = {};
         if (properties)
             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
@@ -17185,7 +17199,7 @@ export const UpdateConfig = $root.UpdateConfig = (() => {
 
     /**
      * UpdateConfig division.
-     * @member {State.Division} division
+     * @member {Division} division
      * @memberof UpdateConfig
      * @instance
      */
@@ -17206,14 +17220,6 @@ export const UpdateConfig = $root.UpdateConfig = (() => {
      * @instance
      */
     UpdateConfig.prototype.autoContinue = false;
-
-    /**
-     * UpdateConfig gameEventBehavior.
-     * @member {Object.<string,State.GameEventBehavior>} gameEventBehavior
-     * @memberof UpdateConfig
-     * @instance
-     */
-    UpdateConfig.prototype.gameEventBehavior = $util.emptyObject;
 
     /**
      * Creates a new UpdateConfig instance using the specified properties.
@@ -17245,9 +17251,6 @@ export const UpdateConfig = $root.UpdateConfig = (() => {
             writer.uint32(/* id 2, wireType 0 =*/16).int32(message.firstKickoffTeam);
         if (message.autoContinue != null && message.hasOwnProperty("autoContinue"))
             writer.uint32(/* id 3, wireType 0 =*/24).bool(message.autoContinue);
-        if (message.gameEventBehavior != null && message.hasOwnProperty("gameEventBehavior"))
-            for (let keys = Object.keys(message.gameEventBehavior), i = 0; i < keys.length; ++i)
-                writer.uint32(/* id 4, wireType 2 =*/34).fork().uint32(/* id 1, wireType 2 =*/10).string(keys[i]).uint32(/* id 2, wireType 0 =*/16).int32(message.gameEventBehavior[keys[i]]).ldelim();
         return writer;
     };
 
@@ -17278,7 +17281,7 @@ export const UpdateConfig = $root.UpdateConfig = (() => {
     UpdateConfig.decode = function decode(reader, length) {
         if (!(reader instanceof $Reader))
             reader = $Reader.create(reader);
-        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.UpdateConfig(), key;
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.UpdateConfig();
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
@@ -17290,14 +17293,6 @@ export const UpdateConfig = $root.UpdateConfig = (() => {
                 break;
             case 3:
                 message.autoContinue = reader.bool();
-                break;
-            case 4:
-                reader.skip().pos++;
-                if (message.gameEventBehavior === $util.emptyObject)
-                    message.gameEventBehavior = {};
-                key = reader.string();
-                reader.pos++;
-                message.gameEventBehavior[key] = reader.int32();
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -17355,21 +17350,6 @@ export const UpdateConfig = $root.UpdateConfig = (() => {
         if (message.autoContinue != null && message.hasOwnProperty("autoContinue"))
             if (typeof message.autoContinue !== "boolean")
                 return "autoContinue: boolean expected";
-        if (message.gameEventBehavior != null && message.hasOwnProperty("gameEventBehavior")) {
-            if (!$util.isObject(message.gameEventBehavior))
-                return "gameEventBehavior: object expected";
-            let key = Object.keys(message.gameEventBehavior);
-            for (let i = 0; i < key.length; ++i)
-                switch (message.gameEventBehavior[key[i]]) {
-                default:
-                    return "gameEventBehavior: enum value{k:string} expected";
-                case 0:
-                case 1:
-                case 2:
-                case 3:
-                    break;
-                }
-        }
         return null;
     };
 
@@ -17415,30 +17395,6 @@ export const UpdateConfig = $root.UpdateConfig = (() => {
         }
         if (object.autoContinue != null)
             message.autoContinue = Boolean(object.autoContinue);
-        if (object.gameEventBehavior) {
-            if (typeof object.gameEventBehavior !== "object")
-                throw TypeError(".UpdateConfig.gameEventBehavior: object expected");
-            message.gameEventBehavior = {};
-            for (let keys = Object.keys(object.gameEventBehavior), i = 0; i < keys.length; ++i)
-                switch (object.gameEventBehavior[keys[i]]) {
-                case "GAME_EVENT_BEHAVIOR_UNKNOWN":
-                case 0:
-                    message.gameEventBehavior[keys[i]] = 0;
-                    break;
-                case "GAME_EVENT_BEHAVIOR_ON":
-                case 1:
-                    message.gameEventBehavior[keys[i]] = 1;
-                    break;
-                case "GAME_EVENT_BEHAVIOR_MAJORITY":
-                case 2:
-                    message.gameEventBehavior[keys[i]] = 2;
-                    break;
-                case "GAME_EVENT_BEHAVIOR_OFF":
-                case 3:
-                    message.gameEventBehavior[keys[i]] = 3;
-                    break;
-                }
-        }
         return message;
     };
 
@@ -17455,25 +17411,17 @@ export const UpdateConfig = $root.UpdateConfig = (() => {
         if (!options)
             options = {};
         let object = {};
-        if (options.objects || options.defaults)
-            object.gameEventBehavior = {};
         if (options.defaults) {
             object.division = options.enums === String ? "DIV_UNKNOWN" : 0;
             object.firstKickoffTeam = options.enums === String ? "UNKNOWN" : 0;
             object.autoContinue = false;
         }
         if (message.division != null && message.hasOwnProperty("division"))
-            object.division = options.enums === String ? $root.State.Division[message.division] : message.division;
+            object.division = options.enums === String ? $root.Division[message.division] : message.division;
         if (message.firstKickoffTeam != null && message.hasOwnProperty("firstKickoffTeam"))
             object.firstKickoffTeam = options.enums === String ? $root.Team[message.firstKickoffTeam] : message.firstKickoffTeam;
         if (message.autoContinue != null && message.hasOwnProperty("autoContinue"))
             object.autoContinue = message.autoContinue;
-        let keys2;
-        if (message.gameEventBehavior && (keys2 = Object.keys(message.gameEventBehavior)).length) {
-            object.gameEventBehavior = {};
-            for (let j = 0; j < keys2.length; ++j)
-                object.gameEventBehavior[keys2[j]] = options.enums === String ? $root.State.GameEventBehavior[message.gameEventBehavior[keys2[j]]] : message.gameEventBehavior[keys2[j]];
-        }
         return object;
     };
 
@@ -20464,10 +20412,9 @@ export const State = $root.State = (() => {
      * @property {google.protobuf.IDuration|null} [currentActionTimeRemaining] State currentActionTimeRemaining
      * @property {Array.<IGameEvent>|null} [gameEvents] State gameEvents
      * @property {Array.<IProposedGameEvent>|null} [proposedGameEvents] State proposedGameEvents
-     * @property {State.Division|null} [division] State division
+     * @property {Division|null} [division] State division
      * @property {boolean|null} [autoContinue] State autoContinue
      * @property {Team|null} [firstKickoffTeam] State firstKickoffTeam
-     * @property {Object.<string,State.GameEventBehavior>|null} [gameEventBehavior] State gameEventBehavior
      */
 
     /**
@@ -20482,7 +20429,6 @@ export const State = $root.State = (() => {
         this.teamState = {};
         this.gameEvents = [];
         this.proposedGameEvents = [];
-        this.gameEventBehavior = {};
         if (properties)
             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
@@ -20587,7 +20533,7 @@ export const State = $root.State = (() => {
 
     /**
      * State division.
-     * @member {State.Division} division
+     * @member {Division} division
      * @memberof State
      * @instance
      */
@@ -20608,14 +20554,6 @@ export const State = $root.State = (() => {
      * @instance
      */
     State.prototype.firstKickoffTeam = 0;
-
-    /**
-     * State gameEventBehavior.
-     * @member {Object.<string,State.GameEventBehavior>} gameEventBehavior
-     * @memberof State
-     * @instance
-     */
-    State.prototype.gameEventBehavior = $util.emptyObject;
 
     /**
      * Creates a new State instance using the specified properties.
@@ -20674,9 +20612,6 @@ export const State = $root.State = (() => {
             writer.uint32(/* id 16, wireType 0 =*/128).bool(message.autoContinue);
         if (message.firstKickoffTeam != null && message.hasOwnProperty("firstKickoffTeam"))
             writer.uint32(/* id 17, wireType 0 =*/136).int32(message.firstKickoffTeam);
-        if (message.gameEventBehavior != null && message.hasOwnProperty("gameEventBehavior"))
-            for (let keys = Object.keys(message.gameEventBehavior), i = 0; i < keys.length; ++i)
-                writer.uint32(/* id 18, wireType 2 =*/146).fork().uint32(/* id 1, wireType 2 =*/10).string(keys[i]).uint32(/* id 2, wireType 0 =*/16).int32(message.gameEventBehavior[keys[i]]).ldelim();
         if (message.gameState != null && message.hasOwnProperty("gameState"))
             $root.GameState.encode(message.gameState, writer.uint32(/* id 19, wireType 2 =*/154).fork()).ldelim();
         return writer;
@@ -20766,14 +20701,6 @@ export const State = $root.State = (() => {
                 break;
             case 17:
                 message.firstKickoffTeam = reader.int32();
-                break;
-            case 18:
-                reader.skip().pos++;
-                if (message.gameEventBehavior === $util.emptyObject)
-                    message.gameEventBehavior = {};
-                key = reader.string();
-                reader.pos++;
-                message.gameEventBehavior[key] = reader.int32();
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -20919,21 +20846,6 @@ export const State = $root.State = (() => {
             case 2:
                 break;
             }
-        if (message.gameEventBehavior != null && message.hasOwnProperty("gameEventBehavior")) {
-            if (!$util.isObject(message.gameEventBehavior))
-                return "gameEventBehavior: object expected";
-            let key = Object.keys(message.gameEventBehavior);
-            for (let i = 0; i < key.length; ++i)
-                switch (message.gameEventBehavior[key[i]]) {
-                default:
-                    return "gameEventBehavior: enum value{k:string} expected";
-                case 0:
-                case 1:
-                case 2:
-                case 3:
-                    break;
-                }
-        }
         return null;
     };
 
@@ -21107,30 +21019,6 @@ export const State = $root.State = (() => {
             message.firstKickoffTeam = 2;
             break;
         }
-        if (object.gameEventBehavior) {
-            if (typeof object.gameEventBehavior !== "object")
-                throw TypeError(".State.gameEventBehavior: object expected");
-            message.gameEventBehavior = {};
-            for (let keys = Object.keys(object.gameEventBehavior), i = 0; i < keys.length; ++i)
-                switch (object.gameEventBehavior[keys[i]]) {
-                case "GAME_EVENT_BEHAVIOR_UNKNOWN":
-                case 0:
-                    message.gameEventBehavior[keys[i]] = 0;
-                    break;
-                case "GAME_EVENT_BEHAVIOR_ON":
-                case 1:
-                    message.gameEventBehavior[keys[i]] = 1;
-                    break;
-                case "GAME_EVENT_BEHAVIOR_MAJORITY":
-                case 2:
-                    message.gameEventBehavior[keys[i]] = 2;
-                    break;
-                case "GAME_EVENT_BEHAVIOR_OFF":
-                case 3:
-                    message.gameEventBehavior[keys[i]] = 3;
-                    break;
-                }
-        }
         return message;
     };
 
@@ -21151,10 +21039,8 @@ export const State = $root.State = (() => {
             object.gameEvents = [];
             object.proposedGameEvents = [];
         }
-        if (options.objects || options.defaults) {
+        if (options.objects || options.defaults)
             object.teamState = {};
-            object.gameEventBehavior = {};
-        }
         if (options.defaults) {
             object.stage = options.enums === String ? "NORMAL_FIRST_HALF_PRE" : 0;
             object.command = null;
@@ -21202,16 +21088,11 @@ export const State = $root.State = (() => {
                 object.proposedGameEvents[j] = $root.ProposedGameEvent.toObject(message.proposedGameEvents[j], options);
         }
         if (message.division != null && message.hasOwnProperty("division"))
-            object.division = options.enums === String ? $root.State.Division[message.division] : message.division;
+            object.division = options.enums === String ? $root.Division[message.division] : message.division;
         if (message.autoContinue != null && message.hasOwnProperty("autoContinue"))
             object.autoContinue = message.autoContinue;
         if (message.firstKickoffTeam != null && message.hasOwnProperty("firstKickoffTeam"))
             object.firstKickoffTeam = options.enums === String ? $root.Team[message.firstKickoffTeam] : message.firstKickoffTeam;
-        if (message.gameEventBehavior && (keys2 = Object.keys(message.gameEventBehavior)).length) {
-            object.gameEventBehavior = {};
-            for (let j = 0; j < keys2.length; ++j)
-                object.gameEventBehavior[keys2[j]] = options.enums === String ? $root.State.GameEventBehavior[message.gameEventBehavior[keys2[j]]] : message.gameEventBehavior[keys2[j]];
-        }
         if (message.gameState != null && message.hasOwnProperty("gameState"))
             object.gameState = $root.GameState.toObject(message.gameState, options);
         return object;
@@ -21227,40 +21108,6 @@ export const State = $root.State = (() => {
     State.prototype.toJSON = function toJSON() {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
-
-    /**
-     * Division enum.
-     * @name State.Division
-     * @enum {string}
-     * @property {number} DIV_UNKNOWN=0 DIV_UNKNOWN value
-     * @property {number} DIV_A=1 DIV_A value
-     * @property {number} DIV_B=2 DIV_B value
-     */
-    State.Division = (function() {
-        const valuesById = {}, values = Object.create(valuesById);
-        values[valuesById[0] = "DIV_UNKNOWN"] = 0;
-        values[valuesById[1] = "DIV_A"] = 1;
-        values[valuesById[2] = "DIV_B"] = 2;
-        return values;
-    })();
-
-    /**
-     * GameEventBehavior enum.
-     * @name State.GameEventBehavior
-     * @enum {string}
-     * @property {number} GAME_EVENT_BEHAVIOR_UNKNOWN=0 GAME_EVENT_BEHAVIOR_UNKNOWN value
-     * @property {number} GAME_EVENT_BEHAVIOR_ON=1 GAME_EVENT_BEHAVIOR_ON value
-     * @property {number} GAME_EVENT_BEHAVIOR_MAJORITY=2 GAME_EVENT_BEHAVIOR_MAJORITY value
-     * @property {number} GAME_EVENT_BEHAVIOR_OFF=3 GAME_EVENT_BEHAVIOR_OFF value
-     */
-    State.GameEventBehavior = (function() {
-        const valuesById = {}, values = Object.create(valuesById);
-        values[valuesById[0] = "GAME_EVENT_BEHAVIOR_UNKNOWN"] = 0;
-        values[valuesById[1] = "GAME_EVENT_BEHAVIOR_ON"] = 1;
-        values[valuesById[2] = "GAME_EVENT_BEHAVIOR_MAJORITY"] = 2;
-        values[valuesById[3] = "GAME_EVENT_BEHAVIOR_OFF"] = 3;
-        return values;
-    })();
 
     return State;
 })();
@@ -21746,6 +21593,7 @@ export const Output = $root.Output = (() => {
      * @property {IState|null} [matchState] Output matchState
      * @property {IGcState|null} [gcState] Output gcState
      * @property {IProtocol|null} [protocol] Output protocol
+     * @property {IConfig|null} [config] Output config
      */
 
     /**
@@ -21788,6 +21636,14 @@ export const Output = $root.Output = (() => {
     Output.prototype.protocol = null;
 
     /**
+     * Output config.
+     * @member {IConfig|null|undefined} config
+     * @memberof Output
+     * @instance
+     */
+    Output.prototype.config = null;
+
+    /**
      * Creates a new Output instance using the specified properties.
      * @function create
      * @memberof Output
@@ -21817,6 +21673,8 @@ export const Output = $root.Output = (() => {
             $root.GcState.encode(message.gcState, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
         if (message.protocol != null && message.hasOwnProperty("protocol"))
             $root.Protocol.encode(message.protocol, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+        if (message.config != null && message.hasOwnProperty("config"))
+            $root.Config.encode(message.config, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
         return writer;
     };
 
@@ -21859,6 +21717,9 @@ export const Output = $root.Output = (() => {
                 break;
             case 3:
                 message.protocol = $root.Protocol.decode(reader, reader.uint32());
+                break;
+            case 4:
+                message.config = $root.Config.decode(reader, reader.uint32());
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -21910,6 +21771,11 @@ export const Output = $root.Output = (() => {
             if (error)
                 return "protocol." + error;
         }
+        if (message.config != null && message.hasOwnProperty("config")) {
+            let error = $root.Config.verify(message.config);
+            if (error)
+                return "config." + error;
+        }
         return null;
     };
 
@@ -21940,6 +21806,11 @@ export const Output = $root.Output = (() => {
                 throw TypeError(".Output.protocol: object expected");
             message.protocol = $root.Protocol.fromObject(object.protocol);
         }
+        if (object.config != null) {
+            if (typeof object.config !== "object")
+                throw TypeError(".Output.config: object expected");
+            message.config = $root.Config.fromObject(object.config);
+        }
         return message;
     };
 
@@ -21960,6 +21831,7 @@ export const Output = $root.Output = (() => {
             object.matchState = null;
             object.gcState = null;
             object.protocol = null;
+            object.config = null;
         }
         if (message.matchState != null && message.hasOwnProperty("matchState"))
             object.matchState = $root.State.toObject(message.matchState, options);
@@ -21967,6 +21839,8 @@ export const Output = $root.Output = (() => {
             object.gcState = $root.GcState.toObject(message.gcState, options);
         if (message.protocol != null && message.hasOwnProperty("protocol"))
             object.protocol = $root.Protocol.toObject(message.protocol, options);
+        if (message.config != null && message.hasOwnProperty("config"))
+            object.config = $root.Config.toObject(message.config, options);
         return object;
     };
 
@@ -22492,6 +22366,7 @@ export const Input = $root.Input = (() => {
      * @interface IInput
      * @property {IChange|null} [change] Input change
      * @property {boolean|null} [resetMatch] Input resetMatch
+     * @property {IConfig|null} [configDelta] Input configDelta
      */
 
     /**
@@ -22526,6 +22401,14 @@ export const Input = $root.Input = (() => {
     Input.prototype.resetMatch = false;
 
     /**
+     * Input configDelta.
+     * @member {IConfig|null|undefined} configDelta
+     * @memberof Input
+     * @instance
+     */
+    Input.prototype.configDelta = null;
+
+    /**
      * Creates a new Input instance using the specified properties.
      * @function create
      * @memberof Input
@@ -22553,6 +22436,8 @@ export const Input = $root.Input = (() => {
             $root.Change.encode(message.change, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
         if (message.resetMatch != null && message.hasOwnProperty("resetMatch"))
             writer.uint32(/* id 2, wireType 0 =*/16).bool(message.resetMatch);
+        if (message.configDelta != null && message.hasOwnProperty("configDelta"))
+            $root.Config.encode(message.configDelta, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
         return writer;
     };
 
@@ -22592,6 +22477,9 @@ export const Input = $root.Input = (() => {
                 break;
             case 2:
                 message.resetMatch = reader.bool();
+                break;
+            case 3:
+                message.configDelta = $root.Config.decode(reader, reader.uint32());
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -22636,6 +22524,11 @@ export const Input = $root.Input = (() => {
         if (message.resetMatch != null && message.hasOwnProperty("resetMatch"))
             if (typeof message.resetMatch !== "boolean")
                 return "resetMatch: boolean expected";
+        if (message.configDelta != null && message.hasOwnProperty("configDelta")) {
+            let error = $root.Config.verify(message.configDelta);
+            if (error)
+                return "configDelta." + error;
+        }
         return null;
     };
 
@@ -22658,6 +22551,11 @@ export const Input = $root.Input = (() => {
         }
         if (object.resetMatch != null)
             message.resetMatch = Boolean(object.resetMatch);
+        if (object.configDelta != null) {
+            if (typeof object.configDelta !== "object")
+                throw TypeError(".Input.configDelta: object expected");
+            message.configDelta = $root.Config.fromObject(object.configDelta);
+        }
         return message;
     };
 
@@ -22677,11 +22575,14 @@ export const Input = $root.Input = (() => {
         if (options.defaults) {
             object.change = null;
             object.resetMatch = false;
+            object.configDelta = null;
         }
         if (message.change != null && message.hasOwnProperty("change"))
             object.change = $root.Change.toObject(message.change, options);
         if (message.resetMatch != null && message.hasOwnProperty("resetMatch"))
             object.resetMatch = message.resetMatch;
+        if (message.configDelta != null && message.hasOwnProperty("configDelta"))
+            object.configDelta = $root.Config.toObject(message.configDelta, options);
         return object;
     };
 
@@ -24158,6 +24059,514 @@ export const Robot = $root.Robot = (() => {
     };
 
     return Robot;
+})();
+
+export const Config = $root.Config = (() => {
+
+    /**
+     * Properties of a Config.
+     * @exports IConfig
+     * @interface IConfig
+     * @property {Object.<string,Config.GameEventBehavior>|null} [gameEventBehavior] Config gameEventBehavior
+     * @property {Object.<string,IAutoRefConfig>|null} [autoRefConfigs] Config autoRefConfigs
+     */
+
+    /**
+     * Constructs a new Config.
+     * @exports Config
+     * @classdesc Represents a Config.
+     * @implements IConfig
+     * @constructor
+     * @param {IConfig=} [properties] Properties to set
+     */
+    function Config(properties) {
+        this.gameEventBehavior = {};
+        this.autoRefConfigs = {};
+        if (properties)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * Config gameEventBehavior.
+     * @member {Object.<string,Config.GameEventBehavior>} gameEventBehavior
+     * @memberof Config
+     * @instance
+     */
+    Config.prototype.gameEventBehavior = $util.emptyObject;
+
+    /**
+     * Config autoRefConfigs.
+     * @member {Object.<string,IAutoRefConfig>} autoRefConfigs
+     * @memberof Config
+     * @instance
+     */
+    Config.prototype.autoRefConfigs = $util.emptyObject;
+
+    /**
+     * Creates a new Config instance using the specified properties.
+     * @function create
+     * @memberof Config
+     * @static
+     * @param {IConfig=} [properties] Properties to set
+     * @returns {Config} Config instance
+     */
+    Config.create = function create(properties) {
+        return new Config(properties);
+    };
+
+    /**
+     * Encodes the specified Config message. Does not implicitly {@link Config.verify|verify} messages.
+     * @function encode
+     * @memberof Config
+     * @static
+     * @param {IConfig} message Config message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    Config.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.gameEventBehavior != null && message.hasOwnProperty("gameEventBehavior"))
+            for (let keys = Object.keys(message.gameEventBehavior), i = 0; i < keys.length; ++i)
+                writer.uint32(/* id 3, wireType 2 =*/26).fork().uint32(/* id 1, wireType 2 =*/10).string(keys[i]).uint32(/* id 2, wireType 0 =*/16).int32(message.gameEventBehavior[keys[i]]).ldelim();
+        if (message.autoRefConfigs != null && message.hasOwnProperty("autoRefConfigs"))
+            for (let keys = Object.keys(message.autoRefConfigs), i = 0; i < keys.length; ++i) {
+                writer.uint32(/* id 4, wireType 2 =*/34).fork().uint32(/* id 1, wireType 2 =*/10).string(keys[i]);
+                $root.AutoRefConfig.encode(message.autoRefConfigs[keys[i]], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim().ldelim();
+            }
+        return writer;
+    };
+
+    /**
+     * Encodes the specified Config message, length delimited. Does not implicitly {@link Config.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof Config
+     * @static
+     * @param {IConfig} message Config message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    Config.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a Config message from the specified reader or buffer.
+     * @function decode
+     * @memberof Config
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {Config} Config
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    Config.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Config(), key;
+        while (reader.pos < end) {
+            let tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 3:
+                reader.skip().pos++;
+                if (message.gameEventBehavior === $util.emptyObject)
+                    message.gameEventBehavior = {};
+                key = reader.string();
+                reader.pos++;
+                message.gameEventBehavior[key] = reader.int32();
+                break;
+            case 4:
+                reader.skip().pos++;
+                if (message.autoRefConfigs === $util.emptyObject)
+                    message.autoRefConfigs = {};
+                key = reader.string();
+                reader.pos++;
+                message.autoRefConfigs[key] = $root.AutoRefConfig.decode(reader, reader.uint32());
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes a Config message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof Config
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {Config} Config
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    Config.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a Config message.
+     * @function verify
+     * @memberof Config
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    Config.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (message.gameEventBehavior != null && message.hasOwnProperty("gameEventBehavior")) {
+            if (!$util.isObject(message.gameEventBehavior))
+                return "gameEventBehavior: object expected";
+            let key = Object.keys(message.gameEventBehavior);
+            for (let i = 0; i < key.length; ++i)
+                switch (message.gameEventBehavior[key[i]]) {
+                default:
+                    return "gameEventBehavior: enum value{k:string} expected";
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                    break;
+                }
+        }
+        if (message.autoRefConfigs != null && message.hasOwnProperty("autoRefConfigs")) {
+            if (!$util.isObject(message.autoRefConfigs))
+                return "autoRefConfigs: object expected";
+            let key = Object.keys(message.autoRefConfigs);
+            for (let i = 0; i < key.length; ++i) {
+                let error = $root.AutoRefConfig.verify(message.autoRefConfigs[key[i]]);
+                if (error)
+                    return "autoRefConfigs." + error;
+            }
+        }
+        return null;
+    };
+
+    /**
+     * Creates a Config message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof Config
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {Config} Config
+     */
+    Config.fromObject = function fromObject(object) {
+        if (object instanceof $root.Config)
+            return object;
+        let message = new $root.Config();
+        if (object.gameEventBehavior) {
+            if (typeof object.gameEventBehavior !== "object")
+                throw TypeError(".Config.gameEventBehavior: object expected");
+            message.gameEventBehavior = {};
+            for (let keys = Object.keys(object.gameEventBehavior), i = 0; i < keys.length; ++i)
+                switch (object.gameEventBehavior[keys[i]]) {
+                case "GAME_EVENT_BEHAVIOR_UNKNOWN":
+                case 0:
+                    message.gameEventBehavior[keys[i]] = 0;
+                    break;
+                case "GAME_EVENT_BEHAVIOR_ON":
+                case 1:
+                    message.gameEventBehavior[keys[i]] = 1;
+                    break;
+                case "GAME_EVENT_BEHAVIOR_MAJORITY":
+                case 2:
+                    message.gameEventBehavior[keys[i]] = 2;
+                    break;
+                case "GAME_EVENT_BEHAVIOR_OFF":
+                case 3:
+                    message.gameEventBehavior[keys[i]] = 3;
+                    break;
+                }
+        }
+        if (object.autoRefConfigs) {
+            if (typeof object.autoRefConfigs !== "object")
+                throw TypeError(".Config.autoRefConfigs: object expected");
+            message.autoRefConfigs = {};
+            for (let keys = Object.keys(object.autoRefConfigs), i = 0; i < keys.length; ++i) {
+                if (typeof object.autoRefConfigs[keys[i]] !== "object")
+                    throw TypeError(".Config.autoRefConfigs: object expected");
+                message.autoRefConfigs[keys[i]] = $root.AutoRefConfig.fromObject(object.autoRefConfigs[keys[i]]);
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a Config message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof Config
+     * @static
+     * @param {Config} message Config
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    Config.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        let object = {};
+        if (options.objects || options.defaults) {
+            object.gameEventBehavior = {};
+            object.autoRefConfigs = {};
+        }
+        let keys2;
+        if (message.gameEventBehavior && (keys2 = Object.keys(message.gameEventBehavior)).length) {
+            object.gameEventBehavior = {};
+            for (let j = 0; j < keys2.length; ++j)
+                object.gameEventBehavior[keys2[j]] = options.enums === String ? $root.Config.GameEventBehavior[message.gameEventBehavior[keys2[j]]] : message.gameEventBehavior[keys2[j]];
+        }
+        if (message.autoRefConfigs && (keys2 = Object.keys(message.autoRefConfigs)).length) {
+            object.autoRefConfigs = {};
+            for (let j = 0; j < keys2.length; ++j)
+                object.autoRefConfigs[keys2[j]] = $root.AutoRefConfig.toObject(message.autoRefConfigs[keys2[j]], options);
+        }
+        return object;
+    };
+
+    /**
+     * Converts this Config to JSON.
+     * @function toJSON
+     * @memberof Config
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    Config.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    /**
+     * GameEventBehavior enum.
+     * @name Config.GameEventBehavior
+     * @enum {string}
+     * @property {number} GAME_EVENT_BEHAVIOR_UNKNOWN=0 GAME_EVENT_BEHAVIOR_UNKNOWN value
+     * @property {number} GAME_EVENT_BEHAVIOR_ON=1 GAME_EVENT_BEHAVIOR_ON value
+     * @property {number} GAME_EVENT_BEHAVIOR_MAJORITY=2 GAME_EVENT_BEHAVIOR_MAJORITY value
+     * @property {number} GAME_EVENT_BEHAVIOR_OFF=3 GAME_EVENT_BEHAVIOR_OFF value
+     */
+    Config.GameEventBehavior = (function() {
+        const valuesById = {}, values = Object.create(valuesById);
+        values[valuesById[0] = "GAME_EVENT_BEHAVIOR_UNKNOWN"] = 0;
+        values[valuesById[1] = "GAME_EVENT_BEHAVIOR_ON"] = 1;
+        values[valuesById[2] = "GAME_EVENT_BEHAVIOR_MAJORITY"] = 2;
+        values[valuesById[3] = "GAME_EVENT_BEHAVIOR_OFF"] = 3;
+        return values;
+    })();
+
+    return Config;
+})();
+
+export const AutoRefConfig = $root.AutoRefConfig = (() => {
+
+    /**
+     * Properties of an AutoRefConfig.
+     * @exports IAutoRefConfig
+     * @interface IAutoRefConfig
+     * @property {Object.<string,boolean>|null} [gameEventEnabled] AutoRefConfig gameEventEnabled
+     */
+
+    /**
+     * Constructs a new AutoRefConfig.
+     * @exports AutoRefConfig
+     * @classdesc Represents an AutoRefConfig.
+     * @implements IAutoRefConfig
+     * @constructor
+     * @param {IAutoRefConfig=} [properties] Properties to set
+     */
+    function AutoRefConfig(properties) {
+        this.gameEventEnabled = {};
+        if (properties)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * AutoRefConfig gameEventEnabled.
+     * @member {Object.<string,boolean>} gameEventEnabled
+     * @memberof AutoRefConfig
+     * @instance
+     */
+    AutoRefConfig.prototype.gameEventEnabled = $util.emptyObject;
+
+    /**
+     * Creates a new AutoRefConfig instance using the specified properties.
+     * @function create
+     * @memberof AutoRefConfig
+     * @static
+     * @param {IAutoRefConfig=} [properties] Properties to set
+     * @returns {AutoRefConfig} AutoRefConfig instance
+     */
+    AutoRefConfig.create = function create(properties) {
+        return new AutoRefConfig(properties);
+    };
+
+    /**
+     * Encodes the specified AutoRefConfig message. Does not implicitly {@link AutoRefConfig.verify|verify} messages.
+     * @function encode
+     * @memberof AutoRefConfig
+     * @static
+     * @param {IAutoRefConfig} message AutoRefConfig message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    AutoRefConfig.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.gameEventEnabled != null && message.hasOwnProperty("gameEventEnabled"))
+            for (let keys = Object.keys(message.gameEventEnabled), i = 0; i < keys.length; ++i)
+                writer.uint32(/* id 1, wireType 2 =*/10).fork().uint32(/* id 1, wireType 2 =*/10).string(keys[i]).uint32(/* id 2, wireType 0 =*/16).bool(message.gameEventEnabled[keys[i]]).ldelim();
+        return writer;
+    };
+
+    /**
+     * Encodes the specified AutoRefConfig message, length delimited. Does not implicitly {@link AutoRefConfig.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof AutoRefConfig
+     * @static
+     * @param {IAutoRefConfig} message AutoRefConfig message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    AutoRefConfig.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes an AutoRefConfig message from the specified reader or buffer.
+     * @function decode
+     * @memberof AutoRefConfig
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {AutoRefConfig} AutoRefConfig
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    AutoRefConfig.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.AutoRefConfig(), key;
+        while (reader.pos < end) {
+            let tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1:
+                reader.skip().pos++;
+                if (message.gameEventEnabled === $util.emptyObject)
+                    message.gameEventEnabled = {};
+                key = reader.string();
+                reader.pos++;
+                message.gameEventEnabled[key] = reader.bool();
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes an AutoRefConfig message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof AutoRefConfig
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {AutoRefConfig} AutoRefConfig
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    AutoRefConfig.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies an AutoRefConfig message.
+     * @function verify
+     * @memberof AutoRefConfig
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    AutoRefConfig.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (message.gameEventEnabled != null && message.hasOwnProperty("gameEventEnabled")) {
+            if (!$util.isObject(message.gameEventEnabled))
+                return "gameEventEnabled: object expected";
+            let key = Object.keys(message.gameEventEnabled);
+            for (let i = 0; i < key.length; ++i)
+                if (typeof message.gameEventEnabled[key[i]] !== "boolean")
+                    return "gameEventEnabled: boolean{k:string} expected";
+        }
+        return null;
+    };
+
+    /**
+     * Creates an AutoRefConfig message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof AutoRefConfig
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {AutoRefConfig} AutoRefConfig
+     */
+    AutoRefConfig.fromObject = function fromObject(object) {
+        if (object instanceof $root.AutoRefConfig)
+            return object;
+        let message = new $root.AutoRefConfig();
+        if (object.gameEventEnabled) {
+            if (typeof object.gameEventEnabled !== "object")
+                throw TypeError(".AutoRefConfig.gameEventEnabled: object expected");
+            message.gameEventEnabled = {};
+            for (let keys = Object.keys(object.gameEventEnabled), i = 0; i < keys.length; ++i)
+                message.gameEventEnabled[keys[i]] = Boolean(object.gameEventEnabled[keys[i]]);
+        }
+        return message;
+    };
+
+    /**
+     * Creates a plain object from an AutoRefConfig message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof AutoRefConfig
+     * @static
+     * @param {AutoRefConfig} message AutoRefConfig
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    AutoRefConfig.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        let object = {};
+        if (options.objects || options.defaults)
+            object.gameEventEnabled = {};
+        let keys2;
+        if (message.gameEventEnabled && (keys2 = Object.keys(message.gameEventEnabled)).length) {
+            object.gameEventEnabled = {};
+            for (let j = 0; j < keys2.length; ++j)
+                object.gameEventEnabled[keys2[j]] = message.gameEventEnabled[keys2[j]];
+        }
+        return object;
+    };
+
+    /**
+     * Converts this AutoRefConfig to JSON.
+     * @function toJSON
+     * @memberof AutoRefConfig
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    AutoRefConfig.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    return AutoRefConfig;
 })();
 
 export { $root as default };

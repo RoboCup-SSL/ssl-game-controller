@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import {GcState, State} from "./proto";
+import {Config, GcState, State} from "./proto";
 
 Vue.use(Vuex);
 
@@ -8,6 +8,7 @@ export default new Vuex.Store({
     state: {
         gcState: GcState.create(),
         matchState: State.create(),
+        config: Config.create(),
         protocol: [],
         initialized: false
     },
@@ -33,6 +34,9 @@ export default new Vuex.Store({
             if (message.matchState) {
                 state.matchState = message.matchState;
                 state.initialized = true;
+            }
+            if (message.config) {
+                state.config = message.config;
             }
         },
         SOCKET_RECONNECT(state) {

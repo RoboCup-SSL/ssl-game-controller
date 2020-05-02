@@ -14,6 +14,8 @@ server:
     trusted-keys-dir: config/trusted_keys/team
   ci:
     address: :10009
+engine:
+  config-filename: config/engine.yaml
 game:
   state-store-file: state-store.json.stream
   yellow-card-duration: 2m

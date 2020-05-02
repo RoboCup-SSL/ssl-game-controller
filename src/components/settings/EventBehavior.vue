@@ -49,30 +49,28 @@
 </template>
 
 <script>
-    import {submitChange} from "../../submit";
+    import {submitConfigUpdate} from "../../submit";
 
     export default {
         name: "EventBehavior",
         computed: {
             eventTypes() {
-                return Object.keys(this.$store.state.matchState.gameEventBehavior).sort();
+                return Object.keys(this.$store.state.config.gameEventBehavior).sort();
             },
         },
         methods: {
             eventBehavior(eventType) {
-                return this.$store.state.matchState.gameEventBehavior[eventType];
+                return this.$store.state.config.gameEventBehavior[eventType];
             },
             changeBehavior(eventType, eventBehavior) {
-                submitChange({
-                    updateConfig: {
-                        gameEventBehavior: {
-                            [eventType]: eventBehavior
-                        }
+                submitConfigUpdate({
+                    gameEventBehavior: {
+                        [eventType]: eventBehavior
                     }
                 });
             },
             allBehaviorsAre(value) {
-                for (let behavior of Object.values(this.$store.state.matchState.gameEventBehavior)) {
+                for (let behavior of Object.values(this.$store.state.config.gameEventBehavior)) {
                     if (behavior !== value) {
                         return false;
                     }
@@ -81,14 +79,12 @@
             },
             changeAllBehaviorsTo(eventBehavior) {
                 let behaviorMap = {};
-                for (let key of Object.keys(this.$store.state.matchState.gameEventBehavior)) {
+                for (let key of Object.keys(this.$store.state.config.gameEventBehavior)) {
                     behaviorMap[key] = eventBehavior;
                 }
 
-                submitChange({
-                    updateConfig: {
-                        gameEventBehavior: behaviorMap
-                    }
+                submitConfigUpdate({
+                    gameEventBehavior: behaviorMap
                 });
             }
         }

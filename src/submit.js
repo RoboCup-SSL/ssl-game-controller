@@ -28,3 +28,7 @@ export const submitGameEvent = function (gameEvent) {
 export const resetMatch = function () {
     vueApp.$socket.sendObj({resetMatch: true});
 };
+
+export const submitConfigUpdate = function (configDelta) {
+    vueApp.$socket.sendObj({configDelta});
+};

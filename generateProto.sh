@@ -34,6 +34,7 @@ protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_state.pro
 protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_change.proto
 protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_api.proto
 protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_engine.proto
+protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_engine_config.proto
 
 # continuous integration communication
 protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_ci.proto

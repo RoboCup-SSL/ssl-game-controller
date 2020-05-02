@@ -31,7 +31,7 @@ type GameController struct {
 func NewGameController(cfg config.Controller) (c *GameController) {
 	c = new(GameController)
 	c.config = cfg
-	c.gcEngine = engine.NewEngine(cfg.Game)
+	c.gcEngine = engine.NewEngine(cfg.Game, cfg.Engine)
 	c.messageGenerator = publish.NewMessageGenerator()
 	c.publisher = publish.NewPublisher(c.config.Network.PublishAddress)
 	c.apiServer = api.NewServer(c.gcEngine)

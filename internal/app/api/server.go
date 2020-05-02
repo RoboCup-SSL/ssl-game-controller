@@ -9,6 +9,7 @@ import (
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/gorilla/websocket"
+	"github.com/odeke-em/go-uuid"
 	"log"
 	"net/http"
 	"reflect"
@@ -27,6 +28,7 @@ type ServerConnection struct {
 	lastPublishedState *state.State
 	lastGcState        *engine.GcState
 	lastProtocolId     int32
+	lastConfig         *engine.Config
 	marshaler          jsonpb.Marshaler
 }
 
@@ -71,13 +73,15 @@ func (a *Server) WsHandler(w http.ResponseWriter, r *http.Request) {
 
 func (s *ServerConnection) publish() {
 	hook := make(chan engine.HookOut, 10)
-	s.gcEngine.RegisterHook("apiServer", hook)
+	hookId := "apiServer-" + uuid.New()
+	s.gcEngine.RegisterHook(hookId, hook)
 	defer func() {
-		s.gcEngine.UnregisterHook("apiServer")
+		s.gcEngine.UnregisterHook(hookId)
 		close(hook)
 	}()
 
 	s.publishGcState()
+	s.publishConfig()
 	s.publishState(s.gcEngine.CurrentState())
 	s.publishProtocolFull()
 
@@ -91,6 +95,7 @@ func (s *ServerConnection) publish() {
 				s.publishProtocolDelta()
 			} else if hookOut.State != nil {
 				s.publishGcState()
+				s.publishConfig()
 				s.publishState(hookOut.State)
 				if s.gcEngine.LatestChangeId() != s.lastProtocolId {
 					s.publishProtocolFull()
@@ -121,6 +126,17 @@ func (s *ServerConnection) publishGcState() {
 		s.publishOutput(&out)
 		s.lastGcState = &engine.GcState{}
 		proto.Merge(s.lastGcState, gcState)
+	}
+}
+
+func (s *ServerConnection) publishConfig() {
+	cfg := s.gcEngine.GetConfig()
+
+	if !reflect.DeepEqual(cfg, s.lastConfig) {
+		out := Output{Config: cfg}
+		s.publishOutput(&out)
+		s.lastConfig = &engine.Config{}
+		proto.Merge(s.lastConfig, cfg)
 	}
 }
 
@@ -227,6 +243,9 @@ func (a *Server) handleNewEventMessage(b []byte) {
 	if in.ResetMatch != nil && *in.ResetMatch {
 		a.gcEngine.ResetMatch()
 	}
+	if in.ConfigDelta != nil {
+		a.gcEngine.UpdateConfig(in.ConfigDelta)
+	}
 }
 
 func stateChanged(s1, s2 *state.State) bool {
@@ -275,9 +294,6 @@ func stateChanged(s1, s2 *state.State) bool {
 		return true
 	}
 	if *s1.FirstKickoffTeam != *s2.FirstKickoffTeam {
-		return true
-	}
-	if !reflect.DeepEqual(s1.GameEventBehavior, s2.GameEventBehavior) {
 		return true
 	}
 	return false

@@ -5,6 +5,7 @@ option go_package = "github.com/RoboCup-SSL/ssl-game-controller/internal/app/api
 import "ssl_gc_state.proto";
 import "ssl_gc_change.proto";
 import "ssl_gc_engine.proto";
+import "ssl_gc_engine_config.proto";
 
 import "google/protobuf/duration.proto";
 
@@ -16,6 +17,8 @@ message Output {
     optional GcState gc_state = 2;
     // The protocol
     optional Protocol protocol = 3;
+    // The engine config
+    optional Config config = 4;
 }
 
 // The game protocol
@@ -46,4 +49,6 @@ message Input {
     optional Change change = 1;
     // Reset the match
     optional bool reset_match = 2;
+    // An updated config delta
+    optional Config config_delta = 3;
 }

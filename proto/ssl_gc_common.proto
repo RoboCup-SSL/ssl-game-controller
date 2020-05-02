@@ -19,3 +19,10 @@ message RobotId {
     // the team that the robot belongs to
     optional Team team = 2;
 }
+
+// Division denotes the current division, which influences some rules
+enum Division {
+    DIV_UNKNOWN = 0;
+    DIV_A = 1;
+    DIV_B = 2;
+}

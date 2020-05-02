@@ -96,18 +96,4 @@ message State {
     optional Division division = 15;
     optional bool auto_continue = 16;
     optional Team first_kickoff_team = 17;
-    map<string, GameEventBehavior> game_event_behavior = 18;
-
-    enum Division {
-        DIV_UNKNOWN = 0;
-        DIV_A = 1;
-        DIV_B = 2;
-    }
-
-    enum GameEventBehavior {
-        GAME_EVENT_BEHAVIOR_UNKNOWN = 0;
-        GAME_EVENT_BEHAVIOR_ON = 1;
-        GAME_EVENT_BEHAVIOR_MAJORITY = 2;
-        GAME_EVENT_BEHAVIOR_OFF = 3;
-    }
 }

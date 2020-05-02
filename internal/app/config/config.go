@@ -94,12 +94,17 @@ type ServerCi struct {
 	Address string `yaml:"address"`
 }
 
+type Engine struct {
+	ConfigFilename string `yaml:"config-filename"`
+}
+
 // Controller structure for the game controller
 type Controller struct {
 	Network             Network             `yaml:"network"`
 	Game                Game                `yaml:"game"`
 	Server              Server              `yaml:"server"`
 	TimeAcquisitionMode TimeAcquisitionMode `yaml:"time-acquisition-mode"`
+	Engine              Engine              `yaml:"engine"`
 }
 
 type TimeAcquisitionMode string
@@ -223,6 +228,8 @@ func DefaultControllerConfig() (c Controller) {
 	c.Game.MaxBots = map[Division]int32{DivA: 11, DivB: 6}
 
 	c.TimeAcquisitionMode = TimeAcquisitionModeSystem
+
+	c.Engine.ConfigFilename = "config/engine.yaml"
 
 	return
 }
