@@ -64,6 +64,14 @@ func NewEngine(gameConfig config.Game, engineConfig config.Engine) (e *Engine) {
 
 // Enqueue adds the change to the change queue
 func (e *Engine) Enqueue(change *statemachine.Change) {
+	if change.GetAddGameEvent() != nil {
+		for t, b := range e.config.GameEventBehavior {
+			if b == Config_GAME_EVENT_BEHAVIOR_OFF && change.GetAddGameEvent().GameEvent.Type.String() == t {
+				// disabled game event
+				return
+			}
+		}
+	}
 	if change.Revertible == nil {
 		change.Revertible = new(bool)
 		// Assume that changes from outside are by default revertible, except if the flag is already set
@@ -305,4 +313,9 @@ func (e *Engine) UpdateConfig(delta *Config) {
 	if err := e.config.WriteTo(e.engineConfig.ConfigFilename); err != nil {
 		log.Printf("Could not write engine config: %v", err)
 	}
+}
+
+// IsGameEventEnabled returns true, if the game event type is not disabled
+func (e *Engine) IsGameEventEnabled(evenType state.GameEvent_Type) bool {
+	return e.config.GameEventBehavior[evenType.String()] != Config_GAME_EVENT_BEHAVIOR_OFF
 }

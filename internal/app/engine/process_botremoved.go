@@ -8,6 +8,10 @@ import (
 )
 
 func (e *Engine) processBotNumber() {
+	if !e.IsGameEventEnabled(state.GameEvent_TOO_MANY_ROBOTS) {
+		return
+	}
+
 	for _, team := range state.BothTeams() {
 		e.processBotNumberPerTeam(team)
 	}
