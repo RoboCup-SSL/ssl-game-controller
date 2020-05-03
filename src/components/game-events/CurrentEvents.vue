@@ -4,17 +4,15 @@
         <div class="game-event-item"
              v-if="gameEventsPresent"
              v-for="(gameEvent, index) in gameEvents"
+             @click="eventSelected(index)"
              :key="index">
             <span :class="{'team-blue': byTeam(gameEvent) === 'BLUE', 'team-yellow': byTeam(gameEvent) === 'YELLOW'}">
                 {{gameEvent.type}}
             </span>
             <p class="details-row"
+               v-if="selectedEvent === index"
                v-for="detail in detailsList(gameEvent)"
                :key="detail.key">{{detail.key}}: {{detail.value}}</p>
-            <p class="details-row"
-               v-if="gameEvent.origins && gameEvent.origins.length > 0">
-                Submitted by: {{gameEvent.origins}}
-            </p>
             <div class="btn-accept"
                  v-if="showAcceptGoal(gameEvent)"
                  v-b-tooltip.hover.d500.righttop="'Accept this goal'">
@@ -28,9 +26,15 @@
 
 <script>
     import {submitGameEvent} from "../../submit";
+    import {gameEventByTeam, gameEventDetailsList} from "../../gameEvents";
 
     export default {
         name: "CurrentEvents",
+        data() {
+            return {
+                selectedEvent: -1,
+            }
+        },
         computed: {
             gameEvents() {
                 return this.$store.state.matchState.gameEvents;
@@ -48,34 +52,21 @@
             }
         },
         methods: {
+            eventSelected(index) {
+                if (this.selectedEvent === index) {
+                    this.selectedEvent = -1;
+                } else {
+                    this.selectedEvent = index;
+                }
+            },
             showAcceptGoal(gameEvent) {
                 return !this.goalEventPresent && gameEvent.type === 'POSSIBLE_GOAL';
             },
-            details(gameEvent) {
-                Object.keys(gameEvent).forEach(function (wrapperKey) {
-                    if (wrapperKey !== 'type' && wrapperKey !== 'origin') {
-                        return gameEvent[wrapperKey];
-                    }
-                });
-                return {};
-            },
             detailsList(gameEvent) {
-                let list = [];
-                let i = 0;
-                let eventDetails = this.details(gameEvent);
-                Object.keys(eventDetails).forEach(function (key) {
-                    if (key !== 'byTeam') {
-                        list[i++] = {key: key, value: eventDetails[key]};
-                    }
-                });
-                return list;
+                return gameEventDetailsList(gameEvent);
             },
             byTeam(gameEvent) {
-                let eventDetails = this.details(gameEvent);
-                if (eventDetails.hasOwnProperty('byTeam')) {
-                    return eventDetails.byTeam;
-                }
-                return '';
+                return gameEventByTeam(gameEvent);
             },
             acceptGoal(gameEvent) {
                 submitGameEvent({

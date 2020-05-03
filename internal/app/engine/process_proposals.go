@@ -30,7 +30,7 @@ func (e *Engine) processProposals() {
 	majority := int(math.Floor(float64(numAutoRefs) / 2.0))
 
 	if numProposals > majority {
-		log.Printf("Majority (%v > %v) reached for %v.", numProposals, majority, firstGameEvent.Type)
+		log.Printf("Majority of %v reached with %v out of %v for %v.", majority, numProposals, numAutoRefs, firstGameEvent.Type)
 		e.Enqueue(&statemachine.Change{
 			Change: &statemachine.Change_AcceptGameEventProposals{
 				AcceptGameEventProposals: &statemachine.AcceptGameEventProposals{

@@ -49,6 +49,7 @@
 <script>
     import "../../date.format";
     import {submitChange} from "../../submit";
+    import {gameEventDetails} from "../../gameEvents";
 
     export default {
         name: "EventTable",
@@ -94,14 +95,6 @@
                 }
                 return '';
             },
-            gameEventDetails(event) {
-                for (let key of Object.keys(event)) {
-                    if (key !== 'origin' && key !== 'type') {
-                        return event[key];
-                    }
-                }
-                return {};
-            },
             entryDetails(entry) {
                 let type = this.protocolType(entry);
                 return JSON.stringify(entry.change[type], null, 2);
@@ -118,11 +111,11 @@
                     case 'yellowCardOver':
                         return entry.change.yellowCardOver.forTeam;
                     case 'addGameEvent':
-                        return this.gameEventDetails(entry.change.addGameEvent.gameEvent).byTeam;
+                        return gameEventDetails(entry.change.addGameEvent.gameEvent).byTeam;
                     case 'addPassiveGameEvent':
-                        return this.gameEventDetails(entry.change.addPassiveGameEvent.gameEvent).byTeam;
+                        return gameEventDetails(entry.change.addPassiveGameEvent.gameEvent).byTeam;
                     case 'addProposedGameEvent':
-                        return this.gameEventDetails(entry.change.addProposedGameEvent.gameEvent).byTeam;
+                        return gameEventDetails(entry.change.addProposedGameEvent.proposal.gameEvent).byTeam;
                     case 'updateTeamState':
                         return entry.change.updateTeamState.forTeam;
                     case 'newGameState':
@@ -191,7 +184,7 @@
                     case 'addPassiveGameEvent':
                         return 'New passive game event: ' + entry.change.addPassiveGameEvent.gameEvent.type;
                     case 'addProposedGameEvent':
-                        return 'New proposed game event: ' + entry.change.addProposedGameEvent.gameEvent.type;
+                        return 'New proposed game event: ' + entry.change.addProposedGameEvent.proposal.type;
                     case 'startBallPlacement':
                         return 'Start ball placement';
                     case 'continue':

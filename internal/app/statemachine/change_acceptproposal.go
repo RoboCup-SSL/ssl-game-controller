@@ -33,7 +33,7 @@ func (s *StateMachine) processChangeAcceptGameEventProposals(newState *state.Sta
 
 func (s *StateMachine) createMergedGameEvent(events []*state.GameEventProposal) *state.GameEvent {
 	event := new(state.GameEvent)
-	proto.Merge(event, events[0])
+	proto.Merge(event, events[0].GameEvent)
 	event.Origin = []string{}
 	byTeam := map[state.Team]int{}
 	for _, e := range events {

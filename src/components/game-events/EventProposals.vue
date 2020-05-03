@@ -3,14 +3,14 @@
         <div class="proposal-item"
              v-if="eventProposalsPresent"
              v-for="(proposal, index) in eventProposals"
+             @click="eventSelected(index)"
              :key="index">
-            <span :class="{'team-blue': byTeam(proposal) === 2, 'team-yellow': byTeam(proposal) === 1}">
+            <span :class="{'team-blue': byTeam(proposal.gameEvent) === 'BLUE', 'team-yellow': byTeam(proposal.gameEvent) === 'YELLOW'}">
                 {{proposal.gameEvent.type}}
             </span>
-            <span>by {{proposal.proposerId}}</span>
-            (<span v-format-ns-duration="proposalTimeout(proposal.validUntil)"></span>):
             <p class="details-row"
-               v-for="detail in detailsList(proposal)"
+               v-if="selectedEvent === index"
+               v-for="detail in detailsList(proposal.gameEvent)"
                :key="detail.key">{{detail.key}}: {{detail.value}}</p>
             <a class="btn-accept"
                v-b-tooltip.hover.d500
@@ -23,56 +23,41 @@
 </template>
 
 <script>
+    import {gameEventByTeam, gameEventDetailsList} from "../../gameEvents";
+
     export default {
         name: "EventProposals",
+        data() {
+            return {
+                selectedEvent: -1,
+            }
+        },
         computed: {
             eventProposals() {
-                return this.$store.state.matchState.proposedGameEvents;
+                return this.$store.state.matchState.gameEventProposals;
             },
             eventProposalsPresent() {
                 return this.eventProposals != null && this.eventProposals.length > 0;
             }
         },
         methods: {
-            details(gameEvent) {
-                Object.keys(gameEvent).forEach(function (wrapperKey) {
-                    if (wrapperKey !== 'type' && wrapperKey !== 'origin') {
-                        return gameEvent[wrapperKey];
-                    }
-                });
-                return {};
+            eventSelected(index) {
+                if (this.selectedEvent === index) {
+                    this.selectedEvent = -1;
+                } else {
+                    this.selectedEvent = index;
+                }
             },
             detailsList(gameEvent) {
-                let list = [];
-                let i = 0;
-                let eventDetails = this.details(gameEvent);
-                Object.keys(eventDetails).forEach(function (key) {
-                    if (key !== 'byTeam') {
-                        list[i++] = {key: key, value: eventDetails[key]};
-                    }
-                });
-                return list;
+                return gameEventDetailsList(gameEvent);
             },
             byTeam(gameEvent) {
-                let eventDetails = this.details(gameEvent);
-                if (eventDetails.hasOwnProperty('byTeam')) {
-                    return eventDetails.byTeam;
-                }
-                return '';
-            },
-            proposalTimeout(v) {
-                let validUntil = new Date(v);
-                let now = Date.now();
-                let remaining = validUntil - now;
-                if (remaining < 0) {
-                    return 0;
-                }
-                return remaining * 1e6;
+                return gameEventByTeam(gameEvent);
             },
             accept(gameEvent) {
-                this.$socket.sendObj({
-                    gameEvent: gameEvent
-                });
+                // TODO
+                // submitChange();
+                console.log('TODO: submit ' + gameEvent);
             },
         }
     }
