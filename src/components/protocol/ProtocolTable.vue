@@ -119,10 +119,14 @@
                         return entry.change.yellowCardOver.forTeam;
                     case 'addGameEvent':
                         return this.gameEventDetails(entry.change.addGameEvent.gameEvent).byTeam;
+                    case 'addPassiveGameEvent':
+                        return this.gameEventDetails(entry.change.addPassiveGameEvent.gameEvent).byTeam;
                     case 'addProposedGameEvent':
                         return this.gameEventDetails(entry.change.addProposedGameEvent.gameEvent).byTeam;
                     case 'updateTeamState':
                         return entry.change.updateTeamState.forTeam;
+                    case 'newGameState':
+                        return entry.change.newGameState.gameState.forTeam;
                     default:
                         return undefined;
                 }
@@ -133,6 +137,8 @@
                         return 'terminal';
                     case 'changeStage':
                         return 'gavel';
+                    case 'setBallPlacementPos':
+                        return 'futbol';
                     case 'addYellowCard':
                         return 'chess-board';
                     case 'addRedCard':
@@ -141,11 +147,11 @@
                         return 'clock';
                     case 'addGameEvent':
                         return 'exclamation-triangle';
+                    case 'addPassiveGameEvent':
+                        return 'exclamation-triangle';
                     case 'addProposedGameEvent':
                         return 'recycle';
                     case 'startBallPlacement':
-                        return 'futbol';
-                    case 'setBallPlacementPos':
                         return 'futbol';
                     case 'continue':
                         return 'bullhorn';
@@ -157,6 +163,10 @@
                         return 'edit';
                     case 'revert':
                         return 'exclamation';
+                    case 'newGameState':
+                        return 'gavel';
+                    case 'acceptGameEventProposals':
+                        return 'check-circle';
                     default:
                         return 'question-circle';
                 }
@@ -168,6 +178,8 @@
                         return 'New command: ' + entry.change.newCommand.command.type;
                     case 'changeStage':
                         return 'New stage: ' + entry.change.changeStage.newStage;
+                    case 'setBallPlacementPos':
+                        return 'New ball placement pos';
                     case 'addYellowCard':
                         return 'Yellow card';
                     case 'addRedCard':
@@ -176,12 +188,12 @@
                         return 'Yellow card over';
                     case 'addGameEvent':
                         return 'New game event: ' + entry.change.addGameEvent.gameEvent.type;
+                    case 'addPassiveGameEvent':
+                        return 'New passive game event: ' + entry.change.addPassiveGameEvent.gameEvent.type;
                     case 'addProposedGameEvent':
                         return 'New proposed game event: ' + entry.change.addProposedGameEvent.gameEvent.type;
                     case 'startBallPlacement':
                         return 'Start ball placement';
-                    case 'setBallPlacementPos':
-                        return 'New ball placement pos';
                     case 'continue':
                         return 'Continue';
                     case 'updateConfig':
@@ -192,6 +204,10 @@
                         return 'Switch colors';
                     case 'revert':
                         return 'Revert';
+                    case 'newGameState':
+                        return 'New game state: ' + entry.change.newGameState.gameState.type;
+                    case 'acceptGameEventProposals':
+                        return 'Accept game event proposals';
                     default:
                         return type;
                 }
