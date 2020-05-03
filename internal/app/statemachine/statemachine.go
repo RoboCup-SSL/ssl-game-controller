@@ -77,6 +77,8 @@ func (s *StateMachine) Process(currentState *state.State, change *Change) (newSt
 		newChanges = s.processChangeSwitchColors(newState)
 	} else if change.GetAddGameEvent() != nil {
 		newChanges = s.processChangeAddGameEvent(newState, change.GetAddGameEvent())
+	} else if change.GetAddPassiveGameEvent() != nil {
+		newChanges = s.processChangeAddPassiveGameEvent(change.GetAddPassiveGameEvent())
 	} else if change.GetStartBallPlacement() != nil {
 		newChanges = s.processChangeStartBallPlacement(newState)
 	} else if change.GetContinue() != nil {

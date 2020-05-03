@@ -30,6 +30,7 @@ message Change {
         AddRedCard add_red_card = 6;
         YellowCardOver yellow_card_over = 7;
         AddGameEvent add_game_event = 8;
+        AddPassiveGameEvent add_passive_game_event = 19;
         AddProposedGameEvent add_proposed_game_event = 9;
         StartBallPlacement start_ball_placement = 10;
         Continue continue = 11;
@@ -69,6 +70,10 @@ message YellowCardOver {
 }
 
 message AddGameEvent {
+    optional GameEvent game_event = 1;
+}
+
+message AddPassiveGameEvent {
     optional GameEvent game_event = 1;
 }
 

@@ -64,13 +64,9 @@ func NewEngine(gameConfig config.Game, engineConfig config.Engine) (e *Engine) {
 
 // Enqueue adds the change to the change queue
 func (e *Engine) Enqueue(change *statemachine.Change) {
-	if change.GetAddGameEvent() != nil {
-		for t, b := range e.config.GameEventBehavior {
-			if b == Config_GAME_EVENT_BEHAVIOR_OFF && change.GetAddGameEvent().GameEvent.Type.String() == t {
-				// disabled game event
-				return
-			}
-		}
+	if change.GetAddGameEvent() != nil && !e.IsGameEventEnabled(*change.GetAddGameEvent().GameEvent.Type) {
+		log.Printf("Ignoring disabled game event %v", change.GetAddGameEvent().GameEvent)
+		return
 	}
 	if change.Revertible == nil {
 		change.Revertible = new(bool)

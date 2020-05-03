@@ -14434,6 +14434,7 @@ export const Change = $root.Change = (() => {
      * @property {IAddRedCard|null} [addRedCard] Change addRedCard
      * @property {IYellowCardOver|null} [yellowCardOver] Change yellowCardOver
      * @property {IAddGameEvent|null} [addGameEvent] Change addGameEvent
+     * @property {IAddPassiveGameEvent|null} [addPassiveGameEvent] Change addPassiveGameEvent
      * @property {IAddProposedGameEvent|null} [addProposedGameEvent] Change addProposedGameEvent
      * @property {IStartBallPlacement|null} [startBallPlacement] Change startBallPlacement
      * @property {IContinue|null} ["continue"] Change continue
@@ -14533,6 +14534,14 @@ export const Change = $root.Change = (() => {
     Change.prototype.addGameEvent = null;
 
     /**
+     * Change addPassiveGameEvent.
+     * @member {IAddPassiveGameEvent|null|undefined} addPassiveGameEvent
+     * @memberof Change
+     * @instance
+     */
+    Change.prototype.addPassiveGameEvent = null;
+
+    /**
      * Change addProposedGameEvent.
      * @member {IAddProposedGameEvent|null|undefined} addProposedGameEvent
      * @memberof Change
@@ -14609,12 +14618,12 @@ export const Change = $root.Change = (() => {
 
     /**
      * Change change.
-     * @member {"newCommand"|"changeStage"|"setBallPlacementPos"|"addYellowCard"|"addRedCard"|"yellowCardOver"|"addGameEvent"|"addProposedGameEvent"|"startBallPlacement"|"continue"|"updateConfig"|"updateTeamState"|"switchColors"|"revert"|"newGameState"|"acceptGameEventProposals"|undefined} change
+     * @member {"newCommand"|"changeStage"|"setBallPlacementPos"|"addYellowCard"|"addRedCard"|"yellowCardOver"|"addGameEvent"|"addPassiveGameEvent"|"addProposedGameEvent"|"startBallPlacement"|"continue"|"updateConfig"|"updateTeamState"|"switchColors"|"revert"|"newGameState"|"acceptGameEventProposals"|undefined} change
      * @memberof Change
      * @instance
      */
     Object.defineProperty(Change.prototype, "change", {
-        get: $util.oneOfGetter($oneOfFields = ["newCommand", "changeStage", "setBallPlacementPos", "addYellowCard", "addRedCard", "yellowCardOver", "addGameEvent", "addProposedGameEvent", "startBallPlacement", "continue", "updateConfig", "updateTeamState", "switchColors", "revert", "newGameState", "acceptGameEventProposals"]),
+        get: $util.oneOfGetter($oneOfFields = ["newCommand", "changeStage", "setBallPlacementPos", "addYellowCard", "addRedCard", "yellowCardOver", "addGameEvent", "addPassiveGameEvent", "addProposedGameEvent", "startBallPlacement", "continue", "updateConfig", "updateTeamState", "switchColors", "revert", "newGameState", "acceptGameEventProposals"]),
         set: $util.oneOfSetter($oneOfFields)
     });
 
@@ -14678,6 +14687,8 @@ export const Change = $root.Change = (() => {
             $root.NewGameState.encode(message.newGameState, writer.uint32(/* id 17, wireType 2 =*/138).fork()).ldelim();
         if (message.acceptGameEventProposals != null && message.hasOwnProperty("acceptGameEventProposals"))
             $root.AcceptGameEventProposals.encode(message.acceptGameEventProposals, writer.uint32(/* id 18, wireType 2 =*/146).fork()).ldelim();
+        if (message.addPassiveGameEvent != null && message.hasOwnProperty("addPassiveGameEvent"))
+            $root.AddPassiveGameEvent.encode(message.addPassiveGameEvent, writer.uint32(/* id 19, wireType 2 =*/154).fork()).ldelim();
         return writer;
     };
 
@@ -14738,6 +14749,9 @@ export const Change = $root.Change = (() => {
                 break;
             case 8:
                 message.addGameEvent = $root.AddGameEvent.decode(reader, reader.uint32());
+                break;
+            case 19:
+                message.addPassiveGameEvent = $root.AddPassiveGameEvent.decode(reader, reader.uint32());
                 break;
             case 9:
                 message.addProposedGameEvent = $root.AddProposedGameEvent.decode(reader, reader.uint32());
@@ -14874,6 +14888,16 @@ export const Change = $root.Change = (() => {
                 let error = $root.AddGameEvent.verify(message.addGameEvent);
                 if (error)
                     return "addGameEvent." + error;
+            }
+        }
+        if (message.addPassiveGameEvent != null && message.hasOwnProperty("addPassiveGameEvent")) {
+            if (properties.change === 1)
+                return "change: multiple values";
+            properties.change = 1;
+            {
+                let error = $root.AddPassiveGameEvent.verify(message.addPassiveGameEvent);
+                if (error)
+                    return "addPassiveGameEvent." + error;
             }
         }
         if (message.addProposedGameEvent != null && message.hasOwnProperty("addProposedGameEvent")) {
@@ -15019,6 +15043,11 @@ export const Change = $root.Change = (() => {
             if (typeof object.addGameEvent !== "object")
                 throw TypeError(".Change.addGameEvent: object expected");
             message.addGameEvent = $root.AddGameEvent.fromObject(object.addGameEvent);
+        }
+        if (object.addPassiveGameEvent != null) {
+            if (typeof object.addPassiveGameEvent !== "object")
+                throw TypeError(".Change.addPassiveGameEvent: object expected");
+            message.addPassiveGameEvent = $root.AddPassiveGameEvent.fromObject(object.addPassiveGameEvent);
         }
         if (object.addProposedGameEvent != null) {
             if (typeof object.addProposedGameEvent !== "object")
@@ -15168,6 +15197,11 @@ export const Change = $root.Change = (() => {
             object.acceptGameEventProposals = $root.AcceptGameEventProposals.toObject(message.acceptGameEventProposals, options);
             if (options.oneofs)
                 object.change = "acceptGameEventProposals";
+        }
+        if (message.addPassiveGameEvent != null && message.hasOwnProperty("addPassiveGameEvent")) {
+            object.addPassiveGameEvent = $root.AddPassiveGameEvent.toObject(message.addPassiveGameEvent, options);
+            if (options.oneofs)
+                object.change = "addPassiveGameEvent";
         }
         return object;
     };
@@ -16691,6 +16725,198 @@ export const AddGameEvent = $root.AddGameEvent = (() => {
     };
 
     return AddGameEvent;
+})();
+
+export const AddPassiveGameEvent = $root.AddPassiveGameEvent = (() => {
+
+    /**
+     * Properties of an AddPassiveGameEvent.
+     * @exports IAddPassiveGameEvent
+     * @interface IAddPassiveGameEvent
+     * @property {IGameEvent|null} [gameEvent] AddPassiveGameEvent gameEvent
+     */
+
+    /**
+     * Constructs a new AddPassiveGameEvent.
+     * @exports AddPassiveGameEvent
+     * @classdesc Represents an AddPassiveGameEvent.
+     * @implements IAddPassiveGameEvent
+     * @constructor
+     * @param {IAddPassiveGameEvent=} [properties] Properties to set
+     */
+    function AddPassiveGameEvent(properties) {
+        if (properties)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * AddPassiveGameEvent gameEvent.
+     * @member {IGameEvent|null|undefined} gameEvent
+     * @memberof AddPassiveGameEvent
+     * @instance
+     */
+    AddPassiveGameEvent.prototype.gameEvent = null;
+
+    /**
+     * Creates a new AddPassiveGameEvent instance using the specified properties.
+     * @function create
+     * @memberof AddPassiveGameEvent
+     * @static
+     * @param {IAddPassiveGameEvent=} [properties] Properties to set
+     * @returns {AddPassiveGameEvent} AddPassiveGameEvent instance
+     */
+    AddPassiveGameEvent.create = function create(properties) {
+        return new AddPassiveGameEvent(properties);
+    };
+
+    /**
+     * Encodes the specified AddPassiveGameEvent message. Does not implicitly {@link AddPassiveGameEvent.verify|verify} messages.
+     * @function encode
+     * @memberof AddPassiveGameEvent
+     * @static
+     * @param {IAddPassiveGameEvent} message AddPassiveGameEvent message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    AddPassiveGameEvent.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.gameEvent != null && message.hasOwnProperty("gameEvent"))
+            $root.GameEvent.encode(message.gameEvent, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+        return writer;
+    };
+
+    /**
+     * Encodes the specified AddPassiveGameEvent message, length delimited. Does not implicitly {@link AddPassiveGameEvent.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof AddPassiveGameEvent
+     * @static
+     * @param {IAddPassiveGameEvent} message AddPassiveGameEvent message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    AddPassiveGameEvent.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes an AddPassiveGameEvent message from the specified reader or buffer.
+     * @function decode
+     * @memberof AddPassiveGameEvent
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {AddPassiveGameEvent} AddPassiveGameEvent
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    AddPassiveGameEvent.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.AddPassiveGameEvent();
+        while (reader.pos < end) {
+            let tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1:
+                message.gameEvent = $root.GameEvent.decode(reader, reader.uint32());
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes an AddPassiveGameEvent message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof AddPassiveGameEvent
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {AddPassiveGameEvent} AddPassiveGameEvent
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    AddPassiveGameEvent.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies an AddPassiveGameEvent message.
+     * @function verify
+     * @memberof AddPassiveGameEvent
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    AddPassiveGameEvent.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (message.gameEvent != null && message.hasOwnProperty("gameEvent")) {
+            let error = $root.GameEvent.verify(message.gameEvent);
+            if (error)
+                return "gameEvent." + error;
+        }
+        return null;
+    };
+
+    /**
+     * Creates an AddPassiveGameEvent message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof AddPassiveGameEvent
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {AddPassiveGameEvent} AddPassiveGameEvent
+     */
+    AddPassiveGameEvent.fromObject = function fromObject(object) {
+        if (object instanceof $root.AddPassiveGameEvent)
+            return object;
+        let message = new $root.AddPassiveGameEvent();
+        if (object.gameEvent != null) {
+            if (typeof object.gameEvent !== "object")
+                throw TypeError(".AddPassiveGameEvent.gameEvent: object expected");
+            message.gameEvent = $root.GameEvent.fromObject(object.gameEvent);
+        }
+        return message;
+    };
+
+    /**
+     * Creates a plain object from an AddPassiveGameEvent message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof AddPassiveGameEvent
+     * @static
+     * @param {AddPassiveGameEvent} message AddPassiveGameEvent
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    AddPassiveGameEvent.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        let object = {};
+        if (options.defaults)
+            object.gameEvent = null;
+        if (message.gameEvent != null && message.hasOwnProperty("gameEvent"))
+            object.gameEvent = $root.GameEvent.toObject(message.gameEvent, options);
+        return object;
+    };
+
+    /**
+     * Converts this AddPassiveGameEvent to JSON.
+     * @function toJSON
+     * @memberof AddPassiveGameEvent
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    AddPassiveGameEvent.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    return AddPassiveGameEvent;
 })();
 
 export const AddProposedGameEvent = $root.AddProposedGameEvent = (() => {

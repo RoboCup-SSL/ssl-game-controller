@@ -19,7 +19,14 @@ func (e *Engine) EnqueueGameEvent(gameEvent *state.GameEvent) {
 	origin := gameEvent.Origin[0]
 
 	if !e.config.AutoRefConfigs[origin].GameEventEnabled[gameEvent.Type.String()] {
-		log.Printf("Ignoring disabled game event for %v: %v", origin, *gameEvent)
+		e.Enqueue(&statemachine.Change{
+			Origin: &origin,
+			Change: &statemachine.Change_AddPassiveGameEvent{
+				AddPassiveGameEvent: &statemachine.AddPassiveGameEvent{
+					GameEvent: gameEvent,
+				},
+			},
+		})
 		return
 	}
 
