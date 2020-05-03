@@ -252,19 +252,13 @@ func stateChanged(s1, s2 *state.State) bool {
 	if s1 == nil || s2 == nil {
 		return true
 	}
-	if *s1.Stage != *s2.Stage {
-		return true
-	}
-	if !reflect.DeepEqual(s1.Command, s2.Command) {
-		return true
-	}
 	if s1.StageTimeElapsed.Seconds != s2.StageTimeElapsed.Seconds {
 		return true
 	}
 	if s1.StageTimeLeft.Seconds != s2.StageTimeLeft.Seconds {
 		return true
 	}
-	if !reflect.DeepEqual(s1.MatchTimeStart, s2.MatchTimeStart) {
+	if s1.CurrentActionTimeRemaining.Seconds != s2.CurrentActionTimeRemaining.Seconds {
 		return true
 	}
 	for _, team := range state.BothTeams() {
@@ -272,31 +266,21 @@ func stateChanged(s1, s2 *state.State) bool {
 			return true
 		}
 	}
-	if !reflect.DeepEqual(s1.PlacementPos, s2.PlacementPos) {
-		return true
-	}
-	if !reflect.DeepEqual(s1.NextCommand, s2.NextCommand) {
-		return true
-	}
-	if s1.CurrentActionTimeRemaining.Seconds != s2.CurrentActionTimeRemaining.Seconds {
-		return true
-	}
-	if !reflect.DeepEqual(s1.GameEvents, s2.GameEvents) {
-		return true
-	}
-	if !reflect.DeepEqual(s1.GameEventProposals, s2.GameEventProposals) {
-		return true
-	}
-	if *s1.Division != *s2.Division {
-		return true
-	}
-	if *s1.AutoContinue != *s2.AutoContinue {
-		return true
-	}
-	if *s1.FirstKickoffTeam != *s2.FirstKickoffTeam {
-		return true
-	}
-	return false
+
+	s1c := new(state.State)
+	s2c := new(state.State)
+	proto.Merge(s1c, s1)
+	proto.Merge(s2c, s2)
+	s1c.StageTimeElapsed = nil
+	s2c.StageTimeElapsed = nil
+	s1c.StageTimeLeft = nil
+	s2c.StageTimeLeft = nil
+	s1c.CurrentActionTimeRemaining = nil
+	s2c.CurrentActionTimeRemaining = nil
+	s1c.TeamState = nil
+	s2c.TeamState = nil
+
+	return !proto.Equal(s1c, s2c)
 }
 
 func teamStateChanged(s1, s2 *state.TeamInfo) bool {
