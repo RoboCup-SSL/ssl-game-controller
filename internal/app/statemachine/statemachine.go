@@ -85,6 +85,8 @@ func (s *StateMachine) Process(currentState *state.State, change *Change) (newSt
 		newChanges = s.processChangeAddProposedGameEvent(newState, change.GetAddProposedGameEvent())
 	} else if change.GetNewGameState() != nil {
 		newChanges = s.processNewGameState(newState, change.GetNewGameState())
+	} else if change.GetAcceptGameEventProposals() != nil {
+		newChanges = s.processChangeAcceptGameEventProposals(newState, change.GetAcceptGameEventProposals())
 	} else {
 		log.Println("Unhandled change in state machine: ", change)
 	}

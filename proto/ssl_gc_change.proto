@@ -38,6 +38,7 @@ message Change {
         SwitchColors switch_colors = 14;
         Revert revert = 15;
         NewGameState new_game_state = 17;
+        AcceptGameEventProposals accept_game_event_proposals = 18;
     }
 }
 
@@ -72,7 +73,11 @@ message AddGameEvent {
 }
 
 message AddProposedGameEvent {
-    optional ProposedGameEvent game_event = 1;
+    optional GameEventProposal proposal = 1;
+}
+
+message AcceptGameEventProposals {
+    repeated GameEventProposal proposals = 1;
 }
 
 message StartBallPlacement {

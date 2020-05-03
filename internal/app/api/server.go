@@ -284,7 +284,7 @@ func stateChanged(s1, s2 *state.State) bool {
 	if !reflect.DeepEqual(s1.GameEvents, s2.GameEvents) {
 		return true
 	}
-	if !reflect.DeepEqual(s1.ProposedGameEvents, s2.ProposedGameEvents) {
+	if !reflect.DeepEqual(s1.GameEventProposals, s2.GameEventProposals) {
 		return true
 	}
 	if *s1.Division != *s2.Division {

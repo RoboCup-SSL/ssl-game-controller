@@ -2,7 +2,6 @@ package rcon
 
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/engine"
-	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"github.com/RoboCup-SSL/ssl-go-tools/pkg/sslconn"
 	"github.com/odeke-em/go-uuid"
 	"github.com/pkg/errors"
@@ -167,13 +166,8 @@ func (c *AutoRefClient) reply(reply ControllerReply) {
 func (s *AutoRefServer) processRequest(id string, request AutoRefToController) error {
 
 	if request.GameEvent != nil {
-		s.gcEngine.Enqueue(&statemachine.Change{
-			Origin: &id,
-			Change: &statemachine.Change_AddGameEvent{
-				AddGameEvent: &statemachine.AddGameEvent{
-					GameEvent: request.GameEvent,
-				}},
-		})
+		request.GameEvent.Origin = []string{id}
+		s.gcEngine.EnqueueGameEvent(request.GameEvent)
 	}
 
 	return nil

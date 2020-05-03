@@ -192,10 +192,10 @@ func (GameEvent_Type) EnumDescriptor() ([]byte, []int) {
 // An autoRef should ideally set all fields, except if there are good reasons to not do so.
 type GameEvent struct {
 	Type *GameEvent_Type `protobuf:"varint,40,req,name=type,enum=GameEvent_Type" json:"type,omitempty"`
-	// the origins of this game event
-	// empty, if it originates from game controller
-	// autoRef name(s), if it originates from one or more autoRefs
-	// ignored if sent by autoRef to game controller
+	// The origins of this game event.
+	// Empty, if it originates from game controller.
+	// Contains autoRef name(s), if it originates from one or more autoRefs.
+	// Ignored if sent by autoRef to game controller.
 	Origin []string `protobuf:"bytes,41,rep,name=origin" json:"origin,omitempty"`
 	// the event that occurred
 	//
@@ -1357,7 +1357,7 @@ func (m *GameEvent_BotTooFastInStop) GetSpeed() float32 {
 
 // a bot of the defending team got too close to the kick point during a free kick
 type GameEvent_DefenderTooCloseToKickPoint struct {
-	// the team that found guilty
+	// the team that was found guilty
 	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// the bot that violates the distance to the kick point
 	ByBot *uint32 `protobuf:"varint,2,opt,name=by_bot,json=byBot" json:"by_bot,omitempty"`

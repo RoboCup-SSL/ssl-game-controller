@@ -8,10 +8,19 @@ import (
 	"time"
 )
 
-func mapProposedGameEvents(events []*state.ProposedGameEvent) []*state.ProposedGameEvent {
+func mapProposedGameEvents(events []*state.GameEventProposal) []*state.ProposedGameEvent {
 	mappedEvents := make([]*state.ProposedGameEvent, len(events))
 	for i, e := range events {
-		mappedEvents[i] = e
+		proposer := ""
+		if len(e.GameEvent.Origin) > 0 {
+			proposer = e.GameEvent.Origin[0]
+		}
+		var validUntil uint64
+		mappedEvents[i] = &state.ProposedGameEvent{
+			ValidUntil: &validUntil, // required in protobuf ref msg... Add zero value
+			ProposerId: &proposer,
+			GameEvent:  e.GameEvent,
+		}
 	}
 	return mappedEvents
 }

@@ -23,7 +23,7 @@ game:
   multiple-card-step: 2
   multiple-foul-step: 3
   multiple-placement-failures: 5
-  auto-ref-proposal-timeout: 5s
+  auto-ref-proposal-timeout: 1s
   default-division: DIV_A
   prepare-timeout: 10s
   free-kick-timeout:

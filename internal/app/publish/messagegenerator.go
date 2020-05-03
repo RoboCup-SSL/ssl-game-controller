@@ -93,7 +93,7 @@ func (g *MessageGenerator) StateToRefereeMessage(matchState *state.State) (r *st
 	r = newRefereeMessage()
 	r.DesignatedPosition = mapLocation(matchState.PlacementPos)
 	r.GameEvents = matchState.GameEvents
-	r.ProposedGameEvents = mapProposedGameEvents(matchState.ProposedGameEvents)
+	r.ProposedGameEvents = mapProposedGameEvents(matchState.GameEventProposals)
 
 	r.Command = mapCommand(matchState.Command)
 	*r.CommandCounter = g.commandCounter

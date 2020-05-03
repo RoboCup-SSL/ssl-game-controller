@@ -164,7 +164,7 @@ func DefaultControllerConfig() (c Controller) {
 	c.Game.MultipleCardStep = 2
 	c.Game.MultipleFoulStep = 3
 	c.Game.MultiplePlacementFailures = 5
-	c.Game.AutoRefProposalTimeout = 5 * time.Second
+	c.Game.AutoRefProposalTimeout = 1 * time.Second
 	c.Game.PrepareTimeout = time.Second * 10
 	c.Game.FreeKickTimeout = map[Division]time.Duration{DivA: time.Second * 5, DivB: time.Second * 10}
 	c.Game.NoProgressTimeout = map[Division]time.Duration{DivA: time.Second * 5, DivB: time.Second * 10}

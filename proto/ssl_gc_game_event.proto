@@ -15,10 +15,10 @@ message GameEvent {
 
     required Type type = 40;
 
-    // the origins of this game event
-    // empty, if it originates from game controller
-    // autoRef name(s), if it originates from one or more autoRefs
-    // ignored if sent by autoRef to game controller
+    // The origins of this game event.
+    // Empty, if it originates from game controller.
+    // Contains autoRef name(s), if it originates from one or more autoRefs.
+    // Ignored if sent by autoRef to game controller.
     repeated string origin = 41;
 
     // the event that occurred
@@ -179,7 +179,7 @@ message GameEvent {
     }
     // a bot of the defending team got too close to the kick point during a free kick
     message DefenderTooCloseToKickPoint {
-        // the team that found guilty
+        // the team that was found guilty
         required Team by_team = 1;
         // the bot that violates the distance to the kick point
         optional uint32 by_bot = 2;

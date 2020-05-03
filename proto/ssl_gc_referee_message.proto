@@ -200,7 +200,8 @@ message Referee {
 
 message ProposedGameEvent {
     // The UNIX timestamp when the game event proposal will time out, in microseconds.
-    required uint64 valid_until = 1;
+    // Deprecated: Value will always be zero
+    required uint64 valid_until = 1 [deprecated = true];
     // The identifier of the proposer.
     required string proposer_id = 2;
     // The proposed game event.

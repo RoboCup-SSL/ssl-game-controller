@@ -14442,6 +14442,7 @@ export const Change = $root.Change = (() => {
      * @property {ISwitchColors|null} [switchColors] Change switchColors
      * @property {IRevert|null} [revert] Change revert
      * @property {INewGameState|null} [newGameState] Change newGameState
+     * @property {IAcceptGameEventProposals|null} [acceptGameEventProposals] Change acceptGameEventProposals
      */
 
     /**
@@ -14595,17 +14596,25 @@ export const Change = $root.Change = (() => {
      */
     Change.prototype.newGameState = null;
 
+    /**
+     * Change acceptGameEventProposals.
+     * @member {IAcceptGameEventProposals|null|undefined} acceptGameEventProposals
+     * @memberof Change
+     * @instance
+     */
+    Change.prototype.acceptGameEventProposals = null;
+
     // OneOf field names bound to virtual getters and setters
     let $oneOfFields;
 
     /**
      * Change change.
-     * @member {"newCommand"|"changeStage"|"setBallPlacementPos"|"addYellowCard"|"addRedCard"|"yellowCardOver"|"addGameEvent"|"addProposedGameEvent"|"startBallPlacement"|"continue"|"updateConfig"|"updateTeamState"|"switchColors"|"revert"|"newGameState"|undefined} change
+     * @member {"newCommand"|"changeStage"|"setBallPlacementPos"|"addYellowCard"|"addRedCard"|"yellowCardOver"|"addGameEvent"|"addProposedGameEvent"|"startBallPlacement"|"continue"|"updateConfig"|"updateTeamState"|"switchColors"|"revert"|"newGameState"|"acceptGameEventProposals"|undefined} change
      * @memberof Change
      * @instance
      */
     Object.defineProperty(Change.prototype, "change", {
-        get: $util.oneOfGetter($oneOfFields = ["newCommand", "changeStage", "setBallPlacementPos", "addYellowCard", "addRedCard", "yellowCardOver", "addGameEvent", "addProposedGameEvent", "startBallPlacement", "continue", "updateConfig", "updateTeamState", "switchColors", "revert", "newGameState"]),
+        get: $util.oneOfGetter($oneOfFields = ["newCommand", "changeStage", "setBallPlacementPos", "addYellowCard", "addRedCard", "yellowCardOver", "addGameEvent", "addProposedGameEvent", "startBallPlacement", "continue", "updateConfig", "updateTeamState", "switchColors", "revert", "newGameState", "acceptGameEventProposals"]),
         set: $util.oneOfSetter($oneOfFields)
     });
 
@@ -14667,6 +14676,8 @@ export const Change = $root.Change = (() => {
             writer.uint32(/* id 16, wireType 0 =*/128).bool(message.revertible);
         if (message.newGameState != null && message.hasOwnProperty("newGameState"))
             $root.NewGameState.encode(message.newGameState, writer.uint32(/* id 17, wireType 2 =*/138).fork()).ldelim();
+        if (message.acceptGameEventProposals != null && message.hasOwnProperty("acceptGameEventProposals"))
+            $root.AcceptGameEventProposals.encode(message.acceptGameEventProposals, writer.uint32(/* id 18, wireType 2 =*/146).fork()).ldelim();
         return writer;
     };
 
@@ -14751,6 +14762,9 @@ export const Change = $root.Change = (() => {
                 break;
             case 17:
                 message.newGameState = $root.NewGameState.decode(reader, reader.uint32());
+                break;
+            case 18:
+                message.acceptGameEventProposals = $root.AcceptGameEventProposals.decode(reader, reader.uint32());
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -14942,6 +14956,16 @@ export const Change = $root.Change = (() => {
                     return "newGameState." + error;
             }
         }
+        if (message.acceptGameEventProposals != null && message.hasOwnProperty("acceptGameEventProposals")) {
+            if (properties.change === 1)
+                return "change: multiple values";
+            properties.change = 1;
+            {
+                let error = $root.AcceptGameEventProposals.verify(message.acceptGameEventProposals);
+                if (error)
+                    return "acceptGameEventProposals." + error;
+            }
+        }
         return null;
     };
 
@@ -15035,6 +15059,11 @@ export const Change = $root.Change = (() => {
             if (typeof object.newGameState !== "object")
                 throw TypeError(".Change.newGameState: object expected");
             message.newGameState = $root.NewGameState.fromObject(object.newGameState);
+        }
+        if (object.acceptGameEventProposals != null) {
+            if (typeof object.acceptGameEventProposals !== "object")
+                throw TypeError(".Change.acceptGameEventProposals: object expected");
+            message.acceptGameEventProposals = $root.AcceptGameEventProposals.fromObject(object.acceptGameEventProposals);
         }
         return message;
     };
@@ -15134,6 +15163,11 @@ export const Change = $root.Change = (() => {
             object.newGameState = $root.NewGameState.toObject(message.newGameState, options);
             if (options.oneofs)
                 object.change = "newGameState";
+        }
+        if (message.acceptGameEventProposals != null && message.hasOwnProperty("acceptGameEventProposals")) {
+            object.acceptGameEventProposals = $root.AcceptGameEventProposals.toObject(message.acceptGameEventProposals, options);
+            if (options.oneofs)
+                object.change = "acceptGameEventProposals";
         }
         return object;
     };
@@ -16665,7 +16699,7 @@ export const AddProposedGameEvent = $root.AddProposedGameEvent = (() => {
      * Properties of an AddProposedGameEvent.
      * @exports IAddProposedGameEvent
      * @interface IAddProposedGameEvent
-     * @property {IProposedGameEvent|null} [gameEvent] AddProposedGameEvent gameEvent
+     * @property {IGameEventProposal|null} [proposal] AddProposedGameEvent proposal
      */
 
     /**
@@ -16684,12 +16718,12 @@ export const AddProposedGameEvent = $root.AddProposedGameEvent = (() => {
     }
 
     /**
-     * AddProposedGameEvent gameEvent.
-     * @member {IProposedGameEvent|null|undefined} gameEvent
+     * AddProposedGameEvent proposal.
+     * @member {IGameEventProposal|null|undefined} proposal
      * @memberof AddProposedGameEvent
      * @instance
      */
-    AddProposedGameEvent.prototype.gameEvent = null;
+    AddProposedGameEvent.prototype.proposal = null;
 
     /**
      * Creates a new AddProposedGameEvent instance using the specified properties.
@@ -16715,8 +16749,8 @@ export const AddProposedGameEvent = $root.AddProposedGameEvent = (() => {
     AddProposedGameEvent.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.gameEvent != null && message.hasOwnProperty("gameEvent"))
-            $root.ProposedGameEvent.encode(message.gameEvent, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+        if (message.proposal != null && message.hasOwnProperty("proposal"))
+            $root.GameEventProposal.encode(message.proposal, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
         return writer;
     };
 
@@ -16752,7 +16786,7 @@ export const AddProposedGameEvent = $root.AddProposedGameEvent = (() => {
             let tag = reader.uint32();
             switch (tag >>> 3) {
             case 1:
-                message.gameEvent = $root.ProposedGameEvent.decode(reader, reader.uint32());
+                message.proposal = $root.GameEventProposal.decode(reader, reader.uint32());
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -16789,10 +16823,10 @@ export const AddProposedGameEvent = $root.AddProposedGameEvent = (() => {
     AddProposedGameEvent.verify = function verify(message) {
         if (typeof message !== "object" || message === null)
             return "object expected";
-        if (message.gameEvent != null && message.hasOwnProperty("gameEvent")) {
-            let error = $root.ProposedGameEvent.verify(message.gameEvent);
+        if (message.proposal != null && message.hasOwnProperty("proposal")) {
+            let error = $root.GameEventProposal.verify(message.proposal);
             if (error)
-                return "gameEvent." + error;
+                return "proposal." + error;
         }
         return null;
     };
@@ -16809,10 +16843,10 @@ export const AddProposedGameEvent = $root.AddProposedGameEvent = (() => {
         if (object instanceof $root.AddProposedGameEvent)
             return object;
         let message = new $root.AddProposedGameEvent();
-        if (object.gameEvent != null) {
-            if (typeof object.gameEvent !== "object")
-                throw TypeError(".AddProposedGameEvent.gameEvent: object expected");
-            message.gameEvent = $root.ProposedGameEvent.fromObject(object.gameEvent);
+        if (object.proposal != null) {
+            if (typeof object.proposal !== "object")
+                throw TypeError(".AddProposedGameEvent.proposal: object expected");
+            message.proposal = $root.GameEventProposal.fromObject(object.proposal);
         }
         return message;
     };
@@ -16831,9 +16865,9 @@ export const AddProposedGameEvent = $root.AddProposedGameEvent = (() => {
             options = {};
         let object = {};
         if (options.defaults)
-            object.gameEvent = null;
-        if (message.gameEvent != null && message.hasOwnProperty("gameEvent"))
-            object.gameEvent = $root.ProposedGameEvent.toObject(message.gameEvent, options);
+            object.proposal = null;
+        if (message.proposal != null && message.hasOwnProperty("proposal"))
+            object.proposal = $root.GameEventProposal.toObject(message.proposal, options);
         return object;
     };
 
@@ -16849,6 +16883,214 @@ export const AddProposedGameEvent = $root.AddProposedGameEvent = (() => {
     };
 
     return AddProposedGameEvent;
+})();
+
+export const AcceptGameEventProposals = $root.AcceptGameEventProposals = (() => {
+
+    /**
+     * Properties of an AcceptGameEventProposals.
+     * @exports IAcceptGameEventProposals
+     * @interface IAcceptGameEventProposals
+     * @property {Array.<IGameEventProposal>|null} [proposals] AcceptGameEventProposals proposals
+     */
+
+    /**
+     * Constructs a new AcceptGameEventProposals.
+     * @exports AcceptGameEventProposals
+     * @classdesc Represents an AcceptGameEventProposals.
+     * @implements IAcceptGameEventProposals
+     * @constructor
+     * @param {IAcceptGameEventProposals=} [properties] Properties to set
+     */
+    function AcceptGameEventProposals(properties) {
+        this.proposals = [];
+        if (properties)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * AcceptGameEventProposals proposals.
+     * @member {Array.<IGameEventProposal>} proposals
+     * @memberof AcceptGameEventProposals
+     * @instance
+     */
+    AcceptGameEventProposals.prototype.proposals = $util.emptyArray;
+
+    /**
+     * Creates a new AcceptGameEventProposals instance using the specified properties.
+     * @function create
+     * @memberof AcceptGameEventProposals
+     * @static
+     * @param {IAcceptGameEventProposals=} [properties] Properties to set
+     * @returns {AcceptGameEventProposals} AcceptGameEventProposals instance
+     */
+    AcceptGameEventProposals.create = function create(properties) {
+        return new AcceptGameEventProposals(properties);
+    };
+
+    /**
+     * Encodes the specified AcceptGameEventProposals message. Does not implicitly {@link AcceptGameEventProposals.verify|verify} messages.
+     * @function encode
+     * @memberof AcceptGameEventProposals
+     * @static
+     * @param {IAcceptGameEventProposals} message AcceptGameEventProposals message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    AcceptGameEventProposals.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.proposals != null && message.proposals.length)
+            for (let i = 0; i < message.proposals.length; ++i)
+                $root.GameEventProposal.encode(message.proposals[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+        return writer;
+    };
+
+    /**
+     * Encodes the specified AcceptGameEventProposals message, length delimited. Does not implicitly {@link AcceptGameEventProposals.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof AcceptGameEventProposals
+     * @static
+     * @param {IAcceptGameEventProposals} message AcceptGameEventProposals message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    AcceptGameEventProposals.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes an AcceptGameEventProposals message from the specified reader or buffer.
+     * @function decode
+     * @memberof AcceptGameEventProposals
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {AcceptGameEventProposals} AcceptGameEventProposals
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    AcceptGameEventProposals.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.AcceptGameEventProposals();
+        while (reader.pos < end) {
+            let tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1:
+                if (!(message.proposals && message.proposals.length))
+                    message.proposals = [];
+                message.proposals.push($root.GameEventProposal.decode(reader, reader.uint32()));
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes an AcceptGameEventProposals message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof AcceptGameEventProposals
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {AcceptGameEventProposals} AcceptGameEventProposals
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    AcceptGameEventProposals.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies an AcceptGameEventProposals message.
+     * @function verify
+     * @memberof AcceptGameEventProposals
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    AcceptGameEventProposals.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (message.proposals != null && message.hasOwnProperty("proposals")) {
+            if (!Array.isArray(message.proposals))
+                return "proposals: array expected";
+            for (let i = 0; i < message.proposals.length; ++i) {
+                let error = $root.GameEventProposal.verify(message.proposals[i]);
+                if (error)
+                    return "proposals." + error;
+            }
+        }
+        return null;
+    };
+
+    /**
+     * Creates an AcceptGameEventProposals message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof AcceptGameEventProposals
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {AcceptGameEventProposals} AcceptGameEventProposals
+     */
+    AcceptGameEventProposals.fromObject = function fromObject(object) {
+        if (object instanceof $root.AcceptGameEventProposals)
+            return object;
+        let message = new $root.AcceptGameEventProposals();
+        if (object.proposals) {
+            if (!Array.isArray(object.proposals))
+                throw TypeError(".AcceptGameEventProposals.proposals: array expected");
+            message.proposals = [];
+            for (let i = 0; i < object.proposals.length; ++i) {
+                if (typeof object.proposals[i] !== "object")
+                    throw TypeError(".AcceptGameEventProposals.proposals: object expected");
+                message.proposals[i] = $root.GameEventProposal.fromObject(object.proposals[i]);
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Creates a plain object from an AcceptGameEventProposals message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof AcceptGameEventProposals
+     * @static
+     * @param {AcceptGameEventProposals} message AcceptGameEventProposals
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    AcceptGameEventProposals.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        let object = {};
+        if (options.arrays || options.defaults)
+            object.proposals = [];
+        if (message.proposals && message.proposals.length) {
+            object.proposals = [];
+            for (let j = 0; j < message.proposals.length; ++j)
+                object.proposals[j] = $root.GameEventProposal.toObject(message.proposals[j], options);
+        }
+        return object;
+    };
+
+    /**
+     * Converts this AcceptGameEventProposals to JSON.
+     * @function toJSON
+     * @memberof AcceptGameEventProposals
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    AcceptGameEventProposals.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    return AcceptGameEventProposals;
 })();
 
 export const StartBallPlacement = $root.StartBallPlacement = (() => {
@@ -19850,6 +20092,248 @@ export const GameState = $root.GameState = (() => {
     return GameState;
 })();
 
+export const GameEventProposal = $root.GameEventProposal = (() => {
+
+    /**
+     * Properties of a GameEventProposal.
+     * @exports IGameEventProposal
+     * @interface IGameEventProposal
+     * @property {google.protobuf.ITimestamp|null} [timestamp] GameEventProposal timestamp
+     * @property {IGameEvent|null} [gameEvent] GameEventProposal gameEvent
+     * @property {boolean|null} [accepted] GameEventProposal accepted
+     */
+
+    /**
+     * Constructs a new GameEventProposal.
+     * @exports GameEventProposal
+     * @classdesc Represents a GameEventProposal.
+     * @implements IGameEventProposal
+     * @constructor
+     * @param {IGameEventProposal=} [properties] Properties to set
+     */
+    function GameEventProposal(properties) {
+        if (properties)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * GameEventProposal timestamp.
+     * @member {google.protobuf.ITimestamp|null|undefined} timestamp
+     * @memberof GameEventProposal
+     * @instance
+     */
+    GameEventProposal.prototype.timestamp = null;
+
+    /**
+     * GameEventProposal gameEvent.
+     * @member {IGameEvent|null|undefined} gameEvent
+     * @memberof GameEventProposal
+     * @instance
+     */
+    GameEventProposal.prototype.gameEvent = null;
+
+    /**
+     * GameEventProposal accepted.
+     * @member {boolean} accepted
+     * @memberof GameEventProposal
+     * @instance
+     */
+    GameEventProposal.prototype.accepted = false;
+
+    /**
+     * Creates a new GameEventProposal instance using the specified properties.
+     * @function create
+     * @memberof GameEventProposal
+     * @static
+     * @param {IGameEventProposal=} [properties] Properties to set
+     * @returns {GameEventProposal} GameEventProposal instance
+     */
+    GameEventProposal.create = function create(properties) {
+        return new GameEventProposal(properties);
+    };
+
+    /**
+     * Encodes the specified GameEventProposal message. Does not implicitly {@link GameEventProposal.verify|verify} messages.
+     * @function encode
+     * @memberof GameEventProposal
+     * @static
+     * @param {IGameEventProposal} message GameEventProposal message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    GameEventProposal.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.timestamp != null && message.hasOwnProperty("timestamp"))
+            $root.google.protobuf.Timestamp.encode(message.timestamp, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+        if (message.gameEvent != null && message.hasOwnProperty("gameEvent"))
+            $root.GameEvent.encode(message.gameEvent, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+        if (message.accepted != null && message.hasOwnProperty("accepted"))
+            writer.uint32(/* id 3, wireType 0 =*/24).bool(message.accepted);
+        return writer;
+    };
+
+    /**
+     * Encodes the specified GameEventProposal message, length delimited. Does not implicitly {@link GameEventProposal.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof GameEventProposal
+     * @static
+     * @param {IGameEventProposal} message GameEventProposal message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    GameEventProposal.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a GameEventProposal message from the specified reader or buffer.
+     * @function decode
+     * @memberof GameEventProposal
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {GameEventProposal} GameEventProposal
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    GameEventProposal.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.GameEventProposal();
+        while (reader.pos < end) {
+            let tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1:
+                message.timestamp = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
+                break;
+            case 2:
+                message.gameEvent = $root.GameEvent.decode(reader, reader.uint32());
+                break;
+            case 3:
+                message.accepted = reader.bool();
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes a GameEventProposal message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof GameEventProposal
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {GameEventProposal} GameEventProposal
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    GameEventProposal.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a GameEventProposal message.
+     * @function verify
+     * @memberof GameEventProposal
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    GameEventProposal.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (message.timestamp != null && message.hasOwnProperty("timestamp")) {
+            let error = $root.google.protobuf.Timestamp.verify(message.timestamp);
+            if (error)
+                return "timestamp." + error;
+        }
+        if (message.gameEvent != null && message.hasOwnProperty("gameEvent")) {
+            let error = $root.GameEvent.verify(message.gameEvent);
+            if (error)
+                return "gameEvent." + error;
+        }
+        if (message.accepted != null && message.hasOwnProperty("accepted"))
+            if (typeof message.accepted !== "boolean")
+                return "accepted: boolean expected";
+        return null;
+    };
+
+    /**
+     * Creates a GameEventProposal message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof GameEventProposal
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {GameEventProposal} GameEventProposal
+     */
+    GameEventProposal.fromObject = function fromObject(object) {
+        if (object instanceof $root.GameEventProposal)
+            return object;
+        let message = new $root.GameEventProposal();
+        if (object.timestamp != null) {
+            if (typeof object.timestamp !== "object")
+                throw TypeError(".GameEventProposal.timestamp: object expected");
+            message.timestamp = $root.google.protobuf.Timestamp.fromObject(object.timestamp);
+        }
+        if (object.gameEvent != null) {
+            if (typeof object.gameEvent !== "object")
+                throw TypeError(".GameEventProposal.gameEvent: object expected");
+            message.gameEvent = $root.GameEvent.fromObject(object.gameEvent);
+        }
+        if (object.accepted != null)
+            message.accepted = Boolean(object.accepted);
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a GameEventProposal message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof GameEventProposal
+     * @static
+     * @param {GameEventProposal} message GameEventProposal
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    GameEventProposal.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        let object = {};
+        if (options.defaults) {
+            object.timestamp = null;
+            object.gameEvent = null;
+            object.accepted = false;
+        }
+        if (message.timestamp != null && message.hasOwnProperty("timestamp"))
+            object.timestamp = $root.google.protobuf.Timestamp.toObject(message.timestamp, options);
+        if (message.gameEvent != null && message.hasOwnProperty("gameEvent"))
+            object.gameEvent = $root.GameEvent.toObject(message.gameEvent, options);
+        if (message.accepted != null && message.hasOwnProperty("accepted"))
+            object.accepted = message.accepted;
+        return object;
+    };
+
+    /**
+     * Converts this GameEventProposal to JSON.
+     * @function toJSON
+     * @memberof GameEventProposal
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    GameEventProposal.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    return GameEventProposal;
+})();
+
 export const TeamInfo = $root.TeamInfo = (() => {
 
     /**
@@ -20411,7 +20895,7 @@ export const State = $root.State = (() => {
      * @property {ICommand|null} [nextCommand] State nextCommand
      * @property {google.protobuf.IDuration|null} [currentActionTimeRemaining] State currentActionTimeRemaining
      * @property {Array.<IGameEvent>|null} [gameEvents] State gameEvents
-     * @property {Array.<IProposedGameEvent>|null} [proposedGameEvents] State proposedGameEvents
+     * @property {Array.<IGameEventProposal>|null} [gameEventProposals] State gameEventProposals
      * @property {Division|null} [division] State division
      * @property {boolean|null} [autoContinue] State autoContinue
      * @property {Team|null} [firstKickoffTeam] State firstKickoffTeam
@@ -20428,7 +20912,7 @@ export const State = $root.State = (() => {
     function State(properties) {
         this.teamState = {};
         this.gameEvents = [];
-        this.proposedGameEvents = [];
+        this.gameEventProposals = [];
         if (properties)
             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
@@ -20524,12 +21008,12 @@ export const State = $root.State = (() => {
     State.prototype.gameEvents = $util.emptyArray;
 
     /**
-     * State proposedGameEvents.
-     * @member {Array.<IProposedGameEvent>} proposedGameEvents
+     * State gameEventProposals.
+     * @member {Array.<IGameEventProposal>} gameEventProposals
      * @memberof State
      * @instance
      */
-    State.prototype.proposedGameEvents = $util.emptyArray;
+    State.prototype.gameEventProposals = $util.emptyArray;
 
     /**
      * State division.
@@ -20603,9 +21087,9 @@ export const State = $root.State = (() => {
         if (message.gameEvents != null && message.gameEvents.length)
             for (let i = 0; i < message.gameEvents.length; ++i)
                 $root.GameEvent.encode(message.gameEvents[i], writer.uint32(/* id 13, wireType 2 =*/106).fork()).ldelim();
-        if (message.proposedGameEvents != null && message.proposedGameEvents.length)
-            for (let i = 0; i < message.proposedGameEvents.length; ++i)
-                $root.ProposedGameEvent.encode(message.proposedGameEvents[i], writer.uint32(/* id 14, wireType 2 =*/114).fork()).ldelim();
+        if (message.gameEventProposals != null && message.gameEventProposals.length)
+            for (let i = 0; i < message.gameEventProposals.length; ++i)
+                $root.GameEventProposal.encode(message.gameEventProposals[i], writer.uint32(/* id 14, wireType 2 =*/114).fork()).ldelim();
         if (message.division != null && message.hasOwnProperty("division"))
             writer.uint32(/* id 15, wireType 0 =*/120).int32(message.division);
         if (message.autoContinue != null && message.hasOwnProperty("autoContinue"))
@@ -20689,9 +21173,9 @@ export const State = $root.State = (() => {
                 message.gameEvents.push($root.GameEvent.decode(reader, reader.uint32()));
                 break;
             case 14:
-                if (!(message.proposedGameEvents && message.proposedGameEvents.length))
-                    message.proposedGameEvents = [];
-                message.proposedGameEvents.push($root.ProposedGameEvent.decode(reader, reader.uint32()));
+                if (!(message.gameEventProposals && message.gameEventProposals.length))
+                    message.gameEventProposals = [];
+                message.gameEventProposals.push($root.GameEventProposal.decode(reader, reader.uint32()));
                 break;
             case 15:
                 message.division = reader.int32();
@@ -20816,13 +21300,13 @@ export const State = $root.State = (() => {
                     return "gameEvents." + error;
             }
         }
-        if (message.proposedGameEvents != null && message.hasOwnProperty("proposedGameEvents")) {
-            if (!Array.isArray(message.proposedGameEvents))
-                return "proposedGameEvents: array expected";
-            for (let i = 0; i < message.proposedGameEvents.length; ++i) {
-                let error = $root.ProposedGameEvent.verify(message.proposedGameEvents[i]);
+        if (message.gameEventProposals != null && message.hasOwnProperty("gameEventProposals")) {
+            if (!Array.isArray(message.gameEventProposals))
+                return "gameEventProposals: array expected";
+            for (let i = 0; i < message.gameEventProposals.length; ++i) {
+                let error = $root.GameEventProposal.verify(message.gameEventProposals[i]);
                 if (error)
-                    return "proposedGameEvents." + error;
+                    return "gameEventProposals." + error;
             }
         }
         if (message.division != null && message.hasOwnProperty("division"))
@@ -20979,14 +21463,14 @@ export const State = $root.State = (() => {
                 message.gameEvents[i] = $root.GameEvent.fromObject(object.gameEvents[i]);
             }
         }
-        if (object.proposedGameEvents) {
-            if (!Array.isArray(object.proposedGameEvents))
-                throw TypeError(".State.proposedGameEvents: array expected");
-            message.proposedGameEvents = [];
-            for (let i = 0; i < object.proposedGameEvents.length; ++i) {
-                if (typeof object.proposedGameEvents[i] !== "object")
-                    throw TypeError(".State.proposedGameEvents: object expected");
-                message.proposedGameEvents[i] = $root.ProposedGameEvent.fromObject(object.proposedGameEvents[i]);
+        if (object.gameEventProposals) {
+            if (!Array.isArray(object.gameEventProposals))
+                throw TypeError(".State.gameEventProposals: array expected");
+            message.gameEventProposals = [];
+            for (let i = 0; i < object.gameEventProposals.length; ++i) {
+                if (typeof object.gameEventProposals[i] !== "object")
+                    throw TypeError(".State.gameEventProposals: object expected");
+                message.gameEventProposals[i] = $root.GameEventProposal.fromObject(object.gameEventProposals[i]);
             }
         }
         switch (object.division) {
@@ -21037,7 +21521,7 @@ export const State = $root.State = (() => {
         let object = {};
         if (options.arrays || options.defaults) {
             object.gameEvents = [];
-            object.proposedGameEvents = [];
+            object.gameEventProposals = [];
         }
         if (options.objects || options.defaults)
             object.teamState = {};
@@ -21082,10 +21566,10 @@ export const State = $root.State = (() => {
             for (let j = 0; j < message.gameEvents.length; ++j)
                 object.gameEvents[j] = $root.GameEvent.toObject(message.gameEvents[j], options);
         }
-        if (message.proposedGameEvents && message.proposedGameEvents.length) {
-            object.proposedGameEvents = [];
-            for (let j = 0; j < message.proposedGameEvents.length; ++j)
-                object.proposedGameEvents[j] = $root.ProposedGameEvent.toObject(message.proposedGameEvents[j], options);
+        if (message.gameEventProposals && message.gameEventProposals.length) {
+            object.gameEventProposals = [];
+            for (let j = 0; j < message.gameEventProposals.length; ++j)
+                object.gameEventProposals[j] = $root.GameEventProposal.toObject(message.gameEventProposals[j], options);
         }
         if (message.division != null && message.hasOwnProperty("division"))
             object.division = options.enums === String ? $root.Division[message.division] : message.division;

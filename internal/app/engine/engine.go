@@ -308,6 +308,8 @@ func (e *Engine) GetConfig() *Config {
 
 // UpdateConfig updates the current engine config with the given delta
 func (e *Engine) UpdateConfig(delta *Config) {
+	e.mutex.Lock()
+	defer e.mutex.Unlock()
 	proto.Merge(&e.config, delta)
 	log.Printf("Engine config updated to %v", e.config)
 	if err := e.config.WriteTo(e.engineConfig.ConfigFilename); err != nil {

@@ -63,6 +63,15 @@ message GameState {
     }
 }
 
+message GameEventProposal {
+    // The timestamp when the game event proposal occurred
+    optional google.protobuf.Timestamp timestamp = 1;
+    // The proposed game event.
+    optional GameEvent game_event = 2;
+    // Whether the proposal was accepted
+    optional bool accepted = 3;
+}
+
 message TeamInfo {
     optional string name = 1;
     optional int32 goals = 2;
@@ -92,7 +101,7 @@ message State {
     optional Command next_command = 10;
     optional google.protobuf.Duration current_action_time_remaining = 12;
     repeated GameEvent game_events = 13;
-    repeated ProposedGameEvent proposed_game_events = 14;
+    repeated GameEventProposal game_event_proposals = 14;
     optional Division division = 15;
     optional bool auto_continue = 16;
     optional Team first_kickoff_team = 17;
