@@ -18,15 +18,6 @@ func (e *Engine) EnqueueGameEvent(gameEvent *state.GameEvent) {
 	}
 	origin := gameEvent.Origin[0]
 
-	if _, ok := e.config.AutoRefConfigs[origin]; !ok {
-		cfg := new(AutoRefConfig)
-		cfg.GameEventEnabled = map[string]bool{}
-		for _, event := range state.AllGameEvents() {
-			cfg.GameEventEnabled[event.String()] = true
-		}
-		e.config.AutoRefConfigs[origin] = cfg
-	}
-
 	if !e.config.AutoRefConfigs[origin].GameEventEnabled[gameEvent.Type.String()] {
 		log.Printf("Ignoring disabled game event for %v: %v", origin, *gameEvent)
 		return

@@ -310,7 +310,19 @@ func (e *Engine) GetConfig() *Config {
 func (e *Engine) UpdateConfig(delta *Config) {
 	e.mutex.Lock()
 	defer e.mutex.Unlock()
-	proto.Merge(&e.config, delta)
+	log.Printf("Process config delta change %v", delta)
+	for k, v := range delta.GameEventBehavior {
+		e.config.GameEventBehavior[k] = v
+	}
+	for autoRef, cfg := range delta.AutoRefConfigs {
+		if _, ok := e.config.AutoRefConfigs[autoRef]; !ok {
+			e.config.AutoRefConfigs[autoRef] = new(AutoRefConfig)
+			e.config.AutoRefConfigs[autoRef].GameEventEnabled = map[string]bool{}
+		}
+		for k, v := range cfg.GameEventEnabled {
+			e.config.AutoRefConfigs[autoRef].GameEventEnabled[k] = v
+		}
+	}
 	log.Printf("Engine config updated to %v", e.config)
 	if err := e.config.WriteTo(e.engineConfig.ConfigFilename); err != nil {
 		log.Printf("Could not write engine config: %v", err)

@@ -2,43 +2,34 @@
     <div class="game-controller-container">
         <div class="auto-refs-connected" v-b-tooltip.hover.d500>
             <p>
-                <b>{{autoRefsConnected}}</b> autoRefs connected: {{autoRefs}}
+                <strong>{{autoRefsConnected}}</strong> autoRefs connected: {{autoRefs}}
             </p>
         </div>
 
-        <b-btn @click="showBehaviors=!showBehaviors" v-if="!showBehaviors">Configure Behaviors</b-btn>
-
-        <EventBehavior v-if="showBehaviors"/>
+        <b-tabs content-class="mt-3">
+            <b-tab title="Game events" active>
+                <EventBehavior/>
+            </b-tab>
+            <b-tab v-for="autoRef in autoRefs" :title="autoRef" :key="autoRef">
+                <AutoRefConfig :auto-ref-name="autoRef"/>
+            </b-tab>
+        </b-tabs>
     </div>
 </template>
 
 <script>
     import EventBehavior from "./EventBehavior";
+    import AutoRefConfig from "./AutoRefConfig";
 
     export default {
         name: "AutonomousSettings",
-        components: {EventBehavior},
-        data() {
-            return {
-                showBehaviors: false
-            }
-        },
+        components: {AutoRefConfig, EventBehavior},
         computed: {
             gcState() {
                 return this.$store.state.gcState
             },
             autoRefs() {
-                if (this.autoRefsConnected) {
-                    let autoRefs = '';
-                    let autoRefNames = Object.keys(this.gcState.autoRefState);
-                    for (let i = 0; i < autoRefNames.length; i++) {
-                        autoRefs += autoRefNames[i];
-                        if (i !== (autoRefNames.length - 1)) {
-                            autoRefs += ', '
-                        }
-                    }
-                    return autoRefs;
-                }
+                return Object.keys(this.gcState.autoRefState);
             },
             autoRefsConnected() {
                 if (this.gcState.autoRefState) {

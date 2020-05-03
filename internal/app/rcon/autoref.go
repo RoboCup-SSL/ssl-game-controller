@@ -2,6 +2,7 @@ package rcon
 
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/engine"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-go-tools/pkg/sslconn"
 	"github.com/odeke-em/go-uuid"
 	"github.com/pkg/errors"
@@ -131,6 +132,17 @@ func (s *AutoRefServer) handleClientConnection(conn net.Conn) {
 		s := new(engine.GcStateAutoRef)
 		gcState.AutoRefState[client.id] = s
 	})
+
+	if _, ok := s.gcEngine.GetConfig().AutoRefConfigs[client.id]; !ok {
+		cfg := new(engine.AutoRefConfig)
+		cfg.GameEventEnabled = map[string]bool{}
+		for _, event := range state.AllGameEvents() {
+			cfg.GameEventEnabled[event.String()] = true
+		}
+		s.gcEngine.UpdateConfig(&engine.Config{
+			AutoRefConfigs: map[string]*engine.AutoRefConfig{client.id: cfg},
+		})
+	}
 
 	for {
 		req := AutoRefToController{}
