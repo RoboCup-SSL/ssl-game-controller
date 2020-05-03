@@ -35,7 +35,7 @@ func (e *Engine) processBotNumberPerTeam(team state.Team) {
 		e.Enqueue(createGameEventChange(state.GameEvent_TOO_MANY_ROBOTS, state.GameEvent{
 			Event: &state.GameEvent_TooManyRobots_{
 				TooManyRobots: &state.GameEvent_TooManyRobots{
-					ByTeam:           e.currentState.Command.ForTeam,
+					ByTeam:           &team,
 					NumRobotsAllowed: &numBotsAllowed,
 					NumRobotsOnField: &numBots,
 					BallLocation:     ballPos,
