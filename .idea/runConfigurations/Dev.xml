@@ -1,7 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Dev" type="CompoundRunConfigurationType" factoryName="Compound Run Configuration">
-    <toRun type="GoApplicationRunConfiguration" name="Go Dev Server" />
-    <toRun type="js.build_tools.npm" name="UI Dev Server" />
-    <method v="2" />
-  </configuration>
-</component>
