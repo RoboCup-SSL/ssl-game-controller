@@ -114,8 +114,8 @@
                         return gameEventDetails(entry.change.addGameEvent.gameEvent).byTeam;
                     case 'addPassiveGameEvent':
                         return gameEventDetails(entry.change.addPassiveGameEvent.gameEvent).byTeam;
-                    case 'addProposedGameEvent':
-                        return gameEventDetails(entry.change.addProposedGameEvent.proposal.gameEvent).byTeam;
+                    case 'addProposal':
+                        return gameEventDetails(entry.change.addProposal.proposal.gameEvent).byTeam;
                     case 'updateTeamState':
                         return entry.change.updateTeamState.forTeam;
                     case 'newGameState':
@@ -141,9 +141,9 @@
                     case 'addGameEvent':
                         return 'exclamation-triangle';
                     case 'addPassiveGameEvent':
-                        return 'exclamation-triangle';
-                    case 'addProposedGameEvent':
                         return 'recycle';
+                    case 'addProposal':
+                        return 'hand-point-up';
                     case 'startBallPlacement':
                         return 'futbol';
                     case 'continue':
@@ -158,7 +158,7 @@
                         return 'exclamation';
                     case 'newGameState':
                         return 'gavel';
-                    case 'acceptGameEventProposals':
+                    case 'acceptProposalGroup':
                         return 'check-circle';
                     default:
                         return 'question-circle';
@@ -183,8 +183,8 @@
                         return 'New game event: ' + entry.change.addGameEvent.gameEvent.type;
                     case 'addPassiveGameEvent':
                         return 'New passive game event: ' + entry.change.addPassiveGameEvent.gameEvent.type;
-                    case 'addProposedGameEvent':
-                        return 'New proposed game event: ' + entry.change.addProposedGameEvent.proposal.type;
+                    case 'addProposal':
+                        return 'New proposal: ' + entry.change.addProposal.proposal.gameEvent.type;
                     case 'startBallPlacement':
                         return 'Start ball placement';
                     case 'continue':
@@ -199,8 +199,8 @@
                         return 'Revert';
                     case 'newGameState':
                         return 'New game state: ' + entry.change.newGameState.gameState.type;
-                    case 'acceptGameEventProposals':
-                        return 'Accept game event proposals';
+                    case 'acceptProposalGroup':
+                        return 'Accept proposals';
                     default:
                         return type;
                 }

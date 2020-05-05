@@ -34,9 +34,9 @@ func (e *Engine) EnqueueGameEvent(gameEvent *state.GameEvent) {
 		timestamp, _ := ptypes.TimestampProto(e.timeProvider())
 		e.Enqueue(&statemachine.Change{
 			Origin: &origin,
-			Change: &statemachine.Change_AddProposedGameEvent{
-				AddProposedGameEvent: &statemachine.AddProposedGameEvent{
-					Proposal: &state.GameEventProposal{
+			Change: &statemachine.Change_AddProposal{
+				AddProposal: &statemachine.AddProposal{
+					Proposal: &state.Proposal{
 						Timestamp: timestamp,
 						GameEvent: gameEvent,
 					},

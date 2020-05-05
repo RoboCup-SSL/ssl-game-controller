@@ -44,6 +44,7 @@ library.add(
     fa.faBullhorn,
     fa.faRecycle,
     fa.faFutbol,
+    fa.faHandPointUp,
 );
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 

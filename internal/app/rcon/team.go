@@ -86,7 +86,7 @@ func (c *TeamClient) verifyRegistration(registration TeamRegistration) error {
 		if registration.Signature.Token != nil {
 			sendToken = *registration.Signature.Token
 		}
-		return errors.Errorf("Client %v sent an invalid token: %v != %v", c.id, sendToken, c.token)
+		return errors.Errorf("Team Client %v sent an invalid token: %v != %v", c.id, sendToken, c.token)
 	}
 	signature := registration.Signature.Pkcs1V15
 	registration.Signature.Pkcs1V15 = []byte{}
@@ -150,7 +150,7 @@ func (s *TeamServer) handleClientConnection(conn net.Conn) {
 		s.CloseConnection(client.id)
 	}()
 
-	log.Printf("Client %v connected", client.id)
+	log.Printf("Team Client %v connected", client.id)
 	team := s.gcEngine.CurrentState().TeamByName(client.id)
 	s.gcEngine.UpdateGcState(func(gcState *engine.GcState) {
 		if teamState, ok := gcState.TeamState[team.String()]; ok {
@@ -187,7 +187,7 @@ func (s *TeamServer) SendRequest(teamName string, request ControllerToTeam) erro
 	if client, ok := s.clients[teamName]; ok {
 		return client.SendRequest(request)
 	}
-	return errors.Errorf("Client '%v' not connected", teamName)
+	return errors.Errorf("Team Client '%v' not connected", teamName)
 }
 
 func (c *Client) SendRequest(request ControllerToTeam) error {

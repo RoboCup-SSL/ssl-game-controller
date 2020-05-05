@@ -8,18 +8,21 @@ import (
 	"time"
 )
 
-func mapProposedGameEvents(events []*state.GameEventProposal) []*state.ProposedGameEvent {
-	mappedEvents := make([]*state.ProposedGameEvent, len(events))
-	for i, e := range events {
-		proposer := ""
-		if len(e.GameEvent.Origin) > 0 {
-			proposer = e.GameEvent.Origin[0]
-		}
-		var validUntil uint64
-		mappedEvents[i] = &state.ProposedGameEvent{
-			ValidUntil: &validUntil, // required in protobuf ref msg... Add zero value
-			ProposerId: &proposer,
-			GameEvent:  e.GameEvent,
+func mapProposals(groups []*state.ProposalGroup) []*state.ProposedGameEvent {
+	var mappedEvents []*state.ProposedGameEvent
+	for _, group := range groups {
+		for _, proposal := range group.Proposals {
+			proposer := ""
+			if len(proposal.GameEvent.Origin) > 0 {
+				proposer = proposal.GameEvent.Origin[0]
+			}
+			var validUntil uint64
+			//noinspection GoDeprecation
+			mappedEvents = append(mappedEvents, &state.ProposedGameEvent{
+				ValidUntil: &validUntil, // required in protobuf ref msg... Add zero value
+				ProposerId: &proposer,
+				GameEvent:  proposal.GameEvent,
+			})
 		}
 	}
 	return mappedEvents

@@ -4,12 +4,18 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/golang/protobuf/proto"
 	"log"
-	"reflect"
 )
 
-func (s *StateMachine) processChangeAcceptGameEventProposals(newState *state.State, change *AcceptGameEventProposals) (changes []*Change) {
+func (s *StateMachine) processChangeAcceptProposals(newState *state.State, change *AcceptProposalGroup) (changes []*Change) {
 
-	majorityEvent := s.createMergedGameEvent(change.Proposals)
+	numGroups := len(newState.ProposalGroups)
+	if int(*change.GroupId) >= numGroups {
+		log.Printf("Proposal group id %v invalid, there are only  %v groups", *change.GroupId, numGroups)
+		return
+	}
+
+	group := newState.ProposalGroups[*change.GroupId]
+	majorityEvent := s.createMergedGameEvent(group.Proposals, change.AcceptedBy)
 	changes = append(changes, &Change{
 		Change: &Change_AddGameEvent{
 			AddGameEvent: &AddGameEvent{
@@ -18,20 +24,12 @@ func (s *StateMachine) processChangeAcceptGameEventProposals(newState *state.Sta
 		},
 	})
 
-	for _, proposal := range newState.GameEventProposals {
-		for _, acceptedProposal := range change.Proposals {
-			if reflect.DeepEqual(proposal, acceptedProposal) {
-				proposal.Accepted = new(bool)
-				*proposal.Accepted = true
-				break
-			}
-		}
-	}
+	*group.Accepted = true
 
 	return
 }
 
-func (s *StateMachine) createMergedGameEvent(events []*state.GameEventProposal) *state.GameEvent {
+func (s *StateMachine) createMergedGameEvent(events []*state.Proposal, acceptedBy *string) *state.GameEvent {
 	event := new(state.GameEvent)
 	proto.Merge(event, events[0].GameEvent)
 	event.Origin = []string{}
@@ -39,6 +37,9 @@ func (s *StateMachine) createMergedGameEvent(events []*state.GameEventProposal) 
 	for _, e := range events {
 		event.Origin = append(event.Origin, e.GameEvent.Origin...)
 		byTeam[event.ByTeam()]++
+	}
+	if acceptedBy != nil {
+		event.Origin = append(event.Origin, *acceptedBy)
 	}
 	if byTeam[state.Team_YELLOW] > byTeam[state.Team_BLUE] {
 		event.SetByTeam(state.Team_YELLOW)

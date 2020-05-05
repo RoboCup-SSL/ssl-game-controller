@@ -83,12 +83,12 @@ func (s *StateMachine) Process(currentState *state.State, change *Change) (newSt
 		newChanges = s.processChangeStartBallPlacement(newState)
 	} else if change.GetContinue() != nil {
 		newChanges = s.processChangeContinue(newState)
-	} else if change.GetAddProposedGameEvent() != nil {
-		newChanges = s.processChangeAddProposedGameEvent(newState, change.GetAddProposedGameEvent())
+	} else if change.GetAddProposal() != nil {
+		newChanges = s.processChangeAddProposal(newState, change.GetAddProposal())
 	} else if change.GetNewGameState() != nil {
 		newChanges = s.processNewGameState(newState, change.GetNewGameState())
-	} else if change.GetAcceptGameEventProposals() != nil {
-		newChanges = s.processChangeAcceptGameEventProposals(newState, change.GetAcceptGameEventProposals())
+	} else if change.GetAcceptProposalGroup() != nil {
+		newChanges = s.processChangeAcceptProposals(newState, change.GetAcceptProposalGroup())
 	} else {
 		log.Println("Unhandled change in state machine: ", change)
 	}

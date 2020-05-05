@@ -31,7 +31,7 @@ message Change {
         YellowCardOver yellow_card_over = 7;
         AddGameEvent add_game_event = 8;
         AddPassiveGameEvent add_passive_game_event = 19;
-        AddProposedGameEvent add_proposed_game_event = 9;
+        AddProposal add_proposal = 9;
         StartBallPlacement start_ball_placement = 10;
         Continue continue = 11;
         UpdateConfig update_config = 12;
@@ -39,7 +39,7 @@ message Change {
         SwitchColors switch_colors = 14;
         Revert revert = 15;
         NewGameState new_game_state = 17;
-        AcceptGameEventProposals accept_game_event_proposals = 18;
+        AcceptProposalGroup accept_proposal_group = 18;
     }
 }
 
@@ -77,12 +77,13 @@ message AddPassiveGameEvent {
     optional GameEvent game_event = 1;
 }
 
-message AddProposedGameEvent {
-    optional GameEventProposal proposal = 1;
+message AddProposal {
+    optional Proposal proposal = 1;
 }
 
-message AcceptGameEventProposals {
-    repeated GameEventProposal proposals = 1;
+message AcceptProposalGroup {
+    optional uint32 group_id = 1;
+    optional string accepted_by = 2;
 }
 
 message StartBallPlacement {

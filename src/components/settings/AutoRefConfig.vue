@@ -72,8 +72,8 @@
                 });
             },
             allValuesAre(value) {
-                for (let events of Object.values(this.eventTypes)) {
-                    if (events !== value) {
+                for (let eventEnabled of Object.values(this.gameEventEnabled)) {
+                    if (eventEnabled !== value) {
                         return false;
                     }
                 }

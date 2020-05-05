@@ -1,10 +1,9 @@
-package engine
+package statemachine
 
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/geom"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/golang/protobuf/ptypes"
-	"reflect"
 	"testing"
 	"time"
 )
@@ -119,12 +118,14 @@ func Test_gameEventsSimilar(t *testing.T) {
 
 func Test_collectMatchingProposals(t *testing.T) {
 	type args struct {
-		events []*state.GameEventProposal
+		groups   []*state.ProposalGroup
+		proposal *state.Proposal
+		timeout  time.Duration
 	}
 
-	deadline := time.Date(2020, 3, 10, 0, 0, 0, 0, time.UTC)
-	dateBefore, _ := ptypes.TimestampProto(deadline.Add(-time.Second))
-	dateAfter, _ := ptypes.TimestampProto(deadline.Add(time.Second))
+	now := time.Date(2020, 3, 10, 0, 0, 0, 0, time.UTC)
+	dateNew, _ := ptypes.TimestampProto(now.Add(time.Second))
+	dateOld, _ := ptypes.TimestampProto(now.Add(-time.Second))
 
 	botTooFastType := state.GameEvent_BOT_TOO_FAST_IN_STOP
 	botTooFastOne := &state.GameEvent{
@@ -172,66 +173,76 @@ func Test_collectMatchingProposals(t *testing.T) {
 		},
 	}
 
-	oneProp1 := &state.GameEventProposal{
-		Timestamp: dateBefore,
+	oneProp1 := &state.Proposal{
+		Timestamp: dateNew,
 		GameEvent: botTooFastOne,
 	}
-	oneProp1Old := &state.GameEventProposal{
-		Timestamp: dateAfter,
+	oneProp1Old := &state.Proposal{
+		Timestamp: dateOld,
 		GameEvent: botTooFastOne,
 	}
-	oneProp2 := &state.GameEventProposal{
-		Timestamp: dateBefore,
+	oneProp2 := &state.Proposal{
+		Timestamp: dateNew,
 		GameEvent: ballLeftFieldOne,
 	}
-	twoProp1 := &state.GameEventProposal{
-		Timestamp: dateBefore,
+	twoProp1 := &state.Proposal{
+		Timestamp: dateNew,
 		GameEvent: botTooFastTwo,
 	}
-	oneProp3 := &state.GameEventProposal{
-		Timestamp: dateBefore,
+	oneProp3 := &state.Proposal{
+		Timestamp: dateNew,
 		GameEvent: botCrashDrawnOne,
 	}
-	twoProp3 := &state.GameEventProposal{
-		Timestamp: dateBefore,
+	twoProp3 := &state.Proposal{
+		Timestamp: dateNew,
 		GameEvent: botCrashDrawnTwo,
 	}
-	threeProp3 := &state.GameEventProposal{
-		Timestamp: dateBefore,
+	threeProp3 := &state.Proposal{
+		Timestamp: dateNew,
 		GameEvent: botCrashDrawnThree,
 	}
 
 	tests := []struct {
 		name string
 		args args
-		want []*state.GameEventProposal
+		want int
 	}{
 		{
 			name: "Match by type",
 			args: args{
-				events: []*state.GameEventProposal{oneProp1, oneProp2, twoProp1},
+				groups:   []*state.ProposalGroup{{Proposals: []*state.Proposal{oneProp1}}},
+				proposal: twoProp1,
+				timeout:  1,
 			},
-			want: []*state.GameEventProposal{oneProp1, twoProp1},
+			want: 0,
 		},
 		{
 			name: "Filter event after deadline",
 			args: args{
-				events: []*state.GameEventProposal{oneProp1, twoProp1, oneProp1Old},
+				groups:   []*state.ProposalGroup{{Proposals: []*state.Proposal{oneProp1Old}}},
+				proposal: oneProp1,
+				timeout:  1,
 			},
-			want: []*state.GameEventProposal{oneProp1, twoProp1},
+			want: -1,
 		},
 		{
 			name: "Match larger group",
 			args: args{
-				events: []*state.GameEventProposal{oneProp1, twoProp1, oneProp2, oneProp3, twoProp3, threeProp3},
+				groups: []*state.ProposalGroup{
+					{Proposals: []*state.Proposal{oneProp1, twoProp1}},
+					{Proposals: []*state.Proposal{oneProp2}},
+					{Proposals: []*state.Proposal{oneProp3, twoProp3}},
+				},
+				proposal: threeProp3,
+				timeout:  1,
 			},
-			want: []*state.GameEventProposal{oneProp3, twoProp3, threeProp3},
+			want: 2,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := collectMatchingProposals(tt.args.events, deadline); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("collectMatchingProposals() = %v, want %v", got, tt.want)
+			if _, gid := findGroup(tt.args.proposal, tt.args.groups, tt.args.timeout); tt.want != gid {
+				t.Errorf("findGroup() = %v, want %v", gid, tt.want)
 			}
 		})
 	}

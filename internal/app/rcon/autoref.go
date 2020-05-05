@@ -43,7 +43,7 @@ func (c *AutoRefClient) receiveRegistration(server *AutoRefServer) error {
 		for k := range server.clients {
 			clients = append(clients, k)
 		}
-		return errors.Errorf("Client with given identifier already registered: %v", clients)
+		return errors.Errorf("AutoRef Client with given identifier already registered: %v", clients)
 	}
 	c.pubKey = server.trustedKeys[c.id]
 	if c.pubKey != nil {
@@ -68,7 +68,7 @@ func (c *AutoRefClient) verifyRegistration(registration AutoRefRegistration) err
 		if registration.Signature.Token != nil {
 			sendToken = *registration.Signature.Token
 		}
-		return errors.Errorf("Client %v sent an invalid token: %v != %v", c.id, sendToken, c.token)
+		return errors.Errorf("AutoRef Client %v sent an invalid token: %v != %v", c.id, sendToken, c.token)
 	}
 	signature := registration.Signature.Pkcs1V15
 	registration.Signature.Pkcs1V15 = []byte{}
@@ -127,7 +127,7 @@ func (s *AutoRefServer) handleClientConnection(conn net.Conn) {
 		s.CloseConnection(client.id)
 	}()
 
-	log.Printf("Client %v connected", client.id)
+	log.Printf("AutoRef Client %v connected", client.id)
 	s.gcEngine.UpdateGcState(func(gcState *engine.GcState) {
 		s := new(engine.GcStateAutoRef)
 		gcState.AutoRefState[client.id] = s

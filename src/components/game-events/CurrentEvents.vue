@@ -4,15 +4,10 @@
         <div class="game-event-item"
              v-if="gameEventsPresent"
              v-for="(gameEvent, index) in gameEvents"
-             @click="eventSelected(index)"
              :key="index">
-            <span :class="{'team-blue': byTeam(gameEvent) === 'BLUE', 'team-yellow': byTeam(gameEvent) === 'YELLOW'}">
+            <span :class="{[teamClass(gameEvent)]: true}" @click="eventSelected(index)">
                 {{gameEvent.type}}
             </span>
-            <p class="details-row"
-               v-if="selectedEvent === index"
-               v-for="detail in detailsList(gameEvent)"
-               :key="detail.key">{{detail.key}}: {{detail.value}}</p>
             <div class="btn-accept"
                  v-if="showAcceptGoal(gameEvent)"
                  v-b-tooltip.hover.d500.righttop="'Accept this goal'">
@@ -20,6 +15,10 @@
                     <font-awesome-icon icon="check-circle" class="fa-lg"></font-awesome-icon>
                 </a>
             </div>
+            <p class="details-row"
+               v-if="selectedEvent === index"
+               v-for="detail in detailsList(gameEvent)"
+               :key="detail.key">{{detail.key}}: {{detail.value}}</p>
         </div>
     </div>
 </template>
@@ -52,6 +51,15 @@
             }
         },
         methods: {
+            teamClass(gameEvent) {
+                const team = this.byTeam(gameEvent);
+                if (team === 'BLUE') {
+                    return 'team-blue';
+                } else if (team === 'YELLOW') {
+                    return 'team-yellow';
+                }
+                return '';
+            },
             eventSelected(index) {
                 if (this.selectedEvent === index) {
                     this.selectedEvent = -1;
@@ -98,7 +106,7 @@
     .btn-accept {
         position: absolute;
         right: 0;
-        bottom: 0;
+        top: 0;
         margin: 0.3em;
     }
 

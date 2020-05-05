@@ -1,21 +1,25 @@
 <template>
     <div class="content">
-        <div class="proposal-item"
-             v-if="eventProposalsPresent"
-             v-for="(proposal, index) in eventProposals"
-             @click="eventSelected(index)"
-             :key="index">
-            <span :class="{'team-blue': byTeam(proposal.gameEvent) === 'BLUE', 'team-yellow': byTeam(proposal.gameEvent) === 'YELLOW'}">
-                {{proposal.gameEvent.type}}
-            </span>
-            <p class="details-row"
-               v-if="selectedEvent === index"
-               v-for="detail in detailsList(proposal.gameEvent)"
-               :key="detail.key">{{detail.key}}: {{detail.value}}</p>
+        <div :class="{'proposal-group': true, [groupClass(group)]: true}"
+             v-for="(group, groupId) in eventProposalGroups"
+             :key="groupId"
+            >
+            <div class="proposal-item"
+                 v-for="(proposal, proposalId) in group.proposals"
+                 :key="proposalId">
+                <span :class="{[teamClass(proposal)]: true}" @click="eventSelected(groupId, proposalId)">
+                    {{proposal.gameEvent.type}}
+                </span>
+                <p class="details-row"
+                   v-if="selectedGroup === groupId && selectedProposal === proposalId"
+                   v-for="detail in detailsList(proposal.gameEvent)"
+                   :key="detail.key">{{detail.key}}: {{detail.value}}</p>
+            </div>
             <a class="btn-accept"
                v-b-tooltip.hover.d500
-               title="Accept this game event"
-               @click="accept(proposal.gameEvent)">
+               title="Accept this proposal group"
+               v-if="!group.accepted"
+               @click="accept(groupId)">
                 <font-awesome-icon icon="check-circle" class="fa-lg"></font-awesome-icon>
             </a>
         </div>
@@ -24,28 +28,51 @@
 
 <script>
     import {gameEventByTeam, gameEventDetailsList} from "../../gameEvents";
+    import {submitChange} from "../../submit";
 
     export default {
         name: "EventProposals",
         data() {
             return {
-                selectedEvent: -1,
+                selectedGroup: -1,
+                selectedProposal: -1,
+                now: Date.now(),
             }
         },
         computed: {
-            eventProposals() {
-                return this.$store.state.matchState.gameEventProposals;
+            eventProposalGroups() {
+                return this.$store.state.matchState.proposalGroups;
             },
-            eventProposalsPresent() {
-                return this.eventProposals != null && this.eventProposals.length > 0;
-            }
         },
         methods: {
-            eventSelected(index) {
-                if (this.selectedEvent === index) {
-                    this.selectedEvent = -1;
+            blue(proposal) {
+                return this.byTeam(proposal.gameEvent) === 'BLUE';
+            },
+            yellow(proposal) {
+                return this.byTeam(proposal.gameEvent) === 'YELLOW';
+            },
+            teamClass(proposal) {
+                const team = this.byTeam(proposal.gameEvent);
+                if (team === 'BLUE') {
+                    return 'team-blue';
+                } else if (team === 'YELLOW') {
+                    return 'team-yellow';
+                }
+                return '';
+            },
+            groupClass(group) {
+              if (group.accepted) {
+                  return 'proposal-group-accepted';
+              }
+              return '';
+            },
+            eventSelected(groupId, proposalId) {
+                if (this.selectedGroup === groupId && this.selectedProposal === proposalId) {
+                    this.selectedGroup = -1;
+                    this.selectedProposal = -1;
                 } else {
-                    this.selectedEvent = index;
+                    this.selectedGroup = groupId;
+                    this.selectedProposal = proposalId;
                 }
             },
             detailsList(gameEvent) {
@@ -54,10 +81,13 @@
             byTeam(gameEvent) {
                 return gameEventByTeam(gameEvent);
             },
-            accept(gameEvent) {
-                // TODO
-                // submitChange();
-                console.log('TODO: submit ' + gameEvent);
+            accept(groupId) {
+                submitChange({
+                    acceptProposalGroup: {
+                        groupId: groupId,
+                        acceptedBy: 'UI'
+                    }
+                })
             },
         }
     }
@@ -67,6 +97,18 @@
 
     .content {
         text-align: center;
+    }
+
+    .proposal-group {
+        position: relative;
+        min-height: 2em;
+        border-style: dashed;
+        border-width: medium;
+        border-radius: 5px;
+        padding: 0.0em;
+        margin: 0.1em;
+        text-align: left;
+        border-color: darkgrey;
     }
 
     .proposal-item {
@@ -80,11 +122,15 @@
         text-align: left;
     }
 
+    .proposal-group-accepted {
+        border-color: green;
+    }
+
     .btn-accept {
         position: absolute;
         right: 0;
-        bottom: 0;
-        margin: 0.3em;
+        top: 0;
+        margin: -5px;
     }
 
     .details-row {
