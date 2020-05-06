@@ -64,9 +64,11 @@ func NewEngine(gameConfig config.Game, engineConfig config.Engine) (e *Engine) {
 
 // Enqueue adds the change to the change queue
 func (e *Engine) Enqueue(change *statemachine.Change) {
-	if change.GetAddGameEvent() != nil && !e.IsGameEventEnabled(*change.GetAddGameEvent().GameEvent.Type) {
-		log.Printf("Ignoring disabled game event %v", change.GetAddGameEvent().GameEvent)
-		return
+	if change.GetAddGameEvent() != nil {
+		change = e.filterGameEvent(change)
+		if change == nil {
+			return
+		}
 	}
 	if change.Revertible == nil {
 		change.Revertible = new(bool)
@@ -74,6 +76,40 @@ func (e *Engine) Enqueue(change *statemachine.Change) {
 		*change.Revertible = true
 	}
 	e.queue <- change
+}
+
+func (e *Engine) filterGameEvent(change *statemachine.Change) *statemachine.Change {
+	gameEvent := change.GetAddGameEvent().GameEvent
+	behavior := e.config.GameEventBehavior[gameEvent.Type.String()]
+	switch behavior {
+	case Config_BEHAVIOR_ACCEPT:
+		return change
+	case Config_BEHAVIOR_ACCEPT_MAJORITY, Config_BEHAVIOR_PROPOSE_ONLY:
+		timestamp, _ := ptypes.TimestampProto(e.timeProvider())
+		return &statemachine.Change{
+			Origin: &changeOriginEngine,
+			Change: &statemachine.Change_AddProposal{
+				AddProposal: &statemachine.AddProposal{
+					Proposal: &state.Proposal{
+						Timestamp: timestamp,
+						GameEvent: gameEvent,
+					},
+				},
+			},
+		}
+	case Config_BEHAVIOR_LOG:
+		return &statemachine.Change{
+			Origin: &changeOriginEngine,
+			Change: &statemachine.Change_AddPassiveGameEvent{
+				AddPassiveGameEvent: &statemachine.AddPassiveGameEvent{
+					GameEvent: gameEvent,
+				},
+			},
+		}
+	case Config_BEHAVIOR_IGNORE:
+		log.Printf("Ignoring game event: %v", *gameEvent)
+	}
+	return nil
 }
 
 // getGeometry returns the current geometry
@@ -313,10 +349,10 @@ func (e *Engine) UpdateConfig(delta *Config) {
 	for autoRef, cfg := range delta.AutoRefConfigs {
 		if _, ok := e.config.AutoRefConfigs[autoRef]; !ok {
 			e.config.AutoRefConfigs[autoRef] = new(AutoRefConfig)
-			e.config.AutoRefConfigs[autoRef].GameEventEnabled = map[string]bool{}
+			e.config.AutoRefConfigs[autoRef].GameEventBehavior = map[string]AutoRefConfig_Behavior{}
 		}
-		for k, v := range cfg.GameEventEnabled {
-			e.config.AutoRefConfigs[autoRef].GameEventEnabled[k] = v
+		for k, v := range cfg.GameEventBehavior {
+			e.config.AutoRefConfigs[autoRef].GameEventBehavior[k] = v
 		}
 	}
 	log.Printf("Engine config updated to %v", e.config)
@@ -325,7 +361,7 @@ func (e *Engine) UpdateConfig(delta *Config) {
 	}
 }
 
-// IsGameEventEnabled returns true, if the game event type is not disabled
+// IsGameEventEnabled returns true, if the game event type is always accepted
 func (e *Engine) IsGameEventEnabled(evenType state.GameEvent_Type) bool {
-	return e.config.GameEventBehavior[evenType.String()] != Config_GAME_EVENT_BEHAVIOR_OFF
+	return e.config.GameEventBehavior[evenType.String()] == Config_BEHAVIOR_ACCEPT
 }

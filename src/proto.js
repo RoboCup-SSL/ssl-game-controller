@@ -24988,7 +24988,7 @@ export const Config = $root.Config = (() => {
      * Properties of a Config.
      * @exports IConfig
      * @interface IConfig
-     * @property {Object.<string,Config.GameEventBehavior>|null} [gameEventBehavior] Config gameEventBehavior
+     * @property {Object.<string,Config.Behavior>|null} [gameEventBehavior] Config gameEventBehavior
      * @property {Object.<string,IAutoRefConfig>|null} [autoRefConfigs] Config autoRefConfigs
      */
 
@@ -25011,7 +25011,7 @@ export const Config = $root.Config = (() => {
 
     /**
      * Config gameEventBehavior.
-     * @member {Object.<string,Config.GameEventBehavior>} gameEventBehavior
+     * @member {Object.<string,Config.Behavior>} gameEventBehavior
      * @memberof Config
      * @instance
      */
@@ -25154,6 +25154,8 @@ export const Config = $root.Config = (() => {
                 case 1:
                 case 2:
                 case 3:
+                case 4:
+                case 5:
                     break;
                 }
         }
@@ -25188,21 +25190,29 @@ export const Config = $root.Config = (() => {
             message.gameEventBehavior = {};
             for (let keys = Object.keys(object.gameEventBehavior), i = 0; i < keys.length; ++i)
                 switch (object.gameEventBehavior[keys[i]]) {
-                case "GAME_EVENT_BEHAVIOR_UNKNOWN":
+                case "BEHAVIOR_UNKNOWN":
                 case 0:
                     message.gameEventBehavior[keys[i]] = 0;
                     break;
-                case "GAME_EVENT_BEHAVIOR_ON":
+                case "BEHAVIOR_ACCEPT":
                 case 1:
                     message.gameEventBehavior[keys[i]] = 1;
                     break;
-                case "GAME_EVENT_BEHAVIOR_MAJORITY":
+                case "BEHAVIOR_ACCEPT_MAJORITY":
                 case 2:
                     message.gameEventBehavior[keys[i]] = 2;
                     break;
-                case "GAME_EVENT_BEHAVIOR_OFF":
+                case "BEHAVIOR_PROPOSE_ONLY":
                 case 3:
                     message.gameEventBehavior[keys[i]] = 3;
+                    break;
+                case "BEHAVIOR_LOG":
+                case 4:
+                    message.gameEventBehavior[keys[i]] = 4;
+                    break;
+                case "BEHAVIOR_IGNORE":
+                case 5:
+                    message.gameEventBehavior[keys[i]] = 5;
                     break;
                 }
         }
@@ -25240,7 +25250,7 @@ export const Config = $root.Config = (() => {
         if (message.gameEventBehavior && (keys2 = Object.keys(message.gameEventBehavior)).length) {
             object.gameEventBehavior = {};
             for (let j = 0; j < keys2.length; ++j)
-                object.gameEventBehavior[keys2[j]] = options.enums === String ? $root.Config.GameEventBehavior[message.gameEventBehavior[keys2[j]]] : message.gameEventBehavior[keys2[j]];
+                object.gameEventBehavior[keys2[j]] = options.enums === String ? $root.Config.Behavior[message.gameEventBehavior[keys2[j]]] : message.gameEventBehavior[keys2[j]];
         }
         if (message.autoRefConfigs && (keys2 = Object.keys(message.autoRefConfigs)).length) {
             object.autoRefConfigs = {};
@@ -25262,20 +25272,24 @@ export const Config = $root.Config = (() => {
     };
 
     /**
-     * GameEventBehavior enum.
-     * @name Config.GameEventBehavior
+     * Behavior enum.
+     * @name Config.Behavior
      * @enum {string}
-     * @property {number} GAME_EVENT_BEHAVIOR_UNKNOWN=0 GAME_EVENT_BEHAVIOR_UNKNOWN value
-     * @property {number} GAME_EVENT_BEHAVIOR_ON=1 GAME_EVENT_BEHAVIOR_ON value
-     * @property {number} GAME_EVENT_BEHAVIOR_MAJORITY=2 GAME_EVENT_BEHAVIOR_MAJORITY value
-     * @property {number} GAME_EVENT_BEHAVIOR_OFF=3 GAME_EVENT_BEHAVIOR_OFF value
+     * @property {number} BEHAVIOR_UNKNOWN=0 BEHAVIOR_UNKNOWN value
+     * @property {number} BEHAVIOR_ACCEPT=1 BEHAVIOR_ACCEPT value
+     * @property {number} BEHAVIOR_ACCEPT_MAJORITY=2 BEHAVIOR_ACCEPT_MAJORITY value
+     * @property {number} BEHAVIOR_PROPOSE_ONLY=3 BEHAVIOR_PROPOSE_ONLY value
+     * @property {number} BEHAVIOR_LOG=4 BEHAVIOR_LOG value
+     * @property {number} BEHAVIOR_IGNORE=5 BEHAVIOR_IGNORE value
      */
-    Config.GameEventBehavior = (function() {
+    Config.Behavior = (function() {
         const valuesById = {}, values = Object.create(valuesById);
-        values[valuesById[0] = "GAME_EVENT_BEHAVIOR_UNKNOWN"] = 0;
-        values[valuesById[1] = "GAME_EVENT_BEHAVIOR_ON"] = 1;
-        values[valuesById[2] = "GAME_EVENT_BEHAVIOR_MAJORITY"] = 2;
-        values[valuesById[3] = "GAME_EVENT_BEHAVIOR_OFF"] = 3;
+        values[valuesById[0] = "BEHAVIOR_UNKNOWN"] = 0;
+        values[valuesById[1] = "BEHAVIOR_ACCEPT"] = 1;
+        values[valuesById[2] = "BEHAVIOR_ACCEPT_MAJORITY"] = 2;
+        values[valuesById[3] = "BEHAVIOR_PROPOSE_ONLY"] = 3;
+        values[valuesById[4] = "BEHAVIOR_LOG"] = 4;
+        values[valuesById[5] = "BEHAVIOR_IGNORE"] = 5;
         return values;
     })();
 
@@ -25288,7 +25302,7 @@ export const AutoRefConfig = $root.AutoRefConfig = (() => {
      * Properties of an AutoRefConfig.
      * @exports IAutoRefConfig
      * @interface IAutoRefConfig
-     * @property {Object.<string,boolean>|null} [gameEventEnabled] AutoRefConfig gameEventEnabled
+     * @property {Object.<string,AutoRefConfig.Behavior>|null} [gameEventBehavior] AutoRefConfig gameEventBehavior
      */
 
     /**
@@ -25300,7 +25314,7 @@ export const AutoRefConfig = $root.AutoRefConfig = (() => {
      * @param {IAutoRefConfig=} [properties] Properties to set
      */
     function AutoRefConfig(properties) {
-        this.gameEventEnabled = {};
+        this.gameEventBehavior = {};
         if (properties)
             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
@@ -25308,12 +25322,12 @@ export const AutoRefConfig = $root.AutoRefConfig = (() => {
     }
 
     /**
-     * AutoRefConfig gameEventEnabled.
-     * @member {Object.<string,boolean>} gameEventEnabled
+     * AutoRefConfig gameEventBehavior.
+     * @member {Object.<string,AutoRefConfig.Behavior>} gameEventBehavior
      * @memberof AutoRefConfig
      * @instance
      */
-    AutoRefConfig.prototype.gameEventEnabled = $util.emptyObject;
+    AutoRefConfig.prototype.gameEventBehavior = $util.emptyObject;
 
     /**
      * Creates a new AutoRefConfig instance using the specified properties.
@@ -25339,9 +25353,9 @@ export const AutoRefConfig = $root.AutoRefConfig = (() => {
     AutoRefConfig.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.gameEventEnabled != null && message.hasOwnProperty("gameEventEnabled"))
-            for (let keys = Object.keys(message.gameEventEnabled), i = 0; i < keys.length; ++i)
-                writer.uint32(/* id 1, wireType 2 =*/10).fork().uint32(/* id 1, wireType 2 =*/10).string(keys[i]).uint32(/* id 2, wireType 0 =*/16).bool(message.gameEventEnabled[keys[i]]).ldelim();
+        if (message.gameEventBehavior != null && message.hasOwnProperty("gameEventBehavior"))
+            for (let keys = Object.keys(message.gameEventBehavior), i = 0; i < keys.length; ++i)
+                writer.uint32(/* id 1, wireType 2 =*/10).fork().uint32(/* id 1, wireType 2 =*/10).string(keys[i]).uint32(/* id 2, wireType 0 =*/16).int32(message.gameEventBehavior[keys[i]]).ldelim();
         return writer;
     };
 
@@ -25378,11 +25392,11 @@ export const AutoRefConfig = $root.AutoRefConfig = (() => {
             switch (tag >>> 3) {
             case 1:
                 reader.skip().pos++;
-                if (message.gameEventEnabled === $util.emptyObject)
-                    message.gameEventEnabled = {};
+                if (message.gameEventBehavior === $util.emptyObject)
+                    message.gameEventBehavior = {};
                 key = reader.string();
                 reader.pos++;
-                message.gameEventEnabled[key] = reader.bool();
+                message.gameEventBehavior[key] = reader.int32();
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -25419,13 +25433,20 @@ export const AutoRefConfig = $root.AutoRefConfig = (() => {
     AutoRefConfig.verify = function verify(message) {
         if (typeof message !== "object" || message === null)
             return "object expected";
-        if (message.gameEventEnabled != null && message.hasOwnProperty("gameEventEnabled")) {
-            if (!$util.isObject(message.gameEventEnabled))
-                return "gameEventEnabled: object expected";
-            let key = Object.keys(message.gameEventEnabled);
+        if (message.gameEventBehavior != null && message.hasOwnProperty("gameEventBehavior")) {
+            if (!$util.isObject(message.gameEventBehavior))
+                return "gameEventBehavior: object expected";
+            let key = Object.keys(message.gameEventBehavior);
             for (let i = 0; i < key.length; ++i)
-                if (typeof message.gameEventEnabled[key[i]] !== "boolean")
-                    return "gameEventEnabled: boolean{k:string} expected";
+                switch (message.gameEventBehavior[key[i]]) {
+                default:
+                    return "gameEventBehavior: enum value{k:string} expected";
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                    break;
+                }
         }
         return null;
     };
@@ -25442,12 +25463,29 @@ export const AutoRefConfig = $root.AutoRefConfig = (() => {
         if (object instanceof $root.AutoRefConfig)
             return object;
         let message = new $root.AutoRefConfig();
-        if (object.gameEventEnabled) {
-            if (typeof object.gameEventEnabled !== "object")
-                throw TypeError(".AutoRefConfig.gameEventEnabled: object expected");
-            message.gameEventEnabled = {};
-            for (let keys = Object.keys(object.gameEventEnabled), i = 0; i < keys.length; ++i)
-                message.gameEventEnabled[keys[i]] = Boolean(object.gameEventEnabled[keys[i]]);
+        if (object.gameEventBehavior) {
+            if (typeof object.gameEventBehavior !== "object")
+                throw TypeError(".AutoRefConfig.gameEventBehavior: object expected");
+            message.gameEventBehavior = {};
+            for (let keys = Object.keys(object.gameEventBehavior), i = 0; i < keys.length; ++i)
+                switch (object.gameEventBehavior[keys[i]]) {
+                case "BEHAVIOR_UNKNOWN":
+                case 0:
+                    message.gameEventBehavior[keys[i]] = 0;
+                    break;
+                case "BEHAVIOR_ACCEPT":
+                case 1:
+                    message.gameEventBehavior[keys[i]] = 1;
+                    break;
+                case "BEHAVIOR_LOG":
+                case 2:
+                    message.gameEventBehavior[keys[i]] = 2;
+                    break;
+                case "BEHAVIOR_IGNORE":
+                case 3:
+                    message.gameEventBehavior[keys[i]] = 3;
+                    break;
+                }
         }
         return message;
     };
@@ -25466,12 +25504,12 @@ export const AutoRefConfig = $root.AutoRefConfig = (() => {
             options = {};
         let object = {};
         if (options.objects || options.defaults)
-            object.gameEventEnabled = {};
+            object.gameEventBehavior = {};
         let keys2;
-        if (message.gameEventEnabled && (keys2 = Object.keys(message.gameEventEnabled)).length) {
-            object.gameEventEnabled = {};
+        if (message.gameEventBehavior && (keys2 = Object.keys(message.gameEventBehavior)).length) {
+            object.gameEventBehavior = {};
             for (let j = 0; j < keys2.length; ++j)
-                object.gameEventEnabled[keys2[j]] = message.gameEventEnabled[keys2[j]];
+                object.gameEventBehavior[keys2[j]] = options.enums === String ? $root.AutoRefConfig.Behavior[message.gameEventBehavior[keys2[j]]] : message.gameEventBehavior[keys2[j]];
         }
         return object;
     };
@@ -25486,6 +25524,24 @@ export const AutoRefConfig = $root.AutoRefConfig = (() => {
     AutoRefConfig.prototype.toJSON = function toJSON() {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
+
+    /**
+     * Behavior enum.
+     * @name AutoRefConfig.Behavior
+     * @enum {string}
+     * @property {number} BEHAVIOR_UNKNOWN=0 BEHAVIOR_UNKNOWN value
+     * @property {number} BEHAVIOR_ACCEPT=1 BEHAVIOR_ACCEPT value
+     * @property {number} BEHAVIOR_LOG=2 BEHAVIOR_LOG value
+     * @property {number} BEHAVIOR_IGNORE=3 BEHAVIOR_IGNORE value
+     */
+    AutoRefConfig.Behavior = (function() {
+        const valuesById = {}, values = Object.create(valuesById);
+        values[valuesById[0] = "BEHAVIOR_UNKNOWN"] = 0;
+        values[valuesById[1] = "BEHAVIOR_ACCEPT"] = 1;
+        values[valuesById[2] = "BEHAVIOR_LOG"] = 2;
+        values[valuesById[3] = "BEHAVIOR_IGNORE"] = 3;
+        return values;
+    })();
 
     return AutoRefConfig;
 })();

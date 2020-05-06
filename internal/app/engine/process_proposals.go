@@ -15,11 +15,12 @@ func (e *Engine) processProposals() {
 	minTime := now.Add(-proposalTimeout)
 
 	for i, group := range e.currentState.ProposalGroups {
-		if *group.Accepted || groupHasRecentProposal(group, minTime) {
+		latestGameEvent := group.Proposals[len(group.Proposals)-1].GameEvent
+		if *group.Accepted || groupHasRecentProposal(group, minTime) ||
+			e.config.GameEventBehavior[latestGameEvent.Type.String()] == Config_BEHAVIOR_PROPOSE_ONLY {
 			continue
 		}
 		numProposals := uniqueOrigins(group)
-		latestGameEvent := group.Proposals[len(group.Proposals)-1].GameEvent
 		numAutoRefs := e.numAutoRefs(latestGameEvent)
 		majority := int(math.Floor(float64(numAutoRefs) / 2.0))
 
@@ -60,7 +61,8 @@ func (e *Engine) numAutoRefs(gameEvent *state.GameEvent) (n int) {
 		autoRefs = append(autoRefs, autoRef)
 	}
 	for _, autoRef := range autoRefs {
-		if e.config.AutoRefConfigs[autoRef].GameEventEnabled[gameEvent.Type.String()] {
+		behavior := e.config.AutoRefConfigs[autoRef].GameEventBehavior[gameEvent.Type.String()]
+		if behavior == AutoRefConfig_BEHAVIOR_ACCEPT {
 			n++
 		}
 	}

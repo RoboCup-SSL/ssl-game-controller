@@ -3,17 +3,26 @@ syntax = "proto2";
 option go_package = "github.com/RoboCup-SSL/ssl-game-controller/internal/app/engine";
 
 message Config {
-    map<string, GameEventBehavior> game_event_behavior = 3;
+    map<string, Behavior> game_event_behavior = 3;
     map<string, AutoRefConfig> auto_ref_configs = 4;
 
-    enum GameEventBehavior {
-        GAME_EVENT_BEHAVIOR_UNKNOWN = 0;
-        GAME_EVENT_BEHAVIOR_ON = 1;
-        GAME_EVENT_BEHAVIOR_MAJORITY = 2;
-        GAME_EVENT_BEHAVIOR_OFF = 3;
+    enum Behavior {
+        BEHAVIOR_UNKNOWN = 0;
+        BEHAVIOR_ACCEPT = 1;
+        BEHAVIOR_ACCEPT_MAJORITY = 2;
+        BEHAVIOR_PROPOSE_ONLY = 3;
+        BEHAVIOR_LOG = 4;
+        BEHAVIOR_IGNORE = 5;
     }
 }
 
 message AutoRefConfig {
-    map<string, bool> game_event_enabled = 1;
+    map<string, Behavior> game_event_behavior = 1;
+
+    enum Behavior {
+        BEHAVIOR_UNKNOWN = 0;
+        BEHAVIOR_ACCEPT = 1;
+        BEHAVIOR_LOG = 2;
+        BEHAVIOR_IGNORE = 3;
+    }
 }

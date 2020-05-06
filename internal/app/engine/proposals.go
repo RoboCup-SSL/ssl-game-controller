@@ -3,11 +3,10 @@ package engine
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
-	"github.com/golang/protobuf/ptypes"
 	"log"
 )
 
-// EnqueueGameEvent accepts a game event and handles majority accordingly
+// EnqueueGameEvent accepts a game event and handles behaviors accordingly
 func (e *Engine) EnqueueGameEvent(gameEvent *state.GameEvent) {
 	e.mutex.Lock()
 	defer e.mutex.Unlock()
@@ -18,34 +17,22 @@ func (e *Engine) EnqueueGameEvent(gameEvent *state.GameEvent) {
 	}
 	origin := gameEvent.Origin[0]
 
-	if !e.config.AutoRefConfigs[origin].GameEventEnabled[gameEvent.Type.String()] {
+	autoRefBehavior := e.config.AutoRefConfigs[origin].GameEventBehavior[gameEvent.Type.String()]
+	switch autoRefBehavior {
+	case AutoRefConfig_BEHAVIOR_IGNORE:
+		log.Printf("Ignoring game event from autoRef: %v", *gameEvent)
+	case AutoRefConfig_BEHAVIOR_LOG:
 		e.Enqueue(&statemachine.Change{
-			Origin: &origin,
+			Origin: &changeOriginEngine,
 			Change: &statemachine.Change_AddPassiveGameEvent{
 				AddPassiveGameEvent: &statemachine.AddPassiveGameEvent{
 					GameEvent: gameEvent,
 				},
 			},
 		})
-		return
-	}
-
-	if e.IsMajorityForGameEventEnabled(*gameEvent.Type) {
-		timestamp, _ := ptypes.TimestampProto(e.timeProvider())
+	case AutoRefConfig_BEHAVIOR_ACCEPT:
 		e.Enqueue(&statemachine.Change{
-			Origin: &origin,
-			Change: &statemachine.Change_AddProposal{
-				AddProposal: &statemachine.AddProposal{
-					Proposal: &state.Proposal{
-						Timestamp: timestamp,
-						GameEvent: gameEvent,
-					},
-				},
-			},
-		})
-	} else {
-		e.Enqueue(&statemachine.Change{
-			Origin: &origin,
+			Origin: &changeOriginEngine,
 			Change: &statemachine.Change_AddGameEvent{
 				AddGameEvent: &statemachine.AddGameEvent{
 					GameEvent: gameEvent,
@@ -53,9 +40,4 @@ func (e *Engine) EnqueueGameEvent(gameEvent *state.GameEvent) {
 			},
 		})
 	}
-}
-
-// IsMajorityForGameEventEnabled returns true, if the game event behavior is set to majority
-func (e *Engine) IsMajorityForGameEventEnabled(evenType state.GameEvent_Type) bool {
-	return e.config.GameEventBehavior[evenType.String()] == Config_GAME_EVENT_BEHAVIOR_MAJORITY
 }
