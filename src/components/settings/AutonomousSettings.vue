@@ -13,6 +13,9 @@
             <b-tab v-for="autoRef in autoRefs" :title="autoRef" :key="autoRef">
                 <AutoRefConfig :auto-ref-name="autoRef"/>
             </b-tab>
+            <b-tab title="Tracker sources">
+                <TrackerConfig/>
+            </b-tab>
         </b-tabs>
     </div>
 </template>
@@ -20,10 +23,11 @@
 <script>
     import EventBehavior from "./EventBehavior";
     import AutoRefConfig from "./AutoRefConfig";
+    import TrackerConfig from "./TrackerConfig";
 
     export default {
         name: "AutonomousSettings",
-        components: {AutoRefConfig, EventBehavior},
+        components: {TrackerConfig, AutoRefConfig, EventBehavior},
         computed: {
             gcState() {
                 return this.$store.state.gcState

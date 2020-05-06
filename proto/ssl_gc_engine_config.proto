@@ -3,8 +3,9 @@ syntax = "proto2";
 option go_package = "github.com/RoboCup-SSL/ssl-game-controller/internal/app/engine";
 
 message Config {
-    map<string, Behavior> game_event_behavior = 3;
-    map<string, AutoRefConfig> auto_ref_configs = 4;
+    map<string, Behavior> game_event_behavior = 1;
+    map<string, AutoRefConfig> auto_ref_configs = 2;
+    repeated string tracker_source_priority = 3;
 
     enum Behavior {
         BEHAVIOR_UNKNOWN = 0;

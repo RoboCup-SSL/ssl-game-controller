@@ -30,6 +30,9 @@ message GcStateTracker {
     // Name of the source
     optional string source_name = 1;
 
+    // UUID of the source
+    optional string uuid = 4;
+
     // Current ball
     optional Ball ball = 2;
 

@@ -29,6 +29,7 @@ type Engine struct {
 	timeProvider             timer.TimeProvider
 	lastTimeUpdate           time.Time
 	gcState                  *GcState
+	trackerLastUpdate        map[string]time.Time
 	mutex                    sync.Mutex
 	noProgressDetector       NoProgressDetector
 	ballPlacementCoordinator BallPlacementCoordinator
@@ -53,7 +54,7 @@ func NewEngine(gameConfig config.Game, engineConfig config.Engine) (e *Engine) {
 	}
 	e.gcState.AutoRefState = map[string]*GcStateAutoRef{}
 	e.gcState.TrackerState = map[string]*GcStateTracker{}
-	e.gcState.TrackerStateGc = new(GcStateTracker)
+	e.trackerLastUpdate = map[string]time.Time{}
 	e.noProgressDetector = NoProgressDetector{gcEngine: e}
 	e.ballPlacementCoordinator = BallPlacementCoordinator{gcEngine: e}
 	e.tickChanProvider = func() <-chan time.Time {
