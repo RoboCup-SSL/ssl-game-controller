@@ -72,3 +72,12 @@ func (m *Config) WriteTo(fileName string) (err error) {
 	log.Printf("Written to %v", fileName)
 	return
 }
+
+func (m *Config) StringJson() string {
+	marshaler := jsonpb.Marshaler{}
+	if str, err := marshaler.MarshalToString(m); err != nil {
+		return err.Error()
+	} else {
+		return str
+	}
+}

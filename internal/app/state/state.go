@@ -1,6 +1,7 @@
 package state
 
 import (
+	"github.com/golang/protobuf/jsonpb"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes/duration"
 	"github.com/golang/protobuf/ptypes/timestamp"
@@ -53,4 +54,13 @@ func (m *State) TeamByName(name string) Team {
 		}
 	}
 	return Team_UNKNOWN
+}
+
+func (m *State) StringJson() string {
+	marshaler := jsonpb.Marshaler{}
+	if str, err := marshaler.MarshalToString(m); err != nil {
+		return err.Error()
+	} else {
+		return str
+	}
 }

@@ -232,7 +232,7 @@ func (e *Engine) ResetMatch() {
 func (e *Engine) processChange(change *statemachine.Change) {
 	e.mutex.Lock()
 	defer e.mutex.Unlock()
-	log.Printf("Engine: Process change '%v'", change)
+	log.Printf("Engine: Process change '%v'", change.StringJson())
 
 	var newChanges []*statemachine.Change
 	entry := statemachine.StateChange{}
@@ -294,7 +294,7 @@ func (e *Engine) processChange(change *statemachine.Change) {
 		}
 	}
 
-	log.Printf("Change '%v' processed", change)
+	log.Printf("Change '%v' processed", change.StringJson())
 }
 
 // initialStateFromStore gets the current state or returns a new default state
@@ -342,7 +342,7 @@ func (e *Engine) GetConfig() *Config {
 func (e *Engine) UpdateConfig(delta *Config) {
 	e.mutex.Lock()
 	defer e.mutex.Unlock()
-	log.Printf("Process config delta change %v", delta)
+	log.Printf("Process config delta change %v", delta.StringJson())
 	for k, v := range delta.GameEventBehavior {
 		e.config.GameEventBehavior[k] = v
 	}
@@ -355,7 +355,7 @@ func (e *Engine) UpdateConfig(delta *Config) {
 			e.config.AutoRefConfigs[autoRef].GameEventBehavior[k] = v
 		}
 	}
-	log.Printf("Engine config updated to %v", e.config)
+	log.Printf("Engine config updated to %v", e.config.StringJson())
 	if err := e.config.WriteTo(e.engineConfig.ConfigFilename); err != nil {
 		log.Printf("Could not write engine config: %v", err)
 	}
