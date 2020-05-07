@@ -54,6 +54,7 @@ func NewEngine(gameConfig config.Game, engineConfig config.Engine) (e *Engine) {
 	}
 	e.gcState.AutoRefState = map[string]*GcStateAutoRef{}
 	e.gcState.TrackerState = map[string]*GcStateTracker{}
+	e.gcState.TrackerStateGc = &GcStateTracker{}
 	e.trackerLastUpdate = map[string]time.Time{}
 	e.noProgressDetector = NoProgressDetector{gcEngine: e}
 	e.ballPlacementCoordinator = BallPlacementCoordinator{gcEngine: e}
@@ -355,6 +356,9 @@ func (e *Engine) UpdateConfig(delta *Config) {
 		for k, v := range cfg.GameEventBehavior {
 			e.config.AutoRefConfigs[autoRef].GameEventBehavior[k] = v
 		}
+	}
+	if delta.ActiveTrackerSource != nil {
+		e.config.ActiveTrackerSource = delta.ActiveTrackerSource
 	}
 	log.Printf("Engine config updated to %v", e.config.StringJson())
 	if err := e.config.WriteTo(e.engineConfig.ConfigFilename); err != nil {

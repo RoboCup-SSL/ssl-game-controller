@@ -25012,7 +25012,7 @@ export const Config = $root.Config = (() => {
      * @interface IConfig
      * @property {Object.<string,Config.Behavior>|null} [gameEventBehavior] Config gameEventBehavior
      * @property {Object.<string,IAutoRefConfig>|null} [autoRefConfigs] Config autoRefConfigs
-     * @property {Array.<string>|null} [trackerSourcePriority] Config trackerSourcePriority
+     * @property {string|null} [activeTrackerSource] Config activeTrackerSource
      */
 
     /**
@@ -25026,7 +25026,6 @@ export const Config = $root.Config = (() => {
     function Config(properties) {
         this.gameEventBehavior = {};
         this.autoRefConfigs = {};
-        this.trackerSourcePriority = [];
         if (properties)
             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
@@ -25050,12 +25049,12 @@ export const Config = $root.Config = (() => {
     Config.prototype.autoRefConfigs = $util.emptyObject;
 
     /**
-     * Config trackerSourcePriority.
-     * @member {Array.<string>} trackerSourcePriority
+     * Config activeTrackerSource.
+     * @member {string} activeTrackerSource
      * @memberof Config
      * @instance
      */
-    Config.prototype.trackerSourcePriority = $util.emptyArray;
+    Config.prototype.activeTrackerSource = "";
 
     /**
      * Creates a new Config instance using the specified properties.
@@ -25089,9 +25088,8 @@ export const Config = $root.Config = (() => {
                 writer.uint32(/* id 2, wireType 2 =*/18).fork().uint32(/* id 1, wireType 2 =*/10).string(keys[i]);
                 $root.AutoRefConfig.encode(message.autoRefConfigs[keys[i]], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim().ldelim();
             }
-        if (message.trackerSourcePriority != null && message.trackerSourcePriority.length)
-            for (let i = 0; i < message.trackerSourcePriority.length; ++i)
-                writer.uint32(/* id 3, wireType 2 =*/26).string(message.trackerSourcePriority[i]);
+        if (message.activeTrackerSource != null && message.hasOwnProperty("activeTrackerSource"))
+            writer.uint32(/* id 3, wireType 2 =*/26).string(message.activeTrackerSource);
         return writer;
     };
 
@@ -25143,9 +25141,7 @@ export const Config = $root.Config = (() => {
                 message.autoRefConfigs[key] = $root.AutoRefConfig.decode(reader, reader.uint32());
                 break;
             case 3:
-                if (!(message.trackerSourcePriority && message.trackerSourcePriority.length))
-                    message.trackerSourcePriority = [];
-                message.trackerSourcePriority.push(reader.string());
+                message.activeTrackerSource = reader.string();
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -25209,13 +25205,9 @@ export const Config = $root.Config = (() => {
                     return "autoRefConfigs." + error;
             }
         }
-        if (message.trackerSourcePriority != null && message.hasOwnProperty("trackerSourcePriority")) {
-            if (!Array.isArray(message.trackerSourcePriority))
-                return "trackerSourcePriority: array expected";
-            for (let i = 0; i < message.trackerSourcePriority.length; ++i)
-                if (!$util.isString(message.trackerSourcePriority[i]))
-                    return "trackerSourcePriority: string[] expected";
-        }
+        if (message.activeTrackerSource != null && message.hasOwnProperty("activeTrackerSource"))
+            if (!$util.isString(message.activeTrackerSource))
+                return "activeTrackerSource: string expected";
         return null;
     };
 
@@ -25273,13 +25265,8 @@ export const Config = $root.Config = (() => {
                 message.autoRefConfigs[keys[i]] = $root.AutoRefConfig.fromObject(object.autoRefConfigs[keys[i]]);
             }
         }
-        if (object.trackerSourcePriority) {
-            if (!Array.isArray(object.trackerSourcePriority))
-                throw TypeError(".Config.trackerSourcePriority: array expected");
-            message.trackerSourcePriority = [];
-            for (let i = 0; i < object.trackerSourcePriority.length; ++i)
-                message.trackerSourcePriority[i] = String(object.trackerSourcePriority[i]);
-        }
+        if (object.activeTrackerSource != null)
+            message.activeTrackerSource = String(object.activeTrackerSource);
         return message;
     };
 
@@ -25296,12 +25283,12 @@ export const Config = $root.Config = (() => {
         if (!options)
             options = {};
         let object = {};
-        if (options.arrays || options.defaults)
-            object.trackerSourcePriority = [];
         if (options.objects || options.defaults) {
             object.gameEventBehavior = {};
             object.autoRefConfigs = {};
         }
+        if (options.defaults)
+            object.activeTrackerSource = "";
         let keys2;
         if (message.gameEventBehavior && (keys2 = Object.keys(message.gameEventBehavior)).length) {
             object.gameEventBehavior = {};
@@ -25313,11 +25300,8 @@ export const Config = $root.Config = (() => {
             for (let j = 0; j < keys2.length; ++j)
                 object.autoRefConfigs[keys2[j]] = $root.AutoRefConfig.toObject(message.autoRefConfigs[keys2[j]], options);
         }
-        if (message.trackerSourcePriority && message.trackerSourcePriority.length) {
-            object.trackerSourcePriority = [];
-            for (let j = 0; j < message.trackerSourcePriority.length; ++j)
-                object.trackerSourcePriority[j] = message.trackerSourcePriority[j];
-        }
+        if (message.activeTrackerSource != null && message.hasOwnProperty("activeTrackerSource"))
+            object.activeTrackerSource = message.activeTrackerSource;
         return object;
     };
 

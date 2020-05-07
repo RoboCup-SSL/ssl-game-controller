@@ -5,7 +5,7 @@ option go_package = "github.com/RoboCup-SSL/ssl-game-controller/internal/app/eng
 message Config {
     map<string, Behavior> game_event_behavior = 1;
     map<string, AutoRefConfig> auto_ref_configs = 2;
-    repeated string tracker_source_priority = 3;
+    optional string active_tracker_source = 3;
 
     enum Behavior {
         BEHAVIOR_UNKNOWN = 0;

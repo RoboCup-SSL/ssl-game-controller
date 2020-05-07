@@ -7,15 +7,11 @@
             <li v-for="(state, sourceId) in trackerState"
                 :key="sourceId">
                 {{sourceId}} ({{state.sourceName}})
-            </li>
-        </ul>
-        <p>
-            Tracker source priority:
-        </p>
-        <ul>
-            <li v-for="sourceName in trackerSourcePriority"
-                :key="sourceName">
-                {{sourceName}}
+                <b-button variant="primary"
+                          @click="setActiveTrackerSource(sourceId)"
+                          :disabled="sourceId === activeTrackerSource">
+                    Set active
+                </b-button>
             </li>
         </ul>
     </div>
@@ -30,16 +26,14 @@
             trackerState() {
                 return this.$store.state.gcState.trackerState;
             },
-            trackerSourcePriority() {
-                return this.$store.state.config.trackerSourcePriority
-            },
+            activeTrackerSource() {
+                return this.$store.state.config.activeTrackerSource;
+            }
         },
         methods: {
-            changeBehavior(eventType, value) {
+            setActiveTrackerSource(sourceId) {
                 submitConfigUpdate({
-                    gameEventBehavior: {
-                        [eventType]: value
-                    }
+                    activeTrackerSource: sourceId
                 });
             },
         }

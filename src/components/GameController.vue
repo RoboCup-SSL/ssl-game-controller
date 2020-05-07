@@ -10,6 +10,7 @@
 
             <ControlFlowBar id="match-controls"/>
             <SwitchWindowBar/>
+            <ActiveTrackerSource/>
         </div>
         <div v-else>
             <p>No state received yet. Is the backend running?</p>
@@ -22,10 +23,12 @@
     import GameStateBar from './GameStateBar.vue'
     import ControlFlowBar from "./control/ControlFlowBar";
     import SwitchWindowBar from "./control/SwitchWindowBar";
+    import ActiveTrackerSource from "./control/ActiveTrackerSource";
 
     export default {
         name: 'GameController',
         components: {
+            ActiveTrackerSource,
             SwitchWindowBar,
             MatchSettingsBar,
             GameStateBar,

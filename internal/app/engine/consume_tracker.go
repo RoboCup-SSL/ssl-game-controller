@@ -22,40 +22,33 @@ func (e *Engine) ProcessTrackerFrame(wrapperFrame *tracker.TrackerWrapperPacket)
 		Robots:     convertRobots(wrapperFrame.TrackedFrame.Robots),
 	}
 	e.trackerLastUpdate[*wrapperFrame.Uuid] = now
-
 	e.gcState.TrackerState[*wrapperFrame.Uuid] = &state
 
+	if e.config.ActiveTrackerSource == nil {
+		e.config.ActiveTrackerSource = state.Uuid
+		log.Printf("Switched tracker source to %v (%v)", *state.Uuid, *state.SourceName)
+	}
+
+	if *e.config.ActiveTrackerSource == *wrapperFrame.Uuid {
+		e.gcState.TrackerStateGc = &state
+	}
+}
+
+func (e *Engine) processTrackerSources() {
+	now := e.timeProvider()
+
+	if e.config.ActiveTrackerSource != nil && now.Sub(e.trackerLastUpdate[*e.config.ActiveTrackerSource]) > time.Second {
+		log.Printf("Tracker source %v timed out", *e.config.ActiveTrackerSource)
+		e.config.ActiveTrackerSource = nil
+		e.gcState.TrackerStateGc = &GcStateTracker{}
+	}
+
+	// remove old states
 	for sourceId, state := range e.gcState.TrackerState {
 		if now.Sub(e.trackerLastUpdate[*state.Uuid]) > time.Second {
 			delete(e.gcState.TrackerState, sourceId)
 		}
 	}
-
-	e.updateTrackerSourcePriority(*wrapperFrame.SourceName)
-
-	if e.gcState.TrackerStateGc == nil {
-		e.gcState.TrackerStateGc = &state
-		log.Printf("Initial tracker source is %v (%v)", *e.gcState.TrackerStateGc.Uuid, *e.gcState.TrackerStateGc.SourceName)
-	} else if *e.gcState.TrackerStateGc.Uuid == *wrapperFrame.Uuid {
-		e.gcState.TrackerStateGc = &state
-	} else if now.Sub(e.trackerLastUpdate[*e.gcState.TrackerStateGc.Uuid]) > time.Second {
-		e.gcState.TrackerStateGc = e.findNewTrackerSourceState()
-		if e.gcState.TrackerStateGc == nil {
-			e.gcState.TrackerStateGc = &state
-		}
-		log.Printf("Switched tracker source to %v (%v)", *e.gcState.TrackerStateGc.Uuid, *e.gcState.TrackerStateGc.SourceName)
-	}
-}
-
-func (e *Engine) findNewTrackerSourceState() *GcStateTracker {
-	for _, sourceName := range e.config.TrackerSourcePriority {
-		for _, state := range e.gcState.TrackerState {
-			if *state.SourceName == sourceName {
-				return state
-			}
-		}
-	}
-	return nil
 }
 
 func convertRobots(robots []*tracker.TrackedRobot) (rs []*Robot) {
@@ -77,13 +70,4 @@ func convertBalls(balls []*tracker.TrackedBall) *Ball {
 		Vel: balls[0].Vel,
 	}
 	return &ball
-}
-
-func (e *Engine) updateTrackerSourcePriority(s string) {
-	for _, sourceName := range e.config.TrackerSourcePriority {
-		if sourceName == s {
-			return
-		}
-	}
-	e.config.TrackerSourcePriority = append(e.config.TrackerSourcePriority, s)
 }

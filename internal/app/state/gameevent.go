@@ -49,7 +49,8 @@ func AllGameEvents() (a []GameEvent_Type) {
 	for t := range GameEvent_Type_name {
 		eventType := GameEvent_Type(t)
 		switch eventType {
-		case GameEvent_PREPARED,
+		case GameEvent_UNKNOWN_GAME_EVENT_TYPE,
+			GameEvent_PREPARED,
 			GameEvent_INDIRECT_GOAL,
 			GameEvent_CHIPPED_GOAL,
 			GameEvent_KICK_TIMEOUT,
