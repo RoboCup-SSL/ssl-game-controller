@@ -170,14 +170,14 @@ func (s *TeamServer) processRequest(teamName string, request TeamToController) e
 	teamState := *currentState.TeamInfo(team)
 
 	if x, ok := request.GetMsg().(*TeamToController_SubstituteBot); ok {
-		if *teamState.BotSubstitutionIntent != x.SubstituteBot {
+		if *teamState.RequestsBotSubstitution != x.SubstituteBot {
 			log.Printf("Team %v requests to change bot substituation intent to %v", team, x.SubstituteBot)
 			s.gcEngine.Enqueue(&statemachine.Change{
 				Origin: &teamName,
 				Change: &statemachine.Change_UpdateTeamState{
 					UpdateTeamState: &statemachine.UpdateTeamState{
-						ForTeam:               &team,
-						BotSubstitutionIntent: &x.SubstituteBot,
+						ForTeam:                 &team,
+						RequestsBotSubstitution: &x.SubstituteBot,
 					}},
 			})
 		}

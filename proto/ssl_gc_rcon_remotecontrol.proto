@@ -30,17 +30,17 @@ message RemoteControlToController {
         // false: cancel request
         bool substitute_bot = 4;
 
-        // true: initiate an emergency stop
-        // false: ignored (emergency_stop can not be canceled)
-        bool emergency_stop = 5;
-
         // true: request a timeout with the next stoppage
         // false: cancel the reuqest
-        bool timeout = 6;
+        bool timeout = 5;
 
         // true: raise the challenge flag
         // false: put the challenge flag down
-        bool challenge_flag = 7;
+        bool challenge_flag = 6;
+
+        // true: initiate an emergency stop
+        // false: ignored (emergency_stop can not be canceled)
+        bool emergency_stop = 7;
     }
 }
 

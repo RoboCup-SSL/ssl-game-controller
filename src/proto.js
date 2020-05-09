@@ -17924,7 +17924,10 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
      * @property {boolean|null} [onPositiveHalf] UpdateTeamState onPositiveHalf
      * @property {number|null} [ballPlacementFailures] UpdateTeamState ballPlacementFailures
      * @property {boolean|null} [canPlaceBall] UpdateTeamState canPlaceBall
-     * @property {boolean|null} [botSubstitutionIntent] UpdateTeamState botSubstitutionIntent
+     * @property {boolean|null} [requestsBotSubstitution] UpdateTeamState requestsBotSubstitution
+     * @property {boolean|null} [requestsTimeout] UpdateTeamState requestsTimeout
+     * @property {boolean|null} [requestsChallenge] UpdateTeamState requestsChallenge
+     * @property {boolean|null} [requestsEmergencyStop] UpdateTeamState requestsEmergencyStop
      * @property {IYellowCard|null} [yellowCard] UpdateTeamState yellowCard
      * @property {IRedCard|null} [redCard] UpdateTeamState redCard
      * @property {IFoul|null} [foul] UpdateTeamState foul
@@ -18021,12 +18024,36 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
     UpdateTeamState.prototype.canPlaceBall = false;
 
     /**
-     * UpdateTeamState botSubstitutionIntent.
-     * @member {boolean} botSubstitutionIntent
+     * UpdateTeamState requestsBotSubstitution.
+     * @member {boolean} requestsBotSubstitution
      * @memberof UpdateTeamState
      * @instance
      */
-    UpdateTeamState.prototype.botSubstitutionIntent = false;
+    UpdateTeamState.prototype.requestsBotSubstitution = false;
+
+    /**
+     * UpdateTeamState requestsTimeout.
+     * @member {boolean} requestsTimeout
+     * @memberof UpdateTeamState
+     * @instance
+     */
+    UpdateTeamState.prototype.requestsTimeout = false;
+
+    /**
+     * UpdateTeamState requestsChallenge.
+     * @member {boolean} requestsChallenge
+     * @memberof UpdateTeamState
+     * @instance
+     */
+    UpdateTeamState.prototype.requestsChallenge = false;
+
+    /**
+     * UpdateTeamState requestsEmergencyStop.
+     * @member {boolean} requestsEmergencyStop
+     * @memberof UpdateTeamState
+     * @instance
+     */
+    UpdateTeamState.prototype.requestsEmergencyStop = false;
 
     /**
      * UpdateTeamState yellowCard.
@@ -18118,10 +18145,8 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
             writer.uint32(/* id 8, wireType 0 =*/64).int32(message.ballPlacementFailures);
         if (message.canPlaceBall != null && message.hasOwnProperty("canPlaceBall"))
             writer.uint32(/* id 9, wireType 0 =*/72).bool(message.canPlaceBall);
-        if (message.botSubstitutionIntent != null && message.hasOwnProperty("botSubstitutionIntent"))
-            writer.uint32(/* id 10, wireType 0 =*/80).bool(message.botSubstitutionIntent);
-        if (message.yellowCard != null && message.hasOwnProperty("yellowCard"))
-            $root.YellowCard.encode(message.yellowCard, writer.uint32(/* id 11, wireType 2 =*/90).fork()).ldelim();
+        if (message.requestsBotSubstitution != null && message.hasOwnProperty("requestsBotSubstitution"))
+            writer.uint32(/* id 10, wireType 0 =*/80).bool(message.requestsBotSubstitution);
         if (message.redCard != null && message.hasOwnProperty("redCard"))
             $root.RedCard.encode(message.redCard, writer.uint32(/* id 12, wireType 2 =*/98).fork()).ldelim();
         if (message.foul != null && message.hasOwnProperty("foul"))
@@ -18132,6 +18157,14 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
             writer.uint32(/* id 15, wireType 0 =*/120).uint32(message.removeRedCard);
         if (message.removeFoul != null && message.hasOwnProperty("removeFoul"))
             writer.uint32(/* id 16, wireType 0 =*/128).uint32(message.removeFoul);
+        if (message.requestsTimeout != null && message.hasOwnProperty("requestsTimeout"))
+            writer.uint32(/* id 17, wireType 0 =*/136).bool(message.requestsTimeout);
+        if (message.requestsChallenge != null && message.hasOwnProperty("requestsChallenge"))
+            writer.uint32(/* id 18, wireType 0 =*/144).bool(message.requestsChallenge);
+        if (message.requestsEmergencyStop != null && message.hasOwnProperty("requestsEmergencyStop"))
+            writer.uint32(/* id 19, wireType 0 =*/152).bool(message.requestsEmergencyStop);
+        if (message.yellowCard != null && message.hasOwnProperty("yellowCard"))
+            $root.YellowCard.encode(message.yellowCard, writer.uint32(/* id 20, wireType 2 =*/162).fork()).ldelim();
         return writer;
     };
 
@@ -18194,9 +18227,18 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
                 message.canPlaceBall = reader.bool();
                 break;
             case 10:
-                message.botSubstitutionIntent = reader.bool();
+                message.requestsBotSubstitution = reader.bool();
                 break;
-            case 11:
+            case 17:
+                message.requestsTimeout = reader.bool();
+                break;
+            case 18:
+                message.requestsChallenge = reader.bool();
+                break;
+            case 19:
+                message.requestsEmergencyStop = reader.bool();
+                break;
+            case 20:
                 message.yellowCard = $root.YellowCard.decode(reader, reader.uint32());
                 break;
             case 12:
@@ -18282,9 +18324,18 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
         if (message.canPlaceBall != null && message.hasOwnProperty("canPlaceBall"))
             if (typeof message.canPlaceBall !== "boolean")
                 return "canPlaceBall: boolean expected";
-        if (message.botSubstitutionIntent != null && message.hasOwnProperty("botSubstitutionIntent"))
-            if (typeof message.botSubstitutionIntent !== "boolean")
-                return "botSubstitutionIntent: boolean expected";
+        if (message.requestsBotSubstitution != null && message.hasOwnProperty("requestsBotSubstitution"))
+            if (typeof message.requestsBotSubstitution !== "boolean")
+                return "requestsBotSubstitution: boolean expected";
+        if (message.requestsTimeout != null && message.hasOwnProperty("requestsTimeout"))
+            if (typeof message.requestsTimeout !== "boolean")
+                return "requestsTimeout: boolean expected";
+        if (message.requestsChallenge != null && message.hasOwnProperty("requestsChallenge"))
+            if (typeof message.requestsChallenge !== "boolean")
+                return "requestsChallenge: boolean expected";
+        if (message.requestsEmergencyStop != null && message.hasOwnProperty("requestsEmergencyStop"))
+            if (typeof message.requestsEmergencyStop !== "boolean")
+                return "requestsEmergencyStop: boolean expected";
         if (message.yellowCard != null && message.hasOwnProperty("yellowCard")) {
             let error = $root.YellowCard.verify(message.yellowCard);
             if (error)
@@ -18354,8 +18405,14 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
             message.ballPlacementFailures = object.ballPlacementFailures | 0;
         if (object.canPlaceBall != null)
             message.canPlaceBall = Boolean(object.canPlaceBall);
-        if (object.botSubstitutionIntent != null)
-            message.botSubstitutionIntent = Boolean(object.botSubstitutionIntent);
+        if (object.requestsBotSubstitution != null)
+            message.requestsBotSubstitution = Boolean(object.requestsBotSubstitution);
+        if (object.requestsTimeout != null)
+            message.requestsTimeout = Boolean(object.requestsTimeout);
+        if (object.requestsChallenge != null)
+            message.requestsChallenge = Boolean(object.requestsChallenge);
+        if (object.requestsEmergencyStop != null)
+            message.requestsEmergencyStop = Boolean(object.requestsEmergencyStop);
         if (object.yellowCard != null) {
             if (typeof object.yellowCard !== "object")
                 throw TypeError(".UpdateTeamState.yellowCard: object expected");
@@ -18403,13 +18460,16 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
             object.onPositiveHalf = false;
             object.ballPlacementFailures = 0;
             object.canPlaceBall = false;
-            object.botSubstitutionIntent = false;
-            object.yellowCard = null;
+            object.requestsBotSubstitution = false;
             object.redCard = null;
             object.foul = null;
             object.removeYellowCard = 0;
             object.removeRedCard = 0;
             object.removeFoul = 0;
+            object.requestsTimeout = false;
+            object.requestsChallenge = false;
+            object.requestsEmergencyStop = false;
+            object.yellowCard = null;
         }
         if (message.forTeam != null && message.hasOwnProperty("forTeam"))
             object.forTeam = options.enums === String ? $root.Team[message.forTeam] : message.forTeam;
@@ -18429,10 +18489,8 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
             object.ballPlacementFailures = message.ballPlacementFailures;
         if (message.canPlaceBall != null && message.hasOwnProperty("canPlaceBall"))
             object.canPlaceBall = message.canPlaceBall;
-        if (message.botSubstitutionIntent != null && message.hasOwnProperty("botSubstitutionIntent"))
-            object.botSubstitutionIntent = message.botSubstitutionIntent;
-        if (message.yellowCard != null && message.hasOwnProperty("yellowCard"))
-            object.yellowCard = $root.YellowCard.toObject(message.yellowCard, options);
+        if (message.requestsBotSubstitution != null && message.hasOwnProperty("requestsBotSubstitution"))
+            object.requestsBotSubstitution = message.requestsBotSubstitution;
         if (message.redCard != null && message.hasOwnProperty("redCard"))
             object.redCard = $root.RedCard.toObject(message.redCard, options);
         if (message.foul != null && message.hasOwnProperty("foul"))
@@ -18443,6 +18501,14 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
             object.removeRedCard = message.removeRedCard;
         if (message.removeFoul != null && message.hasOwnProperty("removeFoul"))
             object.removeFoul = message.removeFoul;
+        if (message.requestsTimeout != null && message.hasOwnProperty("requestsTimeout"))
+            object.requestsTimeout = message.requestsTimeout;
+        if (message.requestsChallenge != null && message.hasOwnProperty("requestsChallenge"))
+            object.requestsChallenge = message.requestsChallenge;
+        if (message.requestsEmergencyStop != null && message.hasOwnProperty("requestsEmergencyStop"))
+            object.requestsEmergencyStop = message.requestsEmergencyStop;
+        if (message.yellowCard != null && message.hasOwnProperty("yellowCard"))
+            object.yellowCard = $root.YellowCard.toObject(message.yellowCard, options);
         return object;
     };
 
@@ -20790,7 +20856,10 @@ export const TeamInfo = $root.TeamInfo = (() => {
      * @property {boolean|null} [ballPlacementFailuresReached] TeamInfo ballPlacementFailuresReached
      * @property {boolean|null} [canPlaceBall] TeamInfo canPlaceBall
      * @property {number|null} [maxAllowedBots] TeamInfo maxAllowedBots
-     * @property {boolean|null} [botSubstitutionIntent] TeamInfo botSubstitutionIntent
+     * @property {boolean|null} [requestsBotSubstitution] TeamInfo requestsBotSubstitution
+     * @property {boolean|null} [requestsTimeout] TeamInfo requestsTimeout
+     * @property {boolean|null} [requestsChallenge] TeamInfo requestsChallenge
+     * @property {boolean|null} [requestsEmergencyStop] TeamInfo requestsEmergencyStop
      */
 
     /**
@@ -20916,12 +20985,36 @@ export const TeamInfo = $root.TeamInfo = (() => {
     TeamInfo.prototype.maxAllowedBots = 0;
 
     /**
-     * TeamInfo botSubstitutionIntent.
-     * @member {boolean} botSubstitutionIntent
+     * TeamInfo requestsBotSubstitution.
+     * @member {boolean} requestsBotSubstitution
      * @memberof TeamInfo
      * @instance
      */
-    TeamInfo.prototype.botSubstitutionIntent = false;
+    TeamInfo.prototype.requestsBotSubstitution = false;
+
+    /**
+     * TeamInfo requestsTimeout.
+     * @member {boolean} requestsTimeout
+     * @memberof TeamInfo
+     * @instance
+     */
+    TeamInfo.prototype.requestsTimeout = false;
+
+    /**
+     * TeamInfo requestsChallenge.
+     * @member {boolean} requestsChallenge
+     * @memberof TeamInfo
+     * @instance
+     */
+    TeamInfo.prototype.requestsChallenge = false;
+
+    /**
+     * TeamInfo requestsEmergencyStop.
+     * @member {boolean} requestsEmergencyStop
+     * @memberof TeamInfo
+     * @instance
+     */
+    TeamInfo.prototype.requestsEmergencyStop = false;
 
     /**
      * Creates a new TeamInfo instance using the specified properties.
@@ -20976,8 +21069,14 @@ export const TeamInfo = $root.TeamInfo = (() => {
             writer.uint32(/* id 12, wireType 0 =*/96).bool(message.canPlaceBall);
         if (message.maxAllowedBots != null && message.hasOwnProperty("maxAllowedBots"))
             writer.uint32(/* id 13, wireType 0 =*/104).int32(message.maxAllowedBots);
-        if (message.botSubstitutionIntent != null && message.hasOwnProperty("botSubstitutionIntent"))
-            writer.uint32(/* id 14, wireType 0 =*/112).bool(message.botSubstitutionIntent);
+        if (message.requestsBotSubstitution != null && message.hasOwnProperty("requestsBotSubstitution"))
+            writer.uint32(/* id 14, wireType 0 =*/112).bool(message.requestsBotSubstitution);
+        if (message.requestsTimeout != null && message.hasOwnProperty("requestsTimeout"))
+            writer.uint32(/* id 15, wireType 0 =*/120).bool(message.requestsTimeout);
+        if (message.requestsChallenge != null && message.hasOwnProperty("requestsChallenge"))
+            writer.uint32(/* id 16, wireType 0 =*/128).bool(message.requestsChallenge);
+        if (message.requestsEmergencyStop != null && message.hasOwnProperty("requestsEmergencyStop"))
+            writer.uint32(/* id 17, wireType 0 =*/136).bool(message.requestsEmergencyStop);
         return writer;
     };
 
@@ -21058,7 +21157,16 @@ export const TeamInfo = $root.TeamInfo = (() => {
                 message.maxAllowedBots = reader.int32();
                 break;
             case 14:
-                message.botSubstitutionIntent = reader.bool();
+                message.requestsBotSubstitution = reader.bool();
+                break;
+            case 15:
+                message.requestsTimeout = reader.bool();
+                break;
+            case 16:
+                message.requestsChallenge = reader.bool();
+                break;
+            case 17:
+                message.requestsEmergencyStop = reader.bool();
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -21154,9 +21262,18 @@ export const TeamInfo = $root.TeamInfo = (() => {
         if (message.maxAllowedBots != null && message.hasOwnProperty("maxAllowedBots"))
             if (!$util.isInteger(message.maxAllowedBots))
                 return "maxAllowedBots: integer expected";
-        if (message.botSubstitutionIntent != null && message.hasOwnProperty("botSubstitutionIntent"))
-            if (typeof message.botSubstitutionIntent !== "boolean")
-                return "botSubstitutionIntent: boolean expected";
+        if (message.requestsBotSubstitution != null && message.hasOwnProperty("requestsBotSubstitution"))
+            if (typeof message.requestsBotSubstitution !== "boolean")
+                return "requestsBotSubstitution: boolean expected";
+        if (message.requestsTimeout != null && message.hasOwnProperty("requestsTimeout"))
+            if (typeof message.requestsTimeout !== "boolean")
+                return "requestsTimeout: boolean expected";
+        if (message.requestsChallenge != null && message.hasOwnProperty("requestsChallenge"))
+            if (typeof message.requestsChallenge !== "boolean")
+                return "requestsChallenge: boolean expected";
+        if (message.requestsEmergencyStop != null && message.hasOwnProperty("requestsEmergencyStop"))
+            if (typeof message.requestsEmergencyStop !== "boolean")
+                return "requestsEmergencyStop: boolean expected";
         return null;
     };
 
@@ -21225,8 +21342,14 @@ export const TeamInfo = $root.TeamInfo = (() => {
             message.canPlaceBall = Boolean(object.canPlaceBall);
         if (object.maxAllowedBots != null)
             message.maxAllowedBots = object.maxAllowedBots | 0;
-        if (object.botSubstitutionIntent != null)
-            message.botSubstitutionIntent = Boolean(object.botSubstitutionIntent);
+        if (object.requestsBotSubstitution != null)
+            message.requestsBotSubstitution = Boolean(object.requestsBotSubstitution);
+        if (object.requestsTimeout != null)
+            message.requestsTimeout = Boolean(object.requestsTimeout);
+        if (object.requestsChallenge != null)
+            message.requestsChallenge = Boolean(object.requestsChallenge);
+        if (object.requestsEmergencyStop != null)
+            message.requestsEmergencyStop = Boolean(object.requestsEmergencyStop);
         return message;
     };
 
@@ -21259,7 +21382,10 @@ export const TeamInfo = $root.TeamInfo = (() => {
             object.ballPlacementFailuresReached = false;
             object.canPlaceBall = false;
             object.maxAllowedBots = 0;
-            object.botSubstitutionIntent = false;
+            object.requestsBotSubstitution = false;
+            object.requestsTimeout = false;
+            object.requestsChallenge = false;
+            object.requestsEmergencyStop = false;
         }
         if (message.name != null && message.hasOwnProperty("name"))
             object.name = message.name;
@@ -21296,8 +21422,14 @@ export const TeamInfo = $root.TeamInfo = (() => {
             object.canPlaceBall = message.canPlaceBall;
         if (message.maxAllowedBots != null && message.hasOwnProperty("maxAllowedBots"))
             object.maxAllowedBots = message.maxAllowedBots;
-        if (message.botSubstitutionIntent != null && message.hasOwnProperty("botSubstitutionIntent"))
-            object.botSubstitutionIntent = message.botSubstitutionIntent;
+        if (message.requestsBotSubstitution != null && message.hasOwnProperty("requestsBotSubstitution"))
+            object.requestsBotSubstitution = message.requestsBotSubstitution;
+        if (message.requestsTimeout != null && message.hasOwnProperty("requestsTimeout"))
+            object.requestsTimeout = message.requestsTimeout;
+        if (message.requestsChallenge != null && message.hasOwnProperty("requestsChallenge"))
+            object.requestsChallenge = message.requestsChallenge;
+        if (message.requestsEmergencyStop != null && message.hasOwnProperty("requestsEmergencyStop"))
+            object.requestsEmergencyStop = message.requestsEmergencyStop;
         return object;
     };
 

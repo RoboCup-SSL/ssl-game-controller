@@ -30,7 +30,7 @@
                 return this.$store.state.matchState.teamState[this.teamColor]
             },
             botSubstitutionIntent() {
-                return this.teamState.botSubstitutionIntent;
+                return this.teamState.requestsBotSubstitution;
             },
         }
     }

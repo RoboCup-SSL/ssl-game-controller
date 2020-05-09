@@ -109,8 +109,11 @@ message UpdateTeamState {
     optional bool on_positive_half = 7;
     optional int32 ball_placement_failures = 8;
     optional bool can_place_ball = 9;
-    optional bool bot_substitution_intent = 10;
-    optional YellowCard yellow_card = 11;
+    optional bool requests_bot_substitution = 10;
+    optional bool requests_timeout = 17;
+    optional bool requests_challenge = 18;
+    optional bool requests_emergency_stop = 19;
+    optional YellowCard yellow_card = 20;
     optional RedCard red_card = 12;
     optional Foul foul = 13;
     optional uint32 remove_yellow_card = 14;

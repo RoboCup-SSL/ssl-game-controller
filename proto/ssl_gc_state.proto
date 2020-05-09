@@ -91,7 +91,10 @@ message TeamInfo {
     optional bool ball_placement_failures_reached = 11;
     optional bool can_place_ball = 12;
     optional int32 max_allowed_bots = 13;
-    optional bool bot_substitution_intent = 14;
+    optional bool requests_bot_substitution = 14;
+    optional bool requests_timeout = 15;
+    optional bool requests_challenge = 16;
+    optional bool requests_emergency_stop = 17;
 }
 
 message State {

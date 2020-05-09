@@ -8,7 +8,7 @@ import (
 func (s *StateMachine) processChangeContinue(newState *state.State) (changes []*Change) {
 	substituteBots := false
 	for _, team := range state.BothTeams() {
-		if *newState.TeamInfo(team).BotSubstitutionIntent {
+		if *newState.TeamInfo(team).RequestsBotSubstitution {
 			changes = append(changes, s.botSubstitutionIntentEventChange(team))
 			substituteBots = true
 		}
