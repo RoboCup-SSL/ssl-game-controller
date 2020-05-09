@@ -183,10 +183,12 @@ message Referee {
 
     // All game events that were detected since the last RUNNING state.
     // Will be cleared as soon as the game is continued.
-    repeated GameEvent game_events = 13;
+    reserved 13;
+    repeated GameEvent game_events = 16;
 
     // All non-finished proposed game events that may be processed next.
-    repeated ProposedGameEvent proposed_game_events = 14;
+    reserved 14;
+    repeated GameEventProposalGroup game_event_proposals = 17;
 
     // The time in microseconds that is remaining until the current action times out
     // The time will not be reset. It can get negative.
@@ -198,12 +200,10 @@ message Referee {
     optional int32 current_action_time_remaining = 15;
 }
 
-message ProposedGameEvent {
-    // The UNIX timestamp when the game event proposal will time out, in microseconds.
-    // Deprecated: Value will always be zero
-    required uint64 valid_until = 1 [deprecated = true];
-    // The identifier of the proposer.
-    required string proposer_id = 2;
+// List of matching proposals
+message GameEventProposalGroup {
     // The proposed game event.
-    required GameEvent game_event = 3;
+    repeated GameEvent game_event = 1;
+    // Whether the proposal group was accepted
+    optional bool accepted = 2;
 }

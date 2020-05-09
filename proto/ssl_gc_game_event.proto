@@ -13,7 +13,7 @@ import "ssl_gc_geometry.proto";
 // An autoRef should ideally set all fields, except if there are good reasons to not do so.
 message GameEvent {
 
-    required Type type = 40;
+    optional Type type = 40;
 
     // The origins of this game event.
     // Empty, if it originates from game controller.

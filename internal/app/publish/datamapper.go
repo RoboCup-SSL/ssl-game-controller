@@ -8,24 +8,17 @@ import (
 	"time"
 )
 
-func mapProposals(groups []*state.ProposalGroup) []*state.ProposedGameEvent {
-	var mappedEvents []*state.ProposedGameEvent
+func mapProposals(groups []*state.ProposalGroup) []*state.GameEventProposalGroup {
+	var mappedGroups []*state.GameEventProposalGroup
 	for _, group := range groups {
+		mappedGroup := state.GameEventProposalGroup{}
+		mappedGroup.GameEvent = []*state.GameEvent{}
 		for _, proposal := range group.Proposals {
-			proposer := ""
-			if len(proposal.GameEvent.Origin) > 0 {
-				proposer = proposal.GameEvent.Origin[0]
-			}
-			var validUntil uint64
-			//noinspection GoDeprecation
-			mappedEvents = append(mappedEvents, &state.ProposedGameEvent{
-				ValidUntil: &validUntil, // required in protobuf ref msg... Add zero value
-				ProposerId: &proposer,
-				GameEvent:  proposal.GameEvent,
-			})
+			mappedGroup.GameEvent = append(mappedGroup.GameEvent, proposal.GameEvent)
 		}
+		mappedGroups = append(mappedGroups, &mappedGroup)
 	}
-	return mappedEvents
+	return mappedGroups
 }
 
 func mapCommand(command *state.Command) (c *state.Referee_Command) {
