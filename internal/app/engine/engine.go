@@ -125,6 +125,7 @@ func (e *Engine) SetTimeProvider(provider timer.TimeProvider) {
 	defer e.mutex.Unlock()
 	e.timeProvider = provider
 	e.lastTimeUpdate = e.timeProvider()
+	e.stateMachine.SetTimeProvider(provider)
 }
 
 // SetTickChanProvider sets an alternative provider for the tick channel
@@ -315,6 +316,7 @@ func (e *Engine) createInitialState() (s *state.State) {
 		*s.TeamInfo(team).TimeoutsLeft = e.gameConfig.Normal.Timeouts
 		s.TeamInfo(team).TimeoutTimeLeft = ptypes.DurationProto(e.gameConfig.Normal.TimeoutDuration)
 		*s.TeamInfo(team).MaxAllowedBots = e.gameConfig.MaxBots[e.gameConfig.DefaultDivision]
+		*s.TeamInfo(team).ChallengeFlags = e.gameConfig.ChallengeFlags
 	}
 	return
 }

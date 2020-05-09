@@ -284,13 +284,7 @@ func stateChanged(s1, s2 *state.State) bool {
 }
 
 func teamStateChanged(s1, s2 *state.TeamInfo) bool {
-	if *s1.Name != *s2.Name {
-		return true
-	}
-	if *s1.Goals != *s2.Goals {
-		return true
-	}
-	if *s1.Goalkeeper != *s2.Goalkeeper {
+	if s1 == nil || s2 == nil {
 		return true
 	}
 	if len(s1.YellowCards) != len(s2.YellowCards) {
@@ -307,35 +301,18 @@ func teamStateChanged(s1, s2 *state.TeamInfo) bool {
 			return true
 		}
 	}
-	if !reflect.DeepEqual(s1.RedCards, s2.RedCards) {
-		return true
-	}
-	if *s1.TimeoutsLeft != *s2.TimeoutsLeft {
-		return true
-	}
 	if s1.TimeoutTimeLeft.Seconds != s2.TimeoutTimeLeft.Seconds {
 		return true
 	}
-	if *s1.OnPositiveHalf != *s2.OnPositiveHalf {
-		return true
-	}
-	if !reflect.DeepEqual(s1.Fouls, s2.Fouls) {
-		return true
-	}
-	if *s1.BallPlacementFailures != *s2.BallPlacementFailures {
-		return true
-	}
-	if *s1.BallPlacementFailuresReached != *s2.BallPlacementFailuresReached {
-		return true
-	}
-	if *s1.CanPlaceBall != *s2.CanPlaceBall {
-		return true
-	}
-	if *s1.MaxAllowedBots != *s2.MaxAllowedBots {
-		return true
-	}
-	if *s1.RequestsBotSubstitution != *s2.RequestsBotSubstitution {
-		return true
-	}
-	return false
+
+	s1c := new(state.TeamInfo)
+	s2c := new(state.TeamInfo)
+	proto.Merge(s1c, s1)
+	proto.Merge(s2c, s2)
+	s1c.YellowCards = []*state.YellowCard{}
+	s2c.YellowCards = []*state.YellowCard{}
+	s1c.TimeoutTimeLeft = nil
+	s2c.TimeoutTimeLeft = nil
+
+	return !proto.Equal(s1c, s2c)
 }

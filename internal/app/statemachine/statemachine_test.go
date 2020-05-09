@@ -6,6 +6,7 @@ import (
 	"github.com/go-test/deep"
 	"github.com/golang/protobuf/ptypes"
 	"testing"
+	"time"
 )
 
 func Test_Statemachine(t *testing.T) {
@@ -62,6 +63,7 @@ func Test_Statemachine(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			sm := NewStateMachine(gameConfig)
+			sm.timeProvider = func() time.Time { return time.Now() }
 			currentState := state.NewState()
 			tt.args.initState(currentState)
 			newState := state.NewState()

@@ -6,6 +6,7 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"github.com/RoboCup-SSL/ssl-go-tools/pkg/sslconn"
 	"github.com/golang/protobuf/proto"
+	"github.com/golang/protobuf/ptypes/timestamp"
 	"github.com/odeke-em/go-uuid"
 	"github.com/pkg/errors"
 	"io"
@@ -137,14 +138,30 @@ func (c *RemoteControlClient) reply(reply ControllerReply) {
 
 	teamState := c.gcEngine.CurrentState().TeamState[c.team.String()]
 	response.Keeper = teamState.Goalkeeper
-	response.SubstituteBot = teamState.RequestsBotSubstitution
-	response.EmergencyStop = teamState.RequestsEmergencyStop
-	response.Timeout = teamState.RequestsTimeout
-	response.ChallengeFlag = teamState.RequestsChallenge
+	response.SubstituteBot = timeSet(teamState.RequestsBotSubstitutionSince)
+	response.EmergencyStop = c.gameEventPresent(state.GameEvent_EMERGENCY_STOP)
+	response.Timeout = timeSet(teamState.RequestsTimeoutSince)
+	response.ChallengeFlag = c.gameEventPresent(state.GameEvent_CHALLENGE_FLAG)
 
 	if err := sslconn.SendMessage(c.conn, &response); err != nil {
 		log.Print("Failed to send reply: ", err)
 	}
+}
+
+func timeSet(t *timestamp.Timestamp) (set *bool) {
+	set = new(bool)
+	*set = t != nil
+	return
+}
+
+func (c *RemoteControlClient) gameEventPresent(eventType state.GameEvent_Type) (present *bool) {
+	present = new(bool)
+	for _, event := range c.gcEngine.CurrentState().GameEvents {
+		if *event.Type == eventType && event.ByTeam() == *c.team {
+			*present = true
+		}
+	}
+	return
 }
 
 func (s *RemoteControlServer) processRequest(team state.Team, request RemoteControlToController) error {
@@ -168,7 +185,7 @@ func (s *RemoteControlServer) processRequest(team state.Team, request RemoteCont
 	}
 
 	if x, ok := request.GetMsg().(*RemoteControlToController_SubstituteBot); ok {
-		if *teamState.RequestsBotSubstitution != x.SubstituteBot {
+		if *timeSet(teamState.RequestsBotSubstitutionSince) != x.SubstituteBot {
 			s.updateTeamConfig(team, &statemachine.UpdateTeamState{
 				RequestsBotSubstitution: &x.SubstituteBot,
 			})
@@ -177,7 +194,7 @@ func (s *RemoteControlServer) processRequest(team state.Team, request RemoteCont
 	}
 
 	if x, ok := request.GetMsg().(*RemoteControlToController_Timeout); ok {
-		if *teamState.RequestsTimeout != x.Timeout {
+		if *timeSet(teamState.RequestsTimeoutSince) != x.Timeout {
 			s.updateTeamConfig(team, &statemachine.UpdateTeamState{
 				RequestsTimeout: &x.Timeout,
 			})
@@ -186,17 +203,30 @@ func (s *RemoteControlServer) processRequest(team state.Team, request RemoteCont
 	}
 
 	if x, ok := request.GetMsg().(*RemoteControlToController_ChallengeFlag); ok {
-		if *teamState.RequestsChallenge != x.ChallengeFlag {
-			s.updateTeamConfig(team, &statemachine.UpdateTeamState{
-				RequestsChallenge: &x.ChallengeFlag,
+		if x.ChallengeFlag {
+			if *teamState.ChallengeFlags <= 0 {
+				return errors.New("No more challenge flags left")
+			} else if *teamState.TimeoutsLeft <= 0 {
+				return errors.New("No more timeouts left")
+			}
+			eventType := state.GameEvent_CHALLENGE_FLAG
+			s.gcEngine.EnqueueGameEvent(&state.GameEvent{
+				Type: &eventType,
+				Event: &state.GameEvent_ChallengeFlag_{
+					ChallengeFlag: &state.GameEvent_ChallengeFlag{
+						ByTeam: &team,
+					},
+				},
 			})
 		}
 		return nil
 	}
 
 	if x, ok := request.GetMsg().(*RemoteControlToController_EmergencyStop); ok {
-		// note: emergency stop can not be disabled again
 		if x.EmergencyStop {
+			if teamState.RequestsEmergencyStopSince != nil {
+				return errors.Errorf("Emergency stop already requested at %v", *teamState.RequestsEmergencyStopSince)
+			}
 			s.updateTeamConfig(team, &statemachine.UpdateTeamState{
 				RequestsEmergencyStop: &x.EmergencyStop,
 			})

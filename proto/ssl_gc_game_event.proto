@@ -73,6 +73,8 @@ message GameEvent {
         MultipleFouls multiple_fouls = 34;
         BotSubstitution bot_substitution = 37;
         TooManyRobots too_many_robots = 38;
+        ChallengeFlag challenge_flag = 46;
+        EmergencyStop emergency_stop = 47;
 
         UnsportingBehaviorMinor unsporting_behavior_minor = 35;
         UnsportingBehaviorMajor unsporting_behavior_major = 36;
@@ -437,8 +439,18 @@ message GameEvent {
         // the time [s] taken for preparing
         optional float time_taken = 1;
     }
-    // bots are being substituted by at least one team
+    // bots are being substituted by a team
     message BotSubstitution {
+        // the team that substitutes robots
+        required Team by_team = 1;
+    }
+    // A challenge flag, requested by a team previously, is flagged
+    message ChallengeFlag {
+        // the team that substitutes robots
+        required Team by_team = 1;
+    }
+    // An emergency stop, requested by team previously, occurred
+    message EmergencyStop {
         // the team that substitutes robots
         required Team by_team = 1;
     }
@@ -520,6 +532,8 @@ message GameEvent {
         MULTIPLE_FOULS = 34; // triggered by GC
         BOT_SUBSTITUTION = 37; // triggered by GC
         TOO_MANY_ROBOTS = 38; // triggered by GC
+        CHALLENGE_FLAG = 44; // triggered by GC
+        EMERGENCY_STOP = 45; // triggered by GC
 
         UNSPORTING_BEHAVIOR_MINOR = 35; // triggered by human ref
         UNSPORTING_BEHAVIOR_MAJOR = 36; // triggered by human ref

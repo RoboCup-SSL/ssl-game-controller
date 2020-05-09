@@ -40,16 +40,18 @@ func (s *StateMachine) processChangeUpdateTeamState(newState *state.State, chang
 		*teamState.CanPlaceBall = *change.CanPlaceBall
 	}
 	if change.RequestsBotSubstitution != nil {
-		*teamState.RequestsBotSubstitution = *change.RequestsBotSubstitution
+		if *change.RequestsBotSubstitution {
+			teamState.RequestsBotSubstitutionSince, _ = ptypes.TimestampProto(s.timeProvider())
+		} else {
+			teamState.RequestsBotSubstitutionSince = nil
+		}
 	}
 	if change.RequestsTimeout != nil {
-		*teamState.RequestsTimeout = *change.RequestsTimeout
-	}
-	if change.RequestsChallenge != nil {
-		*teamState.RequestsChallenge = *change.RequestsChallenge
-	}
-	if change.RequestsEmergencyStop != nil {
-		*teamState.RequestsEmergencyStop = *change.RequestsEmergencyStop
+		if *change.RequestsTimeout {
+			teamState.RequestsTimeoutSince, _ = ptypes.TimestampProto(s.timeProvider())
+		} else {
+			teamState.RequestsTimeoutSince = nil
+		}
 	}
 	if change.YellowCard != nil && change.YellowCard.Id != nil {
 		for i, existingCard := range teamState.YellowCards {

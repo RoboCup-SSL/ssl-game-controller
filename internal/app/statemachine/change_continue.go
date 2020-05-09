@@ -6,15 +6,34 @@ import (
 )
 
 func (s *StateMachine) processChangeContinue(newState *state.State) (changes []*Change) {
-	substituteBots := false
+	continueCanceled := false
+
 	for _, team := range state.BothTeams() {
-		if *newState.TeamInfo(team).RequestsBotSubstitution {
+		if newState.TeamInfo(team).RequestsBotSubstitutionSince != nil {
 			changes = append(changes, s.botSubstitutionIntentEventChange(team))
-			substituteBots = true
+			continueCanceled = true
 		}
 	}
-	if substituteBots {
-		log.Print("Can not continue yet: A bot substitution was requested.")
+
+	if newState.TeamInfo(state.Team_BLUE).RequestsTimeoutSince != nil &&
+		newState.TeamInfo(state.Team_YELLOW).RequestsTimeoutSince != nil {
+		if goTime(newState.TeamInfo(state.Team_BLUE).RequestsTimeoutSince).
+			Before(goTime(newState.TeamInfo(state.Team_YELLOW).RequestsTimeoutSince)) {
+			changes = append(changes, s.createCommandChange(state.NewCommand(state.Command_TIMEOUT, state.Team_BLUE)))
+		} else {
+			changes = append(changes, s.createCommandChange(state.NewCommand(state.Command_TIMEOUT, state.Team_YELLOW)))
+		}
+		continueCanceled = true
+	} else {
+		for _, team := range state.BothTeams() {
+			if newState.TeamInfo(team).RequestsTimeoutSince != nil {
+				changes = append(changes, s.createCommandChange(state.NewCommand(state.Command_TIMEOUT, team)))
+				continueCanceled = true
+			}
+		}
+	}
+
+	if continueCanceled {
 		return
 	}
 
@@ -33,9 +52,7 @@ func (s *StateMachine) processChangeContinue(newState *state.State) (changes []*
 
 // botSubstitutionIntentEventChange creates a new change for bot substitution
 func (s *StateMachine) botSubstitutionIntentEventChange(byTeam state.Team) *Change {
-	eventType := state.GameEvent_BOT_SUBSTITUTION
 	return createGameEventChange(state.GameEvent_BOT_SUBSTITUTION, state.GameEvent{
-		Type: &eventType,
 		Event: &state.GameEvent_BotSubstitution_{
 			BotSubstitution: &state.GameEvent_BotSubstitution{
 				ByTeam: &byTeam,

@@ -1,9 +1,9 @@
 <template>
     <div class="content">
         <span v-if="!gameEventsPresent">None</span>
-        <div class="game-event-item"
-             v-if="gameEventsPresent"
+        <div v-if="gameEventsPresent"
              v-for="(gameEvent, index) in gameEvents"
+             :class="{'game-event-item': true, 'attention': isChallengeFlag(gameEvent)}"
              :key="index">
             <span :class="{[teamClass(gameEvent)]: true}" @click="eventSelected(index)">
                 {{gameEvent.type}}
@@ -48,7 +48,7 @@
                     }
                 }
                 return false;
-            }
+            },
         },
         methods: {
             teamClass(gameEvent) {
@@ -69,6 +69,9 @@
             },
             showAcceptGoal(gameEvent) {
                 return !this.goalEventPresent && gameEvent.type === 'POSSIBLE_GOAL';
+            },
+            isChallengeFlag(gameEvent) {
+                return !this.goalEventPresent && gameEvent.type === 'CHALLENGE_FLAG';
             },
             detailsList(gameEvent) {
                 return gameEventDetailsList(gameEvent);
@@ -108,6 +111,10 @@
         right: 0;
         top: 0;
         margin: 0.3em;
+    }
+
+    .attention {
+        background-color: crimson;
     }
 
     .details-row {

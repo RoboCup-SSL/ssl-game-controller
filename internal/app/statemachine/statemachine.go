@@ -3,6 +3,7 @@ package statemachine
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
+	"github.com/RoboCup-SSL/ssl-game-controller/pkg/timer"
 	"github.com/golang/protobuf/proto"
 	"log"
 	"math/rand"
@@ -13,10 +14,11 @@ var changeOriginStateMachine = "StateMachine"
 
 // StateMachine describes the state machine that translates changes into new states
 type StateMachine struct {
-	gameConfig config.Game
-	Geometry   config.Geometry
-	stageTimes map[state.Referee_Stage]time.Duration
-	rand       *rand.Rand
+	gameConfig   config.Game
+	Geometry     config.Geometry
+	stageTimes   map[state.Referee_Stage]time.Duration
+	rand         *rand.Rand
+	timeProvider timer.TimeProvider
 }
 
 // NewStateMachine creates a new state machine
@@ -27,6 +29,11 @@ func NewStateMachine(gameConfig config.Game) (s *StateMachine) {
 	s.stageTimes = loadStageTimes(gameConfig)
 	s.rand = rand.New(rand.NewSource(time.Now().Unix()))
 	return
+}
+
+// SetTimeProvider sets a new time provider for this engine
+func (s *StateMachine) SetTimeProvider(provider timer.TimeProvider) {
+	s.timeProvider = provider
 }
 
 // loadStageTimes loads the stage time durations from the game config into a map

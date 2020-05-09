@@ -64,6 +64,7 @@ func (e *Engine) processTick() {
 	e.processPenalty()
 	e.processProposals()
 	e.processTrackerSources()
+	e.processEmergencyStop()
 
 	stateCopy := e.currentState.Clone()
 	hookOut := HookOut{State: stateCopy}

@@ -115,10 +115,26 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 		log.Printf("Halt the game, because team %v requested robot substitution", byTeam)
 		// reset robot substitution flags
 		for _, team := range state.BothTeams() {
-			*newState.TeamInfo(team).RequestsBotSubstitution = false
+			newState.TeamInfo(team).RequestsBotSubstitutionSince = nil
 		}
 		// halt the game to allow teams to substitute robots
 		changes = append(changes, s.createCommandChange(state.NewCommandNeutral(state.Command_HALT)))
+	}
+
+	// challenge flag
+	if *gameEvent.Type == state.GameEvent_CHALLENGE_FLAG {
+		log.Printf("Reduce number of timeouts for %v by one for challenge flag", byTeam)
+		*newState.TeamInfo(byTeam).TimeoutsLeft--
+	}
+
+	// emergency stop
+	if *gameEvent.Type == state.GameEvent_EMERGENCY_STOP {
+		log.Printf("Initiate emergency stop for %v", byTeam)
+		if *newState.TeamInfo(byTeam).TimeoutsLeft > 0 {
+			changes = append(changes, s.createCommandChange(state.NewCommand(state.Command_TIMEOUT, byTeam)))
+		} else {
+			changes = append(changes, s.createCommandChange(state.NewCommandNeutral(state.Command_HALT)))
+		}
 	}
 
 	// ball placement interference
@@ -322,6 +338,11 @@ func (s *StateMachine) nextCommandForEvent(newState *state.State, gameEvent *sta
 	case state.GameEvent_NO_PROGRESS_IN_GAME,
 		state.GameEvent_TOO_MANY_ROBOTS:
 		return state.NewCommand(state.Command_FORCE_START, state.Team_UNKNOWN)
+	case state.GameEvent_EMERGENCY_STOP:
+		if newState.NextCommand != nil {
+			return newState.NextCommand
+		}
+		return state.NewCommand(state.Command_DIRECT, gameEvent.ByTeam().Opposite())
 	default:
 		return newState.NextCommand
 	}
@@ -356,6 +377,7 @@ func addsYellowCard(gameEvent state.GameEvent_Type) bool {
 	switch gameEvent {
 	case
 		state.GameEvent_MULTIPLE_FOULS,
+		state.GameEvent_EMERGENCY_STOP,
 		state.GameEvent_UNSPORTING_BEHAVIOR_MINOR:
 		return true
 	}

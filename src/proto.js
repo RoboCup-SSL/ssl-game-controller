@@ -747,6 +747,8 @@ export const GameEvent = $root.GameEvent = (() => {
      * @property {GameEvent.IMultipleFouls|null} [multipleFouls] GameEvent multipleFouls
      * @property {GameEvent.IBotSubstitution|null} [botSubstitution] GameEvent botSubstitution
      * @property {GameEvent.ITooManyRobots|null} [tooManyRobots] GameEvent tooManyRobots
+     * @property {GameEvent.IChallengeFlag|null} [challengeFlag] GameEvent challengeFlag
+     * @property {GameEvent.IEmergencyStop|null} [emergencyStop] GameEvent emergencyStop
      * @property {GameEvent.IUnsportingBehaviorMinor|null} [unsportingBehaviorMinor] GameEvent unsportingBehaviorMinor
      * @property {GameEvent.IUnsportingBehaviorMajor|null} [unsportingBehaviorMajor] GameEvent unsportingBehaviorMajor
      * @property {GameEvent.IPrepared|null} [prepared] GameEvent prepared
@@ -1034,6 +1036,22 @@ export const GameEvent = $root.GameEvent = (() => {
     GameEvent.prototype.tooManyRobots = null;
 
     /**
+     * GameEvent challengeFlag.
+     * @member {GameEvent.IChallengeFlag|null|undefined} challengeFlag
+     * @memberof GameEvent
+     * @instance
+     */
+    GameEvent.prototype.challengeFlag = null;
+
+    /**
+     * GameEvent emergencyStop.
+     * @member {GameEvent.IEmergencyStop|null|undefined} emergencyStop
+     * @memberof GameEvent
+     * @instance
+     */
+    GameEvent.prototype.emergencyStop = null;
+
+    /**
      * GameEvent unsportingBehaviorMinor.
      * @member {GameEvent.IUnsportingBehaviorMinor|null|undefined} unsportingBehaviorMinor
      * @memberof GameEvent
@@ -1134,12 +1152,12 @@ export const GameEvent = $root.GameEvent = (() => {
 
     /**
      * GameEvent event.
-     * @member {"ballLeftFieldTouchLine"|"ballLeftFieldGoalLine"|"aimlessKick"|"attackerTooCloseToDefenseArea"|"defenderInDefenseArea"|"boundaryCrossing"|"keeperHeldBall"|"botDribbledBallTooFar"|"botPushedBot"|"botHeldBallDeliberately"|"botTippedOver"|"attackerTouchedBallInDefenseArea"|"botKickedBallTooFast"|"botCrashUnique"|"botCrashDrawn"|"defenderTooCloseToKickPoint"|"botTooFastInStop"|"botInterferedPlacement"|"possibleGoal"|"goal"|"invalidGoal"|"attackerDoubleTouchedBall"|"placementSucceeded"|"penaltyKickFailed"|"noProgressInGame"|"placementFailed"|"multipleCards"|"multipleFouls"|"botSubstitution"|"tooManyRobots"|"unsportingBehaviorMinor"|"unsportingBehaviorMajor"|"prepared"|"indirectGoal"|"chippedGoal"|"kickTimeout"|"attackerTouchedOpponentInDefenseArea"|"attackerTouchedOpponentInDefenseAreaSkipped"|"botCrashUniqueSkipped"|"botPushedBotSkipped"|"defenderInDefenseAreaPartially"|"multiplePlacementFailures"|undefined} event
+     * @member {"ballLeftFieldTouchLine"|"ballLeftFieldGoalLine"|"aimlessKick"|"attackerTooCloseToDefenseArea"|"defenderInDefenseArea"|"boundaryCrossing"|"keeperHeldBall"|"botDribbledBallTooFar"|"botPushedBot"|"botHeldBallDeliberately"|"botTippedOver"|"attackerTouchedBallInDefenseArea"|"botKickedBallTooFast"|"botCrashUnique"|"botCrashDrawn"|"defenderTooCloseToKickPoint"|"botTooFastInStop"|"botInterferedPlacement"|"possibleGoal"|"goal"|"invalidGoal"|"attackerDoubleTouchedBall"|"placementSucceeded"|"penaltyKickFailed"|"noProgressInGame"|"placementFailed"|"multipleCards"|"multipleFouls"|"botSubstitution"|"tooManyRobots"|"challengeFlag"|"emergencyStop"|"unsportingBehaviorMinor"|"unsportingBehaviorMajor"|"prepared"|"indirectGoal"|"chippedGoal"|"kickTimeout"|"attackerTouchedOpponentInDefenseArea"|"attackerTouchedOpponentInDefenseAreaSkipped"|"botCrashUniqueSkipped"|"botPushedBotSkipped"|"defenderInDefenseAreaPartially"|"multiplePlacementFailures"|undefined} event
      * @memberof GameEvent
      * @instance
      */
     Object.defineProperty(GameEvent.prototype, "event", {
-        get: $util.oneOfGetter($oneOfFields = ["ballLeftFieldTouchLine", "ballLeftFieldGoalLine", "aimlessKick", "attackerTooCloseToDefenseArea", "defenderInDefenseArea", "boundaryCrossing", "keeperHeldBall", "botDribbledBallTooFar", "botPushedBot", "botHeldBallDeliberately", "botTippedOver", "attackerTouchedBallInDefenseArea", "botKickedBallTooFast", "botCrashUnique", "botCrashDrawn", "defenderTooCloseToKickPoint", "botTooFastInStop", "botInterferedPlacement", "possibleGoal", "goal", "invalidGoal", "attackerDoubleTouchedBall", "placementSucceeded", "penaltyKickFailed", "noProgressInGame", "placementFailed", "multipleCards", "multipleFouls", "botSubstitution", "tooManyRobots", "unsportingBehaviorMinor", "unsportingBehaviorMajor", "prepared", "indirectGoal", "chippedGoal", "kickTimeout", "attackerTouchedOpponentInDefenseArea", "attackerTouchedOpponentInDefenseAreaSkipped", "botCrashUniqueSkipped", "botPushedBotSkipped", "defenderInDefenseAreaPartially", "multiplePlacementFailures"]),
+        get: $util.oneOfGetter($oneOfFields = ["ballLeftFieldTouchLine", "ballLeftFieldGoalLine", "aimlessKick", "attackerTooCloseToDefenseArea", "defenderInDefenseArea", "boundaryCrossing", "keeperHeldBall", "botDribbledBallTooFar", "botPushedBot", "botHeldBallDeliberately", "botTippedOver", "attackerTouchedBallInDefenseArea", "botKickedBallTooFast", "botCrashUnique", "botCrashDrawn", "defenderTooCloseToKickPoint", "botTooFastInStop", "botInterferedPlacement", "possibleGoal", "goal", "invalidGoal", "attackerDoubleTouchedBall", "placementSucceeded", "penaltyKickFailed", "noProgressInGame", "placementFailed", "multipleCards", "multipleFouls", "botSubstitution", "tooManyRobots", "challengeFlag", "emergencyStop", "unsportingBehaviorMinor", "unsportingBehaviorMajor", "prepared", "indirectGoal", "chippedGoal", "kickTimeout", "attackerTouchedOpponentInDefenseArea", "attackerTouchedOpponentInDefenseAreaSkipped", "botCrashUniqueSkipped", "botPushedBotSkipped", "defenderInDefenseAreaPartially", "multiplePlacementFailures"]),
         set: $util.oneOfSetter($oneOfFields)
     });
 
@@ -1255,6 +1273,10 @@ export const GameEvent = $root.GameEvent = (() => {
             $root.GameEvent.Goal.encode(message.invalidGoal, writer.uint32(/* id 44, wireType 2 =*/354).fork()).ldelim();
         if (message.penaltyKickFailed != null && message.hasOwnProperty("penaltyKickFailed"))
             $root.GameEvent.PenaltyKickFailed.encode(message.penaltyKickFailed, writer.uint32(/* id 45, wireType 2 =*/362).fork()).ldelim();
+        if (message.challengeFlag != null && message.hasOwnProperty("challengeFlag"))
+            $root.GameEvent.ChallengeFlag.encode(message.challengeFlag, writer.uint32(/* id 46, wireType 2 =*/370).fork()).ldelim();
+        if (message.emergencyStop != null && message.hasOwnProperty("emergencyStop"))
+            $root.GameEvent.EmergencyStop.encode(message.emergencyStop, writer.uint32(/* id 47, wireType 2 =*/378).fork()).ldelim();
         return writer;
     };
 
@@ -1387,6 +1409,12 @@ export const GameEvent = $root.GameEvent = (() => {
             case 38:
                 message.tooManyRobots = $root.GameEvent.TooManyRobots.decode(reader, reader.uint32());
                 break;
+            case 46:
+                message.challengeFlag = $root.GameEvent.ChallengeFlag.decode(reader, reader.uint32());
+                break;
+            case 47:
+                message.emergencyStop = $root.GameEvent.EmergencyStop.decode(reader, reader.uint32());
+                break;
             case 35:
                 message.unsportingBehaviorMinor = $root.GameEvent.UnsportingBehaviorMinor.decode(reader, reader.uint32());
                 break;
@@ -1495,6 +1523,8 @@ export const GameEvent = $root.GameEvent = (() => {
         case 34:
         case 37:
         case 38:
+        case 44:
+        case 45:
         case 35:
         case 36:
         case 1:
@@ -1814,6 +1844,26 @@ export const GameEvent = $root.GameEvent = (() => {
                     return "tooManyRobots." + error;
             }
         }
+        if (message.challengeFlag != null && message.hasOwnProperty("challengeFlag")) {
+            if (properties.event === 1)
+                return "event: multiple values";
+            properties.event = 1;
+            {
+                let error = $root.GameEvent.ChallengeFlag.verify(message.challengeFlag);
+                if (error)
+                    return "challengeFlag." + error;
+            }
+        }
+        if (message.emergencyStop != null && message.hasOwnProperty("emergencyStop")) {
+            if (properties.event === 1)
+                return "event: multiple values";
+            properties.event = 1;
+            {
+                let error = $root.GameEvent.EmergencyStop.verify(message.emergencyStop);
+                if (error)
+                    return "emergencyStop." + error;
+            }
+        }
         if (message.unsportingBehaviorMinor != null && message.hasOwnProperty("unsportingBehaviorMinor")) {
             if (properties.event === 1)
                 return "event: multiple values";
@@ -2074,6 +2124,14 @@ export const GameEvent = $root.GameEvent = (() => {
         case 38:
             message.type = 38;
             break;
+        case "CHALLENGE_FLAG":
+        case 44:
+            message.type = 44;
+            break;
+        case "EMERGENCY_STOP":
+        case 45:
+            message.type = 45;
+            break;
         case "UNSPORTING_BEHAVIOR_MINOR":
         case 35:
             message.type = 35;
@@ -2279,6 +2337,16 @@ export const GameEvent = $root.GameEvent = (() => {
             if (typeof object.tooManyRobots !== "object")
                 throw TypeError(".GameEvent.tooManyRobots: object expected");
             message.tooManyRobots = $root.GameEvent.TooManyRobots.fromObject(object.tooManyRobots);
+        }
+        if (object.challengeFlag != null) {
+            if (typeof object.challengeFlag !== "object")
+                throw TypeError(".GameEvent.challengeFlag: object expected");
+            message.challengeFlag = $root.GameEvent.ChallengeFlag.fromObject(object.challengeFlag);
+        }
+        if (object.emergencyStop != null) {
+            if (typeof object.emergencyStop !== "object")
+                throw TypeError(".GameEvent.emergencyStop: object expected");
+            message.emergencyStop = $root.GameEvent.EmergencyStop.fromObject(object.emergencyStop);
         }
         if (object.unsportingBehaviorMinor != null) {
             if (typeof object.unsportingBehaviorMinor !== "object")
@@ -2576,6 +2644,16 @@ export const GameEvent = $root.GameEvent = (() => {
             object.penaltyKickFailed = $root.GameEvent.PenaltyKickFailed.toObject(message.penaltyKickFailed, options);
             if (options.oneofs)
                 object.event = "penaltyKickFailed";
+        }
+        if (message.challengeFlag != null && message.hasOwnProperty("challengeFlag")) {
+            object.challengeFlag = $root.GameEvent.ChallengeFlag.toObject(message.challengeFlag, options);
+            if (options.oneofs)
+                object.event = "challengeFlag";
+        }
+        if (message.emergencyStop != null && message.hasOwnProperty("emergencyStop")) {
+            object.emergencyStop = $root.GameEvent.EmergencyStop.toObject(message.emergencyStop, options);
+            if (options.oneofs)
+                object.event = "emergencyStop";
         }
         return object;
     };
@@ -11414,6 +11492,416 @@ export const GameEvent = $root.GameEvent = (() => {
         return BotSubstitution;
     })();
 
+    GameEvent.ChallengeFlag = (function() {
+
+        /**
+         * Properties of a ChallengeFlag.
+         * @memberof GameEvent
+         * @interface IChallengeFlag
+         * @property {Team} byTeam ChallengeFlag byTeam
+         */
+
+        /**
+         * Constructs a new ChallengeFlag.
+         * @memberof GameEvent
+         * @classdesc Represents a ChallengeFlag.
+         * @implements IChallengeFlag
+         * @constructor
+         * @param {GameEvent.IChallengeFlag=} [properties] Properties to set
+         */
+        function ChallengeFlag(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * ChallengeFlag byTeam.
+         * @member {Team} byTeam
+         * @memberof GameEvent.ChallengeFlag
+         * @instance
+         */
+        ChallengeFlag.prototype.byTeam = 0;
+
+        /**
+         * Creates a new ChallengeFlag instance using the specified properties.
+         * @function create
+         * @memberof GameEvent.ChallengeFlag
+         * @static
+         * @param {GameEvent.IChallengeFlag=} [properties] Properties to set
+         * @returns {GameEvent.ChallengeFlag} ChallengeFlag instance
+         */
+        ChallengeFlag.create = function create(properties) {
+            return new ChallengeFlag(properties);
+        };
+
+        /**
+         * Encodes the specified ChallengeFlag message. Does not implicitly {@link GameEvent.ChallengeFlag.verify|verify} messages.
+         * @function encode
+         * @memberof GameEvent.ChallengeFlag
+         * @static
+         * @param {GameEvent.IChallengeFlag} message ChallengeFlag message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ChallengeFlag.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified ChallengeFlag message, length delimited. Does not implicitly {@link GameEvent.ChallengeFlag.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof GameEvent.ChallengeFlag
+         * @static
+         * @param {GameEvent.IChallengeFlag} message ChallengeFlag message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ChallengeFlag.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a ChallengeFlag message from the specified reader or buffer.
+         * @function decode
+         * @memberof GameEvent.ChallengeFlag
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {GameEvent.ChallengeFlag} ChallengeFlag
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ChallengeFlag.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.GameEvent.ChallengeFlag();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.byTeam = reader.int32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            if (!message.hasOwnProperty("byTeam"))
+                throw $util.ProtocolError("missing required 'byTeam'", { instance: message });
+            return message;
+        };
+
+        /**
+         * Decodes a ChallengeFlag message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof GameEvent.ChallengeFlag
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {GameEvent.ChallengeFlag} ChallengeFlag
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ChallengeFlag.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a ChallengeFlag message.
+         * @function verify
+         * @memberof GameEvent.ChallengeFlag
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        ChallengeFlag.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            switch (message.byTeam) {
+            default:
+                return "byTeam: enum value expected";
+            case 0:
+            case 1:
+            case 2:
+                break;
+            }
+            return null;
+        };
+
+        /**
+         * Creates a ChallengeFlag message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof GameEvent.ChallengeFlag
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {GameEvent.ChallengeFlag} ChallengeFlag
+         */
+        ChallengeFlag.fromObject = function fromObject(object) {
+            if (object instanceof $root.GameEvent.ChallengeFlag)
+                return object;
+            let message = new $root.GameEvent.ChallengeFlag();
+            switch (object.byTeam) {
+            case "UNKNOWN":
+            case 0:
+                message.byTeam = 0;
+                break;
+            case "YELLOW":
+            case 1:
+                message.byTeam = 1;
+                break;
+            case "BLUE":
+            case 2:
+                message.byTeam = 2;
+                break;
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a ChallengeFlag message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof GameEvent.ChallengeFlag
+         * @static
+         * @param {GameEvent.ChallengeFlag} message ChallengeFlag
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        ChallengeFlag.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults)
+                object.byTeam = options.enums === String ? "UNKNOWN" : 0;
+            if (message.byTeam != null && message.hasOwnProperty("byTeam"))
+                object.byTeam = options.enums === String ? $root.Team[message.byTeam] : message.byTeam;
+            return object;
+        };
+
+        /**
+         * Converts this ChallengeFlag to JSON.
+         * @function toJSON
+         * @memberof GameEvent.ChallengeFlag
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        ChallengeFlag.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return ChallengeFlag;
+    })();
+
+    GameEvent.EmergencyStop = (function() {
+
+        /**
+         * Properties of an EmergencyStop.
+         * @memberof GameEvent
+         * @interface IEmergencyStop
+         * @property {Team} byTeam EmergencyStop byTeam
+         */
+
+        /**
+         * Constructs a new EmergencyStop.
+         * @memberof GameEvent
+         * @classdesc Represents an EmergencyStop.
+         * @implements IEmergencyStop
+         * @constructor
+         * @param {GameEvent.IEmergencyStop=} [properties] Properties to set
+         */
+        function EmergencyStop(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * EmergencyStop byTeam.
+         * @member {Team} byTeam
+         * @memberof GameEvent.EmergencyStop
+         * @instance
+         */
+        EmergencyStop.prototype.byTeam = 0;
+
+        /**
+         * Creates a new EmergencyStop instance using the specified properties.
+         * @function create
+         * @memberof GameEvent.EmergencyStop
+         * @static
+         * @param {GameEvent.IEmergencyStop=} [properties] Properties to set
+         * @returns {GameEvent.EmergencyStop} EmergencyStop instance
+         */
+        EmergencyStop.create = function create(properties) {
+            return new EmergencyStop(properties);
+        };
+
+        /**
+         * Encodes the specified EmergencyStop message. Does not implicitly {@link GameEvent.EmergencyStop.verify|verify} messages.
+         * @function encode
+         * @memberof GameEvent.EmergencyStop
+         * @static
+         * @param {GameEvent.IEmergencyStop} message EmergencyStop message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        EmergencyStop.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified EmergencyStop message, length delimited. Does not implicitly {@link GameEvent.EmergencyStop.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof GameEvent.EmergencyStop
+         * @static
+         * @param {GameEvent.IEmergencyStop} message EmergencyStop message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        EmergencyStop.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes an EmergencyStop message from the specified reader or buffer.
+         * @function decode
+         * @memberof GameEvent.EmergencyStop
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {GameEvent.EmergencyStop} EmergencyStop
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        EmergencyStop.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.GameEvent.EmergencyStop();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.byTeam = reader.int32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            if (!message.hasOwnProperty("byTeam"))
+                throw $util.ProtocolError("missing required 'byTeam'", { instance: message });
+            return message;
+        };
+
+        /**
+         * Decodes an EmergencyStop message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof GameEvent.EmergencyStop
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {GameEvent.EmergencyStop} EmergencyStop
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        EmergencyStop.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies an EmergencyStop message.
+         * @function verify
+         * @memberof GameEvent.EmergencyStop
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        EmergencyStop.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            switch (message.byTeam) {
+            default:
+                return "byTeam: enum value expected";
+            case 0:
+            case 1:
+            case 2:
+                break;
+            }
+            return null;
+        };
+
+        /**
+         * Creates an EmergencyStop message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof GameEvent.EmergencyStop
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {GameEvent.EmergencyStop} EmergencyStop
+         */
+        EmergencyStop.fromObject = function fromObject(object) {
+            if (object instanceof $root.GameEvent.EmergencyStop)
+                return object;
+            let message = new $root.GameEvent.EmergencyStop();
+            switch (object.byTeam) {
+            case "UNKNOWN":
+            case 0:
+                message.byTeam = 0;
+                break;
+            case "YELLOW":
+            case 1:
+                message.byTeam = 1;
+                break;
+            case "BLUE":
+            case 2:
+                message.byTeam = 2;
+                break;
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from an EmergencyStop message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof GameEvent.EmergencyStop
+         * @static
+         * @param {GameEvent.EmergencyStop} message EmergencyStop
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        EmergencyStop.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults)
+                object.byTeam = options.enums === String ? "UNKNOWN" : 0;
+            if (message.byTeam != null && message.hasOwnProperty("byTeam"))
+                object.byTeam = options.enums === String ? $root.Team[message.byTeam] : message.byTeam;
+            return object;
+        };
+
+        /**
+         * Converts this EmergencyStop to JSON.
+         * @function toJSON
+         * @memberof GameEvent.EmergencyStop
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        EmergencyStop.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return EmergencyStop;
+    })();
+
     GameEvent.TooManyRobots = (function() {
 
         /**
@@ -12192,6 +12680,8 @@ export const GameEvent = $root.GameEvent = (() => {
      * @property {number} MULTIPLE_FOULS=34 MULTIPLE_FOULS value
      * @property {number} BOT_SUBSTITUTION=37 BOT_SUBSTITUTION value
      * @property {number} TOO_MANY_ROBOTS=38 TOO_MANY_ROBOTS value
+     * @property {number} CHALLENGE_FLAG=44 CHALLENGE_FLAG value
+     * @property {number} EMERGENCY_STOP=45 EMERGENCY_STOP value
      * @property {number} UNSPORTING_BEHAVIOR_MINOR=35 UNSPORTING_BEHAVIOR_MINOR value
      * @property {number} UNSPORTING_BEHAVIOR_MAJOR=36 UNSPORTING_BEHAVIOR_MAJOR value
      * @property {number} PREPARED=1 PREPARED value
@@ -12238,6 +12728,8 @@ export const GameEvent = $root.GameEvent = (() => {
         values[valuesById[34] = "MULTIPLE_FOULS"] = 34;
         values[valuesById[37] = "BOT_SUBSTITUTION"] = 37;
         values[valuesById[38] = "TOO_MANY_ROBOTS"] = 38;
+        values[valuesById[44] = "CHALLENGE_FLAG"] = 44;
+        values[valuesById[45] = "EMERGENCY_STOP"] = 45;
         values[valuesById[35] = "UNSPORTING_BEHAVIOR_MINOR"] = 35;
         values[valuesById[36] = "UNSPORTING_BEHAVIOR_MAJOR"] = 36;
         values[valuesById[1] = "PREPARED"] = 1;
@@ -20856,10 +21348,10 @@ export const TeamInfo = $root.TeamInfo = (() => {
      * @property {boolean|null} [ballPlacementFailuresReached] TeamInfo ballPlacementFailuresReached
      * @property {boolean|null} [canPlaceBall] TeamInfo canPlaceBall
      * @property {number|null} [maxAllowedBots] TeamInfo maxAllowedBots
-     * @property {boolean|null} [requestsBotSubstitution] TeamInfo requestsBotSubstitution
-     * @property {boolean|null} [requestsTimeout] TeamInfo requestsTimeout
-     * @property {boolean|null} [requestsChallenge] TeamInfo requestsChallenge
-     * @property {boolean|null} [requestsEmergencyStop] TeamInfo requestsEmergencyStop
+     * @property {google.protobuf.ITimestamp|null} [requestsBotSubstitutionSince] TeamInfo requestsBotSubstitutionSince
+     * @property {google.protobuf.ITimestamp|null} [requestsTimeoutSince] TeamInfo requestsTimeoutSince
+     * @property {google.protobuf.ITimestamp|null} [requestsEmergencyStopSince] TeamInfo requestsEmergencyStopSince
+     * @property {number|null} [challengeFlags] TeamInfo challengeFlags
      */
 
     /**
@@ -20985,36 +21477,36 @@ export const TeamInfo = $root.TeamInfo = (() => {
     TeamInfo.prototype.maxAllowedBots = 0;
 
     /**
-     * TeamInfo requestsBotSubstitution.
-     * @member {boolean} requestsBotSubstitution
+     * TeamInfo requestsBotSubstitutionSince.
+     * @member {google.protobuf.ITimestamp|null|undefined} requestsBotSubstitutionSince
      * @memberof TeamInfo
      * @instance
      */
-    TeamInfo.prototype.requestsBotSubstitution = false;
+    TeamInfo.prototype.requestsBotSubstitutionSince = null;
 
     /**
-     * TeamInfo requestsTimeout.
-     * @member {boolean} requestsTimeout
+     * TeamInfo requestsTimeoutSince.
+     * @member {google.protobuf.ITimestamp|null|undefined} requestsTimeoutSince
      * @memberof TeamInfo
      * @instance
      */
-    TeamInfo.prototype.requestsTimeout = false;
+    TeamInfo.prototype.requestsTimeoutSince = null;
 
     /**
-     * TeamInfo requestsChallenge.
-     * @member {boolean} requestsChallenge
+     * TeamInfo requestsEmergencyStopSince.
+     * @member {google.protobuf.ITimestamp|null|undefined} requestsEmergencyStopSince
      * @memberof TeamInfo
      * @instance
      */
-    TeamInfo.prototype.requestsChallenge = false;
+    TeamInfo.prototype.requestsEmergencyStopSince = null;
 
     /**
-     * TeamInfo requestsEmergencyStop.
-     * @member {boolean} requestsEmergencyStop
+     * TeamInfo challengeFlags.
+     * @member {number} challengeFlags
      * @memberof TeamInfo
      * @instance
      */
-    TeamInfo.prototype.requestsEmergencyStop = false;
+    TeamInfo.prototype.challengeFlags = 0;
 
     /**
      * Creates a new TeamInfo instance using the specified properties.
@@ -21069,14 +21561,14 @@ export const TeamInfo = $root.TeamInfo = (() => {
             writer.uint32(/* id 12, wireType 0 =*/96).bool(message.canPlaceBall);
         if (message.maxAllowedBots != null && message.hasOwnProperty("maxAllowedBots"))
             writer.uint32(/* id 13, wireType 0 =*/104).int32(message.maxAllowedBots);
-        if (message.requestsBotSubstitution != null && message.hasOwnProperty("requestsBotSubstitution"))
-            writer.uint32(/* id 14, wireType 0 =*/112).bool(message.requestsBotSubstitution);
-        if (message.requestsTimeout != null && message.hasOwnProperty("requestsTimeout"))
-            writer.uint32(/* id 15, wireType 0 =*/120).bool(message.requestsTimeout);
-        if (message.requestsChallenge != null && message.hasOwnProperty("requestsChallenge"))
-            writer.uint32(/* id 16, wireType 0 =*/128).bool(message.requestsChallenge);
-        if (message.requestsEmergencyStop != null && message.hasOwnProperty("requestsEmergencyStop"))
-            writer.uint32(/* id 17, wireType 0 =*/136).bool(message.requestsEmergencyStop);
+        if (message.requestsBotSubstitutionSince != null && message.hasOwnProperty("requestsBotSubstitutionSince"))
+            $root.google.protobuf.Timestamp.encode(message.requestsBotSubstitutionSince, writer.uint32(/* id 14, wireType 2 =*/114).fork()).ldelim();
+        if (message.requestsTimeoutSince != null && message.hasOwnProperty("requestsTimeoutSince"))
+            $root.google.protobuf.Timestamp.encode(message.requestsTimeoutSince, writer.uint32(/* id 15, wireType 2 =*/122).fork()).ldelim();
+        if (message.requestsEmergencyStopSince != null && message.hasOwnProperty("requestsEmergencyStopSince"))
+            $root.google.protobuf.Timestamp.encode(message.requestsEmergencyStopSince, writer.uint32(/* id 16, wireType 2 =*/130).fork()).ldelim();
+        if (message.challengeFlags != null && message.hasOwnProperty("challengeFlags"))
+            writer.uint32(/* id 17, wireType 0 =*/136).int32(message.challengeFlags);
         return writer;
     };
 
@@ -21157,16 +21649,16 @@ export const TeamInfo = $root.TeamInfo = (() => {
                 message.maxAllowedBots = reader.int32();
                 break;
             case 14:
-                message.requestsBotSubstitution = reader.bool();
+                message.requestsBotSubstitutionSince = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
                 break;
             case 15:
-                message.requestsTimeout = reader.bool();
+                message.requestsTimeoutSince = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
                 break;
             case 16:
-                message.requestsChallenge = reader.bool();
+                message.requestsEmergencyStopSince = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
                 break;
             case 17:
-                message.requestsEmergencyStop = reader.bool();
+                message.challengeFlags = reader.int32();
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -21262,18 +21754,24 @@ export const TeamInfo = $root.TeamInfo = (() => {
         if (message.maxAllowedBots != null && message.hasOwnProperty("maxAllowedBots"))
             if (!$util.isInteger(message.maxAllowedBots))
                 return "maxAllowedBots: integer expected";
-        if (message.requestsBotSubstitution != null && message.hasOwnProperty("requestsBotSubstitution"))
-            if (typeof message.requestsBotSubstitution !== "boolean")
-                return "requestsBotSubstitution: boolean expected";
-        if (message.requestsTimeout != null && message.hasOwnProperty("requestsTimeout"))
-            if (typeof message.requestsTimeout !== "boolean")
-                return "requestsTimeout: boolean expected";
-        if (message.requestsChallenge != null && message.hasOwnProperty("requestsChallenge"))
-            if (typeof message.requestsChallenge !== "boolean")
-                return "requestsChallenge: boolean expected";
-        if (message.requestsEmergencyStop != null && message.hasOwnProperty("requestsEmergencyStop"))
-            if (typeof message.requestsEmergencyStop !== "boolean")
-                return "requestsEmergencyStop: boolean expected";
+        if (message.requestsBotSubstitutionSince != null && message.hasOwnProperty("requestsBotSubstitutionSince")) {
+            let error = $root.google.protobuf.Timestamp.verify(message.requestsBotSubstitutionSince);
+            if (error)
+                return "requestsBotSubstitutionSince." + error;
+        }
+        if (message.requestsTimeoutSince != null && message.hasOwnProperty("requestsTimeoutSince")) {
+            let error = $root.google.protobuf.Timestamp.verify(message.requestsTimeoutSince);
+            if (error)
+                return "requestsTimeoutSince." + error;
+        }
+        if (message.requestsEmergencyStopSince != null && message.hasOwnProperty("requestsEmergencyStopSince")) {
+            let error = $root.google.protobuf.Timestamp.verify(message.requestsEmergencyStopSince);
+            if (error)
+                return "requestsEmergencyStopSince." + error;
+        }
+        if (message.challengeFlags != null && message.hasOwnProperty("challengeFlags"))
+            if (!$util.isInteger(message.challengeFlags))
+                return "challengeFlags: integer expected";
         return null;
     };
 
@@ -21342,14 +21840,23 @@ export const TeamInfo = $root.TeamInfo = (() => {
             message.canPlaceBall = Boolean(object.canPlaceBall);
         if (object.maxAllowedBots != null)
             message.maxAllowedBots = object.maxAllowedBots | 0;
-        if (object.requestsBotSubstitution != null)
-            message.requestsBotSubstitution = Boolean(object.requestsBotSubstitution);
-        if (object.requestsTimeout != null)
-            message.requestsTimeout = Boolean(object.requestsTimeout);
-        if (object.requestsChallenge != null)
-            message.requestsChallenge = Boolean(object.requestsChallenge);
-        if (object.requestsEmergencyStop != null)
-            message.requestsEmergencyStop = Boolean(object.requestsEmergencyStop);
+        if (object.requestsBotSubstitutionSince != null) {
+            if (typeof object.requestsBotSubstitutionSince !== "object")
+                throw TypeError(".TeamInfo.requestsBotSubstitutionSince: object expected");
+            message.requestsBotSubstitutionSince = $root.google.protobuf.Timestamp.fromObject(object.requestsBotSubstitutionSince);
+        }
+        if (object.requestsTimeoutSince != null) {
+            if (typeof object.requestsTimeoutSince !== "object")
+                throw TypeError(".TeamInfo.requestsTimeoutSince: object expected");
+            message.requestsTimeoutSince = $root.google.protobuf.Timestamp.fromObject(object.requestsTimeoutSince);
+        }
+        if (object.requestsEmergencyStopSince != null) {
+            if (typeof object.requestsEmergencyStopSince !== "object")
+                throw TypeError(".TeamInfo.requestsEmergencyStopSince: object expected");
+            message.requestsEmergencyStopSince = $root.google.protobuf.Timestamp.fromObject(object.requestsEmergencyStopSince);
+        }
+        if (object.challengeFlags != null)
+            message.challengeFlags = object.challengeFlags | 0;
         return message;
     };
 
@@ -21382,10 +21889,10 @@ export const TeamInfo = $root.TeamInfo = (() => {
             object.ballPlacementFailuresReached = false;
             object.canPlaceBall = false;
             object.maxAllowedBots = 0;
-            object.requestsBotSubstitution = false;
-            object.requestsTimeout = false;
-            object.requestsChallenge = false;
-            object.requestsEmergencyStop = false;
+            object.requestsBotSubstitutionSince = null;
+            object.requestsTimeoutSince = null;
+            object.requestsEmergencyStopSince = null;
+            object.challengeFlags = 0;
         }
         if (message.name != null && message.hasOwnProperty("name"))
             object.name = message.name;
@@ -21422,14 +21929,14 @@ export const TeamInfo = $root.TeamInfo = (() => {
             object.canPlaceBall = message.canPlaceBall;
         if (message.maxAllowedBots != null && message.hasOwnProperty("maxAllowedBots"))
             object.maxAllowedBots = message.maxAllowedBots;
-        if (message.requestsBotSubstitution != null && message.hasOwnProperty("requestsBotSubstitution"))
-            object.requestsBotSubstitution = message.requestsBotSubstitution;
-        if (message.requestsTimeout != null && message.hasOwnProperty("requestsTimeout"))
-            object.requestsTimeout = message.requestsTimeout;
-        if (message.requestsChallenge != null && message.hasOwnProperty("requestsChallenge"))
-            object.requestsChallenge = message.requestsChallenge;
-        if (message.requestsEmergencyStop != null && message.hasOwnProperty("requestsEmergencyStop"))
-            object.requestsEmergencyStop = message.requestsEmergencyStop;
+        if (message.requestsBotSubstitutionSince != null && message.hasOwnProperty("requestsBotSubstitutionSince"))
+            object.requestsBotSubstitutionSince = $root.google.protobuf.Timestamp.toObject(message.requestsBotSubstitutionSince, options);
+        if (message.requestsTimeoutSince != null && message.hasOwnProperty("requestsTimeoutSince"))
+            object.requestsTimeoutSince = $root.google.protobuf.Timestamp.toObject(message.requestsTimeoutSince, options);
+        if (message.requestsEmergencyStopSince != null && message.hasOwnProperty("requestsEmergencyStopSince"))
+            object.requestsEmergencyStopSince = $root.google.protobuf.Timestamp.toObject(message.requestsEmergencyStopSince, options);
+        if (message.challengeFlags != null && message.hasOwnProperty("challengeFlags"))
+            object.challengeFlags = message.challengeFlags;
         return object;
     };
 
