@@ -27,6 +27,7 @@ There are some reference clients:
  * [ssl-ref-client](./cmd/ssl-ref-client): A client that receives referee messages
  * [ssl-auto-ref-client](./cmd/ssl-auto-ref-client/README.md): A client that connects to the controller as an autoRef
  * [ssl-team-client](./cmd/ssl-team-client/README.md): A client that connects to the controller as a team
+ * [ssl-remote-control-client](./cmd/ssl-remote-control-client/README.md): A client that connects to the controller as a remote-control
  * [ssl-ci-test-client](./cmd/ssl-ci-test-client/README.md): A client that connects to the CI interface of the controller
  
 ### Comparison to ssl-refbox

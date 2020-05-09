@@ -1,0 +1,14 @@
+# https://www.websequencediagrams.com/
+
+RemoteControl->Controller: establish TCP connection
+Controller->Controller: generate new token
+Controller->RemoteControl: ControllerReply ( token )
+RemoteControl->Controller: RemoteControlRegistration ( team, [ token, signature ] )
+Controller-->Controller: verify token
+Controller-->Controller: verify signature
+Controller->RemoteControl: ControllerReply ( ok | reject )
+
+loop
+RemoteControl->Controller: RemoteControlToController
+Controller->RemoteControl: ControllerReply ( ok | reject )
+end
