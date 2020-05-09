@@ -47,7 +47,7 @@ func (c *AutoRefClient) receiveRegistration(server *AutoRefServer) error {
 	}
 	c.pubKey = server.trustedKeys[c.id]
 	if c.pubKey != nil {
-		if err := c.verifyRegistration(registration); err != nil {
+		if err := c.Client.verifyMessage(&registration); err != nil {
 			return err
 		}
 	} else {
@@ -56,50 +56,6 @@ func (c *AutoRefClient) receiveRegistration(server *AutoRefServer) error {
 
 	c.reply(c.Ok())
 
-	return nil
-}
-
-func (c *AutoRefClient) verifyRegistration(registration AutoRefRegistration) error {
-	if registration.Signature == nil {
-		return errors.New("Missing signature")
-	}
-	if registration.Signature.Token == nil || *registration.Signature.Token != c.token {
-		sendToken := ""
-		if registration.Signature.Token != nil {
-			sendToken = *registration.Signature.Token
-		}
-		return errors.Errorf("AutoRef Client %v sent an invalid token: %v != %v", c.id, sendToken, c.token)
-	}
-	signature := registration.Signature.Pkcs1V15
-	registration.Signature.Pkcs1V15 = []byte{}
-	err := VerifySignature(c.pubKey, &registration, signature)
-	registration.Signature.Pkcs1V15 = signature
-	if err != nil {
-		return errors.New("Invalid signature")
-	}
-	c.token = uuid.New()
-	return nil
-}
-
-func (c *AutoRefClient) verifyRequest(req AutoRefToController) error {
-	if req.Signature == nil {
-		return errors.New("Missing signature")
-	}
-	if req.Signature.Token == nil || *req.Signature.Token != c.token {
-		sendToken := ""
-		if req.Signature.Token != nil {
-			sendToken = *req.Signature.Token
-		}
-		return errors.Errorf("Invalid token: %v != %v", sendToken, c.token)
-	}
-	signature := req.Signature.Pkcs1V15
-	req.Signature.Pkcs1V15 = []byte{}
-	err := VerifySignature(c.pubKey, &req, signature)
-	req.Signature.Pkcs1V15 = signature
-	if err != nil {
-		return errors.Wrap(err, "Verification failed.")
-	}
-	c.token = uuid.New()
 	return nil
 }
 
@@ -154,7 +110,7 @@ func (s *AutoRefServer) handleClientConnection(conn net.Conn) {
 			continue
 		}
 		if client.pubKey != nil {
-			if err := client.verifyRequest(req); err != nil {
+			if err := client.verifyMessage(&req); err != nil {
 				client.reply(client.Reject(err.Error()))
 				continue
 			}

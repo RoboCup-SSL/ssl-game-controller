@@ -12,6 +12,10 @@ server:
     address: :10008
     address-tls: :10108
     trusted-keys-dir: config/trusted_keys/team
+  remote-control:
+    address: :10011
+    address-tls: :10111
+    trusted-keys-dir: config/trusted_keys/remote-control
   ci:
     address: :10009
 engine:

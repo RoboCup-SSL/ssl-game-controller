@@ -53,8 +53,7 @@ func (c *TeamClient) receiveRegistration(server *TeamServer) error {
 	}
 	c.pubKey = server.trustedKeys[c.id]
 	if c.pubKey != nil {
-		err := c.verifyRegistration(registration)
-		if err != nil {
+		if err := c.Client.verifyMessage(&registration); err != nil {
 			return err
 		}
 	} else {
@@ -75,50 +74,6 @@ func isAllowedTeamName(teamName string, allowed []string) bool {
 		}
 	}
 	return false
-}
-
-func (c *TeamClient) verifyRegistration(registration TeamRegistration) error {
-	if registration.Signature == nil {
-		return errors.New("Missing signature")
-	}
-	if registration.Signature.Token == nil || *registration.Signature.Token != c.token {
-		sendToken := ""
-		if registration.Signature.Token != nil {
-			sendToken = *registration.Signature.Token
-		}
-		return errors.Errorf("Team Client %v sent an invalid token: %v != %v", c.id, sendToken, c.token)
-	}
-	signature := registration.Signature.Pkcs1V15
-	registration.Signature.Pkcs1V15 = []byte{}
-	err := VerifySignature(c.pubKey, &registration, signature)
-	registration.Signature.Pkcs1V15 = signature
-	if err != nil {
-		return errors.New("Invalid signature")
-	}
-	c.token = uuid.New()
-	return nil
-}
-
-func (c *TeamClient) verifyRequest(req TeamToController) error {
-	if req.Signature == nil {
-		return errors.New("Missing signature")
-	}
-	if req.Signature.Token == nil || *req.Signature.Token != c.token {
-		sendToken := ""
-		if req.Signature.Token != nil {
-			sendToken = *req.Signature.Token
-		}
-		return errors.Errorf("Invalid token: %v != %v", sendToken, c.token)
-	}
-	signature := req.Signature.Pkcs1V15
-	req.Signature.Pkcs1V15 = []byte{}
-	err := VerifySignature(c.pubKey, &req, signature)
-	req.Signature.Pkcs1V15 = signature
-	if err != nil {
-		return errors.Wrap(err, "Verification failed.")
-	}
-	c.token = uuid.New()
-	return nil
 }
 
 func (s *TeamServer) handleClientConnection(conn net.Conn) {
@@ -170,7 +125,7 @@ func (s *TeamServer) handleClientConnection(conn net.Conn) {
 			continue
 		}
 		if client.pubKey != nil {
-			if err := client.verifyRequest(req); err != nil {
+			if err := client.verifyMessage(&req); err != nil {
 				client.reply(client.Reject(err.Error()))
 				continue
 			}
@@ -185,16 +140,12 @@ func (s *TeamServer) handleClientConnection(conn net.Conn) {
 
 func (s *TeamServer) SendRequest(teamName string, request ControllerToTeam) error {
 	if client, ok := s.clients[teamName]; ok {
-		return client.SendRequest(request)
+		return sslconn.SendMessage(client.conn, &request)
 	}
 	return errors.Errorf("Team Client '%v' not connected", teamName)
 }
 
-func (c *Client) SendRequest(request ControllerToTeam) error {
-	return sslconn.SendMessage(c.conn, &request)
-}
-
-func (c *Client) reply(reply ControllerReply) {
+func (c *TeamClient) reply(reply ControllerReply) {
 	msg := ControllerToTeam_ControllerReply{ControllerReply: &reply}
 	response := ControllerToTeam{Msg: &msg}
 	if err := sslconn.SendMessage(c.conn, &response); err != nil {

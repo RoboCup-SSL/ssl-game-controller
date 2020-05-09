@@ -70,9 +70,10 @@ type Network struct {
 
 // Server holds configs for the available server services
 type Server struct {
-	AutoRef ServerAutoRef `yaml:"auto-ref"`
-	Team    ServerTeam    `yaml:"team"`
-	Ci      ServerCi      `yaml:"ci"`
+	AutoRef       ServerAutoRef     `yaml:"auto-ref"`
+	Team          ServerTeam        `yaml:"team"`
+	Ci            ServerCi          `yaml:"ci"`
+	RemoteControl RemoteControlTeam `yaml:"remote-control"`
 }
 
 // ServerAutoRef holds configs for the autoRef server
@@ -84,6 +85,13 @@ type ServerAutoRef struct {
 
 // ServerTeam holds configs for the team server
 type ServerTeam struct {
+	Address        string `yaml:"address"`
+	AddressTls     string `yaml:"address-tls"`
+	TrustedKeysDir string `yaml:"trusted-keys-dir"`
+}
+
+// RemoteControlTeam holds configs for the remote control server
+type RemoteControlTeam struct {
 	Address        string `yaml:"address"`
 	AddressTls     string `yaml:"address-tls"`
 	TrustedKeysDir string `yaml:"trusted-keys-dir"`
@@ -197,6 +205,9 @@ func DefaultControllerConfig() (c Controller) {
 	c.Server.Team.Address = ":10008"
 	c.Server.Team.AddressTls = ":10108"
 	c.Server.Team.TrustedKeysDir = "config/trusted_keys/team"
+	c.Server.RemoteControl.Address = ":10011"
+	c.Server.RemoteControl.AddressTls = ":10111"
+	c.Server.RemoteControl.TrustedKeysDir = "config/trusted_keys/remote-control"
 	c.Server.Ci.Address = ":10009"
 
 	c.Game.DefaultGeometry = map[Division]Geometry{}

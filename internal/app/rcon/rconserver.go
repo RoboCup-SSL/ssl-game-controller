@@ -8,6 +8,7 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"github.com/golang/protobuf/proto"
+	"github.com/odeke-em/go-uuid"
 	"github.com/pkg/errors"
 	"io/ioutil"
 	"log"
@@ -31,6 +32,11 @@ type Client struct {
 	token              string
 	pubKey             *rsa.PublicKey
 	verifiedConnection bool
+}
+
+type SignedMessage interface {
+	GetSignature() *Signature
+	proto.Message
 }
 
 func NewServer(address string) (s *Server) {
@@ -199,4 +205,27 @@ func VerifySignature(key *rsa.PublicKey, message proto.Message, signature []byte
 	hash.Write(messageBytes)
 	d := hash.Sum(nil)
 	return rsa.VerifyPKCS1v15(key, crypto.SHA256, d, signature)
+}
+
+func (c *Client) verifyMessage(message SignedMessage) error {
+	signature := message.GetSignature()
+	if signature == nil {
+		return errors.New("Missing signature")
+	}
+	if signature.Token == nil || *signature.Token != c.token {
+		sendToken := ""
+		if signature.Token != nil {
+			sendToken = *signature.Token
+		}
+		return errors.Errorf("Client %v sent an invalid token: %v != %v", c.id, sendToken, c.token)
+	}
+	sig := signature.Pkcs1V15
+	signature.Pkcs1V15 = []byte{}
+	err := VerifySignature(c.pubKey, message, sig)
+	signature.Pkcs1V15 = sig
+	if err != nil {
+		return errors.New("Invalid signature")
+	}
+	c.token = uuid.New()
+	return nil
 }

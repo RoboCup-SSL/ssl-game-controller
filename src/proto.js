@@ -23894,6 +23894,8 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
      * @interface IGcStateTeam
      * @property {boolean|null} [connected] GcStateTeam connected
      * @property {boolean|null} [connectionVerified] GcStateTeam connectionVerified
+     * @property {boolean|null} [remoteControlConnected] GcStateTeam remoteControlConnected
+     * @property {boolean|null} [remoteControlConnectionVerified] GcStateTeam remoteControlConnectionVerified
      */
 
     /**
@@ -23928,6 +23930,22 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
     GcStateTeam.prototype.connectionVerified = false;
 
     /**
+     * GcStateTeam remoteControlConnected.
+     * @member {boolean} remoteControlConnected
+     * @memberof GcStateTeam
+     * @instance
+     */
+    GcStateTeam.prototype.remoteControlConnected = false;
+
+    /**
+     * GcStateTeam remoteControlConnectionVerified.
+     * @member {boolean} remoteControlConnectionVerified
+     * @memberof GcStateTeam
+     * @instance
+     */
+    GcStateTeam.prototype.remoteControlConnectionVerified = false;
+
+    /**
      * Creates a new GcStateTeam instance using the specified properties.
      * @function create
      * @memberof GcStateTeam
@@ -23955,6 +23973,10 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
             writer.uint32(/* id 1, wireType 0 =*/8).bool(message.connected);
         if (message.connectionVerified != null && message.hasOwnProperty("connectionVerified"))
             writer.uint32(/* id 2, wireType 0 =*/16).bool(message.connectionVerified);
+        if (message.remoteControlConnected != null && message.hasOwnProperty("remoteControlConnected"))
+            writer.uint32(/* id 3, wireType 0 =*/24).bool(message.remoteControlConnected);
+        if (message.remoteControlConnectionVerified != null && message.hasOwnProperty("remoteControlConnectionVerified"))
+            writer.uint32(/* id 4, wireType 0 =*/32).bool(message.remoteControlConnectionVerified);
         return writer;
     };
 
@@ -23994,6 +24016,12 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
                 break;
             case 2:
                 message.connectionVerified = reader.bool();
+                break;
+            case 3:
+                message.remoteControlConnected = reader.bool();
+                break;
+            case 4:
+                message.remoteControlConnectionVerified = reader.bool();
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -24036,6 +24064,12 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
         if (message.connectionVerified != null && message.hasOwnProperty("connectionVerified"))
             if (typeof message.connectionVerified !== "boolean")
                 return "connectionVerified: boolean expected";
+        if (message.remoteControlConnected != null && message.hasOwnProperty("remoteControlConnected"))
+            if (typeof message.remoteControlConnected !== "boolean")
+                return "remoteControlConnected: boolean expected";
+        if (message.remoteControlConnectionVerified != null && message.hasOwnProperty("remoteControlConnectionVerified"))
+            if (typeof message.remoteControlConnectionVerified !== "boolean")
+                return "remoteControlConnectionVerified: boolean expected";
         return null;
     };
 
@@ -24055,6 +24089,10 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
             message.connected = Boolean(object.connected);
         if (object.connectionVerified != null)
             message.connectionVerified = Boolean(object.connectionVerified);
+        if (object.remoteControlConnected != null)
+            message.remoteControlConnected = Boolean(object.remoteControlConnected);
+        if (object.remoteControlConnectionVerified != null)
+            message.remoteControlConnectionVerified = Boolean(object.remoteControlConnectionVerified);
         return message;
     };
 
@@ -24074,11 +24112,17 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
         if (options.defaults) {
             object.connected = false;
             object.connectionVerified = false;
+            object.remoteControlConnected = false;
+            object.remoteControlConnectionVerified = false;
         }
         if (message.connected != null && message.hasOwnProperty("connected"))
             object.connected = message.connected;
         if (message.connectionVerified != null && message.hasOwnProperty("connectionVerified"))
             object.connectionVerified = message.connectionVerified;
+        if (message.remoteControlConnected != null && message.hasOwnProperty("remoteControlConnected"))
+            object.remoteControlConnected = message.remoteControlConnected;
+        if (message.remoteControlConnectionVerified != null && message.hasOwnProperty("remoteControlConnectionVerified"))
+            object.remoteControlConnectionVerified = message.remoteControlConnectionVerified;
         return object;
     };
 

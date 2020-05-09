@@ -19,6 +19,12 @@ message GcStateTeam {
 
     // true: The team connected via TLS with a verified certificate
     optional bool connection_verified = 2;
+
+    // true: The remote control for the team is connected
+    optional bool remote_control_connected = 3;
+
+    // true: The remote control for the team connected via TLS with a verified certificate
+    optional bool remote_control_connection_verified = 4;
 }
 
 message GcStateAutoRef {

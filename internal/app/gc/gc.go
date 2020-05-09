@@ -13,18 +13,20 @@ import (
 
 // GameController contains all the different connected modules of the game controller
 type GameController struct {
-	config           config.Controller
-	gcEngine         *engine.Engine
-	publisher        *publish.Publisher
-	messageGenerator *publish.MessageGenerator
-	apiServer        *api.Server
-	autoRefServer    *rcon.AutoRefServer
-	autoRefServerTls *rcon.AutoRefServer
-	teamServer       *rcon.TeamServer
-	teamServerTls    *rcon.TeamServer
-	ciServer         *ci.Server
-	visionReceiver   *vision.Receiver
-	trackerReceiver  *tracker.Receiver
+	config                 config.Controller
+	gcEngine               *engine.Engine
+	publisher              *publish.Publisher
+	messageGenerator       *publish.MessageGenerator
+	apiServer              *api.Server
+	autoRefServer          *rcon.AutoRefServer
+	autoRefServerTls       *rcon.AutoRefServer
+	teamServer             *rcon.TeamServer
+	teamServerTls          *rcon.TeamServer
+	remoteControlServer    *rcon.RemoteControlServer
+	remoteControlServerTls *rcon.RemoteControlServer
+	ciServer               *ci.Server
+	visionReceiver         *vision.Receiver
+	trackerReceiver        *tracker.Receiver
 }
 
 // NewGameController creates a new GameController
@@ -41,6 +43,9 @@ func NewGameController(cfg config.Controller) (c *GameController) {
 	c.teamServer = rcon.NewTeamServer(cfg.Server.Team.Address, c.gcEngine)
 	c.teamServerTls = rcon.NewTeamServer(cfg.Server.Team.AddressTls, c.gcEngine)
 	c.teamServerTls.Tls = true
+	c.remoteControlServer = rcon.NewRemoteControlServer(cfg.Server.RemoteControl.Address, c.gcEngine)
+	c.remoteControlServerTls = rcon.NewRemoteControlServer(cfg.Server.RemoteControl.AddressTls, c.gcEngine)
+	c.remoteControlServerTls.Tls = true
 	c.ciServer = ci.NewServer(cfg.Server.Ci.Address)
 	c.visionReceiver = vision.NewReceiver(cfg.Network.VisionAddress)
 	c.visionReceiver.GeometryCallback = c.gcEngine.ProcessGeometry
@@ -77,6 +82,8 @@ func (c *GameController) Start() {
 	c.autoRefServerTls.Server.Start()
 	c.teamServer.Server.Start()
 	c.teamServerTls.Server.Start()
+	c.remoteControlServer.Server.Start()
+	c.remoteControlServerTls.Server.Start()
 
 	if err := c.gcEngine.Start(); err != nil {
 		panic(err)
@@ -95,6 +102,8 @@ func (c *GameController) Stop() {
 	c.autoRefServerTls.Server.Stop()
 	c.teamServer.Server.Stop()
 	c.teamServerTls.Server.Stop()
+	c.remoteControlServer.Server.Stop()
+	c.remoteControlServerTls.Server.Stop()
 	c.gcEngine.Stop()
 }
 

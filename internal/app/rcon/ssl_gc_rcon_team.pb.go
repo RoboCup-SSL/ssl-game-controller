@@ -20,7 +20,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
-// a registration that must be send by teams and autoRefs to the controller as the very first message
+// a registration that must be send by teams to the controller as the very first message
 type TeamRegistration struct {
 	// the exact team name as published by the game-controller
 	TeamName *string `protobuf:"bytes,1,req,name=team_name,json=teamName" json:"team_name,omitempty"`
