@@ -18416,6 +18416,7 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
      * @property {boolean|null} [onPositiveHalf] UpdateTeamState onPositiveHalf
      * @property {number|null} [ballPlacementFailures] UpdateTeamState ballPlacementFailures
      * @property {boolean|null} [canPlaceBall] UpdateTeamState canPlaceBall
+     * @property {number|null} [challengeFlags] UpdateTeamState challengeFlags
      * @property {boolean|null} [requestsBotSubstitution] UpdateTeamState requestsBotSubstitution
      * @property {boolean|null} [requestsTimeout] UpdateTeamState requestsTimeout
      * @property {boolean|null} [requestsChallenge] UpdateTeamState requestsChallenge
@@ -18514,6 +18515,14 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
      * @instance
      */
     UpdateTeamState.prototype.canPlaceBall = false;
+
+    /**
+     * UpdateTeamState challengeFlags.
+     * @member {number} challengeFlags
+     * @memberof UpdateTeamState
+     * @instance
+     */
+    UpdateTeamState.prototype.challengeFlags = 0;
 
     /**
      * UpdateTeamState requestsBotSubstitution.
@@ -18657,6 +18666,8 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
             writer.uint32(/* id 19, wireType 0 =*/152).bool(message.requestsEmergencyStop);
         if (message.yellowCard != null && message.hasOwnProperty("yellowCard"))
             $root.YellowCard.encode(message.yellowCard, writer.uint32(/* id 20, wireType 2 =*/162).fork()).ldelim();
+        if (message.challengeFlags != null && message.hasOwnProperty("challengeFlags"))
+            writer.uint32(/* id 21, wireType 0 =*/168).int32(message.challengeFlags);
         return writer;
     };
 
@@ -18717,6 +18728,9 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
                 break;
             case 9:
                 message.canPlaceBall = reader.bool();
+                break;
+            case 21:
+                message.challengeFlags = reader.int32();
                 break;
             case 10:
                 message.requestsBotSubstitution = reader.bool();
@@ -18816,6 +18830,9 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
         if (message.canPlaceBall != null && message.hasOwnProperty("canPlaceBall"))
             if (typeof message.canPlaceBall !== "boolean")
                 return "canPlaceBall: boolean expected";
+        if (message.challengeFlags != null && message.hasOwnProperty("challengeFlags"))
+            if (!$util.isInteger(message.challengeFlags))
+                return "challengeFlags: integer expected";
         if (message.requestsBotSubstitution != null && message.hasOwnProperty("requestsBotSubstitution"))
             if (typeof message.requestsBotSubstitution !== "boolean")
                 return "requestsBotSubstitution: boolean expected";
@@ -18897,6 +18914,8 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
             message.ballPlacementFailures = object.ballPlacementFailures | 0;
         if (object.canPlaceBall != null)
             message.canPlaceBall = Boolean(object.canPlaceBall);
+        if (object.challengeFlags != null)
+            message.challengeFlags = object.challengeFlags | 0;
         if (object.requestsBotSubstitution != null)
             message.requestsBotSubstitution = Boolean(object.requestsBotSubstitution);
         if (object.requestsTimeout != null)
@@ -18962,6 +18981,7 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
             object.requestsChallenge = false;
             object.requestsEmergencyStop = false;
             object.yellowCard = null;
+            object.challengeFlags = 0;
         }
         if (message.forTeam != null && message.hasOwnProperty("forTeam"))
             object.forTeam = options.enums === String ? $root.Team[message.forTeam] : message.forTeam;
@@ -19001,6 +19021,8 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
             object.requestsEmergencyStop = message.requestsEmergencyStop;
         if (message.yellowCard != null && message.hasOwnProperty("yellowCard"))
             object.yellowCard = $root.YellowCard.toObject(message.yellowCard, options);
+        if (message.challengeFlags != null && message.hasOwnProperty("challengeFlags"))
+            object.challengeFlags = message.challengeFlags;
         return object;
     };
 

@@ -109,10 +109,10 @@ func (s *RemoteControlServer) handleClientConnection(conn net.Conn) {
 				continue
 			}
 		}
-		if err := s.processRequest(*client.team, req); err != nil {
+		if response, err := s.processRequest(*client.team, req); err != nil {
 			client.reply(client.Reject(err.Error()))
 		} else {
-			client.reply(client.Ok())
+			client.replyWithPayload(client.Ok(), response)
 		}
 	}
 }
@@ -136,15 +136,20 @@ func (s *RemoteControlServer) SendRequest(teamName string, request ControllerToR
 func (c *RemoteControlClient) reply(reply ControllerReply) {
 	response := ControllerToRemoteControl{ControllerReply: &reply}
 
-	teamState := c.gcEngine.CurrentState().TeamState[c.team.String()]
-	response.Keeper = teamState.Goalkeeper
-	response.SubstituteBot = timeSet(teamState.RequestsBotSubstitutionSince)
-	response.EmergencyStop = c.gameEventPresent(state.GameEvent_EMERGENCY_STOP)
-	response.Timeout = timeSet(teamState.RequestsTimeoutSince)
-	response.ChallengeFlag = c.gameEventPresent(state.GameEvent_CHALLENGE_FLAG)
-
 	if err := sslconn.SendMessage(c.conn, &response); err != nil {
 		log.Print("Failed to send reply: ", err)
+	}
+}
+
+func (c *RemoteControlClient) replyWithPayload(reply ControllerReply, response *ControllerToRemoteControl) {
+	if response != nil {
+		response.ControllerReply = &reply
+
+		if err := sslconn.SendMessage(c.conn, response); err != nil {
+			log.Print("Failed to send reply: ", err)
+		}
+	} else {
+		c.reply(reply)
 	}
 }
 
@@ -154,20 +159,37 @@ func timeSet(t *timestamp.Timestamp) (set *bool) {
 	return
 }
 
-func (c *RemoteControlClient) gameEventPresent(eventType state.GameEvent_Type) (present *bool) {
+func gameEventPresent(events []*state.GameEvent, eventType state.GameEvent_Type, team state.Team) (present *bool) {
 	present = new(bool)
-	for _, event := range c.gcEngine.CurrentState().GameEvents {
-		if *event.Type == eventType && event.ByTeam() == *c.team {
+	for _, event := range events {
+		if *event.Type == eventType && event.ByTeam() == team {
 			*present = true
 		}
 	}
 	return
 }
 
-func (s *RemoteControlServer) processRequest(team state.Team, request RemoteControlToController) error {
+func (s *RemoteControlServer) processRequest(team state.Team, request RemoteControlToController) (*ControllerToRemoteControl, error) {
 
-	if request.GetPing() {
-		return nil
+	if request.GetRequest() == RemoteControlToController_PING {
+		return nil, nil
+	}
+	if request.GetRequest() == RemoteControlToController_GET_STATE {
+		teamState := s.gcEngine.CurrentState().TeamState[team.String()]
+		emergencyStopDueIn := s.gcEngine.EmergencyStopDueIn(team)
+		var emergencyStopIn *float32
+		if emergencyStopDueIn != nil {
+			emergencyStopIn = new(float32)
+			*emergencyStopIn = float32(emergencyStopDueIn.Seconds())
+		}
+		return &ControllerToRemoteControl{
+			Keeper:          teamState.Goalkeeper,
+			SubstituteBot:   timeSet(teamState.RequestsBotSubstitutionSince),
+			EmergencyStop:   timeSet(teamState.RequestsEmergencyStopSince),
+			EmergencyStopIn: emergencyStopIn,
+			Timeout:         timeSet(teamState.RequestsTimeoutSince),
+			ChallengeFlag:   gameEventPresent(s.gcEngine.CurrentState().GameEvents, state.GameEvent_CHALLENGE_FLAG, team),
+		}, nil
 	}
 
 	log.Print("Received request from remote-control: ", proto.MarshalTextString(&request))
@@ -177,7 +199,7 @@ func (s *RemoteControlServer) processRequest(team state.Team, request RemoteCont
 
 	if x, ok := request.GetMsg().(*RemoteControlToController_DesiredKeeper); ok && *teamState.Goalkeeper != x.DesiredKeeper {
 		if err := mayChangeKeeper(s.gcEngine.CurrentGcState(), &teamState); err != nil {
-			return errors.Wrap(err, "Remote control requests to change keeper, but: ")
+			return nil, errors.Wrap(err, "Remote control requests to change keeper, but: ")
 		}
 		s.updateTeamConfig(team, &statemachine.UpdateTeamState{
 			Goalkeeper: &x.DesiredKeeper,
@@ -190,7 +212,7 @@ func (s *RemoteControlServer) processRequest(team state.Team, request RemoteCont
 				RequestsBotSubstitution: &x.SubstituteBot,
 			})
 		}
-		return nil
+		return nil, nil
 	}
 
 	if x, ok := request.GetMsg().(*RemoteControlToController_Timeout); ok {
@@ -199,51 +221,54 @@ func (s *RemoteControlServer) processRequest(team state.Team, request RemoteCont
 				RequestsTimeout: &x.Timeout,
 			})
 		}
-		return nil
+		return nil, nil
 	}
 
-	if x, ok := request.GetMsg().(*RemoteControlToController_ChallengeFlag); ok {
-		if x.ChallengeFlag {
-			if *teamState.ChallengeFlags <= 0 {
-				return errors.New("No more challenge flags left")
-			} else if *teamState.TimeoutsLeft <= 0 {
-				return errors.New("No more timeouts left")
-			}
-			eventType := state.GameEvent_CHALLENGE_FLAG
-			s.gcEngine.EnqueueGameEvent(&state.GameEvent{
-				Type: &eventType,
-				Event: &state.GameEvent_ChallengeFlag_{
-					ChallengeFlag: &state.GameEvent_ChallengeFlag{
-						ByTeam: &team,
-					},
-				},
-			})
+	if request.GetRequest() == RemoteControlToController_CHALLENGE_FLAG {
+		if *teamState.ChallengeFlags <= 0 {
+			return nil, errors.New("No more challenge flags left")
+		} else if *teamState.TimeoutsLeft <= 0 {
+			return nil, errors.New("No more timeouts left")
 		}
-		return nil
+		eventType := state.GameEvent_CHALLENGE_FLAG
+		s.gcEngine.EnqueueGameEvent(&state.GameEvent{
+			Type:   &eventType,
+			Origin: []string{*origin(team)},
+			Event: &state.GameEvent_ChallengeFlag_{
+				ChallengeFlag: &state.GameEvent_ChallengeFlag{
+					ByTeam: &team,
+				},
+			},
+		})
+		return nil, nil
 	}
 
 	if x, ok := request.GetMsg().(*RemoteControlToController_EmergencyStop); ok {
-		if x.EmergencyStop {
-			if teamState.RequestsEmergencyStopSince != nil {
-				return errors.Errorf("Emergency stop already requested at %v", *teamState.RequestsEmergencyStopSince)
-			}
+		if *currentState.GameState.Type != state.GameState_RUNNING {
+			return nil, errors.New("Game is not running, can not request emergency stop")
+		}
+		if *timeSet(teamState.RequestsEmergencyStopSince) != x.EmergencyStop {
 			s.updateTeamConfig(team, &statemachine.UpdateTeamState{
 				RequestsEmergencyStop: &x.EmergencyStop,
 			})
 		}
-		return nil
+		return nil, nil
 	}
 
-	return nil
+	return nil, nil
 }
 
 func (s *RemoteControlServer) updateTeamConfig(team state.Team, update *statemachine.UpdateTeamState) {
-	origin := "Remote Control " + team.String()
 	update.ForTeam = &team
 	s.gcEngine.Enqueue(&statemachine.Change{
-		Origin: &origin,
+		Origin: origin(team),
 		Change: &statemachine.Change_UpdateTeamState{
 			UpdateTeamState: update,
 		},
 	})
+}
+
+func origin(team state.Team) *string {
+	origin := "Remote Control " + team.String()
+	return &origin
 }

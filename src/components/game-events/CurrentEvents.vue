@@ -114,7 +114,7 @@
     }
 
     .attention {
-        background-color: crimson;
+        background-color: red;
     }
 
     .details-row {

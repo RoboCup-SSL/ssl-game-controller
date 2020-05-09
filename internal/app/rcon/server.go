@@ -139,7 +139,7 @@ func (c *Client) addVerification(reply *ControllerReply) {
 }
 
 func (c *Client) Reject(reason string) (reply ControllerReply) {
-	log.Print("Reject connection: " + reason)
+	log.Print("Reject request: " + reason)
 	reply.StatusCode = new(ControllerReply_StatusCode)
 	*reply.StatusCode = ControllerReply_REJECTED
 	reply.Reason = new(string)

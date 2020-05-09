@@ -21,6 +21,7 @@ func (s *StateMachine) processChangeNewCommand(newState *state.State, newCommand
 		if *newState.TeamInfo(*newState.Command.ForTeam).TimeoutsLeft > 0 {
 			*newState.TeamInfo(*newState.Command.ForTeam).TimeoutsLeft--
 		}
+		newState.TeamInfo(*newState.Command.ForTeam).RequestsTimeoutSince = nil
 	}
 
 	// determine next command

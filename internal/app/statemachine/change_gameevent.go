@@ -125,6 +125,7 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 	if *gameEvent.Type == state.GameEvent_CHALLENGE_FLAG {
 		log.Printf("Reduce number of timeouts for %v by one for challenge flag", byTeam)
 		*newState.TeamInfo(byTeam).TimeoutsLeft--
+		*newState.TeamInfo(byTeam).ChallengeFlags--
 	}
 
 	// emergency stop
@@ -135,6 +136,7 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 		} else {
 			changes = append(changes, s.createCommandChange(state.NewCommandNeutral(state.Command_HALT)))
 		}
+		newState.TeamInfo(byTeam).RequestsEmergencyStopSince = nil
 	}
 
 	// ball placement interference

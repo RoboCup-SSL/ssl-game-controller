@@ -110,6 +110,8 @@ func (e *Engine) filterGameEvent(change *statemachine.Change) *statemachine.Chan
 		}
 	case Config_BEHAVIOR_IGNORE:
 		log.Printf("Ignoring game event: %v", *gameEvent)
+	case Config_BEHAVIOR_UNKNOWN:
+		log.Printf("Behavior for event %v unknown", *gameEvent.Type)
 	}
 	return nil
 }

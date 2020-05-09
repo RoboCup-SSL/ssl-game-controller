@@ -39,6 +39,15 @@
             </tr>
             <tr>
                 <td>
+                    <TeamTimeoutRequest :team-color="TEAM_YELLOW"/>
+                </td>
+                <td class="label-column">Timeout Request</td>
+                <td>
+                    <TeamTimeoutRequest :team-color="TEAM_BLUE"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
                     <TeamRedCards :team-color="TEAM_YELLOW"/>
                     <TeamRedCardsEdit :edit-mode="editMode" :team-color="TEAM_YELLOW"/>
                 </td>
@@ -115,11 +124,29 @@
             </tr>
             <tr>
                 <td>
+                    <TeamChallengeFlags :edit-mode="editMode" :team-color="TEAM_YELLOW"/>
+                </td>
+                <td class="label-column">Challenge flags</td>
+                <td>
+                    <TeamChallengeFlags :edit-mode="editMode" :team-color="TEAM_BLUE"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
                     <TeamConnection :team-color="TEAM_YELLOW"/>
                 </td>
                 <td class="label-column">Connected</td>
                 <td>
                     <TeamConnection :team-color="TEAM_BLUE"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <TeamRemoteControlConnection :team-color="TEAM_YELLOW"/>
+                </td>
+                <td class="label-column">Remote Controlled</td>
+                <td>
+                    <TeamRemoteControlConnection :team-color="TEAM_BLUE"/>
                 </td>
             </tr>
         </table>
@@ -142,10 +169,16 @@
     import TeamYellowCardsEdit from "./TeamYellowCardsEdit";
     import TeamRedCardsEdit from "./TeamRedCardsEdit";
     import TeamFoulsEdit from "./TeamFoulsEdit";
+    import TeamRemoteControlConnection from "./TeamRemoteControlConnection";
+    import TeamTimeoutRequest from "./TeamTimeoutRequest";
+    import TeamChallengeFlags from "./TeamChallengeFlags";
 
     export default {
         name: "TeamOverviewView",
         components: {
+            TeamChallengeFlags,
+            TeamTimeoutRequest,
+            TeamRemoteControlConnection,
             TeamFoulsEdit,
             TeamRedCardsEdit,
             TeamYellowCardsActive,

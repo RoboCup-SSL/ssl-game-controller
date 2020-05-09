@@ -39,11 +39,21 @@ func (s *StateMachine) processChangeUpdateTeamState(newState *state.State, chang
 	if change.CanPlaceBall != nil {
 		*teamState.CanPlaceBall = *change.CanPlaceBall
 	}
+	if change.ChallengeFlags != nil {
+		*teamState.ChallengeFlags = *change.ChallengeFlags
+	}
 	if change.RequestsBotSubstitution != nil {
 		if *change.RequestsBotSubstitution {
 			teamState.RequestsBotSubstitutionSince, _ = ptypes.TimestampProto(s.timeProvider())
 		} else {
 			teamState.RequestsBotSubstitutionSince = nil
+		}
+	}
+	if change.RequestsEmergencyStop != nil {
+		if *change.RequestsEmergencyStop {
+			teamState.RequestsEmergencyStopSince, _ = ptypes.TimestampProto(s.timeProvider())
+		} else {
+			teamState.RequestsEmergencyStopSince = nil
 		}
 	}
 	if change.RequestsTimeout != nil {

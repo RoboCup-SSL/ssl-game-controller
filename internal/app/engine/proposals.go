@@ -17,7 +17,13 @@ func (e *Engine) EnqueueGameEvent(gameEvent *state.GameEvent) {
 	}
 	origin := gameEvent.Origin[0]
 
-	autoRefBehavior := e.config.AutoRefConfigs[origin].GameEventBehavior[gameEvent.Type.String()]
+	var autoRefBehavior AutoRefConfig_Behavior
+	if config, ok := e.config.AutoRefConfigs[origin]; ok {
+		autoRefBehavior = config.GameEventBehavior[gameEvent.Type.String()]
+	} else {
+		autoRefBehavior = AutoRefConfig_BEHAVIOR_ACCEPT
+	}
+
 	switch autoRefBehavior {
 	case AutoRefConfig_BEHAVIOR_IGNORE:
 		log.Printf("Ignoring game event from autoRef: %v", *gameEvent)

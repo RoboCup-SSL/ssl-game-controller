@@ -1,8 +1,8 @@
 <template>
     <div>
         <a class="btn-edit toggle-button" v-on:click="edit()">
-            <font-awesome-icon icon="toggle-on" v-if="requestsBotSubstitution"/>
-            <font-awesome-icon icon="toggle-off" v-if="!requestsBotSubstitution"/>
+            <font-awesome-icon icon="toggle-on" v-if="requestsTimeout"/>
+            <font-awesome-icon icon="toggle-off" v-if="!requestsTimeout"/>
         </a>
     </div>
 </template>
@@ -11,7 +11,7 @@
     import {submitChange} from "../../submit";
 
     export default {
-        name: "TeamBotSubstitution",
+        name: "TeamTimeoutRequest",
         props: {
             teamColor: String,
         },
@@ -20,7 +20,7 @@
                 submitChange({
                     updateTeamState: {
                         forTeam: this.teamColor,
-                        requestsBotSubstitution: !this.requestsBotSubstitution
+                        requestsTimeout: !this.requestsTimeout
                     }
                 });
             }
@@ -29,8 +29,8 @@
             teamState: function () {
                 return this.$store.state.matchState.teamState[this.teamColor]
             },
-            requestsBotSubstitution() {
-                return this.teamState.requestsBotSubstitutionSince !== null;
+            requestsTimeout() {
+                return this.teamState.requestsTimeoutSince !== null;
             },
         }
     }

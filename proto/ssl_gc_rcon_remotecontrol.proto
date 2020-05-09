@@ -21,7 +21,7 @@ message RemoteControlToController {
     oneof msg {
         // send a ping to the GC to test if the connection is still open.
         // the value is ignored and a reply is sent back
-        bool ping = 2;
+        Request request = 2;
 
         // request a new desired keeper id
         int32 desired_keeper = 3;
@@ -34,13 +34,19 @@ message RemoteControlToController {
         // false: cancel the reuqest
         bool timeout = 5;
 
-        // true: raise the challenge flag
-        // false: put the challenge flag down
-        bool challenge_flag = 6;
-
         // true: initiate an emergency stop
         // false: ignored (emergency_stop can not be canceled)
-        bool emergency_stop = 7;
+        bool emergency_stop = 6;
+    }
+
+    enum Request {
+        UNKNOWN = 0;
+        // Ping the GC to test the connection. The GC will respond with OK.
+        PING = 1;
+        // Request the current team state
+        GET_STATE = 2;
+        // Raise a challenge flag (this is not revocable)
+        CHALLENGE_FLAG = 3;
     }
 }
 
@@ -58,9 +64,12 @@ message ControllerToRemoteControl {
     // true, if emergency stop pending
     optional bool emergency_stop = 4;
 
+    // number of seconds till emergency stop is executed
+    optional float emergency_stop_in = 5;
+
     // true, if timeout request pending
-    optional bool timeout = 5;
+    optional bool timeout = 6;
 
     // true, if challenge flag pending
-    optional bool challenge_flag = 6;
+    optional bool challenge_flag = 7;
 }
