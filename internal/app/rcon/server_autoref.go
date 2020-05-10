@@ -92,7 +92,7 @@ func (s *AutoRefServer) handleClientConnection(conn net.Conn) {
 	if _, ok := s.gcEngine.GetConfig().AutoRefConfigs[client.id]; !ok {
 		cfg := new(engine.AutoRefConfig)
 		cfg.GameEventBehavior = map[string]engine.AutoRefConfig_Behavior{}
-		for _, event := range state.AllGameEvents() {
+		for _, event := range state.GameEventsForBehaviorConfig() {
 			cfg.GameEventBehavior[event.String()] = engine.AutoRefConfig_BEHAVIOR_ACCEPT
 		}
 		s.gcEngine.UpdateConfig(&engine.Config{

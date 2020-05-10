@@ -44,25 +44,40 @@ func (m GameEvent) SetByTeam(team Team) {
 	return
 }
 
-// AllGameEvents returns a list with all known game event types
-func AllGameEvents() (a []GameEvent_Type) {
+// GameEventsForBehaviorConfig returns a list with all game event types that should have configurable behavior
+func GameEventsForBehaviorConfig() (a []GameEvent_Type) {
 	for t := range GameEvent_Type_name {
 		eventType := GameEvent_Type(t)
 		switch eventType {
-		case GameEvent_UNKNOWN_GAME_EVENT_TYPE,
-			GameEvent_PREPARED,
-			GameEvent_INDIRECT_GOAL,
-			GameEvent_CHIPPED_GOAL,
-			GameEvent_KICK_TIMEOUT,
-			GameEvent_ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA,
-			GameEvent_ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA_SKIPPED,
-			GameEvent_BOT_CRASH_UNIQUE_SKIPPED,
-			GameEvent_BOT_PUSHED_BOT_SKIPPED,
-			GameEvent_DEFENDER_IN_DEFENSE_AREA_PARTIALLY,
-			GameEvent_MULTIPLE_PLACEMENT_FAILURES:
-			// ignore
-		default:
+		case
+			GameEvent_BALL_LEFT_FIELD_TOUCH_LINE,
+			GameEvent_BALL_LEFT_FIELD_GOAL_LINE,
+			GameEvent_AIMLESS_KICK,
+			GameEvent_ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA,
+			GameEvent_DEFENDER_IN_DEFENSE_AREA,
+			GameEvent_BOUNDARY_CROSSING,
+			GameEvent_KEEPER_HELD_BALL,
+			GameEvent_BOT_DRIBBLED_BALL_TOO_FAR,
+			GameEvent_BOT_PUSHED_BOT,
+			GameEvent_BOT_HELD_BALL_DELIBERATELY,
+			GameEvent_BOT_TIPPED_OVER,
+			GameEvent_ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA,
+			GameEvent_BOT_KICKED_BALL_TOO_FAST,
+			GameEvent_BOT_CRASH_UNIQUE,
+			GameEvent_BOT_CRASH_DRAWN,
+			GameEvent_DEFENDER_TOO_CLOSE_TO_KICK_POINT,
+			GameEvent_BOT_TOO_FAST_IN_STOP,
+			GameEvent_BOT_INTERFERED_PLACEMENT,
+			GameEvent_POSSIBLE_GOAL,
+			GameEvent_GOAL,
+			GameEvent_INVALID_GOAL,
+			GameEvent_ATTACKER_DOUBLE_TOUCHED_BALL,
+			GameEvent_PLACEMENT_SUCCEEDED,
+			GameEvent_PENALTY_KICK_FAILED,
+			GameEvent_NO_PROGRESS_IN_GAME:
 			a = append(a, eventType)
+		default:
+			// ignore
 		}
 	}
 	return

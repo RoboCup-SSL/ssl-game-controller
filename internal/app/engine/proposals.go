@@ -36,7 +36,7 @@ func (e *Engine) EnqueueGameEvent(gameEvent *state.GameEvent) {
 				},
 			},
 		})
-	case AutoRefConfig_BEHAVIOR_ACCEPT:
+	case AutoRefConfig_BEHAVIOR_ACCEPT, AutoRefConfig_BEHAVIOR_UNKNOWN:
 		e.Enqueue(&statemachine.Change{
 			Origin: &changeOriginEngine,
 			Change: &statemachine.Change_AddGameEvent{

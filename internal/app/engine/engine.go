@@ -84,7 +84,7 @@ func (e *Engine) filterGameEvent(change *statemachine.Change) *statemachine.Chan
 	gameEvent := change.GetAddGameEvent().GameEvent
 	behavior := e.config.GameEventBehavior[gameEvent.Type.String()]
 	switch behavior {
-	case Config_BEHAVIOR_ACCEPT:
+	case Config_BEHAVIOR_ACCEPT, Config_BEHAVIOR_UNKNOWN:
 		return change
 	case Config_BEHAVIOR_ACCEPT_MAJORITY, Config_BEHAVIOR_PROPOSE_ONLY:
 		timestamp, _ := ptypes.TimestampProto(e.timeProvider())
@@ -110,8 +110,6 @@ func (e *Engine) filterGameEvent(change *statemachine.Change) *statemachine.Chan
 		}
 	case Config_BEHAVIOR_IGNORE:
 		log.Printf("Ignoring game event: %v", *gameEvent)
-	case Config_BEHAVIOR_UNKNOWN:
-		log.Printf("Behavior for event %v unknown", *gameEvent.Type)
 	}
 	return nil
 }
