@@ -2,7 +2,6 @@ package engine
 
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
-	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"time"
 )
 
@@ -14,23 +13,16 @@ func (e *Engine) processEmergencyStop() {
 		dueIn := e.EmergencyStopDueIn(team)
 		if dueIn != nil &&
 			(*e.currentState.GameState.Type != state.GameState_RUNNING || *dueIn <= 0) {
-			eventType := state.GameEvent_EMERGENCY_STOP
 			byTeam := team
-			e.Enqueue(&statemachine.Change{
-				Origin: &changeOriginEngine,
-				Change: &statemachine.Change_AddGameEvent{
-					AddGameEvent: &statemachine.AddGameEvent{
-						GameEvent: &state.GameEvent{
-							Type: &eventType,
-							Event: &state.GameEvent_EmergencyStop_{
-								EmergencyStop: &state.GameEvent_EmergencyStop{
-									ByTeam: &byTeam,
-								},
-							},
+			e.Enqueue(createGameEventChange(state.GameEvent_EMERGENCY_STOP,
+				state.GameEvent{
+					Event: &state.GameEvent_EmergencyStop_{
+						EmergencyStop: &state.GameEvent_EmergencyStop{
+							ByTeam: &byTeam,
 						},
 					},
 				},
-			})
+			))
 		}
 	}
 }
