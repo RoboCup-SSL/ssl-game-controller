@@ -133,6 +133,15 @@
             </tr>
             <tr>
                 <td>
+                    <TeamEmergencyStop :edit-mode="editMode" :team-color="TEAM_YELLOW"/>
+                </td>
+                <td class="label-column">Emergency Stop</td>
+                <td>
+                    <TeamEmergencyStop :edit-mode="editMode" :team-color="TEAM_BLUE"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
                     <TeamConnection :team-color="TEAM_YELLOW"/>
                 </td>
                 <td class="label-column">Connected</td>
@@ -172,10 +181,12 @@
     import TeamRemoteControlConnection from "./TeamRemoteControlConnection";
     import TeamTimeoutRequest from "./TeamTimeoutRequest";
     import TeamChallengeFlags from "./TeamChallengeFlags";
+    import TeamEmergencyStop from "./TeamEmergencyStop";
 
     export default {
         name: "TeamOverviewView",
         components: {
+            TeamEmergencyStop,
             TeamChallengeFlags,
             TeamTimeoutRequest,
             TeamRemoteControlConnection,
