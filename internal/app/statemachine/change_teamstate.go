@@ -4,6 +4,7 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/pkg/errors"
+	"log"
 	"strconv"
 	"strings"
 	"time"
@@ -50,10 +51,14 @@ func (s *StateMachine) processChangeUpdateTeamState(newState *state.State, chang
 		}
 	}
 	if change.RequestsEmergencyStop != nil {
-		if *change.RequestsEmergencyStop {
-			teamState.RequestsEmergencyStopSince, _ = ptypes.TimestampProto(s.timeProvider())
+		if *newState.GameState.Type == state.GameState_RUNNING {
+			if *change.RequestsEmergencyStop {
+				teamState.RequestsEmergencyStopSince, _ = ptypes.TimestampProto(s.timeProvider())
+			} else {
+				teamState.RequestsEmergencyStopSince = nil
+			}
 		} else {
-			teamState.RequestsEmergencyStopSince = nil
+			log.Printf("Reject to start emergency mode while game is not running")
 		}
 	}
 	if change.RequestsTimeout != nil {
