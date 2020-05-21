@@ -15,7 +15,7 @@
     import TeamSelection from "../common/TeamSelection";
     import {convertStringLocation} from "../../refereeState";
     import {isNumeric} from "../../util";
-    import {submitChange} from "../../submit";
+    import {submitChange, submitNewCommand} from "../../submit";
 
     export default {
         name: "PlaceBall",
@@ -40,11 +40,13 @@
         },
         methods: {
             sendEvent: function () {
+                console.log('place ' + this.model.team)
                 submitChange({
                     setBallPlacementPos: {
                         pos: convertStringLocation(this.model.location)
                     }
                 });
+                submitNewCommand('BALL_PLACEMENT', this.model.team);
                 this.$root.$emit('bv::hide::modal', 'place-ball-modal');
             }
         }
