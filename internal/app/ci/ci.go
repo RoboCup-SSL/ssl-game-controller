@@ -1,9 +1,9 @@
 package ci
 
 import (
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/sslconn"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/tracker"
-	"github.com/RoboCup-SSL/ssl-go-tools/pkg/sslconn"
 	"log"
 	"net"
 	"sync"
@@ -67,9 +67,12 @@ func (s *Server) serve(conn net.Conn) {
 
 	for {
 		input := CiInput{}
-		if err := sslconn.ReceiveMessage(conn, &input); err != nil {
+		if data, err := sslconn.Receive(conn); err != nil {
 			log.Println("Could not receive message from CI connection: ", err)
 			return
+		} else if err := sslconn.Unmarshal(data, &input); err != nil {
+			log.Println("Could not unmarshal message: ", err)
+			continue
 		}
 
 		if input.TrackerPacket != nil {

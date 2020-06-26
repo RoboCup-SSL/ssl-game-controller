@@ -3,7 +3,6 @@ module github.com/RoboCup-SSL/ssl-game-controller
 go 1.14
 
 require (
-	github.com/RoboCup-SSL/ssl-go-tools v1.0.0
 	github.com/go-test/deep v1.0.5
 	github.com/gobuffalo/packr v1.30.1
 	github.com/golang/protobuf v1.3.5

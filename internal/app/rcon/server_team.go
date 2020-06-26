@@ -2,9 +2,9 @@ package rcon
 
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/engine"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/sslconn"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
-	"github.com/RoboCup-SSL/ssl-go-tools/pkg/sslconn"
 	"github.com/golang/protobuf/proto"
 	"github.com/odeke-em/go-uuid"
 	"github.com/pkg/errors"
