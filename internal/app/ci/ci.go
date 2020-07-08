@@ -1,6 +1,7 @@
 package ci
 
 import (
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/engine"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/sslconn"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/tracker"
@@ -13,17 +14,21 @@ import (
 type Handler func(time.Time, *tracker.TrackerWrapperPacket) *state.Referee
 
 type Server struct {
-	address         string
-	listener        net.Listener
-	conn            net.Conn
-	latestTime      time.Time
-	tickChan        chan time.Time
-	mutex           sync.Mutex
-	TrackerConsumer func(*tracker.TrackerWrapperPacket)
+	address    string
+	listener   net.Listener
+	conn       net.Conn
+	latestTime time.Time
+	tickChan   chan time.Time
+	mutex      sync.Mutex
+	gcEngine   *engine.Engine
 }
 
 func NewServer(address string) *Server {
 	return &Server{address: address, tickChan: make(chan time.Time, 1)}
+}
+
+func (s *Server) SetEngine(engine *engine.Engine) {
+	s.gcEngine = engine
 }
 
 func (s *Server) Start() {
@@ -76,7 +81,19 @@ func (s *Server) serve(conn net.Conn) {
 		}
 
 		if input.TrackerPacket != nil {
-			s.TrackerConsumer(input.TrackerPacket)
+			s.gcEngine.ProcessTrackerFrame(input.TrackerPacket)
+		}
+
+		for _, in := range input.ApiInputs {
+			if in.Change != nil {
+				s.gcEngine.Enqueue(in.Change)
+			}
+			if in.ResetMatch != nil && *in.ResetMatch {
+				s.gcEngine.ResetMatch()
+			}
+			if in.ConfigDelta != nil {
+				s.gcEngine.UpdateConfig(in.ConfigDelta)
+			}
 		}
 
 		if input.Timestamp != nil {

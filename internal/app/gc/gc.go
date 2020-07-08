@@ -72,7 +72,7 @@ func (c *GameController) Start() {
 		c.messageGenerator.MessageConsumer = c.ciServer.SendMessage
 		c.gcEngine.SetTimeProvider(c.ciServer.Time)
 		c.gcEngine.SetTickChanProvider(c.ciServer.TickChanProvider)
-		c.ciServer.TrackerConsumer = c.gcEngine.ProcessTrackerFrame
+		c.ciServer.SetEngine(c.gcEngine)
 		c.ciServer.Start()
 	}
 
