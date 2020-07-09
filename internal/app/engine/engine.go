@@ -284,15 +284,17 @@ func (e *Engine) processChange(change *statemachine.Change) {
 		e.queue <- newChange
 	}
 
+	log.Println("Add entry to state store")
 	if err := e.stateStore.Add(&entry); err != nil {
 		log.Println("Could not add new state to store: ", err)
 	}
 	stateCopy := e.currentState.Clone()
 	hookOut := HookOut{Change: entry.Change, State: stateCopy}
 	for name, hook := range e.hooks {
+		log.Println("Notify hook ", name)
 		select {
 		case hook <- hookOut:
-		case <-time.After(1 * time.Second):
+		case <-time.After(500 * time.Millisecond):
 			log.Printf("Hook %v unresponsive! Failed to sent %v", name, hookOut)
 		}
 	}

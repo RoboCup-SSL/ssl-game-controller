@@ -107,6 +107,8 @@ func (s *Server) serve(conn net.Conn) {
 			case <-time.After(1 * time.Second):
 				log.Printf("tickChan unresponsive! Failed to sent %v", s.latestTime)
 			}
+		} else {
+			log.Println("CiInput without timestamp!")
 		}
 	}
 }
