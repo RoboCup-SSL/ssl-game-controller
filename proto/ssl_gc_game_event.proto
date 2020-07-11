@@ -494,7 +494,7 @@ message GameEvent {
         ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA = 19; // triggered by autoRef
         DEFENDER_IN_DEFENSE_AREA = 31; // triggered by autoRef
         BOUNDARY_CROSSING = 41; // triggered by autoRef
-        KEEPER_HELD_BALL = 13; // triggered by autoRef
+        KEEPER_HELD_BALL = 13; // triggered by GC
         BOT_DRIBBLED_BALL_TOO_FAR = 17; // triggered by autoRef
 
         BOT_PUSHED_BOT = 24; // triggered by human ref
