@@ -25,6 +25,7 @@ func NewMessageGenerator() (m *MessageGenerator) {
 	m.goal = map[state.Team]bool{}
 	m.goal[state.Team_BLUE] = false
 	m.goal[state.Team_YELLOW] = false
+	m.quit = make(chan int, 1)
 
 	return
 }

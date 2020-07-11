@@ -7,6 +7,9 @@ import (
 	"github.com/gobuffalo/packr"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
 )
 
 var address = flag.String("address", "localhost:8081", "The address on which the UI and API is served")
@@ -43,6 +46,15 @@ func setupGameController() {
 
 	gameController := gc.NewGameController(cfg)
 	gameController.Start()
+
+	sigs := make(chan os.Signal, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+	go func() {
+		<-sigs
+		gameController.Stop()
+		os.Exit(0)
+	}()
+
 	// serve the bidirectional web socket
 	http.HandleFunc("/api/control", gameController.ApiServer().WsHandler)
 }

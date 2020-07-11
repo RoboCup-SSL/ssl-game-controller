@@ -92,12 +92,21 @@ func (c *GameController) Start() {
 
 // Stop stops all go routines
 func (c *GameController) Stop() {
-	// Note: Stopping is not (yet) implemented correctly by all servers.
+
+	switch c.config.TimeAcquisitionMode {
+	case config.TimeAcquisitionModeSystem:
+		c.visionReceiver.Stop()
+		c.trackerReceiver.Stop()
+		break
+	case config.TimeAcquisitionModeVision:
+		c.visionReceiver.Stop()
+		c.trackerReceiver.Stop()
+	case config.TimeAcquisitionModeCi:
+		c.ciServer.Stop()
+	}
+
 	c.gcEngine.UnregisterHook("messageGen")
 	c.messageGenerator.Stop()
-	c.ciServer.Stop()
-	c.trackerReceiver.Stop()
-	c.visionReceiver.Stop()
 	c.autoRefServer.Server.Stop()
 	c.autoRefServerTls.Server.Stop()
 	c.teamServer.Server.Stop()

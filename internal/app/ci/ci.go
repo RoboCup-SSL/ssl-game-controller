@@ -21,6 +21,7 @@ type Server struct {
 	tickChan   chan time.Time
 	mutex      sync.Mutex
 	gcEngine   *engine.Engine
+	running    bool
 }
 
 func NewServer(address string) *Server {
@@ -32,13 +33,16 @@ func (s *Server) SetEngine(engine *engine.Engine) {
 }
 
 func (s *Server) Start() {
+	s.running = true
 	go s.listen(s.address)
 }
 
 func (s *Server) Stop() {
+	s.running = false
 	if err := s.listener.Close(); err != nil {
 		log.Printf("Could not close listener: %v", err)
 	}
+	s.listener = nil
 }
 
 func (s *Server) listen(address string) {
@@ -50,7 +54,7 @@ func (s *Server) listen(address string) {
 	log.Print("Listening on ", address)
 	s.listener = listener
 
-	for {
+	for s.running {
 		conn, err := listener.Accept()
 		if err != nil {
 			log.Print("Could not accept connection: ", err)
