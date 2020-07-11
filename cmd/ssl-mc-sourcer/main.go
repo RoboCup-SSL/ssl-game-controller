@@ -37,7 +37,7 @@ func watchAddress(address string) {
 	for {
 		_, udpAddr, err := conn.ReadFromUDP([]byte{0})
 		if err != nil {
-			log.Print("Could not read", err)
+			log.Print("Could not read: ", err)
 			time.Sleep(1 * time.Second)
 			continue
 		}

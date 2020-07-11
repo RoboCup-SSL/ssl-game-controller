@@ -57,7 +57,7 @@ func (v *Receiver) receive() {
 	for {
 		n, err := v.conn.Read(b)
 		if err != nil {
-			log.Print("Could not read", err)
+			log.Print("Could not read: ", err)
 			time.Sleep(1 * time.Second)
 			continue
 		}
