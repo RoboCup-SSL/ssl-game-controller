@@ -110,10 +110,6 @@ func (s *Store) Add(entry *statemachine.StateChange) error {
 	if err != nil {
 		return errors.Wrap(err, "Could not write '\n' to store")
 	}
-	err = s.file.Sync()
-	if err != nil {
-		return errors.Wrap(err, "Could not sync store")
-	}
 	return nil
 }
 
