@@ -214,7 +214,7 @@ func (e *Engine) processChanges() {
 			if !ok {
 				return
 			}
-			e.processChange(change)
+			e.processChangeList([]*statemachine.Change{change})
 		case <-e.tickChanProvider():
 			e.processTick()
 		}
@@ -232,12 +232,22 @@ func (e *Engine) ResetMatch() {
 	}
 }
 
-func (e *Engine) processChange(change *statemachine.Change) {
+func (e *Engine) processChangeList(changes []*statemachine.Change) {
+	var newChanges []*statemachine.Change
+	for _, change := range changes {
+		newChanges = append(newChanges, e.processChange(change)...)
+	}
+	if len(newChanges) > 0 {
+		e.processChangeList(newChanges)
+	}
+	return
+}
+
+func (e *Engine) processChange(change *statemachine.Change) (newChanges []*statemachine.Change) {
 	e.mutex.Lock()
 	defer e.mutex.Unlock()
 	log.Printf("Engine: Process change '%v'", change.StringJson())
 
-	var newChanges []*statemachine.Change
 	entry := statemachine.StateChange{}
 	entry.Change = change
 	entry.StatePre = new(state.State)
@@ -279,11 +289,6 @@ func (e *Engine) processChange(change *statemachine.Change) {
 
 	e.postProcessChange(entry)
 
-	log.Printf("Enqueue %d new changes", len(newChanges))
-	for _, newChange := range newChanges {
-		e.queue <- newChange
-	}
-
 	log.Println("Add entry to state store")
 	if err := e.stateStore.Add(&entry); err != nil {
 		log.Println("Could not add new state to store: ", err)
@@ -299,7 +304,9 @@ func (e *Engine) processChange(change *statemachine.Change) {
 		}
 	}
 
+	log.Printf("Change produced %d new changes", len(newChanges))
 	log.Printf("Change '%v' processed", change.StringJson())
+	return
 }
 
 // initialStateFromStore gets the current state or returns a new default state
