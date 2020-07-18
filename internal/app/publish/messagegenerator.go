@@ -14,7 +14,7 @@ type MessageGenerator struct {
 	commandTimestamp uint64
 	quit             chan int
 	gcEngine         *engine.Engine
-	MessageConsumer  func(*state.Referee)
+	MessageConsumers []func(*state.Referee)
 	EngineHook       chan engine.HookOut
 }
 
@@ -48,12 +48,16 @@ func (g *MessageGenerator) listen() {
 		case hookOut := <-g.EngineHook:
 			if hookOut.Change != nil {
 				refereeMessages := g.GenerateRefereeMessages(hookOut)
-				for _, refereeMsg := range refereeMessages {
-					g.MessageConsumer(refereeMsg)
+				for _, refMsg := range refereeMessages {
+					for _, consumer := range g.MessageConsumers {
+						consumer(refMsg)
+					}
 				}
 			} else if hookOut.State != nil {
 				refMsg := g.StateToRefereeMessage(hookOut.State)
-				g.MessageConsumer(refMsg)
+				for _, consumer := range g.MessageConsumers {
+					consumer(refMsg)
+				}
 			}
 		}
 	}

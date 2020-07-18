@@ -57,19 +57,21 @@ func NewGameController(cfg config.Controller) (c *GameController) {
 // Start starts all go routines
 func (c *GameController) Start() {
 
+	if len(c.config.Network.PublishAddress) > 0 {
+		c.messageGenerator.MessageConsumers = append(c.messageGenerator.MessageConsumers, c.publisher.SendMessage)
+	}
+
 	switch c.config.TimeAcquisitionMode {
 	case config.TimeAcquisitionModeSystem:
-		c.messageGenerator.MessageConsumer = c.publisher.SendMessage
 		c.visionReceiver.Start()
 		c.trackerReceiver.Start()
 		break
 	case config.TimeAcquisitionModeVision:
-		c.messageGenerator.MessageConsumer = c.publisher.SendMessage
 		c.gcEngine.SetTimeProvider(c.visionReceiver.Time)
 		c.visionReceiver.Start()
 		c.trackerReceiver.Start()
 	case config.TimeAcquisitionModeCi:
-		c.messageGenerator.MessageConsumer = c.ciServer.SendMessage
+		c.messageGenerator.MessageConsumers = append(c.messageGenerator.MessageConsumers, c.ciServer.SendMessage)
 		c.gcEngine.SetTimeProvider(c.ciServer.Time)
 		c.gcEngine.SetTickChanProvider(c.ciServer.TickChanProvider)
 		c.ciServer.SetEngine(c.gcEngine)
