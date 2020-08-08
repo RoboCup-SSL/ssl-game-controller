@@ -11,7 +11,7 @@ type BallPlacementPosDeterminer struct {
 	Event               *state.GameEvent
 	Geometry            config.Geometry
 	CurrentPlacementPos *geom.Vector2
-	OnPositiveHalf      map[state.Team]bool
+	OnPositiveHalf      map[state.SSL_Team]bool
 }
 
 // Location determines the ball placement position based on the game event type

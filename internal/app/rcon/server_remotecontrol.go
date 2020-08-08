@@ -21,7 +21,7 @@ type RemoteControlServer struct {
 
 type RemoteControlClient struct {
 	gcEngine *engine.Engine
-	team     *state.Team
+	team     *state.SSL_Team
 	*Client
 }
 
@@ -48,7 +48,7 @@ func (c *RemoteControlClient) receiveRegistration(server *RemoteControlServer) e
 	c.team = registration.Team
 	c.id = registration.Team.String()
 	if _, exists := server.clients[c.id]; exists {
-		return errors.New("Team already registered: " + c.id)
+		return errors.New("SSL_Team already registered: " + c.id)
 	}
 	c.pubKey = server.trustedKeys[c.id]
 	if c.pubKey != nil {
@@ -61,7 +61,7 @@ func (c *RemoteControlClient) receiveRegistration(server *RemoteControlServer) e
 
 	c.reply(c.Ok())
 
-	log.Printf("Team %v connected.", registration.Team.String())
+	log.Printf("SSL_Team %v connected.", registration.Team.String())
 
 	return nil
 }
@@ -159,7 +159,7 @@ func timeSet(t *timestamp.Timestamp) (set *bool) {
 	return
 }
 
-func gameEventPresent(events []*state.GameEvent, eventType state.GameEvent_Type, team state.Team) (present *bool) {
+func gameEventPresent(events []*state.GameEvent, eventType state.GameEvent_Type, team state.SSL_Team) (present *bool) {
 	present = new(bool)
 	for _, event := range events {
 		if *event.Type == eventType && event.ByTeam() == team {
@@ -169,7 +169,7 @@ func gameEventPresent(events []*state.GameEvent, eventType state.GameEvent_Type,
 	return
 }
 
-func (s *RemoteControlServer) processRequest(team state.Team, request RemoteControlToController) (*ControllerToRemoteControl, error) {
+func (s *RemoteControlServer) processRequest(team state.SSL_Team, request RemoteControlToController) (*ControllerToRemoteControl, error) {
 
 	if request.GetRequest() == RemoteControlToController_PING {
 		return nil, nil
@@ -258,7 +258,7 @@ func (s *RemoteControlServer) processRequest(team state.Team, request RemoteCont
 	return nil, nil
 }
 
-func (s *RemoteControlServer) updateTeamConfig(team state.Team, update *statemachine.UpdateTeamState) {
+func (s *RemoteControlServer) updateTeamConfig(team state.SSL_Team, update *statemachine.UpdateTeamState) {
 	update.ForTeam = &team
 	s.gcEngine.Enqueue(&statemachine.Change{
 		Origin: origin(team),
@@ -268,7 +268,7 @@ func (s *RemoteControlServer) updateTeamConfig(team state.Team, update *statemac
 	})
 }
 
-func origin(team state.Team) *string {
+func origin(team state.SSL_Team) *string {
 	origin := "Remote Control " + team.String()
 	return &origin
 }

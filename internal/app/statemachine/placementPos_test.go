@@ -28,8 +28,8 @@ func Test_BallPlacementPos(t *testing.T) {
 		Geometry:            geometry,
 		CurrentPlacementPos: nil,
 		OnPositiveHalf: map[state.Team]bool{
-			state.Team_BLUE:   false,
-			state.Team_YELLOW: true,
+			state.SSL_Team_BLUE:   false,
+			state.SSL_Team_YELLOW: true,
 		},
 	}
 
@@ -76,32 +76,32 @@ func Test_BallPlacementPos(t *testing.T) {
 		},
 		{
 			name:  "ball left field over goal line 1",
-			event: createBallLeftFieldGoalLine(geom.NewVector2(fl/2, fw/2), state.Team_YELLOW),
+			event: createBallLeftFieldGoalLine(geom.NewVector2(fl/2, fw/2), state.SSL_Team_YELLOW),
 			want:  geom.NewVector2(fl/2-ogg, fw/2-ot),
 		},
 		{
 			name:  "ball left field over goal line 2",
-			event: createBallLeftFieldGoalLine(geom.NewVector2(-fl/2, fw/2), state.Team_YELLOW),
+			event: createBallLeftFieldGoalLine(geom.NewVector2(-fl/2, fw/2), state.SSL_Team_YELLOW),
 			want:  geom.NewVector2(-(fl/2 - og), fw/2-ot),
 		},
 		{
 			name:  "ball left field over goal line 3",
-			event: createBallLeftFieldGoalLine(geom.NewVector2(fl/2, fw/4), state.Team_YELLOW),
+			event: createBallLeftFieldGoalLine(geom.NewVector2(fl/2, fw/4), state.SSL_Team_YELLOW),
 			want:  geom.NewVector2(fl/2-ogg, fw/2-ot),
 		},
 		{
 			name:  "ball left field over goal line 4",
-			event: createBallLeftFieldGoalLine(geom.NewVector2(fl/2, fw/4), state.Team_BLUE),
+			event: createBallLeftFieldGoalLine(geom.NewVector2(fl/2, fw/4), state.SSL_Team_BLUE),
 			want:  geom.NewVector2(fl/2-og, fw/2-ot),
 		},
 		{
 			name:  "ball left field over goal line 5",
-			event: createBallLeftFieldGoalLine(geom.NewVector2(fl/2, 0), state.Team_BLUE),
+			event: createBallLeftFieldGoalLine(geom.NewVector2(fl/2, 0), state.SSL_Team_BLUE),
 			want:  geom.NewVector2(fl/2-og, fw/2-ot),
 		},
 		{
 			name:  "ball left field over goal line 6",
-			event: createBallLeftFieldGoalLine(geom.NewVector2(fl/2, -fw), state.Team_BLUE),
+			event: createBallLeftFieldGoalLine(geom.NewVector2(fl/2, -fw), state.SSL_Team_BLUE),
 			want:  geom.NewVector2(fl/2-og, -(fw/2 - ot)),
 		},
 		{
@@ -164,7 +164,7 @@ func Test_BallPlacementPos(t *testing.T) {
 }
 
 func createBallLeftFieldTouchLine(eventLocation *geom.Vector2) *state.GameEvent {
-	var byTeam = state.Team_YELLOW
+	var byTeam = state.SSL_Team_YELLOW
 	eventType := state.GameEvent_BALL_LEFT_FIELD_TOUCH_LINE
 	return &state.GameEvent{
 		Type: &eventType,
@@ -191,7 +191,7 @@ func createBallLeftFieldGoalLine(eventLocation *geom.Vector2, placingTeam state.
 	}
 }
 func createBotKickedBallToFastEvent(eventLocation *geom.Vector2) *state.GameEvent {
-	var byTeam = state.Team_YELLOW
+	var byTeam = state.SSL_Team_YELLOW
 	eventType := state.GameEvent_BOT_KICKED_BALL_TOO_FAST
 	return &state.GameEvent{
 		Type: &eventType,

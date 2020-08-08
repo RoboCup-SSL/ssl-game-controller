@@ -1,27 +1,27 @@
 package state
 
 // BothTeams returns a list with both teams
-func BothTeams() []Team {
-	return []Team{Team_YELLOW, Team_BLUE}
+func BothTeams() []SSL_Team {
+	return []SSL_Team{SSL_Team_YELLOW, SSL_Team_BLUE}
 }
 
 // Unknown returns true if the team is not blue or yellow
-func (x Team) Unknown() bool {
-	return x != Team_YELLOW && x != Team_BLUE
+func (x SSL_Team) Unknown() bool {
+	return x != SSL_Team_YELLOW && x != SSL_Team_BLUE
 }
 
 // Known returns true if the team is blue or yellow
-func (x Team) Known() bool {
-	return x == Team_YELLOW || x == Team_BLUE
+func (x SSL_Team) Known() bool {
+	return x == SSL_Team_YELLOW || x == SSL_Team_BLUE
 }
 
 // Opposite returns the other team
 // if the team is not Yellow or Blue, return the same team
-func (x Team) Opposite() Team {
-	if x == Team_YELLOW {
-		return Team_BLUE
-	} else if x == Team_BLUE {
-		return Team_YELLOW
+func (x SSL_Team) Opposite() SSL_Team {
+	if x == SSL_Team_YELLOW {
+		return SSL_Team_BLUE
+	} else if x == SSL_Team_BLUE {
+		return SSL_Team_YELLOW
 	}
 	return x
 }

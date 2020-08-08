@@ -44,12 +44,12 @@ message KickedBall {
     optional Vector2 stop_pos = 5;
 
     // The robot that kicked the ball
-    optional RobotId robot_id = 6;
+    optional SSL_RobotId robot_id = 6;
 }
 
 // A single tracked robot
 message TrackedRobot {
-    required RobotId robot_id = 1;
+    required SSL_RobotId robot_id = 1;
 
     // The position [m] in the ssl-vision coordinate system
     required Vector2 pos = 2;

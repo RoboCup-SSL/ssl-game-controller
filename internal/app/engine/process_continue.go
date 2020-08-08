@@ -101,17 +101,17 @@ func (e *Engine) processContinue() {
 	}
 }
 
-func (e *Engine) penaltyKeeperId() *state.RobotId {
+func (e *Engine) penaltyKeeperId() *state.SSL_RobotId {
 	forTeam := e.currentState.Command.ForTeam.Opposite()
 	teamInfo := e.currentState.TeamState[forTeam.String()]
 	keeperId := uint32(*teamInfo.Goalkeeper)
-	return &state.RobotId{
+	return &state.SSL_RobotId{
 		Id:   &keeperId,
 		Team: &forTeam,
 	}
 }
 
-func (e *Engine) robotPos(robotId *state.RobotId) *geom.Vector2 {
+func (e *Engine) robotPos(robotId *state.SSL_RobotId) *geom.Vector2 {
 	for _, robot := range e.gcState.TrackerStateGc.Robots {
 		if *robot.Id.Id == *robotId.Id && *robot.Id.Team == *robotId.Team {
 			return robot.Pos

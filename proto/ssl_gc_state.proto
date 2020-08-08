@@ -29,7 +29,7 @@ message Foul {
 
 message Command {
     required Type type = 1;
-    optional Team for_team = 2;
+    optional SSL_Team for_team = 2;
 
     enum Type {
         UNKNOWN = 0;
@@ -48,7 +48,7 @@ message Command {
 
 message GameState {
     required Type type = 1;
-    optional Team for_team = 2;
+    optional SSL_Team for_team = 2;
 
     enum Type {
         UNKNOWN = 0;
@@ -112,5 +112,5 @@ message State {
     repeated ProposalGroup proposal_groups = 14;
     optional Division division = 15;
     optional bool auto_continue = 16;
-    optional Team first_kickoff_team = 17;
+    optional SSL_Team first_kickoff_team = 17;
 }

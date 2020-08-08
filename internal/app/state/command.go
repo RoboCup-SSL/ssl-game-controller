@@ -3,7 +3,7 @@ package state
 import "log"
 
 // NewCommand creates a new command
-func NewCommand(t Command_Type, forTeam Team) (c *Command) {
+func NewCommand(t Command_Type, forTeam SSL_Team) (c *Command) {
 	return &Command{Type: &t, ForTeam: &forTeam}
 }
 

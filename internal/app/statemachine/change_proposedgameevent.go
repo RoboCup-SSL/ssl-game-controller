@@ -83,7 +83,7 @@ func gameEventsSimilar(e1, e2 *state.GameEvent) bool {
 	return true
 }
 
-func similarTeam(t1, t2 *state.Team) bool {
+func similarTeam(t1, t2 *state.SSL_Team) bool {
 	return (t1 == nil && t2 == nil) || (t1 != nil && t2 != nil && *t1 == *t2)
 }
 

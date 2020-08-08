@@ -14,8 +14,8 @@ func Test_gameEventsSimilar(t *testing.T) {
 		e2 *state.GameEvent
 	}
 
-	yellow := state.Team_YELLOW
-	blue := state.Team_BLUE
+	yellow := state.SSL_Team_YELLOW
+	blue := state.SSL_Team_BLUE
 	bot := uint32(1)
 	otherBot := uint32(2)
 	location := geom.NewVector2(1, 1)

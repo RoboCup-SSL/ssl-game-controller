@@ -8,7 +8,7 @@ import "ssl_gc_rcon.proto";
 // a registration that must be send by the remote control to the controller as the very first message
 message RemoteControlRegistration {
     // the team to be controlled
-    required Team team = 1;
+    required SSL_Team team = 1;
     // signature can optionally be specified to enable secure communication
     optional Signature signature = 2;
 }

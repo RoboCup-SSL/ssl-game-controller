@@ -5,11 +5,11 @@ import (
 )
 
 func TestGameEvent_ByTeam(t *testing.T) {
-	teamYellow := Team_YELLOW
+	teamYellow := SSL_Team_YELLOW
 	tests := []struct {
 		name  string
 		event isGameEvent_Event
-		want  Team
+		want  SSL_Team
 	}{
 		{
 			name: "Event with ByTeam",
@@ -18,12 +18,12 @@ func TestGameEvent_ByTeam(t *testing.T) {
 					ByTeam: &teamYellow,
 				},
 			},
-			want: Team_YELLOW,
+			want: SSL_Team_YELLOW,
 		},
 		{
 			name:  "Nil event",
 			event: nil,
-			want:  Team_UNKNOWN,
+			want:  SSL_Team_UNKNOWN,
 		},
 		{
 			name: "Nil ByTeam",
@@ -32,14 +32,14 @@ func TestGameEvent_ByTeam(t *testing.T) {
 					ByTeam: nil,
 				},
 			},
-			want: Team_UNKNOWN,
+			want: SSL_Team_UNKNOWN,
 		},
 		{
 			name: "Event without ByTeam",
 			event: &GameEvent_Prepared_{
 				Prepared: &GameEvent_Prepared{},
 			},
-			want: Team_UNKNOWN,
+			want: SSL_Team_UNKNOWN,
 		},
 	}
 	for _, tt := range tests {
@@ -55,11 +55,11 @@ func TestGameEvent_ByTeam(t *testing.T) {
 }
 
 func TestGameEvent_SetByTeam(t *testing.T) {
-	teamYellow := Team_YELLOW
+	teamYellow := SSL_Team_YELLOW
 	tests := []struct {
 		name  string
 		event isGameEvent_Event
-		want  Team
+		want  SSL_Team
 	}{
 		{
 			name: "Event with ByTeam",
@@ -68,12 +68,12 @@ func TestGameEvent_SetByTeam(t *testing.T) {
 					ByTeam: &teamYellow,
 				},
 			},
-			want: Team_YELLOW,
+			want: SSL_Team_YELLOW,
 		},
 		{
 			name:  "Nil event",
 			event: nil,
-			want:  Team_UNKNOWN,
+			want:  SSL_Team_UNKNOWN,
 		},
 		{
 			name: "Nil ByTeam",
@@ -82,14 +82,14 @@ func TestGameEvent_SetByTeam(t *testing.T) {
 					ByTeam: nil,
 				},
 			},
-			want: Team_UNKNOWN,
+			want: SSL_Team_UNKNOWN,
 		},
 		{
 			name: "Event without ByTeam",
 			event: &GameEvent_Prepared_{
 				Prepared: &GameEvent_Prepared{},
 			},
-			want: Team_UNKNOWN,
+			want: SSL_Team_UNKNOWN,
 		},
 	}
 	for _, tt := range tests {

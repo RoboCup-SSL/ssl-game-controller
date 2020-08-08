@@ -52,10 +52,10 @@ func mapCommand(command *state.Command) (c *state.Referee_Command) {
 	return
 }
 
-func commandByTeam(team state.Team, blueCommand state.Referee_Command, yellowCommand state.Referee_Command) state.Referee_Command {
-	if team == state.Team_BLUE {
+func commandByTeam(team state.SSL_Team, blueCommand state.Referee_Command, yellowCommand state.Referee_Command) state.Referee_Command {
+	if team == state.SSL_Team_BLUE {
 		return blueCommand
-	} else if team == state.Team_YELLOW {
+	} else if team == state.SSL_Team_YELLOW {
 		return yellowCommand
 	}
 	log.Printf("Invalid team: %v. Could not choose from %v and %v", team, blueCommand, yellowCommand)

@@ -37,8 +37,8 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 	// Increment foul counter
 	if incrementsFoulCounter(*gameEvent.Type) {
 		for _, team := range state.BothTeams() {
-			if byTeam == state.Team_UNKNOWN || byTeam == team {
-				log.Printf("Team %v got a foul for %v", byTeam, gameEvent)
+			if byTeam == state.SSL_Team_UNKNOWN || byTeam == team {
+				log.Printf("SSL_Team %v got a foul for %v", byTeam, gameEvent)
 				newState.TeamInfo(team).AddFoul(gameEvent)
 				if len(newState.TeamInfo(team).Fouls)%3 == 0 {
 					changes = append(changes, s.multipleFoulsChange(team))
@@ -49,7 +49,7 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 
 	// Add yellow card
 	if addsYellowCard(*gameEvent.Type) && byTeam.Known() {
-		log.Printf("Team %v got a yellow card", byTeam)
+		log.Printf("SSL_Team %v got a yellow card", byTeam)
 		changes = append(changes, &Change{
 			Change: &Change_AddYellowCard{
 				AddYellowCard: &AddYellowCard{
@@ -62,7 +62,7 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 
 	// Add red card
 	if addsRedCard(*gameEvent.Type) && byTeam.Known() {
-		log.Printf("Team %v got a red card", byTeam)
+		log.Printf("SSL_Team %v got a red card", byTeam)
 		changes = append(changes, &Change{
 			Change: &Change_AddRedCard{
 				AddRedCard: &AddRedCard{
@@ -151,9 +151,9 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 		Event:               gameEvent,
 		Geometry:            s.Geometry,
 		CurrentPlacementPos: newState.PlacementPos,
-		OnPositiveHalf: map[state.Team]bool{
-			state.Team_BLUE:   *newState.TeamInfo(state.Team_BLUE).OnPositiveHalf,
-			state.Team_YELLOW: *newState.TeamInfo(state.Team_YELLOW).OnPositiveHalf,
+		OnPositiveHalf: map[state.SSL_Team]bool{
+			state.SSL_Team_BLUE:   *newState.TeamInfo(state.SSL_Team_BLUE).OnPositiveHalf,
+			state.SSL_Team_YELLOW: *newState.TeamInfo(state.SSL_Team_YELLOW).OnPositiveHalf,
 		},
 	}
 	newState.PlacementPos = placementPosDeterminer.Location()
@@ -166,7 +166,7 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 			log.Printf("Placement failed for all teams. The human ref must place the ball.")
 			changes = append(changes, s.createCommandChange(state.NewCommandNeutral(state.Command_HALT)))
 		} else {
-			log.Printf("Placement failed for team %v. Team %v is awarded a free kick and places the ball.", byTeam, byTeam.Opposite())
+			log.Printf("Placement failed for team %v. SSL_Team %v is awarded a free kick and places the ball.", byTeam, byTeam.Opposite())
 			newState.NextCommand = state.NewCommand(state.Command_DIRECT, byTeam.Opposite())
 			changes = append(changes, s.createCommandChange(state.NewCommand(state.Command_BALL_PLACEMENT, byTeam.Opposite())))
 		}
@@ -284,7 +284,7 @@ func (s *StateMachine) isGoalValid(newState *state.State, gameEvent *state.GameE
 }
 
 // multipleFoulsChange creates a multiple fouls event change
-func (s *StateMachine) multipleFoulsChange(byTeam state.Team) *Change {
+func (s *StateMachine) multipleFoulsChange(byTeam state.SSL_Team) *Change {
 	return createGameEventChange(state.GameEvent_MULTIPLE_FOULS, state.GameEvent{
 		Event: &state.GameEvent_MultipleFouls_{
 			MultipleFouls: &state.GameEvent_MultipleFouls{
@@ -315,7 +315,7 @@ func (s *StateMachine) convertAimlessKick(gameEvent *state.GameEvent) *state.Gam
 // nextCommandForEvent determines the next command for the given event or returns the currently set one
 func (s *StateMachine) nextCommandForEvent(newState *state.State, gameEvent *state.GameEvent) (command *state.Command) {
 	if *newState.Command.Type == state.Command_PENALTY || *newState.Command.Type == state.Command_KICKOFF {
-		return state.NewCommand(state.Command_NORMAL_START, state.Team_UNKNOWN)
+		return state.NewCommand(state.Command_NORMAL_START, state.SSL_Team_UNKNOWN)
 	}
 
 	switch *gameEvent.Type {
@@ -339,7 +339,7 @@ func (s *StateMachine) nextCommandForEvent(newState *state.State, gameEvent *sta
 		return state.NewCommand(state.Command_KICKOFF, gameEvent.ByTeam().Opposite())
 	case state.GameEvent_NO_PROGRESS_IN_GAME,
 		state.GameEvent_TOO_MANY_ROBOTS:
-		return state.NewCommand(state.Command_FORCE_START, state.Team_UNKNOWN)
+		return state.NewCommand(state.Command_FORCE_START, state.SSL_Team_UNKNOWN)
 	case state.GameEvent_EMERGENCY_STOP:
 		if newState.NextCommand != nil {
 			return newState.NextCommand

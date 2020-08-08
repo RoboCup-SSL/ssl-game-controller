@@ -2,8 +2,8 @@ syntax = "proto2";
 
 option go_package = "github.com/RoboCup-SSL/ssl-game-controller/internal/app/state";
 
-// Team is either blue or yellow
-enum Team {
+// SSL_Team is either blue or yellow
+enum SSL_Team {
     // team not set
     UNKNOWN = 0;
     // yellow team
@@ -12,12 +12,12 @@ enum Team {
     BLUE = 2;
 }
 
-// RobotId is the combination of a team and a robot id
-message RobotId {
+// SSL_RobotId is the combination of a team and a robot id
+message SSL_RobotId {
     // the robot number
     optional uint32 id = 1;
     // the team that the robot belongs to
-    optional Team team = 2;
+    optional SSL_Team team = 2;
 }
 
 // Division denotes the current division, which influences some rules

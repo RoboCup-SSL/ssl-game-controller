@@ -72,12 +72,12 @@ func (d *NoProgressDetector) process() {
 	}
 }
 
-func (d *NoProgressDetector) isBallInAnyDefenseArea() (bool, state.Team) {
+func (d *NoProgressDetector) isBallInAnyDefenseArea() (bool, state.SSL_Team) {
 	for _, team := range state.BothTeams() {
 		defenseArea := geom.NewDefenseArea(d.gcEngine.getGeometry(), *d.gcEngine.currentState.TeamState[team.String()].OnPositiveHalf)
 		if defenseArea.IsPointInside(d.gcEngine.gcState.TrackerStateGc.Ball.Pos.ToVector2()) {
 			return true, team
 		}
 	}
-	return false, state.Team_UNKNOWN
+	return false, state.SSL_Team_UNKNOWN
 }

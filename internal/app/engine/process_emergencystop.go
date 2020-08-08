@@ -27,7 +27,7 @@ func (e *Engine) processEmergencyStop() {
 	}
 }
 
-func (e *Engine) EmergencyStopDueIn(team state.Team) *time.Duration {
+func (e *Engine) EmergencyStopDueIn(team state.SSL_Team) *time.Duration {
 	now := e.timeProvider()
 	emergencyStopSince := e.currentState.TeamInfo(team).RequestsEmergencyStopSince
 	if emergencyStopSince == nil {
@@ -38,7 +38,7 @@ func (e *Engine) EmergencyStopDueIn(team state.Team) *time.Duration {
 	return &due
 }
 
-func (e *Engine) emergencyEventPresent(team state.Team) bool {
+func (e *Engine) emergencyEventPresent(team state.SSL_Team) bool {
 	for _, event := range e.currentState.GameEvents {
 		if *event.Type == state.GameEvent_EMERGENCY_STOP &&
 			event.ByTeam() == team {

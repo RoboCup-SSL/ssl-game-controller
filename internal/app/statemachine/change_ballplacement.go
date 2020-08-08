@@ -18,7 +18,7 @@ func (s *StateMachine) processChangeStartBallPlacement(newState *state.State) (c
 		changes = append(changes, s.createCommandChange(state.NewCommandNeutral(state.Command_HALT)))
 	}
 
-	var teamInFavor state.Team
+	var teamInFavor state.SSL_Team
 	if newState.NextCommand.ForTeam.Unknown() {
 		// select a team by 50% chance
 		teamInFavor = s.randomTeam()
@@ -32,14 +32,14 @@ func (s *StateMachine) processChangeStartBallPlacement(newState *state.State) (c
 		log.Printf("Placement for team %v is disabled, team %v places the ball for team %v", teamInFavor, teamInFavor.Opposite(), teamInFavor)
 		changes = append(changes, s.createCommandChange(state.NewCommand(state.Command_BALL_PLACEMENT, teamInFavor.Opposite())))
 	} else if !*newState.TeamInfo(teamInFavor).BallPlacementFailuresReached {
-		log.Printf("Team %v places the ball for itself", teamInFavor)
+		log.Printf("SSL_Team %v places the ball for itself", teamInFavor)
 		changes = append(changes, s.createCommandChange(state.NewCommand(state.Command_BALL_PLACEMENT, teamInFavor)))
 	} else if ballLeftField(newState) {
-		log.Printf("Team %v reached the maximum allowed placement failures and ball left the field. Team %v places ball for its own free kick", teamInFavor, teamInFavor.Opposite())
+		log.Printf("SSL_Team %v reached the maximum allowed placement failures and ball left the field. SSL_Team %v places ball for its own free kick", teamInFavor, teamInFavor.Opposite())
 		newState.NextCommand = state.NewCommand(state.Command_DIRECT, teamInFavor.Opposite())
 		changes = append(changes, s.createCommandChange(state.NewCommand(state.Command_BALL_PLACEMENT, teamInFavor.Opposite())))
 	} else {
-		log.Printf("Team %v reached the maximum allowed placement failures, but ball has not left the field. Human ref places the ball for team %v", teamInFavor, teamInFavor)
+		log.Printf("SSL_Team %v reached the maximum allowed placement failures, but ball has not left the field. Human ref places the ball for team %v", teamInFavor, teamInFavor)
 		changes = append(changes, s.createCommandChange(state.NewCommandNeutral(state.Command_HALT)))
 	}
 
@@ -47,11 +47,11 @@ func (s *StateMachine) processChangeStartBallPlacement(newState *state.State) (c
 }
 
 // randomTeam selects a team by 50% chance
-func (s *StateMachine) randomTeam() state.Team {
+func (s *StateMachine) randomTeam() state.SSL_Team {
 	if s.rand.Intn(2) == 0 {
-		return state.Team_YELLOW
+		return state.SSL_Team_YELLOW
 	}
-	return state.Team_BLUE
+	return state.SSL_Team_BLUE
 }
 
 // ballLeftField returns true if the game was stopped because the ball left the field
@@ -71,5 +71,5 @@ func ballLeftField(newState *state.State) bool {
 
 // noTeamCanPlaceBall returns true if no team can or is allowed to place the ball
 func noTeamCanPlaceBall(s *state.State) bool {
-	return !s.TeamInfo(state.Team_YELLOW).BallPlacementAllowed() && !s.TeamInfo(state.Team_BLUE).BallPlacementAllowed()
+	return !s.TeamInfo(state.SSL_Team_YELLOW).BallPlacementAllowed() && !s.TeamInfo(state.SSL_Team_BLUE).BallPlacementAllowed()
 }

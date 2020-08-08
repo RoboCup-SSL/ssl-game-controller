@@ -56,17 +56,17 @@ message SetBallPlacementPos {
 }
 
 message AddYellowCard {
-    optional Team for_team = 1;
+    optional SSL_Team for_team = 1;
     optional GameEvent caused_by_game_event = 2;
 }
 
 message AddRedCard {
-    optional Team for_team = 1;
+    optional SSL_Team for_team = 1;
     optional GameEvent caused_by_game_event = 2;
 }
 
 message YellowCardOver {
-    optional Team for_team = 1;
+    optional SSL_Team for_team = 1;
 }
 
 message AddGameEvent {
@@ -94,12 +94,12 @@ message Continue {
 
 message UpdateConfig {
     optional Division division = 1;
-    optional Team first_kickoff_team = 2;
+    optional SSL_Team first_kickoff_team = 2;
     optional bool auto_continue = 3;
 }
 
 message UpdateTeamState {
-    optional Team for_team = 1;
+    optional SSL_Team for_team = 1;
 
     optional string team_name = 2;
     optional int32 goals = 3;

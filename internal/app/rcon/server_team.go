@@ -49,7 +49,7 @@ func (c *TeamClient) receiveRegistration(server *TeamServer) error {
 	}
 	c.id = *registration.TeamName
 	if _, exists := server.clients[c.id]; exists {
-		return errors.New("Team with given name already registered: " + c.id)
+		return errors.New("SSL_Team with given name already registered: " + c.id)
 	}
 	c.pubKey = server.trustedKeys[c.id]
 	if c.pubKey != nil {
@@ -62,7 +62,7 @@ func (c *TeamClient) receiveRegistration(server *TeamServer) error {
 
 	c.reply(c.Ok())
 
-	log.Printf("Team %v connected.", *registration.TeamName)
+	log.Printf("SSL_Team %v connected.", *registration.TeamName)
 
 	return nil
 }
@@ -105,7 +105,7 @@ func (s *TeamServer) handleClientConnection(conn net.Conn) {
 		s.CloseConnection(client.id)
 	}()
 
-	log.Printf("Team Client %v connected", client.id)
+	log.Printf("SSL_Team Client %v connected", client.id)
 	team := s.gcEngine.CurrentState().TeamByName(client.id)
 	s.gcEngine.UpdateGcState(func(gcState *engine.GcState) {
 		if teamState, ok := gcState.TeamState[team.String()]; ok {
@@ -142,7 +142,7 @@ func (s *TeamServer) SendRequest(teamName string, request ControllerToTeam) erro
 	if client, ok := s.clients[teamName]; ok {
 		return sslconn.SendMessage(client.conn, &request)
 	}
-	return errors.Errorf("Team Client '%v' not connected", teamName)
+	return errors.Errorf("SSL_Team Client '%v' not connected", teamName)
 }
 
 func (c *TeamClient) reply(reply ControllerReply) {
@@ -163,7 +163,7 @@ func (s *TeamServer) processRequest(teamName string, request TeamToController) e
 
 	currentState := s.gcEngine.CurrentState()
 	team := currentState.TeamByName(teamName)
-	if team == state.Team_UNKNOWN {
+	if team == state.SSL_Team_UNKNOWN {
 		return errors.New("Your team is not playing?!")
 	}
 
@@ -171,7 +171,7 @@ func (s *TeamServer) processRequest(teamName string, request TeamToController) e
 
 	if x, ok := request.GetMsg().(*TeamToController_SubstituteBot); ok {
 		if *timeSet(teamState.RequestsBotSubstitutionSince) != x.SubstituteBot {
-			log.Printf("Team %v requests to change bot substituation intent to %v", team, x.SubstituteBot)
+			log.Printf("SSL_Team %v requests to change bot substituation intent to %v", team, x.SubstituteBot)
 			s.gcEngine.Enqueue(&statemachine.Change{
 				Origin: &teamName,
 				Change: &statemachine.Change_UpdateTeamState{
@@ -190,9 +190,9 @@ func (s *TeamServer) processRequest(teamName string, request TeamToController) e
 		}
 
 		if err := mayChangeKeeper(s.gcEngine.CurrentGcState(), &teamState); err != nil {
-			return errors.Wrap(err, "Team requests to change keeper, but: ")
+			return errors.Wrap(err, "SSL_Team requests to change keeper, but: ")
 		}
-		log.Printf("Team %v requests to change keeper to %v", team, x.DesiredKeeper)
+		log.Printf("SSL_Team %v requests to change keeper to %v", team, x.DesiredKeeper)
 		s.gcEngine.Enqueue(&statemachine.Change{
 			Origin: &teamName,
 			Change: &statemachine.Change_UpdateTeamState{

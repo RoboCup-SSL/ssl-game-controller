@@ -17,7 +17,7 @@ func (e *Engine) processBotNumber() {
 	}
 }
 
-func (e *Engine) processBotNumberPerTeam(team state.Team) {
+func (e *Engine) processBotNumberPerTeam(team state.SSL_Team) {
 
 	teamInfo := e.currentState.TeamState[team.String()]
 	newCards := newActiveYellowCards(
@@ -55,7 +55,7 @@ func newActiveYellowCards(cards []*state.YellowCard, minRemaining time.Duration)
 	return
 }
 
-func numRobotsOfTeam(robots []*Robot, team state.Team) (count int32) {
+func numRobotsOfTeam(robots []*Robot, team state.SSL_Team) (count int32) {
 	for _, robot := range robots {
 		if *robot.Id.Team == team {
 			count++

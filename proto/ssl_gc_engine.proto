@@ -56,7 +56,7 @@ message Ball {
 
 message Robot {
     // robot id and team
-    optional RobotId id = 1;
+    optional SSL_RobotId id = 1;
 
     // robot position [m]
     optional Vector2 pos = 2;

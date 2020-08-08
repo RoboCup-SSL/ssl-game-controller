@@ -9,7 +9,7 @@ import (
 )
 
 type MessageGenerator struct {
-	goal             map[state.Team]bool
+	goal             map[state.SSL_Team]bool
 	commandCounter   uint32
 	commandTimestamp uint64
 	quit             chan int
@@ -22,9 +22,9 @@ type MessageGenerator struct {
 func NewMessageGenerator() (m *MessageGenerator) {
 	m = new(MessageGenerator)
 	m.EngineHook = make(chan engine.HookOut)
-	m.goal = map[state.Team]bool{}
-	m.goal[state.Team_BLUE] = false
-	m.goal[state.Team_YELLOW] = false
+	m.goal = map[state.SSL_Team]bool{}
+	m.goal[state.SSL_Team_BLUE] = false
+	m.goal[state.SSL_Team_YELLOW] = false
 	m.quit = make(chan int, 1)
 
 	return
@@ -70,7 +70,7 @@ func (g *MessageGenerator) GenerateRefereeMessages(change engine.HookOut) (rs []
 		*change.Change.GetAddGameEvent().GameEvent.Type == state.GameEvent_GOAL {
 		g.updateCommand()
 		refereeMsg := g.StateToRefereeMessage(change.State)
-		if change.Change.GetAddGameEvent().GameEvent.ByTeam() == state.Team_YELLOW {
+		if change.Change.GetAddGameEvent().GameEvent.ByTeam() == state.SSL_Team_YELLOW {
 			//noinspection GoDeprecation (sent for compatibility)
 			*refereeMsg.Command = state.Referee_GOAL_YELLOW
 		} else {
@@ -106,12 +106,12 @@ func (g *MessageGenerator) StateToRefereeMessage(matchState *state.State) (r *st
 	*r.PacketTimestamp = uint64(time.Now().UnixNano() / 1000)
 	*r.Stage = *matchState.Stage
 	*r.StageTimeLeft = microseconds(*matchState.StageTimeLeft)
-	*r.BlueTeamOnPositiveHalf = *matchState.TeamInfo(state.Team_BLUE).OnPositiveHalf
+	*r.BlueTeamOnPositiveHalf = *matchState.TeamInfo(state.SSL_Team_BLUE).OnPositiveHalf
 	r.NextCommand = mapCommand(matchState.NextCommand)
 	*r.CurrentActionTimeRemaining = microseconds(*matchState.CurrentActionTimeRemaining)
 
-	updateTeam(r.Yellow, matchState.TeamInfo(state.Team_YELLOW))
-	updateTeam(r.Blue, matchState.TeamInfo(state.Team_BLUE))
+	updateTeam(r.Yellow, matchState.TeamInfo(state.SSL_Team_YELLOW))
+	updateTeam(r.Blue, matchState.TeamInfo(state.SSL_Team_BLUE))
 	return
 }
 

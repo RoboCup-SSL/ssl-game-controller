@@ -15,13 +15,13 @@ func (s *StateMachine) processChangeContinue(newState *state.State) (changes []*
 		}
 	}
 
-	if newState.TeamInfo(state.Team_BLUE).RequestsTimeoutSince != nil &&
-		newState.TeamInfo(state.Team_YELLOW).RequestsTimeoutSince != nil {
-		if goTime(newState.TeamInfo(state.Team_BLUE).RequestsTimeoutSince).
-			Before(goTime(newState.TeamInfo(state.Team_YELLOW).RequestsTimeoutSince)) {
-			changes = append(changes, s.createCommandChange(state.NewCommand(state.Command_TIMEOUT, state.Team_BLUE)))
+	if newState.TeamInfo(state.SSL_Team_BLUE).RequestsTimeoutSince != nil &&
+		newState.TeamInfo(state.SSL_Team_YELLOW).RequestsTimeoutSince != nil {
+		if goTime(newState.TeamInfo(state.SSL_Team_BLUE).RequestsTimeoutSince).
+			Before(goTime(newState.TeamInfo(state.SSL_Team_YELLOW).RequestsTimeoutSince)) {
+			changes = append(changes, s.createCommandChange(state.NewCommand(state.Command_TIMEOUT, state.SSL_Team_BLUE)))
 		} else {
-			changes = append(changes, s.createCommandChange(state.NewCommand(state.Command_TIMEOUT, state.Team_YELLOW)))
+			changes = append(changes, s.createCommandChange(state.NewCommand(state.Command_TIMEOUT, state.SSL_Team_YELLOW)))
 		}
 		continueCanceled = true
 	} else {
@@ -51,7 +51,7 @@ func (s *StateMachine) processChangeContinue(newState *state.State) (changes []*
 }
 
 // botSubstitutionIntentEventChange creates a new change for bot substitution
-func (s *StateMachine) botSubstitutionIntentEventChange(byTeam state.Team) *Change {
+func (s *StateMachine) botSubstitutionIntentEventChange(byTeam state.SSL_Team) *Change {
 	return createGameEventChange(state.GameEvent_BOT_SUBSTITUTION, state.GameEvent{
 		Event: &state.GameEvent_BotSubstitution_{
 			BotSubstitution: &state.GameEvent_BotSubstitution{

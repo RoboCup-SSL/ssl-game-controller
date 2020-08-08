@@ -7,7 +7,7 @@ func NewGameStateNeutral(t GameState_Type) *GameState {
 	}
 }
 
-func NewGameStateWithTeam(t GameState_Type, forTeam Team) *GameState {
+func NewGameStateWithTeam(t GameState_Type, forTeam SSL_Team) *GameState {
 	return &GameState{
 		Type:    &t,
 		ForTeam: &forTeam,

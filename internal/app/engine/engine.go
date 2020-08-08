@@ -49,8 +49,8 @@ func NewEngine(gameConfig config.Game, engineConfig config.Engine) (e *Engine) {
 	e.SetTimeProvider(func() time.Time { return time.Now() })
 	e.gcState = new(GcState)
 	e.gcState.TeamState = map[string]*GcStateTeam{
-		state.Team_YELLOW.String(): new(GcStateTeam),
-		state.Team_BLUE.String():   new(GcStateTeam),
+		state.SSL_Team_YELLOW.String(): new(GcStateTeam),
+		state.SSL_Team_BLUE.String():   new(GcStateTeam),
 	}
 	e.gcState.AutoRefState = map[string]*GcStateAutoRef{}
 	e.gcState.TrackerState = map[string]*GcStateTracker{}

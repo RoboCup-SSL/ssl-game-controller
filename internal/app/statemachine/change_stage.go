@@ -24,7 +24,7 @@ func (s *StateMachine) processChangeChangeStage(newState *state.State, change *C
 		changes = append(changes, &Change{
 			Change: &Change_NewCommand{
 				NewCommand: &NewCommand{
-					Command: state.NewCommand(state.Command_HALT, state.Team_UNKNOWN),
+					Command: state.NewCommand(state.Command_HALT, state.SSL_Team_UNKNOWN),
 				},
 			},
 		})
@@ -32,10 +32,10 @@ func (s *StateMachine) processChangeChangeStage(newState *state.State, change *C
 
 	// update timeout times when transiting to overtime
 	if *change.NewStage == state.Referee_EXTRA_FIRST_HALF_PRE {
-		*newState.TeamInfo(state.Team_YELLOW).TimeoutsLeft = s.gameConfig.Overtime.Timeouts
-		newState.TeamInfo(state.Team_YELLOW).TimeoutTimeLeft = ptypes.DurationProto(s.gameConfig.Overtime.TimeoutDuration)
-		*newState.TeamInfo(state.Team_BLUE).TimeoutsLeft = s.gameConfig.Overtime.Timeouts
-		newState.TeamInfo(state.Team_BLUE).TimeoutTimeLeft = ptypes.DurationProto(s.gameConfig.Overtime.TimeoutDuration)
+		*newState.TeamInfo(state.SSL_Team_YELLOW).TimeoutsLeft = s.gameConfig.Overtime.Timeouts
+		newState.TeamInfo(state.SSL_Team_YELLOW).TimeoutTimeLeft = ptypes.DurationProto(s.gameConfig.Overtime.TimeoutDuration)
+		*newState.TeamInfo(state.SSL_Team_BLUE).TimeoutsLeft = s.gameConfig.Overtime.Timeouts
+		newState.TeamInfo(state.SSL_Team_BLUE).TimeoutTimeLeft = ptypes.DurationProto(s.gameConfig.Overtime.TimeoutDuration)
 	}
 
 	// update next command based on new stage
