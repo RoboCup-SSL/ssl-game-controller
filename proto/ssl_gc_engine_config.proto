@@ -6,6 +6,8 @@ message Config {
     map<string, Behavior> game_event_behavior = 1;
     map<string, AutoRefConfig> auto_ref_configs = 2;
     optional string active_tracker_source = 3;
+    // The list of available teams
+    repeated string teams = 4;
 
     enum Behavior {
         BEHAVIOR_UNKNOWN = 0;

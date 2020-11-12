@@ -9,38 +9,9 @@
 
 <script>
     import EditableLabelSelect from "../../common/EditableLabelSelect";
-    import {submitChange} from "../../../submit";
+    import {submitChange} from "@/submit";
 
     export const TEAMS = [
-        "",
-        "AIS",
-        "AMC",
-        "CMμs",
-        "ER-Force",
-        "Immortals",
-        "KIKS",
-        "MCT Susano Logics",
-        "MRL",
-        "nAMeC",
-        "NEUIslanders",
-        "OMID",
-        "OP-AmP",
-        "Parsian",
-        "RobôCIn",
-        "RoboDragons",
-        "RoboFEI",
-        "RoboIME",
-        "RoboJackets",
-        "RoboTeam Twente",
-        "SRC",
-        "SSH",
-        "STOx’s",
-        "Test Team",
-        "TIGERs Mannheim",
-        "ULtron",
-        "UMass Minutebots",
-        "UBC Thunderbots",
-        "ZJUNlict",
     ];
 
     export default {
@@ -55,7 +26,7 @@
                 return this.$store.state.matchState.teamState[this.teamColor]
             },
             teams: function () {
-                return TEAMS
+                return this.$store.state.config.teams;
             }
         },
         methods: {

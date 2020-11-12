@@ -25697,6 +25697,7 @@ export const Config = $root.Config = (() => {
      * @property {Object.<string,Config.Behavior>|null} [gameEventBehavior] Config gameEventBehavior
      * @property {Object.<string,IAutoRefConfig>|null} [autoRefConfigs] Config autoRefConfigs
      * @property {string|null} [activeTrackerSource] Config activeTrackerSource
+     * @property {Array.<string>|null} [teams] Config teams
      */
 
     /**
@@ -25710,6 +25711,7 @@ export const Config = $root.Config = (() => {
     function Config(properties) {
         this.gameEventBehavior = {};
         this.autoRefConfigs = {};
+        this.teams = [];
         if (properties)
             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
@@ -25739,6 +25741,14 @@ export const Config = $root.Config = (() => {
      * @instance
      */
     Config.prototype.activeTrackerSource = "";
+
+    /**
+     * Config teams.
+     * @member {Array.<string>} teams
+     * @memberof Config
+     * @instance
+     */
+    Config.prototype.teams = $util.emptyArray;
 
     /**
      * Creates a new Config instance using the specified properties.
@@ -25774,6 +25784,9 @@ export const Config = $root.Config = (() => {
             }
         if (message.activeTrackerSource != null && message.hasOwnProperty("activeTrackerSource"))
             writer.uint32(/* id 3, wireType 2 =*/26).string(message.activeTrackerSource);
+        if (message.teams != null && message.teams.length)
+            for (let i = 0; i < message.teams.length; ++i)
+                writer.uint32(/* id 4, wireType 2 =*/34).string(message.teams[i]);
         return writer;
     };
 
@@ -25826,6 +25839,11 @@ export const Config = $root.Config = (() => {
                 break;
             case 3:
                 message.activeTrackerSource = reader.string();
+                break;
+            case 4:
+                if (!(message.teams && message.teams.length))
+                    message.teams = [];
+                message.teams.push(reader.string());
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -25892,6 +25910,13 @@ export const Config = $root.Config = (() => {
         if (message.activeTrackerSource != null && message.hasOwnProperty("activeTrackerSource"))
             if (!$util.isString(message.activeTrackerSource))
                 return "activeTrackerSource: string expected";
+        if (message.teams != null && message.hasOwnProperty("teams")) {
+            if (!Array.isArray(message.teams))
+                return "teams: array expected";
+            for (let i = 0; i < message.teams.length; ++i)
+                if (!$util.isString(message.teams[i]))
+                    return "teams: string[] expected";
+        }
         return null;
     };
 
@@ -25951,6 +25976,13 @@ export const Config = $root.Config = (() => {
         }
         if (object.activeTrackerSource != null)
             message.activeTrackerSource = String(object.activeTrackerSource);
+        if (object.teams) {
+            if (!Array.isArray(object.teams))
+                throw TypeError(".Config.teams: array expected");
+            message.teams = [];
+            for (let i = 0; i < object.teams.length; ++i)
+                message.teams[i] = String(object.teams[i]);
+        }
         return message;
     };
 
@@ -25967,6 +25999,8 @@ export const Config = $root.Config = (() => {
         if (!options)
             options = {};
         let object = {};
+        if (options.arrays || options.defaults)
+            object.teams = [];
         if (options.objects || options.defaults) {
             object.gameEventBehavior = {};
             object.autoRefConfigs = {};
@@ -25986,6 +26020,11 @@ export const Config = $root.Config = (() => {
         }
         if (message.activeTrackerSource != null && message.hasOwnProperty("activeTrackerSource"))
             object.activeTrackerSource = message.activeTrackerSource;
+        if (message.teams && message.teams.length) {
+            object.teams = [];
+            for (let j = 0; j < message.teams.length; ++j)
+                object.teams[j] = message.teams[j];
+        }
         return object;
     };
 

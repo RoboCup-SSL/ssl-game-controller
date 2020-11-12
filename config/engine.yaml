@@ -27,5 +27,36 @@
     "POSSIBLE_GOAL": "BEHAVIOR_ACCEPT"
   },
   "autoRefConfigs": {
-  }
+  },
+  "teams": [
+      "",
+      "AIS",
+      "AMC",
+      "CMμs",
+      "ER-Force",
+      "Immortals",
+      "KIKS",
+      "MCT Susano Logics",
+      "MRL",
+      "nAMeC",
+      "NEUIslanders",
+      "OMID",
+      "OP-AmP",
+      "Parsian",
+      "RobôCIn",
+      "RoboDragons",
+      "RoboFEI",
+      "RoboIME",
+      "RoboJackets",
+      "RoboTeam Twente",
+      "SRC",
+      "SSH",
+      "STOx’s",
+      "Test Team",
+      "TIGERs Mannheim",
+      "ULtron",
+      "UMass Minutebots",
+      "UBC Thunderbots",
+      "ZJUNlict"
+  ]
 }
