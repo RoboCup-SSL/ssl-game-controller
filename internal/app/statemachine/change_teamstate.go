@@ -40,8 +40,8 @@ func (s *StateMachine) processChangeUpdateTeamState(newState *state.State, chang
 	if change.CanPlaceBall != nil {
 		*teamState.CanPlaceBall = *change.CanPlaceBall
 	}
-	if change.ChallengeFlags != nil {
-		*teamState.ChallengeFlags = *change.ChallengeFlags
+	if change.ChallengeFlagsLeft != nil {
+		*teamState.ChallengeFlags = *change.ChallengeFlagsLeft
 	}
 	if change.RequestsBotSubstitution != nil {
 		if *change.RequestsBotSubstitution {

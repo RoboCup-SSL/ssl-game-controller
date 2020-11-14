@@ -944,7 +944,7 @@ type GameEvent_BallLeftField struct {
 	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// the bot that last touched the ball
 	ByBot *uint32 `protobuf:"varint,2,opt,name=by_bot,json=byBot" json:"by_bot,omitempty"`
-	// the location where the ball left the field
+	// the location where the ball left the field [m]
 	Location             *geom.Vector2 `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
 	XXX_unrecognized     []byte        `json:"-"`
@@ -1003,9 +1003,9 @@ type GameEvent_AimlessKick struct {
 	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// the bot that last touched the ball
 	ByBot *uint32 `protobuf:"varint,2,opt,name=by_bot,json=byBot" json:"by_bot,omitempty"`
-	// the location where the ball left the field
+	// the location where the ball left the field [m]
 	Location *geom.Vector2 `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
-	// the location where the ball was last touched
+	// the location where the ball was last touched [m]
 	KickLocation         *geom.Vector2 `protobuf:"bytes,4,opt,name=kick_location,json=kickLocation" json:"kick_location,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
 	XXX_unrecognized     []byte        `json:"-"`
@@ -1073,11 +1073,11 @@ type GameEvent_Goal struct {
 	KickingTeam *Team `protobuf:"varint,6,opt,name=kicking_team,json=kickingTeam,enum=Team" json:"kicking_team,omitempty"`
 	// the bot that shot the goal
 	KickingBot *uint32 `protobuf:"varint,2,opt,name=kicking_bot,json=kickingBot" json:"kicking_bot,omitempty"`
-	// the location where the ball entered the goal
+	// the location where the ball entered the goal [m]
 	Location *geom.Vector2 `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
-	// the location where the ball was kicked (for deciding if this was a valid goal)
+	// the location where the ball was kicked (for deciding if this was a valid goal) [m]
 	KickLocation *geom.Vector2 `protobuf:"bytes,4,opt,name=kick_location,json=kickLocation" json:"kick_location,omitempty"`
-	// the maximum height the ball reached during the goal kick (for deciding if this was a valid goal)
+	// the maximum height the ball reached during the goal kick (for deciding if this was a valid goal) [m]
 	MaxBallHeight *float32 `protobuf:"fixed32,5,opt,name=max_ball_height,json=maxBallHeight" json:"max_ball_height,omitempty"`
 	// number of robots of scoring team when the ball entered the goal (for deciding if this was a valid goal)
 	NumRobotsByTeam *uint32 `protobuf:"varint,7,opt,name=num_robots_by_team,json=numRobotsByTeam" json:"num_robots_by_team,omitempty"`
@@ -1184,9 +1184,9 @@ type GameEvent_IndirectGoal struct {
 	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// the bot that kicked the ball - at least the team must be set
 	ByBot *uint32 `protobuf:"varint,2,opt,name=by_bot,json=byBot" json:"by_bot,omitempty"`
-	// the location where the ball entered the goal
+	// the location where the ball entered the goal [m]
 	Location *geom.Vector2 `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
-	// the location where the ball was kicked
+	// the location where the ball was kicked [m]
 	KickLocation         *geom.Vector2 `protobuf:"bytes,4,opt,name=kick_location,json=kickLocation" json:"kick_location,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
 	XXX_unrecognized     []byte        `json:"-"`
@@ -1252,11 +1252,11 @@ type GameEvent_ChippedGoal struct {
 	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// the bot that kicked the ball
 	ByBot *uint32 `protobuf:"varint,2,opt,name=by_bot,json=byBot" json:"by_bot,omitempty"`
-	// the location where the ball entered the goal
+	// the location where the ball entered the goal [m]
 	Location *geom.Vector2 `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
-	// the location where the ball was kicked
+	// the location where the ball was kicked [m]
 	KickLocation *geom.Vector2 `protobuf:"bytes,4,opt,name=kick_location,json=kickLocation" json:"kick_location,omitempty"`
-	// the maximum height [m] of the ball, before it entered the goal and since the last kick
+	// the maximum height [m] of the ball, before it entered the goal and since the last kick [m]
 	MaxBallHeight        *float32 `protobuf:"fixed32,5,opt,name=max_ball_height,json=maxBallHeight" json:"max_ball_height,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -1329,7 +1329,7 @@ type GameEvent_BotTooFastInStop struct {
 	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// the bot that was too fast
 	ByBot *uint32 `protobuf:"varint,2,opt,name=by_bot,json=byBot" json:"by_bot,omitempty"`
-	// the location of the bot
+	// the location of the bot [m]
 	Location *geom.Vector2 `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
 	// the bot speed [m/s]
 	Speed                *float32 `protobuf:"fixed32,4,opt,name=speed" json:"speed,omitempty"`
@@ -1397,7 +1397,7 @@ type GameEvent_DefenderTooCloseToKickPoint struct {
 	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// the bot that violates the distance to the kick point
 	ByBot *uint32 `protobuf:"varint,2,opt,name=by_bot,json=byBot" json:"by_bot,omitempty"`
-	// the location of the bot
+	// the location of the bot [m]
 	Location *geom.Vector2 `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
 	// the distance [m] from bot to the kick point (including the minimum radius)
 	Distance             *float32 `protobuf:"fixed32,4,opt,name=distance" json:"distance,omitempty"`
@@ -1465,7 +1465,7 @@ type GameEvent_BotCrashDrawn struct {
 	BotYellow *uint32 `protobuf:"varint,1,opt,name=bot_yellow,json=botYellow" json:"bot_yellow,omitempty"`
 	// the bot of the blue team
 	BotBlue *uint32 `protobuf:"varint,2,opt,name=bot_blue,json=botBlue" json:"bot_blue,omitempty"`
-	// the location of the crash (center between both bots)
+	// the location of the crash (center between both bots) [m]
 	Location *geom.Vector2 `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
 	// the calculated crash speed [m/s] of the two bots
 	CrashSpeed *float32 `protobuf:"fixed32,4,opt,name=crash_speed,json=crashSpeed" json:"crash_speed,omitempty"`
@@ -1555,7 +1555,7 @@ type GameEvent_BotCrashUnique struct {
 	Violator *uint32 `protobuf:"varint,2,opt,name=violator" json:"violator,omitempty"`
 	// the bot of the opposite team that was involved in the crash
 	Victim *uint32 `protobuf:"varint,3,opt,name=victim" json:"victim,omitempty"`
-	// the location of the crash (center between both bots)
+	// the location of the crash (center between both bots) [m]
 	Location *geom.Vector2 `protobuf:"bytes,4,opt,name=location" json:"location,omitempty"`
 	// the calculated crash speed vector [m/s] of the two bots
 	CrashSpeed *float32 `protobuf:"fixed32,5,opt,name=crash_speed,json=crashSpeed" json:"crash_speed,omitempty"`
@@ -1652,7 +1652,7 @@ type GameEvent_BotPushedBot struct {
 	Violator *uint32 `protobuf:"varint,2,opt,name=violator" json:"violator,omitempty"`
 	// the bot of the opposite team that was pushed
 	Victim *uint32 `protobuf:"varint,3,opt,name=victim" json:"victim,omitempty"`
-	// the location of the push (center between both bots)
+	// the location of the push (center between both bots) [m]
 	Location *geom.Vector2 `protobuf:"bytes,4,opt,name=location" json:"location,omitempty"`
 	// the pushed distance [m]
 	PushedDistance       *float32 `protobuf:"fixed32,5,opt,name=pushed_distance,json=pushedDistance" json:"pushed_distance,omitempty"`
@@ -1727,9 +1727,9 @@ type GameEvent_BotTippedOver struct {
 	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// the bot that tipped over
 	ByBot *uint32 `protobuf:"varint,2,opt,name=by_bot,json=byBot" json:"by_bot,omitempty"`
-	// the location of the bot
+	// the location of the bot [m]
 	Location *geom.Vector2 `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
-	// the location of the ball at the moment when this foul occurred
+	// the location of the ball at the moment when this foul occurred [m]
 	BallLocation         *geom.Vector2 `protobuf:"bytes,4,opt,name=ball_location,json=ballLocation" json:"ball_location,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
 	XXX_unrecognized     []byte        `json:"-"`
@@ -1795,7 +1795,7 @@ type GameEvent_DefenderInDefenseArea struct {
 	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// the bot that is inside the penalty area
 	ByBot *uint32 `protobuf:"varint,2,opt,name=by_bot,json=byBot" json:"by_bot,omitempty"`
-	// the location of the bot
+	// the location of the bot [m]
 	Location *geom.Vector2 `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
 	// the distance [m] from bot case to the nearest point outside the defense area
 	Distance             *float32 `protobuf:"fixed32,4,opt,name=distance" json:"distance,omitempty"`
@@ -1867,7 +1867,7 @@ type GameEvent_DefenderInDefenseAreaPartially struct {
 	Location *geom.Vector2 `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
 	// the distance [m] that the bot is inside the penalty area
 	Distance *float32 `protobuf:"fixed32,4,opt,name=distance" json:"distance,omitempty"`
-	// the location of the ball at the moment when this foul occurred
+	// the location of the ball at the moment when this foul occurred [m]
 	BallLocation         *geom.Vector2 `protobuf:"bytes,5,opt,name=ball_location,json=ballLocation" json:"ball_location,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
 	XXX_unrecognized     []byte        `json:"-"`
@@ -1942,7 +1942,7 @@ type GameEvent_AttackerTouchedBallInDefenseArea struct {
 	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// the bot that is inside the penalty area
 	ByBot *uint32 `protobuf:"varint,2,opt,name=by_bot,json=byBot" json:"by_bot,omitempty"`
-	// the location of the bot
+	// the location of the bot [m]
 	Location *geom.Vector2 `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
 	// the distance [m] that the bot is inside the penalty area
 	Distance             *float32 `protobuf:"fixed32,4,opt,name=distance" json:"distance,omitempty"`
@@ -2014,7 +2014,7 @@ type GameEvent_BotKickedBallTooFast struct {
 	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// the bot that kicked too fast
 	ByBot *uint32 `protobuf:"varint,2,opt,name=by_bot,json=byBot" json:"by_bot,omitempty"`
-	// the location of the ball at the time of the highest speed
+	// the location of the ball at the time of the highest speed [m]
 	Location *geom.Vector2 `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
 	// the absolute initial ball speed (kick speed) [m/s]
 	InitialBallSpeed *float32 `protobuf:"fixed32,4,opt,name=initial_ball_speed,json=initialBallSpeed" json:"initial_ball_speed,omitempty"`
@@ -2091,9 +2091,9 @@ type GameEvent_BotDribbledBallTooFar struct {
 	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// the bot that dribbled too far
 	ByBot *uint32 `protobuf:"varint,2,opt,name=by_bot,json=byBot" json:"by_bot,omitempty"`
-	// the location where the dribbling started
+	// the location where the dribbling started [m]
 	Start *geom.Vector2 `protobuf:"bytes,3,opt,name=start" json:"start,omitempty"`
-	// the location where the maximum dribbling distance was reached
+	// the location where the maximum dribbling distance was reached [m]
 	End                  *geom.Vector2 `protobuf:"bytes,4,opt,name=end" json:"end,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
 	XXX_unrecognized     []byte        `json:"-"`
@@ -2161,7 +2161,7 @@ type GameEvent_AttackerTouchedOpponentInDefenseArea struct {
 	ByBot *uint32 `protobuf:"varint,2,opt,name=by_bot,json=byBot" json:"by_bot,omitempty"`
 	// the bot of the opposite team that was touched
 	Victim *uint32 `protobuf:"varint,4,opt,name=victim" json:"victim,omitempty"`
-	// the location of the contact point between both bots
+	// the location of the contact point between both bots [m]
 	Location             *geom.Vector2 `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
 	XXX_unrecognized     []byte        `json:"-"`
@@ -2231,7 +2231,7 @@ type GameEvent_AttackerDoubleTouchedBall struct {
 	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// the bot that touched the ball twice
 	ByBot *uint32 `protobuf:"varint,2,opt,name=by_bot,json=byBot" json:"by_bot,omitempty"`
-	// the location of the ball when it was first touched
+	// the location of the ball when it was first touched [m]
 	Location             *geom.Vector2 `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
 	XXX_unrecognized     []byte        `json:"-"`
@@ -2290,11 +2290,11 @@ type GameEvent_AttackerTooCloseToDefenseArea struct {
 	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// the bot that is too close to the defense area
 	ByBot *uint32 `protobuf:"varint,2,opt,name=by_bot,json=byBot" json:"by_bot,omitempty"`
-	// the location of the bot
+	// the location of the bot [m]
 	Location *geom.Vector2 `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
 	// the distance [m] of the bot to the penalty area
 	Distance *float32 `protobuf:"fixed32,4,opt,name=distance" json:"distance,omitempty"`
-	// the location of the ball at the moment when this foul occurred
+	// the location of the ball at the moment when this foul occurred [m]
 	BallLocation         *geom.Vector2 `protobuf:"bytes,5,opt,name=ball_location,json=ballLocation" json:"ball_location,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
 	XXX_unrecognized     []byte        `json:"-"`
@@ -2369,7 +2369,7 @@ type GameEvent_BotHeldBallDeliberately struct {
 	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// the bot that holds the ball
 	ByBot *uint32 `protobuf:"varint,2,opt,name=by_bot,json=byBot" json:"by_bot,omitempty"`
-	// the location of the ball
+	// the location of the ball [m]
 	Location *geom.Vector2 `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
 	// the duration [s] that the bot hold the ball
 	Duration             *float32 `protobuf:"fixed32,4,opt,name=duration" json:"duration,omitempty"`
@@ -2437,7 +2437,7 @@ type GameEvent_BotInterferedPlacement struct {
 	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 	// the bot that interfered the placement
 	ByBot *uint32 `protobuf:"varint,2,opt,name=by_bot,json=byBot" json:"by_bot,omitempty"`
-	// the location of the bot
+	// the location of the bot [m]
 	Location             *geom.Vector2 `protobuf:"bytes,3,opt,name=location" json:"location,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
 	XXX_unrecognized     []byte        `json:"-"`
@@ -2617,7 +2617,7 @@ func (m *GameEvent_MultiplePlacementFailures) GetByTeam() Team {
 type GameEvent_KickTimeout struct {
 	// the team that that should have kicked
 	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
-	// the location of the ball
+	// the location of the ball [m]
 	Location *geom.Vector2 `protobuf:"bytes,2,opt,name=location" json:"location,omitempty"`
 	// the time [s] that was waited
 	Time                 *float32 `protobuf:"fixed32,3,opt,name=time" json:"time,omitempty"`
@@ -2876,7 +2876,7 @@ func (m *GameEvent_UnsportingBehaviorMajor) GetReason() string {
 type GameEvent_KeeperHeldBall struct {
 	// the team that found guilty
 	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
-	// the location of the ball
+	// the location of the ball [m]
 	Location *geom.Vector2 `protobuf:"bytes,2,opt,name=location" json:"location,omitempty"`
 	// the duration [s] that the keeper hold the ball
 	Duration             *float32 `protobuf:"fixed32,3,opt,name=duration" json:"duration,omitempty"`
@@ -3171,7 +3171,7 @@ type GameEvent_TooManyRobots struct {
 	NumRobotsAllowed *int32 `protobuf:"varint,2,opt,name=num_robots_allowed,json=numRobotsAllowed" json:"num_robots_allowed,omitempty"`
 	// number of robots currently on the field
 	NumRobotsOnField *int32 `protobuf:"varint,3,opt,name=num_robots_on_field,json=numRobotsOnField" json:"num_robots_on_field,omitempty"`
-	// the location of the ball at the moment when this foul occurred
+	// the location of the ball at the moment when this foul occurred [m]
 	BallLocation         *geom.Vector2 `protobuf:"bytes,4,opt,name=ball_location,json=ballLocation" json:"ball_location,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
 	XXX_unrecognized     []byte        `json:"-"`
@@ -3235,7 +3235,7 @@ func (m *GameEvent_TooManyRobots) GetBallLocation() *geom.Vector2 {
 type GameEvent_BoundaryCrossing struct {
 	// the team that has too many robots
 	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
-	// the location of the ball
+	// the location of the ball [m]
 	Location             *geom.Vector2 `protobuf:"bytes,2,opt,name=location" json:"location,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
 	XXX_unrecognized     []byte        `json:"-"`
@@ -3285,7 +3285,7 @@ func (m *GameEvent_BoundaryCrossing) GetLocation() *geom.Vector2 {
 type GameEvent_PenaltyKickFailed struct {
 	// the team that last touched the ball
 	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
-	// the location of the ball at the moment of this event
+	// the location of the ball at the moment of this event [m]
 	Location             *geom.Vector2 `protobuf:"bytes,2,opt,name=location" json:"location,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
 	XXX_unrecognized     []byte        `json:"-"`

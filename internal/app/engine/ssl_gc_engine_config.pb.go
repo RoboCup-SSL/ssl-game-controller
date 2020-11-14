@@ -20,15 +20,22 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
+// Behaviors for each game event
 type Config_Behavior int32
 
 const (
-	Config_BEHAVIOR_UNKNOWN         Config_Behavior = 0
-	Config_BEHAVIOR_ACCEPT          Config_Behavior = 1
+	// Not set or unknown
+	Config_BEHAVIOR_UNKNOWN Config_Behavior = 0
+	// Always accept the game event
+	Config_BEHAVIOR_ACCEPT Config_Behavior = 1
+	// Accept the game event if was reported by a majority
 	Config_BEHAVIOR_ACCEPT_MAJORITY Config_Behavior = 2
-	Config_BEHAVIOR_PROPOSE_ONLY    Config_Behavior = 3
-	Config_BEHAVIOR_LOG             Config_Behavior = 4
-	Config_BEHAVIOR_IGNORE          Config_Behavior = 5
+	// Only propose the game event (can be accepted in the UI by a human)
+	Config_BEHAVIOR_PROPOSE_ONLY Config_Behavior = 3
+	// Only log the game event to the protocol
+	Config_BEHAVIOR_LOG Config_Behavior = 4
+	// Silently ignore the game event
+	Config_BEHAVIOR_IGNORE Config_Behavior = 5
 )
 
 var Config_Behavior_name = map[int32]string{
@@ -72,13 +79,18 @@ func (Config_Behavior) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_297fb0f3751cdb09, []int{0, 0}
 }
 
+// Behaviors for the game events reported by this auto referee
 type AutoRefConfig_Behavior int32
 
 const (
+	// Not set or unknown
 	AutoRefConfig_BEHAVIOR_UNKNOWN AutoRefConfig_Behavior = 0
-	AutoRefConfig_BEHAVIOR_ACCEPT  AutoRefConfig_Behavior = 1
-	AutoRefConfig_BEHAVIOR_LOG     AutoRefConfig_Behavior = 2
-	AutoRefConfig_BEHAVIOR_IGNORE  AutoRefConfig_Behavior = 3
+	// Accept the game event
+	AutoRefConfig_BEHAVIOR_ACCEPT AutoRefConfig_Behavior = 1
+	// Log the game event
+	AutoRefConfig_BEHAVIOR_LOG AutoRefConfig_Behavior = 2
+	// Silently ignore the game event
+	AutoRefConfig_BEHAVIOR_IGNORE AutoRefConfig_Behavior = 3
 )
 
 var AutoRefConfig_Behavior_name = map[int32]string{
@@ -118,10 +130,14 @@ func (AutoRefConfig_Behavior) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_297fb0f3751cdb09, []int{1, 0}
 }
 
+// The engine config
 type Config struct {
-	GameEventBehavior   map[string]Config_Behavior `protobuf:"bytes,1,rep,name=game_event_behavior,json=gameEventBehavior" json:"game_event_behavior,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"varint,2,opt,name=value,enum=Config_Behavior"`
-	AutoRefConfigs      map[string]*AutoRefConfig  `protobuf:"bytes,2,rep,name=auto_ref_configs,json=autoRefConfigs" json:"auto_ref_configs,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	ActiveTrackerSource *string                    `protobuf:"bytes,3,opt,name=active_tracker_source,json=activeTrackerSource" json:"active_tracker_source,omitempty"`
+	// The behavior for each game event
+	GameEventBehavior map[string]Config_Behavior `protobuf:"bytes,1,rep,name=game_event_behavior,json=gameEventBehavior" json:"game_event_behavior,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"varint,2,opt,name=value,enum=Config_Behavior"`
+	// The config for each auto referee
+	AutoRefConfigs map[string]*AutoRefConfig `protobuf:"bytes,2,rep,name=auto_ref_configs,json=autoRefConfigs" json:"auto_ref_configs,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	// The selected tracker source
+	ActiveTrackerSource *string `protobuf:"bytes,3,opt,name=active_tracker_source,json=activeTrackerSource" json:"active_tracker_source,omitempty"`
 	// The list of available teams
 	Teams                []string `protobuf:"bytes,4,rep,name=teams" json:"teams,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -182,7 +198,9 @@ func (m *Config) GetTeams() []string {
 	return nil
 }
 
+// The config for an auto referee
 type AutoRefConfig struct {
+	// The game event behaviors for this auto referee
 	GameEventBehavior    map[string]AutoRefConfig_Behavior `protobuf:"bytes,1,rep,name=game_event_behavior,json=gameEventBehavior" json:"game_event_behavior,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"varint,2,opt,name=value,enum=AutoRefConfig_Behavior"`
 	XXX_NoUnkeyedLiteral struct{}                          `json:"-"`
 	XXX_unrecognized     []byte                            `json:"-"`

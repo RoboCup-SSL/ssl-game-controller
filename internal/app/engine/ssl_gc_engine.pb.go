@@ -22,15 +22,21 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
+// The GC state contains settings and state independent of the match state
 type GcState struct {
-	TeamState            map[string]*GcStateTeam    `protobuf:"bytes,1,rep,name=team_state,json=teamState" json:"team_state,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	AutoRefState         map[string]*GcStateAutoRef `protobuf:"bytes,2,rep,name=auto_ref_state,json=autoRefState" json:"auto_ref_state,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	TrackerState         map[string]*GcStateTracker `protobuf:"bytes,3,rep,name=tracker_state,json=trackerState" json:"tracker_state,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	TrackerStateGc       *GcStateTracker            `protobuf:"bytes,4,opt,name=tracker_state_gc,json=trackerStateGc" json:"tracker_state_gc,omitempty"`
-	ReadyToContinue      *bool                      `protobuf:"varint,5,opt,name=ready_to_continue,json=readyToContinue" json:"ready_to_continue,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}                   `json:"-"`
-	XXX_unrecognized     []byte                     `json:"-"`
-	XXX_sizecache        int32                      `json:"-"`
+	// The state of each team
+	TeamState map[string]*GcStateTeam `protobuf:"bytes,1,rep,name=team_state,json=teamState" json:"team_state,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	// the states of the auto referees
+	AutoRefState map[string]*GcStateAutoRef `protobuf:"bytes,2,rep,name=auto_ref_state,json=autoRefState" json:"auto_ref_state,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	// the states of the attached trackers
+	TrackerState map[string]*GcStateTracker `protobuf:"bytes,3,rep,name=tracker_state,json=trackerState" json:"tracker_state,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	// the state of the currently selected tracker
+	TrackerStateGc *GcStateTracker `protobuf:"bytes,4,opt,name=tracker_state_gc,json=trackerStateGc" json:"tracker_state_gc,omitempty"`
+	// can the match be continued right now?
+	ReadyToContinue      *bool    `protobuf:"varint,5,opt,name=ready_to_continue,json=readyToContinue" json:"ready_to_continue,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *GcState) Reset()         { *m = GcState{} }
@@ -93,6 +99,7 @@ func (m *GcState) GetReadyToContinue() bool {
 	return false
 }
 
+// The GC state for a singl eteam
 type GcStateTeam struct {
 	// true: The team is connected
 	Connected *bool `protobuf:"varint,1,opt,name=connected" json:"connected,omitempty"`
@@ -160,6 +167,7 @@ func (m *GcStateTeam) GetRemoteControlConnectionVerified() bool {
 	return false
 }
 
+// The GC state of an auto referee
 type GcStateAutoRef struct {
 	// true: The autoRef connected via TLS with a verified certificate
 	ConnectionVerified   *bool    `protobuf:"varint,1,opt,name=connection_verified,json=connectionVerified" json:"connection_verified,omitempty"`
@@ -200,6 +208,7 @@ func (m *GcStateAutoRef) GetConnectionVerified() bool {
 	return false
 }
 
+// GC state of a tracker
 type GcStateTracker struct {
 	// Name of the source
 	SourceName *string `protobuf:"bytes,1,opt,name=source_name,json=sourceName" json:"source_name,omitempty"`
@@ -267,6 +276,7 @@ func (m *GcStateTracker) GetRobots() []*Robot {
 	return nil
 }
 
+// The ball state
 type Ball struct {
 	// ball position [m]
 	Pos *geom.Vector3 `protobuf:"bytes,1,opt,name=pos" json:"pos,omitempty"`
@@ -316,6 +326,7 @@ func (m *Ball) GetVel() *geom.Vector3 {
 	return nil
 }
 
+// The robot state
 type Robot struct {
 	// robot id and team
 	Id *state.RobotId `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
