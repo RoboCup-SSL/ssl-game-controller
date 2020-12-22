@@ -16,15 +16,15 @@ publishing {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/RoboCup-SSL/ssl-game-controller")
             credentials {
-                username = project.findProperty("gpr.user") ?: System.getenv("CIRCLE_PROJECT_USERNAME")
-                password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+                username = System.getenv("CIRCLE_PROJECT_USERNAME")
+                password = System.getenv("GITHUB_TOKEN")
             }
         }
     }
     publications {
         gpr(MavenPublication) {
             groupId 'com.github.robocup-ssl'
-            version System.getenv('CIRCLE_TAG')
+            version System.getenv('CIRCLE_TAG')?: "build-${System.getenv('CIRCLE_BUILD_NUM')}"
             artifact(gcLinuxArtifact) {
                 classifier 'linux_amd64'
             }
