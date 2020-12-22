@@ -75,7 +75,7 @@ jobs:
           name: "Publish Packages to GitHub"
           working_directory: .circleci/pkg-maven
           command: |
-            ./gradlew publish
+            ./gradlew publish --info --stacktrace
 
 workflows:
   version: 2
