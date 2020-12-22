@@ -1,0 +1,39 @@
+plugins {
+    id 'maven-publish'
+}
+
+configurations {
+    binaries
+}
+
+def gcLinuxArtifact = artifacts.add('binaries', file("../../release/ssl-game-controller_linux_amd64"))
+def gcDarwinArtifact = artifacts.add('binaries', file("../../release/ssl-game-controller_darwin_amd64"))
+def gcWindowsArtifact = artifacts.add('binaries', file("../../release/ssl-game-controller_windows_amd64.exe"))
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/RoboCup-SSL/ssl-game-controller")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("CIRCLE_PROJECT_USERNAME")
+                password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            groupId 'com.github.robocup-ssl'
+            version System.getenv('CIRCLE_TAG')
+            artifact(gcLinuxArtifact) {
+                classifier 'linux_amd64'
+            }
+            artifact(gcDarwinArtifact) {
+                classifier 'darwin_amd64'
+            }
+            artifact(gcWindowsArtifact) {
+                classifier 'windows_amd64'
+            }
+        }
+    }
+}

@@ -55,14 +55,26 @@ jobs:
           name: "Prepare artifacts"
           working_directory: release
           command: |
-            mv ssl-game-controller_linux_amd64 ssl-game-controller_${CIRCLE_TAG}_linux_amd64
-            mv ssl-game-controller_darwin_amd64 ssl-game-controller_${CIRCLE_TAG}_darwin_amd64
-            mv ssl-game-controller_windows_amd64.exe ssl-game-controller_${CIRCLE_TAG}_windows_amd64.exe
+            cp ssl-game-controller_linux_amd64 gh/ssl-game-controller_${CIRCLE_TAG}_linux_amd64
+            cp ssl-game-controller_darwin_amd64 gh/ssl-game-controller_${CIRCLE_TAG}_darwin_amd64
+            cp ssl-game-controller_windows_amd64.exe gh/ssl-game-controller_${CIRCLE_TAG}_windows_amd64.exe
       - run:
           name: "Publish Release on GitHub"
           command: |
             go get github.com/tcnksm/ghr
-            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_TAG} ./release/
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_TAG} ./release/gh/
+
+  publish-package-maven:
+    docker:
+      - image: circleci/golang:1.14
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: "Publish Packages to GitHub"
+          working_directory: .circleci/pkg-maven
+          command: |
+            ./gradlew publish
 
 workflows:
   version: 2
@@ -79,6 +91,14 @@ workflows:
             tags:
               only: /.*/
       - publish-github-release:
+          requires:
+            - backend
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/
+      - publish-package-maven:
           requires:
             - backend
           filters:
