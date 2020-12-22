@@ -106,28 +106,52 @@ Generate a new `server.crt` for the game-controller with [tools/newX509KeyPair.s
 See instructions for the client part in the reference clients mentioned above.
 
 ## Integration into your own framework
-The game-controller can easily be integrated into your own AI framework, if you do not want to implement your own controller for testing purposes.
+The game-controller is designed to be integrated into your own AI framework, if you do not want to implement your own controller for testing purposes.
 
-Download the release binary from the Github release and run it from inside your framework. 
-Then, attach to the WebSocket API that is used by the UI as well to control the game.
-The API is defined in [proto/ssl_gc_api.proto](./proto/ssl_gc_api.proto) and available at the path `/api/control`.
+Download the release binary from the Github release and run it from inside your framework.
+You can adapt the `ssl-game-controller.yaml` config file that is generated on first startup,
+like changing the default ports. Some parameters can also be passed via command line.
+Find the available parameters with the `-h` option.
+Make sure to use non-standard ports whenever possible to avoid any interference with a real field setup.
 
-If you don't want to run the controller in real time, you can change the time acquisition mode in the `ssl-game-controller.yaml` file:
+There are three modes that you can run the ssl-game-controller with:
 
 1. `system` (default): Use system time
-1. `vision`: Receive messages from ssl-vision and use the timestamps from these messages as the time source. This is mostly useful, when you produce your own ssl-vision frames from simulation. 
-1. `ci`: Connect your software directly to the GC via TCP. You can send the current timestamp and tracker packets and will receive the resulting referee message. 
+1. `vision`: Receive messages from ssl-vision and use the timestamps from these messages as the time source. This is mostly useful, when you produce your own ssl-vision frames from simulation.
+1. `ci`: Connect your software directly to the GC via TCP. You send the current timestamp and tracker packets and will receive the resulting referee message.
 
-The `ci` mode also disables all multicast messages.
-This is especially useful, if you run integration tests on your build server in parallel and/or in a container. 
-The GC does not receive vision or tracker packages and does not produce referee messages.
-Instead, you should set the correct geometry in `ssl-game-controller.yaml` and send the tracker packages via the CI protocol along the timestamp.
-The referee messages are send from the GC to you via the CI protocol as well.
-For every `CiInput` there will be one or more `CiOutput` responses.
+It is highly recommended using the `ci` mode when you integrate the GC with your own simulator.
+It has following advantages:
+
+1. No multicast network traffic is required that might be published to your local network (make sure to unset `network.publish-address`)
+1. You have full control of the data flow. The GC will not do anything asynchronously in the background
+1. You define the time and thus the speed.
+1. You provide the ssl-vision tracking data directly.
+
+The `ci` mode does not work when you use external simulators like grSim.
+Consider using the `vision` mode instead.
+
+When you enable `ci` mode, referee messages will still be published via multicast,
+unless the address unset (set to an empty string). That way, you can still integrate
+an autoRef. It is not yet possible to use the autoRefs without multicast.
+
+When the `ci` mode is enabled (via `ssl-game-controller.yaml` -> `time-acquisition-mode`),
+a TCP port is opened (default: 10009). The protocol is defined in [proto/ssl_gc_ci.proto](./proto/ssl_gc_ci.proto).
+You send `CiInput` messages and receive `CiOutput` messages.
+Each input will produce one or more outputs.
 This is, because some changes will generate multiple messages.
 `CiOutput` messages will also be pushed to the CI client for manual changes from the UI or UI API.
 
-For details, see: [ssl-ci-test-client](./cmd/ssl-ci-test-client/README.md)
+The GC requires ssl-vision detection data to work correctly.
+By default, it just receives ssl-vision messages.
+In the `ci` mode, you have to provide the data via the ci protocol.
+The message format is the same as for the recently introduced tracking protocol.
+
+A small sample test client for the `ci` mode can be found here: [ssl-ci-test-client](./cmd/ssl-ci-test-client/README.md)
+
+If you can not use the `ci` mode, you can alternatively connect to the GC using the UI WebSocket API.
+The API is defined in [proto/ssl_gc_api.proto](./proto/ssl_gc_api.proto) and available at the path `/api/control`
+under the same port as the UI.
 
 ### Examples
  * Integration of the binary: https://github.com/TIGERs-Mannheim/AutoReferee/blob/master/modules/moduli-referee/src/main/java/edu/tigers/sumatra/referee/SslGameControllerProcess.java
