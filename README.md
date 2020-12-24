@@ -24,6 +24,23 @@ The controller will generate a default config file to [config/ssl-game-controlle
  * A reasonable Web-Browser (mostly tested on Chrome)
  * (optional) To view the field, you need the [ssl-vision-client](https://github.com/RoboCup-SSL/ssl-vision-client)
 
+### External Runtime Dependencies
+[ssl-vision](https://github.com/RoboCup-SSL/ssl-vision) - Receive Geometry packages for correct field dimensions   
+If not available, make sure to configure to correct dimensions in [config/ssl-game-controller.yaml](config/ssl-game-controller.yaml).
+
+tracker-source implementation that produces
+[TrackerWrapperPacket](https://github.com/RoboCup-SSL/ssl-vision/blob/master/src/shared/proto/messages_robocup_ssl_wrapper_tracked.proto) - 
+Get ball and robot positions.      
+Required for:
+ * Check ball placement progress
+ * Check for correct number of robots per team
+ * Check if game can continue (ball and robots prepared)
+ * Check for "no progress"
+ * Check if keeper may be changed via team protocol
+
+The [TIGERs AutoRef](https://github.com/TIGERs-Mannheim/AutoReferee) is a tracker-source implementation.
+If no tracker-source is available, the above features will not work.
+
 ### Reference Clients
 There are some reference clients:
  * [ssl-ref-client](./cmd/ssl-ref-client): A client that receives referee messages
@@ -55,24 +72,26 @@ It has following advantages:
 1. You define the time and thus the speed.
 1. You provide the ssl-vision tracking data directly.
 
-The `ci` mode does not work when you use external simulators like grSim.
-Consider using the `vision` mode instead.
+If you use external simulators like grSim, you can consider using the `vision` mode instead.
+That way, the game-controller uses the time and speed of the simulator, even if it is not
+running in real time. You then still need to run a tracking-source implementation like an AutoRef
+if you require the additional features described in [External Runtime Dependencies](#External Runtime Dependencies).
 
 When you enable `ci` mode, referee messages will still be published via multicast,
-unless the address unset (set to an empty string). That way, you can still integrate
+unless the address is unset (set to an empty string). That way, you can still integrate
 an autoRef. It is not yet possible to use the autoRefs without multicast.
 
 When the `ci` mode is enabled (via `ssl-game-controller.yaml` -> `time-acquisition-mode`),
 a TCP port is opened (default: 10009). The protocol is defined in [proto/ssl_gc_ci.proto](./proto/ssl_gc_ci.proto).
-You send `CiInput` messages and receive `CiOutput` messages.
+You send `CiInput` messages and receive `CiOutput` messages. The protocol is the same as for the [team-client](./cmd/ssl-team-client/README.md).
 Each input will produce one or more outputs.
 This is, because some changes will generate multiple messages.
 `CiOutput` messages will also be pushed to the CI client for manual changes from the UI or UI API.
 
-The GC requires ssl-vision detection data to work correctly.
-By default, it just receives ssl-vision messages.
-In the `ci` mode, you have to provide the data via the ci protocol.
-The message format is the same as for the recently introduced tracking protocol.
+The GC requires some input data, see [External Runtime Dependencies](#External Runtime Dependencies).
+In the `ci` mode, you have to provide the geometry statically in [config/ssl-game-controller.yaml](config/ssl-game-controller.yaml).
+The ball and robot positions must be sent with the `CiInput`.
+It is sufficient to fill in the required fields and keep the optional empty.
 
 A small sample test client for the `ci` mode can be found here: [ssl-ci-test-client](./cmd/ssl-ci-test-client/README.md)
 
