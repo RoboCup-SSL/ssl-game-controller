@@ -1,5 +1,26 @@
 plugins {
+    id 'com.jfrog.bintray' version '1.8.5'
     id 'maven-publish'
+}
+
+version = System.getenv('CIRCLE_TAG')?: "build-${System.getenv('CIRCLE_BUILD_NUM')}"
+
+bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+    publications = ['binaries']
+    publish = true
+    pkg {
+        repo = 'ssl-game-controller'
+        name = 'ssl-game-controller'
+        userOrg = 'robocup-ssl'
+        licenses = ['GNU-3.0']
+        vcsUrl = 'https://github.com/RoboCup-SSL/ssl-game-controller.git'
+        githubRepo = 'RoboCup-SSL/ssl-game-controller'
+        version {
+            name = project.version
+        }
+    }
 }
 
 configurations {
@@ -11,20 +32,9 @@ def gcDarwinArtifact = artifacts.add('binaries', file("../../release/ssl-game-co
 def gcWindowsArtifact = artifacts.add('binaries', file("../../release/ssl-game-controller_windows_amd64.exe"))
 
 publishing {
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/RoboCup-SSL/ssl-game-controller")
-            credentials {
-                username = System.getenv("CIRCLE_PROJECT_USERNAME")
-                password = System.getenv("GITHUB_TOKEN")
-            }
-        }
-    }
     publications {
-        gpr(MavenPublication) {
+        binaries(MavenPublication) {
             groupId 'com.github.robocup-ssl'
-            version System.getenv('CIRCLE_TAG')?: "build-${System.getenv('CIRCLE_BUILD_NUM')}"
             artifact(gcLinuxArtifact) {
                 classifier 'linux_amd64'
             }
