@@ -72,10 +72,10 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: "Publish Packages to GitHub"
+          name: "Publish Packages to Bintray"
           working_directory: .circleci/pkg-maven
           command: |
-            ./gradlew publish --info --stacktrace
+            ./gradlew bintrayUpload --info --stacktrace
 
 workflows:
   version: 2
