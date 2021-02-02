@@ -49,8 +49,10 @@ func NewGameController(cfg config.Controller) (c *GameController) {
 	c.ciServer = ci.NewServer(cfg.Server.Ci.Address)
 	c.visionReceiver = vision.NewReceiver(cfg.Network.VisionAddress)
 	c.visionReceiver.GeometryCallback = c.gcEngine.ProcessGeometry
+	c.visionReceiver.MulticastReceiver.SkipInterfaces = cfg.Network.SkipInterfaces
 	c.trackerReceiver = tracker.NewReceiver(cfg.Network.TrackerAddress)
 	c.trackerReceiver.Callback = c.gcEngine.ProcessTrackerFrame
+	c.trackerReceiver.MulticastReceiver.SkipInterfaces = cfg.Network.SkipInterfaces
 	return
 }
 

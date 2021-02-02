@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 )
 
@@ -16,6 +17,7 @@ var address = flag.String("address", "localhost:8081", "The address on which the
 var visionAddress = flag.String("visionAddress", "", "The address (ip+port) from which vision packages are received")
 var publishAddress = flag.String("publishAddress", "", "The address (ip+port) to which referee command should be sent")
 var timeAcquisitionMode = flag.String("timeAcquisitionMode", "", "The time acquisitionMode to use (system, ci, vision)")
+var skipInterfaces = flag.String("skipInterfaces", "", "Comma separated list of interface names to ignore when receiving multicast packets")
 
 const configFileName = "config/ssl-game-controller.yaml"
 
@@ -43,6 +45,9 @@ func setupGameController() {
 	if timeAcquisitionMode != nil && *timeAcquisitionMode != "" {
 		cfg.TimeAcquisitionMode = config.TimeAcquisitionMode(*timeAcquisitionMode)
 	}
+	if skipInterfaces != nil && *skipInterfaces != "" {
+		cfg.Network.SkipInterfaces = parseSkipInterfaces()
+	}
 
 	gameController := gc.NewGameController(cfg)
 	gameController.Start()
@@ -67,4 +72,8 @@ func setupUi() {
 	} else {
 		log.Print("Backend-only version started. Run the UI separately or get a binary that has the UI included")
 	}
+}
+
+func parseSkipInterfaces() []string {
+	return strings.Split(*skipInterfaces, ",")
 }

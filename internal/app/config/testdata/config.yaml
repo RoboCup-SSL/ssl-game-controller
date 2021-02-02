@@ -3,6 +3,7 @@ network:
   publish-address: 224.5.23.1:10003
   vision-address: 224.5.23.2:10006
   tracker-address: 224.5.23.2:10010
+  skip-interfaces: []
 server:
   auto-ref:
     address: :10007
