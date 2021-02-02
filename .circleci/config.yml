@@ -55,6 +55,7 @@ jobs:
           name: "Prepare artifacts"
           working_directory: release
           command: |
+            mkdir gh
             cp ssl-game-controller_linux_amd64 gh/ssl-game-controller_${CIRCLE_TAG}_linux_amd64
             cp ssl-game-controller_darwin_amd64 gh/ssl-game-controller_${CIRCLE_TAG}_darwin_amd64
             cp ssl-game-controller_windows_amd64.exe gh/ssl-game-controller_${CIRCLE_TAG}_windows_amd64.exe
