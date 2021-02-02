@@ -1,21 +1,21 @@
 package vision
 
 import (
+	"github.com/RoboCup-SSL/ssl-game-controller/pkg/sslnet"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/timer"
 	"github.com/golang/protobuf/proto"
 	"log"
-	"net"
+	"sync"
 	"time"
 )
-
-const maxDatagramSize = 8192
 
 type Receiver struct {
 	address           string
 	DetectionCallback func(*SSL_DetectionFrame)
 	GeometryCallback  func(*SSL_GeometryData)
-	conn              *net.UDPConn
 	latestTimestamp   time.Time
+	mutex             sync.Mutex
+	MulticastReceiver *sslnet.MulticastReceiver
 }
 
 // NewReceiver creates a new receiver
@@ -24,66 +24,41 @@ func NewReceiver(address string) (v *Receiver) {
 	v.address = address
 	v.DetectionCallback = func(*SSL_DetectionFrame) {}
 	v.GeometryCallback = func(data *SSL_GeometryData) {}
+	v.MulticastReceiver = sslnet.NewMulticastReceiver(v.consumeData)
 	return
 }
 
 // Start starts the receiver
 func (v *Receiver) Start() {
-	addr, err := net.ResolveUDPAddr("udp", v.address)
-	if err != nil {
-		log.Print(err)
-		return
-	}
-	conn, err := net.ListenMulticastUDP("udp", nil, addr)
-	if err != nil {
-		log.Print(err)
-		return
-	}
-
-	if err := conn.SetReadBuffer(maxDatagramSize); err != nil {
-		log.Printf("Could not set read buffer to %v.", maxDatagramSize)
-	}
-	log.Println("Receiving vision from", v.address)
-
-	v.conn = conn
-	go v.receive()
+	v.MulticastReceiver.Start(v.address)
 }
 
 // Stop stops the receiver
 func (v *Receiver) Stop() {
-	if err := v.conn.Close(); err != nil {
-		log.Printf("Could not close vision receiver: %v", err)
-	}
+	v.MulticastReceiver.Stop()
 }
 
-func (v *Receiver) receive() {
-	b := make([]byte, maxDatagramSize)
-	for {
-		n, err := v.conn.Read(b)
-		if err != nil {
-			log.Print("Could not read: ", err)
-			time.Sleep(1 * time.Second)
-			continue
-		}
-		if n >= maxDatagramSize {
-			log.Fatal("Buffer size too small")
-		}
-		wrapper := SSL_WrapperPacket{}
-		if err := proto.Unmarshal(b[0:n], &wrapper); err != nil {
-			log.Println("Could not unmarshal referee message")
-			continue
-		}
+func (v *Receiver) consumeData(data []byte) {
+	v.mutex.Lock()
+	defer v.mutex.Unlock()
 
-		if wrapper.Geometry != nil {
-			v.GeometryCallback(wrapper.Geometry)
-		}
-		if wrapper.Detection != nil {
-			v.latestTimestamp = timer.TimestampToTime(*wrapper.Detection.TCapture)
-			v.DetectionCallback(wrapper.Detection)
-		}
+	wrapper := SSL_WrapperPacket{}
+	if err := proto.Unmarshal(data, &wrapper); err != nil {
+		log.Println("Could not unmarshal referee message")
+		return
+	}
+
+	if wrapper.Geometry != nil {
+		v.GeometryCallback(wrapper.Geometry)
+	}
+	if wrapper.Detection != nil {
+		v.latestTimestamp = timer.TimestampToTime(*wrapper.Detection.TCapture)
+		v.DetectionCallback(wrapper.Detection)
 	}
 }
 
 func (v *Receiver) Time() time.Time {
+	v.mutex.Lock()
+	defer v.mutex.Unlock()
 	return v.latestTimestamp
 }

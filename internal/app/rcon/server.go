@@ -15,6 +15,7 @@ import (
 	"net"
 	"os"
 	"strings"
+	"sync"
 )
 
 type Server struct {
@@ -25,6 +26,7 @@ type Server struct {
 	connectionHandler func(net.Conn)
 	listener          net.Listener
 	running           bool
+	mutex             sync.Mutex
 }
 
 type Client struct {
@@ -68,6 +70,8 @@ func (s *Server) Stop() {
 	if s.listener == nil {
 		return
 	}
+	s.mutex.Lock()
+	defer s.mutex.Unlock()
 	s.running = false
 	if err := s.listener.Close(); err != nil {
 		log.Printf("Could not close listener: %v", err)
@@ -81,7 +85,7 @@ func (s *Server) Stop() {
 func (s *Server) listen() {
 	log.Print("Listening on ", s.address)
 
-	for s.running {
+	for s.isRunning() {
 		conn, err := s.listener.Accept()
 		if err != nil {
 			log.Print("Could not accept connection: ", err)
@@ -89,6 +93,12 @@ func (s *Server) listen() {
 			go s.connectionHandler(conn)
 		}
 	}
+}
+
+func (s *Server) isRunning() bool {
+	s.mutex.Lock()
+	defer s.mutex.Unlock()
+	return s.running
 }
 
 func (s *Server) createListener() (net.Listener, error) {
