@@ -20,12 +20,12 @@ You can also use pre-build docker images:
 docker pull robocupssl/ssl-game-controller
 # Run GC with default configuration
 docker run -p 8081:8081 robocupssl/ssl-game-controller
-# You can also mount the config and work directories locally
+# Mount local directories 
 docker run -p 8081:8081 \
   # Local config dir
   -v "$(pwd)"/config:/config \
-  # Local working dir with the current state
-  -v "$(pwd)"/work:/work \
+  # Local data dir (current state)
+  -v "$(pwd)"/data:/data \
   robocupssl/ssl-game-controller
 ```
 

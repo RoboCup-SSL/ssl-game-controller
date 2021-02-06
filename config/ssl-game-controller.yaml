@@ -22,7 +22,7 @@ server:
 engine:
   config-filename: config/engine.yaml
 game:
-  state-store-file: state-store.json.stream
+  state-store-file: data/state-store.json.stream
   yellow-card-duration: 2m
   yellow-card-bot-removal-time: 10s
   multiple-card-step: 2

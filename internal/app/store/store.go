@@ -51,6 +51,10 @@ func (s *Store) LatestEntry() *statemachine.StateChange {
 
 // Open opens the store file
 func (s *Store) Open() error {
+	err := os.MkdirAll(filepath.Dir(s.filename), 0755)
+	if err != nil {
+		return errors.Wrapf(err, "Could not create directory for store file: %v", s.filename)
+	}
 	f, err := os.OpenFile(s.filename, os.O_RDWR|os.O_CREATE, 0600)
 	if err != nil {
 		return err
