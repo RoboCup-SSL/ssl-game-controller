@@ -21,6 +21,7 @@ func newTeamInfo() (t *TeamInfo) {
 	t.ChallengeFlags = new(int32)
 
 	*t.CanPlaceBall = true
+	*t.Name = "Unknown"
 	return
 }
 
