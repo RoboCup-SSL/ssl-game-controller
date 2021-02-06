@@ -15,6 +15,20 @@ See [FAQ](./FAQ.md) for some general information.
 ## Usage
 If you just want to use this app, simply download the latest [release binary](https://github.com/RoboCup-SSL/ssl-game-controller/releases/latest). The binary is self-contained. No dependencies are required.
 
+You can also use pre-build docker images:
+```shell script
+docker pull robocupssl/ssl-game-controller
+# Run GC with default configuration
+docker run -p 8081:8081 robocupssl/ssl-game-controller
+# You can also mount the config and work directories locally
+docker run -p 8081:8081 \
+  # Local config dir
+  -v "$(pwd)"/config:/config \
+  # Local working dir with the current state
+  -v "$(pwd)"/work:/work \
+  robocupssl/ssl-game-controller
+```
+
 The controller will generate a default config file to [config/ssl-game-controller.yaml](config/ssl-game-controller.yaml) on the first start. Afterwards, you can change all settings there.
 
 ### Runtime Requirements

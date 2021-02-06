@@ -16,6 +16,8 @@ RUN GOOS=linux GOARCH=amd64 packr build -o ../../release/ssl-game-controller_lin
 # Start fresh from a smaller image
 FROM alpine:3.9
 COPY --from=build_go /go/src/github.com/RoboCup-SSL/ssl-game-controller/release/ssl-game-controller_linux_amd64 /app/ssl-game-controller
+COPY config config
+WORKDIR /work
 EXPOSE 8081 10007 10008 10011 10009
 ENTRYPOINT ["/app/ssl-game-controller", "-address", ":8081"]
 CMD []
