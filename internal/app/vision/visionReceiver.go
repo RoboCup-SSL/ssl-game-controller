@@ -15,7 +15,7 @@ type Receiver struct {
 	GeometryCallback  func(*SSL_GeometryData)
 	latestTimestamp   time.Time
 	mutex             sync.Mutex
-	MulticastReceiver *sslnet.MulticastReceiver
+	MulticastServer   *sslnet.MulticastServer
 }
 
 // NewReceiver creates a new receiver
@@ -24,18 +24,18 @@ func NewReceiver(address string) (v *Receiver) {
 	v.address = address
 	v.DetectionCallback = func(*SSL_DetectionFrame) {}
 	v.GeometryCallback = func(data *SSL_GeometryData) {}
-	v.MulticastReceiver = sslnet.NewMulticastReceiver(v.consumeData)
+	v.MulticastServer = sslnet.NewMulticastServer(v.consumeData)
 	return
 }
 
 // Start starts the receiver
 func (v *Receiver) Start() {
-	v.MulticastReceiver.Start(v.address)
+	v.MulticastServer.Start(v.address)
 }
 
 // Stop stops the receiver
 func (v *Receiver) Stop() {
-	v.MulticastReceiver.Stop()
+	v.MulticastServer.Stop()
 }
 
 func (v *Receiver) consumeData(data []byte) {

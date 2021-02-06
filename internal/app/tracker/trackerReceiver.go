@@ -8,10 +8,10 @@ import (
 )
 
 type Receiver struct {
-	address           string
-	Callback          func(*TrackerWrapperPacket)
-	mutex             sync.Mutex
-	MulticastReceiver *sslnet.MulticastReceiver
+	address         string
+	Callback        func(*TrackerWrapperPacket)
+	mutex           sync.Mutex
+	MulticastServer *sslnet.MulticastServer
 }
 
 // NewReceiver creates a new receiver
@@ -19,18 +19,18 @@ func NewReceiver(address string) (v *Receiver) {
 	v = new(Receiver)
 	v.address = address
 	v.Callback = func(*TrackerWrapperPacket) {}
-	v.MulticastReceiver = sslnet.NewMulticastReceiver(v.consumeData)
+	v.MulticastServer = sslnet.NewMulticastServer(v.consumeData)
 	return
 }
 
 // Start starts the receiver
 func (v *Receiver) Start() {
-	v.MulticastReceiver.Start(v.address)
+	v.MulticastServer.Start(v.address)
 }
 
 // Stop stops the receiver
 func (v *Receiver) Stop() {
-	v.MulticastReceiver.Stop()
+	v.MulticastServer.Stop()
 }
 
 func (v *Receiver) consumeData(data []byte) {

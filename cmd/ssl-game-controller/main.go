@@ -19,6 +19,7 @@ var trackerAddress = flag.String("trackerAddress", "", "The address (ip+port) fr
 var publishAddress = flag.String("publishAddress", "", "The address (ip+port) to which referee command should be sent")
 var timeAcquisitionMode = flag.String("timeAcquisitionMode", "", "The time acquisitionMode to use (system, ci, vision)")
 var skipInterfaces = flag.String("skipInterfaces", "", "Comma separated list of interface names to ignore when receiving multicast packets")
+var verbose = flag.Bool("verbose", false, "Verbose output")
 
 const configFileName = "config/ssl-game-controller.yaml"
 
@@ -54,6 +55,7 @@ func setupGameController() {
 	}
 
 	gameController := gc.NewGameController(cfg)
+	gameController.SetVerbose(*verbose)
 	gameController.Start()
 
 	sigs := make(chan os.Signal, 1)

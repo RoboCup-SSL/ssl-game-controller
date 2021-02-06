@@ -49,11 +49,16 @@ func NewGameController(cfg config.Controller) (c *GameController) {
 	c.ciServer = ci.NewServer(cfg.Server.Ci.Address)
 	c.visionReceiver = vision.NewReceiver(cfg.Network.VisionAddress)
 	c.visionReceiver.GeometryCallback = c.gcEngine.ProcessGeometry
-	c.visionReceiver.MulticastReceiver.SkipInterfaces = cfg.Network.SkipInterfaces
+	c.visionReceiver.MulticastServer.SkipInterfaces = cfg.Network.SkipInterfaces
 	c.trackerReceiver = tracker.NewReceiver(cfg.Network.TrackerAddress)
 	c.trackerReceiver.Callback = c.gcEngine.ProcessTrackerFrame
-	c.trackerReceiver.MulticastReceiver.SkipInterfaces = cfg.Network.SkipInterfaces
+	c.trackerReceiver.MulticastServer.SkipInterfaces = cfg.Network.SkipInterfaces
 	return
+}
+
+func (c *GameController) SetVerbose(verbose bool) {
+	c.visionReceiver.MulticastServer.Verbose = verbose
+	c.trackerReceiver.MulticastServer.Verbose = verbose
 }
 
 // Start starts all go routines
