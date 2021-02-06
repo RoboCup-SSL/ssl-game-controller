@@ -15,6 +15,7 @@ import (
 
 var address = flag.String("address", "localhost:8081", "The address on which the UI and API is served")
 var visionAddress = flag.String("visionAddress", "", "The address (ip+port) from which vision packages are received")
+var trackerAddress = flag.String("trackerAddress", "", "The address (ip+port) from which tracker packages are received")
 var publishAddress = flag.String("publishAddress", "", "The address (ip+port) to which referee command should be sent")
 var timeAcquisitionMode = flag.String("timeAcquisitionMode", "", "The time acquisitionMode to use (system, ci, vision)")
 var skipInterfaces = flag.String("skipInterfaces", "", "Comma separated list of interface names to ignore when receiving multicast packets")
@@ -38,6 +39,9 @@ func setupGameController() {
 
 	if visionAddress != nil && *visionAddress != "" {
 		cfg.Network.VisionAddress = *visionAddress
+	}
+	if trackerAddress != nil && *trackerAddress != "" {
+		cfg.Network.TrackerAddress = *trackerAddress
 	}
 	if publishAddress != nil && *publishAddress != "" {
 		cfg.Network.PublishAddress = *publishAddress
