@@ -54,7 +54,13 @@ if (process.env.NODE_ENV === 'development') {
     wsAddress = 'ws://localhost:8081/api/control';
 } else {
     // UI and backend are served on the same host+port on production builds
-    wsAddress = 'ws://' + window.location.hostname + ':' + window.location.port + '/api/control';
+    let protocol;
+    if (window.location.protocol === 'http:') {
+        protocol = 'ws:'
+    } else {
+        protocol = 'wss:'
+    }
+    wsAddress = protocol + '//' + window.location.hostname + ':' + window.location.port + '/api/control';
 }
 
 // Connect to the backend with a single websocket that communicates with JSON format and is attached to the store
