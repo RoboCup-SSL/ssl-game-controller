@@ -44,7 +44,7 @@ func (v *Receiver) consumeData(data []byte) {
 
 	wrapper := SSL_WrapperPacket{}
 	if err := proto.Unmarshal(data, &wrapper); err != nil {
-		log.Println("Could not unmarshal referee message")
+		log.Println("Could not unmarshal vision wrapper packet", err)
 		return
 	}
 
