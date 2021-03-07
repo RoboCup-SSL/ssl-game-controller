@@ -9,6 +9,7 @@ func (s *StateMachine) processChangeUpdateConfig(newState *state.State, change *
 	if change.Division != nil {
 		log.Printf("Change division to %v", *change.Division)
 		newState.Division = change.Division
+		s.updateMaxBots(newState)
 	}
 	if change.FirstKickoffTeam != nil {
 		log.Printf("Change first kickoff team to %v", *change.FirstKickoffTeam)
