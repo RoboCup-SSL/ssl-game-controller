@@ -100,6 +100,10 @@ func (s *Server) serve(conn net.Conn) {
 			}
 		}
 
+		if input.Geometry != nil {
+			s.gcEngine.ProcessGeometry(input.Geometry)
+		}
+
 		if input.Timestamp != nil {
 			sec := *input.Timestamp / 1e9
 			nSec := *input.Timestamp - sec*1e9

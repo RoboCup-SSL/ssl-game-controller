@@ -5,6 +5,7 @@ option go_package = "github.com/RoboCup-SSL/ssl-game-controller/internal/app/ci"
 import "ssl_vision_wrapper_tracked.proto";
 import "ssl_gc_api.proto";
 import "ssl_gc_referee_message.proto";
+import "ssl_vision_geometry.proto";
 
 // The input format to the GC
 message CiInput {
@@ -14,6 +15,8 @@ message CiInput {
     optional TrackerWrapperPacket tracker_packet = 2;
     // (UI) API input
     repeated Input api_inputs = 3;
+    // Update geometry
+    optional SSL_GeometryData geometry = 4;
 }
 
 // The output format of the GC response
