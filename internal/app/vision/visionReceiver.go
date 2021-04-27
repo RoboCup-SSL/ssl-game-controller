@@ -39,9 +39,6 @@ func (v *Receiver) Stop() {
 }
 
 func (v *Receiver) consumeData(data []byte) {
-	v.mutex.Lock()
-	defer v.mutex.Unlock()
-
 	wrapper := SSL_WrapperPacket{}
 	if err := proto.Unmarshal(data, &wrapper); err != nil {
 		log.Println("Could not unmarshal vision wrapper packet", err)
@@ -52,7 +49,9 @@ func (v *Receiver) consumeData(data []byte) {
 		v.GeometryCallback(wrapper.Geometry)
 	}
 	if wrapper.Detection != nil {
+		v.mutex.Lock()
 		v.latestTimestamp = timer.TimestampToTime(*wrapper.Detection.TCapture)
+		v.mutex.Unlock()
 		v.DetectionCallback(wrapper.Detection)
 	}
 }
