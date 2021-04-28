@@ -1,6 +1,7 @@
 package rcon
 
 import (
+	"bufio"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/engine"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/sslconn"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
@@ -30,9 +31,9 @@ func NewTeamServer(address string, gcEngine *engine.Engine) (s *TeamServer) {
 	return
 }
 
-func (c *TeamClient) receiveRegistration(server *TeamServer) error {
+func (c *TeamClient) receiveRegistration(reader *bufio.Reader, server *TeamServer) error {
 	registration := TeamRegistration{}
-	if err := sslconn.ReceiveMessage(c.conn, &registration); err != nil {
+	if err := sslconn.ReceiveMessage(reader, &registration); err != nil {
 		return err
 	}
 
@@ -83,10 +84,12 @@ func (s *TeamServer) handleClientConnection(conn net.Conn) {
 		}
 	}()
 
+	reader := bufio.NewReaderSize(conn, 1)
+
 	client := TeamClient{Client: &Client{conn: conn, token: uuid.New()}}
 	client.reply(client.Ok())
 
-	err := client.receiveRegistration(s)
+	err := client.receiveRegistration(reader, s)
 	if err != nil {
 		client.reply(client.Reject(err.Error()))
 		return
@@ -117,7 +120,7 @@ func (s *TeamServer) handleClientConnection(conn net.Conn) {
 
 	for {
 		req := TeamToController{}
-		if err := sslconn.ReceiveMessage(conn, &req); err != nil {
+		if err := sslconn.ReceiveMessage(reader, &req); err != nil {
 			if err == io.EOF {
 				return
 			}

@@ -26,8 +26,9 @@ var clientIdentifier = flag.String("identifier", "test", "The identifier of the 
 var privateKey *rsa.PrivateKey
 
 type Client struct {
-	conn  net.Conn
-	token string
+	conn   net.Conn
+	reader *bufio.Reader
+	token  string
 }
 
 func main() {
@@ -56,6 +57,7 @@ func main() {
 	log.Printf("Connected to game-controller at %v", *refBoxAddr)
 	c := Client{}
 	c.conn = conn
+	c.reader = bufio.NewReaderSize(conn, 1)
 
 	c.register()
 
@@ -103,7 +105,7 @@ func main() {
 
 func (c *Client) register() {
 	reply := rcon.ControllerToAutoRef{}
-	if err := sslconn.ReceiveMessage(c.conn, &reply); err != nil {
+	if err := sslconn.ReceiveMessage(c.reader, &reply); err != nil {
 		log.Fatal("Failed receiving controller reply: ", err)
 	}
 	if reply.GetControllerReply() == nil || reply.GetControllerReply().NextToken == nil {
@@ -122,7 +124,7 @@ func (c *Client) register() {
 	}
 	log.Print("Sent registration, waiting for reply")
 	reply = rcon.ControllerToAutoRef{}
-	if err := sslconn.ReceiveMessage(c.conn, &reply); err != nil {
+	if err := sslconn.ReceiveMessage(c.reader, &reply); err != nil {
 		log.Fatal("Failed receiving controller reply: ", err)
 	}
 	if reply.GetControllerReply().StatusCode == nil || *reply.GetControllerReply().StatusCode != rcon.ControllerReply_OK {
@@ -209,7 +211,7 @@ func (c *Client) sendRequest(request *rcon.AutoRefToController, doLog bool) {
 
 	logIf(doLog, "Waiting for reply...")
 	reply := rcon.ControllerToAutoRef{}
-	if err := sslconn.ReceiveMessage(c.conn, &reply); err != nil {
+	if err := sslconn.ReceiveMessage(c.reader, &reply); err != nil {
 		log.Fatal("Failed receiving controller reply: ", err)
 	}
 	logIf(doLog, "Received reply: ", reply)

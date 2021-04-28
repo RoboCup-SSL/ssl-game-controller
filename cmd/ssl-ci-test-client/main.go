@@ -123,9 +123,10 @@ func send(conn net.Conn) {
 }
 
 func receive(conn net.Conn) {
+	reader := bufio.NewReaderSize(conn, 1)
 	for {
 		output := ci.CiOutput{}
-		if err := sslconn.ReceiveMessage(conn, &output); err != nil {
+		if err := sslconn.ReceiveMessage(reader, &output); err != nil {
 			log.Println("Could not receive message: ", err)
 		}
 		log.Println("RefereeMsg: ", output.RefereeMsg)

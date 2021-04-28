@@ -1,6 +1,7 @@
 package ci
 
 import (
+	"bufio"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/engine"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/sslconn"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
@@ -74,9 +75,10 @@ func (s *Server) serve(conn net.Conn) {
 		}
 	}()
 
+	reader := bufio.NewReaderSize(conn, 1)
 	for {
 		input := CiInput{}
-		if data, err := sslconn.Receive(conn); err != nil {
+		if data, err := sslconn.Receive(reader); err != nil {
 			log.Println("Could not receive message from CI connection: ", err)
 			return
 		} else if err := sslconn.Unmarshal(data, &input); err != nil {

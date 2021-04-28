@@ -39,9 +39,8 @@ func SendMessage(conn net.Conn, message proto.Message) error {
 }
 
 // Receive reads data and the preceding size from the given connection
-func Receive(conn net.Conn) ([]byte, error) {
+func Receive(reader *bufio.Reader) ([]byte, error) {
 
-	reader := bufio.NewReaderSize(conn, 1)
 	dataLength, err := readDataLength(reader)
 	if err != nil {
 		return nil, err
@@ -65,9 +64,9 @@ func Unmarshal(data []byte, message proto.Message) error {
 }
 
 // ReceiveMessage reads a protobuf message and the preceding size from the given connection
-func ReceiveMessage(conn net.Conn, message proto.Message) error {
+func ReceiveMessage(reader *bufio.Reader, message proto.Message) error {
 
-	data, err := Receive(conn)
+	data, err := Receive(reader)
 	if err != nil {
 		return err
 	}

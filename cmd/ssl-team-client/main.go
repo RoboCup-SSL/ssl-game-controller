@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"crypto/rsa"
 	"flag"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/rcon"
@@ -21,8 +22,9 @@ var teamName = flag.String("teamName", "Test Team", "The name of the team as it 
 var privateKey *rsa.PrivateKey
 
 type Client struct {
-	conn  net.Conn
-	token string
+	conn   net.Conn
+	reader *bufio.Reader
+	token  string
 }
 
 func main() {
@@ -51,6 +53,7 @@ func main() {
 	log.Printf("Connected to game-controller at %v", *refBoxAddr)
 	c := Client{}
 	c.conn = conn
+	c.reader = bufio.NewReaderSize(conn, 1)
 
 	c.register()
 	for !c.sendDesiredKeeper(3) {
@@ -64,7 +67,7 @@ func main() {
 
 func (c *Client) register() {
 	reply := rcon.ControllerToTeam{}
-	if err := sslconn.ReceiveMessage(c.conn, &reply); err != nil {
+	if err := sslconn.ReceiveMessage(c.reader, &reply); err != nil {
 		log.Fatal("Failed receiving controller reply: ", err)
 	}
 	if reply.GetControllerReply().NextToken == nil {
@@ -83,7 +86,7 @@ func (c *Client) register() {
 	}
 	log.Print("Sent registration, waiting for reply")
 	reply = rcon.ControllerToTeam{}
-	if err := sslconn.ReceiveMessage(c.conn, &reply); err != nil {
+	if err := sslconn.ReceiveMessage(c.reader, &reply); err != nil {
 		log.Fatal("Failed receiving controller reply: ", err)
 	}
 	if reply.GetControllerReply().StatusCode == nil || *reply.GetControllerReply().StatusCode != rcon.ControllerReply_OK {
@@ -121,7 +124,7 @@ func (c *Client) sendRequest(request *rcon.TeamToController) (accepted bool) {
 
 	log.Print("Waiting for reply...")
 	reply := rcon.ControllerToTeam{}
-	if err := sslconn.ReceiveMessage(c.conn, &reply); err != nil {
+	if err := sslconn.ReceiveMessage(c.reader, &reply); err != nil {
 		log.Fatal("Failed receiving controller reply: ", err)
 	}
 	log.Print("Received reply: ", proto.MarshalTextString(&reply))
