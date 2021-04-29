@@ -14,6 +14,7 @@ import (
 )
 
 var address = flag.String("address", "localhost:8081", "The address on which the UI and API is served")
+var ciAddress = flag.String("ciAddress", "", "The address on which the CI connection is served")
 var visionAddress = flag.String("visionAddress", "", "The address (ip+port) from which vision packages are received")
 var trackerAddress = flag.String("trackerAddress", "", "The address (ip+port) from which tracker packages are received")
 var publishAddress = flag.String("publishAddress", "", "The address (ip+port) to which referee command should be sent")
@@ -52,6 +53,9 @@ func setupGameController() {
 	}
 	if skipInterfaces != nil && *skipInterfaces != "" {
 		cfg.Network.SkipInterfaces = parseSkipInterfaces()
+	}
+	if ciAddress != nil && *ciAddress != "" {
+		cfg.Server.Ci.Address = *ciAddress
 	}
 
 	gameController := gc.NewGameController(cfg)
