@@ -21,6 +21,7 @@ var publishAddress = flag.String("publishAddress", "", "The address (ip+port) to
 var timeAcquisitionMode = flag.String("timeAcquisitionMode", "", "The time acquisitionMode to use (system, ci, vision)")
 var skipInterfaces = flag.String("skipInterfaces", "", "Comma separated list of interface names to ignore when receiving multicast packets")
 var verbose = flag.Bool("verbose", false, "Verbose output")
+var backendOnly = flag.Bool("backendOnly", false, "Do not serve the UI and API")
 
 const configFileName = "config/ssl-game-controller.yaml"
 
@@ -28,12 +29,22 @@ func main() {
 	flag.Parse()
 
 	setupGameController()
+
+	if backendOnly != nil && *backendOnly {
+		blockForever()
+		return
+	}
+
 	setupUi()
 
 	err := http.ListenAndServe(*address, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func blockForever() {
+	select {}
 }
 
 func setupGameController() {
@@ -70,8 +81,10 @@ func setupGameController() {
 		os.Exit(0)
 	}()
 
-	// serve the bidirectional web socket
-	http.HandleFunc("/api/control", gameController.ApiServer().WsHandler)
+	if backendOnly == nil || !*backendOnly {
+		// serve the bidirectional web socket
+		http.HandleFunc("/api/control", gameController.ApiServer().WsHandler)
+	}
 }
 
 func setupUi() {
