@@ -14,7 +14,7 @@ func DefaultConfig() (c Config) {
 	c.AutoRefConfigs = map[string]*AutoRefConfig{}
 	c.GameEventBehavior = map[string]Config_Behavior{}
 	for _, event := range state.GameEventsForBehaviorConfig() {
-		c.GameEventBehavior[event.String()] = Config_BEHAVIOR_ACCEPT
+		c.GameEventBehavior[event.String()] = Config_BEHAVIOR_ACCEPT_MAJORITY
 	}
 	return
 }
