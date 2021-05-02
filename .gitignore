@@ -1,7 +1,7 @@
 .DS_Store
 node_modules
 /dist
-/data
+/config/state-store.json.stream
 
 # Editor directories and files
 .idea/*
