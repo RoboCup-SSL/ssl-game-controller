@@ -59,6 +59,7 @@ type Game struct {
 	BallPlacementMinRobotDistance         float64                    `yaml:"ball-placement-min-robot-distance"`
 	DistanceToBallInStop                  float64                    `yaml:"distance-to-ball-in-stop"`
 	AutoApproveGoals                      bool                       `yaml:"auto-approve-goals"`
+	ContinueFromHalt                      bool                       `yaml:"continue-from-halt"`
 	ChallengeFlags                        int32                      `yaml:"challenge-flags"`
 	EmergencyStopGracePeriod              time.Duration              `yaml:"emergency-stop-grace-period"`
 }

@@ -11,7 +11,9 @@ const minPreparationTime = time.Second * 2
 const distanceToBallDuringPenalty = 1.0
 
 func (e *Engine) processContinue() {
-	if !(e.currentState.Command.IsPrepare() || *e.currentState.Command.Type == state.Command_STOP) ||
+	if !(e.currentState.Command.IsPrepare() ||
+		*e.currentState.Command.Type == state.Command_STOP ||
+		(e.gameConfig.ContinueFromHalt && *e.currentState.Command.Type == state.Command_HALT)) ||
 		e.gcState.TrackerStateGc.Ball == nil {
 		e.gcState.ReadyToContinue = nil
 		return
@@ -89,6 +91,12 @@ func (e *Engine) processContinue() {
 		return
 	}
 
+	if *e.currentState.Command.Type == state.Command_STOP &&
+		(e.currentState.NextCommand == nil ||
+			!e.readyToContinueFromHalt()) {
+		return
+	}
+
 	readyToContinue = true
 
 	if e.currentState.GetAutoContinue() {
@@ -136,6 +144,24 @@ func (e *Engine) readyToContinueFromStop() bool {
 		return false
 	}
 	return true
+}
+
+func (e *Engine) readyToContinueFromHalt() bool {
+	if e.gcState.TrackerStateGc.Ball == nil ||
+		e.currentState.PlacementPos == nil ||
+		!e.ballSteady() ||
+		e.currentState.PlacementPos.DistanceTo(e.gcState.TrackerStateGc.Ball.Pos.ToVector2()) > e.gameConfig.BallPlacementTolerance ||
+		e.tooManyRobots(state.Team_BLUE) ||
+		e.tooManyRobots(state.Team_YELLOW) {
+		return false
+	}
+	return true
+}
+
+func (e *Engine) tooManyRobots(team state.Team) bool {
+	maxAllowed := *e.currentState.TeamState[team.String()].MaxAllowedBots
+	current := numRobotsOfTeam(e.gcState.TrackerStateGc.Robots, team)
+	return current > maxAllowed
 }
 
 func (e *Engine) timeSinceLastChange() time.Duration {
