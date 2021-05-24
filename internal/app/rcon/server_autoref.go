@@ -118,7 +118,7 @@ func (s *AutoRefServer) handleClientConnection(conn net.Conn) {
 				continue
 			}
 		}
-		if err := s.processRequest(client.id, req); err != nil {
+		if err := s.processRequest(client.id, &req); err != nil {
 			client.reply(client.Reject(err.Error()))
 		} else {
 			client.reply(client.Ok())
@@ -126,15 +126,15 @@ func (s *AutoRefServer) handleClientConnection(conn net.Conn) {
 	}
 }
 
-func (c *AutoRefClient) reply(reply ControllerReply) {
-	msg := ControllerToAutoRef_ControllerReply{ControllerReply: &reply}
+func (c *AutoRefClient) reply(reply *ControllerReply) {
+	msg := ControllerToAutoRef_ControllerReply{ControllerReply: reply}
 	response := ControllerToAutoRef{Msg: &msg}
 	if err := sslconn.SendMessage(c.conn, &response); err != nil {
 		log.Print("Failed to send reply: ", err)
 	}
 }
 
-func (s *AutoRefServer) processRequest(id string, request AutoRefToController) error {
+func (s *AutoRefServer) processRequest(id string, request *AutoRefToController) error {
 
 	if request.GameEvent != nil {
 		request.GameEvent.Origin = []string{id}

@@ -112,7 +112,7 @@ func (s *RemoteControlServer) handleClientConnection(conn net.Conn) {
 				continue
 			}
 		}
-		if response, err := s.processRequest(*client.team, req); err != nil {
+		if response, err := s.processRequest(*client.team, &req); err != nil {
 			client.reply(client.Reject(err.Error()))
 		} else {
 			client.replyWithPayload(client.Ok(), response)
@@ -129,24 +129,24 @@ func (s *RemoteControlServer) updateConnectionState(client RemoteControlClient, 
 	})
 }
 
-func (s *RemoteControlServer) SendRequest(teamName string, request ControllerToRemoteControl) error {
+func (s *RemoteControlServer) SendRequest(teamName string, request *ControllerToRemoteControl) error {
 	if client, ok := s.clients[teamName]; ok {
-		return sslconn.SendMessage(client.conn, &request)
+		return sslconn.SendMessage(client.conn, request)
 	}
 	return errors.Errorf("Remote control client '%v' not connected", teamName)
 }
 
-func (c *RemoteControlClient) reply(reply ControllerReply) {
-	response := ControllerToRemoteControl{ControllerReply: &reply}
+func (c *RemoteControlClient) reply(reply *ControllerReply) {
+	response := ControllerToRemoteControl{ControllerReply: reply}
 
 	if err := sslconn.SendMessage(c.conn, &response); err != nil {
 		log.Print("Failed to send reply: ", err)
 	}
 }
 
-func (c *RemoteControlClient) replyWithPayload(reply ControllerReply, response *ControllerToRemoteControl) {
+func (c *RemoteControlClient) replyWithPayload(reply *ControllerReply, response *ControllerToRemoteControl) {
 	if response != nil {
-		response.ControllerReply = &reply
+		response.ControllerReply = reply
 
 		if err := sslconn.SendMessage(c.conn, response); err != nil {
 			log.Print("Failed to send reply: ", err)
@@ -172,7 +172,7 @@ func gameEventPresent(events []*state.GameEvent, eventType state.GameEvent_Type,
 	return
 }
 
-func (s *RemoteControlServer) processRequest(team state.Team, request RemoteControlToController) (*ControllerToRemoteControl, error) {
+func (s *RemoteControlServer) processRequest(team state.Team, request *RemoteControlToController) (*ControllerToRemoteControl, error) {
 
 	if request.GetRequest() == RemoteControlToController_PING {
 		return nil, nil
@@ -195,7 +195,7 @@ func (s *RemoteControlServer) processRequest(team state.Team, request RemoteCont
 		}, nil
 	}
 
-	log.Print("Received request from remote-control: ", proto.MarshalTextString(&request))
+	log.Print("Received request from remote-control: ", proto.MarshalTextString(request))
 
 	currentState := s.gcEngine.CurrentState()
 	teamState := *currentState.TeamInfo(team)

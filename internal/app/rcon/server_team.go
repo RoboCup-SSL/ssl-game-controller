@@ -20,6 +20,8 @@ type TeamServer struct {
 }
 
 type TeamClient struct {
+	teamName string
+	team     state.Team
 	*Client
 }
 
@@ -38,8 +40,10 @@ func (c *TeamClient) receiveRegistration(reader *bufio.Reader, server *TeamServe
 	}
 
 	var allowedTeamNames []string
-	for _, teamInfo := range server.gcEngine.CurrentState().TeamState {
+	nameToTeamMap := map[string]state.Team{}
+	for team, teamInfo := range server.gcEngine.CurrentState().TeamState {
 		allowedTeamNames = append(allowedTeamNames, *teamInfo.Name)
+		nameToTeamMap[*teamInfo.Name] = state.Team(state.Team_value[team])
 	}
 
 	if registration.TeamName == nil {
@@ -48,11 +52,22 @@ func (c *TeamClient) receiveRegistration(reader *bufio.Reader, server *TeamServe
 	if !isAllowedTeamName(*registration.TeamName, allowedTeamNames) {
 		return errors.Errorf("Invalid team name: '%v'. Expecting one of these: %v", *registration.TeamName, allowedTeamNames)
 	}
-	c.id = *registration.TeamName
+	var team state.Team
+	if registration.Team != nil {
+		team = *registration.Team
+	} else if len(nameToTeamMap) == 2 {
+		team = nameToTeamMap[*registration.TeamName]
+	} else {
+		return errors.Errorf("No team specified and both teams have the same name. Specify the team (-color).")
+	}
+
+	c.id = team.String() + "-" + *registration.TeamName
+	c.team = team
+	c.teamName = *registration.TeamName
 	if _, exists := server.clients[c.id]; exists {
 		return errors.New("Team with given name already registered: " + c.id)
 	}
-	c.pubKey = server.trustedKeys[c.id]
+	c.pubKey = server.trustedKeys[*registration.TeamName]
 	if c.pubKey != nil {
 		if err := c.Client.verifyMessage(&registration); err != nil {
 			return err
@@ -97,21 +112,21 @@ func (s *TeamServer) handleClientConnection(conn net.Conn) {
 
 	s.clients[client.id] = client.Client
 	defer func() {
-		team := s.gcEngine.CurrentState().TeamByName(client.id)
 		s.gcEngine.UpdateGcState(func(gcState *engine.GcState) {
-			if teamState, ok := gcState.TeamState[team.String()]; ok {
+			if teamState, ok := gcState.TeamState[client.team.String()]; ok {
 				connected := false
 				teamState.Connected = &connected
 				teamState.ConnectionVerified = &connected
+			} else {
+				log.Println("Team not connected: " + client.team.String())
 			}
 		})
 		s.CloseConnection(client.id)
 	}()
 
 	log.Printf("Team Client %v connected", client.id)
-	team := s.gcEngine.CurrentState().TeamByName(client.id)
 	s.gcEngine.UpdateGcState(func(gcState *engine.GcState) {
-		if teamState, ok := gcState.TeamState[team.String()]; ok {
+		if teamState, ok := gcState.TeamState[client.team.String()]; ok {
 			connected := true
 			teamState.Connected = &connected
 			teamState.ConnectionVerified = &client.verifiedConnection
@@ -133,7 +148,7 @@ func (s *TeamServer) handleClientConnection(conn net.Conn) {
 				continue
 			}
 		}
-		if err := s.processRequest(client.id, req); err != nil {
+		if err := s.processRequest(client, &req); err != nil {
 			client.reply(client.Reject(err.Error()))
 		} else {
 			client.reply(client.Ok())
@@ -141,45 +156,44 @@ func (s *TeamServer) handleClientConnection(conn net.Conn) {
 	}
 }
 
-func (s *TeamServer) SendRequest(teamName string, request ControllerToTeam) error {
+func (s *TeamServer) SendRequest(teamName string, request *ControllerToTeam) error {
 	if client, ok := s.clients[teamName]; ok {
-		return sslconn.SendMessage(client.conn, &request)
+		return sslconn.SendMessage(client.conn, request)
 	}
 	return errors.Errorf("Team Client '%v' not connected", teamName)
 }
 
-func (c *TeamClient) reply(reply ControllerReply) {
-	msg := ControllerToTeam_ControllerReply{ControllerReply: &reply}
+func (c *TeamClient) reply(reply *ControllerReply) {
+	msg := ControllerToTeam_ControllerReply{ControllerReply: reply}
 	response := ControllerToTeam{Msg: &msg}
 	if err := sslconn.SendMessage(c.conn, &response); err != nil {
 		log.Print("Failed to send reply: ", err)
 	}
 }
 
-func (s *TeamServer) processRequest(teamName string, request TeamToController) error {
+func (s *TeamServer) processRequest(teamClient TeamClient, request *TeamToController) error {
 
 	if request.GetPing() {
 		return nil
 	}
 
-	log.Print("Received request from team: ", proto.MarshalTextString(&request))
+	log.Print("Received request from team: ", proto.MarshalTextString(request))
 
 	currentState := s.gcEngine.CurrentState()
-	team := currentState.TeamByName(teamName)
-	if team == state.Team_UNKNOWN {
+	if teamClient.team == state.Team_UNKNOWN {
 		return errors.New("Your team is not playing?!")
 	}
 
-	teamState := *currentState.TeamInfo(team)
+	teamState := *currentState.TeamInfo(teamClient.team)
 
 	if x, ok := request.GetMsg().(*TeamToController_SubstituteBot); ok {
 		if *timeSet(teamState.RequestsBotSubstitutionSince) != x.SubstituteBot {
-			log.Printf("Team %v requests to change bot substituation intent to %v", team, x.SubstituteBot)
+			log.Printf("Team %v requests to change bot substituation intent to %v", teamClient.id, x.SubstituteBot)
 			s.gcEngine.Enqueue(&statemachine.Change{
-				Origin: &teamName,
+				Origin: &teamClient.id,
 				Change: &statemachine.Change_UpdateTeamState{
 					UpdateTeamState: &statemachine.UpdateTeamState{
-						ForTeam:                 &team,
+						ForTeam:                 &teamClient.team,
 						RequestsBotSubstitution: &x.SubstituteBot,
 					}},
 			})
@@ -195,12 +209,12 @@ func (s *TeamServer) processRequest(teamName string, request TeamToController) e
 		if err := mayChangeKeeper(s.gcEngine.CurrentGcState(), &teamState); err != nil {
 			return errors.Wrap(err, "Team requests to change keeper, but: ")
 		}
-		log.Printf("Team %v requests to change keeper to %v", team, x.DesiredKeeper)
+		log.Printf("Team %v requests to change keeper to %v", teamClient.team, x.DesiredKeeper)
 		s.gcEngine.Enqueue(&statemachine.Change{
-			Origin: &teamName,
+			Origin: &teamClient.teamName,
 			Change: &statemachine.Change_UpdateTeamState{
 				UpdateTeamState: &statemachine.UpdateTeamState{
-					ForTeam:    &team,
+					ForTeam:    &teamClient.team,
 					Goalkeeper: &x.DesiredKeeper,
 				}},
 		})

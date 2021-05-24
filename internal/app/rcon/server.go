@@ -136,10 +136,11 @@ func (s *Server) CloseConnection(id string) {
 	log.Printf("Connection to %v closed", id)
 }
 
-func (c *Client) Ok() (reply ControllerReply) {
+func (c *Client) Ok() (reply *ControllerReply) {
+	reply = new(ControllerReply)
 	reply.StatusCode = new(ControllerReply_StatusCode)
 	*reply.StatusCode = ControllerReply_OK
-	c.addVerification(&reply)
+	c.addVerification(reply)
 	return
 }
 
@@ -156,13 +157,14 @@ func (c *Client) addVerification(reply *ControllerReply) {
 	}
 }
 
-func (c *Client) Reject(reason string) (reply ControllerReply) {
+func (c *Client) Reject(reason string) (reply *ControllerReply) {
 	log.Print("Reject request: " + reason)
+	reply = new(ControllerReply)
 	reply.StatusCode = new(ControllerReply_StatusCode)
 	*reply.StatusCode = ControllerReply_REJECTED
 	reply.Reason = new(string)
 	*reply.Reason = reason
-	c.addVerification(&reply)
+	c.addVerification(reply)
 	return
 }
 
