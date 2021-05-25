@@ -64,7 +64,7 @@ func (c *TeamClient) receiveRegistration(reader *bufio.Reader, server *TeamServe
 	c.id = team.String() + "-" + *registration.TeamName
 	c.team = team
 	c.teamName = *registration.TeamName
-	if _, exists := server.clients[c.id]; exists {
+	if _, exists := server.GetClient(c.id); exists {
 		return errors.New("Team with given name already registered: " + c.id)
 	}
 	c.pubKey = server.trustedKeys[*registration.TeamName]
@@ -110,7 +110,7 @@ func (s *TeamServer) handleClientConnection(conn net.Conn) {
 		return
 	}
 
-	s.clients[client.id] = client.Client
+	s.PutClient(client.id, client.Client)
 	defer func() {
 		s.gcEngine.UpdateGcState(func(gcState *engine.GcState) {
 			if teamState, ok := gcState.TeamState[client.team.String()]; ok {
@@ -157,7 +157,7 @@ func (s *TeamServer) handleClientConnection(conn net.Conn) {
 }
 
 func (s *TeamServer) SendRequest(teamName string, request *ControllerToTeam) error {
-	if client, ok := s.clients[teamName]; ok {
+	if client, ok := s.GetClient(teamName); ok {
 		return sslconn.SendMessage(client.conn, request)
 	}
 	return errors.Errorf("Team Client '%v' not connected", teamName)

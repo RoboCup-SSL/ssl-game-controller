@@ -27,6 +27,7 @@ type Server struct {
 	listener          net.Listener
 	running           bool
 	mutex             sync.Mutex
+	clientsMutex      sync.Mutex
 }
 
 type Client struct {
@@ -76,10 +77,33 @@ func (s *Server) Stop() {
 	if err := s.listener.Close(); err != nil {
 		log.Printf("Could not close listener: %v", err)
 	}
-	for id := range s.clients {
+	for _, id := range s.GetClientIds() {
 		s.CloseConnection(id)
 	}
 	s.listener = nil
+}
+
+func (s *Server) GetClient(id string) (*Client, bool) {
+	s.clientsMutex.Lock()
+	defer s.clientsMutex.Unlock()
+	client, ok := s.clients[id]
+	return client, ok
+}
+
+func (s *Server) PutClient(id string, client *Client) {
+	s.clientsMutex.Lock()
+	defer s.clientsMutex.Unlock()
+	s.clients[id] = client
+}
+
+func (s *Server) GetClientIds() []string {
+	s.clientsMutex.Lock()
+	defer s.clientsMutex.Unlock()
+	var clients []string
+	for k := range s.clients {
+		clients = append(clients, k)
+	}
+	return clients
 }
 
 func (s *Server) listen() {
@@ -132,6 +156,8 @@ func (s *Server) loadTlsConfig() (*tls.Config, error) {
 }
 
 func (s *Server) CloseConnection(id string) {
+	s.clientsMutex.Lock()
+	defer s.clientsMutex.Unlock()
 	delete(s.clients, id)
 	log.Printf("Connection to %v closed", id)
 }

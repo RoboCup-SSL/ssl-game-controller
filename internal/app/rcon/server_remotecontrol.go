@@ -48,7 +48,7 @@ func (c *RemoteControlClient) receiveRegistration(reader *bufio.Reader, server *
 	}
 	c.team = registration.Team
 	c.id = registration.Team.String()
-	if _, exists := server.clients[c.id]; exists {
+	if _, exists := server.GetClient(c.id); exists {
 		return errors.New("Team already registered: " + c.id)
 	}
 	c.pubKey = server.trustedKeys[c.id]
@@ -88,7 +88,7 @@ func (s *RemoteControlServer) handleClientConnection(conn net.Conn) {
 		return
 	}
 
-	s.clients[client.id] = client.Client
+	s.PutClient(client.id, client.Client)
 	defer func() {
 		s.updateConnectionState(client, false)
 		s.CloseConnection(client.id)
@@ -130,7 +130,7 @@ func (s *RemoteControlServer) updateConnectionState(client RemoteControlClient, 
 }
 
 func (s *RemoteControlServer) SendRequest(teamName string, request *ControllerToRemoteControl) error {
-	if client, ok := s.clients[teamName]; ok {
+	if client, ok := s.GetClient(teamName); ok {
 		return sslconn.SendMessage(client.conn, request)
 	}
 	return errors.Errorf("Remote control client '%v' not connected", teamName)

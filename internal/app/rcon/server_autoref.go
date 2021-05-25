@@ -39,12 +39,8 @@ func (c *AutoRefClient) receiveRegistration(reader *bufio.Reader, server *AutoRe
 		return errors.New("No identifier specified")
 	}
 	c.id = *registration.Identifier
-	if _, exists := server.clients[c.id]; exists {
-		var clients []string
-		for k := range server.clients {
-			clients = append(clients, k)
-		}
-		return errors.Errorf("AutoRef Client with given identifier already registered: %v", clients)
+	if _, exists := server.GetClient(c.id); exists {
+		return errors.Errorf("AutoRef Client with given identifier already registered: %v", server.GetClientIds())
 	}
 	c.pubKey = server.trustedKeys[c.id]
 	if c.pubKey != nil {
@@ -78,7 +74,7 @@ func (s *AutoRefServer) handleClientConnection(conn net.Conn) {
 		return
 	}
 
-	s.clients[client.id] = client.Client
+	s.PutClient(client.id, client.Client)
 	defer func() {
 		s.gcEngine.UpdateGcState(func(gcState *engine.GcState) {
 			delete(gcState.AutoRefState, client.id)
