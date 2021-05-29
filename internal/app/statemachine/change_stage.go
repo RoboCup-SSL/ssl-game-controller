@@ -49,6 +49,10 @@ func (s *StateMachine) processChangeChangeStage(newState *state.State, change *C
 		newState.PlacementPos = geom.NewVector2(0.0, 0.0)
 	}
 
+	// Reset game events and proposals
+	newState.ProposalGroups = nil
+	newState.GameEvents = nil
+
 	// update new stage
 	newState.Stage = change.NewStage
 
