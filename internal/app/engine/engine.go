@@ -2,6 +2,7 @@ package engine
 
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/geom"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/store"
@@ -327,6 +328,8 @@ func (e *Engine) createInitialState() (s *state.State) {
 		*s.TeamInfo(team).MaxAllowedBots = e.gameConfig.MaxBots[e.gameConfig.DefaultDivision]
 		*s.TeamInfo(team).ChallengeFlags = e.gameConfig.ChallengeFlags
 	}
+	s.NextCommand = state.NewCommand(state.Command_KICKOFF, *s.FirstKickoffTeam)
+	s.PlacementPos = geom.NewVector2(0.0, 0.0)
 	return
 }
 
