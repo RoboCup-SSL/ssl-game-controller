@@ -12,7 +12,7 @@
             </template>
             <template v-slot:cell(type)="data">
                 <span v-b-tooltip.hover.d500 :title="protocolType(data.item)">
-                    <font-awesome-icon class="fa-sm" :icon="iconForType(protocolType(data.item))"/>
+                    <font-awesome-icon :class="{'fa-sm': true, foul: isFoul(data.item)}" :icon="iconForType(protocolType(data.item))" />
                 </span>
             </template>
             <template v-slot:cell(time)="data">
@@ -124,6 +124,38 @@
                         return undefined;
                 }
             },
+            isFoul(entry) {
+              let protocolType = this.protocolType(entry);
+              let gameEventType;
+              if (protocolType === 'addGameEvent') {
+                gameEventType = entry.change.addGameEvent.gameEvent.type;
+              } else if (protocolType === 'addProposal') {
+                gameEventType = entry.change.addProposal.proposal.gameEvent.type;
+              } else if (protocolType === 'addPassiveGameEvent') {
+                gameEventType = entry.change.addPassiveGameEvent.gameEvent.type;
+              } else {
+                return false;
+              }
+              switch(gameEventType) {
+                case 'ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA':
+                case 'DEFENDER_IN_DEFENSE_AREA':
+                case 'BOUNDARY_CROSSING':
+                case 'KEEPER_HELD_BALL':
+                case 'BOT_DRIBBLED_BALL_TOO_FAR':
+                case 'BOT_PUSHED_BOT':
+                case 'BOT_HELD_BALL_DELIBERATELY':
+                case 'BOT_TIPPED_OVER':
+                case 'ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA':
+                case 'BOT_KICKED_BALL_TOO_FAST':
+                case 'BOT_CRASH_UNIQUE':
+                case 'BOT_CRASH_DRAWN':
+                case 'DEFENDER_TOO_CLOSE_TO_KICK_POINT':
+                case 'BOT_TOO_FAST_IN_STOP':
+                case 'BOT_INTERFERED_PLACEMENT':
+                  return true;
+              }
+              return false;
+            },
             iconForType(type) {
                 switch (type) {
                     case 'newCommand':
@@ -213,5 +245,9 @@
     .row-details {
         text-align: left;
         margin-left: 50px;
+    }
+    
+    .foul {
+      color: Tomato;
     }
 </style>
