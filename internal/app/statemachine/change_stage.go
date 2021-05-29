@@ -1,6 +1,7 @@
 package statemachine
 
 import (
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/geom"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/golang/protobuf/ptypes"
 	"time"
@@ -40,6 +41,13 @@ func (s *StateMachine) processChangeChangeStage(newState *state.State, change *C
 
 	// update next command based on new stage
 	newState.NextCommand = s.getNextCommandForStage(newState, *change.NewStage)
+
+	// update placement pos (assuming it is either kickoff or nothing)
+	if newState.NextCommand == nil {
+		newState.PlacementPos = nil
+	} else {
+		newState.PlacementPos = geom.NewVector2(0.0, 0.0)
+	}
 
 	// update new stage
 	newState.Stage = change.NewStage
