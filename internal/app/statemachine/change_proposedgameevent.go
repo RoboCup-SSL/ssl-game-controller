@@ -44,7 +44,22 @@ func isNonTimeoutEvent(proposal *state.Proposal) bool {
 	return false
 }
 
+func isBallLeftFieldEvent(e *state.GameEvent) bool {
+	switch *e.Type {
+	case state.GameEvent_AIMLESS_KICK,
+		state.GameEvent_BALL_LEFT_FIELD_GOAL_LINE,
+		state.GameEvent_BALL_LEFT_FIELD_TOUCH_LINE:
+		return true
+	}
+	return false
+}
+
 func gameEventsSimilar(e1, e2 *state.GameEvent) bool {
+	if isBallLeftFieldEvent(e1) && isBallLeftFieldEvent(e2) {
+		// All ball left field events are similar
+		return true
+	}
+
 	if *e1.Type != *e2.Type {
 		return false
 	}
