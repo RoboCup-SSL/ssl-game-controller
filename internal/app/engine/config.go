@@ -10,17 +10,18 @@ import (
 	"path/filepath"
 )
 
-func DefaultConfig() (c Config) {
-	c.AutoRefConfigs = map[string]*AutoRefConfig{}
-	c.GameEventBehavior = map[string]Config_Behavior{}
+func DefaultConfig() (x Config) {
+	x.AutoRefConfigs = map[string]*AutoRefConfig{}
+	x.GameEventBehavior = map[string]Config_Behavior{}
 	for _, event := range state.GameEventsForBehaviorConfig() {
-		c.GameEventBehavior[event.String()] = Config_BEHAVIOR_ACCEPT_MAJORITY
+		x.GameEventBehavior[event.String()] = Config_BEHAVIOR_ACCEPT_MAJORITY
 	}
+	x.Teams = []string{"Unknown", "Test Team"}
 	return
 }
 
 // ReadFrom loads a config from given file
-func (m *Config) ReadFrom(fileName string) (err error) {
+func (x *Config) ReadFrom(fileName string) (err error) {
 
 	f, err := os.OpenFile(fileName, os.O_RDONLY, 0600)
 	if err != nil {
@@ -31,21 +32,32 @@ func (m *Config) ReadFrom(fileName string) (err error) {
 		return
 	}
 
-	err = jsonpb.UnmarshalString(string(b), m)
+	err = jsonpb.UnmarshalString(string(b), x)
 	if err != nil {
 		err = errors.Wrapf(err, "Could not unmarshal config file %v", fileName)
+	}
+
+	defConfig := DefaultConfig()
+	if x.AutoRefConfigs == nil {
+		x.AutoRefConfigs = defConfig.AutoRefConfigs
+	}
+	if x.GameEventBehavior == nil {
+		x.GameEventBehavior = defConfig.GameEventBehavior
+	}
+	if len(x.Teams) == 0 {
+		x.Teams = defConfig.Teams
 	}
 
 	return
 }
 
 // LoadControllerConfig loads the controller config, creating a default one if it is not present yet
-func (m *Config) LoadControllerConfig(configFileName string) {
-	err := m.ReadFrom(configFileName)
+func (x *Config) LoadControllerConfig(configFileName string) {
+	err := x.ReadFrom(configFileName)
 	if err != nil {
 		log.Printf("Could not load config: %v", err)
-		*m = DefaultConfig()
-		err = m.WriteTo(configFileName)
+		*x = DefaultConfig()
+		err = x.WriteTo(configFileName)
 		if err != nil {
 			log.Printf("Failed to write a default config file to %v: %v", configFileName, err)
 		} else {
@@ -56,11 +68,11 @@ func (m *Config) LoadControllerConfig(configFileName string) {
 }
 
 // WriteTo writes the config to the given file
-func (m *Config) WriteTo(fileName string) (err error) {
+func (x *Config) WriteTo(fileName string) (err error) {
 	marshaler := jsonpb.Marshaler{Indent: "  "}
-	jsonStr, err := marshaler.MarshalToString(m)
+	jsonStr, err := marshaler.MarshalToString(x)
 	if err != nil {
-		err = errors.Wrapf(err, "Could not marshal config %v", m)
+		err = errors.Wrapf(err, "Could not marshal config %v", x)
 		return
 	}
 	err = os.MkdirAll(filepath.Dir(fileName), 0755)
@@ -73,9 +85,9 @@ func (m *Config) WriteTo(fileName string) (err error) {
 	return
 }
 
-func (m *Config) StringJson() string {
+func (x *Config) StringJson() string {
 	marshaler := jsonpb.Marshaler{}
-	if str, err := marshaler.MarshalToString(m); err != nil {
+	if str, err := marshaler.MarshalToString(x); err != nil {
 		return err.Error()
 	} else {
 		return str
