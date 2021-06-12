@@ -75,9 +75,9 @@ jobs:
       - run: |
           TAG=${CIRCLE_TAG:1}
           TAG=${TAG:-latest}
-          docker build -t robocupssl/ssl-simulation-controller:$TAG .
+          docker build -t robocupssl/ssl-game-controller:$TAG .
           docker login -u "${DOCKER_HUB_USERNAME}" -p "${DOCKER_HUB_PASSWORD}"
-          docker push robocupssl/ssl-simulation-controller:$TAG
+          docker push robocupssl/ssl-game-controller:$TAG
 
 workflows:
   version: 2
