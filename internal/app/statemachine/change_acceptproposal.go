@@ -34,9 +34,15 @@ func (s *StateMachine) createMergedGameEvent(events []*state.Proposal, acceptedB
 	proto.Merge(event, events[0].GameEvent)
 	event.Origin = []string{}
 	byTeam := map[state.Team]int{}
+	origins := map[string]struct{}{}
 	for _, e := range events {
-		event.Origin = append(event.Origin, e.GameEvent.Origin...)
+		for _, origin := range e.GameEvent.Origin {
+			origins[origin] = struct{}{}
+		}
 		byTeam[event.ByTeam()]++
+	}
+	for origin := range origins {
+		event.Origin = append(event.Origin, origin)
 	}
 	if acceptedBy != nil {
 		event.Origin = append(event.Origin, *acceptedBy)
