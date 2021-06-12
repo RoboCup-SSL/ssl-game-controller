@@ -21,7 +21,7 @@ jobs:
 
   backend:
     docker:
-      - image: circleci/golang:1.14
+      - image: circleci/golang:1.16
     working_directory: /go/src/github.com/RoboCup-SSL/ssl-game-controller
     steps:
       - checkout
@@ -47,7 +47,7 @@ jobs:
 
   publish-github-release:
     docker:
-      - image: circleci/golang:1.14
+      - image: circleci/golang:1.16
     steps:
       - attach_workspace:
           at: .
@@ -64,6 +64,20 @@ jobs:
           command: |
             go get github.com/tcnksm/ghr
             ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_TAG} ./release/gh/
+
+  docker:
+    docker:
+      - image: cimg/base:2021.04
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 20.10.6
+      - run: |
+          TAG=${CIRCLE_TAG:1}
+          TAG=${TAG:-latest}
+          docker build -t robocupssl/ssl-simulation-controller:$TAG .
+          docker login -u "${DOCKER_HUB_USERNAME}" -p "${DOCKER_HUB_PASSWORD}"
+          docker push robocupssl/ssl-simulation-controller:$TAG
 
 workflows:
   version: 2
@@ -85,5 +99,12 @@ workflows:
           filters:
             branches:
               ignore: /.*/
+            tags:
+              only: /^v.*/
+      - docker:
+          context: docker hub
+          filters:
+            branches:
+              only: master
             tags:
               only: /^v.*/
