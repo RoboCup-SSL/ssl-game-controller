@@ -58,6 +58,12 @@ func (p *Publisher) connect() bool {
 }
 
 func (p *Publisher) disconnect() {
+	for _, conn := range p.conns {
+		if err := conn.Close(); err != nil {
+			log.Println("Failed to close referee connection:", err)
+		}
+	}
+
 	p.conns = []*net.UDPConn{}
 }
 
@@ -73,7 +79,7 @@ func (p *Publisher) SendMessage(refereeMsg *state.Referee) {
 		}
 		_, err = conn.Write(bytes)
 		if err != nil {
-			log.Printf("Could not write message: %v", err)
+			log.Println("Could not write referee message:", err)
 			p.disconnect()
 		}
 	}

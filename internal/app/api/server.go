@@ -198,7 +198,7 @@ func (s *ServerConnection) publishOutput(wrapper *Output) {
 
 	err = s.conn.WriteMessage(websocket.TextMessage, []byte(b))
 	if err != nil {
-		log.Println("Could not write message.", err)
+		log.Println("Could not write message to api client:", err)
 	}
 }
 

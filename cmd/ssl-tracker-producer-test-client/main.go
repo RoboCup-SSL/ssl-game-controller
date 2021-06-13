@@ -113,7 +113,7 @@ func publish(frame tracker.TrackedFrame, conn *net.UDPConn) {
 			return
 		} else {
 			if _, err = conn.Write(bytes); err != nil {
-				log.Printf("Could not write message: %v", err)
+				log.Println("Could not write tracker message:", err)
 				return
 			}
 		}

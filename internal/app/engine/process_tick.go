@@ -68,11 +68,11 @@ func (e *Engine) processTick() {
 
 	stateCopy := e.currentState.Clone()
 	hookOut := HookOut{State: stateCopy}
-	for _, hook := range e.hooks {
+	for hookId, hook := range e.hooks {
 		select {
 		case hook <- hookOut:
 		case <-time.After(1 * time.Second):
-			log.Printf("processTick: Hook unresponsive! Failed to sent %v", hookOut)
+			log.Printf("processTick: Hook %v unresponsive! Failed to sent %v", hookId, hookOut)
 		}
 	}
 }
