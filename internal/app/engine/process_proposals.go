@@ -8,6 +8,8 @@ import (
 	"time"
 )
 
+const maxProposals = 5
+
 func (e *Engine) processProposals() {
 
 	now := e.timeProvider()
@@ -37,6 +39,11 @@ func (e *Engine) processProposals() {
 				},
 			})
 		}
+	}
+
+	diff := len(e.currentState.ProposalGroups) - maxProposals
+	if diff > 0 {
+		e.currentState.ProposalGroups = e.currentState.ProposalGroups[diff:]
 	}
 }
 
