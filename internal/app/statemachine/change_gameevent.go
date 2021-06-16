@@ -417,6 +417,7 @@ func stopsTheGame(gameEvent state.GameEvent_Type) bool {
 		state.GameEvent_BOT_HELD_BALL_DELIBERATELY,
 		state.GameEvent_BOT_TIPPED_OVER,
 		// others
+		state.GameEvent_ATTACKER_DOUBLE_TOUCHED_BALL,
 		state.GameEvent_TOO_MANY_ROBOTS,
 		state.GameEvent_NO_PROGRESS_IN_GAME,
 		state.GameEvent_PENALTY_KICK_FAILED,
