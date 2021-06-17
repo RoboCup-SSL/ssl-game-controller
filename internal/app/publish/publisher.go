@@ -12,13 +12,15 @@ const maxDatagramSize = 8192
 // Publisher can publish state and commands to the teams
 type Publisher struct {
 	address string
+	nif     string
 	conns   []*net.UDPConn
 }
 
 // NewPublisher creates a new publisher that publishes referee messages via UDP to the teams
-func NewPublisher(address string) (p *Publisher) {
+func NewPublisher(address, nif string) (p *Publisher) {
 	p = new(Publisher)
 	p.address = address
+	p.nif = nif
 	p.conns = []*net.UDPConn{}
 	return
 }
@@ -36,6 +38,9 @@ func (p *Publisher) connect() bool {
 	for _, iaddr := range iaddrs {
 		ip := iaddr.(*net.IPNet).IP
 		if ip.To4() == nil {
+			continue
+		}
+		if p.nif != "" && ip.String() != p.nif {
 			continue
 		}
 		laddr := &net.UDPAddr{

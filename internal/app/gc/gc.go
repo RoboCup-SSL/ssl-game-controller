@@ -35,7 +35,7 @@ func NewGameController(cfg config.Controller) (c *GameController) {
 	c.config = cfg
 	c.gcEngine = engine.NewEngine(cfg.Game, cfg.Engine)
 	c.messageGenerator = publish.NewMessageGenerator()
-	c.publisher = publish.NewPublisher(c.config.Network.PublishAddress)
+	c.publisher = publish.NewPublisher(c.config.Network.PublishAddress, c.config.Network.PublishNif)
 	c.apiServer = api.NewServer(c.gcEngine)
 	c.autoRefServer = rcon.NewAutoRefServer(cfg.Server.AutoRef.Address, c.gcEngine)
 	c.autoRefServerTls = rcon.NewAutoRefServer(cfg.Server.AutoRef.AddressTls, c.gcEngine)
