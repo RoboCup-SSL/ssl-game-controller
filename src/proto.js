@@ -9016,6 +9016,7 @@ export const GameEvent = $root.GameEvent = (() => {
          * @memberof GameEvent
          * @interface IMultipleFouls
          * @property {Team} byTeam MultipleFouls byTeam
+         * @property {Array.<IGameEvent>|null} [causedGameEvents] MultipleFouls causedGameEvents
          */
 
         /**
@@ -9027,6 +9028,7 @@ export const GameEvent = $root.GameEvent = (() => {
          * @param {GameEvent.IMultipleFouls=} [properties] Properties to set
          */
         function MultipleFouls(properties) {
+            this.causedGameEvents = [];
             if (properties)
                 for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
@@ -9040,6 +9042,14 @@ export const GameEvent = $root.GameEvent = (() => {
          * @instance
          */
         MultipleFouls.prototype.byTeam = 0;
+
+        /**
+         * MultipleFouls causedGameEvents.
+         * @member {Array.<IGameEvent>} causedGameEvents
+         * @memberof GameEvent.MultipleFouls
+         * @instance
+         */
+        MultipleFouls.prototype.causedGameEvents = $util.emptyArray;
 
         /**
          * Creates a new MultipleFouls instance using the specified properties.
@@ -9066,6 +9076,9 @@ export const GameEvent = $root.GameEvent = (() => {
             if (!writer)
                 writer = $Writer.create();
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
+            if (message.causedGameEvents != null && message.causedGameEvents.length)
+                for (let i = 0; i < message.causedGameEvents.length; ++i)
+                    $root.GameEvent.encode(message.causedGameEvents[i], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
             return writer;
         };
 
@@ -9102,6 +9115,11 @@ export const GameEvent = $root.GameEvent = (() => {
                 switch (tag >>> 3) {
                 case 1:
                     message.byTeam = reader.int32();
+                    break;
+                case 2:
+                    if (!(message.causedGameEvents && message.causedGameEvents.length))
+                        message.causedGameEvents = [];
+                    message.causedGameEvents.push($root.GameEvent.decode(reader, reader.uint32()));
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -9148,6 +9166,15 @@ export const GameEvent = $root.GameEvent = (() => {
             case 2:
                 break;
             }
+            if (message.causedGameEvents != null && message.hasOwnProperty("causedGameEvents")) {
+                if (!Array.isArray(message.causedGameEvents))
+                    return "causedGameEvents: array expected";
+                for (let i = 0; i < message.causedGameEvents.length; ++i) {
+                    let error = $root.GameEvent.verify(message.causedGameEvents[i]);
+                    if (error)
+                        return "causedGameEvents." + error;
+                }
+            }
             return null;
         };
 
@@ -9177,6 +9204,16 @@ export const GameEvent = $root.GameEvent = (() => {
                 message.byTeam = 2;
                 break;
             }
+            if (object.causedGameEvents) {
+                if (!Array.isArray(object.causedGameEvents))
+                    throw TypeError(".GameEvent.MultipleFouls.causedGameEvents: array expected");
+                message.causedGameEvents = [];
+                for (let i = 0; i < object.causedGameEvents.length; ++i) {
+                    if (typeof object.causedGameEvents[i] !== "object")
+                        throw TypeError(".GameEvent.MultipleFouls.causedGameEvents: object expected");
+                    message.causedGameEvents[i] = $root.GameEvent.fromObject(object.causedGameEvents[i]);
+                }
+            }
             return message;
         };
 
@@ -9193,10 +9230,17 @@ export const GameEvent = $root.GameEvent = (() => {
             if (!options)
                 options = {};
             let object = {};
+            if (options.arrays || options.defaults)
+                object.causedGameEvents = [];
             if (options.defaults)
                 object.byTeam = options.enums === String ? "UNKNOWN" : 0;
             if (message.byTeam != null && message.hasOwnProperty("byTeam"))
                 object.byTeam = options.enums === String ? $root.Team[message.byTeam] : message.byTeam;
+            if (message.causedGameEvents && message.causedGameEvents.length) {
+                object.causedGameEvents = [];
+                for (let j = 0; j < message.causedGameEvents.length; ++j)
+                    object.causedGameEvents[j] = $root.GameEvent.toObject(message.causedGameEvents[j], options);
+            }
             return object;
         };
 

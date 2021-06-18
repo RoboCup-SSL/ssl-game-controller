@@ -371,6 +371,8 @@ message GameEvent {
     message MultipleFouls {
         // the team that collected multiple fouls
         required Team by_team = 1;
+        // the list of game events that caused the multiple fouls
+        repeated GameEvent caused_game_events = 2;
     }
     // a team failed to place the ball multiple times in a row
     message MultiplePlacementFailures {
