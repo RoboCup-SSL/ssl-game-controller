@@ -10,6 +10,8 @@ func (s *StateMachine) processChangeUpdateConfig(newState *state.State, change *
 		log.Printf("Change division to %v", *change.Division)
 		newState.Division = change.Division
 		s.updateMaxBots(newState)
+		s.Geometry = s.gameConfig.DefaultGeometry[change.Division.Div()]
+		log.Println("Updated geometry to ", s.Geometry)
 	}
 	if change.FirstKickoffTeam != nil {
 		log.Printf("Change first kickoff team to %v", *change.FirstKickoffTeam)
