@@ -81,9 +81,21 @@ func (e *Engine) Enqueue(change *statemachine.Change) {
 	e.queue <- change
 }
 
+func isUiOrigin(origins []string) bool {
+	for _, origin := range origins {
+		if origin == "UI" {
+			return true
+		}
+	}
+	return false
+}
+
 func (e *Engine) filterGameEvent(change *statemachine.Change) *statemachine.Change {
 	gameEvent := change.GetAddGameEvent().GameEvent
 	behavior := e.config.GameEventBehavior[gameEvent.Type.String()]
+	if isUiOrigin(gameEvent.Origin) {
+		behavior = Config_BEHAVIOR_ACCEPT
+	}
 	switch behavior {
 	case Config_BEHAVIOR_ACCEPT, Config_BEHAVIOR_UNKNOWN:
 		return change
