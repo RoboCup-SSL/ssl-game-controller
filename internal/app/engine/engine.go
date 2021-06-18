@@ -81,9 +81,9 @@ func (e *Engine) Enqueue(change *statemachine.Change) {
 	e.queue <- change
 }
 
-func isUiOrigin(origins []string) bool {
+func isNonMajorityOrigin(origins []string) bool {
 	for _, origin := range origins {
-		if origin == "UI" {
+		if origin == "UI" || origin == "Engine" || origin == "StateMachine" {
 			return true
 		}
 	}
@@ -93,7 +93,7 @@ func isUiOrigin(origins []string) bool {
 func (e *Engine) filterGameEvent(change *statemachine.Change) *statemachine.Change {
 	gameEvent := change.GetAddGameEvent().GameEvent
 	behavior := e.config.GameEventBehavior[gameEvent.Type.String()]
-	if isUiOrigin(gameEvent.Origin) {
+	if isNonMajorityOrigin(gameEvent.Origin) {
 		behavior = Config_BEHAVIOR_ACCEPT
 	}
 	switch behavior {
@@ -392,7 +392,8 @@ func (e *Engine) UpdateConfig(delta *Config) {
 	}
 }
 
-// IsGameEventEnabled returns true, if the game event type is always accepted
+// IsGameEventEnabled returns true, if the game event type is accept
 func (e *Engine) IsGameEventEnabled(evenType state.GameEvent_Type) bool {
-	return e.config.GameEventBehavior[evenType.String()] == Config_BEHAVIOR_ACCEPT
+	return e.config.GameEventBehavior[evenType.String()] == Config_BEHAVIOR_ACCEPT ||
+		e.config.GameEventBehavior[evenType.String()] == Config_BEHAVIOR_ACCEPT_MAJORITY
 }
