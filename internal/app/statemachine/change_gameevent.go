@@ -40,8 +40,14 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 			if byTeam == state.Team_UNKNOWN || byTeam == team {
 				log.Printf("Team %v got a foul for %v", byTeam, gameEvent)
 				newState.TeamInfo(team).AddFoul(gameEvent)
-				if len(newState.TeamInfo(team).Fouls)%3 == 0 {
-					changes = append(changes, s.multipleFoulsChange(team))
+				numFouls := len(newState.TeamInfo(team).Fouls)
+				if numFouls%3 == 0 {
+					var causedGameEvents []*state.GameEvent
+					for i := numFouls - 3; i < numFouls; i++ {
+						causedGameEvents = append(causedGameEvents, newState.TeamInfo(team).Fouls[i].CausedByGameEvent)
+					}
+
+					changes = append(changes, s.multipleFoulsChange(team, causedGameEvents))
 				}
 			}
 		}
@@ -284,11 +290,12 @@ func (s *StateMachine) isGoalValid(newState *state.State, gameEvent *state.GameE
 }
 
 // multipleFoulsChange creates a multiple fouls event change
-func (s *StateMachine) multipleFoulsChange(byTeam state.Team) *Change {
+func (s *StateMachine) multipleFoulsChange(byTeam state.Team, events []*state.GameEvent) *Change {
 	return createGameEventChange(state.GameEvent_MULTIPLE_FOULS, state.GameEvent{
 		Event: &state.GameEvent_MultipleFouls_{
 			MultipleFouls: &state.GameEvent_MultipleFouls{
-				ByTeam: &byTeam,
+				ByTeam:           &byTeam,
+				CausedGameEvents: events,
 			},
 		},
 	},
