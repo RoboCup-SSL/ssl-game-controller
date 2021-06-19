@@ -5,14 +5,14 @@ import (
 	"flag"
 	"fmt"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
+	"github.com/RoboCup-SSL/ssl-game-controller/pkg/sslnet"
 	"github.com/golang/protobuf/proto"
 	"log"
 	"math"
-	"net"
-	"time"
+	"os"
+	"os/signal"
+	"syscall"
 )
-
-const maxDatagramSize = 8192
 
 var refereeAddress = flag.String("address", "224.5.23.1:10003", "The multicast address of ssl-game-controller")
 var fullScreen = flag.Bool("fullScreen", false, "Print the formatted message to the console, clearing the screen during print")
@@ -22,64 +22,48 @@ var history []state.Referee_Command
 func main() {
 	flag.Parse()
 
-	addr, err := net.ResolveUDPAddr("udp", *refereeAddress)
-	if err != nil {
-		log.Fatal(err)
+	server := sslnet.NewMulticastServer(consume)
+	server.Start(*refereeAddress)
+
+	signals := make(chan os.Signal, 1)
+	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM)
+	<-signals
+	server.Stop()
+}
+
+func consume(b []byte) {
+	refMsg := state.Referee{}
+	if err := proto.Unmarshal(b, &refMsg); err != nil {
+		log.Println("Could not unmarshal referee message")
+		return
 	}
-	conn, err := net.ListenMulticastUDP("udp", nil, addr)
-	if err != nil {
-		log.Fatal(err)
+	if len(history) == 0 || *refMsg.Command != history[len(history)-1] {
+		history = append(history, *refMsg.Command)
 	}
 
-	if err := conn.SetReadBuffer(maxDatagramSize); err != nil {
-		log.Printf("Could not set read buffer to %v.", maxDatagramSize)
-	}
-	log.Println("Receiving from", *refereeAddress)
+	if *fullScreen {
+		// clear screen, move cursor to upper left corner
+		fmt.Print("\033[H\033[2J")
 
-	b := make([]byte, maxDatagramSize)
-	for {
-		n, err := conn.Read(b)
+		// print last commands
+		fmt.Print("Last commands: ")
+		n := int(math.Min(float64(len(history)), 5.0))
+		for i := 0; i < n; i++ {
+			fmt.Print(history[len(history)-1-i])
+			if i != n-1 {
+				fmt.Print(",")
+			}
+		}
+		fmt.Println()
+		fmt.Println()
+
+		// print message formatted with line breaks
+		fmt.Print(proto.MarshalTextString(&refMsg))
+	} else {
+		b, err := json.Marshal(&refMsg)
 		if err != nil {
-			log.Print("Could not read: ", err)
-			time.Sleep(1 * time.Second)
-			continue
+			log.Fatal(err)
 		}
-		if n >= maxDatagramSize {
-			log.Fatal("Buffer size too small")
-		}
-		refMsg := state.Referee{}
-		if err := proto.Unmarshal(b[0:n], &refMsg); err != nil {
-			log.Println("Could not unmarshal referee message")
-			continue
-		}
-		if len(history) == 0 || *refMsg.Command != history[len(history)-1] {
-			history = append(history, *refMsg.Command)
-		}
-
-		if *fullScreen {
-			// clear screen, move cursor to upper left corner
-			fmt.Print("\033[H\033[2J")
-
-			// print last commands
-			fmt.Print("Last commands: ")
-			n := int(math.Min(float64(len(history)), 5.0))
-			for i := 0; i < n; i++ {
-				fmt.Print(history[len(history)-1-i])
-				if i != n-1 {
-					fmt.Print(",")
-				}
-			}
-			fmt.Println()
-			fmt.Println()
-
-			// print message formatted with line breaks
-			fmt.Print(proto.MarshalTextString(&refMsg))
-		} else {
-			b, err := json.Marshal(refMsg)
-			if err != nil {
-				log.Fatal(err)
-			}
-			log.Print(string(b))
-		}
+		log.Print(string(b))
 	}
 }
