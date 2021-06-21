@@ -397,7 +397,6 @@ func addsYellowCard(gameEvent state.GameEvent_Type) bool {
 func addsRedCard(gameEvent state.GameEvent_Type) bool {
 	switch gameEvent {
 	case
-		state.GameEvent_DEFENDER_IN_DEFENSE_AREA,
 		state.GameEvent_MULTIPLE_CARDS,
 		state.GameEvent_UNSPORTING_BEHAVIOR_MAJOR:
 		return true
