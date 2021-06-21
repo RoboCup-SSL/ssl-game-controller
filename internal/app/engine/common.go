@@ -13,7 +13,7 @@ import (
 
 const ballSteadyThreshold = 0.2
 const robotRadius = 0.09
-const distanceThreshold = 0.03
+const distanceThreshold = 0.05
 
 func createGameEventChange(eventType state.GameEvent_Type, event state.GameEvent) *statemachine.Change {
 	event.Type = &eventType
