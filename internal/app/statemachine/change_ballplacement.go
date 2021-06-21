@@ -28,7 +28,10 @@ func (s *StateMachine) processChangeStartBallPlacement(newState *state.State) (c
 	}
 	log.Printf("Start ball placement for %v", teamInFavor)
 
-	if !*newState.TeamInfo(teamInFavor).CanPlaceBall {
+	if noTeamCanPlaceBall(newState) {
+		log.Printf("No team can place the ball. Human ref places the ball for team %v", teamInFavor)
+		changes = append(changes, s.createCommandChange(state.NewCommandNeutral(state.Command_HALT)))
+	} else if !*newState.TeamInfo(teamInFavor).CanPlaceBall && *newState.TeamInfo(teamInFavor.Opposite()).CanPlaceBall {
 		log.Printf("Placement for team %v is disabled, team %v places the ball for team %v", teamInFavor, teamInFavor.Opposite(), teamInFavor)
 		changes = append(changes, s.createCommandChange(state.NewCommand(state.Command_BALL_PLACEMENT, teamInFavor.Opposite())))
 	} else if !*newState.TeamInfo(teamInFavor).BallPlacementFailuresReached {
