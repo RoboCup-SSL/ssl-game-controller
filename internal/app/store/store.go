@@ -79,6 +79,9 @@ func (s *Store) Close() error {
 func (s *Store) Load() error {
 	s.entries = []*statemachine.StateChange{}
 	scanner := bufio.NewScanner(s.file)
+	maxSize := 1024 * 1024
+	buffer := make([]byte, maxSize)
+	scanner.Buffer(buffer, maxSize)
 	for scanner.Scan() {
 		b := scanner.Text()
 		entry := new(statemachine.StateChange)
