@@ -41,8 +41,18 @@ func (x *Config) ReadFrom(fileName string) (err error) {
 	if x.AutoRefConfigs == nil {
 		x.AutoRefConfigs = defConfig.AutoRefConfigs
 	}
+	for key, value := range defConfig.AutoRefConfigs {
+		if _, ok := x.AutoRefConfigs[key]; !ok {
+			x.AutoRefConfigs[key] = value
+		}
+	}
 	if x.GameEventBehavior == nil {
-		x.GameEventBehavior = defConfig.GameEventBehavior
+		x.GameEventBehavior = map[string]Config_Behavior{}
+	}
+	for key, value := range defConfig.GameEventBehavior {
+		if _, ok := x.GameEventBehavior[key]; !ok {
+			x.GameEventBehavior[key] = value
+		}
 	}
 	if len(x.Teams) == 0 {
 		x.Teams = defConfig.Teams

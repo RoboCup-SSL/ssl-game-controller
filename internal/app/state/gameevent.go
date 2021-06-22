@@ -74,7 +74,8 @@ func GameEventsForBehaviorConfig() (a []GameEvent_Type) {
 			GameEvent_ATTACKER_DOUBLE_TOUCHED_BALL,
 			GameEvent_PLACEMENT_SUCCEEDED,
 			GameEvent_PENALTY_KICK_FAILED,
-			GameEvent_NO_PROGRESS_IN_GAME:
+			GameEvent_NO_PROGRESS_IN_GAME,
+			GameEvent_TOO_MANY_ROBOTS:
 			a = append(a, eventType)
 		default:
 			// ignore
