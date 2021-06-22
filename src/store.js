@@ -4,6 +4,14 @@ import {Config, GcState, State} from "./proto";
 
 Vue.use(Vuex);
 
+const maxProtocolEntriesString = window.localStorage.getItem('maxProtocolEntries');
+let maxProtocolEntries = 50;
+if (maxProtocolEntriesString !== null) {
+    maxProtocolEntries = parseInt(maxProtocolEntriesString);
+} else {
+    window.localStorage.setItem('maxProtocolEntries', maxProtocolEntries);
+}
+
 export default new Vuex.Store({
     state: {
         gcState: GcState.create(),
@@ -26,6 +34,9 @@ export default new Vuex.Store({
                     state.protocol = message.protocol.entry.concat(state.protocol);
                 } else {
                     state.protocol = message.protocol.entry;
+                }
+                if (state.protocol.length > maxProtocolEntries) {
+                    state.protocol = state.protocol.slice(0, maxProtocolEntries);
                 }
             }
             if (message.gcState) {
