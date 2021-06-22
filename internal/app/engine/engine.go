@@ -34,6 +34,7 @@ type Engine struct {
 	mutex                    sync.Mutex
 	noProgressDetector       NoProgressDetector
 	ballPlacementCoordinator BallPlacementCoordinator
+	botNumberProcessor       BotNumberProcessor
 	tickChanProvider         func() <-chan time.Time
 }
 
@@ -59,6 +60,7 @@ func NewEngine(gameConfig config.Game, engineConfig config.Engine) (e *Engine) {
 	e.trackerLastUpdate = map[string]time.Time{}
 	e.noProgressDetector = NoProgressDetector{gcEngine: e}
 	e.ballPlacementCoordinator = BallPlacementCoordinator{gcEngine: e}
+	e.botNumberProcessor = BotNumberProcessor{gcEngine: e}
 	e.tickChanProvider = func() <-chan time.Time {
 		return time.After(25 * time.Millisecond)
 	}

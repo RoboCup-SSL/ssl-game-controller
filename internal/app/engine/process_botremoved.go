@@ -7,13 +7,32 @@ import (
 	"time"
 )
 
-func (e *Engine) processBotNumber() {
-	if !e.IsGameEventEnabled(state.GameEvent_TOO_MANY_ROBOTS) {
+type BotNumberProcessor struct {
+	gcEngine *Engine
+	lastTime *time.Time
+}
+
+func (p *BotNumberProcessor) processBotNumber() {
+
+	if !p.gcEngine.currentState.Command.IsRunning() ||
+		!p.gcEngine.IsGameEventEnabled(state.GameEvent_TOO_MANY_ROBOTS) {
+		p.lastTime = nil
+		return
+	}
+
+	if p.lastTime == nil {
+		p.lastTime = new(time.Time)
+		*p.lastTime = p.gcEngine.timeProvider()
+		return
+	}
+
+	timeSinceLastProgress := p.gcEngine.timeProvider().Sub(*p.lastTime)
+	if timeSinceLastProgress < 2*time.Second {
 		return
 	}
 
 	for _, team := range state.BothTeams() {
-		e.processBotNumberPerTeam(team)
+		p.gcEngine.processBotNumberPerTeam(team)
 	}
 }
 

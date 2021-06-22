@@ -60,7 +60,7 @@ func (e *Engine) processTick() {
 	e.noProgressDetector.process()
 	e.ballPlacementCoordinator.process()
 	e.processContinue()
-	e.processBotNumber()
+	e.botNumberProcessor.processBotNumber()
 	e.processPenalty()
 	e.processProposals()
 	e.processTrackerSources()
