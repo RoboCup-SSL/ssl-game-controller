@@ -170,6 +170,10 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 		*newState.TeamInfo(byTeam).BallPlacementFailuresReached = *newState.TeamInfo(byTeam).BallPlacementFailures >= s.gameConfig.MultiplePlacementFailures
 		if s.allTeamsFailedPlacement(newState) {
 			log.Printf("Placement failed for all teams. The human ref must place the ball.")
+			if s.numActiveBallPlacementTeams(newState) == 2 {
+				// both teams failed, switch back to original command
+				newState.NextCommand = state.NewCommand(state.Command_DIRECT, byTeam.Opposite())
+			}
 			changes = append(changes, s.createCommandChange(state.NewCommandNeutral(state.Command_HALT)))
 		} else {
 			log.Printf("Placement failed for team %v. Team %v is awarded a free kick and places the ball.", byTeam, byTeam.Opposite())
@@ -483,12 +487,7 @@ func locationForRuleViolation(gameEvent *state.GameEvent) *geom.Vector2 {
 // allTeamsFailedPlacement returns true if all teams failed placing the ball
 // It takes into account, how many teams are able to place the ball and how many failures happened
 func (s *StateMachine) allTeamsFailedPlacement(newState *state.State) bool {
-	possibleFailures := 0
-	for _, team := range state.BothTeams() {
-		if newState.TeamInfo(team).BallPlacementAllowed() {
-			possibleFailures++
-		}
-	}
+	possibleFailures := s.numActiveBallPlacementTeams(newState)
 
 	failures := 0
 	for _, e := range newState.GameEvents {
@@ -500,6 +499,16 @@ func (s *StateMachine) allTeamsFailedPlacement(newState *state.State) bool {
 		}
 	}
 	return false
+}
+
+func (s *StateMachine) numActiveBallPlacementTeams(newState *state.State) int {
+	possibleFailures := 0
+	for _, team := range state.BothTeams() {
+		if newState.TeamInfo(team).BallPlacementAllowed() {
+			possibleFailures++
+		}
+	}
+	return possibleFailures
 }
 
 func goTime(timestamp *timestamp.Timestamp) time.Time {
