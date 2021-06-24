@@ -71,7 +71,7 @@ func (e *Engine) processTick() {
 	for hookId, hook := range e.hooks {
 		select {
 		case hook <- hookOut:
-		case <-time.After(1 * time.Second):
+		default:
 			log.Printf("processTick: Hook %v unresponsive! Failed to sent %v", hookId, hookOut)
 		}
 	}

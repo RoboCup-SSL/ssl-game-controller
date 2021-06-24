@@ -314,7 +314,7 @@ func (e *Engine) processChange(change *statemachine.Change) (newChanges []*state
 		log.Println("Notify hook ", name)
 		select {
 		case hook <- hookOut:
-		case <-time.After(500 * time.Millisecond):
+		default:
 			log.Printf("Hook %v unresponsive! Failed to sent %v", name, hookOut)
 		}
 	}

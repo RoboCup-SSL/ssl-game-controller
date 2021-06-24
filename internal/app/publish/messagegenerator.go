@@ -21,7 +21,7 @@ type MessageGenerator struct {
 // NewPublisher creates a new publisher that publishes referee messages via UDP to the teams
 func NewMessageGenerator() (m *MessageGenerator) {
 	m = new(MessageGenerator)
-	m.EngineHook = make(chan engine.HookOut)
+	m.EngineHook = make(chan engine.HookOut, 10)
 	m.goal = map[state.Team]bool{}
 	m.goal[state.Team_BLUE] = false
 	m.goal[state.Team_YELLOW] = false
