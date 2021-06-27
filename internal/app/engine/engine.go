@@ -95,7 +95,7 @@ func isNonMajorityOrigin(origins []string) bool {
 func (e *Engine) filterGameEvent(change *statemachine.Change) *statemachine.Change {
 	gameEvent := change.GetAddGameEvent().GameEvent
 	behavior := e.config.GameEventBehavior[gameEvent.Type.String()]
-	if isNonMajorityOrigin(gameEvent.Origin) {
+	if isNonMajorityOrigin(gameEvent.Origin) && behavior == Config_BEHAVIOR_ACCEPT_MAJORITY {
 		behavior = Config_BEHAVIOR_ACCEPT
 	}
 	switch behavior {
