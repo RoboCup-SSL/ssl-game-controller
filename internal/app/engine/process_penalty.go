@@ -6,7 +6,8 @@ import (
 )
 
 func (e *Engine) processPenalty() {
-	if *e.currentState.GameState.Type == state.GameState_PENALTY &&
+	if e.IsGameEventEnabled(state.GameEvent_PENALTY_KICK_FAILED) &&
+		*e.currentState.GameState.Type == state.GameState_PENALTY &&
 		goDur(e.currentState.CurrentActionTimeRemaining) < 0 {
 		var location *geom.Vector2
 		if e.gcState.TrackerStateGc.Ball != nil {
