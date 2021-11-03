@@ -3,7 +3,7 @@ package statemachine
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/geom"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"testing"
 	"time"
 )
@@ -124,8 +124,8 @@ func Test_collectMatchingProposals(t *testing.T) {
 	}
 
 	now := time.Date(2020, 3, 10, 0, 0, 0, 0, time.UTC)
-	dateNew, _ := ptypes.TimestampProto(now.Add(time.Second))
-	dateOld, _ := ptypes.TimestampProto(now.Add(-time.Second))
+	dateNew := timestamppb.New(now.Add(time.Second))
+	dateOld := timestamppb.New(now.Add(-time.Second))
 
 	botTooFastType := state.GameEvent_BOT_TOO_FAST_IN_STOP
 	botTooFastOne := &state.GameEvent{

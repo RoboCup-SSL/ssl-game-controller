@@ -2,8 +2,9 @@ package statemachine
 
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
-	"github.com/golang/protobuf/ptypes"
 	"github.com/pkg/errors"
+	"google.golang.org/protobuf/types/known/durationpb"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"log"
 	"strconv"
 	"strings"
@@ -26,7 +27,7 @@ func (s *StateMachine) processChangeUpdateTeamState(newState *state.State, chang
 	}
 	if change.TimeoutTimeLeft != nil {
 		if duration, err := strToDuration(*change.TimeoutTimeLeft); err == nil {
-			teamState.TimeoutTimeLeft = ptypes.DurationProto(duration)
+			teamState.TimeoutTimeLeft = durationpb.New(duration)
 		}
 	}
 	if change.OnPositiveHalf != nil {
@@ -45,7 +46,7 @@ func (s *StateMachine) processChangeUpdateTeamState(newState *state.State, chang
 	}
 	if change.RequestsBotSubstitution != nil {
 		if *change.RequestsBotSubstitution {
-			teamState.RequestsBotSubstitutionSince, _ = ptypes.TimestampProto(s.timeProvider())
+			teamState.RequestsBotSubstitutionSince = timestamppb.New(s.timeProvider())
 		} else {
 			teamState.RequestsBotSubstitutionSince = nil
 		}
@@ -53,7 +54,7 @@ func (s *StateMachine) processChangeUpdateTeamState(newState *state.State, chang
 	if change.RequestsEmergencyStop != nil {
 		if *newState.GameState.Type == state.GameState_RUNNING {
 			if *change.RequestsEmergencyStop {
-				teamState.RequestsEmergencyStopSince, _ = ptypes.TimestampProto(s.timeProvider())
+				teamState.RequestsEmergencyStopSince = timestamppb.New(s.timeProvider())
 			} else {
 				teamState.RequestsEmergencyStopSince = nil
 			}
@@ -63,7 +64,7 @@ func (s *StateMachine) processChangeUpdateTeamState(newState *state.State, chang
 	}
 	if change.RequestsTimeout != nil {
 		if *change.RequestsTimeout {
-			teamState.RequestsTimeoutSince, _ = ptypes.TimestampProto(s.timeProvider())
+			teamState.RequestsTimeoutSince = timestamppb.New(s.timeProvider())
 		} else {
 			teamState.RequestsTimeoutSince = nil
 		}

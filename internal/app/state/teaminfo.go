@@ -1,8 +1,7 @@
 package state
 
 import (
-	"github.com/golang/protobuf/ptypes"
-	"github.com/golang/protobuf/ptypes/duration"
+	"google.golang.org/protobuf/types/known/durationpb"
 	"time"
 )
 
@@ -12,7 +11,7 @@ func newTeamInfo() (t *TeamInfo) {
 	t.Goals = new(int32)
 	t.Goalkeeper = new(int32)
 	t.TimeoutsLeft = new(int32)
-	t.TimeoutTimeLeft = new(duration.Duration)
+	t.TimeoutTimeLeft = new(durationpb.Duration)
 	t.OnPositiveHalf = new(bool)
 	t.BallPlacementFailures = new(int32)
 	t.BallPlacementFailuresReached = new(bool)
@@ -26,33 +25,33 @@ func newTeamInfo() (t *TeamInfo) {
 }
 
 // BallPlacementAllowed returns true, if the team has ball placement enabled and has not yet failed too often
-func (m *TeamInfo) BallPlacementAllowed() bool {
-	return *m.CanPlaceBall && !*m.BallPlacementFailuresReached
+func (x *TeamInfo) BallPlacementAllowed() bool {
+	return *x.CanPlaceBall && !*x.BallPlacementFailuresReached
 }
 
 // AddYellowCard adds a new yellow card to the team
-func (m *TeamInfo) AddYellowCard(d time.Duration, causedByGameEvent *GameEvent) {
+func (x *TeamInfo) AddYellowCard(d time.Duration, causedByGameEvent *GameEvent) {
 	id := uint32(0)
-	numCards := len(m.YellowCards)
+	numCards := len(x.YellowCards)
 	if numCards > 0 {
-		id = *m.YellowCards[numCards-1].Id + 1
+		id = *x.YellowCards[numCards-1].Id + 1
 	}
-	m.YellowCards = append(m.YellowCards, &YellowCard{
+	x.YellowCards = append(x.YellowCards, &YellowCard{
 		Id:                &id,
-		TimeRemaining:     ptypes.DurationProto(d),
+		TimeRemaining:     durationpb.New(d),
 		CausedByGameEvent: causedByGameEvent,
 	})
 	return
 }
 
 // AddRedCard adds a new red card to the team
-func (m *TeamInfo) AddRedCard(causedByGameEvent *GameEvent) {
+func (x *TeamInfo) AddRedCard(causedByGameEvent *GameEvent) {
 	id := uint32(0)
-	numCards := len(m.RedCards)
+	numCards := len(x.RedCards)
 	if numCards > 0 {
-		id = *m.RedCards[numCards-1].Id + 1
+		id = *x.RedCards[numCards-1].Id + 1
 	}
-	m.RedCards = append(m.RedCards, &RedCard{
+	x.RedCards = append(x.RedCards, &RedCard{
 		Id:                &id,
 		CausedByGameEvent: causedByGameEvent,
 	})
@@ -60,13 +59,13 @@ func (m *TeamInfo) AddRedCard(causedByGameEvent *GameEvent) {
 }
 
 // AddFoul adds a new foul to the team
-func (m *TeamInfo) AddFoul(causedByGameEvent *GameEvent) {
+func (x *TeamInfo) AddFoul(causedByGameEvent *GameEvent) {
 	id := uint32(0)
-	numCards := len(m.Fouls)
+	numCards := len(x.Fouls)
 	if numCards > 0 {
-		id = *m.Fouls[numCards-1].Id + 1
+		id = *x.Fouls[numCards-1].Id + 1
 	}
-	m.Fouls = append(m.Fouls, &Foul{
+	x.Fouls = append(x.Fouls, &Foul{
 		Id:                &id,
 		CausedByGameEvent: causedByGameEvent,
 	})

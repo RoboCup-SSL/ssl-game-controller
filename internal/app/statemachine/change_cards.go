@@ -2,7 +2,6 @@ package statemachine
 
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
-	"github.com/golang/protobuf/ptypes"
 )
 
 func (s *StateMachine) processChangeAddYellowCard(newState *state.State, change *AddYellowCard) (changes []*Change) {
@@ -38,7 +37,7 @@ func (s *StateMachine) updateMaxBots(newState *state.State) {
 
 func activeYellowCards(cards []*state.YellowCard) (count int32) {
 	for _, c := range cards {
-		d, _ := ptypes.Duration(c.TimeRemaining)
+		d := c.TimeRemaining.AsDuration()
 		if d > 0 {
 			count++
 		}

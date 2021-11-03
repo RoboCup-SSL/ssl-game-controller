@@ -3,15 +3,15 @@ package statemachine
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/geom"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/durationpb"
 	"time"
 )
 
 func (s *StateMachine) processChangeChangeStage(newState *state.State, change *ChangeStage) (changes []*Change) {
 
 	// update stage time
-	newState.StageTimeLeft = ptypes.DurationProto(s.stageTimes[*change.NewStage])
-	newState.StageTimeElapsed = ptypes.DurationProto(time.Duration(0))
+	newState.StageTimeLeft = durationpb.New(s.stageTimes[*change.NewStage])
+	newState.StageTimeElapsed = durationpb.New(time.Duration(0))
 
 	// if not transiting from a pre stage
 	if !newState.Stage.IsPreStage() {
@@ -34,9 +34,9 @@ func (s *StateMachine) processChangeChangeStage(newState *state.State, change *C
 	// update timeout times when transiting to overtime
 	if *change.NewStage == state.Referee_EXTRA_FIRST_HALF_PRE {
 		*newState.TeamInfo(state.Team_YELLOW).TimeoutsLeft = s.gameConfig.Overtime.Timeouts
-		newState.TeamInfo(state.Team_YELLOW).TimeoutTimeLeft = ptypes.DurationProto(s.gameConfig.Overtime.TimeoutDuration)
+		newState.TeamInfo(state.Team_YELLOW).TimeoutTimeLeft = durationpb.New(s.gameConfig.Overtime.TimeoutDuration)
 		*newState.TeamInfo(state.Team_BLUE).TimeoutsLeft = s.gameConfig.Overtime.Timeouts
-		newState.TeamInfo(state.Team_BLUE).TimeoutTimeLeft = ptypes.DurationProto(s.gameConfig.Overtime.TimeoutDuration)
+		newState.TeamInfo(state.Team_BLUE).TimeoutTimeLeft = durationpb.New(s.gameConfig.Overtime.TimeoutDuration)
 	}
 
 	// update next command based on new stage

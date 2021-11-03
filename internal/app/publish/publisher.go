@@ -2,7 +2,7 @@ package publish
 
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
-	"github.com/golang/protobuf/proto"
+	"google.golang.org/protobuf/proto"
 	"log"
 	"net"
 )

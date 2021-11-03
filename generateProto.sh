@@ -5,6 +5,9 @@ set -e
 # Print commands
 set -x
 
+# install latest protoc-gen-go
+go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+
 # common GC
 protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_common.proto
 protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_geometry.proto

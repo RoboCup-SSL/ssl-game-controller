@@ -2,7 +2,7 @@ package tracker
 
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/sslnet"
-	"github.com/golang/protobuf/proto"
+	"google.golang.org/protobuf/proto"
 	"log"
 	"sync"
 )

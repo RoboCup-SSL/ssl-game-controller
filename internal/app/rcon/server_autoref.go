@@ -5,7 +5,7 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/engine"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/sslconn"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
-	"github.com/odeke-em/go-uuid"
+	"github.com/google/uuid"
 	"github.com/pkg/errors"
 	"io"
 	"log"
@@ -65,7 +65,7 @@ func (s *AutoRefServer) handleClientConnection(conn net.Conn) {
 
 	reader := bufio.NewReaderSize(conn, 1)
 
-	client := AutoRefClient{Client: &Client{conn: conn, token: uuid.New()}}
+	client := AutoRefClient{Client: &Client{conn: conn, token: uuid.NewString()}}
 	client.reply(client.Ok())
 
 	err := client.receiveRegistration(reader, s)

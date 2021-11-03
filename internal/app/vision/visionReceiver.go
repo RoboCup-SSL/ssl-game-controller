@@ -3,7 +3,7 @@ package vision
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/sslnet"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/timer"
-	"github.com/golang/protobuf/proto"
+	"google.golang.org/protobuf/proto"
 	"log"
 	"sync"
 	"time"

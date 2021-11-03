@@ -4,7 +4,8 @@ import (
 	"flag"
 	"fmt"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/tracker"
-	"github.com/golang/protobuf/proto"
+	"google.golang.org/protobuf/encoding/prototext"
+	"google.golang.org/protobuf/proto"
 	"log"
 	"net"
 	"sort"
@@ -64,10 +65,10 @@ func main() {
 
 			// print message formatted with line breaks
 			for _, source := range sources {
-				fmt.Print(proto.MarshalTextString(sourcePackets[source]))
+				fmt.Print(prototext.MarshalOptions{Multiline: true}.Format(sourcePackets[source]))
 			}
 		} else {
-			log.Print(proto.CompactTextString(&packet))
+			log.Print(prototext.MarshalOptions{Multiline: false}.Format(&packet))
 		}
 	}
 }

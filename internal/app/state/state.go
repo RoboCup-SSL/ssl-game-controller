@@ -1,10 +1,10 @@
 package state
 
 import (
-	"github.com/golang/protobuf/jsonpb"
-	"github.com/golang/protobuf/proto"
-	"github.com/golang/protobuf/ptypes/duration"
-	"github.com/golang/protobuf/ptypes/timestamp"
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/durationpb"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 // NewState creates a new state, initialized for the start of a new game
@@ -13,10 +13,10 @@ func NewState() (s *State) {
 	s.Stage = new(Referee_Stage)
 	s.Command = NewCommandNeutral(Command_HALT)
 	s.GameState = NewGameStateNeutral(GameState_HALT)
-	s.StageTimeElapsed = new(duration.Duration)
-	s.StageTimeLeft = new(duration.Duration)
-	s.MatchTimeStart = new(timestamp.Timestamp)
-	s.CurrentActionTimeRemaining = new(duration.Duration)
+	s.StageTimeElapsed = new(durationpb.Duration)
+	s.StageTimeLeft = new(durationpb.Duration)
+	s.MatchTimeStart = new(timestamppb.Timestamp)
+	s.CurrentActionTimeRemaining = new(durationpb.Duration)
 	s.Division = new(Division)
 	s.AutoContinue = new(bool)
 	s.FirstKickoffTeam = new(Team)
@@ -57,10 +57,9 @@ func (m *State) TeamByName(name string) Team {
 }
 
 func (m *State) StringJson() string {
-	marshaler := jsonpb.Marshaler{}
-	if str, err := marshaler.MarshalToString(m); err != nil {
+	if b, err := protojson.Marshal(m); err != nil {
 		return err.Error()
 	} else {
-		return str
+		return string(b)
 	}
 }

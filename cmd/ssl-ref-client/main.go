@@ -6,7 +6,8 @@ import (
 	"fmt"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/sslnet"
-	"github.com/golang/protobuf/proto"
+	"google.golang.org/protobuf/encoding/prototext"
+	"google.golang.org/protobuf/proto"
 	"log"
 	"math"
 	"os"
@@ -58,7 +59,7 @@ func consume(b []byte) {
 		fmt.Println()
 
 		// print message formatted with line breaks
-		fmt.Print(proto.MarshalTextString(&refMsg))
+		fmt.Print(prototext.MarshalOptions{Multiline: true}.Format(&refMsg))
 	} else {
 		b, err := json.Marshal(&refMsg)
 		if err != nil {

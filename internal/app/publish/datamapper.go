@@ -3,7 +3,6 @@ package publish
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/geom"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
-	"github.com/golang/protobuf/ptypes"
 	"log"
 	"time"
 )
@@ -64,7 +63,7 @@ func commandByTeam(team state.Team, blueCommand state.Referee_Command, yellowCom
 
 func mapYellowCardTimes(cards []*state.YellowCard) (times []uint32) {
 	for _, c := range cards {
-		duration, _ := ptypes.Duration(c.TimeRemaining)
+		duration := c.TimeRemaining.AsDuration()
 		if duration > 0 {
 			times = append(times, mapTime(duration))
 		}

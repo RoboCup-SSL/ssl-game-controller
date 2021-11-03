@@ -2,8 +2,8 @@ package engine
 
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
-	"github.com/golang/protobuf/jsonpb"
 	"github.com/pkg/errors"
+	"google.golang.org/protobuf/encoding/protojson"
 	"io/ioutil"
 	"log"
 	"os"
@@ -32,7 +32,7 @@ func (x *Config) ReadFrom(fileName string) (err error) {
 		return
 	}
 
-	err = jsonpb.UnmarshalString(string(b), x)
+	err = protojson.Unmarshal(b, x)
 	if err != nil {
 		err = errors.Wrapf(err, "Could not unmarshal config file %v", fileName)
 	}
@@ -79,8 +79,8 @@ func (x *Config) LoadControllerConfig(configFileName string) {
 
 // WriteTo writes the config to the given file
 func (x *Config) WriteTo(fileName string) (err error) {
-	marshaler := jsonpb.Marshaler{Indent: "  "}
-	jsonStr, err := marshaler.MarshalToString(x)
+	marshaler := protojson.MarshalOptions{Indent: "  "}
+	b, err := marshaler.Marshal(x)
 	if err != nil {
 		err = errors.Wrapf(err, "Could not marshal config %v", x)
 		return
@@ -90,16 +90,15 @@ func (x *Config) WriteTo(fileName string) (err error) {
 		err = errors.Wrapf(err, "Could not create directory for config file: %v", fileName)
 		return
 	}
-	err = ioutil.WriteFile(fileName, []byte(jsonStr), 0600)
+	err = ioutil.WriteFile(fileName, b, 0600)
 	log.Printf("Written to %v", fileName)
 	return
 }
 
 func (x *Config) StringJson() string {
-	marshaler := jsonpb.Marshaler{}
-	if str, err := marshaler.MarshalToString(x); err != nil {
+	if b, err := protojson.Marshal(x); err != nil {
 		return err.Error()
 	} else {
-		return str
+		return string(b)
 	}
 }

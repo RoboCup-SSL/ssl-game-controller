@@ -3,7 +3,6 @@ package engine
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/geom"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
-	"github.com/golang/protobuf/ptypes"
 	"time"
 )
 
@@ -51,7 +50,7 @@ func (e *Engine) processBotNumberPerTeam(team state.Team) {
 		if e.gcState.TrackerStateGc.Ball != nil {
 			ballPos = e.gcState.TrackerStateGc.Ball.Pos.ToVector2()
 		}
-		e.Enqueue(createGameEventChange(state.GameEvent_TOO_MANY_ROBOTS, state.GameEvent{
+		e.Enqueue(createGameEventChange(state.GameEvent_TOO_MANY_ROBOTS, &state.GameEvent{
 			Event: &state.GameEvent_TooManyRobots_{
 				TooManyRobots: &state.GameEvent_TooManyRobots{
 					ByTeam:           &team,
@@ -66,7 +65,7 @@ func (e *Engine) processBotNumberPerTeam(team state.Team) {
 
 func newActiveYellowCards(cards []*state.YellowCard, minRemaining time.Duration) (count int32) {
 	for _, c := range cards {
-		d, _ := ptypes.Duration(c.TimeRemaining)
+		d := c.TimeRemaining.AsDuration()
 		if d > minRemaining {
 			count++
 		}

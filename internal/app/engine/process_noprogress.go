@@ -47,7 +47,7 @@ func (d *NoProgressDetector) process() {
 		location := d.gcEngine.gcState.TrackerStateGc.Ball.Pos.ToVector2()
 		if d.gcEngine.IsGameEventEnabled(state.GameEvent_KEEPER_HELD_BALL) {
 			if ok, team := d.isBallInAnyDefenseArea(); ok {
-				d.gcEngine.Enqueue(createGameEventChange(state.GameEvent_KEEPER_HELD_BALL, state.GameEvent{
+				d.gcEngine.Enqueue(createGameEventChange(state.GameEvent_KEEPER_HELD_BALL, &state.GameEvent{
 					Event: &state.GameEvent_KeeperHeldBall_{
 						KeeperHeldBall: &state.GameEvent_KeeperHeldBall{
 							ByTeam:   &team,
@@ -60,7 +60,7 @@ func (d *NoProgressDetector) process() {
 			}
 		}
 		if d.gcEngine.IsGameEventEnabled(state.GameEvent_NO_PROGRESS_IN_GAME) {
-			d.gcEngine.Enqueue(createGameEventChange(state.GameEvent_NO_PROGRESS_IN_GAME, state.GameEvent{
+			d.gcEngine.Enqueue(createGameEventChange(state.GameEvent_NO_PROGRESS_IN_GAME, &state.GameEvent{
 				Event: &state.GameEvent_NoProgressInGame_{
 					NoProgressInGame: &state.GameEvent_NoProgressInGame{
 						Location: location,

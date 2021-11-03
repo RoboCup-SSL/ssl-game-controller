@@ -5,9 +5,8 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/geom"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
-	"github.com/golang/protobuf/proto"
-	"github.com/golang/protobuf/ptypes"
-	"github.com/golang/protobuf/ptypes/timestamp"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/durationpb"
 	"log"
 	"time"
 )
@@ -97,7 +96,7 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 			proto.Merge(&goal, gameEvent.GetPossibleGoal())
 			goal.Message = new(string)
 			*goal.Message = "Valid and auto approved"
-			goalEvent := state.GameEvent{
+			goalEvent := &state.GameEvent{
 				Event: &state.GameEvent_Goal_{
 					Goal: &goal,
 				},
@@ -107,7 +106,7 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 			goal := state.GameEvent_Goal{}
 			proto.Merge(&goal, gameEvent.GetPossibleGoal())
 			goal.Message = &message
-			goalEvent := state.GameEvent{
+			goalEvent := &state.GameEvent{
 				Event: &state.GameEvent_InvalidGoal{
 					InvalidGoal: &goal,
 				},
@@ -148,8 +147,8 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 	// ball placement interference
 	if *gameEvent.Type == state.GameEvent_BOT_INTERFERED_PLACEMENT {
 		log.Printf("Reset current action time for ball placement interference by %v", byTeam)
-		curDuration, _ := ptypes.Duration(newState.CurrentActionTimeRemaining)
-		newState.CurrentActionTimeRemaining = ptypes.DurationProto(curDuration + s.gameConfig.BallPlacementTimeTopUp)
+		curDuration := newState.CurrentActionTimeRemaining.AsDuration()
+		newState.CurrentActionTimeRemaining = durationpb.New(curDuration + s.gameConfig.BallPlacementTimeTopUp)
 	}
 
 	// ball placement position
@@ -205,11 +204,11 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 
 		switch *newState.Command.Type {
 		case state.Command_DIRECT, state.Command_INDIRECT:
-			newState.CurrentActionTimeRemaining = ptypes.DurationProto(s.gameConfig.FreeKickTimeout[newState.Division.Div()])
+			newState.CurrentActionTimeRemaining = durationpb.New(s.gameConfig.FreeKickTimeout[newState.Division.Div()])
 		case state.Command_NORMAL_START:
-			newState.CurrentActionTimeRemaining = ptypes.DurationProto(s.gameConfig.PrepareTimeout)
+			newState.CurrentActionTimeRemaining = durationpb.New(s.gameConfig.PrepareTimeout)
 		case state.Command_FORCE_START:
-			newState.CurrentActionTimeRemaining = ptypes.DurationProto(s.gameConfig.NoProgressTimeout[newState.Division.Div()])
+			newState.CurrentActionTimeRemaining = durationpb.New(s.gameConfig.NoProgressTimeout[newState.Division.Div()])
 		default:
 			log.Printf("Unexpected command while handling defender too close to kick point: %v", *newState.Command.Type)
 		}
@@ -219,7 +218,7 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 		isRuleViolationDuringPenalty(*gameEvent.Type) {
 		if byTeam == *newState.GameState.ForTeam {
 			// rule violation by attacking team -> no goal
-			changes = append(changes, createGameEventChange(state.GameEvent_PENALTY_KICK_FAILED, state.GameEvent{
+			changes = append(changes, createGameEventChange(state.GameEvent_PENALTY_KICK_FAILED, &state.GameEvent{
 				Event: &state.GameEvent_PenaltyKickFailed_{
 					PenaltyKickFailed: &state.GameEvent_PenaltyKickFailed{
 						ByTeam:   &byTeam,
@@ -229,7 +228,7 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 			}))
 		} else if byTeam == newState.GameState.ForTeam.Opposite() {
 			// rule violation by defender team -> goal
-			changes = append(changes, createGameEventChange(state.GameEvent_GOAL, state.GameEvent{
+			changes = append(changes, createGameEventChange(state.GameEvent_GOAL, &state.GameEvent{
 				Event: &state.GameEvent_Goal_{
 					Goal: &state.GameEvent_Goal{
 						ByTeam: &byTeam,
@@ -274,7 +273,7 @@ func (s *StateMachine) isGoalValid(newState *state.State, gameEvent *state.GameE
 			foul.Timestamp != nil &&
 			gameEvent.GetPossibleGoal().LastTouchByTeam != nil &&
 			isNonStoppingFoul(*foul.CausedByGameEvent.Type) &&
-			goTime(foul.Timestamp).After(microTimestampToTime(*gameEvent.GetPossibleGoal().LastTouchByTeam)) {
+			foul.Timestamp.AsTime().After(microTimestampToTime(*gameEvent.GetPossibleGoal().LastTouchByTeam)) {
 			recentlyCommittedFouls = append(recentlyCommittedFouls, *foul.CausedByGameEvent.Type)
 		}
 	}
@@ -295,7 +294,7 @@ func (s *StateMachine) isGoalValid(newState *state.State, gameEvent *state.GameE
 
 // multipleFoulsChange creates a multiple fouls event change
 func (s *StateMachine) multipleFoulsChange(byTeam state.Team, events []*state.GameEvent) *Change {
-	return createGameEventChange(state.GameEvent_MULTIPLE_FOULS, state.GameEvent{
+	return createGameEventChange(state.GameEvent_MULTIPLE_FOULS, &state.GameEvent{
 		Event: &state.GameEvent_MultipleFouls_{
 			MultipleFouls: &state.GameEvent_MultipleFouls{
 				ByTeam:           &byTeam,
@@ -509,14 +508,6 @@ func (s *StateMachine) numActiveBallPlacementTeams(newState *state.State) int {
 		}
 	}
 	return possibleFailures
-}
-
-func goTime(timestamp *timestamp.Timestamp) time.Time {
-	goTime, err := ptypes.Timestamp(timestamp)
-	if err != nil {
-		log.Printf("Could not parse timestamp: %v", timestamp)
-	}
-	return goTime
 }
 
 func microTimestampToTime(timestamp uint64) time.Time {

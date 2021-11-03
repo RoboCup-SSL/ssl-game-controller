@@ -8,7 +8,7 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/geom"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/sslconn"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/tracker"
-	"github.com/odeke-em/go-uuid"
+	"github.com/google/uuid"
 	"log"
 	"net"
 	"os"
@@ -19,7 +19,7 @@ import (
 
 var address = flag.String("address", "localhost:10009", "The address of the ssl-game-controller CI interface")
 
-var id = uuid.New()
+var id = uuid.NewString()
 var name = "Test client"
 var trackerPacket = createTrackerPacket()
 

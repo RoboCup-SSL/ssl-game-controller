@@ -29,7 +29,7 @@ func (c *BallPlacementCoordinator) process() {
 	remainingDistance := c.remainingPlacementDistance()
 
 	if goDur(e.currentState.CurrentActionTimeRemaining) <= 0 {
-		e.Enqueue(createGameEventChange(state.GameEvent_PLACEMENT_FAILED, state.GameEvent{
+		e.Enqueue(createGameEventChange(state.GameEvent_PLACEMENT_FAILED, &state.GameEvent{
 			Event: &state.GameEvent_PlacementFailed_{
 				PlacementFailed: &state.GameEvent_PlacementFailed{
 					ByTeam:            e.currentState.Command.ForTeam,

@@ -5,7 +5,7 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"github.com/go-test/deep"
-	"github.com/golang/protobuf/proto"
+	"google.golang.org/protobuf/proto"
 	"io/ioutil"
 	"os"
 	"testing"

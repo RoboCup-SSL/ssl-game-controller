@@ -6,8 +6,7 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/sslconn"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
-	"github.com/golang/protobuf/proto"
-	"github.com/odeke-em/go-uuid"
+	"github.com/google/uuid"
 	"github.com/pkg/errors"
 	"io"
 	"log"
@@ -101,7 +100,7 @@ func (s *TeamServer) handleClientConnection(conn net.Conn) {
 
 	reader := bufio.NewReaderSize(conn, 1)
 
-	client := TeamClient{Client: &Client{conn: conn, token: uuid.New()}}
+	client := TeamClient{Client: &Client{conn: conn, token: uuid.NewString()}}
 	client.reply(client.Ok())
 
 	err := client.receiveRegistration(reader, s)
@@ -177,7 +176,7 @@ func (s *TeamServer) processRequest(teamClient TeamClient, request *TeamToContro
 		return nil
 	}
 
-	log.Print("Received request from team: ", proto.MarshalTextString(request))
+	log.Print("Received request from team: ", request)
 
 	currentState := s.gcEngine.CurrentState()
 	if teamClient.team == state.Team_UNKNOWN {

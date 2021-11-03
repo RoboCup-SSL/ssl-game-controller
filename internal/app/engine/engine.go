@@ -7,9 +7,10 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/store"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/timer"
-	"github.com/golang/protobuf/proto"
-	"github.com/golang/protobuf/ptypes"
 	"github.com/pkg/errors"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/durationpb"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"log"
 	"sync"
 	"time"
@@ -102,7 +103,7 @@ func (e *Engine) filterGameEvent(change *statemachine.Change) *statemachine.Chan
 	case Config_BEHAVIOR_ACCEPT, Config_BEHAVIOR_UNKNOWN:
 		return change
 	case Config_BEHAVIOR_ACCEPT_MAJORITY, Config_BEHAVIOR_PROPOSE_ONLY:
-		timestamp, _ := ptypes.TimestampProto(e.timeProvider())
+		timestamp := timestamppb.New(e.timeProvider())
 		return &statemachine.Change{
 			Origin: &changeOriginEngine,
 			Change: &statemachine.Change_AddProposal{
@@ -124,7 +125,7 @@ func (e *Engine) filterGameEvent(change *statemachine.Change) *statemachine.Chan
 			},
 		}
 	case Config_BEHAVIOR_IGNORE:
-		log.Printf("Ignoring game event: %v", *gameEvent)
+		log.Printf("Ignoring game event: %v", gameEvent)
 	}
 	return nil
 }
@@ -263,10 +264,10 @@ func (e *Engine) processChange(change *statemachine.Change) (newChanges []*state
 	defer e.mutex.Unlock()
 	log.Printf("Engine: Process change '%v'", change.StringJson())
 
-	entry := statemachine.StateChange{}
+	entry := &statemachine.StateChange{}
 	entry.Change = change
 	entry.StatePre = new(state.State)
-	entry.Timestamp, _ = ptypes.TimestampProto(e.timeProvider())
+	entry.Timestamp = timestamppb.New(e.timeProvider())
 	proto.Merge(entry.StatePre, e.currentState)
 
 	if change.GetRevert() != nil {
@@ -305,7 +306,7 @@ func (e *Engine) processChange(change *statemachine.Change) (newChanges []*state
 	e.postProcessChange(entry)
 
 	log.Println("Add entry to state store")
-	if err := e.stateStore.Add(&entry); err != nil {
+	if err := e.stateStore.Add(entry); err != nil {
 		log.Println("Could not add new state to store: ", err)
 	}
 	stateCopy := e.currentState.Clone()
@@ -338,7 +339,7 @@ func (e *Engine) createInitialState() (s *state.State) {
 	s.Division = state.ToDiv(e.gameConfig.DefaultDivision)
 	for _, team := range state.BothTeams() {
 		*s.TeamInfo(team).TimeoutsLeft = e.gameConfig.Normal.Timeouts
-		s.TeamInfo(team).TimeoutTimeLeft = ptypes.DurationProto(e.gameConfig.Normal.TimeoutDuration)
+		s.TeamInfo(team).TimeoutTimeLeft = durationpb.New(e.gameConfig.Normal.TimeoutDuration)
 		*s.TeamInfo(team).MaxAllowedBots = e.gameConfig.MaxBots[e.gameConfig.DefaultDivision]
 		*s.TeamInfo(team).ChallengeFlags = e.gameConfig.ChallengeFlags
 	}
@@ -348,11 +349,11 @@ func (e *Engine) createInitialState() (s *state.State) {
 }
 
 // postProcessChange performs synchronous post processing steps
-func (e *Engine) postProcessChange(entry statemachine.StateChange) {
+func (e *Engine) postProcessChange(entry *statemachine.StateChange) {
 	change := entry.Change
 	if change.GetChangeStage() != nil &&
 		*change.GetChangeStage().NewStage == state.Referee_NORMAL_FIRST_HALF {
-		e.currentState.MatchTimeStart, _ = ptypes.TimestampProto(e.timeProvider())
+		e.currentState.MatchTimeStart = timestamppb.New(e.timeProvider())
 	}
 	if change.GetNewCommand() != nil &&
 		*change.GetNewCommand().Command.Type == state.Command_STOP &&

@@ -3,8 +3,8 @@ package store
 import (
 	"bufio"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
-	"github.com/golang/protobuf/jsonpb"
 	"github.com/pkg/errors"
+	"google.golang.org/protobuf/encoding/protojson"
 	"os"
 	"path/filepath"
 	"time"
@@ -15,7 +15,7 @@ type Store struct {
 	filename  string
 	file      *os.File
 	entries   []*statemachine.StateChange
-	marshaler jsonpb.Marshaler
+	marshaler protojson.MarshalOptions
 }
 
 // NewStore creates a new store
@@ -83,9 +83,9 @@ func (s *Store) Load() error {
 	buffer := make([]byte, maxSize)
 	scanner.Buffer(buffer, maxSize)
 	for scanner.Scan() {
-		b := scanner.Text()
+		b := scanner.Bytes()
 		entry := new(statemachine.StateChange)
-		if err := jsonpb.UnmarshalString(b, entry); err != nil {
+		if err := protojson.Unmarshal(b, entry); err != nil {
 			return errors.Errorf("Could not unmarshal entry: %v %v", b, err)
 		}
 		s.entries = append(s.entries, entry)
@@ -104,12 +104,12 @@ func (s *Store) Add(entry *statemachine.StateChange) error {
 	*entry.Id = int32(len(s.entries))
 	s.entries = append(s.entries, entry)
 
-	jsonState, err := s.marshaler.MarshalToString(entry)
+	jsonState, err := protojson.Marshal(entry)
 	if err != nil {
 		return errors.Wrap(err, "Can not marshal entry")
 	}
 
-	_, err = s.file.WriteString(jsonState)
+	_, err = s.file.WriteString(string(jsonState))
 	if err != nil {
 		return errors.Wrapf(err, "Could not write '%v' to store", jsonState)
 	}

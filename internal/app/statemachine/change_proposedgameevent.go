@@ -26,7 +26,7 @@ func findGroup(proposal *state.Proposal, proposals []*state.ProposalGroup, timeo
 	for i, group := range proposals {
 		latestProposal := group.Proposals[len(group.Proposals)-1]
 		if gameEventsSimilar(proposal.GameEvent, latestProposal.GameEvent) &&
-			(isNonTimeoutEvent(proposal) || goTime(proposal.Timestamp).Sub(goTime(latestProposal.Timestamp)) < timeout) {
+			(isNonTimeoutEvent(proposal) || proposal.Timestamp.AsTime().Sub(latestProposal.Timestamp.AsTime()) < timeout) {
 			return true, i
 		}
 	}

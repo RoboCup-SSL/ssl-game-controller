@@ -4,8 +4,9 @@ import (
 	"bufio"
 	"encoding/base64"
 	"encoding/binary"
-	"github.com/golang/protobuf/proto"
 	"github.com/pkg/errors"
+	"google.golang.org/protobuf/encoding/protowire"
+	"google.golang.org/protobuf/proto"
 	"io"
 	"net"
 )
@@ -29,7 +30,7 @@ func SendMessage(conn net.Conn, message proto.Message) error {
 	}
 
 	size := uint64(len(data))
-	data = append(proto.EncodeVarint(size), data...)
+	data = append(protowire.AppendVarint([]byte{}, size), data...)
 
 	if _, err = conn.Write(data); err != nil {
 		return err

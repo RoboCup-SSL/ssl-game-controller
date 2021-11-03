@@ -4,7 +4,7 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/go-test/deep"
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/durationpb"
 	"testing"
 	"time"
 )
@@ -36,7 +36,7 @@ func Test_Statemachine(t *testing.T) {
 				}},
 			wantNewState: func(s *state.State) {
 				s.Command = state.NewCommand(state.Command_DIRECT, state.Team_BLUE)
-				s.CurrentActionTimeRemaining = ptypes.DurationProto(gameConfig.FreeKickTimeout[config.DivA])
+				s.CurrentActionTimeRemaining = durationpb.New(gameConfig.FreeKickTimeout[config.DivA])
 				s.GameState = state.NewGameStateWithTeam(state.GameState_FREE_KICK, state.Team_BLUE)
 			},
 		},
@@ -56,7 +56,7 @@ func Test_Statemachine(t *testing.T) {
 			},
 			wantNewState: func(s *state.State) {
 				*s.Stage = state.Referee_NORMAL_FIRST_HALF
-				s.StageTimeLeft = ptypes.DurationProto(gameConfig.Normal.HalfDuration)
+				s.StageTimeLeft = durationpb.New(gameConfig.Normal.HalfDuration)
 			},
 		},
 	}

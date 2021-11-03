@@ -7,7 +7,6 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/rcon"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/sslconn"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/client"
-	"github.com/golang/protobuf/proto"
 	"log"
 	"net"
 	"time"
@@ -116,7 +115,7 @@ func (c *Client) sendRequest(request *rcon.TeamToController) (accepted bool) {
 		request.Signature.Pkcs1V15 = client.Sign(privateKey, request)
 	}
 
-	log.Print("Sending ", proto.MarshalTextString(request))
+	log.Print("Sending ", request.String())
 
 	if err := sslconn.SendMessage(c.conn, request); err != nil {
 		log.Fatalf("Failed sending request: %v (%v)", request, err)
@@ -127,7 +126,7 @@ func (c *Client) sendRequest(request *rcon.TeamToController) (accepted bool) {
 	if err := sslconn.ReceiveMessage(c.reader, &reply); err != nil {
 		log.Fatal("Failed receiving controller reply: ", err)
 	}
-	log.Print("Received reply: ", proto.MarshalTextString(&reply))
+	log.Print("Received reply: ", reply.String())
 	if reply.GetControllerReply().StatusCode == nil || *reply.GetControllerReply().StatusCode != rcon.ControllerReply_OK {
 		log.Print("Message rejected: ", *reply.GetControllerReply().Reason)
 		accepted = false

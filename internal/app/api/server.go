@@ -1,15 +1,14 @@
 package api
 
 import (
-	"bytes"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/engine"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
-	"github.com/golang/protobuf/jsonpb"
-	"github.com/golang/protobuf/proto"
-	"github.com/golang/protobuf/ptypes"
+	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
-	"github.com/odeke-em/go-uuid"
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/durationpb"
 	"log"
 	"net/http"
 	"reflect"
@@ -29,7 +28,7 @@ type ServerConnection struct {
 	lastGcState        *engine.GcState
 	lastProtocolId     int32
 	lastConfig         *engine.Config
-	marshaler          jsonpb.Marshaler
+	marshaler          protojson.MarshalOptions
 }
 
 func NewServer(gcEngine *engine.Engine) (s *Server) {
@@ -45,7 +44,7 @@ func NewServerConnection(gcEngine *engine.Engine, conn *websocket.Conn) (s *Serv
 	s.conn = conn
 	s.gcEngine = gcEngine
 	s.lastProtocolId = -1
-	s.marshaler.EmitDefaults = true
+	s.marshaler.EmitUnpopulated = true
 	return
 }
 
@@ -73,7 +72,7 @@ func (a *Server) WsHandler(w http.ResponseWriter, r *http.Request) {
 
 func (s *ServerConnection) publish() {
 	hook := make(chan engine.HookOut, 10)
-	hookId := "apiServer-" + uuid.New()
+	hookId := "apiServer-" + uuid.NewString()
 	s.gcEngine.RegisterHook(hookId, hook)
 	defer func() {
 		s.gcEngine.UnregisterHook(hookId)
@@ -175,15 +174,15 @@ func (s *ServerConnection) changesToProtocolEntries(changes []*statemachine.Stat
 	for i, change := range changes {
 		var matchTimeElapsed time.Duration
 		if change.State.MatchTimeStart.Seconds != 0 {
-			tChange, _ := ptypes.Timestamp(change.Timestamp)
-			tStart, _ := ptypes.Timestamp(change.State.MatchTimeStart)
+			tChange := change.Timestamp.AsTime()
+			tStart := change.State.MatchTimeStart.AsTime()
 			matchTimeElapsed = tChange.Sub(tStart)
 		}
 
 		entries[len(changes)-1-i] = &ProtocolEntry{
 			Id:               change.Id,
 			Change:           change.Change,
-			MatchTimeElapsed: ptypes.DurationProto(matchTimeElapsed),
+			MatchTimeElapsed: durationpb.New(matchTimeElapsed),
 			StageTimeElapsed: change.State.StageTimeElapsed,
 		}
 	}
@@ -191,12 +190,12 @@ func (s *ServerConnection) changesToProtocolEntries(changes []*statemachine.Stat
 }
 
 func (s *ServerConnection) publishOutput(wrapper *Output) {
-	b, err := s.marshaler.MarshalToString(wrapper)
+	b, err := s.marshaler.Marshal(wrapper)
 	if err != nil {
 		log.Println("Marshal error:", err)
 	}
 
-	err = s.conn.WriteMessage(websocket.TextMessage, []byte(b))
+	err = s.conn.WriteMessage(websocket.TextMessage, b)
 	if err != nil {
 		log.Println("Could not write message to api client:", err)
 	}
@@ -231,7 +230,7 @@ func (a *Server) listenForNewEvents(conn *websocket.Conn) {
 
 func (a *Server) handleNewEventMessage(b []byte) {
 	in := Input{}
-	err := jsonpb.Unmarshal(bytes.NewReader(b), &in)
+	err := protojson.Unmarshal(b, &in)
 	if err != nil {
 		log.Println("Could not read input:", string(b), err)
 		return

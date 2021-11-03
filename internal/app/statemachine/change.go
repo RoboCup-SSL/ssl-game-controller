@@ -1,12 +1,13 @@
 package statemachine
 
-import "github.com/golang/protobuf/jsonpb"
+import (
+	"google.golang.org/protobuf/encoding/protojson"
+)
 
 func (m *Change) StringJson() string {
-	marshaler := jsonpb.Marshaler{}
-	if str, err := marshaler.MarshalToString(m); err != nil {
+	if b, err := protojson.Marshal(m); err != nil {
 		return err.Error()
 	} else {
-		return str
+		return string(b)
 	}
 }

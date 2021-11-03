@@ -7,9 +7,9 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/pem"
-	"github.com/golang/protobuf/proto"
-	"github.com/odeke-em/go-uuid"
+	"github.com/google/uuid"
 	"github.com/pkg/errors"
+	"google.golang.org/protobuf/proto"
 	"io/ioutil"
 	"log"
 	"net"
@@ -272,6 +272,6 @@ func (c *Client) verifyMessage(message SignedMessage) error {
 	if err != nil {
 		return errors.New("Invalid signature")
 	}
-	c.token = uuid.New()
+	c.token = uuid.NewString()
 	return nil
 }

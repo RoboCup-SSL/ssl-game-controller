@@ -15,7 +15,7 @@ func (e *Engine) processEmergencyStop() {
 			(*e.currentState.GameState.Type != state.GameState_RUNNING || *dueIn <= 0) {
 			byTeam := team
 			e.Enqueue(createGameEventChange(state.GameEvent_EMERGENCY_STOP,
-				state.GameEvent{
+				&state.GameEvent{
 					Event: &state.GameEvent_EmergencyStop_{
 						EmergencyStop: &state.GameEvent_EmergencyStop{
 							ByTeam: &byTeam,

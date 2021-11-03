@@ -6,10 +6,9 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/sslconn"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
-	"github.com/golang/protobuf/proto"
-	"github.com/golang/protobuf/ptypes/timestamp"
-	"github.com/odeke-em/go-uuid"
+	"github.com/google/uuid"
 	"github.com/pkg/errors"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"io"
 	"log"
 	"net"
@@ -77,7 +76,7 @@ func (s *RemoteControlServer) handleClientConnection(conn net.Conn) {
 	reader := bufio.NewReaderSize(conn, 1)
 
 	client := RemoteControlClient{
-		Client:   &Client{conn: conn, token: uuid.New()},
+		Client:   &Client{conn: conn, token: uuid.NewString()},
 		gcEngine: s.gcEngine,
 	}
 	client.reply(client.Ok())
@@ -156,7 +155,7 @@ func (c *RemoteControlClient) replyWithPayload(reply *ControllerReply, response 
 	}
 }
 
-func timeSet(t *timestamp.Timestamp) (set *bool) {
+func timeSet(t *timestamppb.Timestamp) (set *bool) {
 	set = new(bool)
 	*set = t != nil
 	return
@@ -195,7 +194,7 @@ func (s *RemoteControlServer) processRequest(team state.Team, request *RemoteCon
 		}, nil
 	}
 
-	log.Print("Received request from remote-control: ", proto.MarshalTextString(request))
+	log.Print("Received request from remote-control: ", request)
 
 	currentState := s.gcEngine.CurrentState()
 	teamState := *currentState.TeamInfo(team)

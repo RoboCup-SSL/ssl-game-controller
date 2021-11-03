@@ -3,7 +3,7 @@ package engine
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/durationpb"
 	"log"
 	"time"
 )
@@ -27,7 +27,7 @@ func (e *Engine) processTick() {
 		minimumTimeRemaining := -time.Minute * 30
 		if goDur(e.currentState.CurrentActionTimeRemaining) < minimumTimeRemaining {
 			// limit how small this time can get to avoid overflow in referee message
-			e.currentState.CurrentActionTimeRemaining = ptypes.DurationProto(minimumTimeRemaining)
+			e.currentState.CurrentActionTimeRemaining = durationpb.New(minimumTimeRemaining)
 		}
 	}
 
@@ -96,7 +96,7 @@ func (e *Engine) updateYellowCardTimes(teamState *state.TeamInfo, delta time.Dur
 		}
 		addDur(teamState.YellowCards[i].TimeRemaining, -delta)
 		if goDur(teamState.YellowCards[i].TimeRemaining) <= 0 {
-			teamState.YellowCards[i].TimeRemaining = ptypes.DurationProto(0)
+			teamState.YellowCards[i].TimeRemaining = durationpb.New(0)
 			e.queue <- &statemachine.Change{
 				Origin: &changeOriginEngine,
 				Change: &statemachine.Change_YellowCardOver{

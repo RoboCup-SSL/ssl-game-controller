@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/geom"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/tracker"
-	"github.com/golang/protobuf/proto"
-	"github.com/odeke-em/go-uuid"
+	"github.com/google/uuid"
+	"google.golang.org/protobuf/proto"
 	"log"
 	"net"
 	"os"
@@ -37,7 +37,7 @@ func main() {
 		log.Printf("Could not set read buffer to %v.", maxDatagramSize)
 	}
 
-	frame := tracker.TrackedFrame{
+	frame := &tracker.TrackedFrame{
 		FrameNumber: new(uint32),
 		Timestamp:   new(float64),
 		Balls: []*tracker.TrackedBall{
@@ -67,7 +67,7 @@ func main() {
 			*frame.Balls[0].Pos.X = float32(x)
 			*frame.Balls[0].Pos.Y = float32(y)
 			*frame.Balls[0].Pos.Z = float32(z)
-			log.Printf("Ball changed: %v", *frame.Balls[0])
+			log.Printf("Ball changed: %v", frame.Balls[0])
 		}
 	}
 
@@ -97,18 +97,18 @@ func main() {
 	}
 }
 
-func publish(frame tracker.TrackedFrame, conn *net.UDPConn) {
-	id := uuid.New()
-	wrapperPacket := tracker.TrackerWrapperPacket{
+func publish(frame *tracker.TrackedFrame, conn *net.UDPConn) {
+	id := uuid.NewString()
+	wrapperPacket := &tracker.TrackerWrapperPacket{
 		Uuid:         &id,
 		SourceName:   sourceName,
-		TrackedFrame: &frame,
+		TrackedFrame: frame,
 	}
 
 	log.Println("Sending to ", *trackerAddress)
 	for {
 		*frame.Timestamp = float64(time.Now().UnixNano()) / 1e9
-		if bytes, err := proto.Marshal(&wrapperPacket); err != nil {
+		if bytes, err := proto.Marshal(wrapperPacket); err != nil {
 			log.Printf("Could not marshal packet: %v\nError: %v", wrapperPacket, err)
 			return
 		} else {

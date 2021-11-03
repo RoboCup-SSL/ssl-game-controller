@@ -3,8 +3,7 @@ package publish
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/engine"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
-	"github.com/golang/protobuf/ptypes"
-	"github.com/golang/protobuf/ptypes/duration"
+	"google.golang.org/protobuf/types/known/durationpb"
 	"time"
 )
 
@@ -18,7 +17,7 @@ type MessageGenerator struct {
 	EngineHook       chan engine.HookOut
 }
 
-// NewPublisher creates a new publisher that publishes referee messages via UDP to the teams
+// NewMessageGenerator creates a new publisher that publishes referee messages via UDP to the teams
 func NewMessageGenerator() (m *MessageGenerator) {
 	m = new(MessageGenerator)
 	m.EngineHook = make(chan engine.HookOut, 10)
@@ -105,10 +104,10 @@ func (g *MessageGenerator) StateToRefereeMessage(matchState *state.State) (r *st
 	*r.CommandTimestamp = g.commandTimestamp
 	*r.PacketTimestamp = uint64(time.Now().UnixNano() / 1000)
 	*r.Stage = *matchState.Stage
-	*r.StageTimeLeft = microseconds(*matchState.StageTimeLeft)
+	*r.StageTimeLeft = microseconds(matchState.StageTimeLeft)
 	*r.BlueTeamOnPositiveHalf = *matchState.TeamInfo(state.Team_BLUE).OnPositiveHalf
 	r.NextCommand = mapCommand(matchState.NextCommand)
-	*r.CurrentActionTimeRemaining = microseconds(*matchState.CurrentActionTimeRemaining)
+	*r.CurrentActionTimeRemaining = microseconds(matchState.CurrentActionTimeRemaining)
 
 	updateTeam(r.Yellow, matchState.TeamInfo(state.Team_YELLOW))
 	updateTeam(r.Blue, matchState.TeamInfo(state.Team_BLUE))
@@ -129,7 +128,7 @@ func updateTeam(teamInfo *state.Referee_TeamInfo, teamState *state.TeamInfo) {
 	*teamInfo.CanPlaceBall = *teamState.CanPlaceBall
 	*teamInfo.MaxAllowedBots = unsigned32(*teamState.MaxAllowedBots)
 	*teamInfo.BotSubstitutionIntent = teamState.RequestsBotSubstitutionSince != nil
-	timeoutTime, _ := ptypes.Duration(teamState.TimeoutTimeLeft)
+	timeoutTime := teamState.TimeoutTimeLeft.AsDuration()
 	*teamInfo.TimeoutTime = mapTime(timeoutTime)
 }
 
@@ -180,6 +179,6 @@ func unsigned(v int) uint32 {
 	return uint32(v)
 }
 
-func microseconds(dur duration.Duration) int32 {
+func microseconds(dur *durationpb.Duration) int32 {
 	return int32(dur.Seconds)*1_000_000 + dur.Nanos/1000
 }

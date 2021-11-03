@@ -1,14 +1,13 @@
 module github.com/RoboCup-SSL/ssl-game-controller
 
-go 1.14
+go 1.16
 
 require (
-	github.com/go-test/deep v1.0.5
+	github.com/go-test/deep v1.0.8
 	github.com/gobuffalo/packr v1.30.1
-	github.com/golang/protobuf v1.5.0
-	github.com/gorilla/websocket v1.4.1
-	github.com/odeke-em/go-uuid v0.0.0-20151221120446-b211d769a9aa
+	github.com/google/uuid v1.3.0
+	github.com/gorilla/websocket v1.4.2
 	github.com/pkg/errors v0.9.1
-	google.golang.org/protobuf v1.26.0
-	gopkg.in/yaml.v2 v2.2.8
+	google.golang.org/protobuf v1.27.1
+	gopkg.in/yaml.v2 v2.4.0
 )
