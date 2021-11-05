@@ -210,8 +210,8 @@ func (c *Client) sendRequest(request *rcon.AutoRefToController, doLog bool) {
 	}
 
 	logIf(doLog, "Waiting for reply...")
-	reply := rcon.ControllerToAutoRef{}
-	if err := sslconn.ReceiveMessage(c.reader, &reply); err != nil {
+	reply := &rcon.ControllerToAutoRef{}
+	if err := sslconn.ReceiveMessage(c.reader, reply); err != nil {
 		log.Fatal("Failed receiving controller reply: ", err)
 	}
 	logIf(doLog, "Received reply: ", reply)

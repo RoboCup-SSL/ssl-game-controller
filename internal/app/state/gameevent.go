@@ -5,11 +5,11 @@ import (
 )
 
 // ByTeam extracts the `ByTeam` attribute from the game event details, if present
-func (m GameEvent) ByTeam() Team {
-	if m.GetEvent() == nil {
+func (x *GameEvent) ByTeam() Team {
+	if x.GetEvent() == nil {
 		return Team_UNKNOWN
 	}
-	event := reflect.ValueOf(m.GetEvent())
+	event := reflect.ValueOf(x.GetEvent())
 	if event.Elem().NumField() == 0 {
 		return Team_UNKNOWN
 	}
@@ -25,11 +25,11 @@ func (m GameEvent) ByTeam() Team {
 }
 
 // SetByTeam sets the value of the `ByTeam` attribute to the given value, if present and not nil
-func (m GameEvent) SetByTeam(team Team) {
-	if m.GetEvent() == nil {
+func (x *GameEvent) SetByTeam(team Team) {
+	if x.GetEvent() == nil {
 		return
 	}
-	event := reflect.ValueOf(m.GetEvent())
+	event := reflect.ValueOf(x.GetEvent())
 	if event.Elem().NumField() == 0 {
 		return
 	}

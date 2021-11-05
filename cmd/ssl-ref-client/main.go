@@ -17,6 +17,7 @@ import (
 
 var refereeAddress = flag.String("address", "224.5.23.1:10003", "The multicast address of ssl-game-controller")
 var fullScreen = flag.Bool("fullScreen", false, "Print the formatted message to the console, clearing the screen during print")
+var verbose = flag.Bool("verbose", false, "Verbose output")
 
 var history []state.Referee_Command
 
@@ -24,6 +25,7 @@ func main() {
 	flag.Parse()
 
 	server := sslnet.NewMulticastServer(consume)
+	server.Verbose = *verbose
 	server.Start(*refereeAddress)
 
 	signals := make(chan os.Signal, 1)

@@ -35,20 +35,20 @@ func NewState() (s *State) {
 	return
 }
 
-func (m *State) Clone() *State {
+func (x *State) Clone() *State {
 	s := new(State)
-	proto.Merge(s, m)
+	proto.Merge(s, x)
 	return s
 }
 
 // TeamInfo returns the team info for the given team
-func (m *State) TeamInfo(team Team) *TeamInfo {
-	return m.TeamState[team.String()]
+func (x *State) TeamInfo(team Team) *TeamInfo {
+	return x.TeamState[team.String()]
 }
 
 // TeamByName returns the team for the given team name
-func (m *State) TeamByName(name string) Team {
-	for teamColor, teamInfo := range m.TeamState {
+func (x *State) TeamByName(name string) Team {
+	for teamColor, teamInfo := range x.TeamState {
 		if *teamInfo.Name == name {
 			return Team(Team_value[teamColor])
 		}
@@ -56,8 +56,8 @@ func (m *State) TeamByName(name string) Team {
 	return Team_UNKNOWN
 }
 
-func (m *State) StringJson() string {
-	if b, err := protojson.Marshal(m); err != nil {
+func (x *State) StringJson() string {
+	if b, err := protojson.Marshal(x); err != nil {
 		return err.Error()
 	} else {
 		return string(b)

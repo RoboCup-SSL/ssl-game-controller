@@ -26,7 +26,7 @@ func (e *Engine) EnqueueGameEvent(gameEvent *state.GameEvent) {
 
 	switch autoRefBehavior {
 	case AutoRefConfig_BEHAVIOR_IGNORE:
-		log.Printf("Ignoring game event from autoRef: %v", *gameEvent)
+		log.Printf("Ignoring game event from autoRef: %v", gameEvent)
 	case AutoRefConfig_BEHAVIOR_LOG:
 		e.Enqueue(&statemachine.Change{
 			Origin: &changeOriginEngine,

@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <iframe :src="visionClientAddress"
-                frameborder="none"
+                title="vision-client"
                 v-if="showVisionClient"
                 class="vision-client">
         </iframe>

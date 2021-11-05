@@ -7,7 +7,7 @@ const (
 	DivB Division = "DIV_B"
 )
 
-// Division contain all known command enum constants
+// Divisions contain all known command enum constants
 var Divisions = []Division{DivA, DivB}
 
 // Valid checks if the Division enum value is among the known values

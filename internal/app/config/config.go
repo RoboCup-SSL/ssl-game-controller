@@ -254,7 +254,7 @@ func DefaultControllerConfig() (c Controller) {
 	return
 }
 
-// loadConfig loads the controller config
+// LoadConfig loads the controller config
 func LoadConfig(configFileName string) Controller {
 	cfg, err := LoadControllerConfig(configFileName)
 	if err != nil {

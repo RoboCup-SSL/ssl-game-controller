@@ -14,7 +14,7 @@ func (s *StateMachine) processChangeStartBallPlacement(newState *state.State) (c
 	}
 
 	if *newState.NextCommand.Type == state.Command_PENALTY || *newState.NextCommand.Type == state.Command_KICKOFF {
-		log.Printf("Human ref places the ball for %v", *newState.NextCommand)
+		log.Printf("Human ref places the ball for %v", newState.NextCommand)
 		changes = append(changes, s.createCommandChange(state.NewCommandNeutral(state.Command_HALT)))
 	}
 

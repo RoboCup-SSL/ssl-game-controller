@@ -13,8 +13,8 @@ func NewCommandNeutral(t Command_Type) (c *Command) {
 }
 
 // NeedsTeam returns true if the command must be specialized with a team
-func (m Command) NeedsTeam() bool {
-	switch *m.Type {
+func (x *Command) NeedsTeam() bool {
+	switch *x.Type {
 	case Command_UNKNOWN,
 		Command_HALT,
 		Command_STOP,
@@ -29,14 +29,14 @@ func (m Command) NeedsTeam() bool {
 		Command_BALL_PLACEMENT:
 		return true
 	default:
-		log.Fatal("Missing case for command ", m)
+		log.Fatal("Missing case for command ", x)
 		return false
 	}
 }
 
 // IsRunning returns true, if the current commands indicates that the game is running (the ball is in play)
-func (m Command) IsRunning() bool {
-	switch *m.Type {
+func (x *Command) IsRunning() bool {
+	switch *x.Type {
 	case Command_DIRECT,
 		Command_INDIRECT,
 		Command_NORMAL_START,
@@ -47,8 +47,8 @@ func (m Command) IsRunning() bool {
 }
 
 // IsPrepare returns true, if the current command is a prepare command
-func (m Command) IsPrepare() bool {
-	switch *m.Type {
+func (x *Command) IsPrepare() bool {
+	switch *x.Type {
 	case Command_PENALTY,
 		Command_KICKOFF:
 		return true

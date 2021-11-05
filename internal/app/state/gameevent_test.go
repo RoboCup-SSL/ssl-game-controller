@@ -36,8 +36,8 @@ func TestGameEvent_ByTeam(t *testing.T) {
 		},
 		{
 			name: "Event without ByTeam",
-			event: &GameEvent_Prepared_{
-				Prepared: &GameEvent_Prepared{},
+			event: &GameEvent_NoProgressInGame_{
+				NoProgressInGame: &GameEvent_NoProgressInGame{},
 			},
 			want: Team_UNKNOWN,
 		},
@@ -86,8 +86,8 @@ func TestGameEvent_SetByTeam(t *testing.T) {
 		},
 		{
 			name: "Event without ByTeam",
-			event: &GameEvent_Prepared_{
-				Prepared: &GameEvent_Prepared{},
+			event: &GameEvent_NoProgressInGame_{
+				NoProgressInGame: &GameEvent_NoProgressInGame{},
 			},
 			want: Team_UNKNOWN,
 		},

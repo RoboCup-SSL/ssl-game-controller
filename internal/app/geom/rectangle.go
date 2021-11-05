@@ -43,17 +43,17 @@ func (r *Rectangle) MaxX() float64 {
 	return r.center.X64() + r.xExtent/2.0
 }
 
-// MaxX returns the smallest x value
+// MinX returns the smallest x value
 func (r *Rectangle) MinX() float64 {
 	return r.center.X64() - r.xExtent/2.0
 }
 
-// MaxX returns the largest y value
+// MaxY returns the largest y value
 func (r *Rectangle) MaxY() float64 {
 	return r.center.Y64() + r.yExtent/2.0
 }
 
-// MaxX returns the smallest y value
+// MinY returns the smallest y value
 func (r *Rectangle) MinY() float64 {
 	return r.center.Y64() - r.yExtent/2.0
 }

@@ -25,7 +25,12 @@ func DetectHost(address string) string {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer conn.Close()
+	defer func(conn *net.UDPConn) {
+		err := conn.Close()
+		if err != nil {
+			log.Print("Failed to close connection: ", err)
+		}
+	}(conn)
 	_, udpAddr, err := conn.ReadFromUDP([]byte{0})
 	if err != nil {
 		log.Fatal(err)

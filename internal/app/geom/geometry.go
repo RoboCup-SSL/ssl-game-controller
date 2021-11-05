@@ -16,46 +16,46 @@ func NewVector2Float32(x, y float32) *Vector2 {
 }
 
 // Length returns the length of this vector
-func (m *Vector2) Length() float64 {
-	x := *m.X
-	y := *m.Y
-	return math.Sqrt(float64(x*x + y*y))
+func (x *Vector2) Length() float64 {
+	vx := *x.X
+	vy := *x.Y
+	return math.Sqrt(float64(vx*vx + vy*vy))
 }
 
 // Sub subtracts the given vector from this one
-func (m *Vector2) Sub(o *Vector2) *Vector2 {
-	return NewVector2Float32(*m.X-*o.X, *m.Y-*o.Y)
+func (x *Vector2) Sub(o *Vector2) *Vector2 {
+	return NewVector2Float32(*x.X-*o.X, *x.Y-*o.Y)
 }
 
 // DistanceTo returns the distance between this vector and the given one
-func (m *Vector2) DistanceTo(o *Vector2) float64 {
-	return m.Sub(o).Length()
+func (x *Vector2) DistanceTo(o *Vector2) float64 {
+	return x.Sub(o).Length()
 }
 
 // X64 returns the x value as float64
-func (m *Vector2) X64() float64 {
-	return float64(*m.X)
+func (x *Vector2) X64() float64 {
+	return float64(*x.X)
 }
 
 // Y64 returns the y value as float64
-func (m *Vector2) Y64() float64 {
-	return float64(*m.Y)
+func (x *Vector2) Y64() float64 {
+	return float64(*x.Y)
 }
 
 // ToVector2 converts this vector into a new 2d vector, dropping the z part
-func (m *Vector3) ToVector2() *Vector2 {
-	return NewVector2Float32(*m.X, *m.Y)
+func (x *Vector3) ToVector2() *Vector2 {
+	return NewVector2Float32(*x.X, *x.Y)
 }
 
 // StringPretty converts the vector into a pretty printed string
-func (m *Vector2) StringPretty() string {
-	x := float32(0)
-	y := float32(0)
-	if m.X != nil {
-		x = *m.X
+func (x *Vector2) StringPretty() string {
+	vx := float32(0)
+	vy := float32(0)
+	if x.X != nil {
+		vx = *x.X
 	}
-	if m.Y != nil {
-		y = *m.Y
+	if x.Y != nil {
+		vy = *x.Y
 	}
-	return fmt.Sprintf("x: %v, y: %v", x, y)
+	return fmt.Sprintf("x: %v, y: %v", vx, vy)
 }
