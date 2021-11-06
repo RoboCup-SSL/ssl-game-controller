@@ -60,7 +60,7 @@ func main() {
 	}
 
 	for {
-		time.Sleep(time.Second)
+		c.ReplyToChoices()
 	}
 }
 
@@ -107,6 +107,19 @@ func (c *Client) sendDesiredKeeper(id int32) (accepted bool) {
 	message := rcon.TeamToController_DesiredKeeper{DesiredKeeper: id}
 	request := rcon.TeamToController{Msg: &message}
 	return c.sendRequest(&request)
+}
+
+func (c *Client) ReplyToChoices() {
+	request := rcon.ControllerToTeam{}
+	if err := sslconn.ReceiveMessage(c.reader, &request); err != nil {
+		log.Fatal("Failed receiving controller request: ", err)
+	}
+	if request.GetAdvantageChoice() != nil {
+		log.Printf("Received choice for: %v", *request.GetAdvantageChoice().Foul)
+	}
+	reply := rcon.TeamToController_AdvantageResponse_{AdvantageResponse: rcon.TeamToController_CONTINUE}
+	response := rcon.TeamToController{Msg: &reply}
+	c.sendRequest(&response)
 }
 
 func (c *Client) sendRequest(request *rcon.TeamToController) (accepted bool) {
