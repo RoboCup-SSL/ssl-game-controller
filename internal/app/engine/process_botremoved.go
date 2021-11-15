@@ -46,6 +46,12 @@ func (e *Engine) processBotNumberPerTeam(team state.Team) {
 	numBots := numRobotsOfTeam(e.gcState.TrackerStateGc.Robots, team)
 	numBotsAllowed := *teamInfo.MaxAllowedBots + newCards
 	if numBots > numBotsAllowed {
+
+		advantageResponse := e.gcState.TeamState[team.Opposite().String()].LastAdvantageResponse
+		if *advantageResponse.Response == TeamAdvantageResponse_CONTINUE {
+			return
+		}
+
 		var ballPos *geom.Vector2
 		if e.gcState.TrackerStateGc.Ball != nil {
 			ballPos = e.gcState.TrackerStateGc.Ball.Pos.ToVector2()

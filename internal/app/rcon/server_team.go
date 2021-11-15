@@ -8,6 +8,7 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"io"
 	"log"
 	"net"
@@ -173,6 +174,21 @@ func (c *TeamClient) reply(reply *ControllerReply) {
 func (s *TeamServer) processRequest(teamClient TeamClient, request *TeamToController) error {
 
 	if request.GetPing() {
+		return nil
+	}
+
+	if x, ok := request.GetMsg().(*TeamToController_AdvantageResponse); ok {
+		responseType := engine.TeamAdvantageResponse_STOP
+		if x.AdvantageResponse == AdvantageResponse_CONTINUE {
+			responseType = engine.TeamAdvantageResponse_CONTINUE
+		}
+		s.gcEngine.UpdateGcState(func(gcState *engine.GcState) {
+			gcState.TeamState[teamClient.team.String()].LastAdvantageResponse = &engine.TeamAdvantageResponse{
+				Response:  &responseType,
+				Timestamp: timestamppb.New(s.gcEngine.GetLastTimeUpdate()),
+			}
+		})
+		// exit early to avoid spamming the log
 		return nil
 	}
 

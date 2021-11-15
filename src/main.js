@@ -45,6 +45,8 @@ library.add(
     fa.faRecycle,
     fa.faFutbol,
     fa.faHandPointUp,
+    fa.faStopCircle,
+    fa.faPlayCircle,
 );
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 

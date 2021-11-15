@@ -5,6 +5,8 @@ option go_package = "github.com/RoboCup-SSL/ssl-game-controller/internal/app/eng
 import "ssl_gc_geometry.proto";
 import "ssl_gc_common.proto";
 
+import "google/protobuf/timestamp.proto";
+
 // The GC state contains settings and state independent of the match state
 message GcState {
     // The state of each team
@@ -36,6 +38,26 @@ message GcStateTeam {
 
     // true: The remote control for the team connected via TLS with a verified certificate
     optional bool remote_control_connection_verified = 4;
+
+    // the last advantage response of the team
+    optional TeamAdvantageResponse last_advantage_response = 5;
+}
+
+// The response from a team regarding the advantage rule
+message TeamAdvantageResponse {
+    // the response of the team
+    optional AdvantageResponse response = 1;
+
+    // the timestamp of the response
+    optional google.protobuf.Timestamp timestamp = 2;
+
+    // possible advantage responses
+    enum AdvantageResponse {
+        // stop the game
+        STOP = 0;
+        // keep the match running
+        CONTINUE = 1;
+    }
 }
 
 // The GC state of an auto referee

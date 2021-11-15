@@ -24580,6 +24580,7 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
      * @property {boolean|null} [connectionVerified] GcStateTeam connectionVerified
      * @property {boolean|null} [remoteControlConnected] GcStateTeam remoteControlConnected
      * @property {boolean|null} [remoteControlConnectionVerified] GcStateTeam remoteControlConnectionVerified
+     * @property {ITeamAdvantageResponse|null} [lastAdvantageResponse] GcStateTeam lastAdvantageResponse
      */
 
     /**
@@ -24630,6 +24631,14 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
     GcStateTeam.prototype.remoteControlConnectionVerified = false;
 
     /**
+     * GcStateTeam lastAdvantageResponse.
+     * @member {ITeamAdvantageResponse|null|undefined} lastAdvantageResponse
+     * @memberof GcStateTeam
+     * @instance
+     */
+    GcStateTeam.prototype.lastAdvantageResponse = null;
+
+    /**
      * Creates a new GcStateTeam instance using the specified properties.
      * @function create
      * @memberof GcStateTeam
@@ -24661,6 +24670,8 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
             writer.uint32(/* id 3, wireType 0 =*/24).bool(message.remoteControlConnected);
         if (message.remoteControlConnectionVerified != null && message.hasOwnProperty("remoteControlConnectionVerified"))
             writer.uint32(/* id 4, wireType 0 =*/32).bool(message.remoteControlConnectionVerified);
+        if (message.lastAdvantageResponse != null && message.hasOwnProperty("lastAdvantageResponse"))
+            $root.TeamAdvantageResponse.encode(message.lastAdvantageResponse, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
         return writer;
     };
 
@@ -24706,6 +24717,9 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
                 break;
             case 4:
                 message.remoteControlConnectionVerified = reader.bool();
+                break;
+            case 5:
+                message.lastAdvantageResponse = $root.TeamAdvantageResponse.decode(reader, reader.uint32());
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -24754,6 +24768,11 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
         if (message.remoteControlConnectionVerified != null && message.hasOwnProperty("remoteControlConnectionVerified"))
             if (typeof message.remoteControlConnectionVerified !== "boolean")
                 return "remoteControlConnectionVerified: boolean expected";
+        if (message.lastAdvantageResponse != null && message.hasOwnProperty("lastAdvantageResponse")) {
+            let error = $root.TeamAdvantageResponse.verify(message.lastAdvantageResponse);
+            if (error)
+                return "lastAdvantageResponse." + error;
+        }
         return null;
     };
 
@@ -24777,6 +24796,11 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
             message.remoteControlConnected = Boolean(object.remoteControlConnected);
         if (object.remoteControlConnectionVerified != null)
             message.remoteControlConnectionVerified = Boolean(object.remoteControlConnectionVerified);
+        if (object.lastAdvantageResponse != null) {
+            if (typeof object.lastAdvantageResponse !== "object")
+                throw TypeError(".GcStateTeam.lastAdvantageResponse: object expected");
+            message.lastAdvantageResponse = $root.TeamAdvantageResponse.fromObject(object.lastAdvantageResponse);
+        }
         return message;
     };
 
@@ -24798,6 +24822,7 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
             object.connectionVerified = false;
             object.remoteControlConnected = false;
             object.remoteControlConnectionVerified = false;
+            object.lastAdvantageResponse = null;
         }
         if (message.connected != null && message.hasOwnProperty("connected"))
             object.connected = message.connected;
@@ -24807,6 +24832,8 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
             object.remoteControlConnected = message.remoteControlConnected;
         if (message.remoteControlConnectionVerified != null && message.hasOwnProperty("remoteControlConnectionVerified"))
             object.remoteControlConnectionVerified = message.remoteControlConnectionVerified;
+        if (message.lastAdvantageResponse != null && message.hasOwnProperty("lastAdvantageResponse"))
+            object.lastAdvantageResponse = $root.TeamAdvantageResponse.toObject(message.lastAdvantageResponse, options);
         return object;
     };
 
@@ -24822,6 +24849,248 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
     };
 
     return GcStateTeam;
+})();
+
+export const TeamAdvantageResponse = $root.TeamAdvantageResponse = (() => {
+
+    /**
+     * Properties of a TeamAdvantageResponse.
+     * @exports ITeamAdvantageResponse
+     * @interface ITeamAdvantageResponse
+     * @property {TeamAdvantageResponse.AdvantageResponse|null} [response] TeamAdvantageResponse response
+     * @property {google.protobuf.ITimestamp|null} [timestamp] TeamAdvantageResponse timestamp
+     */
+
+    /**
+     * Constructs a new TeamAdvantageResponse.
+     * @exports TeamAdvantageResponse
+     * @classdesc Represents a TeamAdvantageResponse.
+     * @implements ITeamAdvantageResponse
+     * @constructor
+     * @param {ITeamAdvantageResponse=} [properties] Properties to set
+     */
+    function TeamAdvantageResponse(properties) {
+        if (properties)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * TeamAdvantageResponse response.
+     * @member {TeamAdvantageResponse.AdvantageResponse} response
+     * @memberof TeamAdvantageResponse
+     * @instance
+     */
+    TeamAdvantageResponse.prototype.response = 0;
+
+    /**
+     * TeamAdvantageResponse timestamp.
+     * @member {google.protobuf.ITimestamp|null|undefined} timestamp
+     * @memberof TeamAdvantageResponse
+     * @instance
+     */
+    TeamAdvantageResponse.prototype.timestamp = null;
+
+    /**
+     * Creates a new TeamAdvantageResponse instance using the specified properties.
+     * @function create
+     * @memberof TeamAdvantageResponse
+     * @static
+     * @param {ITeamAdvantageResponse=} [properties] Properties to set
+     * @returns {TeamAdvantageResponse} TeamAdvantageResponse instance
+     */
+    TeamAdvantageResponse.create = function create(properties) {
+        return new TeamAdvantageResponse(properties);
+    };
+
+    /**
+     * Encodes the specified TeamAdvantageResponse message. Does not implicitly {@link TeamAdvantageResponse.verify|verify} messages.
+     * @function encode
+     * @memberof TeamAdvantageResponse
+     * @static
+     * @param {ITeamAdvantageResponse} message TeamAdvantageResponse message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    TeamAdvantageResponse.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.response != null && message.hasOwnProperty("response"))
+            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.response);
+        if (message.timestamp != null && message.hasOwnProperty("timestamp"))
+            $root.google.protobuf.Timestamp.encode(message.timestamp, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+        return writer;
+    };
+
+    /**
+     * Encodes the specified TeamAdvantageResponse message, length delimited. Does not implicitly {@link TeamAdvantageResponse.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof TeamAdvantageResponse
+     * @static
+     * @param {ITeamAdvantageResponse} message TeamAdvantageResponse message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    TeamAdvantageResponse.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a TeamAdvantageResponse message from the specified reader or buffer.
+     * @function decode
+     * @memberof TeamAdvantageResponse
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {TeamAdvantageResponse} TeamAdvantageResponse
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    TeamAdvantageResponse.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.TeamAdvantageResponse();
+        while (reader.pos < end) {
+            let tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1:
+                message.response = reader.int32();
+                break;
+            case 2:
+                message.timestamp = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes a TeamAdvantageResponse message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof TeamAdvantageResponse
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {TeamAdvantageResponse} TeamAdvantageResponse
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    TeamAdvantageResponse.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a TeamAdvantageResponse message.
+     * @function verify
+     * @memberof TeamAdvantageResponse
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    TeamAdvantageResponse.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (message.response != null && message.hasOwnProperty("response"))
+            switch (message.response) {
+            default:
+                return "response: enum value expected";
+            case 0:
+            case 1:
+                break;
+            }
+        if (message.timestamp != null && message.hasOwnProperty("timestamp")) {
+            let error = $root.google.protobuf.Timestamp.verify(message.timestamp);
+            if (error)
+                return "timestamp." + error;
+        }
+        return null;
+    };
+
+    /**
+     * Creates a TeamAdvantageResponse message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof TeamAdvantageResponse
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {TeamAdvantageResponse} TeamAdvantageResponse
+     */
+    TeamAdvantageResponse.fromObject = function fromObject(object) {
+        if (object instanceof $root.TeamAdvantageResponse)
+            return object;
+        let message = new $root.TeamAdvantageResponse();
+        switch (object.response) {
+        case "STOP":
+        case 0:
+            message.response = 0;
+            break;
+        case "CONTINUE":
+        case 1:
+            message.response = 1;
+            break;
+        }
+        if (object.timestamp != null) {
+            if (typeof object.timestamp !== "object")
+                throw TypeError(".TeamAdvantageResponse.timestamp: object expected");
+            message.timestamp = $root.google.protobuf.Timestamp.fromObject(object.timestamp);
+        }
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a TeamAdvantageResponse message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof TeamAdvantageResponse
+     * @static
+     * @param {TeamAdvantageResponse} message TeamAdvantageResponse
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    TeamAdvantageResponse.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        let object = {};
+        if (options.defaults) {
+            object.response = options.enums === String ? "STOP" : 0;
+            object.timestamp = null;
+        }
+        if (message.response != null && message.hasOwnProperty("response"))
+            object.response = options.enums === String ? $root.TeamAdvantageResponse.AdvantageResponse[message.response] : message.response;
+        if (message.timestamp != null && message.hasOwnProperty("timestamp"))
+            object.timestamp = $root.google.protobuf.Timestamp.toObject(message.timestamp, options);
+        return object;
+    };
+
+    /**
+     * Converts this TeamAdvantageResponse to JSON.
+     * @function toJSON
+     * @memberof TeamAdvantageResponse
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    TeamAdvantageResponse.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    /**
+     * AdvantageResponse enum.
+     * @name TeamAdvantageResponse.AdvantageResponse
+     * @enum {string}
+     * @property {number} STOP=0 STOP value
+     * @property {number} CONTINUE=1 CONTINUE value
+     */
+    TeamAdvantageResponse.AdvantageResponse = (function() {
+        const valuesById = {}, values = Object.create(valuesById);
+        values[valuesById[0] = "STOP"] = 0;
+        values[valuesById[1] = "CONTINUE"] = 1;
+        return values;
+    })();
+
+    return TeamAdvantageResponse;
 })();
 
 export const GcStateAutoRef = $root.GcStateAutoRef = (() => {

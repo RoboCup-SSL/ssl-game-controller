@@ -50,6 +50,7 @@ game:
   continue-from-halt: false
   challenge-flags: 3
   emergency-stop-grace-period: 10s
+  advantage-response-timeout: 1s
   normal:
     half-duration: 5m
     half-time-duration: 5m

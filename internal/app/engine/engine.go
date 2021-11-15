@@ -369,6 +369,11 @@ func (e *Engine) GetConfig() *Config {
 	return &cfg
 }
 
+// GetLastTimeUpdate returns the current time
+func (e *Engine) GetLastTimeUpdate() time.Time {
+	return e.lastTimeUpdate
+}
+
 // UpdateConfig updates the current engine config with the given delta
 func (e *Engine) UpdateConfig(delta *Config) {
 	e.mutex.Lock()

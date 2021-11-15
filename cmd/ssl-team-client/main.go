@@ -6,6 +6,7 @@ import (
 	"flag"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/rcon"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/sslconn"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/client"
 	"log"
 	"net"
@@ -17,6 +18,7 @@ var autoDetectAddress = flag.Bool("autoDetectHost", true, "Automatically detect 
 var refBoxAddr = flag.String("address", "localhost:10008", "Address to connect to")
 var privateKeyLocation = flag.String("privateKey", "", "A private key to be used to sign messages")
 var teamName = flag.String("teamName", "Test Team", "The name of the team as it is sent by the referee")
+var teamColor = flag.String("teamColor", "", "The color of the team as it is sent by the referee")
 
 var privateKey *rsa.PrivateKey
 
@@ -37,6 +39,8 @@ func main() {
 		if host != "" {
 			log.Print("Detected game-controller host: ", host)
 			*refBoxAddr = client.GetConnectionString(*refBoxAddr, host)
+		} else {
+			log.Println("No host detected")
 		}
 	}
 
@@ -55,12 +59,15 @@ func main() {
 	c.reader = bufio.NewReaderSize(conn, 1)
 
 	c.register()
-	for !c.sendDesiredKeeper(3) {
-		time.Sleep(time.Second)
-	}
+	c.sendDesiredKeeper(3)
 
 	for {
-		c.ReplyToChoices()
+		for i := 0; i < 30; i++ {
+			c.ReplyToChoices()
+			time.Sleep(time.Millisecond * 100)
+		}
+		log.Print("Waiting")
+		time.Sleep(time.Millisecond * 2000)
 	}
 }
 
@@ -75,11 +82,16 @@ func (c *Client) register() {
 
 	registration := rcon.TeamRegistration{}
 	registration.TeamName = teamName
+
+	if color, validColor := state.Team_value[*teamColor]; validColor {
+		registration.Team = new(state.Team)
+		*registration.Team = state.Team(color)
+	}
 	if privateKey != nil {
 		registration.Signature = &rcon.Signature{Token: reply.GetControllerReply().NextToken, Pkcs1V15: []byte{}}
 		registration.Signature.Pkcs1V15 = client.Sign(privateKey, &registration)
 	}
-	log.Print("Sending registration")
+	log.Print("Sending registration: ", registration.String())
 	if err := sslconn.SendMessage(c.conn, &registration); err != nil {
 		log.Fatal("Failed sending registration: ", err)
 	}
@@ -110,14 +122,7 @@ func (c *Client) sendDesiredKeeper(id int32) (accepted bool) {
 }
 
 func (c *Client) ReplyToChoices() {
-	request := rcon.ControllerToTeam{}
-	if err := sslconn.ReceiveMessage(c.reader, &request); err != nil {
-		log.Fatal("Failed receiving controller request: ", err)
-	}
-	if request.GetAdvantageChoice() != nil {
-		log.Printf("Received choice for: %v", *request.GetAdvantageChoice().Foul)
-	}
-	reply := rcon.TeamToController_AdvantageResponse_{AdvantageResponse: rcon.TeamToController_CONTINUE}
+	reply := rcon.TeamToController_AdvantageResponse{AdvantageResponse: rcon.AdvantageResponse_CONTINUE}
 	response := rcon.TeamToController{Msg: &reply}
 	c.sendRequest(&response)
 }
