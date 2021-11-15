@@ -33,7 +33,7 @@ func (e *Engine) processContinue() {
 
 	if *e.currentState.Command.Type == state.Command_KICKOFF {
 		// ball in center circle
-		if e.gcState.TrackerStateGc.Ball.Pos.ToVector2().Length() > e.gameConfig.DistanceToBallInStop {
+		if e.gcState.TrackerStateGc.Ball.Pos.ToVector2().Length() > e.getGeometry().CenterCircleRadius {
 			return
 		}
 

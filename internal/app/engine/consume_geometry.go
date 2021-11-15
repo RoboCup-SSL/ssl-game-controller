@@ -16,12 +16,37 @@ func (e *Engine) ProcessGeometry(data *vision.SSL_GeometryData) {
 	newGeometry.FieldWidth = float64(*data.Field.FieldWidth) / 1000.0
 	newGeometry.FieldLength = float64(*data.Field.FieldLength) / 1000.0
 	newGeometry.GoalWidth = float64(*data.Field.GoalWidth) / 1000.0
-	for _, line := range data.Field.FieldLines {
-		if *line.Name == "LeftFieldLeftPenaltyStretch" {
-			newGeometry.DefenseAreaDepth = math.Abs(float64(*line.P1.X-*line.P2.X)) / 1000.0
-		} else if *line.Name == "LeftPenaltyStretch" {
-			newGeometry.DefenseAreaWidth = math.Abs(float64(*line.P1.Y-*line.P2.Y)) / 1000.0
+
+	if data.Field.PenaltyAreaWidth != nil {
+		newGeometry.DefenseAreaWidth = float64(*data.Field.PenaltyAreaWidth) / 1000.0
+	} else {
+		for _, line := range data.Field.FieldLines {
+			if (line.Type != nil && *line.Type == vision.SSL_FieldShapeType_LeftPenaltyStretch) ||
+				*line.Name == "LeftPenaltyStretch" {
+				newGeometry.DefenseAreaWidth = math.Abs(float64(*line.P1.Y-*line.P2.Y)) / 1000.0
+				break
+			}
 		}
+	}
+
+	if data.Field.PenaltyAreaDepth != nil {
+		newGeometry.DefenseAreaDepth = float64(*data.Field.PenaltyAreaDepth) / 1000.0
+	} else {
+		for _, line := range data.Field.FieldLines {
+			if (line.Type != nil && *line.Type == vision.SSL_FieldShapeType_LeftFieldLeftPenaltyStretch) ||
+				*line.Name == "LeftFieldLeftPenaltyStretch" {
+				newGeometry.DefenseAreaDepth = math.Abs(float64(*line.P1.X-*line.P2.X)) / 1000.0
+				break
+			}
+		}
+	}
+
+	if data.Field.GoalCenterToPenaltyMark != nil {
+		newGeometry.PenaltyKickDistToGoal = float64(*data.Field.GoalCenterToPenaltyMark) / 1000.0
+	}
+
+	if data.Field.CenterCircleRadius != nil {
+		newGeometry.CenterCircleRadius = float64(*data.Field.CenterCircleRadius) / 1000.0
 	}
 
 	e.stateMachine.Geometry = newGeometry

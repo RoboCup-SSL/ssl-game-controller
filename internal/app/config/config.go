@@ -27,6 +27,7 @@ type Geometry struct {
 	DefenseAreaWidth                float64 `yaml:"defense-area-width"`
 	PenaltyKickDistToGoal           float64 `yaml:"penalty-kick-dist-to-goal"`
 	GoalWidth                       float64 `yaml:"goal-width"`
+	CenterCircleRadius              float64 `yaml:"center-circle-radius"`
 	PlacementOffsetTouchLine        float64 `yaml:"placement-offset-touch-line"`
 	PlacementOffsetGoalLine         float64 `yaml:"placement-offset-goal-line"`
 	PlacementOffsetGoalLineGoalKick float64 `yaml:"placement-offset-goal-line-goal-kick"`
@@ -227,6 +228,7 @@ func DefaultControllerConfig() (c Controller) {
 		DefenseAreaWidth:                3.6,
 		PenaltyKickDistToGoal:           8.0,
 		GoalWidth:                       1.8,
+		CenterCircleRadius:              0.5,
 		PlacementOffsetTouchLine:        0.2,
 		PlacementOffsetGoalLine:         0.2,
 		PlacementOffsetGoalLineGoalKick: 1.0,
@@ -239,6 +241,7 @@ func DefaultControllerConfig() (c Controller) {
 		DefenseAreaWidth:                2,
 		PenaltyKickDistToGoal:           6.0,
 		GoalWidth:                       1.0,
+		CenterCircleRadius:              0.5,
 		PlacementOffsetTouchLine:        0.2,
 		PlacementOffsetGoalLine:         0.2,
 		PlacementOffsetGoalLineGoalKick: 1.0,
