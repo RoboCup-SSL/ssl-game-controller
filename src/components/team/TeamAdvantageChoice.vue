@@ -19,7 +19,7 @@
 
 <script>
 export default {
-    name: "TeamAdvantageResponse",
+    name: "TeamAdvantageChoice",
     props: {
         teamColor: String
     },
@@ -37,15 +37,15 @@ export default {
     computed: {
         teamConnected() {
             return this.$store.state.gcState.teamState[this.teamColor].connected &&
-                this.$store.state.gcState.teamState[this.teamColor].lastAdvantageResponse;
+                this.$store.state.gcState.teamState[this.teamColor].advantageChoice;
         },
         isStop() {
             return this.teamConnected && 
-                this.$store.state.gcState.teamState[this.teamColor].lastAdvantageResponse.response === 'STOP';
+                this.$store.state.gcState.teamState[this.teamColor].advantageChoice.choice === 'STOP';
         },
         isContinue() {
             return this.teamConnected &&
-                this.$store.state.gcState.teamState[this.teamColor].lastAdvantageResponse.response === 'CONTINUE';
+                this.$store.state.gcState.teamState[this.teamColor].advantageChoice.choice === 'CONTINUE';
         },
     }
 }

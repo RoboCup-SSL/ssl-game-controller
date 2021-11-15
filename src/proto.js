@@ -24580,7 +24580,7 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
      * @property {boolean|null} [connectionVerified] GcStateTeam connectionVerified
      * @property {boolean|null} [remoteControlConnected] GcStateTeam remoteControlConnected
      * @property {boolean|null} [remoteControlConnectionVerified] GcStateTeam remoteControlConnectionVerified
-     * @property {ITeamAdvantageResponse|null} [lastAdvantageResponse] GcStateTeam lastAdvantageResponse
+     * @property {ITeamAdvantageChoice|null} [advantageChoice] GcStateTeam advantageChoice
      */
 
     /**
@@ -24631,12 +24631,12 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
     GcStateTeam.prototype.remoteControlConnectionVerified = false;
 
     /**
-     * GcStateTeam lastAdvantageResponse.
-     * @member {ITeamAdvantageResponse|null|undefined} lastAdvantageResponse
+     * GcStateTeam advantageChoice.
+     * @member {ITeamAdvantageChoice|null|undefined} advantageChoice
      * @memberof GcStateTeam
      * @instance
      */
-    GcStateTeam.prototype.lastAdvantageResponse = null;
+    GcStateTeam.prototype.advantageChoice = null;
 
     /**
      * Creates a new GcStateTeam instance using the specified properties.
@@ -24670,8 +24670,8 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
             writer.uint32(/* id 3, wireType 0 =*/24).bool(message.remoteControlConnected);
         if (message.remoteControlConnectionVerified != null && message.hasOwnProperty("remoteControlConnectionVerified"))
             writer.uint32(/* id 4, wireType 0 =*/32).bool(message.remoteControlConnectionVerified);
-        if (message.lastAdvantageResponse != null && message.hasOwnProperty("lastAdvantageResponse"))
-            $root.TeamAdvantageResponse.encode(message.lastAdvantageResponse, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
+        if (message.advantageChoice != null && message.hasOwnProperty("advantageChoice"))
+            $root.TeamAdvantageChoice.encode(message.advantageChoice, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
         return writer;
     };
 
@@ -24719,7 +24719,7 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
                 message.remoteControlConnectionVerified = reader.bool();
                 break;
             case 5:
-                message.lastAdvantageResponse = $root.TeamAdvantageResponse.decode(reader, reader.uint32());
+                message.advantageChoice = $root.TeamAdvantageChoice.decode(reader, reader.uint32());
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -24768,10 +24768,10 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
         if (message.remoteControlConnectionVerified != null && message.hasOwnProperty("remoteControlConnectionVerified"))
             if (typeof message.remoteControlConnectionVerified !== "boolean")
                 return "remoteControlConnectionVerified: boolean expected";
-        if (message.lastAdvantageResponse != null && message.hasOwnProperty("lastAdvantageResponse")) {
-            let error = $root.TeamAdvantageResponse.verify(message.lastAdvantageResponse);
+        if (message.advantageChoice != null && message.hasOwnProperty("advantageChoice")) {
+            let error = $root.TeamAdvantageChoice.verify(message.advantageChoice);
             if (error)
-                return "lastAdvantageResponse." + error;
+                return "advantageChoice." + error;
         }
         return null;
     };
@@ -24796,10 +24796,10 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
             message.remoteControlConnected = Boolean(object.remoteControlConnected);
         if (object.remoteControlConnectionVerified != null)
             message.remoteControlConnectionVerified = Boolean(object.remoteControlConnectionVerified);
-        if (object.lastAdvantageResponse != null) {
-            if (typeof object.lastAdvantageResponse !== "object")
-                throw TypeError(".GcStateTeam.lastAdvantageResponse: object expected");
-            message.lastAdvantageResponse = $root.TeamAdvantageResponse.fromObject(object.lastAdvantageResponse);
+        if (object.advantageChoice != null) {
+            if (typeof object.advantageChoice !== "object")
+                throw TypeError(".GcStateTeam.advantageChoice: object expected");
+            message.advantageChoice = $root.TeamAdvantageChoice.fromObject(object.advantageChoice);
         }
         return message;
     };
@@ -24822,7 +24822,7 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
             object.connectionVerified = false;
             object.remoteControlConnected = false;
             object.remoteControlConnectionVerified = false;
-            object.lastAdvantageResponse = null;
+            object.advantageChoice = null;
         }
         if (message.connected != null && message.hasOwnProperty("connected"))
             object.connected = message.connected;
@@ -24832,8 +24832,8 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
             object.remoteControlConnected = message.remoteControlConnected;
         if (message.remoteControlConnectionVerified != null && message.hasOwnProperty("remoteControlConnectionVerified"))
             object.remoteControlConnectionVerified = message.remoteControlConnectionVerified;
-        if (message.lastAdvantageResponse != null && message.hasOwnProperty("lastAdvantageResponse"))
-            object.lastAdvantageResponse = $root.TeamAdvantageResponse.toObject(message.lastAdvantageResponse, options);
+        if (message.advantageChoice != null && message.hasOwnProperty("advantageChoice"))
+            object.advantageChoice = $root.TeamAdvantageChoice.toObject(message.advantageChoice, options);
         return object;
     };
 
@@ -24851,24 +24851,24 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
     return GcStateTeam;
 })();
 
-export const TeamAdvantageResponse = $root.TeamAdvantageResponse = (() => {
+export const TeamAdvantageChoice = $root.TeamAdvantageChoice = (() => {
 
     /**
-     * Properties of a TeamAdvantageResponse.
-     * @exports ITeamAdvantageResponse
-     * @interface ITeamAdvantageResponse
-     * @property {TeamAdvantageResponse.AdvantageResponse|null} [response] TeamAdvantageResponse response
+     * Properties of a TeamAdvantageChoice.
+     * @exports ITeamAdvantageChoice
+     * @interface ITeamAdvantageChoice
+     * @property {TeamAdvantageChoice.AdvantageChoice|null} [choice] TeamAdvantageChoice choice
      */
 
     /**
-     * Constructs a new TeamAdvantageResponse.
-     * @exports TeamAdvantageResponse
-     * @classdesc Represents a TeamAdvantageResponse.
-     * @implements ITeamAdvantageResponse
+     * Constructs a new TeamAdvantageChoice.
+     * @exports TeamAdvantageChoice
+     * @classdesc Represents a TeamAdvantageChoice.
+     * @implements ITeamAdvantageChoice
      * @constructor
-     * @param {ITeamAdvantageResponse=} [properties] Properties to set
+     * @param {ITeamAdvantageChoice=} [properties] Properties to set
      */
-    function TeamAdvantageResponse(properties) {
+    function TeamAdvantageChoice(properties) {
         if (properties)
             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
@@ -24876,75 +24876,75 @@ export const TeamAdvantageResponse = $root.TeamAdvantageResponse = (() => {
     }
 
     /**
-     * TeamAdvantageResponse response.
-     * @member {TeamAdvantageResponse.AdvantageResponse} response
-     * @memberof TeamAdvantageResponse
+     * TeamAdvantageChoice choice.
+     * @member {TeamAdvantageChoice.AdvantageChoice} choice
+     * @memberof TeamAdvantageChoice
      * @instance
      */
-    TeamAdvantageResponse.prototype.response = 0;
+    TeamAdvantageChoice.prototype.choice = 0;
 
     /**
-     * Creates a new TeamAdvantageResponse instance using the specified properties.
+     * Creates a new TeamAdvantageChoice instance using the specified properties.
      * @function create
-     * @memberof TeamAdvantageResponse
+     * @memberof TeamAdvantageChoice
      * @static
-     * @param {ITeamAdvantageResponse=} [properties] Properties to set
-     * @returns {TeamAdvantageResponse} TeamAdvantageResponse instance
+     * @param {ITeamAdvantageChoice=} [properties] Properties to set
+     * @returns {TeamAdvantageChoice} TeamAdvantageChoice instance
      */
-    TeamAdvantageResponse.create = function create(properties) {
-        return new TeamAdvantageResponse(properties);
+    TeamAdvantageChoice.create = function create(properties) {
+        return new TeamAdvantageChoice(properties);
     };
 
     /**
-     * Encodes the specified TeamAdvantageResponse message. Does not implicitly {@link TeamAdvantageResponse.verify|verify} messages.
+     * Encodes the specified TeamAdvantageChoice message. Does not implicitly {@link TeamAdvantageChoice.verify|verify} messages.
      * @function encode
-     * @memberof TeamAdvantageResponse
+     * @memberof TeamAdvantageChoice
      * @static
-     * @param {ITeamAdvantageResponse} message TeamAdvantageResponse message or plain object to encode
+     * @param {ITeamAdvantageChoice} message TeamAdvantageChoice message or plain object to encode
      * @param {$protobuf.Writer} [writer] Writer to encode to
      * @returns {$protobuf.Writer} Writer
      */
-    TeamAdvantageResponse.encode = function encode(message, writer) {
+    TeamAdvantageChoice.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.response != null && message.hasOwnProperty("response"))
-            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.response);
+        if (message.choice != null && message.hasOwnProperty("choice"))
+            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.choice);
         return writer;
     };
 
     /**
-     * Encodes the specified TeamAdvantageResponse message, length delimited. Does not implicitly {@link TeamAdvantageResponse.verify|verify} messages.
+     * Encodes the specified TeamAdvantageChoice message, length delimited. Does not implicitly {@link TeamAdvantageChoice.verify|verify} messages.
      * @function encodeDelimited
-     * @memberof TeamAdvantageResponse
+     * @memberof TeamAdvantageChoice
      * @static
-     * @param {ITeamAdvantageResponse} message TeamAdvantageResponse message or plain object to encode
+     * @param {ITeamAdvantageChoice} message TeamAdvantageChoice message or plain object to encode
      * @param {$protobuf.Writer} [writer] Writer to encode to
      * @returns {$protobuf.Writer} Writer
      */
-    TeamAdvantageResponse.encodeDelimited = function encodeDelimited(message, writer) {
+    TeamAdvantageChoice.encodeDelimited = function encodeDelimited(message, writer) {
         return this.encode(message, writer).ldelim();
     };
 
     /**
-     * Decodes a TeamAdvantageResponse message from the specified reader or buffer.
+     * Decodes a TeamAdvantageChoice message from the specified reader or buffer.
      * @function decode
-     * @memberof TeamAdvantageResponse
+     * @memberof TeamAdvantageChoice
      * @static
      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
      * @param {number} [length] Message length if known beforehand
-     * @returns {TeamAdvantageResponse} TeamAdvantageResponse
+     * @returns {TeamAdvantageChoice} TeamAdvantageChoice
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    TeamAdvantageResponse.decode = function decode(reader, length) {
+    TeamAdvantageChoice.decode = function decode(reader, length) {
         if (!(reader instanceof $Reader))
             reader = $Reader.create(reader);
-        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.TeamAdvantageResponse();
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.TeamAdvantageChoice();
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
             case 1:
-                message.response = reader.int32();
+                message.choice = reader.int32();
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -24955,36 +24955,36 @@ export const TeamAdvantageResponse = $root.TeamAdvantageResponse = (() => {
     };
 
     /**
-     * Decodes a TeamAdvantageResponse message from the specified reader or buffer, length delimited.
+     * Decodes a TeamAdvantageChoice message from the specified reader or buffer, length delimited.
      * @function decodeDelimited
-     * @memberof TeamAdvantageResponse
+     * @memberof TeamAdvantageChoice
      * @static
      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {TeamAdvantageResponse} TeamAdvantageResponse
+     * @returns {TeamAdvantageChoice} TeamAdvantageChoice
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    TeamAdvantageResponse.decodeDelimited = function decodeDelimited(reader) {
+    TeamAdvantageChoice.decodeDelimited = function decodeDelimited(reader) {
         if (!(reader instanceof $Reader))
             reader = new $Reader(reader);
         return this.decode(reader, reader.uint32());
     };
 
     /**
-     * Verifies a TeamAdvantageResponse message.
+     * Verifies a TeamAdvantageChoice message.
      * @function verify
-     * @memberof TeamAdvantageResponse
+     * @memberof TeamAdvantageChoice
      * @static
      * @param {Object.<string,*>} message Plain object to verify
      * @returns {string|null} `null` if valid, otherwise the reason why it is not
      */
-    TeamAdvantageResponse.verify = function verify(message) {
+    TeamAdvantageChoice.verify = function verify(message) {
         if (typeof message !== "object" || message === null)
             return "object expected";
-        if (message.response != null && message.hasOwnProperty("response"))
-            switch (message.response) {
+        if (message.choice != null && message.hasOwnProperty("choice"))
+            switch (message.choice) {
             default:
-                return "response: enum value expected";
+                return "choice: enum value expected";
             case 0:
             case 1:
                 break;
@@ -24993,76 +24993,76 @@ export const TeamAdvantageResponse = $root.TeamAdvantageResponse = (() => {
     };
 
     /**
-     * Creates a TeamAdvantageResponse message from a plain object. Also converts values to their respective internal types.
+     * Creates a TeamAdvantageChoice message from a plain object. Also converts values to their respective internal types.
      * @function fromObject
-     * @memberof TeamAdvantageResponse
+     * @memberof TeamAdvantageChoice
      * @static
      * @param {Object.<string,*>} object Plain object
-     * @returns {TeamAdvantageResponse} TeamAdvantageResponse
+     * @returns {TeamAdvantageChoice} TeamAdvantageChoice
      */
-    TeamAdvantageResponse.fromObject = function fromObject(object) {
-        if (object instanceof $root.TeamAdvantageResponse)
+    TeamAdvantageChoice.fromObject = function fromObject(object) {
+        if (object instanceof $root.TeamAdvantageChoice)
             return object;
-        let message = new $root.TeamAdvantageResponse();
-        switch (object.response) {
+        let message = new $root.TeamAdvantageChoice();
+        switch (object.choice) {
         case "STOP":
         case 0:
-            message.response = 0;
+            message.choice = 0;
             break;
         case "CONTINUE":
         case 1:
-            message.response = 1;
+            message.choice = 1;
             break;
         }
         return message;
     };
 
     /**
-     * Creates a plain object from a TeamAdvantageResponse message. Also converts values to other types if specified.
+     * Creates a plain object from a TeamAdvantageChoice message. Also converts values to other types if specified.
      * @function toObject
-     * @memberof TeamAdvantageResponse
+     * @memberof TeamAdvantageChoice
      * @static
-     * @param {TeamAdvantageResponse} message TeamAdvantageResponse
+     * @param {TeamAdvantageChoice} message TeamAdvantageChoice
      * @param {$protobuf.IConversionOptions} [options] Conversion options
      * @returns {Object.<string,*>} Plain object
      */
-    TeamAdvantageResponse.toObject = function toObject(message, options) {
+    TeamAdvantageChoice.toObject = function toObject(message, options) {
         if (!options)
             options = {};
         let object = {};
         if (options.defaults)
-            object.response = options.enums === String ? "STOP" : 0;
-        if (message.response != null && message.hasOwnProperty("response"))
-            object.response = options.enums === String ? $root.TeamAdvantageResponse.AdvantageResponse[message.response] : message.response;
+            object.choice = options.enums === String ? "STOP" : 0;
+        if (message.choice != null && message.hasOwnProperty("choice"))
+            object.choice = options.enums === String ? $root.TeamAdvantageChoice.AdvantageChoice[message.choice] : message.choice;
         return object;
     };
 
     /**
-     * Converts this TeamAdvantageResponse to JSON.
+     * Converts this TeamAdvantageChoice to JSON.
      * @function toJSON
-     * @memberof TeamAdvantageResponse
+     * @memberof TeamAdvantageChoice
      * @instance
      * @returns {Object.<string,*>} JSON object
      */
-    TeamAdvantageResponse.prototype.toJSON = function toJSON() {
+    TeamAdvantageChoice.prototype.toJSON = function toJSON() {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
     /**
-     * AdvantageResponse enum.
-     * @name TeamAdvantageResponse.AdvantageResponse
+     * AdvantageChoice enum.
+     * @name TeamAdvantageChoice.AdvantageChoice
      * @enum {string}
      * @property {number} STOP=0 STOP value
      * @property {number} CONTINUE=1 CONTINUE value
      */
-    TeamAdvantageResponse.AdvantageResponse = (function() {
+    TeamAdvantageChoice.AdvantageChoice = (function() {
         const valuesById = {}, values = Object.create(valuesById);
         values[valuesById[0] = "STOP"] = 0;
         values[valuesById[1] = "CONTINUE"] = 1;
         return values;
     })();
 
-    return TeamAdvantageResponse;
+    return TeamAdvantageChoice;
 })();
 
 export const GcStateAutoRef = $root.GcStateAutoRef = (() => {

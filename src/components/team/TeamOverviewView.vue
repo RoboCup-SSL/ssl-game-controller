@@ -160,11 +160,11 @@
             </tr>
             <tr>
                 <td>
-                    <TeamAdvantageResponse :team-color="TEAM_YELLOW"/>
+                    <TeamAdvantageChoice :team-color="TEAM_YELLOW"/>
                 </td>
                 <td class="label-column">Advantage Response</td>
                 <td>
-                    <TeamAdvantageResponse :team-color="TEAM_BLUE"/>
+                    <TeamAdvantageChoice :team-color="TEAM_BLUE"/>
                 </td>
             </tr>
         </table>
@@ -191,12 +191,12 @@
     import TeamTimeoutRequest from "./TeamTimeoutRequest";
     import TeamChallengeFlags from "./TeamChallengeFlags";
     import TeamEmergencyStop from "./TeamEmergencyStop";
-    import TeamAdvantageResponse from "@/components/team/TeamAdvantageResponse";
+    import TeamAdvantageChoice from "@/components/team/TeamAdvantageChoice";
 
     export default {
         name: "TeamOverviewView",
         components: {
-            TeamAdvantageResponse,
+            TeamAdvantageChoice,
             TeamEmergencyStop,
             TeamChallengeFlags,
             TeamTimeoutRequest,

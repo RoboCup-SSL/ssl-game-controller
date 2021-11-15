@@ -24,7 +24,7 @@ message TeamToController {
         // request a new desired keeper id
         int32 desired_keeper = 2;
         // response to an advantage choice request
-        AdvantageResponse advantage_response = 3;
+        AdvantageChoice advantage_choice = 3;
         // request to substitute a robot at the next possibility
         bool substitute_bot = 4;
         // send a ping to the GC to test if the connection is still open.
@@ -33,14 +33,15 @@ message TeamToController {
     }
 }
 
-enum AdvantageResponse {
-    option allow_alias = true;
+// the current advantage choice of the team
+// the choice is valid until another choice is received
+// if the team disconnects, the choice is reset to its default (STOP)
+// teams may either send their current choice continuously or only on change
+enum AdvantageChoice {
     // stop the game
     STOP = 0;
-    // continue the game a bit more
+    // keep the game running
     CONTINUE = 1;
-    // no choice -> will default to STOP
-    UNDECIDED = 0;
 }
 
 // wrapper for all messages from controller to a team's computer

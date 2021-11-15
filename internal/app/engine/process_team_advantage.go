@@ -2,15 +2,15 @@ package engine
 
 import "github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 
-var defaultResponse = TeamAdvantageResponse_STOP
+var defaultChoice = TeamAdvantageChoice_STOP
 
-func (e *Engine) processTeamAdvantageResponse() {
+func (e *Engine) processTeamAdvantageChoice() {
 
 	for _, team := range state.BothTeams() {
-		advantageResponse := e.gcState.TeamState[team.String()].LastAdvantageResponse
-		if advantageResponse == nil {
-			e.gcState.TeamState[team.String()].LastAdvantageResponse = &TeamAdvantageResponse{
-				Response: &defaultResponse,
+		advantageChoice := e.gcState.TeamState[team.String()].AdvantageChoice
+		if advantageChoice == nil {
+			e.gcState.TeamState[team.String()].AdvantageChoice = &TeamAdvantageChoice{
+				Choice: &defaultChoice,
 			}
 		}
 	}

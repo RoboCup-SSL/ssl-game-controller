@@ -37,17 +37,17 @@ message GcStateTeam {
     // true: The remote control for the team connected via TLS with a verified certificate
     optional bool remote_control_connection_verified = 4;
 
-    // the last advantage response of the team
-    optional TeamAdvantageResponse last_advantage_response = 5;
+    // the advantage choice of the team
+    optional TeamAdvantageChoice advantage_choice = 5;
 }
 
-// The response from a team regarding the advantage rule
-message TeamAdvantageResponse {
-    // the response of the team
-    optional AdvantageResponse response = 1;
+// The choice from a team regarding the advantage rule
+message TeamAdvantageChoice {
+    // the choice of the team
+    optional AdvantageChoice choice = 1;
 
-    // possible advantage responses
-    enum AdvantageResponse {
+    // possible advantage choices
+    enum AdvantageChoice {
         // stop the game
         STOP = 0;
         // keep the match running

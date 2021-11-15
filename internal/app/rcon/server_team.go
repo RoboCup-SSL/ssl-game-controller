@@ -116,7 +116,7 @@ func (s *TeamServer) handleClientConnection(conn net.Conn) {
 				connected := false
 				teamState.Connected = &connected
 				teamState.ConnectionVerified = &connected
-				teamState.LastAdvantageResponse = nil
+				teamState.AdvantageChoice = nil
 			} else {
 				log.Println("Team not connected: " + client.team.String())
 			}
@@ -177,14 +177,14 @@ func (s *TeamServer) processRequest(teamClient TeamClient, request *TeamToContro
 		return nil
 	}
 
-	if x, ok := request.GetMsg().(*TeamToController_AdvantageResponse); ok {
-		responseType := engine.TeamAdvantageResponse_STOP
-		if x.AdvantageResponse == AdvantageResponse_CONTINUE {
-			responseType = engine.TeamAdvantageResponse_CONTINUE
+	if x, ok := request.GetMsg().(*TeamToController_AdvantageChoice); ok {
+		responseType := engine.TeamAdvantageChoice_STOP
+		if x.AdvantageChoice == AdvantageChoice_CONTINUE {
+			responseType = engine.TeamAdvantageChoice_CONTINUE
 		}
 		s.gcEngine.UpdateGcState(func(gcState *engine.GcState) {
-			gcState.TeamState[teamClient.team.String()].LastAdvantageResponse = &engine.TeamAdvantageResponse{
-				Response: &responseType,
+			gcState.TeamState[teamClient.team.String()].AdvantageChoice = &engine.TeamAdvantageChoice{
+				Choice: &responseType,
 			}
 		})
 		// exit early to avoid spamming the log

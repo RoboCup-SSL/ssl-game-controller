@@ -47,8 +47,8 @@ func (e *Engine) processBotNumberPerTeam(team state.Team) {
 	numBotsAllowed := *teamInfo.MaxAllowedBots + newCards
 	if numBots > numBotsAllowed {
 
-		advantageResponse := e.gcState.TeamState[team.Opposite().String()].LastAdvantageResponse
-		if *advantageResponse.Response == TeamAdvantageResponse_CONTINUE {
+		advantageChoice := e.gcState.TeamState[team.Opposite().String()].AdvantageChoice
+		if *advantageChoice.Choice == TeamAdvantageChoice_CONTINUE {
 			return
 		}
 

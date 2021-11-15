@@ -18,7 +18,7 @@ var autoDetectAddress = flag.Bool("autoDetectHost", true, "Automatically detect 
 var refBoxAddr = flag.String("address", "localhost:10008", "Address to connect to")
 var privateKeyLocation = flag.String("privateKey", "", "A private key to be used to sign messages")
 var teamName = flag.String("teamName", "Test Team", "The name of the team as it is sent by the referee")
-var teamColor = flag.String("teamColor", "", "The color of the team as it is sent by the referee")
+var teamColor = flag.String("teamColor", "", "The color of the team as it is sent by the referee (YELLOW or BLUE)")
 
 var privateKey *rsa.PrivateKey
 
@@ -62,9 +62,9 @@ func main() {
 	c.sendDesiredKeeper(3)
 
 	for {
-		c.SendAdvantageChoice(rcon.AdvantageResponse_CONTINUE)
+		c.SendAdvantageChoice(rcon.AdvantageChoice_CONTINUE)
 		time.Sleep(time.Millisecond * 1000)
-		c.SendAdvantageChoice(rcon.AdvantageResponse_STOP)
+		c.SendAdvantageChoice(rcon.AdvantageChoice_STOP)
 		time.Sleep(time.Millisecond * 1000)
 	}
 }
@@ -119,8 +119,8 @@ func (c *Client) sendDesiredKeeper(id int32) (accepted bool) {
 	return c.sendRequest(&request)
 }
 
-func (c *Client) SendAdvantageChoice(choice rcon.AdvantageResponse) {
-	reply := rcon.TeamToController_AdvantageResponse{AdvantageResponse: choice}
+func (c *Client) SendAdvantageChoice(choice rcon.AdvantageChoice) {
+	reply := rcon.TeamToController_AdvantageChoice{AdvantageChoice: choice}
 	response := rcon.TeamToController{Msg: &reply}
 	c.sendRequest(&response)
 }
