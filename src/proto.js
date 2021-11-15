@@ -24858,7 +24858,6 @@ export const TeamAdvantageResponse = $root.TeamAdvantageResponse = (() => {
      * @exports ITeamAdvantageResponse
      * @interface ITeamAdvantageResponse
      * @property {TeamAdvantageResponse.AdvantageResponse|null} [response] TeamAdvantageResponse response
-     * @property {google.protobuf.ITimestamp|null} [timestamp] TeamAdvantageResponse timestamp
      */
 
     /**
@@ -24883,14 +24882,6 @@ export const TeamAdvantageResponse = $root.TeamAdvantageResponse = (() => {
      * @instance
      */
     TeamAdvantageResponse.prototype.response = 0;
-
-    /**
-     * TeamAdvantageResponse timestamp.
-     * @member {google.protobuf.ITimestamp|null|undefined} timestamp
-     * @memberof TeamAdvantageResponse
-     * @instance
-     */
-    TeamAdvantageResponse.prototype.timestamp = null;
 
     /**
      * Creates a new TeamAdvantageResponse instance using the specified properties.
@@ -24918,8 +24909,6 @@ export const TeamAdvantageResponse = $root.TeamAdvantageResponse = (() => {
             writer = $Writer.create();
         if (message.response != null && message.hasOwnProperty("response"))
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.response);
-        if (message.timestamp != null && message.hasOwnProperty("timestamp"))
-            $root.google.protobuf.Timestamp.encode(message.timestamp, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
         return writer;
     };
 
@@ -24956,9 +24945,6 @@ export const TeamAdvantageResponse = $root.TeamAdvantageResponse = (() => {
             switch (tag >>> 3) {
             case 1:
                 message.response = reader.int32();
-                break;
-            case 2:
-                message.timestamp = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -25003,11 +24989,6 @@ export const TeamAdvantageResponse = $root.TeamAdvantageResponse = (() => {
             case 1:
                 break;
             }
-        if (message.timestamp != null && message.hasOwnProperty("timestamp")) {
-            let error = $root.google.protobuf.Timestamp.verify(message.timestamp);
-            if (error)
-                return "timestamp." + error;
-        }
         return null;
     };
 
@@ -25033,11 +25014,6 @@ export const TeamAdvantageResponse = $root.TeamAdvantageResponse = (() => {
             message.response = 1;
             break;
         }
-        if (object.timestamp != null) {
-            if (typeof object.timestamp !== "object")
-                throw TypeError(".TeamAdvantageResponse.timestamp: object expected");
-            message.timestamp = $root.google.protobuf.Timestamp.fromObject(object.timestamp);
-        }
         return message;
     };
 
@@ -25054,14 +25030,10 @@ export const TeamAdvantageResponse = $root.TeamAdvantageResponse = (() => {
         if (!options)
             options = {};
         let object = {};
-        if (options.defaults) {
+        if (options.defaults)
             object.response = options.enums === String ? "STOP" : 0;
-            object.timestamp = null;
-        }
         if (message.response != null && message.hasOwnProperty("response"))
             object.response = options.enums === String ? $root.TeamAdvantageResponse.AdvantageResponse[message.response] : message.response;
-        if (message.timestamp != null && message.hasOwnProperty("timestamp"))
-            object.timestamp = $root.google.protobuf.Timestamp.toObject(message.timestamp, options);
         return object;
     };
 

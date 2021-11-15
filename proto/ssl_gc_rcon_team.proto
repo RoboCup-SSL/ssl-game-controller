@@ -45,23 +45,11 @@ enum AdvantageResponse {
 
 // wrapper for all messages from controller to a team's computer
 message ControllerToTeam {
+    // reserve obsolete field ids
+    reserved 2;
+    
     oneof msg {
         // a reply from the controller
         ControllerReply controller_reply = 1;
-        // the team is offered an advantage choice
-        AdvantageChoice advantage_choice = 2;
-    }
-}
-
-// information about the advantage choice that is offered to a team
-// there are currently no information, just a "ping"
-message AdvantageChoice {
-    reserved 2, 3, 4;
-    // the type of foul that occurred
-    required Foul foul = 1 [default = UNKNOWN, deprecated = true];
-
-    enum Foul {
-        // default value when not set
-        UNKNOWN = 0;
     }
 }

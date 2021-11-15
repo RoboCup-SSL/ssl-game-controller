@@ -5,8 +5,6 @@ option go_package = "github.com/RoboCup-SSL/ssl-game-controller/internal/app/eng
 import "ssl_gc_geometry.proto";
 import "ssl_gc_common.proto";
 
-import "google/protobuf/timestamp.proto";
-
 // The GC state contains settings and state independent of the match state
 message GcState {
     // The state of each team
@@ -47,9 +45,6 @@ message GcStateTeam {
 message TeamAdvantageResponse {
     // the response of the team
     optional AdvantageResponse response = 1;
-
-    // the timestamp of the response
-    optional google.protobuf.Timestamp timestamp = 2;
 
     // possible advantage responses
     enum AdvantageResponse {

@@ -8,7 +8,6 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
-	"google.golang.org/protobuf/types/known/timestamppb"
 	"io"
 	"log"
 	"net"
@@ -117,6 +116,7 @@ func (s *TeamServer) handleClientConnection(conn net.Conn) {
 				connected := false
 				teamState.Connected = &connected
 				teamState.ConnectionVerified = &connected
+				teamState.LastAdvantageResponse = nil
 			} else {
 				log.Println("Team not connected: " + client.team.String())
 			}
@@ -184,8 +184,7 @@ func (s *TeamServer) processRequest(teamClient TeamClient, request *TeamToContro
 		}
 		s.gcEngine.UpdateGcState(func(gcState *engine.GcState) {
 			gcState.TeamState[teamClient.team.String()].LastAdvantageResponse = &engine.TeamAdvantageResponse{
-				Response:  &responseType,
-				Timestamp: timestamppb.New(s.gcEngine.GetLastTimeUpdate()),
+				Response: &responseType,
 			}
 		})
 		// exit early to avoid spamming the log

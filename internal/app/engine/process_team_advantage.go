@@ -12,13 +12,6 @@ func (e *Engine) processTeamAdvantageResponse() {
 			e.gcState.TeamState[team.String()].LastAdvantageResponse = &TeamAdvantageResponse{
 				Response: &defaultResponse,
 			}
-		} else if advantageResponse.Timestamp != nil {
-			age := e.lastTimeUpdate.Sub(advantageResponse.Timestamp.AsTime())
-			if age > e.gameConfig.AdvantageResponseTimeout {
-				// reset
-				advantageResponse.Timestamp = nil
-				advantageResponse.Response = &defaultResponse
-			}
 		}
 	}
 }

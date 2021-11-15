@@ -62,7 +62,6 @@ type Game struct {
 	ContinueFromHalt                      bool                       `yaml:"continue-from-halt"`
 	ChallengeFlags                        int32                      `yaml:"challenge-flags"`
 	EmergencyStopGracePeriod              time.Duration              `yaml:"emergency-stop-grace-period"`
-	AdvantageResponseTimeout              time.Duration              `yaml:"advantage-response-timeout"`
 }
 
 // Network holds configs for network communication
@@ -194,7 +193,6 @@ func DefaultControllerConfig() (c Controller) {
 	c.Game.AutoApproveGoals = false
 	c.Game.ChallengeFlags = 3
 	c.Game.EmergencyStopGracePeriod = 10 * time.Second
-	c.Game.AdvantageResponseTimeout = 500 * time.Millisecond
 
 	c.Game.Normal.HalfDuration = 5 * time.Minute
 	c.Game.Normal.HalfTimeDuration = 5 * time.Minute

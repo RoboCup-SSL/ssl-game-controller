@@ -62,12 +62,10 @@ func main() {
 	c.sendDesiredKeeper(3)
 
 	for {
-		for i := 0; i < 30; i++ {
-			c.ReplyToChoices()
-			time.Sleep(time.Millisecond * 100)
-		}
-		log.Print("Waiting")
-		time.Sleep(time.Millisecond * 2000)
+		c.SendAdvantageChoice(rcon.AdvantageResponse_CONTINUE)
+		time.Sleep(time.Millisecond * 1000)
+		c.SendAdvantageChoice(rcon.AdvantageResponse_STOP)
+		time.Sleep(time.Millisecond * 1000)
 	}
 }
 
@@ -121,8 +119,8 @@ func (c *Client) sendDesiredKeeper(id int32) (accepted bool) {
 	return c.sendRequest(&request)
 }
 
-func (c *Client) ReplyToChoices() {
-	reply := rcon.TeamToController_AdvantageResponse{AdvantageResponse: rcon.AdvantageResponse_CONTINUE}
+func (c *Client) SendAdvantageChoice(choice rcon.AdvantageResponse) {
+	reply := rcon.TeamToController_AdvantageResponse{AdvantageResponse: choice}
 	response := rcon.TeamToController{Msg: &reply}
 	c.sendRequest(&response)
 }
