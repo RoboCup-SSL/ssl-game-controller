@@ -3,7 +3,9 @@ package publish
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/engine"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
+	"github.com/google/uuid"
 	"google.golang.org/protobuf/types/known/durationpb"
+	"log"
 	"time"
 )
 
@@ -13,6 +15,7 @@ type MessageGenerator struct {
 	commandTimestamp uint64
 	quit             chan int
 	gcEngine         *engine.Engine
+	sourceIdentifier string
 	MessageConsumers []func(*state.Referee)
 	EngineHook       chan engine.HookOut
 }
@@ -25,6 +28,9 @@ func NewMessageGenerator() (m *MessageGenerator) {
 	m.goal[state.Team_BLUE] = false
 	m.goal[state.Team_YELLOW] = false
 	m.quit = make(chan int, 1)
+	m.sourceIdentifier = uuid.NewString()
+
+	log.Println("Publishing referee messages as ", m.sourceIdentifier)
 
 	return
 }
@@ -95,6 +101,7 @@ func (g *MessageGenerator) updateCommand() {
 
 func (g *MessageGenerator) StateToRefereeMessage(matchState *state.State) (r *state.Referee) {
 	r = newRefereeMessage()
+	*r.SourceIdentifier = g.sourceIdentifier
 	r.DesignatedPosition = mapLocation(matchState.PlacementPos)
 	r.GameEvents = matchState.GameEvents
 	r.GameEventProposals = mapProposals(matchState.ProposalGroups)
@@ -134,6 +141,7 @@ func updateTeam(teamInfo *state.Referee_TeamInfo, teamState *state.TeamInfo) {
 
 func newRefereeMessage() (m *state.Referee) {
 	m = new(state.Referee)
+	m.SourceIdentifier = new(string)
 	m.PacketTimestamp = new(uint64)
 	m.Stage = new(state.Referee_Stage)
 	m.StageTimeLeft = new(int32)

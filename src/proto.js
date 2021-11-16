@@ -12798,6 +12798,7 @@ export const Referee = $root.Referee = (() => {
      * Properties of a Referee.
      * @exports IReferee
      * @interface IReferee
+     * @property {string|null} [sourceIdentifier] Referee sourceIdentifier
      * @property {number|Long} packetTimestamp Referee packetTimestamp
      * @property {Referee.Stage} stage Referee stage
      * @property {number|null} [stageTimeLeft] Referee stageTimeLeft
@@ -12830,6 +12831,14 @@ export const Referee = $root.Referee = (() => {
                 if (properties[keys[i]] != null)
                     this[keys[i]] = properties[keys[i]];
     }
+
+    /**
+     * Referee sourceIdentifier.
+     * @member {string} sourceIdentifier
+     * @memberof Referee
+     * @instance
+     */
+    Referee.prototype.sourceIdentifier = "";
 
     /**
      * Referee packetTimestamp.
@@ -12990,6 +12999,8 @@ export const Referee = $root.Referee = (() => {
         if (message.gameEventProposals != null && message.gameEventProposals.length)
             for (let i = 0; i < message.gameEventProposals.length; ++i)
                 $root.GameEventProposalGroup.encode(message.gameEventProposals[i], writer.uint32(/* id 17, wireType 2 =*/138).fork()).ldelim();
+        if (message.sourceIdentifier != null && message.hasOwnProperty("sourceIdentifier"))
+            writer.uint32(/* id 18, wireType 2 =*/146).string(message.sourceIdentifier);
         return writer;
     };
 
@@ -13024,6 +13035,9 @@ export const Referee = $root.Referee = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
+            case 18:
+                message.sourceIdentifier = reader.string();
+                break;
             case 1:
                 message.packetTimestamp = reader.uint64();
                 break;
@@ -13119,6 +13133,9 @@ export const Referee = $root.Referee = (() => {
     Referee.verify = function verify(message) {
         if (typeof message !== "object" || message === null)
             return "object expected";
+        if (message.sourceIdentifier != null && message.hasOwnProperty("sourceIdentifier"))
+            if (!$util.isString(message.sourceIdentifier))
+                return "sourceIdentifier: string expected";
         if (!$util.isInteger(message.packetTimestamp) && !(message.packetTimestamp && $util.isInteger(message.packetTimestamp.low) && $util.isInteger(message.packetTimestamp.high)))
             return "packetTimestamp: integer|Long expected";
         switch (message.stage) {
@@ -13248,6 +13265,8 @@ export const Referee = $root.Referee = (() => {
         if (object instanceof $root.Referee)
             return object;
         let message = new $root.Referee();
+        if (object.sourceIdentifier != null)
+            message.sourceIdentifier = String(object.sourceIdentifier);
         if (object.packetTimestamp != null)
             if ($util.Long)
                 (message.packetTimestamp = $util.Long.fromValue(object.packetTimestamp)).unsigned = true;
@@ -13556,6 +13575,7 @@ export const Referee = $root.Referee = (() => {
             object.blueTeamOnPositiveHalf = false;
             object.nextCommand = options.enums === String ? "HALT" : 0;
             object.currentActionTimeRemaining = 0;
+            object.sourceIdentifier = "";
         }
         if (message.packetTimestamp != null && message.hasOwnProperty("packetTimestamp"))
             if (typeof message.packetTimestamp === "number")
@@ -13597,6 +13617,8 @@ export const Referee = $root.Referee = (() => {
             for (let j = 0; j < message.gameEventProposals.length; ++j)
                 object.gameEventProposals[j] = $root.GameEventProposalGroup.toObject(message.gameEventProposals[j], options);
         }
+        if (message.sourceIdentifier != null && message.hasOwnProperty("sourceIdentifier"))
+            object.sourceIdentifier = message.sourceIdentifier;
         return object;
     };
 
