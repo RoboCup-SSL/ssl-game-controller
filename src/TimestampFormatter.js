@@ -17,7 +17,7 @@ const isNumeric = function (n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 };
 
-const convertDurationToTimestamp = function (duration) {
+export const convertDurationToTimestamp = function (duration) {
     let parts = duration.substring(0, duration.length - 1).split('.');
     if (parts.length === 1) {
         return parseInt(parts[0]) * 1000000000;
