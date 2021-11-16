@@ -49,6 +49,14 @@ func (e *Engine) ProcessGeometry(data *vision.SSL_GeometryData) {
 		newGeometry.CenterCircleRadius = float64(*data.Field.CenterCircleRadius) / 1000.0
 	}
 
+	if newGeometry.FieldWidth/2-
+		newGeometry.DefenseAreaWidth/2-
+		newGeometry.PlacementOffsetDefenseArea-
+		newGeometry.PlacementOffsetTouchLine < 0 {
+		// move the offset further into the field, if the ball does not fit between defense area and touch line
+		newGeometry.PlacementOffsetGoalLine += newGeometry.DefenseAreaDepth
+	}
+
 	e.stateMachine.Geometry = newGeometry
 
 	if currentGeometry != newGeometry {
