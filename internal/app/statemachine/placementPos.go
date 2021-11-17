@@ -42,11 +42,7 @@ func (s *BallPlacementPosDeterminer) Location() *geom.Vector2 {
 		}
 		return s.validateLocation(nil)
 	case state.GameEvent_POSSIBLE_GOAL:
-		if s.Event.GetPossibleGoal().Location != nil {
-			location := s.Event.GetPossibleGoal().Location
-			return s.ballPlacementLocationGoalLine(location)
-		}
-		return s.validateLocation(nil)
+		return nil
 	case state.GameEvent_AIMLESS_KICK:
 		return s.validateLocation(s.Event.GetAimlessKick().KickLocation)
 	case state.GameEvent_GOAL:
