@@ -10,6 +10,14 @@
                     :callback="switchFirstKickoffTeam"
                     :selected-value="firstKickoffTeam"
             />
+
+            <label>Match type: </label>
+            <EditableLabelSelect
+                :edit-mode="{active: true}"
+                :value="matchType"
+                :options="matchTypes"
+                :callback="updateMatchType"
+            />
         </p>
 
         <b-button v-b-tooltip.hover.d500 title="Switch the colors of the teams, keep everything else"
@@ -44,12 +52,13 @@
 <script>
     import TeamSelection from "../common/TeamSelection";
     import DualSwitch from "../common/DualSwitch";
-    import {resetMatch, submitChange} from "../../submit";
-    import {TEAM_YELLOW} from "../../refereeState";
+    import {resetMatch, submitChange} from "@/submit";
+    import {TEAM_YELLOW} from "@/refereeState";
+    import EditableLabelSelect from "@/components/common/EditableLabelSelect";
 
     export default {
         name: "MatchSettings",
-        components: {DualSwitch, TeamSelection},
+        components: {DualSwitch, TeamSelection, EditableLabelSelect},
         data() {
             return {
                 kickoffTeamSelectionModel: {
@@ -94,6 +103,9 @@
                     .catch(err => {
                         console.log('Error in confirm dialog: ' + err);
                     })
+            },
+            updateMatchType(matchType) {
+                submitChange({updateConfig: {matchType: matchType}});
             }
         },
         computed: {
@@ -115,9 +127,19 @@
             forbidMatchControls() {
                 return !this.stopped && !this.halted;
             },
+            matchType() {
+                return this.state.matchType;
+            },
+            matchTypes() {
+                return ["UNKNOWN_MATCH", "GROUP_PHASE", "ELIMINATION_PHASE", "FRIENDLY"];
+            }
         }
     }
 </script>
 
 <style scoped>
+label {
+    margin-right: 0.5em;
+    margin-left: 1em;
+}
 </style>

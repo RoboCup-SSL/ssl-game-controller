@@ -134,6 +134,8 @@ message UpdateConfig {
     optional Team first_kickoff_team = 2;
     // Enable automatic continuation when all conditions are met
     optional bool auto_continue = 3;
+    // The match type
+    optional MatchType match_type = 4;
 }
 
 // Update the current state of a team (all fields that should be updated are set)

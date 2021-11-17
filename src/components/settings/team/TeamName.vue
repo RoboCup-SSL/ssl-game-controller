@@ -11,9 +11,6 @@
     import EditableLabelSelect from "../../common/EditableLabelSelect";
     import {submitChange} from "@/submit";
 
-    export const TEAMS = [
-    ];
-
     export default {
         name: "TeamName",
         components: {EditableLabelSelect},

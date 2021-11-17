@@ -24,5 +24,9 @@ func (s *StateMachine) processChangeUpdateConfig(newState *state.State, change *
 		log.Printf("Change auto continue to %v", *change.AutoContinue)
 		newState.AutoContinue = change.AutoContinue
 	}
+	if change.MatchType != nil {
+		log.Printf("Change match type to %s", change.MatchType.String())
+		newState.MatchType = change.MatchType
+	}
 	return
 }

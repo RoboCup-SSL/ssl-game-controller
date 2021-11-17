@@ -20,7 +20,9 @@ func NewState() (s *State) {
 	s.Division = new(Division)
 	s.AutoContinue = new(bool)
 	s.FirstKickoffTeam = new(Team)
+	s.MatchType = new(MatchType)
 
+	*s.MatchType = MatchType_UNKNOWN_MATCH
 	*s.Stage = Referee_NORMAL_FIRST_HALF_PRE
 
 	s.TeamState = map[string]*TeamInfo{}

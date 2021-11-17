@@ -12799,6 +12799,7 @@ export const Referee = $root.Referee = (() => {
      * @exports IReferee
      * @interface IReferee
      * @property {string|null} [sourceIdentifier] Referee sourceIdentifier
+     * @property {MatchType|null} [matchType] Referee matchType
      * @property {number|Long} packetTimestamp Referee packetTimestamp
      * @property {Referee.Stage} stage Referee stage
      * @property {number|null} [stageTimeLeft] Referee stageTimeLeft
@@ -12839,6 +12840,14 @@ export const Referee = $root.Referee = (() => {
      * @instance
      */
     Referee.prototype.sourceIdentifier = "";
+
+    /**
+     * Referee matchType.
+     * @member {MatchType} matchType
+     * @memberof Referee
+     * @instance
+     */
+    Referee.prototype.matchType = 0;
 
     /**
      * Referee packetTimestamp.
@@ -13001,6 +13010,8 @@ export const Referee = $root.Referee = (() => {
                 $root.GameEventProposalGroup.encode(message.gameEventProposals[i], writer.uint32(/* id 17, wireType 2 =*/138).fork()).ldelim();
         if (message.sourceIdentifier != null && message.hasOwnProperty("sourceIdentifier"))
             writer.uint32(/* id 18, wireType 2 =*/146).string(message.sourceIdentifier);
+        if (message.matchType != null && message.hasOwnProperty("matchType"))
+            writer.uint32(/* id 19, wireType 0 =*/152).int32(message.matchType);
         return writer;
     };
 
@@ -13037,6 +13048,9 @@ export const Referee = $root.Referee = (() => {
             switch (tag >>> 3) {
             case 18:
                 message.sourceIdentifier = reader.string();
+                break;
+            case 19:
+                message.matchType = reader.int32();
                 break;
             case 1:
                 message.packetTimestamp = reader.uint64();
@@ -13136,6 +13150,16 @@ export const Referee = $root.Referee = (() => {
         if (message.sourceIdentifier != null && message.hasOwnProperty("sourceIdentifier"))
             if (!$util.isString(message.sourceIdentifier))
                 return "sourceIdentifier: string expected";
+        if (message.matchType != null && message.hasOwnProperty("matchType"))
+            switch (message.matchType) {
+            default:
+                return "matchType: enum value expected";
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+                break;
+            }
         if (!$util.isInteger(message.packetTimestamp) && !(message.packetTimestamp && $util.isInteger(message.packetTimestamp.low) && $util.isInteger(message.packetTimestamp.high)))
             return "packetTimestamp: integer|Long expected";
         switch (message.stage) {
@@ -13267,6 +13291,24 @@ export const Referee = $root.Referee = (() => {
         let message = new $root.Referee();
         if (object.sourceIdentifier != null)
             message.sourceIdentifier = String(object.sourceIdentifier);
+        switch (object.matchType) {
+        case "UNKNOWN_MATCH":
+        case 0:
+            message.matchType = 0;
+            break;
+        case "GROUP_PHASE":
+        case 1:
+            message.matchType = 1;
+            break;
+        case "ELIMINATION_PHASE":
+        case 2:
+            message.matchType = 2;
+            break;
+        case "FRIENDLY":
+        case 3:
+            message.matchType = 3;
+            break;
+        }
         if (object.packetTimestamp != null)
             if ($util.Long)
                 (message.packetTimestamp = $util.Long.fromValue(object.packetTimestamp)).unsigned = true;
@@ -13576,6 +13618,7 @@ export const Referee = $root.Referee = (() => {
             object.nextCommand = options.enums === String ? "HALT" : 0;
             object.currentActionTimeRemaining = 0;
             object.sourceIdentifier = "";
+            object.matchType = options.enums === String ? "UNKNOWN_MATCH" : 0;
         }
         if (message.packetTimestamp != null && message.hasOwnProperty("packetTimestamp"))
             if (typeof message.packetTimestamp === "number")
@@ -13619,6 +13662,8 @@ export const Referee = $root.Referee = (() => {
         }
         if (message.sourceIdentifier != null && message.hasOwnProperty("sourceIdentifier"))
             object.sourceIdentifier = message.sourceIdentifier;
+        if (message.matchType != null && message.hasOwnProperty("matchType"))
+            object.matchType = options.enums === String ? $root.MatchType[message.matchType] : message.matchType;
         return object;
     };
 
@@ -14658,6 +14703,24 @@ export const GameEventProposalGroup = $root.GameEventProposalGroup = (() => {
     };
 
     return GameEventProposalGroup;
+})();
+
+/**
+ * MatchType enum.
+ * @exports MatchType
+ * @enum {string}
+ * @property {number} UNKNOWN_MATCH=0 UNKNOWN_MATCH value
+ * @property {number} GROUP_PHASE=1 GROUP_PHASE value
+ * @property {number} ELIMINATION_PHASE=2 ELIMINATION_PHASE value
+ * @property {number} FRIENDLY=3 FRIENDLY value
+ */
+$root.MatchType = (function() {
+    const valuesById = {}, values = Object.create(valuesById);
+    values[valuesById[0] = "UNKNOWN_MATCH"] = 0;
+    values[valuesById[1] = "GROUP_PHASE"] = 1;
+    values[valuesById[2] = "ELIMINATION_PHASE"] = 2;
+    values[valuesById[3] = "FRIENDLY"] = 3;
+    return values;
 })();
 
 export const StateChange = $root.StateChange = (() => {
@@ -18187,6 +18250,7 @@ export const UpdateConfig = $root.UpdateConfig = (() => {
      * @property {Division|null} [division] UpdateConfig division
      * @property {Team|null} [firstKickoffTeam] UpdateConfig firstKickoffTeam
      * @property {boolean|null} [autoContinue] UpdateConfig autoContinue
+     * @property {MatchType|null} [matchType] UpdateConfig matchType
      */
 
     /**
@@ -18229,6 +18293,14 @@ export const UpdateConfig = $root.UpdateConfig = (() => {
     UpdateConfig.prototype.autoContinue = false;
 
     /**
+     * UpdateConfig matchType.
+     * @member {MatchType} matchType
+     * @memberof UpdateConfig
+     * @instance
+     */
+    UpdateConfig.prototype.matchType = 0;
+
+    /**
      * Creates a new UpdateConfig instance using the specified properties.
      * @function create
      * @memberof UpdateConfig
@@ -18258,6 +18330,8 @@ export const UpdateConfig = $root.UpdateConfig = (() => {
             writer.uint32(/* id 2, wireType 0 =*/16).int32(message.firstKickoffTeam);
         if (message.autoContinue != null && message.hasOwnProperty("autoContinue"))
             writer.uint32(/* id 3, wireType 0 =*/24).bool(message.autoContinue);
+        if (message.matchType != null && message.hasOwnProperty("matchType"))
+            writer.uint32(/* id 4, wireType 0 =*/32).int32(message.matchType);
         return writer;
     };
 
@@ -18300,6 +18374,9 @@ export const UpdateConfig = $root.UpdateConfig = (() => {
                 break;
             case 3:
                 message.autoContinue = reader.bool();
+                break;
+            case 4:
+                message.matchType = reader.int32();
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -18357,6 +18434,16 @@ export const UpdateConfig = $root.UpdateConfig = (() => {
         if (message.autoContinue != null && message.hasOwnProperty("autoContinue"))
             if (typeof message.autoContinue !== "boolean")
                 return "autoContinue: boolean expected";
+        if (message.matchType != null && message.hasOwnProperty("matchType"))
+            switch (message.matchType) {
+            default:
+                return "matchType: enum value expected";
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+                break;
+            }
         return null;
     };
 
@@ -18402,6 +18489,24 @@ export const UpdateConfig = $root.UpdateConfig = (() => {
         }
         if (object.autoContinue != null)
             message.autoContinue = Boolean(object.autoContinue);
+        switch (object.matchType) {
+        case "UNKNOWN_MATCH":
+        case 0:
+            message.matchType = 0;
+            break;
+        case "GROUP_PHASE":
+        case 1:
+            message.matchType = 1;
+            break;
+        case "ELIMINATION_PHASE":
+        case 2:
+            message.matchType = 2;
+            break;
+        case "FRIENDLY":
+        case 3:
+            message.matchType = 3;
+            break;
+        }
         return message;
     };
 
@@ -18422,6 +18527,7 @@ export const UpdateConfig = $root.UpdateConfig = (() => {
             object.division = options.enums === String ? "DIV_UNKNOWN" : 0;
             object.firstKickoffTeam = options.enums === String ? "UNKNOWN" : 0;
             object.autoContinue = false;
+            object.matchType = options.enums === String ? "UNKNOWN_MATCH" : 0;
         }
         if (message.division != null && message.hasOwnProperty("division"))
             object.division = options.enums === String ? $root.Division[message.division] : message.division;
@@ -18429,6 +18535,8 @@ export const UpdateConfig = $root.UpdateConfig = (() => {
             object.firstKickoffTeam = options.enums === String ? $root.Team[message.firstKickoffTeam] : message.firstKickoffTeam;
         if (message.autoContinue != null && message.hasOwnProperty("autoContinue"))
             object.autoContinue = message.autoContinue;
+        if (message.matchType != null && message.hasOwnProperty("matchType"))
+            object.matchType = options.enums === String ? $root.MatchType[message.matchType] : message.matchType;
         return object;
     };
 
@@ -22042,6 +22150,7 @@ export const State = $root.State = (() => {
      * @property {Division|null} [division] State division
      * @property {boolean|null} [autoContinue] State autoContinue
      * @property {Team|null} [firstKickoffTeam] State firstKickoffTeam
+     * @property {MatchType|null} [matchType] State matchType
      */
 
     /**
@@ -22183,6 +22292,14 @@ export const State = $root.State = (() => {
     State.prototype.firstKickoffTeam = 0;
 
     /**
+     * State matchType.
+     * @member {MatchType} matchType
+     * @memberof State
+     * @instance
+     */
+    State.prototype.matchType = 0;
+
+    /**
      * Creates a new State instance using the specified properties.
      * @function create
      * @memberof State
@@ -22239,6 +22356,8 @@ export const State = $root.State = (() => {
             writer.uint32(/* id 16, wireType 0 =*/128).bool(message.autoContinue);
         if (message.firstKickoffTeam != null && message.hasOwnProperty("firstKickoffTeam"))
             writer.uint32(/* id 17, wireType 0 =*/136).int32(message.firstKickoffTeam);
+        if (message.matchType != null && message.hasOwnProperty("matchType"))
+            writer.uint32(/* id 18, wireType 0 =*/144).int32(message.matchType);
         if (message.gameState != null && message.hasOwnProperty("gameState"))
             $root.GameState.encode(message.gameState, writer.uint32(/* id 19, wireType 2 =*/154).fork()).ldelim();
         return writer;
@@ -22328,6 +22447,9 @@ export const State = $root.State = (() => {
                 break;
             case 17:
                 message.firstKickoffTeam = reader.int32();
+                break;
+            case 18:
+                message.matchType = reader.int32();
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -22471,6 +22593,16 @@ export const State = $root.State = (() => {
             case 0:
             case 1:
             case 2:
+                break;
+            }
+        if (message.matchType != null && message.hasOwnProperty("matchType"))
+            switch (message.matchType) {
+            default:
+                return "matchType: enum value expected";
+            case 0:
+            case 1:
+            case 2:
+            case 3:
                 break;
             }
         return null;
@@ -22646,6 +22778,24 @@ export const State = $root.State = (() => {
             message.firstKickoffTeam = 2;
             break;
         }
+        switch (object.matchType) {
+        case "UNKNOWN_MATCH":
+        case 0:
+            message.matchType = 0;
+            break;
+        case "GROUP_PHASE":
+        case 1:
+            message.matchType = 1;
+            break;
+        case "ELIMINATION_PHASE":
+        case 2:
+            message.matchType = 2;
+            break;
+        case "FRIENDLY":
+        case 3:
+            message.matchType = 3;
+            break;
+        }
         return message;
     };
 
@@ -22680,6 +22830,7 @@ export const State = $root.State = (() => {
             object.division = options.enums === String ? "DIV_UNKNOWN" : 0;
             object.autoContinue = false;
             object.firstKickoffTeam = options.enums === String ? "UNKNOWN" : 0;
+            object.matchType = options.enums === String ? "UNKNOWN_MATCH" : 0;
             object.gameState = null;
         }
         if (message.stage != null && message.hasOwnProperty("stage"))
@@ -22720,6 +22871,8 @@ export const State = $root.State = (() => {
             object.autoContinue = message.autoContinue;
         if (message.firstKickoffTeam != null && message.hasOwnProperty("firstKickoffTeam"))
             object.firstKickoffTeam = options.enums === String ? $root.Team[message.firstKickoffTeam] : message.firstKickoffTeam;
+        if (message.matchType != null && message.hasOwnProperty("matchType"))
+            object.matchType = options.enums === String ? $root.MatchType[message.matchType] : message.matchType;
         if (message.gameState != null && message.hasOwnProperty("gameState"))
             object.gameState = $root.GameState.toObject(message.gameState, options);
         return object;
