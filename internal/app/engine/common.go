@@ -26,15 +26,15 @@ func createGameEventChange(eventType state.GameEvent_Type, event *state.GameEven
 	}
 }
 
-func (e *Engine) robotsInsideRadius(robots []*Robot, pos *geom.Vector2, radius float64) bool {
+func (e *Engine) findRobotInsideRadius(robots []*Robot, pos *geom.Vector2, radius float64) *Robot {
 	for _, robot := range robots {
 		distance := robot.Pos.DistanceTo(pos)
 		if distance < radius {
-			return true
+			return robot
 		}
 	}
 
-	return false
+	return nil
 }
 
 func goDur(duration *durationpb.Duration) time.Duration {

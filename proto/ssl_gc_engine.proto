@@ -21,6 +21,9 @@ message GcState {
 
     // can the match be continued right now?
     optional bool ready_to_continue = 5;
+    
+    // list of issues that hinders the game from continuing
+    repeated string continuation_issues = 6;
 }
 
 // The GC state for a singl eteam
