@@ -54,8 +54,7 @@ export let isPreStage = function (state) {
     return state.stage === 'NORMAL_FIRST_HALF_PRE'
         || state.stage === 'NORMAL_SECOND_HALF_PRE'
         || state.stage === 'EXTRA_FIRST_HALF_PRE'
-        || state.stage === 'EXTRA_SECOND_HALF_PRE'
-        || state.stage === 'PENALTY_SHOOTOUT';
+        || state.stage === 'EXTRA_SECOND_HALF_PRE';
 };
 
 export let convertStringLocation = function (loc) {

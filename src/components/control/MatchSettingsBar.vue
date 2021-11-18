@@ -22,7 +22,7 @@
         <b-button v-b-tooltip.hover.d500
                   title="Proceed to the next stage"
                   v-on:click="nextStage"
-                  :disabled="forbidMatchControls || noNextStage">
+                  :disabled="forbidMatchControls || noNextStage || preStage">
             Proceed to {{nextStageText}}
         </b-button>
 
@@ -48,9 +48,9 @@
 
 <script>
     import Settings from "../settings/Settings";
-    import {getNextStage, canEndGameFromStage, stageNames} from "../../refereeState";
+    import {getNextStage, canEndGameFromStage, stageNames, isPreStage} from "@/refereeState";
     import NewEvent from "../create-event/NewEvent";
-    import {submitChange} from "../../submit";
+    import {submitChange} from "@/submit";
 
     export default {
         name: "MatchSettingsBar",
@@ -102,6 +102,9 @@
             },
             showEndGame() {
                 return canEndGameFromStage(this.$store.state.matchState.stage);
+            },
+            preStage() {
+                return isPreStage(this.$store.state.matchState);
             },
         }
     }
