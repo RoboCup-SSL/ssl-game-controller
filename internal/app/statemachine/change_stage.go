@@ -65,6 +65,8 @@ func (s *StateMachine) getNextCommandForStage(newState *state.State, stage state
 		return state.NewCommand(state.Command_KICKOFF, *newState.FirstKickoffTeam)
 	case state.Referee_NORMAL_SECOND_HALF_PRE, state.Referee_EXTRA_SECOND_HALF_PRE:
 		return state.NewCommand(state.Command_KICKOFF, newState.FirstKickoffTeam.Opposite())
+	case state.Referee_PENALTY_SHOOTOUT:
+		return state.NewCommand(state.Command_PENALTY, *newState.FirstKickoffTeam)
 	default:
 		return nil
 	}
