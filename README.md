@@ -121,7 +121,7 @@ under the same port as the UI.
 
 ### Requirements
 You need to install following dependencies first: 
- * Go >= 1.13
+ * Go >= 1.17
  * Node
  * Yarn
 
