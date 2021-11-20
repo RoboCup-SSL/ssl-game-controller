@@ -3362,7 +3362,7 @@ type GameEvent_ChallengeFlag struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// the team that substitutes robots
+	// the team that requested the challenge flag
 	ByTeam *Team `protobuf:"varint,1,req,name=by_team,json=byTeam,enum=Team" json:"by_team,omitempty"`
 }
 

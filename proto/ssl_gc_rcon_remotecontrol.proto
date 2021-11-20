@@ -31,22 +31,20 @@ message RemoteControlToController {
         bool substitute_bot = 4;
 
         // true: request a timeout with the next stoppage
-        // false: cancel the reuqest
+        // false: cancel the request
         bool timeout = 5;
 
         // true: initiate an emergency stop
-        // false: ignored (emergency_stop can not be canceled)
+        // false: cancel the request
         bool emergency_stop = 6;
     }
 
     enum Request {
         UNKNOWN = 0;
-        // Ping the GC to test the connection. The GC will respond with OK.
+        // Ping the GC to test the connection. The GC will respond with OK and the current team state
         PING = 1;
-        // Request the current team state
-        GET_STATE = 2;
         // Raise a challenge flag (this is not revocable)
-        CHALLENGE_FLAG = 3;
+        CHALLENGE_FLAG = 2;
     }
 }
 
@@ -55,21 +53,27 @@ message ControllerToRemoteControl {
     // a reply from the controller
     optional ControllerReply controller_reply = 1;
 
+    // current team state
+    optional RemoteControlTeamState state = 2;
+}
+
+// Current team state from Controller for remote control
+message RemoteControlTeamState {
     // currently set keeper id
-    optional int32 keeper = 2;
+    optional int32 keeper_id = 1;
 
     // true, if substitution request pending
-    optional bool substitute_bot = 3;
+    optional bool substitute_bot = 2;
 
     // true, if emergency stop pending
-    optional bool emergency_stop = 4;
+    optional bool emergency_stop = 3;
 
     // number of seconds till emergency stop is executed
-    optional float emergency_stop_in = 5;
+    optional float emergency_stop_in = 4;
 
     // true, if timeout request pending
-    optional bool timeout = 6;
+    optional bool timeout = 5;
 
     // true, if challenge flag pending
-    optional bool challenge_flag = 7;
+    optional bool challenge_flag = 6;
 }

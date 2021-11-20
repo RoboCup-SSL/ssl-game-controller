@@ -111,11 +111,6 @@ func main() {
 			Msg: &rcon.RemoteControlToController_EmergencyStop{EmergencyStop: false},
 		})
 	}
-	commands["state"] = func(args []string) {
-		c.sendRequest(&rcon.RemoteControlToController{
-			Msg: &rcon.RemoteControlToController_Request_{Request: rcon.RemoteControlToController_GET_STATE},
-		})
-	}
 
 	reader := bufio.NewReader(os.Stdin)
 	for {
