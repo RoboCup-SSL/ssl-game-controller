@@ -78,22 +78,22 @@ func main() {
 	}
 	commands["substitution"] = func(args []string) {
 		c.sendRequest(&rcon.RemoteControlToController{
-			Msg: &rcon.RemoteControlToController_SubstituteBot{SubstituteBot: true},
+			Msg: &rcon.RemoteControlToController_RequestRobotSubstitution{RequestRobotSubstitution: true},
 		})
 	}
 	commands["no_substitution"] = func(args []string) {
 		c.sendRequest(&rcon.RemoteControlToController{
-			Msg: &rcon.RemoteControlToController_SubstituteBot{SubstituteBot: false},
+			Msg: &rcon.RemoteControlToController_RequestRobotSubstitution{RequestRobotSubstitution: false},
 		})
 	}
 	commands["timeout"] = func(args []string) {
 		c.sendRequest(&rcon.RemoteControlToController{
-			Msg: &rcon.RemoteControlToController_Timeout{Timeout: true},
+			Msg: &rcon.RemoteControlToController_RequestTimeout{RequestTimeout: true},
 		})
 	}
 	commands["no_timeout"] = func(args []string) {
 		c.sendRequest(&rcon.RemoteControlToController{
-			Msg: &rcon.RemoteControlToController_Timeout{Timeout: false},
+			Msg: &rcon.RemoteControlToController_RequestTimeout{RequestTimeout: false},
 		})
 	}
 	commands["challenge"] = func(args []string) {
@@ -103,12 +103,12 @@ func main() {
 	}
 	commands["emergency"] = func(args []string) {
 		c.sendRequest(&rcon.RemoteControlToController{
-			Msg: &rcon.RemoteControlToController_EmergencyStop{EmergencyStop: true},
+			Msg: &rcon.RemoteControlToController_RequestEmergencyStop{RequestEmergencyStop: true},
 		})
 	}
 	commands["no_emergency"] = func(args []string) {
 		c.sendRequest(&rcon.RemoteControlToController{
-			Msg: &rcon.RemoteControlToController_EmergencyStop{EmergencyStop: false},
+			Msg: &rcon.RemoteControlToController_RequestEmergencyStop{RequestEmergencyStop: false},
 		})
 	}
 

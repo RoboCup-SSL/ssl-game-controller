@@ -33,6 +33,7 @@ type Engine struct {
 	gcState                  *GcState
 	trackerLastUpdate        map[string]time.Time
 	mutex                    sync.Mutex
+	mutexEnqueueBlocking     sync.Mutex
 	noProgressDetector       NoProgressDetector
 	ballPlacementCoordinator BallPlacementCoordinator
 	botNumberProcessor       BotNumberProcessor
@@ -82,6 +83,30 @@ func (e *Engine) Enqueue(change *statemachine.Change) {
 		*change.Revertible = true
 	}
 	e.queue <- change
+}
+
+// EnqueueBlocking adds the change to the change queue and waits for application
+func (e *Engine) EnqueueBlocking(change *statemachine.Change) error {
+	e.mutexEnqueueBlocking.Lock()
+	defer e.mutexEnqueueBlocking.Unlock()
+	hook := make(chan HookOut)
+	hookId := "enqueue-blocking"
+	e.RegisterHook(hookId, hook)
+	defer func() {
+		e.UnregisterHook(hookId)
+		close(hook)
+	}()
+	e.Enqueue(change)
+	for {
+		select {
+		case hookOut := <-hook:
+			if hookOut.Change == change {
+				return nil
+			}
+		case <-time.After(100 * time.Millisecond):
+			return errors.Errorf("Failed to apply change: %s", change.String())
+		}
+	}
 }
 
 func isNonMajorityOrigin(origins []string) bool {

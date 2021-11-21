@@ -201,7 +201,8 @@ func (s *TeamServer) processRequest(teamClient TeamClient, request *TeamToContro
 	teamState := *currentState.TeamInfo(teamClient.team)
 
 	if x, ok := request.GetMsg().(*TeamToController_SubstituteBot); ok {
-		if *timeSet(teamState.RequestsBotSubstitutionSince) != x.SubstituteBot {
+		robotSubstitutionRequested := teamState.RequestsBotSubstitutionSince != nil
+		if robotSubstitutionRequested != x.SubstituteBot {
 			log.Printf("Team %v requests to change bot substituation intent to %v", teamClient.id, x.SubstituteBot)
 			s.gcEngine.Enqueue(&statemachine.Change{
 				Origin: &teamClient.id,
@@ -240,11 +241,11 @@ func (s *TeamServer) processRequest(teamClient TeamClient, request *TeamToContro
 func mayChangeKeeper(gcState *engine.GcState, teamState *state.TeamInfo) error {
 	ball := gcState.TrackerStateGc.Ball
 	if ball == nil {
-		return errors.New("GC does not know the ball position.")
+		return errors.New("GC does not know the ball position")
 	}
 	if (*teamState.OnPositiveHalf && *ball.Pos.X > 0) ||
 		(!*teamState.OnPositiveHalf && *ball.Pos.X < 0) {
-		return errors.New("Ball is not in the opponents half.")
+		return errors.New("Ball is not in the opponents half")
 	}
 	return nil
 }

@@ -65,3 +65,12 @@ func (x *State) StringJson() string {
 		return string(b)
 	}
 }
+
+func (x *State) HasGameEventByTeam(t GameEvent_Type, team Team) bool {
+	for _, gameEvent := range x.GameEvents {
+		if *gameEvent.Type == t && gameEvent.ByTeam() == team {
+			return true
+		}
+	}
+	return false
+}

@@ -28,15 +28,15 @@ message RemoteControlToController {
 
         // true: request to substitute a robot at the next possibility
         // false: cancel request
-        bool substitute_bot = 4;
+        bool request_robot_substitution = 4;
 
         // true: request a timeout with the next stoppage
         // false: cancel the request
-        bool timeout = 5;
+        bool request_timeout = 5;
 
         // true: initiate an emergency stop
         // false: cancel the request
-        bool emergency_stop = 6;
+        bool request_emergency_stop = 6;
     }
 
     enum Request {
@@ -59,21 +59,38 @@ message ControllerToRemoteControl {
 
 // Current team state from Controller for remote control
 message RemoteControlTeamState {
+    // list of all currently available request types that can be made
+    repeated RemoteControlRequestType available_requests = 1;
+
+    // list of all currently active request types that are pending
+    repeated RemoteControlRequestType active_requests = 2;
+
     // currently set keeper id
-    optional int32 keeper_id = 1;
-
-    // true, if substitution request pending
-    optional bool substitute_bot = 2;
-
-    // true, if emergency stop pending
-    optional bool emergency_stop = 3;
+    optional int32 keeper_id = 3;
 
     // number of seconds till emergency stop is executed
+    // zero, if no emergency stop requested
     optional float emergency_stop_in = 4;
 
-    // true, if timeout request pending
-    optional bool timeout = 5;
+    // number of timeouts left for the team
+    optional int32 timeouts_left = 5;
 
-    // true, if challenge flag pending
-    optional bool challenge_flag = 6;
+    // number of challenge flags left for the team
+    optional int32 challenge_flags_left = 6;
+
+    // max number of robots currently allowed
+    optional int32 max_robots = 7;
+
+    // list of due times for each active yellow card (in seconds)
+    repeated float yellow_cards_due = 8;
+}
+
+// All possible request types that the remote control can make
+enum RemoteControlRequestType {
+    UNKNOWN_REQUEST_TYPE = 0;
+    EMERGENCY_STOP = 1;
+    ROBOT_SUBSTITUTION = 2;
+    TIMEOUT = 3;
+    CHALLENGE_FLAG = 4;
+    CHANGE_KEEPER_ID = 5;
 }
