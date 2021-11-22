@@ -150,6 +150,7 @@ func (c *RemoteControlClient) replyWithState(reply *ControllerReply) {
 	yellowCardsDue := c.findYellowCardDueTimes()
 	availableRequests := c.findAvailableRequestTypes()
 	activeRequests := c.findActiveRequestTypes()
+	robotsOnField := c.gcEngine.CurrentGcState().TrackerStateGc.NumTeamRobots(*c.team)
 
 	response := &ControllerToRemoteControl{
 		State: &RemoteControlTeamState{
@@ -160,6 +161,7 @@ func (c *RemoteControlClient) replyWithState(reply *ControllerReply) {
 			TimeoutsLeft:       teamState.TimeoutsLeft,
 			ChallengeFlagsLeft: teamState.ChallengeFlags,
 			MaxRobots:          teamState.MaxAllowedBots,
+			RobotsOnField:      &robotsOnField,
 			YellowCardsDue:     yellowCardsDue,
 		},
 		ControllerReply: reply,

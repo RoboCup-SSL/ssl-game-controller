@@ -81,6 +81,9 @@ message RemoteControlTeamState {
     // max number of robots currently allowed
     optional int32 max_robots = 7;
 
+    // current number of robots visible on field
+    optional int32 robots_on_field = 9;
+
     // list of due times for each active yellow card (in seconds)
     repeated float yellow_cards_due = 8;
 }

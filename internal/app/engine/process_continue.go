@@ -174,7 +174,7 @@ func (e *Engine) posInsideGoal(pos *geom.Vector2) bool {
 
 func (e *Engine) tooManyRobots(team state.Team) bool {
 	maxAllowed := *e.currentState.TeamState[team.String()].MaxAllowedBots
-	current := numRobotsOfTeam(e.gcState.TrackerStateGc.Robots, team)
+	current := e.gcState.TrackerStateGc.NumTeamRobots(team)
 	return current > maxAllowed
 }
 

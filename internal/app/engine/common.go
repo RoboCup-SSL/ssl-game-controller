@@ -55,3 +55,12 @@ func (e *Engine) ballSteady() bool {
 	}
 	return e.gcState.TrackerStateGc.Ball.Vel.ToVector2().Length() < ballSteadyThreshold
 }
+
+func (x *GcStateTracker) NumTeamRobots(team state.Team) (count int32) {
+	for _, robot := range x.Robots {
+		if *robot.Id.Team == team {
+			count++
+		}
+	}
+	return
+}

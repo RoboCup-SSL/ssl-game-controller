@@ -43,7 +43,7 @@ func (e *Engine) processBotNumberPerTeam(team state.Team) {
 		e.gameConfig.YellowCardDuration-e.gameConfig.YellowCardBotRemovalTime,
 	)
 
-	numBots := numRobotsOfTeam(e.gcState.TrackerStateGc.Robots, team)
+	numBots := e.gcState.TrackerStateGc.NumTeamRobots(team)
 	numBotsAllowed := *teamInfo.MaxAllowedBots + newCards
 	if numBots > numBotsAllowed {
 
@@ -73,15 +73,6 @@ func newActiveYellowCards(cards []*state.YellowCard, minRemaining time.Duration)
 	for _, c := range cards {
 		d := c.TimeRemaining.AsDuration()
 		if d > minRemaining {
-			count++
-		}
-	}
-	return
-}
-
-func numRobotsOfTeam(robots []*Robot, team state.Team) (count int32) {
-	for _, robot := range robots {
-		if *robot.Id.Team == team {
 			count++
 		}
 	}
