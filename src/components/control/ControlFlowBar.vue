@@ -18,7 +18,7 @@
                       v-on:click="triggerContinue"
                       v-bind:disabled="continueDisabled">
                 Continue
-                <span v-if="nextCommand && nextCommand.forTeam">with</span>
+                <span v-if="nextCommand && nextCommand.type">with</span>
                 <span v-if="nextCommand"
                       :class="teamColorClass">
                     {{ nextCommand.type }}
@@ -68,6 +68,9 @@ export default {
         halted() {
             return this.$store.state.matchState.command.type === 'HALT';
         },
+        timeoutActive() {
+            return this.$store.state.matchState.command.type === 'TIMEOUT';
+        },
         continueDisabled() {
             return !this.nextCommand;
         },
@@ -81,6 +84,9 @@ export default {
                     return {type: 'STOP'};
                 }
                 return null;
+            }
+            if (this.timeoutActive) {
+                return {type: 'STOP'}
             }
             if (!this.$store.state.matchState.nextCommand) {
                 return null;

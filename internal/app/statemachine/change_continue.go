@@ -37,8 +37,8 @@ func (s *StateMachine) processChangeContinue(newState *state.State) (changes []*
 		return
 	}
 
-	if *newState.Command.Type == state.Command_HALT {
-		log.Printf("Continue with STOP after HALT")
+	if *newState.Command.Type == state.Command_HALT || *newState.Command.Type == state.Command_TIMEOUT {
+		log.Printf("Continue with STOP after %s", newState.Command.Type.String())
 		changes = append(changes, s.createCommandChange(state.NewCommandNeutral(state.Command_STOP)))
 	} else if newState.NextCommand != nil {
 		log.Printf("Continue with next command: %v", newState.NextCommand)
