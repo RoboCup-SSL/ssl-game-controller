@@ -18,11 +18,12 @@
                       v-on:click="triggerContinue"
                       v-bind:disabled="continueDisabled">
                 Continue
-                <span v-if="nextCommand && nextCommand.type">with</span>
-                <span v-if="nextCommand"
-                      :class="teamColorClass">
-                    {{ nextCommand.type }}
-                </span>
+                <template v-if="botSubstitutionRequested && timeoutRequested"> with timeout and bot substitution</template>
+                <template v-else-if="botSubstitutionRequested"> with bot substitution</template>
+                <template v-else-if="timeoutRequested"> with timeout</template>
+                <template v-else-if="nextCommand && nextCommand.type">with
+                    <span :class="teamColorClass">{{ nextCommand.type }}</span>
+                </template>
                 <span v-for="issue of continuationIssues" v-bind:key="issue">
                     <br>
                     - {{issue}}
@@ -68,11 +69,32 @@ export default {
         halted() {
             return this.$store.state.matchState.command.type === 'HALT';
         },
+        gameRunning() {
+            switch (this.$store.state.matchState.command.type) {
+                case 'FORCE_START':
+                case 'NORMAL_START':
+                case 'DIRECT':
+                case 'INDIRECT':
+                case 'KICKOFF':
+                case 'PENALTY':
+                case 'BALL_PLACEMENT':
+                    return true;
+            }
+            return false;
+        },
         timeoutActive() {
             return this.$store.state.matchState.command.type === 'TIMEOUT';
         },
+        timeoutRequested() {
+            return this.$store.state.matchState.teamState[TEAM_YELLOW].requestsTimeoutSince !== null
+                || this.$store.state.matchState.teamState[TEAM_BLUE].requestsTimeoutSince !== null;
+        },
+        botSubstitutionRequested() {
+            return this.$store.state.matchState.teamState[TEAM_YELLOW].requestsBotSubstitutionSince !== null
+                || this.$store.state.matchState.teamState[TEAM_BLUE].requestsBotSubstitutionSince !== null;
+        },
         continueDisabled() {
-            return !this.nextCommand;
+            return this.gameRunning || (!this.nextCommand && !this.timeoutRequested && !this.botSubstitutionRequested);
         },
         stopAllowed() {
             return isNonPausedStage(this.$store.state.matchState)
