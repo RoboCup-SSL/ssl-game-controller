@@ -249,6 +249,9 @@ func (c *RemoteControlClient) checkRequestTimeout() error {
 	if gameStateType == state.GameState_TIMEOUT {
 		return errors.New("Timeout is active")
 	}
+	if *c.gcEngine.CurrentState().TeamState[c.team.String()].TimeoutsLeft <= 0 {
+		return errors.New("No timeouts left")
+	}
 	return nil
 }
 
