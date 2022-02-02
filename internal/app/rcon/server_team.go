@@ -240,11 +240,9 @@ func (s *TeamServer) processRequest(teamClient TeamClient, request *TeamToContro
 
 func mayChangeKeeper(gcState *engine.GcState, teamState *state.TeamInfo) error {
 	ball := gcState.TrackerStateGc.Ball
-	if ball == nil {
-		return errors.New("GC does not know the ball position")
-	}
-	if (*teamState.OnPositiveHalf && *ball.Pos.X > 0) ||
-		(!*teamState.OnPositiveHalf && *ball.Pos.X < 0) {
+	if ball != nil &&
+		((*teamState.OnPositiveHalf && *ball.Pos.X > 0) ||
+			(!*teamState.OnPositiveHalf && *ball.Pos.X < 0)) {
 		return errors.New("Ball is not in the opponents half")
 	}
 	return nil
