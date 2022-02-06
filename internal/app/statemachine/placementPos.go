@@ -52,8 +52,6 @@ func (s *BallPlacementPosDeterminer) Location() *geom.Vector2 {
 		return s.validateLocation(s.Event.GetBotTippedOver().BallLocation)
 	case state.GameEvent_BOT_INTERFERED_PLACEMENT:
 		return s.validateLocation(s.CurrentPlacementPos)
-	case state.GameEvent_BOT_KICKED_BALL_TOO_FAST:
-		return s.validateLocation(s.Event.GetBotKickedBallTooFast().Location)
 	case state.GameEvent_BOT_DRIBBLED_BALL_TOO_FAR:
 		return s.validateLocation(s.Event.GetBotDribbledBallTooFar().Start)
 	case state.GameEvent_BOT_PUSHED_BOT:
@@ -64,8 +62,6 @@ func (s *BallPlacementPosDeterminer) Location() *geom.Vector2 {
 		return s.validateLocation(s.Event.GetAttackerDoubleTouchedBall().Location)
 	case state.GameEvent_ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA:
 		return s.validateLocation(s.Event.GetAttackerTooCloseToDefenseArea().BallLocation)
-	case state.GameEvent_ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA:
-		return s.validateLocation(s.Event.GetAttackerTouchedBallInDefenseArea().Location)
 	case state.GameEvent_BOUNDARY_CROSSING:
 		return s.validateLocation(s.Event.GetBoundaryCrossing().Location)
 	case state.GameEvent_DEFENDER_TOO_CLOSE_TO_KICK_POINT:
