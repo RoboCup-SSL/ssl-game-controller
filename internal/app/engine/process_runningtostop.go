@@ -12,13 +12,15 @@ func (e *Engine) processRunningToStop() {
 	}
 
 	if e.ballPlacementRequired() {
-		log.Printf("Ball placement is needed")
+		log.Printf("Running -> Stop: Ball placement is needed")
 		e.Enqueue(&statemachine.Change{
 			Origin: &changeOriginEngine,
 			Change: &statemachine.Change_StartBallPlacement{
 				StartBallPlacement: &statemachine.StartBallPlacement{},
 			},
 		})
+	} else {
+		log.Printf("Running -> Stop: No ball placement needed")
 	}
 }
 
@@ -27,6 +29,13 @@ func (e *Engine) ballPlacementRequired() bool {
 		// fallback if the fields are not set
 		return false
 	}
+
+	// The ball is stationary.
+	// Else, checking the following position checks make no sense, as the ball may roll out of or in those
+	if !e.ballSteady() {
+		return true
+	}
+
 	placementPos := e.currentState.PlacementPos
 	ballPos := e.gcState.TrackerStateGc.Ball.Pos.ToVector2()
 
@@ -48,11 +57,6 @@ func (e *Engine) ballPlacementRequired() bool {
 		if forbiddenArea.IsPointInside(ballPos) {
 			return true
 		}
-	}
-
-	// The ball is stationary.
-	if !e.ballSteady() {
-		return true
 	}
 
 	return false
