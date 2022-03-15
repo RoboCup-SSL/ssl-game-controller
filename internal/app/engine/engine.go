@@ -382,7 +382,9 @@ func (e *Engine) postProcessChange(entry *statemachine.StateChange) {
 	}
 	if change.GetNewCommand() != nil &&
 		*change.GetNewCommand().Command.Type == state.Command_STOP &&
-		entry.StatePre.Command.IsRunning() {
+		// include STOP from last state as well, as game events may come in shortly after state changed to STOP
+		// for example if two robots dribbled ball to far, autoRefs will trigger two events after each other
+		(entry.StatePre.Command.IsRunning() || *entry.StatePre.Command.Type == state.Command_STOP) {
 		e.processRunningToStop()
 	}
 }
