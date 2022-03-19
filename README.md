@@ -93,7 +93,7 @@ if you require the additional features described in [External Runtime Dependenci
 
 When you enable `ci` mode, referee messages will still be published via multicast,
 unless the address is unset (set to an empty string). That way, you can still integrate
-an autoRef. It is not yet possible to use the autoRefs without multicast.
+an autoRef or other software. Have a look at [Auto-referee CI](doc/AutoRefCi.md) for details on how to integrate the auto-referees in a CI way as well.
 
 When the `ci` mode is enabled (via `ssl-game-controller.yaml` -> `time-acquisition-mode`),
 a TCP port is opened (default: 10009). The protocol is defined in [proto/ssl_gc_ci.proto](./proto/ssl_gc_ci.proto).
@@ -103,7 +103,7 @@ This is, because some changes will generate multiple messages.
 `CiOutput` messages will also be pushed to the CI client for manual changes from the UI or UI API.
 
 The GC requires some input data, see [External Runtime Dependencies](#External Runtime Dependencies).
-In the `ci` mode, you have to provide the geometry statically in [config/ssl-game-controller.yaml](config/ssl-game-controller.yaml).
+In the `ci` mode, you have to provide the geometry statically in [config/ssl-game-controller.yaml](config/ssl-game-controller.yaml) or send it through `CiInput`.
 The ball and robot positions must be sent with the `CiInput`.
 It is sufficient to fill in the required fields and keep the optional empty.
 
