@@ -1,0 +1,17 @@
+@startuml
+loop
+
+Simulator -> Simulator : simulate step
+Simulator -> AutoRef : AutoRefCiInput { SSL_WrapperPaket, RefereeMsg }
+
+opt
+AutoRef -> GC : AutoRefToController { GameEvent }
+GC -> AutoRef : ControllerToAutoRef { Reply }
+end
+
+AutoRef -> Simulator : AutoRefCiOutput { TrackerWrapperPacket }
+Simulator -> GC : CiInput { TrackerWrapperPacket }
+GC -> Simulator : CiOutput { RefereeMsg }
+
+end
+@enduml
