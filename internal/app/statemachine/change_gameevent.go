@@ -269,14 +269,13 @@ func (s *StateMachine) isGoalValid(newState *state.State, gameEvent *state.GameE
 	// 3. The team did not commit any non-stopping foul since the teams robots last touched the ball.
 	var recentlyCommittedFouls []state.GameEvent_Type
 	var gracePeriod = 2 * time.Second
+	var now = s.timeProvider()
 	for _, foul := range newState.TeamInfo(byTeam).Fouls {
 		if foul.CausedByGameEvent != nil &&
 			foul.Timestamp != nil &&
 			gameEvent.GetPossibleGoal().LastTouchByTeam != nil &&
 			isNonStoppingFoul(*foul.CausedByGameEvent.Type) &&
-			// add some time offset: If a bot committed a foul by touching ball inside the penalty area and scores
-			// a goal shortly afterwards, the foul would have been before lastTouchedByTeam
-			foul.Timestamp.AsTime().Add(gracePeriod).After(microTimestampToTime(*gameEvent.GetPossibleGoal().LastTouchByTeam)) {
+			foul.Timestamp.AsTime().After(now.Add(-gracePeriod)) {
 			recentlyCommittedFouls = append(recentlyCommittedFouls, *foul.CausedByGameEvent.Type)
 		}
 	}
