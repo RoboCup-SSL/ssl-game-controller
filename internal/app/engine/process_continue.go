@@ -131,9 +131,9 @@ func (e *Engine) readyToContinueFromStop() (issues []string) {
 	}
 	if e.currentState.PlacementPos != nil {
 		ballToPlacementPosDist := e.currentState.PlacementPos.DistanceTo(e.gcState.TrackerStateGc.Ball.Pos.ToVector2())
-		if ballToPlacementPosDist > e.gameConfig.BallPlacementTolerance {
-			issues = append(issues, fmt.Sprintf("Ball is %.1fm (>%.1fm) away from placement pos",
-				ballToPlacementPosDist, e.gameConfig.BallPlacementTolerance))
+		if ballToPlacementPosDist > e.gameConfig.BallPlacementRequiredDistance {
+			issues = append(issues, fmt.Sprintf("Ball is %.2fm (>%.2fm) away from placement pos",
+				ballToPlacementPosDist, e.gameConfig.BallPlacementRequiredDistance))
 		}
 	}
 	if !e.ballSteady() {
