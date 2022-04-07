@@ -158,13 +158,10 @@ First, build the UI resources
 # compile and minify UI
 yarn build
 ```
-Then build the backend with `packr`
+Then build the backend
 ```bash
-# get packr
-go get github.com/gobuffalo/packr/packr
 # install the binary
-cd cmd/ssl-game-controller
-packr install
+go install ./cmd/ssl-game-controller
 ```
 
 ### Update generated protobuf code

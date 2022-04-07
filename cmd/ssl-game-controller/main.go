@@ -4,7 +4,7 @@ import (
 	"flag"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/gc"
-	"github.com/gobuffalo/packr"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/ui"
 	"log"
 	"net/http"
 	"os"
@@ -35,7 +35,7 @@ func main() {
 		return
 	}
 
-	setupUi()
+	ui.HandleUi()
 
 	err := http.ListenAndServe(*address, nil)
 	if err != nil {
@@ -84,19 +84,18 @@ func setupGameController() {
 	if backendOnly == nil || !*backendOnly {
 		// serve the bidirectional web socket
 		http.HandleFunc("/api/control", gameController.ApiServer().WsHandler)
-	}
-}
 
-func setupUi() {
-	box := packr.NewBox("../../dist")
-	http.Handle("/", http.FileServer(box))
-	if box.Has("index.html") {
-		log.Printf("UI is available at http://%v", *address)
-	} else {
-		log.Print("Backend-only version started. Run the UI separately or get a binary that has the UI included")
+		log.Printf("UI is available at %v", formattedAddress())
 	}
 }
 
 func parseSkipInterfaces() []string {
 	return strings.Split(*skipInterfaces, ",")
+}
+
+func formattedAddress() string {
+	if strings.HasPrefix(*address, ":") {
+		return "http://localhost" + *address
+	}
+	return "http://" + *address
 }

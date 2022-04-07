@@ -1,6 +1,6 @@
 .DS_Store
 node_modules
-/dist
+/internal/app/ui/dist
 /config/state-store.json.stream
 
 # Editor directories and files

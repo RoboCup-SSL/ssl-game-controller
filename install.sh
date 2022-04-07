@@ -7,6 +7,4 @@ yarn install
 yarn build
 
 # backend
-go get -v -d ./...
-cd cmd/ssl-game-controller
-packr install
+go install -v ./cmd/ssl-game-controller
