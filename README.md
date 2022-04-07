@@ -121,20 +121,13 @@ under the same port as the UI.
 
 ### Requirements
 You need to install following dependencies first: 
- * Go >= 1.17
+ * Go
  * Node
  * Yarn
+ 
+See [.circleci/config.yml](.circleci/config.yml) for required versions. 
 
-### Prepare
-Download and install to [GOPATH](https://github.com/golang/go/wiki/GOPATH):
-```bash
-go get -u github.com/RoboCup-SSL/ssl-game-controller/...
-```
-Switch to project root directory
-```bash
-cd $GOPATH/src/github.com/RoboCup-SSL/ssl-game-controller/
-```
-Download dependencies for frontend
+### Install dependencies
 ```bash
 yarn install
 ```
@@ -150,18 +143,10 @@ Run the UI:
 # compile and hot-reload
 yarn serve
 ```
-Or use the provided IntelliJ run configurations.
 
 ### Build self-contained release binary
-First, build the UI resources
 ```bash
-# compile and minify UI
-yarn build
-```
-Then build the backend
-```bash
-# install the binary
-go install ./cmd/ssl-game-controller
+./install.sh
 ```
 
 ### Update generated protobuf code
