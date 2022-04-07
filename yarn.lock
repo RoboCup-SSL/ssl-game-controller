@@ -8110,10 +8110,12 @@ uuid@^8.3.2:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
   integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
 
-v-hotkey@0.2.3:
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/v-hotkey/-/v-hotkey-0.2.3.tgz#ef0e7a021e9cda59b67510d870cde3f2176ed5c6"
-  integrity sha512-D4zVnQjahVCl7lr7xKw/6jn3rsnifKnM52YpHWHq7L+7VNIr1NiwpgASINpxbW9Id59aMZ8Tm8kuKqOdTJrvhQ==
+v-hotkey@0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/v-hotkey/-/v-hotkey-0.9.0.tgz#3e6c17128a2faa5f2a80a2f06f6c062b83c5d3e1"
+  integrity sha512-PVbU9cw5oyoOr6y5q0nN9xmndzpCsLDhXRgVP80WRMvM1Eqkai3ViuJs/D+qFhRht6u5LyM10eBEZ5hq+3qLTg==
+  dependencies:
+    core-js "^2.6.5"
 
 validate-npm-package-license@^3.0.1:
   version "3.0.4"
