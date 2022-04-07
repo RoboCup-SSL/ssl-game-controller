@@ -1,4 +1,4 @@
-FROM node:15.7.0-alpine3.11 AS build_node
+FROM node:15.14.0-alpine3.11 AS build_node
 WORKDIR /tmp/ssl-game-controller
 COPY . .
 RUN yarn install
