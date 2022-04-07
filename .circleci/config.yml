@@ -22,7 +22,6 @@ jobs:
   backend:
     docker:
       - image: cimg/go:1.18
-    working_directory: /go/src/github.com/RoboCup-SSL/ssl-game-controller
     steps:
       - checkout
       - attach_workspace:
