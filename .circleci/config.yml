@@ -2,7 +2,7 @@ version: 2
 jobs:
   frontend:
     docker:
-      - image: circleci/node:16.14
+      - image: cimg/node:16.14
     steps:
       - checkout
       - run:
@@ -21,7 +21,7 @@ jobs:
 
   backend:
     docker:
-      - image: circleci/golang:1.18
+      - image: cimg/go:1.18
     working_directory: /go/src/github.com/RoboCup-SSL/ssl-game-controller
     steps:
       - checkout
@@ -46,7 +46,7 @@ jobs:
 
   publish-github-release:
     docker:
-      - image: circleci/golang:1.18
+      - image: cimg/go:1.18
     steps:
       - attach_workspace:
           at: .
@@ -66,11 +66,11 @@ jobs:
 
   docker:
     docker:
-      - image: cimg/base:2021.04
+      - image: cimg/base:2022.03
     steps:
       - checkout
       - setup_remote_docker:
-          version: 20.10.6
+          version: 20.10.11
       - run: |
           TAG=${CIRCLE_TAG:1}
           TAG=${TAG:-latest}
