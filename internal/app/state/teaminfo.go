@@ -2,6 +2,7 @@ package state
 
 import (
 	"google.golang.org/protobuf/types/known/durationpb"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"time"
 )
 
@@ -59,15 +60,17 @@ func (x *TeamInfo) AddRedCard(causedByGameEvent *GameEvent) {
 }
 
 // AddFoul adds a new foul to the team
-func (x *TeamInfo) AddFoul(causedByGameEvent *GameEvent) {
+func (x *TeamInfo) AddFoul(causedByGameEvent *GameEvent, ts time.Time) {
 	id := uint32(0)
-	numCards := len(x.Fouls)
-	if numCards > 0 {
-		id = *x.Fouls[numCards-1].Id + 1
+	numFouls := len(x.Fouls)
+	if numFouls > 0 {
+		id = *x.Fouls[numFouls-1].Id + 1
 	}
+	timestamp := timestamppb.New(ts)
 	x.Fouls = append(x.Fouls, &Foul{
 		Id:                &id,
 		CausedByGameEvent: causedByGameEvent,
+		Timestamp:         timestamp,
 	})
 	return
 }

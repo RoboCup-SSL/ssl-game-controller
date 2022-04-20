@@ -38,7 +38,7 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 		for _, team := range state.BothTeams() {
 			if byTeam == state.Team_UNKNOWN || byTeam == team {
 				log.Printf("Team %v got a foul for %v", byTeam, gameEvent)
-				newState.TeamInfo(team).AddFoul(gameEvent)
+				newState.TeamInfo(team).AddFoul(gameEvent, s.timeProvider())
 				numFouls := len(newState.TeamInfo(team).Fouls)
 				if numFouls%3 == 0 {
 					var causedGameEvents []*state.GameEvent
