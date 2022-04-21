@@ -288,6 +288,7 @@ func (s *StateMachine) isGoalValid(newState *state.State, gameEvent *state.GameE
 				message += ","
 			}
 		}
+		return
 	}
 
 	valid = true
