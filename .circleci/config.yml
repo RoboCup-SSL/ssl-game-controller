@@ -92,6 +92,7 @@ workflows:
             tags:
               only: /.*/
       - publish-github-release:
+          context: github
           requires:
             - backend
           filters:
