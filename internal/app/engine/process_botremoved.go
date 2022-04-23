@@ -38,9 +38,13 @@ func (p *BotNumberProcessor) processBotNumber() {
 func (e *Engine) processBotNumberPerTeam(team state.Team) {
 
 	teamInfo := e.currentState.TeamState[team.String()]
+	removalTime := e.gameConfig.YellowCardBotRemovalTime
+	if *e.currentState.GameState.Type != state.GameState_RUNNING {
+		removalTime = 0
+	}
 	newCards := newActiveYellowCards(
 		teamInfo.YellowCards,
-		e.gameConfig.YellowCardDuration-e.gameConfig.YellowCardBotRemovalTime,
+		e.gameConfig.YellowCardDuration-removalTime,
 	)
 
 	numBots := e.gcState.TrackerStateGc.NumTeamRobots(team)
