@@ -60,6 +60,6 @@ func (e *Engine) ProcessGeometry(data *vision.SSL_GeometryData) {
 	e.stateMachine.Geometry = newGeometry
 
 	if currentGeometry != newGeometry {
-		log.Printf("Geometry changed from %v to %v", currentGeometry, newGeometry)
+		log.Printf("Geometry changed from %+v to %+v", currentGeometry, newGeometry)
 	}
 }

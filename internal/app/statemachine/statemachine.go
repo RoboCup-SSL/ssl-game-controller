@@ -28,6 +28,7 @@ func NewStateMachine(gameConfig config.Game) (s *StateMachine) {
 	s.Geometry = gameConfig.DefaultGeometry[config.DivA]
 	s.stageTimes = loadStageTimes(gameConfig)
 	s.rand = rand.New(rand.NewSource(time.Now().Unix()))
+	log.Printf("Loaded default geometry for DivA: %+v", s.Geometry)
 	return
 }
 
