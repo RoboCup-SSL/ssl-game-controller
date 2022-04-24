@@ -29,9 +29,9 @@ export let getNextStage = function (stage) {
     return stage;
 };
 
-export let canEndGameFromStage = function (stage) {
+export let canEndGameFromStage = function (state) {
     // Games can always end when a team has scored 10 goals, so we only restrict it to non paused stages
-    return isNonPausedStage(stage);
+    return isNonPausedStage(state);
 };
 
 export let isNonPausedStage = function (state) {

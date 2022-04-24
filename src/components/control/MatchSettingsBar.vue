@@ -101,7 +101,7 @@
                 return stageNames[getNextStage(this.$store.state.matchState.stage)];
             },
             showEndGame() {
-                return canEndGameFromStage(this.$store.state.matchState.stage);
+                return canEndGameFromStage(this.$store.state.matchState);
             },
             preStage() {
                 return isPreStage(this.$store.state.matchState);
