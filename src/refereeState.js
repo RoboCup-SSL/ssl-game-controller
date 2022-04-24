@@ -30,9 +30,8 @@ export let getNextStage = function (stage) {
 };
 
 export let canEndGameFromStage = function (stage) {
-    return stage === 'NORMAL_SECOND_HALF'
-        || stage === 'EXTRA_SECOND_HALF'
-        || stage === 'PENALTY_SHOOTOUT';
+    // Games can always end when a team has scored 10 goals, so we only restrict it to non paused stages
+    return isNonPausedStage(stage);
 };
 
 export let isNonPausedStage = function (state) {
