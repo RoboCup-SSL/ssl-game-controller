@@ -7,6 +7,7 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/durationpb"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"log"
 	"time"
 )
@@ -124,6 +125,20 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 		}
 		// halt the game to allow teams to substitute robots
 		changes = append(changes, s.createCommandChange(state.NewCommandNeutral(state.Command_HALT)))
+	}
+
+	// too many robots
+	if *gameEvent.Type == state.GameEvent_TOO_MANY_ROBOTS {
+		byTeam := *gameEvent.GetTooManyRobots().ByTeam
+		if byTeam.Known() {
+			log.Printf("Team %s has too many robots. Requesting robot substition for them", byTeam)
+			newState.TeamInfo(byTeam).RequestsBotSubstitutionSince = timestamppb.New(s.timeProvider())
+		} else {
+			log.Printf("Too many robots, but no information on team. Requesting for both")
+			for _, team := range state.BothTeams() {
+				newState.TeamInfo(team).RequestsBotSubstitutionSince = timestamppb.New(s.timeProvider())
+			}
+		}
 	}
 
 	// challenge flag

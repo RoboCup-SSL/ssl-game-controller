@@ -118,6 +118,12 @@ func (e *Engine) readyToContinuePenalty() (issues []string) {
 }
 
 func (e *Engine) readyToContinueFromStop() (issues []string) {
+	for _, team := range state.BothTeams() {
+		if e.currentState.TeamInfo(team).RequestsBotSubstitutionSince != nil {
+			// next action is robot substitution, no need to check the other issues
+			return
+		}
+	}
 	if e.tooManyRobots(state.Team_YELLOW) {
 		issues = append(issues, "Yellow team has too many robots")
 	}
