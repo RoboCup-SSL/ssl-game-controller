@@ -188,6 +188,7 @@ func (e *Engine) Start() error {
 	}
 	e.currentState = e.initialStateFromStore()
 	e.stateMachine.Geometry = e.gameConfig.DefaultGeometry[e.currentState.Division.Div()]
+	log.Printf("Loaded default geometry for DivA: %+v", e.stateMachine.Geometry)
 	go e.processChanges()
 	return nil
 }
