@@ -2,6 +2,8 @@
 
 To ease integration of the ssl-game-controller and the auto-referee implementations, there are separate unicast protocols that avoid the asynchronous communication via multicast and allows for integration with simulators and running at non-realtime speeds.
 
+The default port is `10013`.
+
 ## Connection sequence
 
 The connection is described in the following sequence diagram:

@@ -175,7 +175,7 @@ func (x *GcState) GetContinuationIssues() []string {
 	return nil
 }
 
-// The GC state for a singl eteam
+// The GC state for a single team
 type GcStateTeam struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
