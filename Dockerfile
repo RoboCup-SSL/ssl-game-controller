@@ -11,7 +11,7 @@ COPY --from=build_node /tmp/ssl-game-controller/internal/app/ui/dist internal/ap
 RUN go install -v ./cmd/ssl-game-controller
 
 # Start fresh from a smaller image
-FROM alpine:3.15
+FROM alpine:3.16
 COPY --from=build_go /go/bin/ssl-game-controller /app/ssl-game-controller
 COPY config config
 RUN chown -R 1000: config
