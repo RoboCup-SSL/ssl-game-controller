@@ -54,7 +54,8 @@ func (e *Engine) ProcessGeometry(data *vision.SSL_GeometryData) {
 		newGeometry.PlacementOffsetDefenseArea-
 		newGeometry.PlacementOffsetTouchLine < 0 {
 		// move the offset further into the field, if the ball does not fit between defense area and touch line
-		newGeometry.PlacementOffsetGoalLine += newGeometry.DefenseAreaDepth
+		defaultPlacementOffsetGoalLine := e.gameConfig.DefaultGeometry[e.currentState.Division.Div()].PlacementOffsetGoalLine
+		newGeometry.PlacementOffsetGoalLine = defaultPlacementOffsetGoalLine + newGeometry.DefenseAreaDepth
 	}
 
 	e.stateMachine.Geometry = newGeometry
