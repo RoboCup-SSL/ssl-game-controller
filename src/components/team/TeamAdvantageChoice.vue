@@ -1,14 +1,12 @@
 <template>
     <div>
-        <span v-b-tooltip.hover.d500
-              title="Team requests to stop"
+        <span v-help-text="'Team requests to stop'"
               v-if="isStop">
             <font-awesome-icon
                 class="fa-xs"
                 icon="stop-circle"/>
         </span>
-        <span v-b-tooltip.hover.d500
-              title="Team requests to continue"
+        <span v-help-text="'Team requests to continue'"
               v-if="isContinue">
         <font-awesome-icon
             class="fa-xs"
@@ -40,7 +38,7 @@ export default {
                 this.$store.state.gcState.teamState[this.teamColor].advantageChoice;
         },
         isStop() {
-            return this.teamConnected && 
+            return this.teamConnected &&
                 this.$store.state.gcState.teamState[this.teamColor].advantageChoice.choice === 'STOP';
         },
         isContinue() {

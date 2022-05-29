@@ -1,22 +1,19 @@
 <template>
     <div>
-        <span v-b-tooltip.hover.d500
-              title="Team connected"
+        <span v-help-text="'Team connected'"
               v-if="teamConnected">
             <font-awesome-icon
                     class="fa-xs"
                     icon="signal"/>
         </span>
-        <span v-b-tooltip.hover.d500
-              title="connection verified"
+        <span v-help-text="'connection verified'"
               class="connection-verified"
               v-if="teamConnectionVerified">
             <font-awesome-icon
                     class="fa-xs"
                     icon="shield-alt"/>
         </span>
-        <span v-b-tooltip.hover.d500
-              title="Team not connected"
+        <span v-help-text="'Team not connected'"
               v-if="!teamConnected">
             <font-awesome-icon
                     class="fa-xs"

@@ -3,6 +3,7 @@
         <div v-if="initialized">
             <div id="app-header">
                 <MatchSettingsBar class="app-header-item"/>
+                <HelpText class="app-header-item"/>
                 <GameStateBar class="app-header-item"/>
             </div>
 
@@ -24,10 +25,12 @@
     import ControlFlowBar from "./control/ControlFlowBar";
     import SwitchWindowBar from "./control/SwitchWindowBar";
     import ActiveTrackerSource from "./control/ActiveTrackerSource";
+    import HelpText from "@/components/control/HelpText";
 
     export default {
         name: 'GameController',
         components: {
+            HelpText,
             ActiveTrackerSource,
             SwitchWindowBar,
             MatchSettingsBar,

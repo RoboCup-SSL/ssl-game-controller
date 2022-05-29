@@ -1,7 +1,6 @@
 <template>
     <div class="control-flaw-bar">
-        <div v-b-tooltip.hover.d500
-             :title="'Immediately stop all robots (' + Object.keys(keymapHalt)[0] + ')'">
+        <div v-help-text="'Immediately stop all robots (' + Object.keys(keymapHalt)[0] + ')'">
             <b-button v-hotkey="keymapHalt"
                       ref="btnHalt"
                       v-on:click="send('HALT')"
@@ -10,8 +9,7 @@
             </b-button>
         </div>
 
-        <div v-b-tooltip.hover.d500
-             :title="'Continue based on last game event (' + Object.keys(keymapContinue)[0] + ')'">
+        <div v-help-text="'Continue based on last game event (' + Object.keys(keymapContinue)[0] + ')'">
             <b-button v-hotkey="keymapContinue"
                       ref="btnContinue"
                       :class="continueButtonClass"

@@ -11,11 +11,11 @@
             <div class="event_buttons"
                  v-if="showAcceptAndRejectGoal(gameEvent)">
                 <a @click="rejectGoal(gameEvent)"
-                   v-b-tooltip.hover.d500.righttop="'Reject this goal'">
+                   v-help-text="'Reject this goal'">
                     <font-awesome-icon icon="times-circle" class="fa-lg"></font-awesome-icon>
                 </a>
                 <a @click="acceptGoal(gameEvent)"
-                   v-b-tooltip.hover.d500.righttop="'Accept this goal'">
+                   v-help-text="'Accept this goal'">
                     <font-awesome-icon icon="check-circle" class="fa-lg"></font-awesome-icon>
                 </a>
             </div>

@@ -2,8 +2,7 @@
     <table>
         <tr>
             <td>
-                <div v-b-tooltip.hover.d500
-                     :title="'Immediately stop all robots (' + Object.keys(keymapHalt)[0] + ')'">
+                <div v-help-text="'Immediately stop all robots (' + Object.keys(keymapHalt)[0] + ')'">
                     <b-button v-hotkey="keymapHalt"
                               ref="btnHalt"
                               class="manual-control-button"
@@ -14,8 +13,7 @@
                 </div>
             </td>
             <td>
-                <div v-b-tooltip.hover.d500
-                     :title="'Robots have to keep distance to the ball (' + Object.keys(keymapStop)[0] + ')'">
+                <div v-help-text="'Robots have to keep distance to the ball (' + Object.keys(keymapStop)[0] + ')'">
                     <b-button v-hotkey="keymapStop"
                               ref="btnStop"
                               class="manual-control-button"
@@ -28,8 +26,7 @@
         </tr>
         <tr>
             <td>
-                <div v-b-tooltip.hover.d500
-                     :title="'Restart the game in draw situations (' + Object.keys(keymapForceStart)[0] + ')'">
+                <div v-help-text="'Restart the game in draw situations (' + Object.keys(keymapForceStart)[0] + ')'">
                     <b-button v-hotkey="keymapForceStart"
                               ref="btnForceStart"
                               class="manual-control-button"
@@ -40,8 +37,7 @@
                 </div>
             </td>
             <td>
-                <div v-b-tooltip.hover.d500
-                     :title="'Continue game after a prepare state (' + Object.keys(keymapNormalStart)[0] + ')'">
+                <div v-help-text="'Continue game after a prepare state (' + Object.keys(keymapNormalStart)[0] + ')'">
                     <b-button v-hotkey="keymapNormalStart"
                               ref="btnNormalStart"
                               class="manual-control-button"

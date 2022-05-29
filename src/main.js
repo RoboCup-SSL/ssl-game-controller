@@ -90,6 +90,24 @@ const router = new VueRouter({
     ]
 });
 
+Vue.directive('help-text', {
+    bind: function (el, binding) {
+        el.__vHoverOver__ = (() => store.state.hoverHelpText = binding.value || '')
+        el.__vHoverLeave__ = (() => store.state.hoverHelpText = '')
+
+        // Add Event Listeners
+        el.addEventListener('mouseover', el.__vHoverOver__)
+        el.addEventListener('mouseleave', el.__vHoverLeave__)
+    },
+    unbind: function (el) {
+        // Remove Event Listeners
+        el.removeEventListener('mouseover', el.__vHoverOver__)
+        el.removeEventListener('mouseleave', el.__vHoverLeave__)
+        delete el.__vHoverOver__
+        delete el.__vHoverLeave__
+    }
+});
+
 // create root vue
 // noinspection JSUnusedGlobalSymbols
 export const vueApp = new Vue({

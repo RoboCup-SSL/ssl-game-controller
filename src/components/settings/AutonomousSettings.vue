@@ -1,6 +1,6 @@
 <template>
     <div class="game-controller-container">
-        <div class="auto-refs-connected" v-b-tooltip.hover.d500>
+        <div class="auto-refs-connected">
             <p>
                 <strong>{{autoRefsConnected}}</strong> autoRefs connected: {{autoRefs}}
             </p>

@@ -1,6 +1,5 @@
 <template>
-        <span v-b-tooltip.hover.d500
-              title="Next yellow card due"
+        <span v-help-text="'Next yellow card due'"
               v-format-ns-duration="latestCardTime">
         </span>
 </template>

@@ -20,13 +20,13 @@
             />
         </p>
 
-        <b-button v-b-tooltip.hover.d500 title="Switch the colors of the teams, keep everything else"
+        <b-button v-help-text="'Switch the colors of the teams, keep everything else'"
                   v-on:click="switchColor"
                   :disabled="forbidMatchControls">
             Switch colors
         </b-button>
 
-        <b-button v-b-tooltip.hover.d500 title="Switch the playing half (the goal) of the teams"
+        <b-button v-help-text="'Switch the playing half (the goal) of the teams'"
                   v-on:click="switchSides"
                   :disabled="forbidMatchControls">
             Switch sides
@@ -42,7 +42,7 @@
                 :disabled="forbidMatchControls"
         />
 
-        <b-button v-b-tooltip.hover.d500 title="Start a new match by resetting everything"
+        <b-button v-help-text="'Start a new match by resetting everything'"
                   v-on:click="showMsgBoxConfirmResetGame">
             Start new game
         </b-button>

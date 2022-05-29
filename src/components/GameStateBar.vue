@@ -2,12 +2,11 @@
     <div class="game-state-bar">
         <span v-if="currentActionTimePositive">
             <span v-format-ns-duration="state.currentActionTimeRemaining"
-                  v-b-tooltip.hover.d500
-                  title="Remaining time until lack of progress">
+                  v-help-text="'Remaining time until lack of progress'">
             </span>
             |
             </span>
-        <span v-b-tooltip.hover.d500 title="Next command">
+        <span v-help-text="'Next command'">
             <span v-if="state.nextCommand"
                   :class="teamColorClassNextCommand">
             {{state.nextCommand.type}}
@@ -15,41 +14,35 @@
             <span v-else>-</span>
         </span>
         |
-        <span v-b-tooltip.hover.d500
-              title="Current command"
+        <span v-help-text="'Current command'"
               :class="teamColorClassCommand">
             {{state.command.type}}
         </span>
         |
-        <span v-b-tooltip.hover.d500 title="The current stage of the game">
+        <span v-help-text="'The current stage of the game'">
             {{stageText}}
         </span>
         |
-        <span v-b-tooltip.hover.d500
-              title="Goals for yellow"
+        <span v-help-text="'Goals for yellow'"
               class="team-yellow">
             {{teamStateYellow.goals}}
         </span>
         :
-        <span v-b-tooltip.hover.d500
-              title="Goals for blue"
+        <span v-help-text="'Goals for blue'"
               class="team-blue">
             {{teamStateBlue.goals}}
         </span>
         |
         <span v-format-ns-duration="state.stageTimeElapsed"
-              v-b-tooltip.hover.d500
-              title="Total time elapsed in the current stage">
+              v-help-text="'Total time elapsed in the current stage'">
         </span>
         |
         <span v-format-ns-duration="state.stageTimeLeft"
-              v-b-tooltip.hover.d500
-              title="Total time left for this stage">
+              v-help-text="'Total time left for this stage'">
         </span>
         |
         <span v-format-ns-duration="matchDuration"
-              v-b-tooltip.hover.d500
-              title="Total real time elapsed since the match has been started">
+              v-help-text="'Total real time elapsed since the match has been started'">
         </span>
     </div>
 </template>

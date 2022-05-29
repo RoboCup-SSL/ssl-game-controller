@@ -1,14 +1,12 @@
 <template>
     <div class="btn-group-toggle btn-group">
-        <label v-b-tooltip.hover.d500
-               :title="leftTitle"
+        <label v-help-text="leftTitle"
                :class="{btn:true, 'btn-active': (selectedValue === leftValue), 'btn-passive': (selectedValue !== leftValue)}"
                @click="callback(leftValue)"
                :disabled="disabled">
             {{leftLabel}}
         </label>
-        <label v-b-tooltip.hover.d500
-               :title="rightTitle"
+        <label v-help-text="rightTitle"
                :class="{btn:true, 'btn-active': (selectedValue === rightValue), 'btn-passive': (selectedValue !== rightValue)}"
                @click="callback(rightValue)"
                :disabled="disabled">

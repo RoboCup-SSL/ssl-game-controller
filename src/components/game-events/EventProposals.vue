@@ -16,8 +16,7 @@
                    :key="detail.key">{{detail.key}}: {{detail.value}}</p>
             </div>
             <a class="btn-accept"
-               v-b-tooltip.hover.d500
-               title="Accept this proposal group"
+               v-help-text="'Accept this proposal group'"
                v-if="!group.accepted"
                @click="accept(groupId)">
                 <font-awesome-icon icon="check-circle" class="fa-lg"></font-awesome-icon>

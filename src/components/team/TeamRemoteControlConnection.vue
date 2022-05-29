@@ -1,22 +1,19 @@
 <template>
     <div>
-        <span v-b-tooltip.hover.d500
-              title="Remote control connected"
+        <span v-help-text="'Remote control connected'"
               v-if="connected">
             <font-awesome-icon
                     class="fa-xs"
                     icon="signal"/>
         </span>
-        <span v-b-tooltip.hover.d500
-              title="connection verified"
+        <span v-help-text="'connection verified'"
               class="connection-verified"
               v-if="connectionVerified">
             <font-awesome-icon
                     class="fa-xs"
                     icon="shield-alt"/>
         </span>
-        <span v-b-tooltip.hover.d500
-              title="Remote control not connected"
+        <span v-help-text="'Remote control not connected'"
               v-if="!connected">
             <font-awesome-icon
                     class="fa-xs"

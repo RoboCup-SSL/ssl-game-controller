@@ -11,7 +11,7 @@
                 <div style="text-align: left; width: 100%;">Description</div>
             </template>
             <template v-slot:cell(type)="data">
-                <span v-b-tooltip.hover.d500 :title="protocolType(data.item)">
+                <span v-help-text="protocolType(data.item)">
                     <font-awesome-icon :class="{'fa-sm': true, foul: isFoul(data.item)}" :icon="iconForType(protocolType(data.item))" />
                 </span>
             </template>
@@ -29,7 +29,7 @@
             <template v-slot:cell(revert)="data">
                 <div class="btn-revert"
                      v-if="data.item.change.revertible"
-                     v-b-tooltip.hover.d500.righttop="'Revert this event'">
+                     v-help-text="'Revert this event'">
                     <a @click="revertProtocolEntry(data.item.id)">
                         <font-awesome-icon icon="history" class="fa-sm"></font-awesome-icon>
                     </a>
@@ -246,7 +246,7 @@
         text-align: left;
         margin-left: 50px;
     }
-    
+
     .foul {
       color: Tomato;
     }

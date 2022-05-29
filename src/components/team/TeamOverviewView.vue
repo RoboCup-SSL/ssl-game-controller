@@ -6,8 +6,7 @@
             <tr>
                 <th class="team-yellow">{{teamYellow.name}}</th>
                 <th>
-                    <a v-b-tooltip.hover.d500
-                       :title="editMode.active ? 'Stop editing' : 'Start editing'"
+                    <a v-help-text="editMode.active ? 'Stop editing' : 'Start editing'"
                        class="btn-edit"
                        v-on:click="editMode.active=!editMode.active">
                         <img alt="pen" src="@/assets/img/icons8-ball-point-pen-16.png">

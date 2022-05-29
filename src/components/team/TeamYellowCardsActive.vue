@@ -1,6 +1,5 @@
 <template>
-        <span v-b-tooltip.hover.d500
-              title="Active yellow cards">
+        <span v-help-text="'Active yellow cards'">
             {{activeYellowCards.length}}
         </span>
 </template>

@@ -14,6 +14,7 @@ if (maxProtocolEntriesString !== null) {
 
 export default new Vuex.Store({
     state: {
+        hoverHelpText: "",
         gcState: GcState.create(),
         matchState: State.create(),
         config: Config.create(),
