@@ -2,7 +2,7 @@ version: 2
 jobs:
   frontend:
     docker:
-      - image: cimg/node:16.14
+      - image: cimg/node:18.3
     steps:
       - checkout
       - run:
