@@ -280,7 +280,7 @@ func (c *RemoteControlClient) checkRequestChallengeFlag() error {
 func (c *RemoteControlClient) checkChangeKeeper() error {
 	currentState := c.gcEngine.CurrentState()
 	teamState := currentState.TeamState[c.team.String()]
-	return mayChangeKeeper(c.gcEngine.CurrentGcState(), teamState)
+	return mayChangeKeeper(c.gcEngine.CurrentGcState(), currentState, teamState)
 }
 
 func (c *RemoteControlClient) processRequest(request *RemoteControlToController) error {
@@ -289,7 +289,7 @@ func (c *RemoteControlClient) processRequest(request *RemoteControlToController)
 	teamState := currentState.TeamInfo(*c.team)
 
 	if x, ok := request.GetMsg().(*RemoteControlToController_DesiredKeeper); ok && *teamState.Goalkeeper != x.DesiredKeeper {
-		if err := mayChangeKeeper(c.gcEngine.CurrentGcState(), teamState); err != nil {
+		if err := mayChangeKeeper(c.gcEngine.CurrentGcState(), currentState, teamState); err != nil {
 			return errors.Wrap(err, "Can not change keeper id")
 		}
 		c.updateTeamConfig(&statemachine.UpdateTeamState{
