@@ -151,6 +151,7 @@ func (c *RemoteControlClient) replyWithState(reply *ControllerReply) {
 	availableRequests := c.findAvailableRequestTypes()
 	activeRequests := c.findActiveRequestTypes()
 	robotsOnField := c.gcEngine.CurrentGcState().TrackerStateGc.NumTeamRobots(*c.team)
+	timeoutTimeLeft := float32(teamState.TimeoutTimeLeft.AsDuration().Seconds())
 
 	response := &ControllerToRemoteControl{
 		State: &RemoteControlTeamState{
@@ -159,6 +160,7 @@ func (c *RemoteControlClient) replyWithState(reply *ControllerReply) {
 			ActiveRequests:     activeRequests,
 			EmergencyStopIn:    &emergencyStopIn,
 			TimeoutsLeft:       teamState.TimeoutsLeft,
+			TimeoutTimeLeft:    &timeoutTimeLeft,
 			ChallengeFlagsLeft: teamState.ChallengeFlags,
 			MaxRobots:          teamState.MaxAllowedBots,
 			RobotsOnField:      &robotsOnField,
@@ -220,6 +222,9 @@ func (c *RemoteControlClient) findAvailableRequestTypes() []RemoteControlRequest
 	if c.checkRequestTimeout() == nil {
 		availableRequests = append(availableRequests, RemoteControlRequestType_TIMEOUT)
 	}
+	if c.checkStopTimeout() == nil {
+		availableRequests = append(availableRequests, RemoteControlRequestType_STOP_TIMEOUT)
+	}
 	if c.checkRequestRobotSubstitution() == nil {
 		availableRequests = append(availableRequests, RemoteControlRequestType_ROBOT_SUBSTITUTION)
 	}
@@ -253,6 +258,14 @@ func (c *RemoteControlClient) checkRequestTimeout() error {
 		return errors.New("No timeouts left")
 	}
 	return nil
+}
+
+func (c *RemoteControlClient) checkStopTimeout() error {
+	gameState := c.gcEngine.CurrentState().GameState
+	if *gameState.Type == state.GameState_TIMEOUT && *gameState.ForTeam == *c.team {
+		return nil
+	}
+	return errors.New("Timeout not active for team")
 }
 
 func (c *RemoteControlClient) checkRequestRobotSubstitution() error {
@@ -334,6 +347,20 @@ func (c *RemoteControlClient) processRequest(request *RemoteControlToController)
 			Event: &state.GameEvent_ChallengeFlag_{
 				ChallengeFlag: &state.GameEvent_ChallengeFlag{
 					ByTeam: c.team,
+				},
+			},
+		})
+		return nil
+	}
+
+	if request.GetRequest() == RemoteControlToController_STOP_TIMEOUT {
+		if err := c.checkStopTimeout(); err != nil {
+			return errors.Wrap(err, "Can not stop timeout")
+		}
+		c.gcEngine.Enqueue(&statemachine.Change{
+			Change: &statemachine.Change_NewCommand{
+				NewCommand: &statemachine.NewCommand{
+					Command: state.NewCommandNeutral(state.Command_HALT),
 				},
 			},
 		})

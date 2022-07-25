@@ -45,6 +45,8 @@ message RemoteControlToController {
         PING = 1;
         // Raise a challenge flag (this is not revocable)
         CHALLENGE_FLAG = 2;
+        // Stop an ongoing timeout
+        STOP_TIMEOUT = 3;
     }
 }
 
@@ -75,6 +77,9 @@ message RemoteControlTeamState {
     // number of timeouts left for the team
     optional int32 timeouts_left = 5;
 
+    // number of seconds left for timeout for the team
+    optional float timeout_time_left = 10;
+
     // number of challenge flags left for the team
     optional int32 challenge_flags_left = 6;
 
@@ -96,4 +101,5 @@ enum RemoteControlRequestType {
     TIMEOUT = 3;
     CHALLENGE_FLAG = 4;
     CHANGE_KEEPER_ID = 5;
+    STOP_TIMEOUT = 6;
 }
