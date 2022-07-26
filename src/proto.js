@@ -10,12 +10,12 @@ const $root = $protobuf.roots["default"] || ($protobuf.roots["default"] = {});
 /**
  * Team enum.
  * @exports Team
- * @enum {string}
+ * @enum {number}
  * @property {number} UNKNOWN=0 UNKNOWN value
  * @property {number} YELLOW=1 YELLOW value
  * @property {number} BLUE=2 BLUE value
  */
-$root.Team = (function() {
+export const Team = $root.Team = (() => {
     const valuesById = {}, values = Object.create(valuesById);
     values[valuesById[0] = "UNKNOWN"] = 0;
     values[valuesById[1] = "YELLOW"] = 1;
@@ -88,9 +88,9 @@ export const RobotId = $root.RobotId = (() => {
     RobotId.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.id != null && message.hasOwnProperty("id"))
+        if (message.id != null && Object.hasOwnProperty.call(message, "id"))
             writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.id);
-        if (message.team != null && message.hasOwnProperty("team"))
+        if (message.team != null && Object.hasOwnProperty.call(message, "team"))
             writer.uint32(/* id 2, wireType 0 =*/16).int32(message.team);
         return writer;
     };
@@ -126,12 +126,14 @@ export const RobotId = $root.RobotId = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.id = reader.uint32();
-                break;
-            case 2:
-                message.team = reader.int32();
-                break;
+            case 1: {
+                    message.id = reader.uint32();
+                    break;
+                }
+            case 2: {
+                    message.team = reader.int32();
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -248,18 +250,33 @@ export const RobotId = $root.RobotId = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for RobotId
+     * @function getTypeUrl
+     * @memberof RobotId
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    RobotId.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/RobotId";
+    };
+
     return RobotId;
 })();
 
 /**
  * Division enum.
  * @exports Division
- * @enum {string}
+ * @enum {number}
  * @property {number} DIV_UNKNOWN=0 DIV_UNKNOWN value
  * @property {number} DIV_A=1 DIV_A value
  * @property {number} DIV_B=2 DIV_B value
  */
-$root.Division = (function() {
+export const Division = $root.Division = (() => {
     const valuesById = {}, values = Object.create(valuesById);
     values[valuesById[0] = "DIV_UNKNOWN"] = 0;
     values[valuesById[1] = "DIV_A"] = 1;
@@ -368,12 +385,14 @@ export const Vector2 = $root.Vector2 = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.x = reader.float();
-                break;
-            case 2:
-                message.y = reader.float();
-                break;
+            case 1: {
+                    message.x = reader.float();
+                    break;
+                }
+            case 2: {
+                    message.y = reader.float();
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -472,6 +491,21 @@ export const Vector2 = $root.Vector2 = (() => {
      */
     Vector2.prototype.toJSON = function toJSON() {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    /**
+     * Gets the default type url for Vector2
+     * @function getTypeUrl
+     * @memberof Vector2
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    Vector2.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/Vector2";
     };
 
     return Vector2;
@@ -588,15 +622,18 @@ export const Vector3 = $root.Vector3 = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.x = reader.float();
-                break;
-            case 2:
-                message.y = reader.float();
-                break;
-            case 3:
-                message.z = reader.float();
-                break;
+            case 1: {
+                    message.x = reader.float();
+                    break;
+                }
+            case 2: {
+                    message.y = reader.float();
+                    break;
+                }
+            case 3: {
+                    message.z = reader.float();
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -704,6 +741,21 @@ export const Vector3 = $root.Vector3 = (() => {
      */
     Vector3.prototype.toJSON = function toJSON() {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    /**
+     * Gets the default type url for Vector3
+     * @function getTypeUrl
+     * @memberof Vector3
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    Vector3.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/Vector3";
     };
 
     return Vector3;
@@ -1185,98 +1237,98 @@ export const GameEvent = $root.GameEvent = (() => {
     GameEvent.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.prepared != null && message.hasOwnProperty("prepared"))
+        if (message.prepared != null && Object.hasOwnProperty.call(message, "prepared"))
             $root.GameEvent.Prepared.encode(message.prepared, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-        if (message.noProgressInGame != null && message.hasOwnProperty("noProgressInGame"))
+        if (message.noProgressInGame != null && Object.hasOwnProperty.call(message, "noProgressInGame"))
             $root.GameEvent.NoProgressInGame.encode(message.noProgressInGame, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-        if (message.placementFailed != null && message.hasOwnProperty("placementFailed"))
+        if (message.placementFailed != null && Object.hasOwnProperty.call(message, "placementFailed"))
             $root.GameEvent.PlacementFailed.encode(message.placementFailed, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-        if (message.placementSucceeded != null && message.hasOwnProperty("placementSucceeded"))
+        if (message.placementSucceeded != null && Object.hasOwnProperty.call(message, "placementSucceeded"))
             $root.GameEvent.PlacementSucceeded.encode(message.placementSucceeded, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
-        if (message.ballLeftFieldTouchLine != null && message.hasOwnProperty("ballLeftFieldTouchLine"))
+        if (message.ballLeftFieldTouchLine != null && Object.hasOwnProperty.call(message, "ballLeftFieldTouchLine"))
             $root.GameEvent.BallLeftField.encode(message.ballLeftFieldTouchLine, writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
-        if (message.ballLeftFieldGoalLine != null && message.hasOwnProperty("ballLeftFieldGoalLine"))
+        if (message.ballLeftFieldGoalLine != null && Object.hasOwnProperty.call(message, "ballLeftFieldGoalLine"))
             $root.GameEvent.BallLeftField.encode(message.ballLeftFieldGoalLine, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
-        if (message.goal != null && message.hasOwnProperty("goal"))
+        if (message.goal != null && Object.hasOwnProperty.call(message, "goal"))
             $root.GameEvent.Goal.encode(message.goal, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
-        if (message.indirectGoal != null && message.hasOwnProperty("indirectGoal"))
+        if (message.indirectGoal != null && Object.hasOwnProperty.call(message, "indirectGoal"))
             $root.GameEvent.IndirectGoal.encode(message.indirectGoal, writer.uint32(/* id 9, wireType 2 =*/74).fork()).ldelim();
-        if (message.chippedGoal != null && message.hasOwnProperty("chippedGoal"))
+        if (message.chippedGoal != null && Object.hasOwnProperty.call(message, "chippedGoal"))
             $root.GameEvent.ChippedGoal.encode(message.chippedGoal, writer.uint32(/* id 10, wireType 2 =*/82).fork()).ldelim();
-        if (message.aimlessKick != null && message.hasOwnProperty("aimlessKick"))
+        if (message.aimlessKick != null && Object.hasOwnProperty.call(message, "aimlessKick"))
             $root.GameEvent.AimlessKick.encode(message.aimlessKick, writer.uint32(/* id 11, wireType 2 =*/90).fork()).ldelim();
-        if (message.kickTimeout != null && message.hasOwnProperty("kickTimeout"))
+        if (message.kickTimeout != null && Object.hasOwnProperty.call(message, "kickTimeout"))
             $root.GameEvent.KickTimeout.encode(message.kickTimeout, writer.uint32(/* id 12, wireType 2 =*/98).fork()).ldelim();
-        if (message.keeperHeldBall != null && message.hasOwnProperty("keeperHeldBall"))
+        if (message.keeperHeldBall != null && Object.hasOwnProperty.call(message, "keeperHeldBall"))
             $root.GameEvent.KeeperHeldBall.encode(message.keeperHeldBall, writer.uint32(/* id 13, wireType 2 =*/106).fork()).ldelim();
-        if (message.attackerDoubleTouchedBall != null && message.hasOwnProperty("attackerDoubleTouchedBall"))
+        if (message.attackerDoubleTouchedBall != null && Object.hasOwnProperty.call(message, "attackerDoubleTouchedBall"))
             $root.GameEvent.AttackerDoubleTouchedBall.encode(message.attackerDoubleTouchedBall, writer.uint32(/* id 14, wireType 2 =*/114).fork()).ldelim();
-        if (message.attackerTouchedBallInDefenseArea != null && message.hasOwnProperty("attackerTouchedBallInDefenseArea"))
+        if (message.attackerTouchedBallInDefenseArea != null && Object.hasOwnProperty.call(message, "attackerTouchedBallInDefenseArea"))
             $root.GameEvent.AttackerTouchedBallInDefenseArea.encode(message.attackerTouchedBallInDefenseArea, writer.uint32(/* id 15, wireType 2 =*/122).fork()).ldelim();
-        if (message.attackerTouchedOpponentInDefenseArea != null && message.hasOwnProperty("attackerTouchedOpponentInDefenseArea"))
+        if (message.attackerTouchedOpponentInDefenseArea != null && Object.hasOwnProperty.call(message, "attackerTouchedOpponentInDefenseArea"))
             $root.GameEvent.AttackerTouchedOpponentInDefenseArea.encode(message.attackerTouchedOpponentInDefenseArea, writer.uint32(/* id 16, wireType 2 =*/130).fork()).ldelim();
-        if (message.botDribbledBallTooFar != null && message.hasOwnProperty("botDribbledBallTooFar"))
+        if (message.botDribbledBallTooFar != null && Object.hasOwnProperty.call(message, "botDribbledBallTooFar"))
             $root.GameEvent.BotDribbledBallTooFar.encode(message.botDribbledBallTooFar, writer.uint32(/* id 17, wireType 2 =*/138).fork()).ldelim();
-        if (message.botKickedBallTooFast != null && message.hasOwnProperty("botKickedBallTooFast"))
+        if (message.botKickedBallTooFast != null && Object.hasOwnProperty.call(message, "botKickedBallTooFast"))
             $root.GameEvent.BotKickedBallTooFast.encode(message.botKickedBallTooFast, writer.uint32(/* id 18, wireType 2 =*/146).fork()).ldelim();
-        if (message.attackerTooCloseToDefenseArea != null && message.hasOwnProperty("attackerTooCloseToDefenseArea"))
+        if (message.attackerTooCloseToDefenseArea != null && Object.hasOwnProperty.call(message, "attackerTooCloseToDefenseArea"))
             $root.GameEvent.AttackerTooCloseToDefenseArea.encode(message.attackerTooCloseToDefenseArea, writer.uint32(/* id 19, wireType 2 =*/154).fork()).ldelim();
-        if (message.botInterferedPlacement != null && message.hasOwnProperty("botInterferedPlacement"))
+        if (message.botInterferedPlacement != null && Object.hasOwnProperty.call(message, "botInterferedPlacement"))
             $root.GameEvent.BotInterferedPlacement.encode(message.botInterferedPlacement, writer.uint32(/* id 20, wireType 2 =*/162).fork()).ldelim();
-        if (message.botCrashDrawn != null && message.hasOwnProperty("botCrashDrawn"))
+        if (message.botCrashDrawn != null && Object.hasOwnProperty.call(message, "botCrashDrawn"))
             $root.GameEvent.BotCrashDrawn.encode(message.botCrashDrawn, writer.uint32(/* id 21, wireType 2 =*/170).fork()).ldelim();
-        if (message.botCrashUnique != null && message.hasOwnProperty("botCrashUnique"))
+        if (message.botCrashUnique != null && Object.hasOwnProperty.call(message, "botCrashUnique"))
             $root.GameEvent.BotCrashUnique.encode(message.botCrashUnique, writer.uint32(/* id 22, wireType 2 =*/178).fork()).ldelim();
-        if (message.botCrashUniqueSkipped != null && message.hasOwnProperty("botCrashUniqueSkipped"))
+        if (message.botCrashUniqueSkipped != null && Object.hasOwnProperty.call(message, "botCrashUniqueSkipped"))
             $root.GameEvent.BotCrashUnique.encode(message.botCrashUniqueSkipped, writer.uint32(/* id 23, wireType 2 =*/186).fork()).ldelim();
-        if (message.botPushedBot != null && message.hasOwnProperty("botPushedBot"))
+        if (message.botPushedBot != null && Object.hasOwnProperty.call(message, "botPushedBot"))
             $root.GameEvent.BotPushedBot.encode(message.botPushedBot, writer.uint32(/* id 24, wireType 2 =*/194).fork()).ldelim();
-        if (message.botPushedBotSkipped != null && message.hasOwnProperty("botPushedBotSkipped"))
+        if (message.botPushedBotSkipped != null && Object.hasOwnProperty.call(message, "botPushedBotSkipped"))
             $root.GameEvent.BotPushedBot.encode(message.botPushedBotSkipped, writer.uint32(/* id 25, wireType 2 =*/202).fork()).ldelim();
-        if (message.botHeldBallDeliberately != null && message.hasOwnProperty("botHeldBallDeliberately"))
+        if (message.botHeldBallDeliberately != null && Object.hasOwnProperty.call(message, "botHeldBallDeliberately"))
             $root.GameEvent.BotHeldBallDeliberately.encode(message.botHeldBallDeliberately, writer.uint32(/* id 26, wireType 2 =*/210).fork()).ldelim();
-        if (message.botTippedOver != null && message.hasOwnProperty("botTippedOver"))
+        if (message.botTippedOver != null && Object.hasOwnProperty.call(message, "botTippedOver"))
             $root.GameEvent.BotTippedOver.encode(message.botTippedOver, writer.uint32(/* id 27, wireType 2 =*/218).fork()).ldelim();
-        if (message.botTooFastInStop != null && message.hasOwnProperty("botTooFastInStop"))
+        if (message.botTooFastInStop != null && Object.hasOwnProperty.call(message, "botTooFastInStop"))
             $root.GameEvent.BotTooFastInStop.encode(message.botTooFastInStop, writer.uint32(/* id 28, wireType 2 =*/226).fork()).ldelim();
-        if (message.defenderTooCloseToKickPoint != null && message.hasOwnProperty("defenderTooCloseToKickPoint"))
+        if (message.defenderTooCloseToKickPoint != null && Object.hasOwnProperty.call(message, "defenderTooCloseToKickPoint"))
             $root.GameEvent.DefenderTooCloseToKickPoint.encode(message.defenderTooCloseToKickPoint, writer.uint32(/* id 29, wireType 2 =*/234).fork()).ldelim();
-        if (message.defenderInDefenseAreaPartially != null && message.hasOwnProperty("defenderInDefenseAreaPartially"))
+        if (message.defenderInDefenseAreaPartially != null && Object.hasOwnProperty.call(message, "defenderInDefenseAreaPartially"))
             $root.GameEvent.DefenderInDefenseAreaPartially.encode(message.defenderInDefenseAreaPartially, writer.uint32(/* id 30, wireType 2 =*/242).fork()).ldelim();
-        if (message.defenderInDefenseArea != null && message.hasOwnProperty("defenderInDefenseArea"))
+        if (message.defenderInDefenseArea != null && Object.hasOwnProperty.call(message, "defenderInDefenseArea"))
             $root.GameEvent.DefenderInDefenseArea.encode(message.defenderInDefenseArea, writer.uint32(/* id 31, wireType 2 =*/250).fork()).ldelim();
-        if (message.multipleCards != null && message.hasOwnProperty("multipleCards"))
+        if (message.multipleCards != null && Object.hasOwnProperty.call(message, "multipleCards"))
             $root.GameEvent.MultipleCards.encode(message.multipleCards, writer.uint32(/* id 32, wireType 2 =*/258).fork()).ldelim();
-        if (message.multiplePlacementFailures != null && message.hasOwnProperty("multiplePlacementFailures"))
+        if (message.multiplePlacementFailures != null && Object.hasOwnProperty.call(message, "multiplePlacementFailures"))
             $root.GameEvent.MultiplePlacementFailures.encode(message.multiplePlacementFailures, writer.uint32(/* id 33, wireType 2 =*/266).fork()).ldelim();
-        if (message.multipleFouls != null && message.hasOwnProperty("multipleFouls"))
+        if (message.multipleFouls != null && Object.hasOwnProperty.call(message, "multipleFouls"))
             $root.GameEvent.MultipleFouls.encode(message.multipleFouls, writer.uint32(/* id 34, wireType 2 =*/274).fork()).ldelim();
-        if (message.unsportingBehaviorMinor != null && message.hasOwnProperty("unsportingBehaviorMinor"))
+        if (message.unsportingBehaviorMinor != null && Object.hasOwnProperty.call(message, "unsportingBehaviorMinor"))
             $root.GameEvent.UnsportingBehaviorMinor.encode(message.unsportingBehaviorMinor, writer.uint32(/* id 35, wireType 2 =*/282).fork()).ldelim();
-        if (message.unsportingBehaviorMajor != null && message.hasOwnProperty("unsportingBehaviorMajor"))
+        if (message.unsportingBehaviorMajor != null && Object.hasOwnProperty.call(message, "unsportingBehaviorMajor"))
             $root.GameEvent.UnsportingBehaviorMajor.encode(message.unsportingBehaviorMajor, writer.uint32(/* id 36, wireType 2 =*/290).fork()).ldelim();
-        if (message.botSubstitution != null && message.hasOwnProperty("botSubstitution"))
+        if (message.botSubstitution != null && Object.hasOwnProperty.call(message, "botSubstitution"))
             $root.GameEvent.BotSubstitution.encode(message.botSubstitution, writer.uint32(/* id 37, wireType 2 =*/298).fork()).ldelim();
-        if (message.tooManyRobots != null && message.hasOwnProperty("tooManyRobots"))
+        if (message.tooManyRobots != null && Object.hasOwnProperty.call(message, "tooManyRobots"))
             $root.GameEvent.TooManyRobots.encode(message.tooManyRobots, writer.uint32(/* id 38, wireType 2 =*/306).fork()).ldelim();
-        if (message.possibleGoal != null && message.hasOwnProperty("possibleGoal"))
+        if (message.possibleGoal != null && Object.hasOwnProperty.call(message, "possibleGoal"))
             $root.GameEvent.Goal.encode(message.possibleGoal, writer.uint32(/* id 39, wireType 2 =*/314).fork()).ldelim();
-        if (message.type != null && message.hasOwnProperty("type"))
+        if (message.type != null && Object.hasOwnProperty.call(message, "type"))
             writer.uint32(/* id 40, wireType 0 =*/320).int32(message.type);
         if (message.origin != null && message.origin.length)
             for (let i = 0; i < message.origin.length; ++i)
                 writer.uint32(/* id 41, wireType 2 =*/330).string(message.origin[i]);
-        if (message.attackerTouchedOpponentInDefenseAreaSkipped != null && message.hasOwnProperty("attackerTouchedOpponentInDefenseAreaSkipped"))
+        if (message.attackerTouchedOpponentInDefenseAreaSkipped != null && Object.hasOwnProperty.call(message, "attackerTouchedOpponentInDefenseAreaSkipped"))
             $root.GameEvent.AttackerTouchedOpponentInDefenseArea.encode(message.attackerTouchedOpponentInDefenseAreaSkipped, writer.uint32(/* id 42, wireType 2 =*/338).fork()).ldelim();
-        if (message.boundaryCrossing != null && message.hasOwnProperty("boundaryCrossing"))
+        if (message.boundaryCrossing != null && Object.hasOwnProperty.call(message, "boundaryCrossing"))
             $root.GameEvent.BoundaryCrossing.encode(message.boundaryCrossing, writer.uint32(/* id 43, wireType 2 =*/346).fork()).ldelim();
-        if (message.invalidGoal != null && message.hasOwnProperty("invalidGoal"))
+        if (message.invalidGoal != null && Object.hasOwnProperty.call(message, "invalidGoal"))
             $root.GameEvent.Goal.encode(message.invalidGoal, writer.uint32(/* id 44, wireType 2 =*/354).fork()).ldelim();
-        if (message.penaltyKickFailed != null && message.hasOwnProperty("penaltyKickFailed"))
+        if (message.penaltyKickFailed != null && Object.hasOwnProperty.call(message, "penaltyKickFailed"))
             $root.GameEvent.PenaltyKickFailed.encode(message.penaltyKickFailed, writer.uint32(/* id 45, wireType 2 =*/362).fork()).ldelim();
-        if (message.challengeFlag != null && message.hasOwnProperty("challengeFlag"))
+        if (message.challengeFlag != null && Object.hasOwnProperty.call(message, "challengeFlag"))
             $root.GameEvent.ChallengeFlag.encode(message.challengeFlag, writer.uint32(/* id 46, wireType 2 =*/370).fork()).ldelim();
-        if (message.emergencyStop != null && message.hasOwnProperty("emergencyStop"))
+        if (message.emergencyStop != null && Object.hasOwnProperty.call(message, "emergencyStop"))
             $root.GameEvent.EmergencyStop.encode(message.emergencyStop, writer.uint32(/* id 47, wireType 2 =*/378).fork()).ldelim();
         return writer;
     };
@@ -1312,146 +1364,192 @@ export const GameEvent = $root.GameEvent = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 40:
-                message.type = reader.int32();
-                break;
-            case 41:
-                if (!(message.origin && message.origin.length))
-                    message.origin = [];
-                message.origin.push(reader.string());
-                break;
-            case 6:
-                message.ballLeftFieldTouchLine = $root.GameEvent.BallLeftField.decode(reader, reader.uint32());
-                break;
-            case 7:
-                message.ballLeftFieldGoalLine = $root.GameEvent.BallLeftField.decode(reader, reader.uint32());
-                break;
-            case 11:
-                message.aimlessKick = $root.GameEvent.AimlessKick.decode(reader, reader.uint32());
-                break;
-            case 19:
-                message.attackerTooCloseToDefenseArea = $root.GameEvent.AttackerTooCloseToDefenseArea.decode(reader, reader.uint32());
-                break;
-            case 31:
-                message.defenderInDefenseArea = $root.GameEvent.DefenderInDefenseArea.decode(reader, reader.uint32());
-                break;
-            case 43:
-                message.boundaryCrossing = $root.GameEvent.BoundaryCrossing.decode(reader, reader.uint32());
-                break;
-            case 13:
-                message.keeperHeldBall = $root.GameEvent.KeeperHeldBall.decode(reader, reader.uint32());
-                break;
-            case 17:
-                message.botDribbledBallTooFar = $root.GameEvent.BotDribbledBallTooFar.decode(reader, reader.uint32());
-                break;
-            case 24:
-                message.botPushedBot = $root.GameEvent.BotPushedBot.decode(reader, reader.uint32());
-                break;
-            case 26:
-                message.botHeldBallDeliberately = $root.GameEvent.BotHeldBallDeliberately.decode(reader, reader.uint32());
-                break;
-            case 27:
-                message.botTippedOver = $root.GameEvent.BotTippedOver.decode(reader, reader.uint32());
-                break;
-            case 15:
-                message.attackerTouchedBallInDefenseArea = $root.GameEvent.AttackerTouchedBallInDefenseArea.decode(reader, reader.uint32());
-                break;
-            case 18:
-                message.botKickedBallTooFast = $root.GameEvent.BotKickedBallTooFast.decode(reader, reader.uint32());
-                break;
-            case 22:
-                message.botCrashUnique = $root.GameEvent.BotCrashUnique.decode(reader, reader.uint32());
-                break;
-            case 21:
-                message.botCrashDrawn = $root.GameEvent.BotCrashDrawn.decode(reader, reader.uint32());
-                break;
-            case 29:
-                message.defenderTooCloseToKickPoint = $root.GameEvent.DefenderTooCloseToKickPoint.decode(reader, reader.uint32());
-                break;
-            case 28:
-                message.botTooFastInStop = $root.GameEvent.BotTooFastInStop.decode(reader, reader.uint32());
-                break;
-            case 20:
-                message.botInterferedPlacement = $root.GameEvent.BotInterferedPlacement.decode(reader, reader.uint32());
-                break;
-            case 39:
-                message.possibleGoal = $root.GameEvent.Goal.decode(reader, reader.uint32());
-                break;
-            case 8:
-                message.goal = $root.GameEvent.Goal.decode(reader, reader.uint32());
-                break;
-            case 44:
-                message.invalidGoal = $root.GameEvent.Goal.decode(reader, reader.uint32());
-                break;
-            case 14:
-                message.attackerDoubleTouchedBall = $root.GameEvent.AttackerDoubleTouchedBall.decode(reader, reader.uint32());
-                break;
-            case 5:
-                message.placementSucceeded = $root.GameEvent.PlacementSucceeded.decode(reader, reader.uint32());
-                break;
-            case 45:
-                message.penaltyKickFailed = $root.GameEvent.PenaltyKickFailed.decode(reader, reader.uint32());
-                break;
-            case 2:
-                message.noProgressInGame = $root.GameEvent.NoProgressInGame.decode(reader, reader.uint32());
-                break;
-            case 3:
-                message.placementFailed = $root.GameEvent.PlacementFailed.decode(reader, reader.uint32());
-                break;
-            case 32:
-                message.multipleCards = $root.GameEvent.MultipleCards.decode(reader, reader.uint32());
-                break;
-            case 34:
-                message.multipleFouls = $root.GameEvent.MultipleFouls.decode(reader, reader.uint32());
-                break;
-            case 37:
-                message.botSubstitution = $root.GameEvent.BotSubstitution.decode(reader, reader.uint32());
-                break;
-            case 38:
-                message.tooManyRobots = $root.GameEvent.TooManyRobots.decode(reader, reader.uint32());
-                break;
-            case 46:
-                message.challengeFlag = $root.GameEvent.ChallengeFlag.decode(reader, reader.uint32());
-                break;
-            case 47:
-                message.emergencyStop = $root.GameEvent.EmergencyStop.decode(reader, reader.uint32());
-                break;
-            case 35:
-                message.unsportingBehaviorMinor = $root.GameEvent.UnsportingBehaviorMinor.decode(reader, reader.uint32());
-                break;
-            case 36:
-                message.unsportingBehaviorMajor = $root.GameEvent.UnsportingBehaviorMajor.decode(reader, reader.uint32());
-                break;
-            case 1:
-                message.prepared = $root.GameEvent.Prepared.decode(reader, reader.uint32());
-                break;
-            case 9:
-                message.indirectGoal = $root.GameEvent.IndirectGoal.decode(reader, reader.uint32());
-                break;
-            case 10:
-                message.chippedGoal = $root.GameEvent.ChippedGoal.decode(reader, reader.uint32());
-                break;
-            case 12:
-                message.kickTimeout = $root.GameEvent.KickTimeout.decode(reader, reader.uint32());
-                break;
-            case 16:
-                message.attackerTouchedOpponentInDefenseArea = $root.GameEvent.AttackerTouchedOpponentInDefenseArea.decode(reader, reader.uint32());
-                break;
-            case 42:
-                message.attackerTouchedOpponentInDefenseAreaSkipped = $root.GameEvent.AttackerTouchedOpponentInDefenseArea.decode(reader, reader.uint32());
-                break;
-            case 23:
-                message.botCrashUniqueSkipped = $root.GameEvent.BotCrashUnique.decode(reader, reader.uint32());
-                break;
-            case 25:
-                message.botPushedBotSkipped = $root.GameEvent.BotPushedBot.decode(reader, reader.uint32());
-                break;
-            case 30:
-                message.defenderInDefenseAreaPartially = $root.GameEvent.DefenderInDefenseAreaPartially.decode(reader, reader.uint32());
-                break;
-            case 33:
-                message.multiplePlacementFailures = $root.GameEvent.MultiplePlacementFailures.decode(reader, reader.uint32());
-                break;
+            case 40: {
+                    message.type = reader.int32();
+                    break;
+                }
+            case 41: {
+                    if (!(message.origin && message.origin.length))
+                        message.origin = [];
+                    message.origin.push(reader.string());
+                    break;
+                }
+            case 6: {
+                    message.ballLeftFieldTouchLine = $root.GameEvent.BallLeftField.decode(reader, reader.uint32());
+                    break;
+                }
+            case 7: {
+                    message.ballLeftFieldGoalLine = $root.GameEvent.BallLeftField.decode(reader, reader.uint32());
+                    break;
+                }
+            case 11: {
+                    message.aimlessKick = $root.GameEvent.AimlessKick.decode(reader, reader.uint32());
+                    break;
+                }
+            case 19: {
+                    message.attackerTooCloseToDefenseArea = $root.GameEvent.AttackerTooCloseToDefenseArea.decode(reader, reader.uint32());
+                    break;
+                }
+            case 31: {
+                    message.defenderInDefenseArea = $root.GameEvent.DefenderInDefenseArea.decode(reader, reader.uint32());
+                    break;
+                }
+            case 43: {
+                    message.boundaryCrossing = $root.GameEvent.BoundaryCrossing.decode(reader, reader.uint32());
+                    break;
+                }
+            case 13: {
+                    message.keeperHeldBall = $root.GameEvent.KeeperHeldBall.decode(reader, reader.uint32());
+                    break;
+                }
+            case 17: {
+                    message.botDribbledBallTooFar = $root.GameEvent.BotDribbledBallTooFar.decode(reader, reader.uint32());
+                    break;
+                }
+            case 24: {
+                    message.botPushedBot = $root.GameEvent.BotPushedBot.decode(reader, reader.uint32());
+                    break;
+                }
+            case 26: {
+                    message.botHeldBallDeliberately = $root.GameEvent.BotHeldBallDeliberately.decode(reader, reader.uint32());
+                    break;
+                }
+            case 27: {
+                    message.botTippedOver = $root.GameEvent.BotTippedOver.decode(reader, reader.uint32());
+                    break;
+                }
+            case 15: {
+                    message.attackerTouchedBallInDefenseArea = $root.GameEvent.AttackerTouchedBallInDefenseArea.decode(reader, reader.uint32());
+                    break;
+                }
+            case 18: {
+                    message.botKickedBallTooFast = $root.GameEvent.BotKickedBallTooFast.decode(reader, reader.uint32());
+                    break;
+                }
+            case 22: {
+                    message.botCrashUnique = $root.GameEvent.BotCrashUnique.decode(reader, reader.uint32());
+                    break;
+                }
+            case 21: {
+                    message.botCrashDrawn = $root.GameEvent.BotCrashDrawn.decode(reader, reader.uint32());
+                    break;
+                }
+            case 29: {
+                    message.defenderTooCloseToKickPoint = $root.GameEvent.DefenderTooCloseToKickPoint.decode(reader, reader.uint32());
+                    break;
+                }
+            case 28: {
+                    message.botTooFastInStop = $root.GameEvent.BotTooFastInStop.decode(reader, reader.uint32());
+                    break;
+                }
+            case 20: {
+                    message.botInterferedPlacement = $root.GameEvent.BotInterferedPlacement.decode(reader, reader.uint32());
+                    break;
+                }
+            case 39: {
+                    message.possibleGoal = $root.GameEvent.Goal.decode(reader, reader.uint32());
+                    break;
+                }
+            case 8: {
+                    message.goal = $root.GameEvent.Goal.decode(reader, reader.uint32());
+                    break;
+                }
+            case 44: {
+                    message.invalidGoal = $root.GameEvent.Goal.decode(reader, reader.uint32());
+                    break;
+                }
+            case 14: {
+                    message.attackerDoubleTouchedBall = $root.GameEvent.AttackerDoubleTouchedBall.decode(reader, reader.uint32());
+                    break;
+                }
+            case 5: {
+                    message.placementSucceeded = $root.GameEvent.PlacementSucceeded.decode(reader, reader.uint32());
+                    break;
+                }
+            case 45: {
+                    message.penaltyKickFailed = $root.GameEvent.PenaltyKickFailed.decode(reader, reader.uint32());
+                    break;
+                }
+            case 2: {
+                    message.noProgressInGame = $root.GameEvent.NoProgressInGame.decode(reader, reader.uint32());
+                    break;
+                }
+            case 3: {
+                    message.placementFailed = $root.GameEvent.PlacementFailed.decode(reader, reader.uint32());
+                    break;
+                }
+            case 32: {
+                    message.multipleCards = $root.GameEvent.MultipleCards.decode(reader, reader.uint32());
+                    break;
+                }
+            case 34: {
+                    message.multipleFouls = $root.GameEvent.MultipleFouls.decode(reader, reader.uint32());
+                    break;
+                }
+            case 37: {
+                    message.botSubstitution = $root.GameEvent.BotSubstitution.decode(reader, reader.uint32());
+                    break;
+                }
+            case 38: {
+                    message.tooManyRobots = $root.GameEvent.TooManyRobots.decode(reader, reader.uint32());
+                    break;
+                }
+            case 46: {
+                    message.challengeFlag = $root.GameEvent.ChallengeFlag.decode(reader, reader.uint32());
+                    break;
+                }
+            case 47: {
+                    message.emergencyStop = $root.GameEvent.EmergencyStop.decode(reader, reader.uint32());
+                    break;
+                }
+            case 35: {
+                    message.unsportingBehaviorMinor = $root.GameEvent.UnsportingBehaviorMinor.decode(reader, reader.uint32());
+                    break;
+                }
+            case 36: {
+                    message.unsportingBehaviorMajor = $root.GameEvent.UnsportingBehaviorMajor.decode(reader, reader.uint32());
+                    break;
+                }
+            case 1: {
+                    message.prepared = $root.GameEvent.Prepared.decode(reader, reader.uint32());
+                    break;
+                }
+            case 9: {
+                    message.indirectGoal = $root.GameEvent.IndirectGoal.decode(reader, reader.uint32());
+                    break;
+                }
+            case 10: {
+                    message.chippedGoal = $root.GameEvent.ChippedGoal.decode(reader, reader.uint32());
+                    break;
+                }
+            case 12: {
+                    message.kickTimeout = $root.GameEvent.KickTimeout.decode(reader, reader.uint32());
+                    break;
+                }
+            case 16: {
+                    message.attackerTouchedOpponentInDefenseArea = $root.GameEvent.AttackerTouchedOpponentInDefenseArea.decode(reader, reader.uint32());
+                    break;
+                }
+            case 42: {
+                    message.attackerTouchedOpponentInDefenseAreaSkipped = $root.GameEvent.AttackerTouchedOpponentInDefenseArea.decode(reader, reader.uint32());
+                    break;
+                }
+            case 23: {
+                    message.botCrashUniqueSkipped = $root.GameEvent.BotCrashUnique.decode(reader, reader.uint32());
+                    break;
+                }
+            case 25: {
+                    message.botPushedBotSkipped = $root.GameEvent.BotPushedBot.decode(reader, reader.uint32());
+                    break;
+                }
+            case 30: {
+                    message.defenderInDefenseAreaPartially = $root.GameEvent.DefenderInDefenseAreaPartially.decode(reader, reader.uint32());
+                    break;
+                }
+            case 33: {
+                    message.multiplePlacementFailures = $root.GameEvent.MultiplePlacementFailures.decode(reader, reader.uint32());
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -2669,6 +2767,21 @@ export const GameEvent = $root.GameEvent = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for GameEvent
+     * @function getTypeUrl
+     * @memberof GameEvent
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    GameEvent.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/GameEvent";
+    };
+
     GameEvent.BallLeftField = (function() {
 
         /**
@@ -2744,9 +2857,9 @@ export const GameEvent = $root.GameEvent = (() => {
             if (!writer)
                 writer = $Writer.create();
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
-            if (message.byBot != null && message.hasOwnProperty("byBot"))
+            if (message.byBot != null && Object.hasOwnProperty.call(message, "byBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.byBot);
-            if (message.location != null && message.hasOwnProperty("location"))
+            if (message.location != null && Object.hasOwnProperty.call(message, "location"))
                 $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
             return writer;
         };
@@ -2782,15 +2895,18 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
-                case 2:
-                    message.byBot = reader.uint32();
-                    break;
-                case 3:
-                    message.location = $root.Vector2.decode(reader, reader.uint32());
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.byBot = reader.uint32();
+                        break;
+                    }
+                case 3: {
+                        message.location = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -2921,6 +3037,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for BallLeftField
+         * @function getTypeUrl
+         * @memberof GameEvent.BallLeftField
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        BallLeftField.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.BallLeftField";
+        };
+
         return BallLeftField;
     })();
 
@@ -3008,11 +3139,11 @@ export const GameEvent = $root.GameEvent = (() => {
             if (!writer)
                 writer = $Writer.create();
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
-            if (message.byBot != null && message.hasOwnProperty("byBot"))
+            if (message.byBot != null && Object.hasOwnProperty.call(message, "byBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.byBot);
-            if (message.location != null && message.hasOwnProperty("location"))
+            if (message.location != null && Object.hasOwnProperty.call(message, "location"))
                 $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-            if (message.kickLocation != null && message.hasOwnProperty("kickLocation"))
+            if (message.kickLocation != null && Object.hasOwnProperty.call(message, "kickLocation"))
                 $root.Vector2.encode(message.kickLocation, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
             return writer;
         };
@@ -3048,18 +3179,22 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
-                case 2:
-                    message.byBot = reader.uint32();
-                    break;
-                case 3:
-                    message.location = $root.Vector2.decode(reader, reader.uint32());
-                    break;
-                case 4:
-                    message.kickLocation = $root.Vector2.decode(reader, reader.uint32());
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.byBot = reader.uint32();
+                        break;
+                    }
+                case 3: {
+                        message.location = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
+                case 4: {
+                        message.kickLocation = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -3203,6 +3338,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for AimlessKick
+         * @function getTypeUrl
+         * @memberof GameEvent.AimlessKick
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        AimlessKick.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.AimlessKick";
+        };
+
         return AimlessKick;
     })();
 
@@ -3335,21 +3485,21 @@ export const GameEvent = $root.GameEvent = (() => {
             if (!writer)
                 writer = $Writer.create();
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
-            if (message.kickingBot != null && message.hasOwnProperty("kickingBot"))
+            if (message.kickingBot != null && Object.hasOwnProperty.call(message, "kickingBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.kickingBot);
-            if (message.location != null && message.hasOwnProperty("location"))
+            if (message.location != null && Object.hasOwnProperty.call(message, "location"))
                 $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-            if (message.kickLocation != null && message.hasOwnProperty("kickLocation"))
+            if (message.kickLocation != null && Object.hasOwnProperty.call(message, "kickLocation"))
                 $root.Vector2.encode(message.kickLocation, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
-            if (message.maxBallHeight != null && message.hasOwnProperty("maxBallHeight"))
+            if (message.maxBallHeight != null && Object.hasOwnProperty.call(message, "maxBallHeight"))
                 writer.uint32(/* id 5, wireType 5 =*/45).float(message.maxBallHeight);
-            if (message.kickingTeam != null && message.hasOwnProperty("kickingTeam"))
+            if (message.kickingTeam != null && Object.hasOwnProperty.call(message, "kickingTeam"))
                 writer.uint32(/* id 6, wireType 0 =*/48).int32(message.kickingTeam);
-            if (message.numRobotsByTeam != null && message.hasOwnProperty("numRobotsByTeam"))
+            if (message.numRobotsByTeam != null && Object.hasOwnProperty.call(message, "numRobotsByTeam"))
                 writer.uint32(/* id 7, wireType 0 =*/56).uint32(message.numRobotsByTeam);
-            if (message.lastTouchByTeam != null && message.hasOwnProperty("lastTouchByTeam"))
+            if (message.lastTouchByTeam != null && Object.hasOwnProperty.call(message, "lastTouchByTeam"))
                 writer.uint32(/* id 8, wireType 0 =*/64).uint64(message.lastTouchByTeam);
-            if (message.message != null && message.hasOwnProperty("message"))
+            if (message.message != null && Object.hasOwnProperty.call(message, "message"))
                 writer.uint32(/* id 9, wireType 2 =*/74).string(message.message);
             return writer;
         };
@@ -3385,33 +3535,42 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
-                case 6:
-                    message.kickingTeam = reader.int32();
-                    break;
-                case 2:
-                    message.kickingBot = reader.uint32();
-                    break;
-                case 3:
-                    message.location = $root.Vector2.decode(reader, reader.uint32());
-                    break;
-                case 4:
-                    message.kickLocation = $root.Vector2.decode(reader, reader.uint32());
-                    break;
-                case 5:
-                    message.maxBallHeight = reader.float();
-                    break;
-                case 7:
-                    message.numRobotsByTeam = reader.uint32();
-                    break;
-                case 8:
-                    message.lastTouchByTeam = reader.uint64();
-                    break;
-                case 9:
-                    message.message = reader.string();
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
+                case 6: {
+                        message.kickingTeam = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.kickingBot = reader.uint32();
+                        break;
+                    }
+                case 3: {
+                        message.location = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
+                case 4: {
+                        message.kickLocation = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
+                case 5: {
+                        message.maxBallHeight = reader.float();
+                        break;
+                    }
+                case 7: {
+                        message.numRobotsByTeam = reader.uint32();
+                        break;
+                    }
+                case 8: {
+                        message.lastTouchByTeam = reader.uint64();
+                        break;
+                    }
+                case 9: {
+                        message.message = reader.string();
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -3627,6 +3786,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for Goal
+         * @function getTypeUrl
+         * @memberof GameEvent.Goal
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        Goal.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.Goal";
+        };
+
         return Goal;
     })();
 
@@ -3714,11 +3888,11 @@ export const GameEvent = $root.GameEvent = (() => {
             if (!writer)
                 writer = $Writer.create();
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
-            if (message.byBot != null && message.hasOwnProperty("byBot"))
+            if (message.byBot != null && Object.hasOwnProperty.call(message, "byBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.byBot);
-            if (message.location != null && message.hasOwnProperty("location"))
+            if (message.location != null && Object.hasOwnProperty.call(message, "location"))
                 $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-            if (message.kickLocation != null && message.hasOwnProperty("kickLocation"))
+            if (message.kickLocation != null && Object.hasOwnProperty.call(message, "kickLocation"))
                 $root.Vector2.encode(message.kickLocation, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
             return writer;
         };
@@ -3754,18 +3928,22 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
-                case 2:
-                    message.byBot = reader.uint32();
-                    break;
-                case 3:
-                    message.location = $root.Vector2.decode(reader, reader.uint32());
-                    break;
-                case 4:
-                    message.kickLocation = $root.Vector2.decode(reader, reader.uint32());
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.byBot = reader.uint32();
+                        break;
+                    }
+                case 3: {
+                        message.location = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
+                case 4: {
+                        message.kickLocation = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -3909,6 +4087,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for IndirectGoal
+         * @function getTypeUrl
+         * @memberof GameEvent.IndirectGoal
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        IndirectGoal.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.IndirectGoal";
+        };
+
         return IndirectGoal;
     })();
 
@@ -4005,13 +4198,13 @@ export const GameEvent = $root.GameEvent = (() => {
             if (!writer)
                 writer = $Writer.create();
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
-            if (message.byBot != null && message.hasOwnProperty("byBot"))
+            if (message.byBot != null && Object.hasOwnProperty.call(message, "byBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.byBot);
-            if (message.location != null && message.hasOwnProperty("location"))
+            if (message.location != null && Object.hasOwnProperty.call(message, "location"))
                 $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-            if (message.kickLocation != null && message.hasOwnProperty("kickLocation"))
+            if (message.kickLocation != null && Object.hasOwnProperty.call(message, "kickLocation"))
                 $root.Vector2.encode(message.kickLocation, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
-            if (message.maxBallHeight != null && message.hasOwnProperty("maxBallHeight"))
+            if (message.maxBallHeight != null && Object.hasOwnProperty.call(message, "maxBallHeight"))
                 writer.uint32(/* id 5, wireType 5 =*/45).float(message.maxBallHeight);
             return writer;
         };
@@ -4047,21 +4240,26 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
-                case 2:
-                    message.byBot = reader.uint32();
-                    break;
-                case 3:
-                    message.location = $root.Vector2.decode(reader, reader.uint32());
-                    break;
-                case 4:
-                    message.kickLocation = $root.Vector2.decode(reader, reader.uint32());
-                    break;
-                case 5:
-                    message.maxBallHeight = reader.float();
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.byBot = reader.uint32();
+                        break;
+                    }
+                case 3: {
+                        message.location = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
+                case 4: {
+                        message.kickLocation = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
+                case 5: {
+                        message.maxBallHeight = reader.float();
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -4213,6 +4411,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for ChippedGoal
+         * @function getTypeUrl
+         * @memberof GameEvent.ChippedGoal
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        ChippedGoal.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.ChippedGoal";
+        };
+
         return ChippedGoal;
     })();
 
@@ -4300,11 +4513,11 @@ export const GameEvent = $root.GameEvent = (() => {
             if (!writer)
                 writer = $Writer.create();
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
-            if (message.byBot != null && message.hasOwnProperty("byBot"))
+            if (message.byBot != null && Object.hasOwnProperty.call(message, "byBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.byBot);
-            if (message.location != null && message.hasOwnProperty("location"))
+            if (message.location != null && Object.hasOwnProperty.call(message, "location"))
                 $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-            if (message.speed != null && message.hasOwnProperty("speed"))
+            if (message.speed != null && Object.hasOwnProperty.call(message, "speed"))
                 writer.uint32(/* id 4, wireType 5 =*/37).float(message.speed);
             return writer;
         };
@@ -4340,18 +4553,22 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
-                case 2:
-                    message.byBot = reader.uint32();
-                    break;
-                case 3:
-                    message.location = $root.Vector2.decode(reader, reader.uint32());
-                    break;
-                case 4:
-                    message.speed = reader.float();
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.byBot = reader.uint32();
+                        break;
+                    }
+                case 3: {
+                        message.location = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
+                case 4: {
+                        message.speed = reader.float();
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -4490,6 +4707,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for BotTooFastInStop
+         * @function getTypeUrl
+         * @memberof GameEvent.BotTooFastInStop
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        BotTooFastInStop.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.BotTooFastInStop";
+        };
+
         return BotTooFastInStop;
     })();
 
@@ -4577,11 +4809,11 @@ export const GameEvent = $root.GameEvent = (() => {
             if (!writer)
                 writer = $Writer.create();
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
-            if (message.byBot != null && message.hasOwnProperty("byBot"))
+            if (message.byBot != null && Object.hasOwnProperty.call(message, "byBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.byBot);
-            if (message.location != null && message.hasOwnProperty("location"))
+            if (message.location != null && Object.hasOwnProperty.call(message, "location"))
                 $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-            if (message.distance != null && message.hasOwnProperty("distance"))
+            if (message.distance != null && Object.hasOwnProperty.call(message, "distance"))
                 writer.uint32(/* id 4, wireType 5 =*/37).float(message.distance);
             return writer;
         };
@@ -4617,18 +4849,22 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
-                case 2:
-                    message.byBot = reader.uint32();
-                    break;
-                case 3:
-                    message.location = $root.Vector2.decode(reader, reader.uint32());
-                    break;
-                case 4:
-                    message.distance = reader.float();
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.byBot = reader.uint32();
+                        break;
+                    }
+                case 3: {
+                        message.location = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
+                case 4: {
+                        message.distance = reader.float();
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -4767,6 +5003,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for DefenderTooCloseToKickPoint
+         * @function getTypeUrl
+         * @memberof GameEvent.DefenderTooCloseToKickPoint
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        DefenderTooCloseToKickPoint.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.DefenderTooCloseToKickPoint";
+        };
+
         return DefenderTooCloseToKickPoint;
     })();
 
@@ -4871,17 +5122,17 @@ export const GameEvent = $root.GameEvent = (() => {
         BotCrashDrawn.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.botYellow != null && message.hasOwnProperty("botYellow"))
+            if (message.botYellow != null && Object.hasOwnProperty.call(message, "botYellow"))
                 writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.botYellow);
-            if (message.botBlue != null && message.hasOwnProperty("botBlue"))
+            if (message.botBlue != null && Object.hasOwnProperty.call(message, "botBlue"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.botBlue);
-            if (message.location != null && message.hasOwnProperty("location"))
+            if (message.location != null && Object.hasOwnProperty.call(message, "location"))
                 $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-            if (message.crashSpeed != null && message.hasOwnProperty("crashSpeed"))
+            if (message.crashSpeed != null && Object.hasOwnProperty.call(message, "crashSpeed"))
                 writer.uint32(/* id 4, wireType 5 =*/37).float(message.crashSpeed);
-            if (message.speedDiff != null && message.hasOwnProperty("speedDiff"))
+            if (message.speedDiff != null && Object.hasOwnProperty.call(message, "speedDiff"))
                 writer.uint32(/* id 5, wireType 5 =*/45).float(message.speedDiff);
-            if (message.crashAngle != null && message.hasOwnProperty("crashAngle"))
+            if (message.crashAngle != null && Object.hasOwnProperty.call(message, "crashAngle"))
                 writer.uint32(/* id 6, wireType 5 =*/53).float(message.crashAngle);
             return writer;
         };
@@ -4917,24 +5168,30 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.botYellow = reader.uint32();
-                    break;
-                case 2:
-                    message.botBlue = reader.uint32();
-                    break;
-                case 3:
-                    message.location = $root.Vector2.decode(reader, reader.uint32());
-                    break;
-                case 4:
-                    message.crashSpeed = reader.float();
-                    break;
-                case 5:
-                    message.speedDiff = reader.float();
-                    break;
-                case 6:
-                    message.crashAngle = reader.float();
-                    break;
+                case 1: {
+                        message.botYellow = reader.uint32();
+                        break;
+                    }
+                case 2: {
+                        message.botBlue = reader.uint32();
+                        break;
+                    }
+                case 3: {
+                        message.location = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
+                case 4: {
+                        message.crashSpeed = reader.float();
+                        break;
+                    }
+                case 5: {
+                        message.speedDiff = reader.float();
+                        break;
+                    }
+                case 6: {
+                        message.crashAngle = reader.float();
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -5070,6 +5327,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for BotCrashDrawn
+         * @function getTypeUrl
+         * @memberof GameEvent.BotCrashDrawn
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        BotCrashDrawn.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.BotCrashDrawn";
+        };
+
         return BotCrashDrawn;
     })();
 
@@ -5184,17 +5456,17 @@ export const GameEvent = $root.GameEvent = (() => {
             if (!writer)
                 writer = $Writer.create();
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
-            if (message.violator != null && message.hasOwnProperty("violator"))
+            if (message.violator != null && Object.hasOwnProperty.call(message, "violator"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.violator);
-            if (message.victim != null && message.hasOwnProperty("victim"))
+            if (message.victim != null && Object.hasOwnProperty.call(message, "victim"))
                 writer.uint32(/* id 3, wireType 0 =*/24).uint32(message.victim);
-            if (message.location != null && message.hasOwnProperty("location"))
+            if (message.location != null && Object.hasOwnProperty.call(message, "location"))
                 $root.Vector2.encode(message.location, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
-            if (message.crashSpeed != null && message.hasOwnProperty("crashSpeed"))
+            if (message.crashSpeed != null && Object.hasOwnProperty.call(message, "crashSpeed"))
                 writer.uint32(/* id 5, wireType 5 =*/45).float(message.crashSpeed);
-            if (message.speedDiff != null && message.hasOwnProperty("speedDiff"))
+            if (message.speedDiff != null && Object.hasOwnProperty.call(message, "speedDiff"))
                 writer.uint32(/* id 6, wireType 5 =*/53).float(message.speedDiff);
-            if (message.crashAngle != null && message.hasOwnProperty("crashAngle"))
+            if (message.crashAngle != null && Object.hasOwnProperty.call(message, "crashAngle"))
                 writer.uint32(/* id 7, wireType 5 =*/61).float(message.crashAngle);
             return writer;
         };
@@ -5230,27 +5502,34 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
-                case 2:
-                    message.violator = reader.uint32();
-                    break;
-                case 3:
-                    message.victim = reader.uint32();
-                    break;
-                case 4:
-                    message.location = $root.Vector2.decode(reader, reader.uint32());
-                    break;
-                case 5:
-                    message.crashSpeed = reader.float();
-                    break;
-                case 6:
-                    message.speedDiff = reader.float();
-                    break;
-                case 7:
-                    message.crashAngle = reader.float();
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.violator = reader.uint32();
+                        break;
+                    }
+                case 3: {
+                        message.victim = reader.uint32();
+                        break;
+                    }
+                case 4: {
+                        message.location = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
+                case 5: {
+                        message.crashSpeed = reader.float();
+                        break;
+                    }
+                case 6: {
+                        message.speedDiff = reader.float();
+                        break;
+                    }
+                case 7: {
+                        message.crashAngle = reader.float();
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -5413,6 +5692,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for BotCrashUnique
+         * @function getTypeUrl
+         * @memberof GameEvent.BotCrashUnique
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        BotCrashUnique.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.BotCrashUnique";
+        };
+
         return BotCrashUnique;
     })();
 
@@ -5509,13 +5803,13 @@ export const GameEvent = $root.GameEvent = (() => {
             if (!writer)
                 writer = $Writer.create();
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
-            if (message.violator != null && message.hasOwnProperty("violator"))
+            if (message.violator != null && Object.hasOwnProperty.call(message, "violator"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.violator);
-            if (message.victim != null && message.hasOwnProperty("victim"))
+            if (message.victim != null && Object.hasOwnProperty.call(message, "victim"))
                 writer.uint32(/* id 3, wireType 0 =*/24).uint32(message.victim);
-            if (message.location != null && message.hasOwnProperty("location"))
+            if (message.location != null && Object.hasOwnProperty.call(message, "location"))
                 $root.Vector2.encode(message.location, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
-            if (message.pushedDistance != null && message.hasOwnProperty("pushedDistance"))
+            if (message.pushedDistance != null && Object.hasOwnProperty.call(message, "pushedDistance"))
                 writer.uint32(/* id 5, wireType 5 =*/45).float(message.pushedDistance);
             return writer;
         };
@@ -5551,21 +5845,26 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
-                case 2:
-                    message.violator = reader.uint32();
-                    break;
-                case 3:
-                    message.victim = reader.uint32();
-                    break;
-                case 4:
-                    message.location = $root.Vector2.decode(reader, reader.uint32());
-                    break;
-                case 5:
-                    message.pushedDistance = reader.float();
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.violator = reader.uint32();
+                        break;
+                    }
+                case 3: {
+                        message.victim = reader.uint32();
+                        break;
+                    }
+                case 4: {
+                        message.location = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
+                case 5: {
+                        message.pushedDistance = reader.float();
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -5712,6 +6011,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for BotPushedBot
+         * @function getTypeUrl
+         * @memberof GameEvent.BotPushedBot
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        BotPushedBot.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.BotPushedBot";
+        };
+
         return BotPushedBot;
     })();
 
@@ -5799,11 +6113,11 @@ export const GameEvent = $root.GameEvent = (() => {
             if (!writer)
                 writer = $Writer.create();
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
-            if (message.byBot != null && message.hasOwnProperty("byBot"))
+            if (message.byBot != null && Object.hasOwnProperty.call(message, "byBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.byBot);
-            if (message.location != null && message.hasOwnProperty("location"))
+            if (message.location != null && Object.hasOwnProperty.call(message, "location"))
                 $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-            if (message.ballLocation != null && message.hasOwnProperty("ballLocation"))
+            if (message.ballLocation != null && Object.hasOwnProperty.call(message, "ballLocation"))
                 $root.Vector2.encode(message.ballLocation, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
             return writer;
         };
@@ -5839,18 +6153,22 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
-                case 2:
-                    message.byBot = reader.uint32();
-                    break;
-                case 3:
-                    message.location = $root.Vector2.decode(reader, reader.uint32());
-                    break;
-                case 4:
-                    message.ballLocation = $root.Vector2.decode(reader, reader.uint32());
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.byBot = reader.uint32();
+                        break;
+                    }
+                case 3: {
+                        message.location = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
+                case 4: {
+                        message.ballLocation = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -5994,6 +6312,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for BotTippedOver
+         * @function getTypeUrl
+         * @memberof GameEvent.BotTippedOver
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        BotTippedOver.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.BotTippedOver";
+        };
+
         return BotTippedOver;
     })();
 
@@ -6081,11 +6414,11 @@ export const GameEvent = $root.GameEvent = (() => {
             if (!writer)
                 writer = $Writer.create();
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
-            if (message.byBot != null && message.hasOwnProperty("byBot"))
+            if (message.byBot != null && Object.hasOwnProperty.call(message, "byBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.byBot);
-            if (message.location != null && message.hasOwnProperty("location"))
+            if (message.location != null && Object.hasOwnProperty.call(message, "location"))
                 $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-            if (message.distance != null && message.hasOwnProperty("distance"))
+            if (message.distance != null && Object.hasOwnProperty.call(message, "distance"))
                 writer.uint32(/* id 4, wireType 5 =*/37).float(message.distance);
             return writer;
         };
@@ -6121,18 +6454,22 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
-                case 2:
-                    message.byBot = reader.uint32();
-                    break;
-                case 3:
-                    message.location = $root.Vector2.decode(reader, reader.uint32());
-                    break;
-                case 4:
-                    message.distance = reader.float();
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.byBot = reader.uint32();
+                        break;
+                    }
+                case 3: {
+                        message.location = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
+                case 4: {
+                        message.distance = reader.float();
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -6271,6 +6608,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for DefenderInDefenseArea
+         * @function getTypeUrl
+         * @memberof GameEvent.DefenderInDefenseArea
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        DefenderInDefenseArea.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.DefenderInDefenseArea";
+        };
+
         return DefenderInDefenseArea;
     })();
 
@@ -6367,13 +6719,13 @@ export const GameEvent = $root.GameEvent = (() => {
             if (!writer)
                 writer = $Writer.create();
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
-            if (message.byBot != null && message.hasOwnProperty("byBot"))
+            if (message.byBot != null && Object.hasOwnProperty.call(message, "byBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.byBot);
-            if (message.location != null && message.hasOwnProperty("location"))
+            if (message.location != null && Object.hasOwnProperty.call(message, "location"))
                 $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-            if (message.distance != null && message.hasOwnProperty("distance"))
+            if (message.distance != null && Object.hasOwnProperty.call(message, "distance"))
                 writer.uint32(/* id 4, wireType 5 =*/37).float(message.distance);
-            if (message.ballLocation != null && message.hasOwnProperty("ballLocation"))
+            if (message.ballLocation != null && Object.hasOwnProperty.call(message, "ballLocation"))
                 $root.Vector2.encode(message.ballLocation, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
             return writer;
         };
@@ -6409,21 +6761,26 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
-                case 2:
-                    message.byBot = reader.uint32();
-                    break;
-                case 3:
-                    message.location = $root.Vector2.decode(reader, reader.uint32());
-                    break;
-                case 4:
-                    message.distance = reader.float();
-                    break;
-                case 5:
-                    message.ballLocation = $root.Vector2.decode(reader, reader.uint32());
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.byBot = reader.uint32();
+                        break;
+                    }
+                case 3: {
+                        message.location = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
+                case 4: {
+                        message.distance = reader.float();
+                        break;
+                    }
+                case 5: {
+                        message.ballLocation = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -6575,6 +6932,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for DefenderInDefenseAreaPartially
+         * @function getTypeUrl
+         * @memberof GameEvent.DefenderInDefenseAreaPartially
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        DefenderInDefenseAreaPartially.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.DefenderInDefenseAreaPartially";
+        };
+
         return DefenderInDefenseAreaPartially;
     })();
 
@@ -6662,11 +7034,11 @@ export const GameEvent = $root.GameEvent = (() => {
             if (!writer)
                 writer = $Writer.create();
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
-            if (message.byBot != null && message.hasOwnProperty("byBot"))
+            if (message.byBot != null && Object.hasOwnProperty.call(message, "byBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.byBot);
-            if (message.location != null && message.hasOwnProperty("location"))
+            if (message.location != null && Object.hasOwnProperty.call(message, "location"))
                 $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-            if (message.distance != null && message.hasOwnProperty("distance"))
+            if (message.distance != null && Object.hasOwnProperty.call(message, "distance"))
                 writer.uint32(/* id 4, wireType 5 =*/37).float(message.distance);
             return writer;
         };
@@ -6702,18 +7074,22 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
-                case 2:
-                    message.byBot = reader.uint32();
-                    break;
-                case 3:
-                    message.location = $root.Vector2.decode(reader, reader.uint32());
-                    break;
-                case 4:
-                    message.distance = reader.float();
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.byBot = reader.uint32();
+                        break;
+                    }
+                case 3: {
+                        message.location = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
+                case 4: {
+                        message.distance = reader.float();
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -6852,6 +7228,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for AttackerTouchedBallInDefenseArea
+         * @function getTypeUrl
+         * @memberof GameEvent.AttackerTouchedBallInDefenseArea
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        AttackerTouchedBallInDefenseArea.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.AttackerTouchedBallInDefenseArea";
+        };
+
         return AttackerTouchedBallInDefenseArea;
     })();
 
@@ -6948,13 +7339,13 @@ export const GameEvent = $root.GameEvent = (() => {
             if (!writer)
                 writer = $Writer.create();
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
-            if (message.byBot != null && message.hasOwnProperty("byBot"))
+            if (message.byBot != null && Object.hasOwnProperty.call(message, "byBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.byBot);
-            if (message.location != null && message.hasOwnProperty("location"))
+            if (message.location != null && Object.hasOwnProperty.call(message, "location"))
                 $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-            if (message.initialBallSpeed != null && message.hasOwnProperty("initialBallSpeed"))
+            if (message.initialBallSpeed != null && Object.hasOwnProperty.call(message, "initialBallSpeed"))
                 writer.uint32(/* id 4, wireType 5 =*/37).float(message.initialBallSpeed);
-            if (message.chipped != null && message.hasOwnProperty("chipped"))
+            if (message.chipped != null && Object.hasOwnProperty.call(message, "chipped"))
                 writer.uint32(/* id 5, wireType 0 =*/40).bool(message.chipped);
             return writer;
         };
@@ -6990,21 +7381,26 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
-                case 2:
-                    message.byBot = reader.uint32();
-                    break;
-                case 3:
-                    message.location = $root.Vector2.decode(reader, reader.uint32());
-                    break;
-                case 4:
-                    message.initialBallSpeed = reader.float();
-                    break;
-                case 5:
-                    message.chipped = reader.bool();
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.byBot = reader.uint32();
+                        break;
+                    }
+                case 3: {
+                        message.location = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
+                case 4: {
+                        message.initialBallSpeed = reader.float();
+                        break;
+                    }
+                case 5: {
+                        message.chipped = reader.bool();
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -7151,6 +7547,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for BotKickedBallTooFast
+         * @function getTypeUrl
+         * @memberof GameEvent.BotKickedBallTooFast
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        BotKickedBallTooFast.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.BotKickedBallTooFast";
+        };
+
         return BotKickedBallTooFast;
     })();
 
@@ -7238,11 +7649,11 @@ export const GameEvent = $root.GameEvent = (() => {
             if (!writer)
                 writer = $Writer.create();
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
-            if (message.byBot != null && message.hasOwnProperty("byBot"))
+            if (message.byBot != null && Object.hasOwnProperty.call(message, "byBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.byBot);
-            if (message.start != null && message.hasOwnProperty("start"))
+            if (message.start != null && Object.hasOwnProperty.call(message, "start"))
                 $root.Vector2.encode(message.start, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-            if (message.end != null && message.hasOwnProperty("end"))
+            if (message.end != null && Object.hasOwnProperty.call(message, "end"))
                 $root.Vector2.encode(message.end, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
             return writer;
         };
@@ -7278,18 +7689,22 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
-                case 2:
-                    message.byBot = reader.uint32();
-                    break;
-                case 3:
-                    message.start = $root.Vector2.decode(reader, reader.uint32());
-                    break;
-                case 4:
-                    message.end = $root.Vector2.decode(reader, reader.uint32());
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.byBot = reader.uint32();
+                        break;
+                    }
+                case 3: {
+                        message.start = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
+                case 4: {
+                        message.end = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -7433,6 +7848,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for BotDribbledBallTooFar
+         * @function getTypeUrl
+         * @memberof GameEvent.BotDribbledBallTooFar
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        BotDribbledBallTooFar.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.BotDribbledBallTooFar";
+        };
+
         return BotDribbledBallTooFar;
     })();
 
@@ -7520,11 +7950,11 @@ export const GameEvent = $root.GameEvent = (() => {
             if (!writer)
                 writer = $Writer.create();
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
-            if (message.byBot != null && message.hasOwnProperty("byBot"))
+            if (message.byBot != null && Object.hasOwnProperty.call(message, "byBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.byBot);
-            if (message.location != null && message.hasOwnProperty("location"))
+            if (message.location != null && Object.hasOwnProperty.call(message, "location"))
                 $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-            if (message.victim != null && message.hasOwnProperty("victim"))
+            if (message.victim != null && Object.hasOwnProperty.call(message, "victim"))
                 writer.uint32(/* id 4, wireType 0 =*/32).uint32(message.victim);
             return writer;
         };
@@ -7560,18 +7990,22 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
-                case 2:
-                    message.byBot = reader.uint32();
-                    break;
-                case 4:
-                    message.victim = reader.uint32();
-                    break;
-                case 3:
-                    message.location = $root.Vector2.decode(reader, reader.uint32());
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.byBot = reader.uint32();
+                        break;
+                    }
+                case 4: {
+                        message.victim = reader.uint32();
+                        break;
+                    }
+                case 3: {
+                        message.location = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -7710,6 +8144,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for AttackerTouchedOpponentInDefenseArea
+         * @function getTypeUrl
+         * @memberof GameEvent.AttackerTouchedOpponentInDefenseArea
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        AttackerTouchedOpponentInDefenseArea.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.AttackerTouchedOpponentInDefenseArea";
+        };
+
         return AttackerTouchedOpponentInDefenseArea;
     })();
 
@@ -7788,9 +8237,9 @@ export const GameEvent = $root.GameEvent = (() => {
             if (!writer)
                 writer = $Writer.create();
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
-            if (message.byBot != null && message.hasOwnProperty("byBot"))
+            if (message.byBot != null && Object.hasOwnProperty.call(message, "byBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.byBot);
-            if (message.location != null && message.hasOwnProperty("location"))
+            if (message.location != null && Object.hasOwnProperty.call(message, "location"))
                 $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
             return writer;
         };
@@ -7826,15 +8275,18 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
-                case 2:
-                    message.byBot = reader.uint32();
-                    break;
-                case 3:
-                    message.location = $root.Vector2.decode(reader, reader.uint32());
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.byBot = reader.uint32();
+                        break;
+                    }
+                case 3: {
+                        message.location = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -7965,6 +8417,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for AttackerDoubleTouchedBall
+         * @function getTypeUrl
+         * @memberof GameEvent.AttackerDoubleTouchedBall
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        AttackerDoubleTouchedBall.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.AttackerDoubleTouchedBall";
+        };
+
         return AttackerDoubleTouchedBall;
     })();
 
@@ -8061,13 +8528,13 @@ export const GameEvent = $root.GameEvent = (() => {
             if (!writer)
                 writer = $Writer.create();
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
-            if (message.byBot != null && message.hasOwnProperty("byBot"))
+            if (message.byBot != null && Object.hasOwnProperty.call(message, "byBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.byBot);
-            if (message.location != null && message.hasOwnProperty("location"))
+            if (message.location != null && Object.hasOwnProperty.call(message, "location"))
                 $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-            if (message.distance != null && message.hasOwnProperty("distance"))
+            if (message.distance != null && Object.hasOwnProperty.call(message, "distance"))
                 writer.uint32(/* id 4, wireType 5 =*/37).float(message.distance);
-            if (message.ballLocation != null && message.hasOwnProperty("ballLocation"))
+            if (message.ballLocation != null && Object.hasOwnProperty.call(message, "ballLocation"))
                 $root.Vector2.encode(message.ballLocation, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
             return writer;
         };
@@ -8103,21 +8570,26 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
-                case 2:
-                    message.byBot = reader.uint32();
-                    break;
-                case 3:
-                    message.location = $root.Vector2.decode(reader, reader.uint32());
-                    break;
-                case 4:
-                    message.distance = reader.float();
-                    break;
-                case 5:
-                    message.ballLocation = $root.Vector2.decode(reader, reader.uint32());
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.byBot = reader.uint32();
+                        break;
+                    }
+                case 3: {
+                        message.location = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
+                case 4: {
+                        message.distance = reader.float();
+                        break;
+                    }
+                case 5: {
+                        message.ballLocation = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -8269,6 +8741,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for AttackerTooCloseToDefenseArea
+         * @function getTypeUrl
+         * @memberof GameEvent.AttackerTooCloseToDefenseArea
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        AttackerTooCloseToDefenseArea.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.AttackerTooCloseToDefenseArea";
+        };
+
         return AttackerTooCloseToDefenseArea;
     })();
 
@@ -8356,11 +8843,11 @@ export const GameEvent = $root.GameEvent = (() => {
             if (!writer)
                 writer = $Writer.create();
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
-            if (message.byBot != null && message.hasOwnProperty("byBot"))
+            if (message.byBot != null && Object.hasOwnProperty.call(message, "byBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.byBot);
-            if (message.location != null && message.hasOwnProperty("location"))
+            if (message.location != null && Object.hasOwnProperty.call(message, "location"))
                 $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-            if (message.duration != null && message.hasOwnProperty("duration"))
+            if (message.duration != null && Object.hasOwnProperty.call(message, "duration"))
                 writer.uint32(/* id 4, wireType 5 =*/37).float(message.duration);
             return writer;
         };
@@ -8396,18 +8883,22 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
-                case 2:
-                    message.byBot = reader.uint32();
-                    break;
-                case 3:
-                    message.location = $root.Vector2.decode(reader, reader.uint32());
-                    break;
-                case 4:
-                    message.duration = reader.float();
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.byBot = reader.uint32();
+                        break;
+                    }
+                case 3: {
+                        message.location = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
+                case 4: {
+                        message.duration = reader.float();
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -8546,6 +9037,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for BotHeldBallDeliberately
+         * @function getTypeUrl
+         * @memberof GameEvent.BotHeldBallDeliberately
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        BotHeldBallDeliberately.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.BotHeldBallDeliberately";
+        };
+
         return BotHeldBallDeliberately;
     })();
 
@@ -8624,9 +9130,9 @@ export const GameEvent = $root.GameEvent = (() => {
             if (!writer)
                 writer = $Writer.create();
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
-            if (message.byBot != null && message.hasOwnProperty("byBot"))
+            if (message.byBot != null && Object.hasOwnProperty.call(message, "byBot"))
                 writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.byBot);
-            if (message.location != null && message.hasOwnProperty("location"))
+            if (message.location != null && Object.hasOwnProperty.call(message, "location"))
                 $root.Vector2.encode(message.location, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
             return writer;
         };
@@ -8662,15 +9168,18 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
-                case 2:
-                    message.byBot = reader.uint32();
-                    break;
-                case 3:
-                    message.location = $root.Vector2.decode(reader, reader.uint32());
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.byBot = reader.uint32();
+                        break;
+                    }
+                case 3: {
+                        message.location = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -8801,6 +9310,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for BotInterferedPlacement
+         * @function getTypeUrl
+         * @memberof GameEvent.BotInterferedPlacement
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        BotInterferedPlacement.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.BotInterferedPlacement";
+        };
+
         return BotInterferedPlacement;
     })();
 
@@ -8895,9 +9419,10 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -9004,6 +9529,21 @@ export const GameEvent = $root.GameEvent = (() => {
          */
         MultipleCards.prototype.toJSON = function toJSON() {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the default type url for MultipleCards
+         * @function getTypeUrl
+         * @memberof GameEvent.MultipleCards
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        MultipleCards.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.MultipleCards";
         };
 
         return MultipleCards;
@@ -9113,14 +9653,16 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
-                case 2:
-                    if (!(message.causedGameEvents && message.causedGameEvents.length))
-                        message.causedGameEvents = [];
-                    message.causedGameEvents.push($root.GameEvent.decode(reader, reader.uint32()));
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        if (!(message.causedGameEvents && message.causedGameEvents.length))
+                            message.causedGameEvents = [];
+                        message.causedGameEvents.push($root.GameEvent.decode(reader, reader.uint32()));
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -9255,6 +9797,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for MultipleFouls
+         * @function getTypeUrl
+         * @memberof GameEvent.MultipleFouls
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        MultipleFouls.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.MultipleFouls";
+        };
+
         return MultipleFouls;
     })();
 
@@ -9349,9 +9906,10 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -9460,6 +10018,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for MultiplePlacementFailures
+         * @function getTypeUrl
+         * @memberof GameEvent.MultiplePlacementFailures
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        MultiplePlacementFailures.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.MultiplePlacementFailures";
+        };
+
         return MultiplePlacementFailures;
     })();
 
@@ -9538,9 +10111,9 @@ export const GameEvent = $root.GameEvent = (() => {
             if (!writer)
                 writer = $Writer.create();
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
-            if (message.location != null && message.hasOwnProperty("location"))
+            if (message.location != null && Object.hasOwnProperty.call(message, "location"))
                 $root.Vector2.encode(message.location, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-            if (message.time != null && message.hasOwnProperty("time"))
+            if (message.time != null && Object.hasOwnProperty.call(message, "time"))
                 writer.uint32(/* id 3, wireType 5 =*/29).float(message.time);
             return writer;
         };
@@ -9576,15 +10149,18 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
-                case 2:
-                    message.location = $root.Vector2.decode(reader, reader.uint32());
-                    break;
-                case 3:
-                    message.time = reader.float();
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.location = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
+                case 3: {
+                        message.time = reader.float();
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -9715,6 +10291,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for KickTimeout
+         * @function getTypeUrl
+         * @memberof GameEvent.KickTimeout
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        KickTimeout.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.KickTimeout";
+        };
+
         return KickTimeout;
     })();
 
@@ -9783,9 +10374,9 @@ export const GameEvent = $root.GameEvent = (() => {
         NoProgressInGame.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.location != null && message.hasOwnProperty("location"))
+            if (message.location != null && Object.hasOwnProperty.call(message, "location"))
                 $root.Vector2.encode(message.location, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-            if (message.time != null && message.hasOwnProperty("time"))
+            if (message.time != null && Object.hasOwnProperty.call(message, "time"))
                 writer.uint32(/* id 2, wireType 5 =*/21).float(message.time);
             return writer;
         };
@@ -9821,12 +10412,14 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.location = $root.Vector2.decode(reader, reader.uint32());
-                    break;
-                case 2:
-                    message.time = reader.float();
-                    break;
+                case 1: {
+                        message.location = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
+                case 2: {
+                        message.time = reader.float();
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -9930,6 +10523,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for NoProgressInGame
+         * @function getTypeUrl
+         * @memberof GameEvent.NoProgressInGame
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        NoProgressInGame.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.NoProgressInGame";
+        };
+
         return NoProgressInGame;
     })();
 
@@ -9999,7 +10607,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (!writer)
                 writer = $Writer.create();
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
-            if (message.remainingDistance != null && message.hasOwnProperty("remainingDistance"))
+            if (message.remainingDistance != null && Object.hasOwnProperty.call(message, "remainingDistance"))
                 writer.uint32(/* id 2, wireType 5 =*/21).float(message.remainingDistance);
             return writer;
         };
@@ -10035,12 +10643,14 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
-                case 2:
-                    message.remainingDistance = reader.float();
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.remainingDistance = reader.float();
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -10158,6 +10768,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for PlacementFailed
+         * @function getTypeUrl
+         * @memberof GameEvent.PlacementFailed
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        PlacementFailed.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.PlacementFailed";
+        };
+
         return PlacementFailed;
     })();
 
@@ -10262,12 +10887,14 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
-                case 2:
-                    message.reason = reader.string();
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.reason = reader.string();
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -10386,6 +11013,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for UnsportingBehaviorMinor
+         * @function getTypeUrl
+         * @memberof GameEvent.UnsportingBehaviorMinor
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        UnsportingBehaviorMinor.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.UnsportingBehaviorMinor";
+        };
+
         return UnsportingBehaviorMinor;
     })();
 
@@ -10490,12 +11132,14 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
-                case 2:
-                    message.reason = reader.string();
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.reason = reader.string();
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -10614,6 +11258,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for UnsportingBehaviorMajor
+         * @function getTypeUrl
+         * @memberof GameEvent.UnsportingBehaviorMajor
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        UnsportingBehaviorMajor.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.UnsportingBehaviorMajor";
+        };
+
         return UnsportingBehaviorMajor;
     })();
 
@@ -10692,9 +11351,9 @@ export const GameEvent = $root.GameEvent = (() => {
             if (!writer)
                 writer = $Writer.create();
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
-            if (message.location != null && message.hasOwnProperty("location"))
+            if (message.location != null && Object.hasOwnProperty.call(message, "location"))
                 $root.Vector2.encode(message.location, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-            if (message.duration != null && message.hasOwnProperty("duration"))
+            if (message.duration != null && Object.hasOwnProperty.call(message, "duration"))
                 writer.uint32(/* id 3, wireType 5 =*/29).float(message.duration);
             return writer;
         };
@@ -10730,15 +11389,18 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
-                case 2:
-                    message.location = $root.Vector2.decode(reader, reader.uint32());
-                    break;
-                case 3:
-                    message.duration = reader.float();
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.location = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
+                case 3: {
+                        message.duration = reader.float();
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -10869,6 +11531,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for KeeperHeldBall
+         * @function getTypeUrl
+         * @memberof GameEvent.KeeperHeldBall
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        KeeperHeldBall.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.KeeperHeldBall";
+        };
+
         return KeeperHeldBall;
     })();
 
@@ -10956,11 +11633,11 @@ export const GameEvent = $root.GameEvent = (() => {
             if (!writer)
                 writer = $Writer.create();
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
-            if (message.timeTaken != null && message.hasOwnProperty("timeTaken"))
+            if (message.timeTaken != null && Object.hasOwnProperty.call(message, "timeTaken"))
                 writer.uint32(/* id 2, wireType 5 =*/21).float(message.timeTaken);
-            if (message.precision != null && message.hasOwnProperty("precision"))
+            if (message.precision != null && Object.hasOwnProperty.call(message, "precision"))
                 writer.uint32(/* id 3, wireType 5 =*/29).float(message.precision);
-            if (message.distance != null && message.hasOwnProperty("distance"))
+            if (message.distance != null && Object.hasOwnProperty.call(message, "distance"))
                 writer.uint32(/* id 4, wireType 5 =*/37).float(message.distance);
             return writer;
         };
@@ -10996,18 +11673,22 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
-                case 2:
-                    message.timeTaken = reader.float();
-                    break;
-                case 3:
-                    message.precision = reader.float();
-                    break;
-                case 4:
-                    message.distance = reader.float();
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.timeTaken = reader.float();
+                        break;
+                    }
+                case 3: {
+                        message.precision = reader.float();
+                        break;
+                    }
+                case 4: {
+                        message.distance = reader.float();
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -11141,6 +11822,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for PlacementSucceeded
+         * @function getTypeUrl
+         * @memberof GameEvent.PlacementSucceeded
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        PlacementSucceeded.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.PlacementSucceeded";
+        };
+
         return PlacementSucceeded;
     })();
 
@@ -11200,7 +11896,7 @@ export const GameEvent = $root.GameEvent = (() => {
         Prepared.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.timeTaken != null && message.hasOwnProperty("timeTaken"))
+            if (message.timeTaken != null && Object.hasOwnProperty.call(message, "timeTaken"))
                 writer.uint32(/* id 1, wireType 5 =*/13).float(message.timeTaken);
             return writer;
         };
@@ -11236,9 +11932,10 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.timeTaken = reader.float();
-                    break;
+                case 1: {
+                        message.timeTaken = reader.float();
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -11326,6 +12023,21 @@ export const GameEvent = $root.GameEvent = (() => {
          */
         Prepared.prototype.toJSON = function toJSON() {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the default type url for Prepared
+         * @function getTypeUrl
+         * @memberof GameEvent.Prepared
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        Prepared.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.Prepared";
         };
 
         return Prepared;
@@ -11422,9 +12134,10 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -11533,6 +12246,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for BotSubstitution
+         * @function getTypeUrl
+         * @memberof GameEvent.BotSubstitution
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        BotSubstitution.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.BotSubstitution";
+        };
+
         return BotSubstitution;
     })();
 
@@ -11627,9 +12355,10 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -11738,6 +12467,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for ChallengeFlag
+         * @function getTypeUrl
+         * @memberof GameEvent.ChallengeFlag
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        ChallengeFlag.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.ChallengeFlag";
+        };
+
         return ChallengeFlag;
     })();
 
@@ -11832,9 +12576,10 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -11943,6 +12688,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for EmergencyStop
+         * @function getTypeUrl
+         * @memberof GameEvent.EmergencyStop
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        EmergencyStop.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.EmergencyStop";
+        };
+
         return EmergencyStop;
     })();
 
@@ -12030,11 +12790,11 @@ export const GameEvent = $root.GameEvent = (() => {
             if (!writer)
                 writer = $Writer.create();
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
-            if (message.numRobotsAllowed != null && message.hasOwnProperty("numRobotsAllowed"))
+            if (message.numRobotsAllowed != null && Object.hasOwnProperty.call(message, "numRobotsAllowed"))
                 writer.uint32(/* id 2, wireType 0 =*/16).int32(message.numRobotsAllowed);
-            if (message.numRobotsOnField != null && message.hasOwnProperty("numRobotsOnField"))
+            if (message.numRobotsOnField != null && Object.hasOwnProperty.call(message, "numRobotsOnField"))
                 writer.uint32(/* id 3, wireType 0 =*/24).int32(message.numRobotsOnField);
-            if (message.ballLocation != null && message.hasOwnProperty("ballLocation"))
+            if (message.ballLocation != null && Object.hasOwnProperty.call(message, "ballLocation"))
                 $root.Vector2.encode(message.ballLocation, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
             return writer;
         };
@@ -12070,18 +12830,22 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
-                case 2:
-                    message.numRobotsAllowed = reader.int32();
-                    break;
-                case 3:
-                    message.numRobotsOnField = reader.int32();
-                    break;
-                case 4:
-                    message.ballLocation = $root.Vector2.decode(reader, reader.uint32());
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.numRobotsAllowed = reader.int32();
+                        break;
+                    }
+                case 3: {
+                        message.numRobotsOnField = reader.int32();
+                        break;
+                    }
+                case 4: {
+                        message.ballLocation = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -12220,6 +12984,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for TooManyRobots
+         * @function getTypeUrl
+         * @memberof GameEvent.TooManyRobots
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        TooManyRobots.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.TooManyRobots";
+        };
+
         return TooManyRobots;
     })();
 
@@ -12289,7 +13068,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (!writer)
                 writer = $Writer.create();
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
-            if (message.location != null && message.hasOwnProperty("location"))
+            if (message.location != null && Object.hasOwnProperty.call(message, "location"))
                 $root.Vector2.encode(message.location, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
             return writer;
         };
@@ -12325,12 +13104,14 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
-                case 2:
-                    message.location = $root.Vector2.decode(reader, reader.uint32());
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.location = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -12453,6 +13234,21 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for BoundaryCrossing
+         * @function getTypeUrl
+         * @memberof GameEvent.BoundaryCrossing
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        BoundaryCrossing.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.BoundaryCrossing";
+        };
+
         return BoundaryCrossing;
     })();
 
@@ -12522,7 +13318,7 @@ export const GameEvent = $root.GameEvent = (() => {
             if (!writer)
                 writer = $Writer.create();
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
-            if (message.location != null && message.hasOwnProperty("location"))
+            if (message.location != null && Object.hasOwnProperty.call(message, "location"))
                 $root.Vector2.encode(message.location, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
             return writer;
         };
@@ -12558,12 +13354,14 @@ export const GameEvent = $root.GameEvent = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.byTeam = reader.int32();
-                    break;
-                case 2:
-                    message.location = $root.Vector2.decode(reader, reader.uint32());
-                    break;
+                case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.location = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -12686,13 +13484,28 @@ export const GameEvent = $root.GameEvent = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for PenaltyKickFailed
+         * @function getTypeUrl
+         * @memberof GameEvent.PenaltyKickFailed
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        PenaltyKickFailed.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.PenaltyKickFailed";
+        };
+
         return PenaltyKickFailed;
     })();
 
     /**
      * Type enum.
      * @name GameEvent.Type
-     * @enum {string}
+     * @enum {number}
      * @property {number} UNKNOWN_GAME_EVENT_TYPE=0 UNKNOWN_GAME_EVENT_TYPE value
      * @property {number} BALL_LEFT_FIELD_TOUCH_LINE=6 BALL_LEFT_FIELD_TOUCH_LINE value
      * @property {number} BALL_LEFT_FIELD_GOAL_LINE=7 BALL_LEFT_FIELD_GOAL_LINE value
@@ -12987,20 +13800,20 @@ export const Referee = $root.Referee = (() => {
             writer = $Writer.create();
         writer.uint32(/* id 1, wireType 0 =*/8).uint64(message.packetTimestamp);
         writer.uint32(/* id 2, wireType 0 =*/16).int32(message.stage);
-        if (message.stageTimeLeft != null && message.hasOwnProperty("stageTimeLeft"))
+        if (message.stageTimeLeft != null && Object.hasOwnProperty.call(message, "stageTimeLeft"))
             writer.uint32(/* id 3, wireType 0 =*/24).sint32(message.stageTimeLeft);
         writer.uint32(/* id 4, wireType 0 =*/32).int32(message.command);
         writer.uint32(/* id 5, wireType 0 =*/40).uint32(message.commandCounter);
         writer.uint32(/* id 6, wireType 0 =*/48).uint64(message.commandTimestamp);
         $root.Referee.TeamInfo.encode(message.yellow, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
         $root.Referee.TeamInfo.encode(message.blue, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
-        if (message.designatedPosition != null && message.hasOwnProperty("designatedPosition"))
+        if (message.designatedPosition != null && Object.hasOwnProperty.call(message, "designatedPosition"))
             $root.Referee.Point.encode(message.designatedPosition, writer.uint32(/* id 9, wireType 2 =*/74).fork()).ldelim();
-        if (message.blueTeamOnPositiveHalf != null && message.hasOwnProperty("blueTeamOnPositiveHalf"))
+        if (message.blueTeamOnPositiveHalf != null && Object.hasOwnProperty.call(message, "blueTeamOnPositiveHalf"))
             writer.uint32(/* id 10, wireType 0 =*/80).bool(message.blueTeamOnPositiveHalf);
-        if (message.nextCommand != null && message.hasOwnProperty("nextCommand"))
+        if (message.nextCommand != null && Object.hasOwnProperty.call(message, "nextCommand"))
             writer.uint32(/* id 12, wireType 0 =*/96).int32(message.nextCommand);
-        if (message.currentActionTimeRemaining != null && message.hasOwnProperty("currentActionTimeRemaining"))
+        if (message.currentActionTimeRemaining != null && Object.hasOwnProperty.call(message, "currentActionTimeRemaining"))
             writer.uint32(/* id 15, wireType 0 =*/120).int32(message.currentActionTimeRemaining);
         if (message.gameEvents != null && message.gameEvents.length)
             for (let i = 0; i < message.gameEvents.length; ++i)
@@ -13008,9 +13821,9 @@ export const Referee = $root.Referee = (() => {
         if (message.gameEventProposals != null && message.gameEventProposals.length)
             for (let i = 0; i < message.gameEventProposals.length; ++i)
                 $root.GameEventProposalGroup.encode(message.gameEventProposals[i], writer.uint32(/* id 17, wireType 2 =*/138).fork()).ldelim();
-        if (message.sourceIdentifier != null && message.hasOwnProperty("sourceIdentifier"))
+        if (message.sourceIdentifier != null && Object.hasOwnProperty.call(message, "sourceIdentifier"))
             writer.uint32(/* id 18, wireType 2 =*/146).string(message.sourceIdentifier);
-        if (message.matchType != null && message.hasOwnProperty("matchType"))
+        if (message.matchType != null && Object.hasOwnProperty.call(message, "matchType"))
             writer.uint32(/* id 19, wireType 0 =*/152).int32(message.matchType);
         return writer;
     };
@@ -13046,58 +13859,74 @@ export const Referee = $root.Referee = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 18:
-                message.sourceIdentifier = reader.string();
-                break;
-            case 19:
-                message.matchType = reader.int32();
-                break;
-            case 1:
-                message.packetTimestamp = reader.uint64();
-                break;
-            case 2:
-                message.stage = reader.int32();
-                break;
-            case 3:
-                message.stageTimeLeft = reader.sint32();
-                break;
-            case 4:
-                message.command = reader.int32();
-                break;
-            case 5:
-                message.commandCounter = reader.uint32();
-                break;
-            case 6:
-                message.commandTimestamp = reader.uint64();
-                break;
-            case 7:
-                message.yellow = $root.Referee.TeamInfo.decode(reader, reader.uint32());
-                break;
-            case 8:
-                message.blue = $root.Referee.TeamInfo.decode(reader, reader.uint32());
-                break;
-            case 9:
-                message.designatedPosition = $root.Referee.Point.decode(reader, reader.uint32());
-                break;
-            case 10:
-                message.blueTeamOnPositiveHalf = reader.bool();
-                break;
-            case 12:
-                message.nextCommand = reader.int32();
-                break;
-            case 16:
-                if (!(message.gameEvents && message.gameEvents.length))
-                    message.gameEvents = [];
-                message.gameEvents.push($root.GameEvent.decode(reader, reader.uint32()));
-                break;
-            case 17:
-                if (!(message.gameEventProposals && message.gameEventProposals.length))
-                    message.gameEventProposals = [];
-                message.gameEventProposals.push($root.GameEventProposalGroup.decode(reader, reader.uint32()));
-                break;
-            case 15:
-                message.currentActionTimeRemaining = reader.int32();
-                break;
+            case 18: {
+                    message.sourceIdentifier = reader.string();
+                    break;
+                }
+            case 19: {
+                    message.matchType = reader.int32();
+                    break;
+                }
+            case 1: {
+                    message.packetTimestamp = reader.uint64();
+                    break;
+                }
+            case 2: {
+                    message.stage = reader.int32();
+                    break;
+                }
+            case 3: {
+                    message.stageTimeLeft = reader.sint32();
+                    break;
+                }
+            case 4: {
+                    message.command = reader.int32();
+                    break;
+                }
+            case 5: {
+                    message.commandCounter = reader.uint32();
+                    break;
+                }
+            case 6: {
+                    message.commandTimestamp = reader.uint64();
+                    break;
+                }
+            case 7: {
+                    message.yellow = $root.Referee.TeamInfo.decode(reader, reader.uint32());
+                    break;
+                }
+            case 8: {
+                    message.blue = $root.Referee.TeamInfo.decode(reader, reader.uint32());
+                    break;
+                }
+            case 9: {
+                    message.designatedPosition = $root.Referee.Point.decode(reader, reader.uint32());
+                    break;
+                }
+            case 10: {
+                    message.blueTeamOnPositiveHalf = reader.bool();
+                    break;
+                }
+            case 12: {
+                    message.nextCommand = reader.int32();
+                    break;
+                }
+            case 16: {
+                    if (!(message.gameEvents && message.gameEvents.length))
+                        message.gameEvents = [];
+                    message.gameEvents.push($root.GameEvent.decode(reader, reader.uint32()));
+                    break;
+                }
+            case 17: {
+                    if (!(message.gameEventProposals && message.gameEventProposals.length))
+                        message.gameEventProposals = [];
+                    message.gameEventProposals.push($root.GameEventProposalGroup.decode(reader, reader.uint32()));
+                    break;
+                }
+            case 15: {
+                    message.currentActionTimeRemaining = reader.int32();
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -13679,9 +14508,24 @@ export const Referee = $root.Referee = (() => {
     };
 
     /**
+     * Gets the default type url for Referee
+     * @function getTypeUrl
+     * @memberof Referee
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    Referee.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/Referee";
+    };
+
+    /**
      * Stage enum.
      * @name Referee.Stage
-     * @enum {string}
+     * @enum {number}
      * @property {number} NORMAL_FIRST_HALF_PRE=0 NORMAL_FIRST_HALF_PRE value
      * @property {number} NORMAL_FIRST_HALF=1 NORMAL_FIRST_HALF value
      * @property {number} NORMAL_HALF_TIME=2 NORMAL_HALF_TIME value
@@ -13719,7 +14563,7 @@ export const Referee = $root.Referee = (() => {
     /**
      * Command enum.
      * @name Referee.Command
-     * @enum {string}
+     * @enum {number}
      * @property {number} HALT=0 HALT value
      * @property {number} STOP=1 STOP value
      * @property {number} NORMAL_START=2 NORMAL_START value
@@ -13949,17 +14793,17 @@ export const Referee = $root.Referee = (() => {
             writer.uint32(/* id 6, wireType 0 =*/48).uint32(message.timeouts);
             writer.uint32(/* id 7, wireType 0 =*/56).uint32(message.timeoutTime);
             writer.uint32(/* id 8, wireType 0 =*/64).uint32(message.goalkeeper);
-            if (message.foulCounter != null && message.hasOwnProperty("foulCounter"))
+            if (message.foulCounter != null && Object.hasOwnProperty.call(message, "foulCounter"))
                 writer.uint32(/* id 9, wireType 0 =*/72).uint32(message.foulCounter);
-            if (message.ballPlacementFailures != null && message.hasOwnProperty("ballPlacementFailures"))
+            if (message.ballPlacementFailures != null && Object.hasOwnProperty.call(message, "ballPlacementFailures"))
                 writer.uint32(/* id 10, wireType 0 =*/80).uint32(message.ballPlacementFailures);
-            if (message.canPlaceBall != null && message.hasOwnProperty("canPlaceBall"))
+            if (message.canPlaceBall != null && Object.hasOwnProperty.call(message, "canPlaceBall"))
                 writer.uint32(/* id 12, wireType 0 =*/96).bool(message.canPlaceBall);
-            if (message.maxAllowedBots != null && message.hasOwnProperty("maxAllowedBots"))
+            if (message.maxAllowedBots != null && Object.hasOwnProperty.call(message, "maxAllowedBots"))
                 writer.uint32(/* id 13, wireType 0 =*/104).uint32(message.maxAllowedBots);
-            if (message.botSubstitutionIntent != null && message.hasOwnProperty("botSubstitutionIntent"))
+            if (message.botSubstitutionIntent != null && Object.hasOwnProperty.call(message, "botSubstitutionIntent"))
                 writer.uint32(/* id 14, wireType 0 =*/112).bool(message.botSubstitutionIntent);
-            if (message.ballPlacementFailuresReached != null && message.hasOwnProperty("ballPlacementFailuresReached"))
+            if (message.ballPlacementFailuresReached != null && Object.hasOwnProperty.call(message, "ballPlacementFailuresReached"))
                 writer.uint32(/* id 15, wireType 0 =*/120).bool(message.ballPlacementFailuresReached);
             return writer;
         };
@@ -13995,55 +14839,69 @@ export const Referee = $root.Referee = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.name = reader.string();
-                    break;
-                case 2:
-                    message.score = reader.uint32();
-                    break;
-                case 3:
-                    message.redCards = reader.uint32();
-                    break;
-                case 4:
-                    if (!(message.yellowCardTimes && message.yellowCardTimes.length))
-                        message.yellowCardTimes = [];
-                    if ((tag & 7) === 2) {
-                        let end2 = reader.uint32() + reader.pos;
-                        while (reader.pos < end2)
+                case 1: {
+                        message.name = reader.string();
+                        break;
+                    }
+                case 2: {
+                        message.score = reader.uint32();
+                        break;
+                    }
+                case 3: {
+                        message.redCards = reader.uint32();
+                        break;
+                    }
+                case 4: {
+                        if (!(message.yellowCardTimes && message.yellowCardTimes.length))
+                            message.yellowCardTimes = [];
+                        if ((tag & 7) === 2) {
+                            let end2 = reader.uint32() + reader.pos;
+                            while (reader.pos < end2)
+                                message.yellowCardTimes.push(reader.uint32());
+                        } else
                             message.yellowCardTimes.push(reader.uint32());
-                    } else
-                        message.yellowCardTimes.push(reader.uint32());
-                    break;
-                case 5:
-                    message.yellowCards = reader.uint32();
-                    break;
-                case 6:
-                    message.timeouts = reader.uint32();
-                    break;
-                case 7:
-                    message.timeoutTime = reader.uint32();
-                    break;
-                case 8:
-                    message.goalkeeper = reader.uint32();
-                    break;
-                case 9:
-                    message.foulCounter = reader.uint32();
-                    break;
-                case 10:
-                    message.ballPlacementFailures = reader.uint32();
-                    break;
-                case 12:
-                    message.canPlaceBall = reader.bool();
-                    break;
-                case 13:
-                    message.maxAllowedBots = reader.uint32();
-                    break;
-                case 14:
-                    message.botSubstitutionIntent = reader.bool();
-                    break;
-                case 15:
-                    message.ballPlacementFailuresReached = reader.bool();
-                    break;
+                        break;
+                    }
+                case 5: {
+                        message.yellowCards = reader.uint32();
+                        break;
+                    }
+                case 6: {
+                        message.timeouts = reader.uint32();
+                        break;
+                    }
+                case 7: {
+                        message.timeoutTime = reader.uint32();
+                        break;
+                    }
+                case 8: {
+                        message.goalkeeper = reader.uint32();
+                        break;
+                    }
+                case 9: {
+                        message.foulCounter = reader.uint32();
+                        break;
+                    }
+                case 10: {
+                        message.ballPlacementFailures = reader.uint32();
+                        break;
+                    }
+                case 12: {
+                        message.canPlaceBall = reader.bool();
+                        break;
+                    }
+                case 13: {
+                        message.maxAllowedBots = reader.uint32();
+                        break;
+                    }
+                case 14: {
+                        message.botSubstitutionIntent = reader.bool();
+                        break;
+                    }
+                case 15: {
+                        message.ballPlacementFailuresReached = reader.bool();
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -14258,6 +15116,21 @@ export const Referee = $root.Referee = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for TeamInfo
+         * @function getTypeUrl
+         * @memberof Referee.TeamInfo
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        TeamInfo.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/Referee.TeamInfo";
+        };
+
         return TeamInfo;
     })();
 
@@ -14362,12 +15235,14 @@ export const Referee = $root.Referee = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.x = reader.float();
-                    break;
-                case 2:
-                    message.y = reader.float();
-                    break;
+                case 1: {
+                        message.x = reader.float();
+                        break;
+                    }
+                case 2: {
+                        message.y = reader.float();
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -14468,6 +15343,21 @@ export const Referee = $root.Referee = (() => {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        /**
+         * Gets the default type url for Point
+         * @function getTypeUrl
+         * @memberof Referee.Point
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        Point.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/Referee.Point";
+        };
+
         return Point;
     })();
 
@@ -14543,7 +15433,7 @@ export const GameEventProposalGroup = $root.GameEventProposalGroup = (() => {
         if (message.gameEvent != null && message.gameEvent.length)
             for (let i = 0; i < message.gameEvent.length; ++i)
                 $root.GameEvent.encode(message.gameEvent[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-        if (message.accepted != null && message.hasOwnProperty("accepted"))
+        if (message.accepted != null && Object.hasOwnProperty.call(message, "accepted"))
             writer.uint32(/* id 2, wireType 0 =*/16).bool(message.accepted);
         return writer;
     };
@@ -14579,14 +15469,16 @@ export const GameEventProposalGroup = $root.GameEventProposalGroup = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                if (!(message.gameEvent && message.gameEvent.length))
-                    message.gameEvent = [];
-                message.gameEvent.push($root.GameEvent.decode(reader, reader.uint32()));
-                break;
-            case 2:
-                message.accepted = reader.bool();
-                break;
+            case 1: {
+                    if (!(message.gameEvent && message.gameEvent.length))
+                        message.gameEvent = [];
+                    message.gameEvent.push($root.GameEvent.decode(reader, reader.uint32()));
+                    break;
+                }
+            case 2: {
+                    message.accepted = reader.bool();
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -14702,19 +15594,34 @@ export const GameEventProposalGroup = $root.GameEventProposalGroup = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for GameEventProposalGroup
+     * @function getTypeUrl
+     * @memberof GameEventProposalGroup
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    GameEventProposalGroup.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/GameEventProposalGroup";
+    };
+
     return GameEventProposalGroup;
 })();
 
 /**
  * MatchType enum.
  * @exports MatchType
- * @enum {string}
+ * @enum {number}
  * @property {number} UNKNOWN_MATCH=0 UNKNOWN_MATCH value
  * @property {number} GROUP_PHASE=1 GROUP_PHASE value
  * @property {number} ELIMINATION_PHASE=2 ELIMINATION_PHASE value
  * @property {number} FRIENDLY=3 FRIENDLY value
  */
-$root.MatchType = (function() {
+export const MatchType = $root.MatchType = (() => {
     const valuesById = {}, values = Object.create(valuesById);
     values[valuesById[0] = "UNKNOWN_MATCH"] = 0;
     values[valuesById[1] = "GROUP_PHASE"] = 1;
@@ -14815,15 +15722,15 @@ export const StateChange = $root.StateChange = (() => {
     StateChange.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.id != null && message.hasOwnProperty("id"))
+        if (message.id != null && Object.hasOwnProperty.call(message, "id"))
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.id);
-        if (message.statePre != null && message.hasOwnProperty("statePre"))
+        if (message.statePre != null && Object.hasOwnProperty.call(message, "statePre"))
             $root.State.encode(message.statePre, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-        if (message.state != null && message.hasOwnProperty("state"))
+        if (message.state != null && Object.hasOwnProperty.call(message, "state"))
             $root.State.encode(message.state, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-        if (message.change != null && message.hasOwnProperty("change"))
+        if (message.change != null && Object.hasOwnProperty.call(message, "change"))
             $root.Change.encode(message.change, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
-        if (message.timestamp != null && message.hasOwnProperty("timestamp"))
+        if (message.timestamp != null && Object.hasOwnProperty.call(message, "timestamp"))
             $root.google.protobuf.Timestamp.encode(message.timestamp, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
         return writer;
     };
@@ -14859,21 +15766,26 @@ export const StateChange = $root.StateChange = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.id = reader.int32();
-                break;
-            case 2:
-                message.statePre = $root.State.decode(reader, reader.uint32());
-                break;
-            case 3:
-                message.state = $root.State.decode(reader, reader.uint32());
-                break;
-            case 4:
-                message.change = $root.Change.decode(reader, reader.uint32());
-                break;
-            case 5:
-                message.timestamp = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
-                break;
+            case 1: {
+                    message.id = reader.int32();
+                    break;
+                }
+            case 2: {
+                    message.statePre = $root.State.decode(reader, reader.uint32());
+                    break;
+                }
+            case 3: {
+                    message.state = $root.State.decode(reader, reader.uint32());
+                    break;
+                }
+            case 4: {
+                    message.change = $root.Change.decode(reader, reader.uint32());
+                    break;
+                }
+            case 5: {
+                    message.timestamp = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -15014,6 +15926,21 @@ export const StateChange = $root.StateChange = (() => {
      */
     StateChange.prototype.toJSON = function toJSON() {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    /**
+     * Gets the default type url for StateChange
+     * @function getTypeUrl
+     * @memberof StateChange
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    StateChange.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/StateChange";
     };
 
     return StateChange;
@@ -15251,43 +16178,43 @@ export const Change = $root.Change = (() => {
     Change.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.origin != null && message.hasOwnProperty("origin"))
+        if (message.origin != null && Object.hasOwnProperty.call(message, "origin"))
             writer.uint32(/* id 1, wireType 2 =*/10).string(message.origin);
-        if (message.newCommand != null && message.hasOwnProperty("newCommand"))
+        if (message.newCommand != null && Object.hasOwnProperty.call(message, "newCommand"))
             $root.NewCommand.encode(message.newCommand, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-        if (message.changeStage != null && message.hasOwnProperty("changeStage"))
+        if (message.changeStage != null && Object.hasOwnProperty.call(message, "changeStage"))
             $root.ChangeStage.encode(message.changeStage, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-        if (message.setBallPlacementPos != null && message.hasOwnProperty("setBallPlacementPos"))
+        if (message.setBallPlacementPos != null && Object.hasOwnProperty.call(message, "setBallPlacementPos"))
             $root.SetBallPlacementPos.encode(message.setBallPlacementPos, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
-        if (message.addYellowCard != null && message.hasOwnProperty("addYellowCard"))
+        if (message.addYellowCard != null && Object.hasOwnProperty.call(message, "addYellowCard"))
             $root.AddYellowCard.encode(message.addYellowCard, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
-        if (message.addRedCard != null && message.hasOwnProperty("addRedCard"))
+        if (message.addRedCard != null && Object.hasOwnProperty.call(message, "addRedCard"))
             $root.AddRedCard.encode(message.addRedCard, writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
-        if (message.yellowCardOver != null && message.hasOwnProperty("yellowCardOver"))
+        if (message.yellowCardOver != null && Object.hasOwnProperty.call(message, "yellowCardOver"))
             $root.YellowCardOver.encode(message.yellowCardOver, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
-        if (message.addGameEvent != null && message.hasOwnProperty("addGameEvent"))
+        if (message.addGameEvent != null && Object.hasOwnProperty.call(message, "addGameEvent"))
             $root.AddGameEvent.encode(message.addGameEvent, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
-        if (message.addProposal != null && message.hasOwnProperty("addProposal"))
+        if (message.addProposal != null && Object.hasOwnProperty.call(message, "addProposal"))
             $root.AddProposal.encode(message.addProposal, writer.uint32(/* id 9, wireType 2 =*/74).fork()).ldelim();
-        if (message.startBallPlacement != null && message.hasOwnProperty("startBallPlacement"))
+        if (message.startBallPlacement != null && Object.hasOwnProperty.call(message, "startBallPlacement"))
             $root.StartBallPlacement.encode(message.startBallPlacement, writer.uint32(/* id 10, wireType 2 =*/82).fork()).ldelim();
-        if (message["continue"] != null && message.hasOwnProperty("continue"))
+        if (message["continue"] != null && Object.hasOwnProperty.call(message, "continue"))
             $root.Continue.encode(message["continue"], writer.uint32(/* id 11, wireType 2 =*/90).fork()).ldelim();
-        if (message.updateConfig != null && message.hasOwnProperty("updateConfig"))
+        if (message.updateConfig != null && Object.hasOwnProperty.call(message, "updateConfig"))
             $root.UpdateConfig.encode(message.updateConfig, writer.uint32(/* id 12, wireType 2 =*/98).fork()).ldelim();
-        if (message.updateTeamState != null && message.hasOwnProperty("updateTeamState"))
+        if (message.updateTeamState != null && Object.hasOwnProperty.call(message, "updateTeamState"))
             $root.UpdateTeamState.encode(message.updateTeamState, writer.uint32(/* id 13, wireType 2 =*/106).fork()).ldelim();
-        if (message.switchColors != null && message.hasOwnProperty("switchColors"))
+        if (message.switchColors != null && Object.hasOwnProperty.call(message, "switchColors"))
             $root.SwitchColors.encode(message.switchColors, writer.uint32(/* id 14, wireType 2 =*/114).fork()).ldelim();
-        if (message.revert != null && message.hasOwnProperty("revert"))
+        if (message.revert != null && Object.hasOwnProperty.call(message, "revert"))
             $root.Revert.encode(message.revert, writer.uint32(/* id 15, wireType 2 =*/122).fork()).ldelim();
-        if (message.revertible != null && message.hasOwnProperty("revertible"))
+        if (message.revertible != null && Object.hasOwnProperty.call(message, "revertible"))
             writer.uint32(/* id 16, wireType 0 =*/128).bool(message.revertible);
-        if (message.newGameState != null && message.hasOwnProperty("newGameState"))
+        if (message.newGameState != null && Object.hasOwnProperty.call(message, "newGameState"))
             $root.NewGameState.encode(message.newGameState, writer.uint32(/* id 17, wireType 2 =*/138).fork()).ldelim();
-        if (message.acceptProposalGroup != null && message.hasOwnProperty("acceptProposalGroup"))
+        if (message.acceptProposalGroup != null && Object.hasOwnProperty.call(message, "acceptProposalGroup"))
             $root.AcceptProposalGroup.encode(message.acceptProposalGroup, writer.uint32(/* id 18, wireType 2 =*/146).fork()).ldelim();
-        if (message.addPassiveGameEvent != null && message.hasOwnProperty("addPassiveGameEvent"))
+        if (message.addPassiveGameEvent != null && Object.hasOwnProperty.call(message, "addPassiveGameEvent"))
             $root.AddPassiveGameEvent.encode(message.addPassiveGameEvent, writer.uint32(/* id 19, wireType 2 =*/154).fork()).ldelim();
         return writer;
     };
@@ -15323,63 +16250,82 @@ export const Change = $root.Change = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.origin = reader.string();
-                break;
-            case 16:
-                message.revertible = reader.bool();
-                break;
-            case 2:
-                message.newCommand = $root.NewCommand.decode(reader, reader.uint32());
-                break;
-            case 3:
-                message.changeStage = $root.ChangeStage.decode(reader, reader.uint32());
-                break;
-            case 4:
-                message.setBallPlacementPos = $root.SetBallPlacementPos.decode(reader, reader.uint32());
-                break;
-            case 5:
-                message.addYellowCard = $root.AddYellowCard.decode(reader, reader.uint32());
-                break;
-            case 6:
-                message.addRedCard = $root.AddRedCard.decode(reader, reader.uint32());
-                break;
-            case 7:
-                message.yellowCardOver = $root.YellowCardOver.decode(reader, reader.uint32());
-                break;
-            case 8:
-                message.addGameEvent = $root.AddGameEvent.decode(reader, reader.uint32());
-                break;
-            case 19:
-                message.addPassiveGameEvent = $root.AddPassiveGameEvent.decode(reader, reader.uint32());
-                break;
-            case 9:
-                message.addProposal = $root.AddProposal.decode(reader, reader.uint32());
-                break;
-            case 10:
-                message.startBallPlacement = $root.StartBallPlacement.decode(reader, reader.uint32());
-                break;
-            case 11:
-                message["continue"] = $root.Continue.decode(reader, reader.uint32());
-                break;
-            case 12:
-                message.updateConfig = $root.UpdateConfig.decode(reader, reader.uint32());
-                break;
-            case 13:
-                message.updateTeamState = $root.UpdateTeamState.decode(reader, reader.uint32());
-                break;
-            case 14:
-                message.switchColors = $root.SwitchColors.decode(reader, reader.uint32());
-                break;
-            case 15:
-                message.revert = $root.Revert.decode(reader, reader.uint32());
-                break;
-            case 17:
-                message.newGameState = $root.NewGameState.decode(reader, reader.uint32());
-                break;
-            case 18:
-                message.acceptProposalGroup = $root.AcceptProposalGroup.decode(reader, reader.uint32());
-                break;
+            case 1: {
+                    message.origin = reader.string();
+                    break;
+                }
+            case 16: {
+                    message.revertible = reader.bool();
+                    break;
+                }
+            case 2: {
+                    message.newCommand = $root.NewCommand.decode(reader, reader.uint32());
+                    break;
+                }
+            case 3: {
+                    message.changeStage = $root.ChangeStage.decode(reader, reader.uint32());
+                    break;
+                }
+            case 4: {
+                    message.setBallPlacementPos = $root.SetBallPlacementPos.decode(reader, reader.uint32());
+                    break;
+                }
+            case 5: {
+                    message.addYellowCard = $root.AddYellowCard.decode(reader, reader.uint32());
+                    break;
+                }
+            case 6: {
+                    message.addRedCard = $root.AddRedCard.decode(reader, reader.uint32());
+                    break;
+                }
+            case 7: {
+                    message.yellowCardOver = $root.YellowCardOver.decode(reader, reader.uint32());
+                    break;
+                }
+            case 8: {
+                    message.addGameEvent = $root.AddGameEvent.decode(reader, reader.uint32());
+                    break;
+                }
+            case 19: {
+                    message.addPassiveGameEvent = $root.AddPassiveGameEvent.decode(reader, reader.uint32());
+                    break;
+                }
+            case 9: {
+                    message.addProposal = $root.AddProposal.decode(reader, reader.uint32());
+                    break;
+                }
+            case 10: {
+                    message.startBallPlacement = $root.StartBallPlacement.decode(reader, reader.uint32());
+                    break;
+                }
+            case 11: {
+                    message["continue"] = $root.Continue.decode(reader, reader.uint32());
+                    break;
+                }
+            case 12: {
+                    message.updateConfig = $root.UpdateConfig.decode(reader, reader.uint32());
+                    break;
+                }
+            case 13: {
+                    message.updateTeamState = $root.UpdateTeamState.decode(reader, reader.uint32());
+                    break;
+                }
+            case 14: {
+                    message.switchColors = $root.SwitchColors.decode(reader, reader.uint32());
+                    break;
+                }
+            case 15: {
+                    message.revert = $root.Revert.decode(reader, reader.uint32());
+                    break;
+                }
+            case 17: {
+                    message.newGameState = $root.NewGameState.decode(reader, reader.uint32());
+                    break;
+                }
+            case 18: {
+                    message.acceptProposalGroup = $root.AcceptProposalGroup.decode(reader, reader.uint32());
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -15817,6 +16763,21 @@ export const Change = $root.Change = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for Change
+     * @function getTypeUrl
+     * @memberof Change
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    Change.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/Change";
+    };
+
     return Change;
 })();
 
@@ -15876,7 +16837,7 @@ export const NewCommand = $root.NewCommand = (() => {
     NewCommand.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.command != null && message.hasOwnProperty("command"))
+        if (message.command != null && Object.hasOwnProperty.call(message, "command"))
             $root.Command.encode(message.command, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
         return writer;
     };
@@ -15912,9 +16873,10 @@ export const NewCommand = $root.NewCommand = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.command = $root.Command.decode(reader, reader.uint32());
-                break;
+            case 1: {
+                    message.command = $root.Command.decode(reader, reader.uint32());
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -16009,6 +16971,21 @@ export const NewCommand = $root.NewCommand = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for NewCommand
+     * @function getTypeUrl
+     * @memberof NewCommand
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    NewCommand.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/NewCommand";
+    };
+
     return NewCommand;
 })();
 
@@ -16068,7 +17045,7 @@ export const ChangeStage = $root.ChangeStage = (() => {
     ChangeStage.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.newStage != null && message.hasOwnProperty("newStage"))
+        if (message.newStage != null && Object.hasOwnProperty.call(message, "newStage"))
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.newStage);
         return writer;
     };
@@ -16104,9 +17081,10 @@ export const ChangeStage = $root.ChangeStage = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.newStage = reader.int32();
-                break;
+            case 1: {
+                    message.newStage = reader.int32();
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -16269,6 +17247,21 @@ export const ChangeStage = $root.ChangeStage = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for ChangeStage
+     * @function getTypeUrl
+     * @memberof ChangeStage
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    ChangeStage.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/ChangeStage";
+    };
+
     return ChangeStage;
 })();
 
@@ -16328,7 +17321,7 @@ export const SetBallPlacementPos = $root.SetBallPlacementPos = (() => {
     SetBallPlacementPos.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.pos != null && message.hasOwnProperty("pos"))
+        if (message.pos != null && Object.hasOwnProperty.call(message, "pos"))
             $root.Vector2.encode(message.pos, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
         return writer;
     };
@@ -16364,9 +17357,10 @@ export const SetBallPlacementPos = $root.SetBallPlacementPos = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.pos = $root.Vector2.decode(reader, reader.uint32());
-                break;
+            case 1: {
+                    message.pos = $root.Vector2.decode(reader, reader.uint32());
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -16461,6 +17455,21 @@ export const SetBallPlacementPos = $root.SetBallPlacementPos = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for SetBallPlacementPos
+     * @function getTypeUrl
+     * @memberof SetBallPlacementPos
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    SetBallPlacementPos.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/SetBallPlacementPos";
+    };
+
     return SetBallPlacementPos;
 })();
 
@@ -16529,9 +17538,9 @@ export const AddYellowCard = $root.AddYellowCard = (() => {
     AddYellowCard.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.forTeam != null && message.hasOwnProperty("forTeam"))
+        if (message.forTeam != null && Object.hasOwnProperty.call(message, "forTeam"))
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.forTeam);
-        if (message.causedByGameEvent != null && message.hasOwnProperty("causedByGameEvent"))
+        if (message.causedByGameEvent != null && Object.hasOwnProperty.call(message, "causedByGameEvent"))
             $root.GameEvent.encode(message.causedByGameEvent, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
         return writer;
     };
@@ -16567,12 +17576,14 @@ export const AddYellowCard = $root.AddYellowCard = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.forTeam = reader.int32();
-                break;
-            case 2:
-                message.causedByGameEvent = $root.GameEvent.decode(reader, reader.uint32());
-                break;
+            case 1: {
+                    message.forTeam = reader.int32();
+                    break;
+                }
+            case 2: {
+                    message.causedByGameEvent = $root.GameEvent.decode(reader, reader.uint32());
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -16694,6 +17705,21 @@ export const AddYellowCard = $root.AddYellowCard = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for AddYellowCard
+     * @function getTypeUrl
+     * @memberof AddYellowCard
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    AddYellowCard.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/AddYellowCard";
+    };
+
     return AddYellowCard;
 })();
 
@@ -16762,9 +17788,9 @@ export const AddRedCard = $root.AddRedCard = (() => {
     AddRedCard.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.forTeam != null && message.hasOwnProperty("forTeam"))
+        if (message.forTeam != null && Object.hasOwnProperty.call(message, "forTeam"))
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.forTeam);
-        if (message.causedByGameEvent != null && message.hasOwnProperty("causedByGameEvent"))
+        if (message.causedByGameEvent != null && Object.hasOwnProperty.call(message, "causedByGameEvent"))
             $root.GameEvent.encode(message.causedByGameEvent, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
         return writer;
     };
@@ -16800,12 +17826,14 @@ export const AddRedCard = $root.AddRedCard = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.forTeam = reader.int32();
-                break;
-            case 2:
-                message.causedByGameEvent = $root.GameEvent.decode(reader, reader.uint32());
-                break;
+            case 1: {
+                    message.forTeam = reader.int32();
+                    break;
+                }
+            case 2: {
+                    message.causedByGameEvent = $root.GameEvent.decode(reader, reader.uint32());
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -16927,6 +17955,21 @@ export const AddRedCard = $root.AddRedCard = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for AddRedCard
+     * @function getTypeUrl
+     * @memberof AddRedCard
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    AddRedCard.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/AddRedCard";
+    };
+
     return AddRedCard;
 })();
 
@@ -16986,7 +18029,7 @@ export const YellowCardOver = $root.YellowCardOver = (() => {
     YellowCardOver.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.forTeam != null && message.hasOwnProperty("forTeam"))
+        if (message.forTeam != null && Object.hasOwnProperty.call(message, "forTeam"))
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.forTeam);
         return writer;
     };
@@ -17022,9 +18065,10 @@ export const YellowCardOver = $root.YellowCardOver = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.forTeam = reader.int32();
-                break;
+            case 1: {
+                    message.forTeam = reader.int32();
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -17132,6 +18176,21 @@ export const YellowCardOver = $root.YellowCardOver = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for YellowCardOver
+     * @function getTypeUrl
+     * @memberof YellowCardOver
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    YellowCardOver.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/YellowCardOver";
+    };
+
     return YellowCardOver;
 })();
 
@@ -17191,7 +18250,7 @@ export const AddGameEvent = $root.AddGameEvent = (() => {
     AddGameEvent.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.gameEvent != null && message.hasOwnProperty("gameEvent"))
+        if (message.gameEvent != null && Object.hasOwnProperty.call(message, "gameEvent"))
             $root.GameEvent.encode(message.gameEvent, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
         return writer;
     };
@@ -17227,9 +18286,10 @@ export const AddGameEvent = $root.AddGameEvent = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.gameEvent = $root.GameEvent.decode(reader, reader.uint32());
-                break;
+            case 1: {
+                    message.gameEvent = $root.GameEvent.decode(reader, reader.uint32());
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -17324,6 +18384,21 @@ export const AddGameEvent = $root.AddGameEvent = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for AddGameEvent
+     * @function getTypeUrl
+     * @memberof AddGameEvent
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    AddGameEvent.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/AddGameEvent";
+    };
+
     return AddGameEvent;
 })();
 
@@ -17383,7 +18458,7 @@ export const AddPassiveGameEvent = $root.AddPassiveGameEvent = (() => {
     AddPassiveGameEvent.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.gameEvent != null && message.hasOwnProperty("gameEvent"))
+        if (message.gameEvent != null && Object.hasOwnProperty.call(message, "gameEvent"))
             $root.GameEvent.encode(message.gameEvent, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
         return writer;
     };
@@ -17419,9 +18494,10 @@ export const AddPassiveGameEvent = $root.AddPassiveGameEvent = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.gameEvent = $root.GameEvent.decode(reader, reader.uint32());
-                break;
+            case 1: {
+                    message.gameEvent = $root.GameEvent.decode(reader, reader.uint32());
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -17516,6 +18592,21 @@ export const AddPassiveGameEvent = $root.AddPassiveGameEvent = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for AddPassiveGameEvent
+     * @function getTypeUrl
+     * @memberof AddPassiveGameEvent
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    AddPassiveGameEvent.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/AddPassiveGameEvent";
+    };
+
     return AddPassiveGameEvent;
 })();
 
@@ -17575,7 +18666,7 @@ export const AddProposal = $root.AddProposal = (() => {
     AddProposal.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.proposal != null && message.hasOwnProperty("proposal"))
+        if (message.proposal != null && Object.hasOwnProperty.call(message, "proposal"))
             $root.Proposal.encode(message.proposal, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
         return writer;
     };
@@ -17611,9 +18702,10 @@ export const AddProposal = $root.AddProposal = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.proposal = $root.Proposal.decode(reader, reader.uint32());
-                break;
+            case 1: {
+                    message.proposal = $root.Proposal.decode(reader, reader.uint32());
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -17708,6 +18800,21 @@ export const AddProposal = $root.AddProposal = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for AddProposal
+     * @function getTypeUrl
+     * @memberof AddProposal
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    AddProposal.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/AddProposal";
+    };
+
     return AddProposal;
 })();
 
@@ -17776,9 +18883,9 @@ export const AcceptProposalGroup = $root.AcceptProposalGroup = (() => {
     AcceptProposalGroup.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.groupId != null && message.hasOwnProperty("groupId"))
+        if (message.groupId != null && Object.hasOwnProperty.call(message, "groupId"))
             writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.groupId);
-        if (message.acceptedBy != null && message.hasOwnProperty("acceptedBy"))
+        if (message.acceptedBy != null && Object.hasOwnProperty.call(message, "acceptedBy"))
             writer.uint32(/* id 2, wireType 2 =*/18).string(message.acceptedBy);
         return writer;
     };
@@ -17814,12 +18921,14 @@ export const AcceptProposalGroup = $root.AcceptProposalGroup = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.groupId = reader.uint32();
-                break;
-            case 2:
-                message.acceptedBy = reader.string();
-                break;
+            case 1: {
+                    message.groupId = reader.uint32();
+                    break;
+                }
+            case 2: {
+                    message.acceptedBy = reader.string();
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -17916,6 +19025,21 @@ export const AcceptProposalGroup = $root.AcceptProposalGroup = (() => {
      */
     AcceptProposalGroup.prototype.toJSON = function toJSON() {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    /**
+     * Gets the default type url for AcceptProposalGroup
+     * @function getTypeUrl
+     * @memberof AcceptProposalGroup
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    AcceptProposalGroup.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/AcceptProposalGroup";
     };
 
     return AcceptProposalGroup;
@@ -18078,6 +19202,21 @@ export const StartBallPlacement = $root.StartBallPlacement = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for StartBallPlacement
+     * @function getTypeUrl
+     * @memberof StartBallPlacement
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    StartBallPlacement.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/StartBallPlacement";
+    };
+
     return StartBallPlacement;
 })();
 
@@ -18238,6 +19377,21 @@ export const Continue = $root.Continue = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for Continue
+     * @function getTypeUrl
+     * @memberof Continue
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    Continue.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/Continue";
+    };
+
     return Continue;
 })();
 
@@ -18324,13 +19478,13 @@ export const UpdateConfig = $root.UpdateConfig = (() => {
     UpdateConfig.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.division != null && message.hasOwnProperty("division"))
+        if (message.division != null && Object.hasOwnProperty.call(message, "division"))
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.division);
-        if (message.firstKickoffTeam != null && message.hasOwnProperty("firstKickoffTeam"))
+        if (message.firstKickoffTeam != null && Object.hasOwnProperty.call(message, "firstKickoffTeam"))
             writer.uint32(/* id 2, wireType 0 =*/16).int32(message.firstKickoffTeam);
-        if (message.autoContinue != null && message.hasOwnProperty("autoContinue"))
+        if (message.autoContinue != null && Object.hasOwnProperty.call(message, "autoContinue"))
             writer.uint32(/* id 3, wireType 0 =*/24).bool(message.autoContinue);
-        if (message.matchType != null && message.hasOwnProperty("matchType"))
+        if (message.matchType != null && Object.hasOwnProperty.call(message, "matchType"))
             writer.uint32(/* id 4, wireType 0 =*/32).int32(message.matchType);
         return writer;
     };
@@ -18366,18 +19520,22 @@ export const UpdateConfig = $root.UpdateConfig = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.division = reader.int32();
-                break;
-            case 2:
-                message.firstKickoffTeam = reader.int32();
-                break;
-            case 3:
-                message.autoContinue = reader.bool();
-                break;
-            case 4:
-                message.matchType = reader.int32();
-                break;
+            case 1: {
+                    message.division = reader.int32();
+                    break;
+                }
+            case 2: {
+                    message.firstKickoffTeam = reader.int32();
+                    break;
+                }
+            case 3: {
+                    message.autoContinue = reader.bool();
+                    break;
+                }
+            case 4: {
+                    message.matchType = reader.int32();
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -18549,6 +19707,21 @@ export const UpdateConfig = $root.UpdateConfig = (() => {
      */
     UpdateConfig.prototype.toJSON = function toJSON() {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    /**
+     * Gets the default type url for UpdateConfig
+     * @function getTypeUrl
+     * @memberof UpdateConfig
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    UpdateConfig.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/UpdateConfig";
     };
 
     return UpdateConfig;
@@ -18781,45 +19954,45 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
     UpdateTeamState.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.forTeam != null && message.hasOwnProperty("forTeam"))
+        if (message.forTeam != null && Object.hasOwnProperty.call(message, "forTeam"))
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.forTeam);
-        if (message.teamName != null && message.hasOwnProperty("teamName"))
+        if (message.teamName != null && Object.hasOwnProperty.call(message, "teamName"))
             writer.uint32(/* id 2, wireType 2 =*/18).string(message.teamName);
-        if (message.goals != null && message.hasOwnProperty("goals"))
+        if (message.goals != null && Object.hasOwnProperty.call(message, "goals"))
             writer.uint32(/* id 3, wireType 0 =*/24).int32(message.goals);
-        if (message.goalkeeper != null && message.hasOwnProperty("goalkeeper"))
+        if (message.goalkeeper != null && Object.hasOwnProperty.call(message, "goalkeeper"))
             writer.uint32(/* id 4, wireType 0 =*/32).int32(message.goalkeeper);
-        if (message.timeoutsLeft != null && message.hasOwnProperty("timeoutsLeft"))
+        if (message.timeoutsLeft != null && Object.hasOwnProperty.call(message, "timeoutsLeft"))
             writer.uint32(/* id 5, wireType 0 =*/40).int32(message.timeoutsLeft);
-        if (message.timeoutTimeLeft != null && message.hasOwnProperty("timeoutTimeLeft"))
+        if (message.timeoutTimeLeft != null && Object.hasOwnProperty.call(message, "timeoutTimeLeft"))
             writer.uint32(/* id 6, wireType 2 =*/50).string(message.timeoutTimeLeft);
-        if (message.onPositiveHalf != null && message.hasOwnProperty("onPositiveHalf"))
+        if (message.onPositiveHalf != null && Object.hasOwnProperty.call(message, "onPositiveHalf"))
             writer.uint32(/* id 7, wireType 0 =*/56).bool(message.onPositiveHalf);
-        if (message.ballPlacementFailures != null && message.hasOwnProperty("ballPlacementFailures"))
+        if (message.ballPlacementFailures != null && Object.hasOwnProperty.call(message, "ballPlacementFailures"))
             writer.uint32(/* id 8, wireType 0 =*/64).int32(message.ballPlacementFailures);
-        if (message.canPlaceBall != null && message.hasOwnProperty("canPlaceBall"))
+        if (message.canPlaceBall != null && Object.hasOwnProperty.call(message, "canPlaceBall"))
             writer.uint32(/* id 9, wireType 0 =*/72).bool(message.canPlaceBall);
-        if (message.requestsBotSubstitution != null && message.hasOwnProperty("requestsBotSubstitution"))
+        if (message.requestsBotSubstitution != null && Object.hasOwnProperty.call(message, "requestsBotSubstitution"))
             writer.uint32(/* id 10, wireType 0 =*/80).bool(message.requestsBotSubstitution);
-        if (message.redCard != null && message.hasOwnProperty("redCard"))
+        if (message.redCard != null && Object.hasOwnProperty.call(message, "redCard"))
             $root.RedCard.encode(message.redCard, writer.uint32(/* id 12, wireType 2 =*/98).fork()).ldelim();
-        if (message.foul != null && message.hasOwnProperty("foul"))
+        if (message.foul != null && Object.hasOwnProperty.call(message, "foul"))
             $root.Foul.encode(message.foul, writer.uint32(/* id 13, wireType 2 =*/106).fork()).ldelim();
-        if (message.removeYellowCard != null && message.hasOwnProperty("removeYellowCard"))
+        if (message.removeYellowCard != null && Object.hasOwnProperty.call(message, "removeYellowCard"))
             writer.uint32(/* id 14, wireType 0 =*/112).uint32(message.removeYellowCard);
-        if (message.removeRedCard != null && message.hasOwnProperty("removeRedCard"))
+        if (message.removeRedCard != null && Object.hasOwnProperty.call(message, "removeRedCard"))
             writer.uint32(/* id 15, wireType 0 =*/120).uint32(message.removeRedCard);
-        if (message.removeFoul != null && message.hasOwnProperty("removeFoul"))
+        if (message.removeFoul != null && Object.hasOwnProperty.call(message, "removeFoul"))
             writer.uint32(/* id 16, wireType 0 =*/128).uint32(message.removeFoul);
-        if (message.requestsTimeout != null && message.hasOwnProperty("requestsTimeout"))
+        if (message.requestsTimeout != null && Object.hasOwnProperty.call(message, "requestsTimeout"))
             writer.uint32(/* id 17, wireType 0 =*/136).bool(message.requestsTimeout);
-        if (message.requestsChallenge != null && message.hasOwnProperty("requestsChallenge"))
+        if (message.requestsChallenge != null && Object.hasOwnProperty.call(message, "requestsChallenge"))
             writer.uint32(/* id 18, wireType 0 =*/144).bool(message.requestsChallenge);
-        if (message.requestsEmergencyStop != null && message.hasOwnProperty("requestsEmergencyStop"))
+        if (message.requestsEmergencyStop != null && Object.hasOwnProperty.call(message, "requestsEmergencyStop"))
             writer.uint32(/* id 19, wireType 0 =*/152).bool(message.requestsEmergencyStop);
-        if (message.yellowCard != null && message.hasOwnProperty("yellowCard"))
+        if (message.yellowCard != null && Object.hasOwnProperty.call(message, "yellowCard"))
             $root.YellowCard.encode(message.yellowCard, writer.uint32(/* id 20, wireType 2 =*/162).fork()).ldelim();
-        if (message.challengeFlagsLeft != null && message.hasOwnProperty("challengeFlagsLeft"))
+        if (message.challengeFlagsLeft != null && Object.hasOwnProperty.call(message, "challengeFlagsLeft"))
             writer.uint32(/* id 21, wireType 0 =*/168).int32(message.challengeFlagsLeft);
         return writer;
     };
@@ -18855,66 +20028,86 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.forTeam = reader.int32();
-                break;
-            case 2:
-                message.teamName = reader.string();
-                break;
-            case 3:
-                message.goals = reader.int32();
-                break;
-            case 4:
-                message.goalkeeper = reader.int32();
-                break;
-            case 5:
-                message.timeoutsLeft = reader.int32();
-                break;
-            case 6:
-                message.timeoutTimeLeft = reader.string();
-                break;
-            case 7:
-                message.onPositiveHalf = reader.bool();
-                break;
-            case 8:
-                message.ballPlacementFailures = reader.int32();
-                break;
-            case 9:
-                message.canPlaceBall = reader.bool();
-                break;
-            case 21:
-                message.challengeFlagsLeft = reader.int32();
-                break;
-            case 10:
-                message.requestsBotSubstitution = reader.bool();
-                break;
-            case 17:
-                message.requestsTimeout = reader.bool();
-                break;
-            case 18:
-                message.requestsChallenge = reader.bool();
-                break;
-            case 19:
-                message.requestsEmergencyStop = reader.bool();
-                break;
-            case 20:
-                message.yellowCard = $root.YellowCard.decode(reader, reader.uint32());
-                break;
-            case 12:
-                message.redCard = $root.RedCard.decode(reader, reader.uint32());
-                break;
-            case 13:
-                message.foul = $root.Foul.decode(reader, reader.uint32());
-                break;
-            case 14:
-                message.removeYellowCard = reader.uint32();
-                break;
-            case 15:
-                message.removeRedCard = reader.uint32();
-                break;
-            case 16:
-                message.removeFoul = reader.uint32();
-                break;
+            case 1: {
+                    message.forTeam = reader.int32();
+                    break;
+                }
+            case 2: {
+                    message.teamName = reader.string();
+                    break;
+                }
+            case 3: {
+                    message.goals = reader.int32();
+                    break;
+                }
+            case 4: {
+                    message.goalkeeper = reader.int32();
+                    break;
+                }
+            case 5: {
+                    message.timeoutsLeft = reader.int32();
+                    break;
+                }
+            case 6: {
+                    message.timeoutTimeLeft = reader.string();
+                    break;
+                }
+            case 7: {
+                    message.onPositiveHalf = reader.bool();
+                    break;
+                }
+            case 8: {
+                    message.ballPlacementFailures = reader.int32();
+                    break;
+                }
+            case 9: {
+                    message.canPlaceBall = reader.bool();
+                    break;
+                }
+            case 21: {
+                    message.challengeFlagsLeft = reader.int32();
+                    break;
+                }
+            case 10: {
+                    message.requestsBotSubstitution = reader.bool();
+                    break;
+                }
+            case 17: {
+                    message.requestsTimeout = reader.bool();
+                    break;
+                }
+            case 18: {
+                    message.requestsChallenge = reader.bool();
+                    break;
+                }
+            case 19: {
+                    message.requestsEmergencyStop = reader.bool();
+                    break;
+                }
+            case 20: {
+                    message.yellowCard = $root.YellowCard.decode(reader, reader.uint32());
+                    break;
+                }
+            case 12: {
+                    message.redCard = $root.RedCard.decode(reader, reader.uint32());
+                    break;
+                }
+            case 13: {
+                    message.foul = $root.Foul.decode(reader, reader.uint32());
+                    break;
+                }
+            case 14: {
+                    message.removeYellowCard = reader.uint32();
+                    break;
+                }
+            case 15: {
+                    message.removeRedCard = reader.uint32();
+                    break;
+                }
+            case 16: {
+                    message.removeFoul = reader.uint32();
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -19190,6 +20383,21 @@ export const UpdateTeamState = $root.UpdateTeamState = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for UpdateTeamState
+     * @function getTypeUrl
+     * @memberof UpdateTeamState
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    UpdateTeamState.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/UpdateTeamState";
+    };
+
     return UpdateTeamState;
 })();
 
@@ -19350,6 +20558,21 @@ export const SwitchColors = $root.SwitchColors = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for SwitchColors
+     * @function getTypeUrl
+     * @memberof SwitchColors
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    SwitchColors.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/SwitchColors";
+    };
+
     return SwitchColors;
 })();
 
@@ -19409,7 +20632,7 @@ export const Revert = $root.Revert = (() => {
     Revert.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.changeId != null && message.hasOwnProperty("changeId"))
+        if (message.changeId != null && Object.hasOwnProperty.call(message, "changeId"))
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.changeId);
         return writer;
     };
@@ -19445,9 +20668,10 @@ export const Revert = $root.Revert = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.changeId = reader.int32();
-                break;
+            case 1: {
+                    message.changeId = reader.int32();
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -19537,6 +20761,21 @@ export const Revert = $root.Revert = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for Revert
+     * @function getTypeUrl
+     * @memberof Revert
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    Revert.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/Revert";
+    };
+
     return Revert;
 })();
 
@@ -19596,7 +20835,7 @@ export const NewGameState = $root.NewGameState = (() => {
     NewGameState.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.gameState != null && message.hasOwnProperty("gameState"))
+        if (message.gameState != null && Object.hasOwnProperty.call(message, "gameState"))
             $root.GameState.encode(message.gameState, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
         return writer;
     };
@@ -19632,9 +20871,10 @@ export const NewGameState = $root.NewGameState = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.gameState = $root.GameState.decode(reader, reader.uint32());
-                break;
+            case 1: {
+                    message.gameState = $root.GameState.decode(reader, reader.uint32());
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -19729,6 +20969,21 @@ export const NewGameState = $root.NewGameState = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for NewGameState
+     * @function getTypeUrl
+     * @memberof NewGameState
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    NewGameState.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/NewGameState";
+    };
+
     return NewGameState;
 })();
 
@@ -19806,11 +21061,11 @@ export const YellowCard = $root.YellowCard = (() => {
     YellowCard.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.id != null && message.hasOwnProperty("id"))
+        if (message.id != null && Object.hasOwnProperty.call(message, "id"))
             writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.id);
-        if (message.causedByGameEvent != null && message.hasOwnProperty("causedByGameEvent"))
+        if (message.causedByGameEvent != null && Object.hasOwnProperty.call(message, "causedByGameEvent"))
             $root.GameEvent.encode(message.causedByGameEvent, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-        if (message.timeRemaining != null && message.hasOwnProperty("timeRemaining"))
+        if (message.timeRemaining != null && Object.hasOwnProperty.call(message, "timeRemaining"))
             $root.google.protobuf.Duration.encode(message.timeRemaining, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
         return writer;
     };
@@ -19846,15 +21101,18 @@ export const YellowCard = $root.YellowCard = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.id = reader.uint32();
-                break;
-            case 2:
-                message.causedByGameEvent = $root.GameEvent.decode(reader, reader.uint32());
-                break;
-            case 3:
-                message.timeRemaining = $root.google.protobuf.Duration.decode(reader, reader.uint32());
-                break;
+            case 1: {
+                    message.id = reader.uint32();
+                    break;
+                }
+            case 2: {
+                    message.causedByGameEvent = $root.GameEvent.decode(reader, reader.uint32());
+                    break;
+                }
+            case 3: {
+                    message.timeRemaining = $root.google.protobuf.Duration.decode(reader, reader.uint32());
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -19971,6 +21229,21 @@ export const YellowCard = $root.YellowCard = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for YellowCard
+     * @function getTypeUrl
+     * @memberof YellowCard
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    YellowCard.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/YellowCard";
+    };
+
     return YellowCard;
 })();
 
@@ -20039,9 +21312,9 @@ export const RedCard = $root.RedCard = (() => {
     RedCard.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.id != null && message.hasOwnProperty("id"))
+        if (message.id != null && Object.hasOwnProperty.call(message, "id"))
             writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.id);
-        if (message.causedByGameEvent != null && message.hasOwnProperty("causedByGameEvent"))
+        if (message.causedByGameEvent != null && Object.hasOwnProperty.call(message, "causedByGameEvent"))
             $root.GameEvent.encode(message.causedByGameEvent, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
         return writer;
     };
@@ -20077,12 +21350,14 @@ export const RedCard = $root.RedCard = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.id = reader.uint32();
-                break;
-            case 2:
-                message.causedByGameEvent = $root.GameEvent.decode(reader, reader.uint32());
-                break;
+            case 1: {
+                    message.id = reader.uint32();
+                    break;
+                }
+            case 2: {
+                    message.causedByGameEvent = $root.GameEvent.decode(reader, reader.uint32());
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -20186,6 +21461,21 @@ export const RedCard = $root.RedCard = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for RedCard
+     * @function getTypeUrl
+     * @memberof RedCard
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    RedCard.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/RedCard";
+    };
+
     return RedCard;
 })();
 
@@ -20263,11 +21553,11 @@ export const Foul = $root.Foul = (() => {
     Foul.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.id != null && message.hasOwnProperty("id"))
+        if (message.id != null && Object.hasOwnProperty.call(message, "id"))
             writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.id);
-        if (message.causedByGameEvent != null && message.hasOwnProperty("causedByGameEvent"))
+        if (message.causedByGameEvent != null && Object.hasOwnProperty.call(message, "causedByGameEvent"))
             $root.GameEvent.encode(message.causedByGameEvent, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-        if (message.timestamp != null && message.hasOwnProperty("timestamp"))
+        if (message.timestamp != null && Object.hasOwnProperty.call(message, "timestamp"))
             $root.google.protobuf.Timestamp.encode(message.timestamp, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
         return writer;
     };
@@ -20303,15 +21593,18 @@ export const Foul = $root.Foul = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.id = reader.uint32();
-                break;
-            case 2:
-                message.causedByGameEvent = $root.GameEvent.decode(reader, reader.uint32());
-                break;
-            case 3:
-                message.timestamp = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
-                break;
+            case 1: {
+                    message.id = reader.uint32();
+                    break;
+                }
+            case 2: {
+                    message.causedByGameEvent = $root.GameEvent.decode(reader, reader.uint32());
+                    break;
+                }
+            case 3: {
+                    message.timestamp = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -20428,6 +21721,21 @@ export const Foul = $root.Foul = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for Foul
+     * @function getTypeUrl
+     * @memberof Foul
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    Foul.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/Foul";
+    };
+
     return Foul;
 })();
 
@@ -20497,7 +21805,7 @@ export const Command = $root.Command = (() => {
         if (!writer)
             writer = $Writer.create();
         writer.uint32(/* id 1, wireType 0 =*/8).int32(message.type);
-        if (message.forTeam != null && message.hasOwnProperty("forTeam"))
+        if (message.forTeam != null && Object.hasOwnProperty.call(message, "forTeam"))
             writer.uint32(/* id 2, wireType 0 =*/16).int32(message.forTeam);
         return writer;
     };
@@ -20533,12 +21841,14 @@ export const Command = $root.Command = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.type = reader.int32();
-                break;
-            case 2:
-                message.forTeam = reader.int32();
-                break;
+            case 1: {
+                    message.type = reader.int32();
+                    break;
+                }
+            case 2: {
+                    message.forTeam = reader.int32();
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -20715,9 +22025,24 @@ export const Command = $root.Command = (() => {
     };
 
     /**
+     * Gets the default type url for Command
+     * @function getTypeUrl
+     * @memberof Command
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    Command.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/Command";
+    };
+
+    /**
      * Type enum.
      * @name Command.Type
-     * @enum {string}
+     * @enum {number}
      * @property {number} UNKNOWN=0 UNKNOWN value
      * @property {number} HALT=1 HALT value
      * @property {number} STOP=2 STOP value
@@ -20815,7 +22140,7 @@ export const GameState = $root.GameState = (() => {
         if (!writer)
             writer = $Writer.create();
         writer.uint32(/* id 1, wireType 0 =*/8).int32(message.type);
-        if (message.forTeam != null && message.hasOwnProperty("forTeam"))
+        if (message.forTeam != null && Object.hasOwnProperty.call(message, "forTeam"))
             writer.uint32(/* id 2, wireType 0 =*/16).int32(message.forTeam);
         return writer;
     };
@@ -20851,12 +22176,14 @@ export const GameState = $root.GameState = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.type = reader.int32();
-                break;
-            case 2:
-                message.forTeam = reader.int32();
-                break;
+            case 1: {
+                    message.type = reader.int32();
+                    break;
+                }
+            case 2: {
+                    message.forTeam = reader.int32();
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -21023,9 +22350,24 @@ export const GameState = $root.GameState = (() => {
     };
 
     /**
+     * Gets the default type url for GameState
+     * @function getTypeUrl
+     * @memberof GameState
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    GameState.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/GameState";
+    };
+
+    /**
      * Type enum.
      * @name GameState.Type
-     * @enum {string}
+     * @enum {number}
      * @property {number} UNKNOWN=0 UNKNOWN value
      * @property {number} HALT=1 HALT value
      * @property {number} STOP=2 STOP value
@@ -21118,9 +22460,9 @@ export const Proposal = $root.Proposal = (() => {
     Proposal.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.timestamp != null && message.hasOwnProperty("timestamp"))
+        if (message.timestamp != null && Object.hasOwnProperty.call(message, "timestamp"))
             $root.google.protobuf.Timestamp.encode(message.timestamp, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-        if (message.gameEvent != null && message.hasOwnProperty("gameEvent"))
+        if (message.gameEvent != null && Object.hasOwnProperty.call(message, "gameEvent"))
             $root.GameEvent.encode(message.gameEvent, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
         return writer;
     };
@@ -21156,12 +22498,14 @@ export const Proposal = $root.Proposal = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.timestamp = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
-                break;
-            case 2:
-                message.gameEvent = $root.GameEvent.decode(reader, reader.uint32());
-                break;
+            case 1: {
+                    message.timestamp = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
+                    break;
+                }
+            case 2: {
+                    message.gameEvent = $root.GameEvent.decode(reader, reader.uint32());
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -21270,6 +22614,21 @@ export const Proposal = $root.Proposal = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for Proposal
+     * @function getTypeUrl
+     * @memberof Proposal
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    Proposal.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/Proposal";
+    };
+
     return Proposal;
 })();
 
@@ -21342,7 +22701,7 @@ export const ProposalGroup = $root.ProposalGroup = (() => {
         if (message.proposals != null && message.proposals.length)
             for (let i = 0; i < message.proposals.length; ++i)
                 $root.Proposal.encode(message.proposals[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-        if (message.accepted != null && message.hasOwnProperty("accepted"))
+        if (message.accepted != null && Object.hasOwnProperty.call(message, "accepted"))
             writer.uint32(/* id 2, wireType 0 =*/16).bool(message.accepted);
         return writer;
     };
@@ -21378,14 +22737,16 @@ export const ProposalGroup = $root.ProposalGroup = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                if (!(message.proposals && message.proposals.length))
-                    message.proposals = [];
-                message.proposals.push($root.Proposal.decode(reader, reader.uint32()));
-                break;
-            case 2:
-                message.accepted = reader.bool();
-                break;
+            case 1: {
+                    if (!(message.proposals && message.proposals.length))
+                        message.proposals = [];
+                    message.proposals.push($root.Proposal.decode(reader, reader.uint32()));
+                    break;
+                }
+            case 2: {
+                    message.accepted = reader.bool();
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -21499,6 +22860,21 @@ export const ProposalGroup = $root.ProposalGroup = (() => {
      */
     ProposalGroup.prototype.toJSON = function toJSON() {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    /**
+     * Gets the default type url for ProposalGroup
+     * @function getTypeUrl
+     * @memberof ProposalGroup
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    ProposalGroup.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/ProposalGroup";
     };
 
     return ProposalGroup;
@@ -21707,11 +23083,11 @@ export const TeamInfo = $root.TeamInfo = (() => {
     TeamInfo.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.name != null && message.hasOwnProperty("name"))
+        if (message.name != null && Object.hasOwnProperty.call(message, "name"))
             writer.uint32(/* id 1, wireType 2 =*/10).string(message.name);
-        if (message.goals != null && message.hasOwnProperty("goals"))
+        if (message.goals != null && Object.hasOwnProperty.call(message, "goals"))
             writer.uint32(/* id 2, wireType 0 =*/16).int32(message.goals);
-        if (message.goalkeeper != null && message.hasOwnProperty("goalkeeper"))
+        if (message.goalkeeper != null && Object.hasOwnProperty.call(message, "goalkeeper"))
             writer.uint32(/* id 3, wireType 0 =*/24).int32(message.goalkeeper);
         if (message.yellowCards != null && message.yellowCards.length)
             for (let i = 0; i < message.yellowCards.length; ++i)
@@ -21719,30 +23095,30 @@ export const TeamInfo = $root.TeamInfo = (() => {
         if (message.redCards != null && message.redCards.length)
             for (let i = 0; i < message.redCards.length; ++i)
                 $root.RedCard.encode(message.redCards[i], writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
-        if (message.timeoutsLeft != null && message.hasOwnProperty("timeoutsLeft"))
+        if (message.timeoutsLeft != null && Object.hasOwnProperty.call(message, "timeoutsLeft"))
             writer.uint32(/* id 6, wireType 0 =*/48).int32(message.timeoutsLeft);
-        if (message.timeoutTimeLeft != null && message.hasOwnProperty("timeoutTimeLeft"))
+        if (message.timeoutTimeLeft != null && Object.hasOwnProperty.call(message, "timeoutTimeLeft"))
             $root.google.protobuf.Duration.encode(message.timeoutTimeLeft, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
-        if (message.onPositiveHalf != null && message.hasOwnProperty("onPositiveHalf"))
+        if (message.onPositiveHalf != null && Object.hasOwnProperty.call(message, "onPositiveHalf"))
             writer.uint32(/* id 8, wireType 0 =*/64).bool(message.onPositiveHalf);
         if (message.fouls != null && message.fouls.length)
             for (let i = 0; i < message.fouls.length; ++i)
                 $root.Foul.encode(message.fouls[i], writer.uint32(/* id 9, wireType 2 =*/74).fork()).ldelim();
-        if (message.ballPlacementFailures != null && message.hasOwnProperty("ballPlacementFailures"))
+        if (message.ballPlacementFailures != null && Object.hasOwnProperty.call(message, "ballPlacementFailures"))
             writer.uint32(/* id 10, wireType 0 =*/80).int32(message.ballPlacementFailures);
-        if (message.ballPlacementFailuresReached != null && message.hasOwnProperty("ballPlacementFailuresReached"))
+        if (message.ballPlacementFailuresReached != null && Object.hasOwnProperty.call(message, "ballPlacementFailuresReached"))
             writer.uint32(/* id 11, wireType 0 =*/88).bool(message.ballPlacementFailuresReached);
-        if (message.canPlaceBall != null && message.hasOwnProperty("canPlaceBall"))
+        if (message.canPlaceBall != null && Object.hasOwnProperty.call(message, "canPlaceBall"))
             writer.uint32(/* id 12, wireType 0 =*/96).bool(message.canPlaceBall);
-        if (message.maxAllowedBots != null && message.hasOwnProperty("maxAllowedBots"))
+        if (message.maxAllowedBots != null && Object.hasOwnProperty.call(message, "maxAllowedBots"))
             writer.uint32(/* id 13, wireType 0 =*/104).int32(message.maxAllowedBots);
-        if (message.requestsBotSubstitutionSince != null && message.hasOwnProperty("requestsBotSubstitutionSince"))
+        if (message.requestsBotSubstitutionSince != null && Object.hasOwnProperty.call(message, "requestsBotSubstitutionSince"))
             $root.google.protobuf.Timestamp.encode(message.requestsBotSubstitutionSince, writer.uint32(/* id 14, wireType 2 =*/114).fork()).ldelim();
-        if (message.requestsTimeoutSince != null && message.hasOwnProperty("requestsTimeoutSince"))
+        if (message.requestsTimeoutSince != null && Object.hasOwnProperty.call(message, "requestsTimeoutSince"))
             $root.google.protobuf.Timestamp.encode(message.requestsTimeoutSince, writer.uint32(/* id 15, wireType 2 =*/122).fork()).ldelim();
-        if (message.requestsEmergencyStopSince != null && message.hasOwnProperty("requestsEmergencyStopSince"))
+        if (message.requestsEmergencyStopSince != null && Object.hasOwnProperty.call(message, "requestsEmergencyStopSince"))
             $root.google.protobuf.Timestamp.encode(message.requestsEmergencyStopSince, writer.uint32(/* id 16, wireType 2 =*/130).fork()).ldelim();
-        if (message.challengeFlags != null && message.hasOwnProperty("challengeFlags"))
+        if (message.challengeFlags != null && Object.hasOwnProperty.call(message, "challengeFlags"))
             writer.uint32(/* id 17, wireType 0 =*/136).int32(message.challengeFlags);
         return writer;
     };
@@ -21778,63 +23154,80 @@ export const TeamInfo = $root.TeamInfo = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.name = reader.string();
-                break;
-            case 2:
-                message.goals = reader.int32();
-                break;
-            case 3:
-                message.goalkeeper = reader.int32();
-                break;
-            case 4:
-                if (!(message.yellowCards && message.yellowCards.length))
-                    message.yellowCards = [];
-                message.yellowCards.push($root.YellowCard.decode(reader, reader.uint32()));
-                break;
-            case 5:
-                if (!(message.redCards && message.redCards.length))
-                    message.redCards = [];
-                message.redCards.push($root.RedCard.decode(reader, reader.uint32()));
-                break;
-            case 6:
-                message.timeoutsLeft = reader.int32();
-                break;
-            case 7:
-                message.timeoutTimeLeft = $root.google.protobuf.Duration.decode(reader, reader.uint32());
-                break;
-            case 8:
-                message.onPositiveHalf = reader.bool();
-                break;
-            case 9:
-                if (!(message.fouls && message.fouls.length))
-                    message.fouls = [];
-                message.fouls.push($root.Foul.decode(reader, reader.uint32()));
-                break;
-            case 10:
-                message.ballPlacementFailures = reader.int32();
-                break;
-            case 11:
-                message.ballPlacementFailuresReached = reader.bool();
-                break;
-            case 12:
-                message.canPlaceBall = reader.bool();
-                break;
-            case 13:
-                message.maxAllowedBots = reader.int32();
-                break;
-            case 14:
-                message.requestsBotSubstitutionSince = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
-                break;
-            case 15:
-                message.requestsTimeoutSince = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
-                break;
-            case 16:
-                message.requestsEmergencyStopSince = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
-                break;
-            case 17:
-                message.challengeFlags = reader.int32();
-                break;
+            case 1: {
+                    message.name = reader.string();
+                    break;
+                }
+            case 2: {
+                    message.goals = reader.int32();
+                    break;
+                }
+            case 3: {
+                    message.goalkeeper = reader.int32();
+                    break;
+                }
+            case 4: {
+                    if (!(message.yellowCards && message.yellowCards.length))
+                        message.yellowCards = [];
+                    message.yellowCards.push($root.YellowCard.decode(reader, reader.uint32()));
+                    break;
+                }
+            case 5: {
+                    if (!(message.redCards && message.redCards.length))
+                        message.redCards = [];
+                    message.redCards.push($root.RedCard.decode(reader, reader.uint32()));
+                    break;
+                }
+            case 6: {
+                    message.timeoutsLeft = reader.int32();
+                    break;
+                }
+            case 7: {
+                    message.timeoutTimeLeft = $root.google.protobuf.Duration.decode(reader, reader.uint32());
+                    break;
+                }
+            case 8: {
+                    message.onPositiveHalf = reader.bool();
+                    break;
+                }
+            case 9: {
+                    if (!(message.fouls && message.fouls.length))
+                        message.fouls = [];
+                    message.fouls.push($root.Foul.decode(reader, reader.uint32()));
+                    break;
+                }
+            case 10: {
+                    message.ballPlacementFailures = reader.int32();
+                    break;
+                }
+            case 11: {
+                    message.ballPlacementFailuresReached = reader.bool();
+                    break;
+                }
+            case 12: {
+                    message.canPlaceBall = reader.bool();
+                    break;
+                }
+            case 13: {
+                    message.maxAllowedBots = reader.int32();
+                    break;
+                }
+            case 14: {
+                    message.requestsBotSubstitutionSince = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
+                    break;
+                }
+            case 15: {
+                    message.requestsTimeoutSince = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
+                    break;
+                }
+            case 16: {
+                    message.requestsEmergencyStopSince = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
+                    break;
+                }
+            case 17: {
+                    message.challengeFlags = reader.int32();
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -22126,6 +23519,21 @@ export const TeamInfo = $root.TeamInfo = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for TeamInfo
+     * @function getTypeUrl
+     * @memberof TeamInfo
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    TeamInfo.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/TeamInfo";
+    };
+
     return TeamInfo;
 })();
 
@@ -22323,26 +23731,26 @@ export const State = $root.State = (() => {
     State.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.stage != null && message.hasOwnProperty("stage"))
+        if (message.stage != null && Object.hasOwnProperty.call(message, "stage"))
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.stage);
-        if (message.command != null && message.hasOwnProperty("command"))
+        if (message.command != null && Object.hasOwnProperty.call(message, "command"))
             $root.Command.encode(message.command, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-        if (message.stageTimeElapsed != null && message.hasOwnProperty("stageTimeElapsed"))
+        if (message.stageTimeElapsed != null && Object.hasOwnProperty.call(message, "stageTimeElapsed"))
             $root.google.protobuf.Duration.encode(message.stageTimeElapsed, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
-        if (message.stageTimeLeft != null && message.hasOwnProperty("stageTimeLeft"))
+        if (message.stageTimeLeft != null && Object.hasOwnProperty.call(message, "stageTimeLeft"))
             $root.google.protobuf.Duration.encode(message.stageTimeLeft, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
-        if (message.matchTimeStart != null && message.hasOwnProperty("matchTimeStart"))
+        if (message.matchTimeStart != null && Object.hasOwnProperty.call(message, "matchTimeStart"))
             $root.google.protobuf.Timestamp.encode(message.matchTimeStart, writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
-        if (message.teamState != null && message.hasOwnProperty("teamState"))
+        if (message.teamState != null && Object.hasOwnProperty.call(message, "teamState"))
             for (let keys = Object.keys(message.teamState), i = 0; i < keys.length; ++i) {
                 writer.uint32(/* id 8, wireType 2 =*/66).fork().uint32(/* id 1, wireType 2 =*/10).string(keys[i]);
                 $root.TeamInfo.encode(message.teamState[keys[i]], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim().ldelim();
             }
-        if (message.placementPos != null && message.hasOwnProperty("placementPos"))
+        if (message.placementPos != null && Object.hasOwnProperty.call(message, "placementPos"))
             $root.Vector2.encode(message.placementPos, writer.uint32(/* id 9, wireType 2 =*/74).fork()).ldelim();
-        if (message.nextCommand != null && message.hasOwnProperty("nextCommand"))
+        if (message.nextCommand != null && Object.hasOwnProperty.call(message, "nextCommand"))
             $root.Command.encode(message.nextCommand, writer.uint32(/* id 10, wireType 2 =*/82).fork()).ldelim();
-        if (message.currentActionTimeRemaining != null && message.hasOwnProperty("currentActionTimeRemaining"))
+        if (message.currentActionTimeRemaining != null && Object.hasOwnProperty.call(message, "currentActionTimeRemaining"))
             $root.google.protobuf.Duration.encode(message.currentActionTimeRemaining, writer.uint32(/* id 12, wireType 2 =*/98).fork()).ldelim();
         if (message.gameEvents != null && message.gameEvents.length)
             for (let i = 0; i < message.gameEvents.length; ++i)
@@ -22350,15 +23758,15 @@ export const State = $root.State = (() => {
         if (message.proposalGroups != null && message.proposalGroups.length)
             for (let i = 0; i < message.proposalGroups.length; ++i)
                 $root.ProposalGroup.encode(message.proposalGroups[i], writer.uint32(/* id 14, wireType 2 =*/114).fork()).ldelim();
-        if (message.division != null && message.hasOwnProperty("division"))
+        if (message.division != null && Object.hasOwnProperty.call(message, "division"))
             writer.uint32(/* id 15, wireType 0 =*/120).int32(message.division);
-        if (message.autoContinue != null && message.hasOwnProperty("autoContinue"))
+        if (message.autoContinue != null && Object.hasOwnProperty.call(message, "autoContinue"))
             writer.uint32(/* id 16, wireType 0 =*/128).bool(message.autoContinue);
-        if (message.firstKickoffTeam != null && message.hasOwnProperty("firstKickoffTeam"))
+        if (message.firstKickoffTeam != null && Object.hasOwnProperty.call(message, "firstKickoffTeam"))
             writer.uint32(/* id 17, wireType 0 =*/136).int32(message.firstKickoffTeam);
-        if (message.matchType != null && message.hasOwnProperty("matchType"))
+        if (message.matchType != null && Object.hasOwnProperty.call(message, "matchType"))
             writer.uint32(/* id 18, wireType 0 =*/144).int32(message.matchType);
-        if (message.gameState != null && message.hasOwnProperty("gameState"))
+        if (message.gameState != null && Object.hasOwnProperty.call(message, "gameState"))
             $root.GameState.encode(message.gameState, writer.uint32(/* id 19, wireType 2 =*/154).fork()).ldelim();
         return writer;
     };
@@ -22390,67 +23798,97 @@ export const State = $root.State = (() => {
     State.decode = function decode(reader, length) {
         if (!(reader instanceof $Reader))
             reader = $Reader.create(reader);
-        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.State(), key;
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.State(), key, value;
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.stage = reader.int32();
-                break;
-            case 2:
-                message.command = $root.Command.decode(reader, reader.uint32());
-                break;
-            case 19:
-                message.gameState = $root.GameState.decode(reader, reader.uint32());
-                break;
-            case 4:
-                message.stageTimeElapsed = $root.google.protobuf.Duration.decode(reader, reader.uint32());
-                break;
-            case 5:
-                message.stageTimeLeft = $root.google.protobuf.Duration.decode(reader, reader.uint32());
-                break;
-            case 6:
-                message.matchTimeStart = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
-                break;
-            case 8:
-                reader.skip().pos++;
-                if (message.teamState === $util.emptyObject)
-                    message.teamState = {};
-                key = reader.string();
-                reader.pos++;
-                message.teamState[key] = $root.TeamInfo.decode(reader, reader.uint32());
-                break;
-            case 9:
-                message.placementPos = $root.Vector2.decode(reader, reader.uint32());
-                break;
-            case 10:
-                message.nextCommand = $root.Command.decode(reader, reader.uint32());
-                break;
-            case 12:
-                message.currentActionTimeRemaining = $root.google.protobuf.Duration.decode(reader, reader.uint32());
-                break;
-            case 13:
-                if (!(message.gameEvents && message.gameEvents.length))
-                    message.gameEvents = [];
-                message.gameEvents.push($root.GameEvent.decode(reader, reader.uint32()));
-                break;
-            case 14:
-                if (!(message.proposalGroups && message.proposalGroups.length))
-                    message.proposalGroups = [];
-                message.proposalGroups.push($root.ProposalGroup.decode(reader, reader.uint32()));
-                break;
-            case 15:
-                message.division = reader.int32();
-                break;
-            case 16:
-                message.autoContinue = reader.bool();
-                break;
-            case 17:
-                message.firstKickoffTeam = reader.int32();
-                break;
-            case 18:
-                message.matchType = reader.int32();
-                break;
+            case 1: {
+                    message.stage = reader.int32();
+                    break;
+                }
+            case 2: {
+                    message.command = $root.Command.decode(reader, reader.uint32());
+                    break;
+                }
+            case 19: {
+                    message.gameState = $root.GameState.decode(reader, reader.uint32());
+                    break;
+                }
+            case 4: {
+                    message.stageTimeElapsed = $root.google.protobuf.Duration.decode(reader, reader.uint32());
+                    break;
+                }
+            case 5: {
+                    message.stageTimeLeft = $root.google.protobuf.Duration.decode(reader, reader.uint32());
+                    break;
+                }
+            case 6: {
+                    message.matchTimeStart = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
+                    break;
+                }
+            case 8: {
+                    if (message.teamState === $util.emptyObject)
+                        message.teamState = {};
+                    let end2 = reader.uint32() + reader.pos;
+                    key = "";
+                    value = null;
+                    while (reader.pos < end2) {
+                        let tag2 = reader.uint32();
+                        switch (tag2 >>> 3) {
+                        case 1:
+                            key = reader.string();
+                            break;
+                        case 2:
+                            value = $root.TeamInfo.decode(reader, reader.uint32());
+                            break;
+                        default:
+                            reader.skipType(tag2 & 7);
+                            break;
+                        }
+                    }
+                    message.teamState[key] = value;
+                    break;
+                }
+            case 9: {
+                    message.placementPos = $root.Vector2.decode(reader, reader.uint32());
+                    break;
+                }
+            case 10: {
+                    message.nextCommand = $root.Command.decode(reader, reader.uint32());
+                    break;
+                }
+            case 12: {
+                    message.currentActionTimeRemaining = $root.google.protobuf.Duration.decode(reader, reader.uint32());
+                    break;
+                }
+            case 13: {
+                    if (!(message.gameEvents && message.gameEvents.length))
+                        message.gameEvents = [];
+                    message.gameEvents.push($root.GameEvent.decode(reader, reader.uint32()));
+                    break;
+                }
+            case 14: {
+                    if (!(message.proposalGroups && message.proposalGroups.length))
+                        message.proposalGroups = [];
+                    message.proposalGroups.push($root.ProposalGroup.decode(reader, reader.uint32()));
+                    break;
+                }
+            case 15: {
+                    message.division = reader.int32();
+                    break;
+                }
+            case 16: {
+                    message.autoContinue = reader.bool();
+                    break;
+                }
+            case 17: {
+                    message.firstKickoffTeam = reader.int32();
+                    break;
+                }
+            case 18: {
+                    message.matchType = reader.int32();
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -22889,6 +24327,21 @@ export const State = $root.State = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for State
+     * @function getTypeUrl
+     * @memberof State
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    State.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/State";
+    };
+
     return State;
 })();
 
@@ -22975,9 +24428,9 @@ export const google = $root.google = (() => {
             Duration.encode = function encode(message, writer) {
                 if (!writer)
                     writer = $Writer.create();
-                if (message.seconds != null && message.hasOwnProperty("seconds"))
+                if (message.seconds != null && Object.hasOwnProperty.call(message, "seconds"))
                     writer.uint32(/* id 1, wireType 0 =*/8).int64(message.seconds);
-                if (message.nanos != null && message.hasOwnProperty("nanos"))
+                if (message.nanos != null && Object.hasOwnProperty.call(message, "nanos"))
                     writer.uint32(/* id 2, wireType 0 =*/16).int32(message.nanos);
                 return writer;
             };
@@ -23013,12 +24466,14 @@ export const google = $root.google = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1:
-                        message.seconds = reader.int64();
-                        break;
-                    case 2:
-                        message.nanos = reader.int32();
-                        break;
+                    case 1: {
+                            message.seconds = reader.int64();
+                            break;
+                        }
+                    case 2: {
+                            message.nanos = reader.int32();
+                            break;
+                        }
                     default:
                         reader.skipType(tag & 7);
                         break;
@@ -23131,6 +24586,21 @@ export const google = $root.google = (() => {
                 return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
             };
 
+            /**
+             * Gets the default type url for Duration
+             * @function getTypeUrl
+             * @memberof google.protobuf.Duration
+             * @static
+             * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+             * @returns {string} The default type url
+             */
+            Duration.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+                if (typeUrlPrefix === undefined) {
+                    typeUrlPrefix = "type.googleapis.com";
+                }
+                return typeUrlPrefix + "/google.protobuf.Duration";
+            };
+
             return Duration;
         })();
 
@@ -23199,9 +24669,9 @@ export const google = $root.google = (() => {
             Timestamp.encode = function encode(message, writer) {
                 if (!writer)
                     writer = $Writer.create();
-                if (message.seconds != null && message.hasOwnProperty("seconds"))
+                if (message.seconds != null && Object.hasOwnProperty.call(message, "seconds"))
                     writer.uint32(/* id 1, wireType 0 =*/8).int64(message.seconds);
-                if (message.nanos != null && message.hasOwnProperty("nanos"))
+                if (message.nanos != null && Object.hasOwnProperty.call(message, "nanos"))
                     writer.uint32(/* id 2, wireType 0 =*/16).int32(message.nanos);
                 return writer;
             };
@@ -23237,12 +24707,14 @@ export const google = $root.google = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1:
-                        message.seconds = reader.int64();
-                        break;
-                    case 2:
-                        message.nanos = reader.int32();
-                        break;
+                    case 1: {
+                            message.seconds = reader.int64();
+                            break;
+                        }
+                    case 2: {
+                            message.nanos = reader.int32();
+                            break;
+                        }
                     default:
                         reader.skipType(tag & 7);
                         break;
@@ -23355,6 +24827,21 @@ export const google = $root.google = (() => {
                 return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
             };
 
+            /**
+             * Gets the default type url for Timestamp
+             * @function getTypeUrl
+             * @memberof google.protobuf.Timestamp
+             * @static
+             * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+             * @returns {string} The default type url
+             */
+            Timestamp.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+                if (typeUrlPrefix === undefined) {
+                    typeUrlPrefix = "type.googleapis.com";
+                }
+                return typeUrlPrefix + "/google.protobuf.Timestamp";
+            };
+
             return Timestamp;
         })();
 
@@ -23447,13 +24934,13 @@ export const Output = $root.Output = (() => {
     Output.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.matchState != null && message.hasOwnProperty("matchState"))
+        if (message.matchState != null && Object.hasOwnProperty.call(message, "matchState"))
             $root.State.encode(message.matchState, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-        if (message.gcState != null && message.hasOwnProperty("gcState"))
+        if (message.gcState != null && Object.hasOwnProperty.call(message, "gcState"))
             $root.GcState.encode(message.gcState, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-        if (message.protocol != null && message.hasOwnProperty("protocol"))
+        if (message.protocol != null && Object.hasOwnProperty.call(message, "protocol"))
             $root.Protocol.encode(message.protocol, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-        if (message.config != null && message.hasOwnProperty("config"))
+        if (message.config != null && Object.hasOwnProperty.call(message, "config"))
             $root.Config.encode(message.config, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
         return writer;
     };
@@ -23489,18 +24976,22 @@ export const Output = $root.Output = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.matchState = $root.State.decode(reader, reader.uint32());
-                break;
-            case 2:
-                message.gcState = $root.GcState.decode(reader, reader.uint32());
-                break;
-            case 3:
-                message.protocol = $root.Protocol.decode(reader, reader.uint32());
-                break;
-            case 4:
-                message.config = $root.Config.decode(reader, reader.uint32());
-                break;
+            case 1: {
+                    message.matchState = $root.State.decode(reader, reader.uint32());
+                    break;
+                }
+            case 2: {
+                    message.gcState = $root.GcState.decode(reader, reader.uint32());
+                    break;
+                }
+            case 3: {
+                    message.protocol = $root.Protocol.decode(reader, reader.uint32());
+                    break;
+                }
+            case 4: {
+                    message.config = $root.Config.decode(reader, reader.uint32());
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -23635,6 +25126,21 @@ export const Output = $root.Output = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for Output
+     * @function getTypeUrl
+     * @memberof Output
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    Output.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/Output";
+    };
+
     return Output;
 })();
 
@@ -23704,7 +25210,7 @@ export const Protocol = $root.Protocol = (() => {
     Protocol.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.delta != null && message.hasOwnProperty("delta"))
+        if (message.delta != null && Object.hasOwnProperty.call(message, "delta"))
             writer.uint32(/* id 1, wireType 0 =*/8).bool(message.delta);
         if (message.entry != null && message.entry.length)
             for (let i = 0; i < message.entry.length; ++i)
@@ -23743,14 +25249,16 @@ export const Protocol = $root.Protocol = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.delta = reader.bool();
-                break;
-            case 2:
-                if (!(message.entry && message.entry.length))
-                    message.entry = [];
-                message.entry.push($root.ProtocolEntry.decode(reader, reader.uint32()));
-                break;
+            case 1: {
+                    message.delta = reader.bool();
+                    break;
+                }
+            case 2: {
+                    if (!(message.entry && message.entry.length))
+                        message.entry = [];
+                    message.entry.push($root.ProtocolEntry.decode(reader, reader.uint32()));
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -23866,6 +25374,21 @@ export const Protocol = $root.Protocol = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for Protocol
+     * @function getTypeUrl
+     * @memberof Protocol
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    Protocol.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/Protocol";
+    };
+
     return Protocol;
 })();
 
@@ -23952,13 +25475,13 @@ export const ProtocolEntry = $root.ProtocolEntry = (() => {
     ProtocolEntry.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.id != null && message.hasOwnProperty("id"))
+        if (message.id != null && Object.hasOwnProperty.call(message, "id"))
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.id);
-        if (message.change != null && message.hasOwnProperty("change"))
+        if (message.change != null && Object.hasOwnProperty.call(message, "change"))
             $root.Change.encode(message.change, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-        if (message.matchTimeElapsed != null && message.hasOwnProperty("matchTimeElapsed"))
+        if (message.matchTimeElapsed != null && Object.hasOwnProperty.call(message, "matchTimeElapsed"))
             $root.google.protobuf.Duration.encode(message.matchTimeElapsed, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-        if (message.stageTimeElapsed != null && message.hasOwnProperty("stageTimeElapsed"))
+        if (message.stageTimeElapsed != null && Object.hasOwnProperty.call(message, "stageTimeElapsed"))
             $root.google.protobuf.Duration.encode(message.stageTimeElapsed, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
         return writer;
     };
@@ -23994,18 +25517,22 @@ export const ProtocolEntry = $root.ProtocolEntry = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.id = reader.int32();
-                break;
-            case 2:
-                message.change = $root.Change.decode(reader, reader.uint32());
-                break;
-            case 3:
-                message.matchTimeElapsed = $root.google.protobuf.Duration.decode(reader, reader.uint32());
-                break;
-            case 4:
-                message.stageTimeElapsed = $root.google.protobuf.Duration.decode(reader, reader.uint32());
-                break;
+            case 1: {
+                    message.id = reader.int32();
+                    break;
+                }
+            case 2: {
+                    message.change = $root.Change.decode(reader, reader.uint32());
+                    break;
+                }
+            case 3: {
+                    message.matchTimeElapsed = $root.google.protobuf.Duration.decode(reader, reader.uint32());
+                    break;
+                }
+            case 4: {
+                    message.stageTimeElapsed = $root.google.protobuf.Duration.decode(reader, reader.uint32());
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -24135,6 +25662,21 @@ export const ProtocolEntry = $root.ProtocolEntry = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for ProtocolEntry
+     * @function getTypeUrl
+     * @memberof ProtocolEntry
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    ProtocolEntry.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/ProtocolEntry";
+    };
+
     return ProtocolEntry;
 })();
 
@@ -24212,11 +25754,11 @@ export const Input = $root.Input = (() => {
     Input.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.change != null && message.hasOwnProperty("change"))
+        if (message.change != null && Object.hasOwnProperty.call(message, "change"))
             $root.Change.encode(message.change, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-        if (message.resetMatch != null && message.hasOwnProperty("resetMatch"))
+        if (message.resetMatch != null && Object.hasOwnProperty.call(message, "resetMatch"))
             writer.uint32(/* id 2, wireType 0 =*/16).bool(message.resetMatch);
-        if (message.configDelta != null && message.hasOwnProperty("configDelta"))
+        if (message.configDelta != null && Object.hasOwnProperty.call(message, "configDelta"))
             $root.Config.encode(message.configDelta, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
         return writer;
     };
@@ -24252,15 +25794,18 @@ export const Input = $root.Input = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.change = $root.Change.decode(reader, reader.uint32());
-                break;
-            case 2:
-                message.resetMatch = reader.bool();
-                break;
-            case 3:
-                message.configDelta = $root.Config.decode(reader, reader.uint32());
-                break;
+            case 1: {
+                    message.change = $root.Change.decode(reader, reader.uint32());
+                    break;
+                }
+            case 2: {
+                    message.resetMatch = reader.bool();
+                    break;
+                }
+            case 3: {
+                    message.configDelta = $root.Config.decode(reader, reader.uint32());
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -24377,6 +25922,21 @@ export const Input = $root.Input = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for Input
+     * @function getTypeUrl
+     * @memberof Input
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    Input.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/Input";
+    };
+
     return Input;
 })();
 
@@ -24485,24 +26045,24 @@ export const GcState = $root.GcState = (() => {
     GcState.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.teamState != null && message.hasOwnProperty("teamState"))
+        if (message.teamState != null && Object.hasOwnProperty.call(message, "teamState"))
             for (let keys = Object.keys(message.teamState), i = 0; i < keys.length; ++i) {
                 writer.uint32(/* id 1, wireType 2 =*/10).fork().uint32(/* id 1, wireType 2 =*/10).string(keys[i]);
                 $root.GcStateTeam.encode(message.teamState[keys[i]], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim().ldelim();
             }
-        if (message.autoRefState != null && message.hasOwnProperty("autoRefState"))
+        if (message.autoRefState != null && Object.hasOwnProperty.call(message, "autoRefState"))
             for (let keys = Object.keys(message.autoRefState), i = 0; i < keys.length; ++i) {
                 writer.uint32(/* id 2, wireType 2 =*/18).fork().uint32(/* id 1, wireType 2 =*/10).string(keys[i]);
                 $root.GcStateAutoRef.encode(message.autoRefState[keys[i]], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim().ldelim();
             }
-        if (message.trackerState != null && message.hasOwnProperty("trackerState"))
+        if (message.trackerState != null && Object.hasOwnProperty.call(message, "trackerState"))
             for (let keys = Object.keys(message.trackerState), i = 0; i < keys.length; ++i) {
                 writer.uint32(/* id 3, wireType 2 =*/26).fork().uint32(/* id 1, wireType 2 =*/10).string(keys[i]);
                 $root.GcStateTracker.encode(message.trackerState[keys[i]], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim().ldelim();
             }
-        if (message.trackerStateGc != null && message.hasOwnProperty("trackerStateGc"))
+        if (message.trackerStateGc != null && Object.hasOwnProperty.call(message, "trackerStateGc"))
             $root.GcStateTracker.encode(message.trackerStateGc, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
-        if (message.readyToContinue != null && message.hasOwnProperty("readyToContinue"))
+        if (message.readyToContinue != null && Object.hasOwnProperty.call(message, "readyToContinue"))
             writer.uint32(/* id 5, wireType 0 =*/40).bool(message.readyToContinue);
         if (message.continuationIssues != null && message.continuationIssues.length)
             for (let i = 0; i < message.continuationIssues.length; ++i)
@@ -24537,45 +26097,93 @@ export const GcState = $root.GcState = (() => {
     GcState.decode = function decode(reader, length) {
         if (!(reader instanceof $Reader))
             reader = $Reader.create(reader);
-        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.GcState(), key;
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.GcState(), key, value;
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                reader.skip().pos++;
-                if (message.teamState === $util.emptyObject)
-                    message.teamState = {};
-                key = reader.string();
-                reader.pos++;
-                message.teamState[key] = $root.GcStateTeam.decode(reader, reader.uint32());
-                break;
-            case 2:
-                reader.skip().pos++;
-                if (message.autoRefState === $util.emptyObject)
-                    message.autoRefState = {};
-                key = reader.string();
-                reader.pos++;
-                message.autoRefState[key] = $root.GcStateAutoRef.decode(reader, reader.uint32());
-                break;
-            case 3:
-                reader.skip().pos++;
-                if (message.trackerState === $util.emptyObject)
-                    message.trackerState = {};
-                key = reader.string();
-                reader.pos++;
-                message.trackerState[key] = $root.GcStateTracker.decode(reader, reader.uint32());
-                break;
-            case 4:
-                message.trackerStateGc = $root.GcStateTracker.decode(reader, reader.uint32());
-                break;
-            case 5:
-                message.readyToContinue = reader.bool();
-                break;
-            case 6:
-                if (!(message.continuationIssues && message.continuationIssues.length))
-                    message.continuationIssues = [];
-                message.continuationIssues.push(reader.string());
-                break;
+            case 1: {
+                    if (message.teamState === $util.emptyObject)
+                        message.teamState = {};
+                    let end2 = reader.uint32() + reader.pos;
+                    key = "";
+                    value = null;
+                    while (reader.pos < end2) {
+                        let tag2 = reader.uint32();
+                        switch (tag2 >>> 3) {
+                        case 1:
+                            key = reader.string();
+                            break;
+                        case 2:
+                            value = $root.GcStateTeam.decode(reader, reader.uint32());
+                            break;
+                        default:
+                            reader.skipType(tag2 & 7);
+                            break;
+                        }
+                    }
+                    message.teamState[key] = value;
+                    break;
+                }
+            case 2: {
+                    if (message.autoRefState === $util.emptyObject)
+                        message.autoRefState = {};
+                    let end2 = reader.uint32() + reader.pos;
+                    key = "";
+                    value = null;
+                    while (reader.pos < end2) {
+                        let tag2 = reader.uint32();
+                        switch (tag2 >>> 3) {
+                        case 1:
+                            key = reader.string();
+                            break;
+                        case 2:
+                            value = $root.GcStateAutoRef.decode(reader, reader.uint32());
+                            break;
+                        default:
+                            reader.skipType(tag2 & 7);
+                            break;
+                        }
+                    }
+                    message.autoRefState[key] = value;
+                    break;
+                }
+            case 3: {
+                    if (message.trackerState === $util.emptyObject)
+                        message.trackerState = {};
+                    let end2 = reader.uint32() + reader.pos;
+                    key = "";
+                    value = null;
+                    while (reader.pos < end2) {
+                        let tag2 = reader.uint32();
+                        switch (tag2 >>> 3) {
+                        case 1:
+                            key = reader.string();
+                            break;
+                        case 2:
+                            value = $root.GcStateTracker.decode(reader, reader.uint32());
+                            break;
+                        default:
+                            reader.skipType(tag2 & 7);
+                            break;
+                        }
+                    }
+                    message.trackerState[key] = value;
+                    break;
+                }
+            case 4: {
+                    message.trackerStateGc = $root.GcStateTracker.decode(reader, reader.uint32());
+                    break;
+                }
+            case 5: {
+                    message.readyToContinue = reader.bool();
+                    break;
+                }
+            case 6: {
+                    if (!(message.continuationIssues && message.continuationIssues.length))
+                        message.continuationIssues = [];
+                    message.continuationIssues.push(reader.string());
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -24781,6 +26389,21 @@ export const GcState = $root.GcState = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for GcState
+     * @function getTypeUrl
+     * @memberof GcState
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    GcState.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/GcState";
+    };
+
     return GcState;
 })();
 
@@ -24876,15 +26499,15 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
     GcStateTeam.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.connected != null && message.hasOwnProperty("connected"))
+        if (message.connected != null && Object.hasOwnProperty.call(message, "connected"))
             writer.uint32(/* id 1, wireType 0 =*/8).bool(message.connected);
-        if (message.connectionVerified != null && message.hasOwnProperty("connectionVerified"))
+        if (message.connectionVerified != null && Object.hasOwnProperty.call(message, "connectionVerified"))
             writer.uint32(/* id 2, wireType 0 =*/16).bool(message.connectionVerified);
-        if (message.remoteControlConnected != null && message.hasOwnProperty("remoteControlConnected"))
+        if (message.remoteControlConnected != null && Object.hasOwnProperty.call(message, "remoteControlConnected"))
             writer.uint32(/* id 3, wireType 0 =*/24).bool(message.remoteControlConnected);
-        if (message.remoteControlConnectionVerified != null && message.hasOwnProperty("remoteControlConnectionVerified"))
+        if (message.remoteControlConnectionVerified != null && Object.hasOwnProperty.call(message, "remoteControlConnectionVerified"))
             writer.uint32(/* id 4, wireType 0 =*/32).bool(message.remoteControlConnectionVerified);
-        if (message.advantageChoice != null && message.hasOwnProperty("advantageChoice"))
+        if (message.advantageChoice != null && Object.hasOwnProperty.call(message, "advantageChoice"))
             $root.TeamAdvantageChoice.encode(message.advantageChoice, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
         return writer;
     };
@@ -24920,21 +26543,26 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.connected = reader.bool();
-                break;
-            case 2:
-                message.connectionVerified = reader.bool();
-                break;
-            case 3:
-                message.remoteControlConnected = reader.bool();
-                break;
-            case 4:
-                message.remoteControlConnectionVerified = reader.bool();
-                break;
-            case 5:
-                message.advantageChoice = $root.TeamAdvantageChoice.decode(reader, reader.uint32());
-                break;
+            case 1: {
+                    message.connected = reader.bool();
+                    break;
+                }
+            case 2: {
+                    message.connectionVerified = reader.bool();
+                    break;
+                }
+            case 3: {
+                    message.remoteControlConnected = reader.bool();
+                    break;
+                }
+            case 4: {
+                    message.remoteControlConnectionVerified = reader.bool();
+                    break;
+                }
+            case 5: {
+                    message.advantageChoice = $root.TeamAdvantageChoice.decode(reader, reader.uint32());
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -25062,6 +26690,21 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for GcStateTeam
+     * @function getTypeUrl
+     * @memberof GcStateTeam
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    GcStateTeam.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/GcStateTeam";
+    };
+
     return GcStateTeam;
 })();
 
@@ -25121,7 +26764,7 @@ export const TeamAdvantageChoice = $root.TeamAdvantageChoice = (() => {
     TeamAdvantageChoice.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.choice != null && message.hasOwnProperty("choice"))
+        if (message.choice != null && Object.hasOwnProperty.call(message, "choice"))
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.choice);
         return writer;
     };
@@ -25157,9 +26800,10 @@ export const TeamAdvantageChoice = $root.TeamAdvantageChoice = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.choice = reader.int32();
-                break;
+            case 1: {
+                    message.choice = reader.int32();
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -25263,9 +26907,24 @@ export const TeamAdvantageChoice = $root.TeamAdvantageChoice = (() => {
     };
 
     /**
+     * Gets the default type url for TeamAdvantageChoice
+     * @function getTypeUrl
+     * @memberof TeamAdvantageChoice
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    TeamAdvantageChoice.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/TeamAdvantageChoice";
+    };
+
+    /**
      * AdvantageChoice enum.
      * @name TeamAdvantageChoice.AdvantageChoice
-     * @enum {string}
+     * @enum {number}
      * @property {number} STOP=0 STOP value
      * @property {number} CONTINUE=1 CONTINUE value
      */
@@ -25335,7 +26994,7 @@ export const GcStateAutoRef = $root.GcStateAutoRef = (() => {
     GcStateAutoRef.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.connectionVerified != null && message.hasOwnProperty("connectionVerified"))
+        if (message.connectionVerified != null && Object.hasOwnProperty.call(message, "connectionVerified"))
             writer.uint32(/* id 1, wireType 0 =*/8).bool(message.connectionVerified);
         return writer;
     };
@@ -25371,9 +27030,10 @@ export const GcStateAutoRef = $root.GcStateAutoRef = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.connectionVerified = reader.bool();
-                break;
+            case 1: {
+                    message.connectionVerified = reader.bool();
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -25463,6 +27123,21 @@ export const GcStateAutoRef = $root.GcStateAutoRef = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for GcStateAutoRef
+     * @function getTypeUrl
+     * @memberof GcStateAutoRef
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    GcStateAutoRef.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/GcStateAutoRef";
+    };
+
     return GcStateAutoRef;
 })();
 
@@ -25550,14 +27225,14 @@ export const GcStateTracker = $root.GcStateTracker = (() => {
     GcStateTracker.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.sourceName != null && message.hasOwnProperty("sourceName"))
+        if (message.sourceName != null && Object.hasOwnProperty.call(message, "sourceName"))
             writer.uint32(/* id 1, wireType 2 =*/10).string(message.sourceName);
-        if (message.ball != null && message.hasOwnProperty("ball"))
+        if (message.ball != null && Object.hasOwnProperty.call(message, "ball"))
             $root.Ball.encode(message.ball, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
         if (message.robots != null && message.robots.length)
             for (let i = 0; i < message.robots.length; ++i)
                 $root.Robot.encode(message.robots[i], writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-        if (message.uuid != null && message.hasOwnProperty("uuid"))
+        if (message.uuid != null && Object.hasOwnProperty.call(message, "uuid"))
             writer.uint32(/* id 4, wireType 2 =*/34).string(message.uuid);
         return writer;
     };
@@ -25593,20 +27268,24 @@ export const GcStateTracker = $root.GcStateTracker = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.sourceName = reader.string();
-                break;
-            case 4:
-                message.uuid = reader.string();
-                break;
-            case 2:
-                message.ball = $root.Ball.decode(reader, reader.uint32());
-                break;
-            case 3:
-                if (!(message.robots && message.robots.length))
-                    message.robots = [];
-                message.robots.push($root.Robot.decode(reader, reader.uint32()));
-                break;
+            case 1: {
+                    message.sourceName = reader.string();
+                    break;
+                }
+            case 4: {
+                    message.uuid = reader.string();
+                    break;
+                }
+            case 2: {
+                    message.ball = $root.Ball.decode(reader, reader.uint32());
+                    break;
+                }
+            case 3: {
+                    if (!(message.robots && message.robots.length))
+                        message.robots = [];
+                    message.robots.push($root.Robot.decode(reader, reader.uint32()));
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -25744,6 +27423,21 @@ export const GcStateTracker = $root.GcStateTracker = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for GcStateTracker
+     * @function getTypeUrl
+     * @memberof GcStateTracker
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    GcStateTracker.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/GcStateTracker";
+    };
+
     return GcStateTracker;
 })();
 
@@ -25812,9 +27506,9 @@ export const Ball = $root.Ball = (() => {
     Ball.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.pos != null && message.hasOwnProperty("pos"))
+        if (message.pos != null && Object.hasOwnProperty.call(message, "pos"))
             $root.Vector3.encode(message.pos, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-        if (message.vel != null && message.hasOwnProperty("vel"))
+        if (message.vel != null && Object.hasOwnProperty.call(message, "vel"))
             $root.Vector3.encode(message.vel, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
         return writer;
     };
@@ -25850,12 +27544,14 @@ export const Ball = $root.Ball = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.pos = $root.Vector3.decode(reader, reader.uint32());
-                break;
-            case 2:
-                message.vel = $root.Vector3.decode(reader, reader.uint32());
-                break;
+            case 1: {
+                    message.pos = $root.Vector3.decode(reader, reader.uint32());
+                    break;
+                }
+            case 2: {
+                    message.vel = $root.Vector3.decode(reader, reader.uint32());
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -25964,6 +27660,21 @@ export const Ball = $root.Ball = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for Ball
+     * @function getTypeUrl
+     * @memberof Ball
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    Ball.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/Ball";
+    };
+
     return Ball;
 })();
 
@@ -26032,9 +27743,9 @@ export const Robot = $root.Robot = (() => {
     Robot.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.id != null && message.hasOwnProperty("id"))
+        if (message.id != null && Object.hasOwnProperty.call(message, "id"))
             $root.RobotId.encode(message.id, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-        if (message.pos != null && message.hasOwnProperty("pos"))
+        if (message.pos != null && Object.hasOwnProperty.call(message, "pos"))
             $root.Vector2.encode(message.pos, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
         return writer;
     };
@@ -26070,12 +27781,14 @@ export const Robot = $root.Robot = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                message.id = $root.RobotId.decode(reader, reader.uint32());
-                break;
-            case 2:
-                message.pos = $root.Vector2.decode(reader, reader.uint32());
-                break;
+            case 1: {
+                    message.id = $root.RobotId.decode(reader, reader.uint32());
+                    break;
+                }
+            case 2: {
+                    message.pos = $root.Vector2.decode(reader, reader.uint32());
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -26184,6 +27897,21 @@ export const Robot = $root.Robot = (() => {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
+    /**
+     * Gets the default type url for Robot
+     * @function getTypeUrl
+     * @memberof Robot
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    Robot.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/Robot";
+    };
+
     return Robot;
 })();
 
@@ -26273,15 +28001,15 @@ export const Config = $root.Config = (() => {
     Config.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.gameEventBehavior != null && message.hasOwnProperty("gameEventBehavior"))
+        if (message.gameEventBehavior != null && Object.hasOwnProperty.call(message, "gameEventBehavior"))
             for (let keys = Object.keys(message.gameEventBehavior), i = 0; i < keys.length; ++i)
                 writer.uint32(/* id 1, wireType 2 =*/10).fork().uint32(/* id 1, wireType 2 =*/10).string(keys[i]).uint32(/* id 2, wireType 0 =*/16).int32(message.gameEventBehavior[keys[i]]).ldelim();
-        if (message.autoRefConfigs != null && message.hasOwnProperty("autoRefConfigs"))
+        if (message.autoRefConfigs != null && Object.hasOwnProperty.call(message, "autoRefConfigs"))
             for (let keys = Object.keys(message.autoRefConfigs), i = 0; i < keys.length; ++i) {
                 writer.uint32(/* id 2, wireType 2 =*/18).fork().uint32(/* id 1, wireType 2 =*/10).string(keys[i]);
                 $root.AutoRefConfig.encode(message.autoRefConfigs[keys[i]], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim().ldelim();
             }
-        if (message.activeTrackerSource != null && message.hasOwnProperty("activeTrackerSource"))
+        if (message.activeTrackerSource != null && Object.hasOwnProperty.call(message, "activeTrackerSource"))
             writer.uint32(/* id 3, wireType 2 =*/26).string(message.activeTrackerSource);
         if (message.teams != null && message.teams.length)
             for (let i = 0; i < message.teams.length; ++i)
@@ -26316,34 +28044,66 @@ export const Config = $root.Config = (() => {
     Config.decode = function decode(reader, length) {
         if (!(reader instanceof $Reader))
             reader = $Reader.create(reader);
-        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Config(), key;
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Config(), key, value;
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                reader.skip().pos++;
-                if (message.gameEventBehavior === $util.emptyObject)
-                    message.gameEventBehavior = {};
-                key = reader.string();
-                reader.pos++;
-                message.gameEventBehavior[key] = reader.int32();
-                break;
-            case 2:
-                reader.skip().pos++;
-                if (message.autoRefConfigs === $util.emptyObject)
-                    message.autoRefConfigs = {};
-                key = reader.string();
-                reader.pos++;
-                message.autoRefConfigs[key] = $root.AutoRefConfig.decode(reader, reader.uint32());
-                break;
-            case 3:
-                message.activeTrackerSource = reader.string();
-                break;
-            case 4:
-                if (!(message.teams && message.teams.length))
-                    message.teams = [];
-                message.teams.push(reader.string());
-                break;
+            case 1: {
+                    if (message.gameEventBehavior === $util.emptyObject)
+                        message.gameEventBehavior = {};
+                    let end2 = reader.uint32() + reader.pos;
+                    key = "";
+                    value = 0;
+                    while (reader.pos < end2) {
+                        let tag2 = reader.uint32();
+                        switch (tag2 >>> 3) {
+                        case 1:
+                            key = reader.string();
+                            break;
+                        case 2:
+                            value = reader.int32();
+                            break;
+                        default:
+                            reader.skipType(tag2 & 7);
+                            break;
+                        }
+                    }
+                    message.gameEventBehavior[key] = value;
+                    break;
+                }
+            case 2: {
+                    if (message.autoRefConfigs === $util.emptyObject)
+                        message.autoRefConfigs = {};
+                    let end2 = reader.uint32() + reader.pos;
+                    key = "";
+                    value = null;
+                    while (reader.pos < end2) {
+                        let tag2 = reader.uint32();
+                        switch (tag2 >>> 3) {
+                        case 1:
+                            key = reader.string();
+                            break;
+                        case 2:
+                            value = $root.AutoRefConfig.decode(reader, reader.uint32());
+                            break;
+                        default:
+                            reader.skipType(tag2 & 7);
+                            break;
+                        }
+                    }
+                    message.autoRefConfigs[key] = value;
+                    break;
+                }
+            case 3: {
+                    message.activeTrackerSource = reader.string();
+                    break;
+                }
+            case 4: {
+                    if (!(message.teams && message.teams.length))
+                        message.teams = [];
+                    message.teams.push(reader.string());
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -26539,9 +28299,24 @@ export const Config = $root.Config = (() => {
     };
 
     /**
+     * Gets the default type url for Config
+     * @function getTypeUrl
+     * @memberof Config
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    Config.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/Config";
+    };
+
+    /**
      * Behavior enum.
      * @name Config.Behavior
-     * @enum {string}
+     * @enum {number}
      * @property {number} BEHAVIOR_UNKNOWN=0 BEHAVIOR_UNKNOWN value
      * @property {number} BEHAVIOR_ACCEPT=1 BEHAVIOR_ACCEPT value
      * @property {number} BEHAVIOR_ACCEPT_MAJORITY=2 BEHAVIOR_ACCEPT_MAJORITY value
@@ -26620,7 +28395,7 @@ export const AutoRefConfig = $root.AutoRefConfig = (() => {
     AutoRefConfig.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.gameEventBehavior != null && message.hasOwnProperty("gameEventBehavior"))
+        if (message.gameEventBehavior != null && Object.hasOwnProperty.call(message, "gameEventBehavior"))
             for (let keys = Object.keys(message.gameEventBehavior), i = 0; i < keys.length; ++i)
                 writer.uint32(/* id 1, wireType 2 =*/10).fork().uint32(/* id 1, wireType 2 =*/10).string(keys[i]).uint32(/* id 2, wireType 0 =*/16).int32(message.gameEventBehavior[keys[i]]).ldelim();
         return writer;
@@ -26653,18 +28428,33 @@ export const AutoRefConfig = $root.AutoRefConfig = (() => {
     AutoRefConfig.decode = function decode(reader, length) {
         if (!(reader instanceof $Reader))
             reader = $Reader.create(reader);
-        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.AutoRefConfig(), key;
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.AutoRefConfig(), key, value;
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1:
-                reader.skip().pos++;
-                if (message.gameEventBehavior === $util.emptyObject)
-                    message.gameEventBehavior = {};
-                key = reader.string();
-                reader.pos++;
-                message.gameEventBehavior[key] = reader.int32();
-                break;
+            case 1: {
+                    if (message.gameEventBehavior === $util.emptyObject)
+                        message.gameEventBehavior = {};
+                    let end2 = reader.uint32() + reader.pos;
+                    key = "";
+                    value = 0;
+                    while (reader.pos < end2) {
+                        let tag2 = reader.uint32();
+                        switch (tag2 >>> 3) {
+                        case 1:
+                            key = reader.string();
+                            break;
+                        case 2:
+                            value = reader.int32();
+                            break;
+                        default:
+                            reader.skipType(tag2 & 7);
+                            break;
+                        }
+                    }
+                    message.gameEventBehavior[key] = value;
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -26793,9 +28583,24 @@ export const AutoRefConfig = $root.AutoRefConfig = (() => {
     };
 
     /**
+     * Gets the default type url for AutoRefConfig
+     * @function getTypeUrl
+     * @memberof AutoRefConfig
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    AutoRefConfig.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/AutoRefConfig";
+    };
+
+    /**
      * Behavior enum.
      * @name AutoRefConfig.Behavior
-     * @enum {string}
+     * @enum {number}
      * @property {number} BEHAVIOR_UNKNOWN=0 BEHAVIOR_UNKNOWN value
      * @property {number} BEHAVIOR_ACCEPT=1 BEHAVIOR_ACCEPT value
      * @property {number} BEHAVIOR_LOG=2 BEHAVIOR_LOG value
