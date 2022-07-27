@@ -44,7 +44,7 @@
 
 <script>
     import Settings from "../settings/Settings";
-    import {getNextStage, canEndGameFromStage, stageNames, isPreStage} from "@/refereeState";
+    import {getNextStage, stageNames, isPreStage} from "@/refereeState";
     import NewEvent from "../create-event/NewEvent";
     import {submitChange} from "@/submit";
 
@@ -97,7 +97,7 @@
                 return stageNames[getNextStage(this.$store.state.matchState.stage)];
             },
             showEndGame() {
-                return canEndGameFromStage(this.$store.state.matchState);
+                return this.halted;
             },
             preStage() {
                 return isPreStage(this.$store.state.matchState);
