@@ -18,7 +18,6 @@ func NewState() (s *State) {
 	s.MatchTimeStart = new(timestamppb.Timestamp)
 	s.CurrentActionTimeRemaining = new(durationpb.Duration)
 	s.Division = new(Division)
-	s.AutoContinue = new(bool)
 	s.FirstKickoffTeam = new(Team)
 	s.MatchType = new(MatchType)
 
@@ -32,7 +31,6 @@ func NewState() (s *State) {
 
 	*s.Division = Division_DIV_A
 	*s.FirstKickoffTeam = Team_YELLOW
-	*s.AutoContinue = true
 
 	return
 }

@@ -19400,7 +19400,6 @@ export const Change = $root.Change = (() => {
          * @interface IUpdateConfig
          * @property {Division|null} [division] UpdateConfig division
          * @property {Team|null} [firstKickoffTeam] UpdateConfig firstKickoffTeam
-         * @property {boolean|null} [autoContinue] UpdateConfig autoContinue
          * @property {MatchType|null} [matchType] UpdateConfig matchType
          */
 
@@ -19434,14 +19433,6 @@ export const Change = $root.Change = (() => {
          * @instance
          */
         UpdateConfig.prototype.firstKickoffTeam = 0;
-
-        /**
-         * UpdateConfig autoContinue.
-         * @member {boolean} autoContinue
-         * @memberof Change.UpdateConfig
-         * @instance
-         */
-        UpdateConfig.prototype.autoContinue = false;
 
         /**
          * UpdateConfig matchType.
@@ -19479,8 +19470,6 @@ export const Change = $root.Change = (() => {
                 writer.uint32(/* id 1, wireType 0 =*/8).int32(message.division);
             if (message.firstKickoffTeam != null && Object.hasOwnProperty.call(message, "firstKickoffTeam"))
                 writer.uint32(/* id 2, wireType 0 =*/16).int32(message.firstKickoffTeam);
-            if (message.autoContinue != null && Object.hasOwnProperty.call(message, "autoContinue"))
-                writer.uint32(/* id 3, wireType 0 =*/24).bool(message.autoContinue);
             if (message.matchType != null && Object.hasOwnProperty.call(message, "matchType"))
                 writer.uint32(/* id 4, wireType 0 =*/32).int32(message.matchType);
             return writer;
@@ -19523,10 +19512,6 @@ export const Change = $root.Change = (() => {
                     }
                 case 2: {
                         message.firstKickoffTeam = reader.int32();
-                        break;
-                    }
-                case 3: {
-                        message.autoContinue = reader.bool();
                         break;
                     }
                 case 4: {
@@ -19586,9 +19571,6 @@ export const Change = $root.Change = (() => {
                 case 2:
                     break;
                 }
-            if (message.autoContinue != null && message.hasOwnProperty("autoContinue"))
-                if (typeof message.autoContinue !== "boolean")
-                    return "autoContinue: boolean expected";
             if (message.matchType != null && message.hasOwnProperty("matchType"))
                 switch (message.matchType) {
                 default:
@@ -19642,8 +19624,6 @@ export const Change = $root.Change = (() => {
                 message.firstKickoffTeam = 2;
                 break;
             }
-            if (object.autoContinue != null)
-                message.autoContinue = Boolean(object.autoContinue);
             switch (object.matchType) {
             case "UNKNOWN_MATCH":
             case 0:
@@ -19681,15 +19661,12 @@ export const Change = $root.Change = (() => {
             if (options.defaults) {
                 object.division = options.enums === String ? "DIV_UNKNOWN" : 0;
                 object.firstKickoffTeam = options.enums === String ? "UNKNOWN" : 0;
-                object.autoContinue = false;
                 object.matchType = options.enums === String ? "UNKNOWN_MATCH" : 0;
             }
             if (message.division != null && message.hasOwnProperty("division"))
                 object.division = options.enums === String ? $root.Division[message.division] : message.division;
             if (message.firstKickoffTeam != null && message.hasOwnProperty("firstKickoffTeam"))
                 object.firstKickoffTeam = options.enums === String ? $root.Team[message.firstKickoffTeam] : message.firstKickoffTeam;
-            if (message.autoContinue != null && message.hasOwnProperty("autoContinue"))
-                object.autoContinue = message.autoContinue;
             if (message.matchType != null && message.hasOwnProperty("matchType"))
                 object.matchType = options.enums === String ? $root.MatchType[message.matchType] : message.matchType;
             return object;
@@ -23556,7 +23533,6 @@ export const State = $root.State = (() => {
      * @property {Array.<IGameEvent>|null} [gameEvents] State gameEvents
      * @property {Array.<IProposalGroup>|null} [proposalGroups] State proposalGroups
      * @property {Division|null} [division] State division
-     * @property {boolean|null} [autoContinue] State autoContinue
      * @property {Team|null} [firstKickoffTeam] State firstKickoffTeam
      * @property {MatchType|null} [matchType] State matchType
      */
@@ -23684,14 +23660,6 @@ export const State = $root.State = (() => {
     State.prototype.division = 0;
 
     /**
-     * State autoContinue.
-     * @member {boolean} autoContinue
-     * @memberof State
-     * @instance
-     */
-    State.prototype.autoContinue = false;
-
-    /**
      * State firstKickoffTeam.
      * @member {Team} firstKickoffTeam
      * @memberof State
@@ -23760,8 +23728,6 @@ export const State = $root.State = (() => {
                 $root.ProposalGroup.encode(message.proposalGroups[i], writer.uint32(/* id 14, wireType 2 =*/114).fork()).ldelim();
         if (message.division != null && Object.hasOwnProperty.call(message, "division"))
             writer.uint32(/* id 15, wireType 0 =*/120).int32(message.division);
-        if (message.autoContinue != null && Object.hasOwnProperty.call(message, "autoContinue"))
-            writer.uint32(/* id 16, wireType 0 =*/128).bool(message.autoContinue);
         if (message.firstKickoffTeam != null && Object.hasOwnProperty.call(message, "firstKickoffTeam"))
             writer.uint32(/* id 17, wireType 0 =*/136).int32(message.firstKickoffTeam);
         if (message.matchType != null && Object.hasOwnProperty.call(message, "matchType"))
@@ -23875,10 +23841,6 @@ export const State = $root.State = (() => {
                 }
             case 15: {
                     message.division = reader.int32();
-                    break;
-                }
-            case 16: {
-                    message.autoContinue = reader.bool();
                     break;
                 }
             case 17: {
@@ -24021,9 +23983,6 @@ export const State = $root.State = (() => {
             case 2:
                 break;
             }
-        if (message.autoContinue != null && message.hasOwnProperty("autoContinue"))
-            if (typeof message.autoContinue !== "boolean")
-                return "autoContinue: boolean expected";
         if (message.firstKickoffTeam != null && message.hasOwnProperty("firstKickoffTeam"))
             switch (message.firstKickoffTeam) {
             default:
@@ -24200,8 +24159,6 @@ export const State = $root.State = (() => {
             message.division = 2;
             break;
         }
-        if (object.autoContinue != null)
-            message.autoContinue = Boolean(object.autoContinue);
         switch (object.firstKickoffTeam) {
         case "UNKNOWN":
         case 0:
@@ -24266,7 +24223,6 @@ export const State = $root.State = (() => {
             object.nextCommand = null;
             object.currentActionTimeRemaining = null;
             object.division = options.enums === String ? "DIV_UNKNOWN" : 0;
-            object.autoContinue = false;
             object.firstKickoffTeam = options.enums === String ? "UNKNOWN" : 0;
             object.matchType = options.enums === String ? "UNKNOWN_MATCH" : 0;
             object.gameState = null;
@@ -24305,8 +24261,6 @@ export const State = $root.State = (() => {
         }
         if (message.division != null && message.hasOwnProperty("division"))
             object.division = options.enums === String ? $root.Division[message.division] : message.division;
-        if (message.autoContinue != null && message.hasOwnProperty("autoContinue"))
-            object.autoContinue = message.autoContinue;
         if (message.firstKickoffTeam != null && message.hasOwnProperty("firstKickoffTeam"))
             object.firstKickoffTeam = options.enums === String ? $root.Team[message.firstKickoffTeam] : message.firstKickoffTeam;
         if (message.matchType != null && message.hasOwnProperty("matchType"))
@@ -25689,6 +25643,7 @@ export const Input = $root.Input = (() => {
      * @property {IChange|null} [change] Input change
      * @property {boolean|null} [resetMatch] Input resetMatch
      * @property {IConfig|null} [configDelta] Input configDelta
+     * @property {boolean|null} [autoContinue] Input autoContinue
      */
 
     /**
@@ -25731,6 +25686,14 @@ export const Input = $root.Input = (() => {
     Input.prototype.configDelta = null;
 
     /**
+     * Input autoContinue.
+     * @member {boolean} autoContinue
+     * @memberof Input
+     * @instance
+     */
+    Input.prototype.autoContinue = false;
+
+    /**
      * Creates a new Input instance using the specified properties.
      * @function create
      * @memberof Input
@@ -25760,6 +25723,8 @@ export const Input = $root.Input = (() => {
             writer.uint32(/* id 2, wireType 0 =*/16).bool(message.resetMatch);
         if (message.configDelta != null && Object.hasOwnProperty.call(message, "configDelta"))
             $root.Config.encode(message.configDelta, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+        if (message.autoContinue != null && Object.hasOwnProperty.call(message, "autoContinue"))
+            writer.uint32(/* id 4, wireType 0 =*/32).bool(message.autoContinue);
         return writer;
     };
 
@@ -25804,6 +25769,10 @@ export const Input = $root.Input = (() => {
                 }
             case 3: {
                     message.configDelta = $root.Config.decode(reader, reader.uint32());
+                    break;
+                }
+            case 4: {
+                    message.autoContinue = reader.bool();
                     break;
                 }
             default:
@@ -25854,6 +25823,9 @@ export const Input = $root.Input = (() => {
             if (error)
                 return "configDelta." + error;
         }
+        if (message.autoContinue != null && message.hasOwnProperty("autoContinue"))
+            if (typeof message.autoContinue !== "boolean")
+                return "autoContinue: boolean expected";
         return null;
     };
 
@@ -25881,6 +25853,8 @@ export const Input = $root.Input = (() => {
                 throw TypeError(".Input.configDelta: object expected");
             message.configDelta = $root.Config.fromObject(object.configDelta);
         }
+        if (object.autoContinue != null)
+            message.autoContinue = Boolean(object.autoContinue);
         return message;
     };
 
@@ -25901,6 +25875,7 @@ export const Input = $root.Input = (() => {
             object.change = null;
             object.resetMatch = false;
             object.configDelta = null;
+            object.autoContinue = false;
         }
         if (message.change != null && message.hasOwnProperty("change"))
             object.change = $root.Change.toObject(message.change, options);
@@ -25908,6 +25883,8 @@ export const Input = $root.Input = (() => {
             object.resetMatch = message.resetMatch;
         if (message.configDelta != null && message.hasOwnProperty("configDelta"))
             object.configDelta = $root.Config.toObject(message.configDelta, options);
+        if (message.autoContinue != null && message.hasOwnProperty("autoContinue"))
+            object.autoContinue = message.autoContinue;
         return object;
     };
 
@@ -25952,6 +25929,7 @@ export const GcState = $root.GcState = (() => {
      * @property {IGcStateTracker|null} [trackerStateGc] GcState trackerStateGc
      * @property {boolean|null} [readyToContinue] GcState readyToContinue
      * @property {Array.<string>|null} [continuationIssues] GcState continuationIssues
+     * @property {boolean|null} [autoContinue] GcState autoContinue
      */
 
     /**
@@ -26022,6 +26000,14 @@ export const GcState = $root.GcState = (() => {
     GcState.prototype.continuationIssues = $util.emptyArray;
 
     /**
+     * GcState autoContinue.
+     * @member {boolean} autoContinue
+     * @memberof GcState
+     * @instance
+     */
+    GcState.prototype.autoContinue = false;
+
+    /**
      * Creates a new GcState instance using the specified properties.
      * @function create
      * @memberof GcState
@@ -26067,6 +26053,8 @@ export const GcState = $root.GcState = (() => {
         if (message.continuationIssues != null && message.continuationIssues.length)
             for (let i = 0; i < message.continuationIssues.length; ++i)
                 writer.uint32(/* id 6, wireType 2 =*/50).string(message.continuationIssues[i]);
+        if (message.autoContinue != null && Object.hasOwnProperty.call(message, "autoContinue"))
+            writer.uint32(/* id 7, wireType 0 =*/56).bool(message.autoContinue);
         return writer;
     };
 
@@ -26184,6 +26172,10 @@ export const GcState = $root.GcState = (() => {
                     message.continuationIssues.push(reader.string());
                     break;
                 }
+            case 7: {
+                    message.autoContinue = reader.bool();
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -26264,6 +26256,9 @@ export const GcState = $root.GcState = (() => {
                 if (!$util.isString(message.continuationIssues[i]))
                     return "continuationIssues: string[] expected";
         }
+        if (message.autoContinue != null && message.hasOwnProperty("autoContinue"))
+            if (typeof message.autoContinue !== "boolean")
+                return "autoContinue: boolean expected";
         return null;
     };
 
@@ -26323,6 +26318,8 @@ export const GcState = $root.GcState = (() => {
             for (let i = 0; i < object.continuationIssues.length; ++i)
                 message.continuationIssues[i] = String(object.continuationIssues[i]);
         }
+        if (object.autoContinue != null)
+            message.autoContinue = Boolean(object.autoContinue);
         return message;
     };
 
@@ -26349,6 +26346,7 @@ export const GcState = $root.GcState = (() => {
         if (options.defaults) {
             object.trackerStateGc = null;
             object.readyToContinue = false;
+            object.autoContinue = false;
         }
         let keys2;
         if (message.teamState && (keys2 = Object.keys(message.teamState)).length) {
@@ -26375,6 +26373,8 @@ export const GcState = $root.GcState = (() => {
             for (let j = 0; j < message.continuationIssues.length; ++j)
                 object.continuationIssues[j] = message.continuationIssues[j];
         }
+        if (message.autoContinue != null && message.hasOwnProperty("autoContinue"))
+            object.autoContinue = message.autoContinue;
         return object;
     };
 

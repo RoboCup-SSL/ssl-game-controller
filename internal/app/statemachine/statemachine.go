@@ -19,6 +19,7 @@ type StateMachine struct {
 	stageTimes   map[state.Referee_Stage]time.Duration
 	rand         *rand.Rand
 	timeProvider timer.TimeProvider
+	AutoContinue bool
 }
 
 // NewStateMachine creates a new state machine

@@ -111,7 +111,7 @@ message State {
     repeated GameEvent game_events = 13;
     repeated ProposalGroup proposal_groups = 14;
     optional Division division = 15;
-    optional bool auto_continue = 16;
+    reserved 16;
     optional Team first_kickoff_team = 17;
     optional MatchType match_type = 18;
 }

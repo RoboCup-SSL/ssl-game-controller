@@ -26,7 +26,7 @@ func (e *Engine) processContinue() {
 	readyToContinue := len(e.gcState.ContinuationIssues) == 0
 	e.gcState.ReadyToContinue = &readyToContinue
 
-	if readyToContinue && e.currentState.GetAutoContinue() {
+	if readyToContinue && *e.gcState.AutoContinue {
 		e.Enqueue(&statemachine.Change{
 			Origin: &changeOriginEngine,
 			Change: &statemachine.Change_ContinueChange{

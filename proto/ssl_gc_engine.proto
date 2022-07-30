@@ -24,6 +24,9 @@ message GcState {
 
     // list of issues that hinders the game from continuing
     repeated string continuation_issues = 6;
+
+    // should the game be continued automatically?
+    optional bool auto_continue = 7;
 }
 
 // The GC state for a single team

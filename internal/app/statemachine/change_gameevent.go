@@ -203,13 +203,14 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 			*newState.TeamInfo(byTeam).BallPlacementFailures--
 		}
 
-		if newState.GetAutoContinue() && newState.NextCommand != nil && byTeam == *newState.NextCommand.ForTeam {
+		if s.AutoContinue && newState.NextCommand != nil && byTeam == *newState.NextCommand.ForTeam {
 			log.Printf("Placement succeeded by team %v, which is also in favor. Can continue.", byTeam)
 			changes = append(changes, &Change{
 				Change: &Change_ContinueChange{
 					ContinueChange: &Change_Continue{},
 				},
 			})
+			return
 		}
 	}
 

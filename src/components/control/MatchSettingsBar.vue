@@ -46,7 +46,7 @@
     import Settings from "../settings/Settings";
     import {getNextStage, stageNames, isPreStage} from "@/refereeState";
     import NewEvent from "../create-event/NewEvent";
-    import {submitChange} from "@/submit";
+    import {setAutoContinue, submitChange} from "@/submit";
 
     export default {
         name: "MatchSettingsBar",
@@ -67,7 +67,7 @@
                 });
             },
             setAutoContinue(enabled) {
-                submitChange({updateConfigChange: {autoContinue: enabled}});
+                setAutoContinue(enabled);
             },
         },
         computed: {
@@ -84,7 +84,7 @@
                 return this.$store.state.matchState.stage === 'POST_GAME';
             },
             autoContinue() {
-                return this.$store.state.matchState.autoContinue;
+                return this.$store.state.gcState.autoContinue;
             },
             keymapToggleAutoRef() {
                 return {

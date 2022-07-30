@@ -59,6 +59,8 @@ func NewEngine(gameConfig config.Game, engineConfig config.Engine) (e *Engine) {
 	e.gcState.AutoRefState = map[string]*GcStateAutoRef{}
 	e.gcState.TrackerState = map[string]*GcStateTracker{}
 	e.gcState.TrackerStateGc = &GcStateTracker{}
+	e.gcState.AutoContinue = new(bool)
+	*e.gcState.AutoContinue = true
 	e.trackerLastUpdate = map[string]time.Time{}
 	e.noProgressDetector = NoProgressDetector{gcEngine: e}
 	e.ballPlacementCoordinator = BallPlacementCoordinator{gcEngine: e}
@@ -274,6 +276,14 @@ func (e *Engine) ResetMatch() {
 	}
 }
 
+// SetAutoContinue enables or disables auto continuation
+func (e *Engine) SetAutoContinue(enabled bool) {
+	e.mutex.Lock()
+	defer e.mutex.Unlock()
+	log.Printf("Change auto continue to %v", enabled)
+	*e.gcState.AutoContinue = enabled
+}
+
 func (e *Engine) processChangeList(changes []*statemachine.Change) {
 	var newChanges []*statemachine.Change
 	for _, change := range changes {
@@ -324,6 +334,7 @@ func (e *Engine) processChange(change *statemachine.Change) (newChanges []*state
 			}
 		}
 	} else {
+		e.stateMachine.AutoContinue = e.gcState.GetAutoContinue()
 		entry.State, newChanges = e.stateMachine.Process(e.currentState, change)
 	}
 

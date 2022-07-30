@@ -245,6 +245,9 @@ func (a *Server) handleNewEventMessage(b []byte) {
 	if in.ConfigDelta != nil {
 		a.gcEngine.UpdateConfig(in.ConfigDelta)
 	}
+	if in.AutoContinue != nil {
+		a.gcEngine.SetAutoContinue(*in.AutoContinue)
+	}
 }
 
 func stateChanged(s1, s2 *state.State) bool {
