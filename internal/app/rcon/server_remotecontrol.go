@@ -250,8 +250,8 @@ func (c *RemoteControlClient) checkRequestEmergencyStop() error {
 }
 
 func (c *RemoteControlClient) checkRequestTimeout() error {
-	gameStateType := *c.gcEngine.CurrentState().GameState.Type
-	if gameStateType == state.GameState_TIMEOUT {
+	gameState := c.gcEngine.CurrentState().GameState
+	if *gameState.Type == state.GameState_TIMEOUT && *gameState.ForTeam == *c.team {
 		return errors.New("Timeout is active")
 	}
 	if *c.gcEngine.CurrentState().TeamState[c.team.String()].TimeoutsLeft <= 0 {
