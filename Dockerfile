@@ -16,6 +16,6 @@ COPY --from=build_go /go/bin/ssl-game-controller /app/ssl-game-controller
 COPY config config
 RUN chown -R 1000: config
 USER 1000
-EXPOSE 8081 10007 10008 10011 10009
-ENTRYPOINT ["/app/ssl-game-controller", "-address", ":8081"]
+EXPOSE 8081 10007 10008 10009 10011 10107 10108 10111
+ENTRYPOINT ["/app/ssl-game-controller"]
 CMD []

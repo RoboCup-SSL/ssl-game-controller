@@ -4,3 +4,5 @@
 /Dockerfile
 /.idea
 /.vscode
+/config/state-store.json.stream
+/config/engine.yaml

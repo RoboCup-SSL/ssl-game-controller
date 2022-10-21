@@ -149,6 +149,12 @@ yarn serve
 ./install.sh
 ```
 
+### Test with autoRefs
+To quickly run the GC together with autoRefs and other popular components, run:
+```shell
+docker-compose up
+```
+
 ### Update generated protobuf code
 Generate the code for the `.proto` files with [./generateProto.sh](./generateProto.sh), 
 after you've changed anything in a `.proto` file.
