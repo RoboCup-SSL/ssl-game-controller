@@ -1,0 +1,75 @@
+version: "3.1"
+
+volumes:
+  ssl-game-controller:
+
+services:
+  ssl-game-controller:
+    build: "."
+    command:
+      - "-visionAddress"
+      - "224.5.23.2:10020"
+      - "-trackerAddress"
+      - "224.5.23.2:10010" # not yet overridable by autoRefs
+      - "-publishAddress"
+      - "224.5.23.1:11003"
+      - "-address"
+      - ":8080"
+    volumes:
+      - "ssl-game-controller:/config:rw"
+    network_mode: "${NETWORK_MODE}"
+    ports:
+      - "8080:8080/tcp"
+
+  ssl-vision-client:
+    image: "robocupssl/ssl-vision-client:1.6.0"
+    command:
+      - "-address"
+      - ":8081"
+      - "-visionAddress"
+      - "224.5.23.2:10020"
+    network_mode: "${NETWORK_MODE}"
+    ports:
+      - "8081:8081/tcp"
+
+  ssl-status-board:
+    image: "robocupssl/ssl-status-board:2.6.0"
+    command:
+      - "-address"
+      - ":8082"
+      - "-refereeAddress"
+      - "224.5.23.1:11003"
+    network_mode: "${NETWORK_MODE}"
+    ports:
+      - "8082:8082/tcp"
+
+  autoref-tigers:
+    image: "tigersmannheim/auto-referee:0.16.0"
+    command:
+     - "-a" # active mode (connect to GC)
+     - "-hl" # headless
+     - "--visionAddress"
+     - "224.5.23.2:10020"
+     - "--refereeAddress"
+     - "224.5.23.1:11003"
+    network_mode: "${NETWORK_MODE}"
+
+  autoref-erforce:
+    image: "roboticserlangen/autoref:commit-5ca75e7c7883"
+    command:
+      - "--vision-port"
+      - "10020"
+      - "--gc-port"
+      - "11003"
+    network_mode: "${NETWORK_MODE}"
+
+  simulator:
+    image: "roboticserlangen/simulatorcli:commit-6a4e1c06533b"
+    environment:
+      GEOMETRY: "2020"
+      REALISM: "RC2021"
+    network_mode: "${NETWORK_MODE}"
+    ports:
+      - "10300/udp"
+      - "10301/udp"
+      - "10302/udp"
