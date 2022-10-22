@@ -1,21 +1,12 @@
 <template>
     <div class="container">
-        <div v-help-text="'Perform direct kick (corner and goal kicks) (' + Object.keys(keymapDirect)[0] + ')'">
+        <div v-help-text="'Perform free kick (' + Object.keys(keymapDirect)[0] + ')'">
             <b-button v-hotkey="keymapDirect"
                       ref="btnDirect"
                       class="manual-control-button"
                       v-on:click="sendDirect"
                       v-bind:disabled="halted || running || preparing || !nonPausedStage">
-                Direct
-            </b-button>
-        </div>
-        <div v-help-text="'Perform indirect kick (throw-in) (' + Object.keys(keymapIndirect)[0] + ')'">
-            <b-button v-hotkey="keymapIndirect"
-                      ref="btnIndirect"
-                      class="manual-control-button"
-                      v-on:click="sendIndirect"
-                      v-bind:disabled="halted || running || preparing || !nonPausedStage">
-                Indirect
+                Freekick
             </b-button>
         </div>
         <div v-help-text="'Prepare for a kickoff (' + Object.keys(keymapKickoff)[0] + ')'">
@@ -62,11 +53,6 @@
                     this.send('DIRECT')
                 }
             },
-            sendIndirect() {
-                if (!this.$refs.btnIndirect.disabled) {
-                    this.send('INDIRECT')
-                }
-            },
             sendPenalty() {
                 this.send('PENALTY')
             },
@@ -87,13 +73,6 @@
                     return {'ctrl+alt+numpad 7': this.sendDirect};
                 } else if (this.teamColor === TEAM_BLUE) {
                     return {'ctrl+alt+numpad 9': this.sendDirect};
-                }
-            },
-            keymapIndirect() {
-                if (this.teamColor === TEAM_YELLOW) {
-                    return {'ctrl+alt+numpad 4': this.sendIndirect};
-                } else if (this.teamColor === TEAM_BLUE) {
-                    return {'ctrl+alt+numpad 6': this.sendIndirect};
                 }
             },
             state() {
