@@ -24,3 +24,6 @@ yarn-error.log*
 
 # app-specific ignores
 /*.json.stream
+
+# Local installations
+/.local

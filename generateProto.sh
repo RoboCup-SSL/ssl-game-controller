@@ -1,48 +1,42 @@
 #!/bin/bash
+set -euo pipefail
 
-# Fail on errors
-set -e
+PB_VERSION=3.15.8
+PB_GO_VERSION=$(go list -m all | grep google.golang.org/protobuf | awk '{print $2}')
+
+# Create a local bin folder
+LOCAL_DIR=".local"
+mkdir -p "${LOCAL_DIR}"
+
+# install a specific version of protoc
+PB_REL="https://github.com/protocolbuffers/protobuf/releases"
+if ! protoc --version | grep "${PB_VERSION}" >/dev/null; then
+  if [[ ! -f "${LOCAL_DIR}/bin/protoc" ]]; then
+    curl -sLO "$PB_REL/download/v${PB_VERSION}/protoc-${PB_VERSION}-linux-x86_64.zip"
+    unzip "protoc-${PB_VERSION}-linux-x86_64.zip" -d "${LOCAL_DIR}"
+    rm "protoc-${PB_VERSION}-linux-x86_64.zip"
+  fi
+  export PATH="${LOCAL_DIR}/bin:$PATH"
+fi
+
+###
+
+if ! protoc --version | grep "${PB_VERSION}"; then
+  echo "protoc version is not ${PB_VERSION}"
+  exit 1
+fi
+
+if ! protoc-gen-go --version | grep "${PB_GO_VERSION}"; then
+  echo "protoc-gen-go version is not ${PB_GO_VERSION}"
+  exit 1
+fi
+
+###
+
 # Print commands
 set -x
 
-# install latest protoc-gen-go
-go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
-
-# common GC
-protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_common.proto
-protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_geometry.proto
-
-# vision
-protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_vision_detection.proto
-protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_vision_geometry.proto
-protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_vision_wrapper.proto
-
-# tracked vision
-protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_vision_detection_tracked.proto
-protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_vision_wrapper_tracked.proto
-
-# game events
-protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_game_event.proto
-
-# referee message
-protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_referee_message.proto
-
-# remote communication
-protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_rcon.proto
-protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_rcon_autoref.proto
-protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_rcon_team.proto
-protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_rcon_remotecontrol.proto
-
-# internal communication
-protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_state.proto
-protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_change.proto
-protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_api.proto
-protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_engine.proto
-protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_engine_config.proto
-
-# continuous integration communication
-protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_gc_ci.proto
-protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/ssl_autoref_ci.proto
+protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/*.proto
 
 # generate javascript code
 pbjs -t static-module -w es6 -o src/proto.js \
