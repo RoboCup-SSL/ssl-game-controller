@@ -22,7 +22,7 @@
         methods: {
             updateGoalkeeper: function (v) {
                 submitChange({
-                    updateTeamState: {
+                    updateTeamStateChange: {
                         forTeam: this.teamColor,
                         goalkeeper: v
                     }

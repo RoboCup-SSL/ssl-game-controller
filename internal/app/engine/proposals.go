@@ -30,8 +30,8 @@ func (e *Engine) EnqueueGameEvent(gameEvent *state.GameEvent) {
 	case AutoRefConfig_BEHAVIOR_LOG:
 		e.Enqueue(&statemachine.Change{
 			Origin: &changeOriginEngine,
-			Change: &statemachine.Change_AddPassiveGameEvent{
-				AddPassiveGameEvent: &statemachine.AddPassiveGameEvent{
+			Change: &statemachine.Change_AddPassiveGameEventChange{
+				AddPassiveGameEventChange: &statemachine.Change_AddPassiveGameEvent{
 					GameEvent: gameEvent,
 				},
 			},
@@ -39,8 +39,8 @@ func (e *Engine) EnqueueGameEvent(gameEvent *state.GameEvent) {
 	case AutoRefConfig_BEHAVIOR_ACCEPT, AutoRefConfig_BEHAVIOR_UNKNOWN:
 		e.Enqueue(&statemachine.Change{
 			Origin: &changeOriginEngine,
-			Change: &statemachine.Change_AddGameEvent{
-				AddGameEvent: &statemachine.AddGameEvent{
+			Change: &statemachine.Change_AddGameEventChange{
+				AddGameEventChange: &statemachine.Change_AddGameEvent{
 					GameEvent: gameEvent,
 				},
 			},

@@ -18,7 +18,7 @@
         methods: {
             edit: function () {
                 submitChange({
-                    updateTeamState: {
+                    updateTeamStateChange: {
                         forTeam: this.teamColor,
                         requestsTimeout: !this.requestsTimeout
                     }

@@ -71,7 +71,7 @@ func NewEngine(gameConfig config.Game, engineConfig config.Engine) (e *Engine) {
 
 // Enqueue adds the change to the change queue
 func (e *Engine) Enqueue(change *statemachine.Change) {
-	if change.GetAddGameEvent() != nil {
+	if change.GetAddGameEventChange() != nil {
 		change = e.filterGameEvent(change)
 		if change == nil {
 			return
@@ -119,7 +119,7 @@ func isNonMajorityOrigin(origins []string) bool {
 }
 
 func (e *Engine) filterGameEvent(change *statemachine.Change) *statemachine.Change {
-	gameEvent := change.GetAddGameEvent().GameEvent
+	gameEvent := change.GetAddGameEventChange().GameEvent
 	behavior := e.config.GameEventBehavior[gameEvent.Type.String()]
 	if isNonMajorityOrigin(gameEvent.Origin) && behavior == Config_BEHAVIOR_ACCEPT_MAJORITY {
 		behavior = Config_BEHAVIOR_ACCEPT
@@ -131,8 +131,8 @@ func (e *Engine) filterGameEvent(change *statemachine.Change) *statemachine.Chan
 		timestamp := timestamppb.New(e.timeProvider())
 		return &statemachine.Change{
 			Origin: &changeOriginEngine,
-			Change: &statemachine.Change_AddProposal{
-				AddProposal: &statemachine.AddProposal{
+			Change: &statemachine.Change_AddProposalChange{
+				AddProposalChange: &statemachine.Change_AddProposal{
 					Proposal: &state.Proposal{
 						Timestamp: timestamp,
 						GameEvent: gameEvent,
@@ -143,8 +143,8 @@ func (e *Engine) filterGameEvent(change *statemachine.Change) *statemachine.Chan
 	case Config_BEHAVIOR_LOG:
 		return &statemachine.Change{
 			Origin: &changeOriginEngine,
-			Change: &statemachine.Change_AddPassiveGameEvent{
-				AddPassiveGameEvent: &statemachine.AddPassiveGameEvent{
+			Change: &statemachine.Change_AddPassiveGameEventChange{
+				AddPassiveGameEventChange: &statemachine.Change_AddPassiveGameEvent{
 					GameEvent: gameEvent,
 				},
 			},
@@ -296,22 +296,22 @@ func (e *Engine) processChange(change *statemachine.Change) (newChanges []*state
 	entry.Timestamp = timestamppb.New(e.timeProvider())
 	proto.Merge(entry.StatePre, e.currentState)
 
-	if change.GetRevert() != nil {
-		if change.GetRevert().ChangeId == nil {
+	if change.GetRevertChange() != nil {
+		if change.GetRevertChange().ChangeId == nil {
 			log.Printf("Missing change id in revert change")
 			return
 		}
-		entryToRevert := e.stateStore.FindEntry(*change.GetRevert().ChangeId)
+		entryToRevert := e.stateStore.FindEntry(*change.GetRevertChange().ChangeId)
 		if entryToRevert == nil {
-			log.Printf("Could not find state id %v. Can not revert.", *change.GetRevert().ChangeId)
+			log.Printf("Could not find state id %v. Can not revert.", *change.GetRevertChange().ChangeId)
 			return
 		} else {
 			entry.State = entryToRevert.StatePre
 			if *entry.State.Command.Type != state.Command_HALT {
 				// halt the game after a revert - just to be save
 				haltChange := statemachine.Change{
-					Change: &statemachine.Change_NewCommand{
-						NewCommand: &statemachine.NewCommand{
+					Change: &statemachine.Change_NewCommandChange{
+						NewCommandChange: &statemachine.Change_NewCommand{
 							Command: state.NewCommandNeutral(state.Command_HALT),
 						},
 					},
@@ -377,12 +377,12 @@ func (e *Engine) createInitialState() (s *state.State) {
 // postProcessChange performs synchronous post processing steps
 func (e *Engine) postProcessChange(entry *statemachine.StateChange) {
 	change := entry.Change
-	if change.GetChangeStage() != nil &&
-		*change.GetChangeStage().NewStage == state.Referee_NORMAL_FIRST_HALF {
+	if change.GetChangeStageChange() != nil &&
+		*change.GetChangeStageChange().NewStage == state.Referee_NORMAL_FIRST_HALF {
 		e.currentState.MatchTimeStart = timestamppb.New(e.timeProvider())
 	}
-	if change.GetNewCommand() != nil &&
-		*change.GetNewCommand().Command.Type == state.Command_STOP &&
+	if change.GetNewCommandChange() != nil &&
+		*change.GetNewCommandChange().Command.Type == state.Command_STOP &&
 		// include STOP from last state as well, as game events may come in shortly after state changed to STOP
 		// for example if two robots dribbled ball to far, autoRefs will trigger two events after each other
 		(entry.StatePre.Command.IsRunning() || *entry.StatePre.Command.Type == state.Command_STOP) {

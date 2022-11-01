@@ -42,7 +42,7 @@
         methods: {
             removeFoul(id) {
                 submitChange({
-                    updateTeamState: {
+                    updateTeamStateChange: {
                         forTeam: this.teamColor,
                         removeFoul: id
                     }

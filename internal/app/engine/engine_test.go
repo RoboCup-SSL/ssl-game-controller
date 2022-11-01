@@ -33,8 +33,8 @@ func Test_Engine(t *testing.T) {
 	wantNewState := state.NewState()
 	proto.Merge(wantNewState, engine.currentState)
 	engine.Enqueue(&statemachine.Change{
-		Change: &statemachine.Change_NewCommand{
-			NewCommand: &statemachine.NewCommand{
+		Change: &statemachine.Change_NewCommandChange{
+			NewCommandChange: &statemachine.Change_NewCommand{
 				Command: state.NewCommandNeutral(state.Command_HALT),
 			},
 		},

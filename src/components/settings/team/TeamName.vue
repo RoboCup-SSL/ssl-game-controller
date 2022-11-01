@@ -29,7 +29,7 @@
         methods: {
             updateTeamName: function (v) {
                 submitChange({
-                    updateTeamState: {
+                    updateTeamStateChange: {
                         forTeam: this.teamColor,
                         teamName: v
                     }

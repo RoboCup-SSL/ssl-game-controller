@@ -82,7 +82,7 @@
             },
             accept(groupId) {
                 submitChange({
-                    acceptProposalGroup: {
+                    acceptProposalGroupChange: {
                         groupId: groupId,
                         acceptedBy: 'UI'
                     }

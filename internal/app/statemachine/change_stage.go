@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func (s *StateMachine) processChangeChangeStage(newState *state.State, change *ChangeStage) (changes []*Change) {
+func (s *StateMachine) processChangeChangeStage(newState *state.State, change *Change_ChangeStage) (changes []*Change) {
 
 	// update stage time
 	newState.StageTimeLeft = durationpb.New(s.stageTimes[*change.NewStage])
@@ -23,8 +23,8 @@ func (s *StateMachine) processChangeChangeStage(newState *state.State, change *C
 
 		// halt the game
 		changes = append(changes, &Change{
-			Change: &Change_NewCommand{
-				NewCommand: &NewCommand{
+			Change: &Change_NewCommandChange{
+				NewCommandChange: &Change_NewCommand{
 					Command: state.NewCommand(state.Command_HALT, state.Team_UNKNOWN),
 				},
 			},

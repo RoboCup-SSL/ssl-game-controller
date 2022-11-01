@@ -42,7 +42,7 @@
         methods: {
             removeCard(cardId) {
                 submitChange({
-                    updateTeamState: {
+                    updateTeamStateChange: {
                         forTeam: this.teamColor,
                         removeRedCard: cardId
                     }

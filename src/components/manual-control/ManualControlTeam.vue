@@ -43,10 +43,10 @@
                 submitNewCommand(command, this.teamColor);
             },
             addYellowCard() {
-                submitChange({addYellowCard: {forTeam: this.teamColor}});
+                submitChange({addYellowCardChange: {forTeam: this.teamColor}});
             },
             addRedCard() {
-                submitChange({addRedCard: {forTeam: this.teamColor}});
+                submitChange({addRedCardChange: {forTeam: this.teamColor}});
             },
             addGoal() {
                 submitGameEvent({

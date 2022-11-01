@@ -26,7 +26,7 @@
         methods: {
             updateChallengeFlags: function (v) {
                 submitChange({
-                    updateTeamState: {
+                    updateTeamStateChange: {
                         forTeam: this.teamColor,
                         challengeFlags: Number(v)
                     }

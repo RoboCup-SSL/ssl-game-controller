@@ -21,7 +21,7 @@
         methods: {
             updateGoals: function (v) {
                 submitChange({
-                    updateTeamState: {
+                    updateTeamStateChange: {
                         forTeam: this.teamColor,
                         goals: Number(v)
                     }

@@ -18,8 +18,8 @@ func createGameEventChange(eventType state.GameEvent_Type, event *state.GameEven
 	event.Origin = []string{changeOriginEngine}
 	return &statemachine.Change{
 		Origin: &changeOriginEngine,
-		Change: &statemachine.Change_AddGameEvent{
-			AddGameEvent: &statemachine.AddGameEvent{
+		Change: &statemachine.Change_AddGameEventChange{
+			AddGameEventChange: &statemachine.Change_AddGameEvent{
 				GameEvent: event,
 			},
 		},

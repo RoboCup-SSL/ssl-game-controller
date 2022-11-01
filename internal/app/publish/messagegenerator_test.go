@@ -12,8 +12,8 @@ func Test_generateMessages(t *testing.T) {
 	hookOut := engine.HookOut{
 		State: s,
 		Change: &statemachine.Change{
-			Change: &statemachine.Change_YellowCardOver{
-				YellowCardOver: &statemachine.YellowCardOver{},
+			Change: &statemachine.Change_YellowCardOverChange{
+				YellowCardOverChange: &statemachine.Change_YellowCardOver{},
 			},
 		},
 	}

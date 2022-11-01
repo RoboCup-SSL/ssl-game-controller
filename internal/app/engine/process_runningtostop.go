@@ -15,8 +15,8 @@ func (e *Engine) processRunningToStop() {
 		log.Printf("Running -> Stop: Ball placement is needed")
 		e.Enqueue(&statemachine.Change{
 			Origin: &changeOriginEngine,
-			Change: &statemachine.Change_StartBallPlacement{
-				StartBallPlacement: &statemachine.StartBallPlacement{},
+			Change: &statemachine.Change_StartBallPlacementChange{
+				StartBallPlacementChange: &statemachine.Change_StartBallPlacement{},
 			},
 		})
 	} else {

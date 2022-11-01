@@ -15954,23 +15954,23 @@ export const Change = $root.Change = (() => {
      * @interface IChange
      * @property {string|null} [origin] Change origin
      * @property {boolean|null} [revertible] Change revertible
-     * @property {INewCommand|null} [newCommand] Change newCommand
-     * @property {IChangeStage|null} [changeStage] Change changeStage
-     * @property {ISetBallPlacementPos|null} [setBallPlacementPos] Change setBallPlacementPos
-     * @property {IAddYellowCard|null} [addYellowCard] Change addYellowCard
-     * @property {IAddRedCard|null} [addRedCard] Change addRedCard
-     * @property {IYellowCardOver|null} [yellowCardOver] Change yellowCardOver
-     * @property {IAddGameEvent|null} [addGameEvent] Change addGameEvent
-     * @property {IAddPassiveGameEvent|null} [addPassiveGameEvent] Change addPassiveGameEvent
-     * @property {IAddProposal|null} [addProposal] Change addProposal
-     * @property {IStartBallPlacement|null} [startBallPlacement] Change startBallPlacement
-     * @property {IContinue|null} ["continue"] Change continue
-     * @property {IUpdateConfig|null} [updateConfig] Change updateConfig
-     * @property {IUpdateTeamState|null} [updateTeamState] Change updateTeamState
-     * @property {ISwitchColors|null} [switchColors] Change switchColors
-     * @property {IRevert|null} [revert] Change revert
-     * @property {INewGameState|null} [newGameState] Change newGameState
-     * @property {IAcceptProposalGroup|null} [acceptProposalGroup] Change acceptProposalGroup
+     * @property {Change.INewCommand|null} [newCommandChange] Change newCommandChange
+     * @property {Change.IChangeStage|null} [changeStageChange] Change changeStageChange
+     * @property {Change.ISetBallPlacementPos|null} [setBallPlacementPosChange] Change setBallPlacementPosChange
+     * @property {Change.IAddYellowCard|null} [addYellowCardChange] Change addYellowCardChange
+     * @property {Change.IAddRedCard|null} [addRedCardChange] Change addRedCardChange
+     * @property {Change.IYellowCardOver|null} [yellowCardOverChange] Change yellowCardOverChange
+     * @property {Change.IAddGameEvent|null} [addGameEventChange] Change addGameEventChange
+     * @property {Change.IAddPassiveGameEvent|null} [addPassiveGameEventChange] Change addPassiveGameEventChange
+     * @property {Change.IAddProposal|null} [addProposalChange] Change addProposalChange
+     * @property {Change.IStartBallPlacement|null} [startBallPlacementChange] Change startBallPlacementChange
+     * @property {Change.IContinue|null} [continueChange] Change continueChange
+     * @property {Change.IUpdateConfig|null} [updateConfigChange] Change updateConfigChange
+     * @property {Change.IUpdateTeamState|null} [updateTeamStateChange] Change updateTeamStateChange
+     * @property {Change.ISwitchColors|null} [switchColorsChange] Change switchColorsChange
+     * @property {Change.IRevert|null} [revertChange] Change revertChange
+     * @property {Change.INewGameState|null} [newGameStateChange] Change newGameStateChange
+     * @property {Change.IAcceptProposalGroup|null} [acceptProposalGroupChange] Change acceptProposalGroupChange
      */
 
     /**
@@ -16005,152 +16005,152 @@ export const Change = $root.Change = (() => {
     Change.prototype.revertible = false;
 
     /**
-     * Change newCommand.
-     * @member {INewCommand|null|undefined} newCommand
+     * Change newCommandChange.
+     * @member {Change.INewCommand|null|undefined} newCommandChange
      * @memberof Change
      * @instance
      */
-    Change.prototype.newCommand = null;
+    Change.prototype.newCommandChange = null;
 
     /**
-     * Change changeStage.
-     * @member {IChangeStage|null|undefined} changeStage
+     * Change changeStageChange.
+     * @member {Change.IChangeStage|null|undefined} changeStageChange
      * @memberof Change
      * @instance
      */
-    Change.prototype.changeStage = null;
+    Change.prototype.changeStageChange = null;
 
     /**
-     * Change setBallPlacementPos.
-     * @member {ISetBallPlacementPos|null|undefined} setBallPlacementPos
+     * Change setBallPlacementPosChange.
+     * @member {Change.ISetBallPlacementPos|null|undefined} setBallPlacementPosChange
      * @memberof Change
      * @instance
      */
-    Change.prototype.setBallPlacementPos = null;
+    Change.prototype.setBallPlacementPosChange = null;
 
     /**
-     * Change addYellowCard.
-     * @member {IAddYellowCard|null|undefined} addYellowCard
+     * Change addYellowCardChange.
+     * @member {Change.IAddYellowCard|null|undefined} addYellowCardChange
      * @memberof Change
      * @instance
      */
-    Change.prototype.addYellowCard = null;
+    Change.prototype.addYellowCardChange = null;
 
     /**
-     * Change addRedCard.
-     * @member {IAddRedCard|null|undefined} addRedCard
+     * Change addRedCardChange.
+     * @member {Change.IAddRedCard|null|undefined} addRedCardChange
      * @memberof Change
      * @instance
      */
-    Change.prototype.addRedCard = null;
+    Change.prototype.addRedCardChange = null;
 
     /**
-     * Change yellowCardOver.
-     * @member {IYellowCardOver|null|undefined} yellowCardOver
+     * Change yellowCardOverChange.
+     * @member {Change.IYellowCardOver|null|undefined} yellowCardOverChange
      * @memberof Change
      * @instance
      */
-    Change.prototype.yellowCardOver = null;
+    Change.prototype.yellowCardOverChange = null;
 
     /**
-     * Change addGameEvent.
-     * @member {IAddGameEvent|null|undefined} addGameEvent
+     * Change addGameEventChange.
+     * @member {Change.IAddGameEvent|null|undefined} addGameEventChange
      * @memberof Change
      * @instance
      */
-    Change.prototype.addGameEvent = null;
+    Change.prototype.addGameEventChange = null;
 
     /**
-     * Change addPassiveGameEvent.
-     * @member {IAddPassiveGameEvent|null|undefined} addPassiveGameEvent
+     * Change addPassiveGameEventChange.
+     * @member {Change.IAddPassiveGameEvent|null|undefined} addPassiveGameEventChange
      * @memberof Change
      * @instance
      */
-    Change.prototype.addPassiveGameEvent = null;
+    Change.prototype.addPassiveGameEventChange = null;
 
     /**
-     * Change addProposal.
-     * @member {IAddProposal|null|undefined} addProposal
+     * Change addProposalChange.
+     * @member {Change.IAddProposal|null|undefined} addProposalChange
      * @memberof Change
      * @instance
      */
-    Change.prototype.addProposal = null;
+    Change.prototype.addProposalChange = null;
 
     /**
-     * Change startBallPlacement.
-     * @member {IStartBallPlacement|null|undefined} startBallPlacement
+     * Change startBallPlacementChange.
+     * @member {Change.IStartBallPlacement|null|undefined} startBallPlacementChange
      * @memberof Change
      * @instance
      */
-    Change.prototype.startBallPlacement = null;
+    Change.prototype.startBallPlacementChange = null;
 
     /**
-     * Change continue.
-     * @member {IContinue|null|undefined} continue
+     * Change continueChange.
+     * @member {Change.IContinue|null|undefined} continueChange
      * @memberof Change
      * @instance
      */
-    Change.prototype["continue"] = null;
+    Change.prototype.continueChange = null;
 
     /**
-     * Change updateConfig.
-     * @member {IUpdateConfig|null|undefined} updateConfig
+     * Change updateConfigChange.
+     * @member {Change.IUpdateConfig|null|undefined} updateConfigChange
      * @memberof Change
      * @instance
      */
-    Change.prototype.updateConfig = null;
+    Change.prototype.updateConfigChange = null;
 
     /**
-     * Change updateTeamState.
-     * @member {IUpdateTeamState|null|undefined} updateTeamState
+     * Change updateTeamStateChange.
+     * @member {Change.IUpdateTeamState|null|undefined} updateTeamStateChange
      * @memberof Change
      * @instance
      */
-    Change.prototype.updateTeamState = null;
+    Change.prototype.updateTeamStateChange = null;
 
     /**
-     * Change switchColors.
-     * @member {ISwitchColors|null|undefined} switchColors
+     * Change switchColorsChange.
+     * @member {Change.ISwitchColors|null|undefined} switchColorsChange
      * @memberof Change
      * @instance
      */
-    Change.prototype.switchColors = null;
+    Change.prototype.switchColorsChange = null;
 
     /**
-     * Change revert.
-     * @member {IRevert|null|undefined} revert
+     * Change revertChange.
+     * @member {Change.IRevert|null|undefined} revertChange
      * @memberof Change
      * @instance
      */
-    Change.prototype.revert = null;
+    Change.prototype.revertChange = null;
 
     /**
-     * Change newGameState.
-     * @member {INewGameState|null|undefined} newGameState
+     * Change newGameStateChange.
+     * @member {Change.INewGameState|null|undefined} newGameStateChange
      * @memberof Change
      * @instance
      */
-    Change.prototype.newGameState = null;
+    Change.prototype.newGameStateChange = null;
 
     /**
-     * Change acceptProposalGroup.
-     * @member {IAcceptProposalGroup|null|undefined} acceptProposalGroup
+     * Change acceptProposalGroupChange.
+     * @member {Change.IAcceptProposalGroup|null|undefined} acceptProposalGroupChange
      * @memberof Change
      * @instance
      */
-    Change.prototype.acceptProposalGroup = null;
+    Change.prototype.acceptProposalGroupChange = null;
 
     // OneOf field names bound to virtual getters and setters
     let $oneOfFields;
 
     /**
      * Change change.
-     * @member {"newCommand"|"changeStage"|"setBallPlacementPos"|"addYellowCard"|"addRedCard"|"yellowCardOver"|"addGameEvent"|"addPassiveGameEvent"|"addProposal"|"startBallPlacement"|"continue"|"updateConfig"|"updateTeamState"|"switchColors"|"revert"|"newGameState"|"acceptProposalGroup"|undefined} change
+     * @member {"newCommandChange"|"changeStageChange"|"setBallPlacementPosChange"|"addYellowCardChange"|"addRedCardChange"|"yellowCardOverChange"|"addGameEventChange"|"addPassiveGameEventChange"|"addProposalChange"|"startBallPlacementChange"|"continueChange"|"updateConfigChange"|"updateTeamStateChange"|"switchColorsChange"|"revertChange"|"newGameStateChange"|"acceptProposalGroupChange"|undefined} change
      * @memberof Change
      * @instance
      */
     Object.defineProperty(Change.prototype, "change", {
-        get: $util.oneOfGetter($oneOfFields = ["newCommand", "changeStage", "setBallPlacementPos", "addYellowCard", "addRedCard", "yellowCardOver", "addGameEvent", "addPassiveGameEvent", "addProposal", "startBallPlacement", "continue", "updateConfig", "updateTeamState", "switchColors", "revert", "newGameState", "acceptProposalGroup"]),
+        get: $util.oneOfGetter($oneOfFields = ["newCommandChange", "changeStageChange", "setBallPlacementPosChange", "addYellowCardChange", "addRedCardChange", "yellowCardOverChange", "addGameEventChange", "addPassiveGameEventChange", "addProposalChange", "startBallPlacementChange", "continueChange", "updateConfigChange", "updateTeamStateChange", "switchColorsChange", "revertChange", "newGameStateChange", "acceptProposalGroupChange"]),
         set: $util.oneOfSetter($oneOfFields)
     });
 
@@ -16180,42 +16180,42 @@ export const Change = $root.Change = (() => {
             writer = $Writer.create();
         if (message.origin != null && Object.hasOwnProperty.call(message, "origin"))
             writer.uint32(/* id 1, wireType 2 =*/10).string(message.origin);
-        if (message.newCommand != null && Object.hasOwnProperty.call(message, "newCommand"))
-            $root.NewCommand.encode(message.newCommand, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-        if (message.changeStage != null && Object.hasOwnProperty.call(message, "changeStage"))
-            $root.ChangeStage.encode(message.changeStage, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-        if (message.setBallPlacementPos != null && Object.hasOwnProperty.call(message, "setBallPlacementPos"))
-            $root.SetBallPlacementPos.encode(message.setBallPlacementPos, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
-        if (message.addYellowCard != null && Object.hasOwnProperty.call(message, "addYellowCard"))
-            $root.AddYellowCard.encode(message.addYellowCard, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
-        if (message.addRedCard != null && Object.hasOwnProperty.call(message, "addRedCard"))
-            $root.AddRedCard.encode(message.addRedCard, writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
-        if (message.yellowCardOver != null && Object.hasOwnProperty.call(message, "yellowCardOver"))
-            $root.YellowCardOver.encode(message.yellowCardOver, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
-        if (message.addGameEvent != null && Object.hasOwnProperty.call(message, "addGameEvent"))
-            $root.AddGameEvent.encode(message.addGameEvent, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
-        if (message.addProposal != null && Object.hasOwnProperty.call(message, "addProposal"))
-            $root.AddProposal.encode(message.addProposal, writer.uint32(/* id 9, wireType 2 =*/74).fork()).ldelim();
-        if (message.startBallPlacement != null && Object.hasOwnProperty.call(message, "startBallPlacement"))
-            $root.StartBallPlacement.encode(message.startBallPlacement, writer.uint32(/* id 10, wireType 2 =*/82).fork()).ldelim();
-        if (message["continue"] != null && Object.hasOwnProperty.call(message, "continue"))
-            $root.Continue.encode(message["continue"], writer.uint32(/* id 11, wireType 2 =*/90).fork()).ldelim();
-        if (message.updateConfig != null && Object.hasOwnProperty.call(message, "updateConfig"))
-            $root.UpdateConfig.encode(message.updateConfig, writer.uint32(/* id 12, wireType 2 =*/98).fork()).ldelim();
-        if (message.updateTeamState != null && Object.hasOwnProperty.call(message, "updateTeamState"))
-            $root.UpdateTeamState.encode(message.updateTeamState, writer.uint32(/* id 13, wireType 2 =*/106).fork()).ldelim();
-        if (message.switchColors != null && Object.hasOwnProperty.call(message, "switchColors"))
-            $root.SwitchColors.encode(message.switchColors, writer.uint32(/* id 14, wireType 2 =*/114).fork()).ldelim();
-        if (message.revert != null && Object.hasOwnProperty.call(message, "revert"))
-            $root.Revert.encode(message.revert, writer.uint32(/* id 15, wireType 2 =*/122).fork()).ldelim();
+        if (message.newCommandChange != null && Object.hasOwnProperty.call(message, "newCommandChange"))
+            $root.Change.NewCommand.encode(message.newCommandChange, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+        if (message.changeStageChange != null && Object.hasOwnProperty.call(message, "changeStageChange"))
+            $root.Change.ChangeStage.encode(message.changeStageChange, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+        if (message.setBallPlacementPosChange != null && Object.hasOwnProperty.call(message, "setBallPlacementPosChange"))
+            $root.Change.SetBallPlacementPos.encode(message.setBallPlacementPosChange, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+        if (message.addYellowCardChange != null && Object.hasOwnProperty.call(message, "addYellowCardChange"))
+            $root.Change.AddYellowCard.encode(message.addYellowCardChange, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
+        if (message.addRedCardChange != null && Object.hasOwnProperty.call(message, "addRedCardChange"))
+            $root.Change.AddRedCard.encode(message.addRedCardChange, writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
+        if (message.yellowCardOverChange != null && Object.hasOwnProperty.call(message, "yellowCardOverChange"))
+            $root.Change.YellowCardOver.encode(message.yellowCardOverChange, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
+        if (message.addGameEventChange != null && Object.hasOwnProperty.call(message, "addGameEventChange"))
+            $root.Change.AddGameEvent.encode(message.addGameEventChange, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
+        if (message.addProposalChange != null && Object.hasOwnProperty.call(message, "addProposalChange"))
+            $root.Change.AddProposal.encode(message.addProposalChange, writer.uint32(/* id 9, wireType 2 =*/74).fork()).ldelim();
+        if (message.startBallPlacementChange != null && Object.hasOwnProperty.call(message, "startBallPlacementChange"))
+            $root.Change.StartBallPlacement.encode(message.startBallPlacementChange, writer.uint32(/* id 10, wireType 2 =*/82).fork()).ldelim();
+        if (message.continueChange != null && Object.hasOwnProperty.call(message, "continueChange"))
+            $root.Change.Continue.encode(message.continueChange, writer.uint32(/* id 11, wireType 2 =*/90).fork()).ldelim();
+        if (message.updateConfigChange != null && Object.hasOwnProperty.call(message, "updateConfigChange"))
+            $root.Change.UpdateConfig.encode(message.updateConfigChange, writer.uint32(/* id 12, wireType 2 =*/98).fork()).ldelim();
+        if (message.updateTeamStateChange != null && Object.hasOwnProperty.call(message, "updateTeamStateChange"))
+            $root.Change.UpdateTeamState.encode(message.updateTeamStateChange, writer.uint32(/* id 13, wireType 2 =*/106).fork()).ldelim();
+        if (message.switchColorsChange != null && Object.hasOwnProperty.call(message, "switchColorsChange"))
+            $root.Change.SwitchColors.encode(message.switchColorsChange, writer.uint32(/* id 14, wireType 2 =*/114).fork()).ldelim();
+        if (message.revertChange != null && Object.hasOwnProperty.call(message, "revertChange"))
+            $root.Change.Revert.encode(message.revertChange, writer.uint32(/* id 15, wireType 2 =*/122).fork()).ldelim();
         if (message.revertible != null && Object.hasOwnProperty.call(message, "revertible"))
             writer.uint32(/* id 16, wireType 0 =*/128).bool(message.revertible);
-        if (message.newGameState != null && Object.hasOwnProperty.call(message, "newGameState"))
-            $root.NewGameState.encode(message.newGameState, writer.uint32(/* id 17, wireType 2 =*/138).fork()).ldelim();
-        if (message.acceptProposalGroup != null && Object.hasOwnProperty.call(message, "acceptProposalGroup"))
-            $root.AcceptProposalGroup.encode(message.acceptProposalGroup, writer.uint32(/* id 18, wireType 2 =*/146).fork()).ldelim();
-        if (message.addPassiveGameEvent != null && Object.hasOwnProperty.call(message, "addPassiveGameEvent"))
-            $root.AddPassiveGameEvent.encode(message.addPassiveGameEvent, writer.uint32(/* id 19, wireType 2 =*/154).fork()).ldelim();
+        if (message.newGameStateChange != null && Object.hasOwnProperty.call(message, "newGameStateChange"))
+            $root.Change.NewGameState.encode(message.newGameStateChange, writer.uint32(/* id 17, wireType 2 =*/138).fork()).ldelim();
+        if (message.acceptProposalGroupChange != null && Object.hasOwnProperty.call(message, "acceptProposalGroupChange"))
+            $root.Change.AcceptProposalGroup.encode(message.acceptProposalGroupChange, writer.uint32(/* id 18, wireType 2 =*/146).fork()).ldelim();
+        if (message.addPassiveGameEventChange != null && Object.hasOwnProperty.call(message, "addPassiveGameEventChange"))
+            $root.Change.AddPassiveGameEvent.encode(message.addPassiveGameEventChange, writer.uint32(/* id 19, wireType 2 =*/154).fork()).ldelim();
         return writer;
     };
 
@@ -16259,71 +16259,71 @@ export const Change = $root.Change = (() => {
                     break;
                 }
             case 2: {
-                    message.newCommand = $root.NewCommand.decode(reader, reader.uint32());
+                    message.newCommandChange = $root.Change.NewCommand.decode(reader, reader.uint32());
                     break;
                 }
             case 3: {
-                    message.changeStage = $root.ChangeStage.decode(reader, reader.uint32());
+                    message.changeStageChange = $root.Change.ChangeStage.decode(reader, reader.uint32());
                     break;
                 }
             case 4: {
-                    message.setBallPlacementPos = $root.SetBallPlacementPos.decode(reader, reader.uint32());
+                    message.setBallPlacementPosChange = $root.Change.SetBallPlacementPos.decode(reader, reader.uint32());
                     break;
                 }
             case 5: {
-                    message.addYellowCard = $root.AddYellowCard.decode(reader, reader.uint32());
+                    message.addYellowCardChange = $root.Change.AddYellowCard.decode(reader, reader.uint32());
                     break;
                 }
             case 6: {
-                    message.addRedCard = $root.AddRedCard.decode(reader, reader.uint32());
+                    message.addRedCardChange = $root.Change.AddRedCard.decode(reader, reader.uint32());
                     break;
                 }
             case 7: {
-                    message.yellowCardOver = $root.YellowCardOver.decode(reader, reader.uint32());
+                    message.yellowCardOverChange = $root.Change.YellowCardOver.decode(reader, reader.uint32());
                     break;
                 }
             case 8: {
-                    message.addGameEvent = $root.AddGameEvent.decode(reader, reader.uint32());
+                    message.addGameEventChange = $root.Change.AddGameEvent.decode(reader, reader.uint32());
                     break;
                 }
             case 19: {
-                    message.addPassiveGameEvent = $root.AddPassiveGameEvent.decode(reader, reader.uint32());
+                    message.addPassiveGameEventChange = $root.Change.AddPassiveGameEvent.decode(reader, reader.uint32());
                     break;
                 }
             case 9: {
-                    message.addProposal = $root.AddProposal.decode(reader, reader.uint32());
+                    message.addProposalChange = $root.Change.AddProposal.decode(reader, reader.uint32());
                     break;
                 }
             case 10: {
-                    message.startBallPlacement = $root.StartBallPlacement.decode(reader, reader.uint32());
+                    message.startBallPlacementChange = $root.Change.StartBallPlacement.decode(reader, reader.uint32());
                     break;
                 }
             case 11: {
-                    message["continue"] = $root.Continue.decode(reader, reader.uint32());
+                    message.continueChange = $root.Change.Continue.decode(reader, reader.uint32());
                     break;
                 }
             case 12: {
-                    message.updateConfig = $root.UpdateConfig.decode(reader, reader.uint32());
+                    message.updateConfigChange = $root.Change.UpdateConfig.decode(reader, reader.uint32());
                     break;
                 }
             case 13: {
-                    message.updateTeamState = $root.UpdateTeamState.decode(reader, reader.uint32());
+                    message.updateTeamStateChange = $root.Change.UpdateTeamState.decode(reader, reader.uint32());
                     break;
                 }
             case 14: {
-                    message.switchColors = $root.SwitchColors.decode(reader, reader.uint32());
+                    message.switchColorsChange = $root.Change.SwitchColors.decode(reader, reader.uint32());
                     break;
                 }
             case 15: {
-                    message.revert = $root.Revert.decode(reader, reader.uint32());
+                    message.revertChange = $root.Change.Revert.decode(reader, reader.uint32());
                     break;
                 }
             case 17: {
-                    message.newGameState = $root.NewGameState.decode(reader, reader.uint32());
+                    message.newGameStateChange = $root.Change.NewGameState.decode(reader, reader.uint32());
                     break;
                 }
             case 18: {
-                    message.acceptProposalGroup = $root.AcceptProposalGroup.decode(reader, reader.uint32());
+                    message.acceptProposalGroupChange = $root.Change.AcceptProposalGroup.decode(reader, reader.uint32());
                     break;
                 }
             default:
@@ -16368,172 +16368,172 @@ export const Change = $root.Change = (() => {
         if (message.revertible != null && message.hasOwnProperty("revertible"))
             if (typeof message.revertible !== "boolean")
                 return "revertible: boolean expected";
-        if (message.newCommand != null && message.hasOwnProperty("newCommand")) {
+        if (message.newCommandChange != null && message.hasOwnProperty("newCommandChange")) {
             properties.change = 1;
             {
-                let error = $root.NewCommand.verify(message.newCommand);
+                let error = $root.Change.NewCommand.verify(message.newCommandChange);
                 if (error)
-                    return "newCommand." + error;
+                    return "newCommandChange." + error;
             }
         }
-        if (message.changeStage != null && message.hasOwnProperty("changeStage")) {
+        if (message.changeStageChange != null && message.hasOwnProperty("changeStageChange")) {
             if (properties.change === 1)
                 return "change: multiple values";
             properties.change = 1;
             {
-                let error = $root.ChangeStage.verify(message.changeStage);
+                let error = $root.Change.ChangeStage.verify(message.changeStageChange);
                 if (error)
-                    return "changeStage." + error;
+                    return "changeStageChange." + error;
             }
         }
-        if (message.setBallPlacementPos != null && message.hasOwnProperty("setBallPlacementPos")) {
+        if (message.setBallPlacementPosChange != null && message.hasOwnProperty("setBallPlacementPosChange")) {
             if (properties.change === 1)
                 return "change: multiple values";
             properties.change = 1;
             {
-                let error = $root.SetBallPlacementPos.verify(message.setBallPlacementPos);
+                let error = $root.Change.SetBallPlacementPos.verify(message.setBallPlacementPosChange);
                 if (error)
-                    return "setBallPlacementPos." + error;
+                    return "setBallPlacementPosChange." + error;
             }
         }
-        if (message.addYellowCard != null && message.hasOwnProperty("addYellowCard")) {
+        if (message.addYellowCardChange != null && message.hasOwnProperty("addYellowCardChange")) {
             if (properties.change === 1)
                 return "change: multiple values";
             properties.change = 1;
             {
-                let error = $root.AddYellowCard.verify(message.addYellowCard);
+                let error = $root.Change.AddYellowCard.verify(message.addYellowCardChange);
                 if (error)
-                    return "addYellowCard." + error;
+                    return "addYellowCardChange." + error;
             }
         }
-        if (message.addRedCard != null && message.hasOwnProperty("addRedCard")) {
+        if (message.addRedCardChange != null && message.hasOwnProperty("addRedCardChange")) {
             if (properties.change === 1)
                 return "change: multiple values";
             properties.change = 1;
             {
-                let error = $root.AddRedCard.verify(message.addRedCard);
+                let error = $root.Change.AddRedCard.verify(message.addRedCardChange);
                 if (error)
-                    return "addRedCard." + error;
+                    return "addRedCardChange." + error;
             }
         }
-        if (message.yellowCardOver != null && message.hasOwnProperty("yellowCardOver")) {
+        if (message.yellowCardOverChange != null && message.hasOwnProperty("yellowCardOverChange")) {
             if (properties.change === 1)
                 return "change: multiple values";
             properties.change = 1;
             {
-                let error = $root.YellowCardOver.verify(message.yellowCardOver);
+                let error = $root.Change.YellowCardOver.verify(message.yellowCardOverChange);
                 if (error)
-                    return "yellowCardOver." + error;
+                    return "yellowCardOverChange." + error;
             }
         }
-        if (message.addGameEvent != null && message.hasOwnProperty("addGameEvent")) {
+        if (message.addGameEventChange != null && message.hasOwnProperty("addGameEventChange")) {
             if (properties.change === 1)
                 return "change: multiple values";
             properties.change = 1;
             {
-                let error = $root.AddGameEvent.verify(message.addGameEvent);
+                let error = $root.Change.AddGameEvent.verify(message.addGameEventChange);
                 if (error)
-                    return "addGameEvent." + error;
+                    return "addGameEventChange." + error;
             }
         }
-        if (message.addPassiveGameEvent != null && message.hasOwnProperty("addPassiveGameEvent")) {
+        if (message.addPassiveGameEventChange != null && message.hasOwnProperty("addPassiveGameEventChange")) {
             if (properties.change === 1)
                 return "change: multiple values";
             properties.change = 1;
             {
-                let error = $root.AddPassiveGameEvent.verify(message.addPassiveGameEvent);
+                let error = $root.Change.AddPassiveGameEvent.verify(message.addPassiveGameEventChange);
                 if (error)
-                    return "addPassiveGameEvent." + error;
+                    return "addPassiveGameEventChange." + error;
             }
         }
-        if (message.addProposal != null && message.hasOwnProperty("addProposal")) {
+        if (message.addProposalChange != null && message.hasOwnProperty("addProposalChange")) {
             if (properties.change === 1)
                 return "change: multiple values";
             properties.change = 1;
             {
-                let error = $root.AddProposal.verify(message.addProposal);
+                let error = $root.Change.AddProposal.verify(message.addProposalChange);
                 if (error)
-                    return "addProposal." + error;
+                    return "addProposalChange." + error;
             }
         }
-        if (message.startBallPlacement != null && message.hasOwnProperty("startBallPlacement")) {
+        if (message.startBallPlacementChange != null && message.hasOwnProperty("startBallPlacementChange")) {
             if (properties.change === 1)
                 return "change: multiple values";
             properties.change = 1;
             {
-                let error = $root.StartBallPlacement.verify(message.startBallPlacement);
+                let error = $root.Change.StartBallPlacement.verify(message.startBallPlacementChange);
                 if (error)
-                    return "startBallPlacement." + error;
+                    return "startBallPlacementChange." + error;
             }
         }
-        if (message["continue"] != null && message.hasOwnProperty("continue")) {
+        if (message.continueChange != null && message.hasOwnProperty("continueChange")) {
             if (properties.change === 1)
                 return "change: multiple values";
             properties.change = 1;
             {
-                let error = $root.Continue.verify(message["continue"]);
+                let error = $root.Change.Continue.verify(message.continueChange);
                 if (error)
-                    return "continue." + error;
+                    return "continueChange." + error;
             }
         }
-        if (message.updateConfig != null && message.hasOwnProperty("updateConfig")) {
+        if (message.updateConfigChange != null && message.hasOwnProperty("updateConfigChange")) {
             if (properties.change === 1)
                 return "change: multiple values";
             properties.change = 1;
             {
-                let error = $root.UpdateConfig.verify(message.updateConfig);
+                let error = $root.Change.UpdateConfig.verify(message.updateConfigChange);
                 if (error)
-                    return "updateConfig." + error;
+                    return "updateConfigChange." + error;
             }
         }
-        if (message.updateTeamState != null && message.hasOwnProperty("updateTeamState")) {
+        if (message.updateTeamStateChange != null && message.hasOwnProperty("updateTeamStateChange")) {
             if (properties.change === 1)
                 return "change: multiple values";
             properties.change = 1;
             {
-                let error = $root.UpdateTeamState.verify(message.updateTeamState);
+                let error = $root.Change.UpdateTeamState.verify(message.updateTeamStateChange);
                 if (error)
-                    return "updateTeamState." + error;
+                    return "updateTeamStateChange." + error;
             }
         }
-        if (message.switchColors != null && message.hasOwnProperty("switchColors")) {
+        if (message.switchColorsChange != null && message.hasOwnProperty("switchColorsChange")) {
             if (properties.change === 1)
                 return "change: multiple values";
             properties.change = 1;
             {
-                let error = $root.SwitchColors.verify(message.switchColors);
+                let error = $root.Change.SwitchColors.verify(message.switchColorsChange);
                 if (error)
-                    return "switchColors." + error;
+                    return "switchColorsChange." + error;
             }
         }
-        if (message.revert != null && message.hasOwnProperty("revert")) {
+        if (message.revertChange != null && message.hasOwnProperty("revertChange")) {
             if (properties.change === 1)
                 return "change: multiple values";
             properties.change = 1;
             {
-                let error = $root.Revert.verify(message.revert);
+                let error = $root.Change.Revert.verify(message.revertChange);
                 if (error)
-                    return "revert." + error;
+                    return "revertChange." + error;
             }
         }
-        if (message.newGameState != null && message.hasOwnProperty("newGameState")) {
+        if (message.newGameStateChange != null && message.hasOwnProperty("newGameStateChange")) {
             if (properties.change === 1)
                 return "change: multiple values";
             properties.change = 1;
             {
-                let error = $root.NewGameState.verify(message.newGameState);
+                let error = $root.Change.NewGameState.verify(message.newGameStateChange);
                 if (error)
-                    return "newGameState." + error;
+                    return "newGameStateChange." + error;
             }
         }
-        if (message.acceptProposalGroup != null && message.hasOwnProperty("acceptProposalGroup")) {
+        if (message.acceptProposalGroupChange != null && message.hasOwnProperty("acceptProposalGroupChange")) {
             if (properties.change === 1)
                 return "change: multiple values";
             properties.change = 1;
             {
-                let error = $root.AcceptProposalGroup.verify(message.acceptProposalGroup);
+                let error = $root.Change.AcceptProposalGroup.verify(message.acceptProposalGroupChange);
                 if (error)
-                    return "acceptProposalGroup." + error;
+                    return "acceptProposalGroupChange." + error;
             }
         }
         return null;
@@ -16555,90 +16555,90 @@ export const Change = $root.Change = (() => {
             message.origin = String(object.origin);
         if (object.revertible != null)
             message.revertible = Boolean(object.revertible);
-        if (object.newCommand != null) {
-            if (typeof object.newCommand !== "object")
-                throw TypeError(".Change.newCommand: object expected");
-            message.newCommand = $root.NewCommand.fromObject(object.newCommand);
+        if (object.newCommandChange != null) {
+            if (typeof object.newCommandChange !== "object")
+                throw TypeError(".Change.newCommandChange: object expected");
+            message.newCommandChange = $root.Change.NewCommand.fromObject(object.newCommandChange);
         }
-        if (object.changeStage != null) {
-            if (typeof object.changeStage !== "object")
-                throw TypeError(".Change.changeStage: object expected");
-            message.changeStage = $root.ChangeStage.fromObject(object.changeStage);
+        if (object.changeStageChange != null) {
+            if (typeof object.changeStageChange !== "object")
+                throw TypeError(".Change.changeStageChange: object expected");
+            message.changeStageChange = $root.Change.ChangeStage.fromObject(object.changeStageChange);
         }
-        if (object.setBallPlacementPos != null) {
-            if (typeof object.setBallPlacementPos !== "object")
-                throw TypeError(".Change.setBallPlacementPos: object expected");
-            message.setBallPlacementPos = $root.SetBallPlacementPos.fromObject(object.setBallPlacementPos);
+        if (object.setBallPlacementPosChange != null) {
+            if (typeof object.setBallPlacementPosChange !== "object")
+                throw TypeError(".Change.setBallPlacementPosChange: object expected");
+            message.setBallPlacementPosChange = $root.Change.SetBallPlacementPos.fromObject(object.setBallPlacementPosChange);
         }
-        if (object.addYellowCard != null) {
-            if (typeof object.addYellowCard !== "object")
-                throw TypeError(".Change.addYellowCard: object expected");
-            message.addYellowCard = $root.AddYellowCard.fromObject(object.addYellowCard);
+        if (object.addYellowCardChange != null) {
+            if (typeof object.addYellowCardChange !== "object")
+                throw TypeError(".Change.addYellowCardChange: object expected");
+            message.addYellowCardChange = $root.Change.AddYellowCard.fromObject(object.addYellowCardChange);
         }
-        if (object.addRedCard != null) {
-            if (typeof object.addRedCard !== "object")
-                throw TypeError(".Change.addRedCard: object expected");
-            message.addRedCard = $root.AddRedCard.fromObject(object.addRedCard);
+        if (object.addRedCardChange != null) {
+            if (typeof object.addRedCardChange !== "object")
+                throw TypeError(".Change.addRedCardChange: object expected");
+            message.addRedCardChange = $root.Change.AddRedCard.fromObject(object.addRedCardChange);
         }
-        if (object.yellowCardOver != null) {
-            if (typeof object.yellowCardOver !== "object")
-                throw TypeError(".Change.yellowCardOver: object expected");
-            message.yellowCardOver = $root.YellowCardOver.fromObject(object.yellowCardOver);
+        if (object.yellowCardOverChange != null) {
+            if (typeof object.yellowCardOverChange !== "object")
+                throw TypeError(".Change.yellowCardOverChange: object expected");
+            message.yellowCardOverChange = $root.Change.YellowCardOver.fromObject(object.yellowCardOverChange);
         }
-        if (object.addGameEvent != null) {
-            if (typeof object.addGameEvent !== "object")
-                throw TypeError(".Change.addGameEvent: object expected");
-            message.addGameEvent = $root.AddGameEvent.fromObject(object.addGameEvent);
+        if (object.addGameEventChange != null) {
+            if (typeof object.addGameEventChange !== "object")
+                throw TypeError(".Change.addGameEventChange: object expected");
+            message.addGameEventChange = $root.Change.AddGameEvent.fromObject(object.addGameEventChange);
         }
-        if (object.addPassiveGameEvent != null) {
-            if (typeof object.addPassiveGameEvent !== "object")
-                throw TypeError(".Change.addPassiveGameEvent: object expected");
-            message.addPassiveGameEvent = $root.AddPassiveGameEvent.fromObject(object.addPassiveGameEvent);
+        if (object.addPassiveGameEventChange != null) {
+            if (typeof object.addPassiveGameEventChange !== "object")
+                throw TypeError(".Change.addPassiveGameEventChange: object expected");
+            message.addPassiveGameEventChange = $root.Change.AddPassiveGameEvent.fromObject(object.addPassiveGameEventChange);
         }
-        if (object.addProposal != null) {
-            if (typeof object.addProposal !== "object")
-                throw TypeError(".Change.addProposal: object expected");
-            message.addProposal = $root.AddProposal.fromObject(object.addProposal);
+        if (object.addProposalChange != null) {
+            if (typeof object.addProposalChange !== "object")
+                throw TypeError(".Change.addProposalChange: object expected");
+            message.addProposalChange = $root.Change.AddProposal.fromObject(object.addProposalChange);
         }
-        if (object.startBallPlacement != null) {
-            if (typeof object.startBallPlacement !== "object")
-                throw TypeError(".Change.startBallPlacement: object expected");
-            message.startBallPlacement = $root.StartBallPlacement.fromObject(object.startBallPlacement);
+        if (object.startBallPlacementChange != null) {
+            if (typeof object.startBallPlacementChange !== "object")
+                throw TypeError(".Change.startBallPlacementChange: object expected");
+            message.startBallPlacementChange = $root.Change.StartBallPlacement.fromObject(object.startBallPlacementChange);
         }
-        if (object["continue"] != null) {
-            if (typeof object["continue"] !== "object")
-                throw TypeError(".Change.continue: object expected");
-            message["continue"] = $root.Continue.fromObject(object["continue"]);
+        if (object.continueChange != null) {
+            if (typeof object.continueChange !== "object")
+                throw TypeError(".Change.continueChange: object expected");
+            message.continueChange = $root.Change.Continue.fromObject(object.continueChange);
         }
-        if (object.updateConfig != null) {
-            if (typeof object.updateConfig !== "object")
-                throw TypeError(".Change.updateConfig: object expected");
-            message.updateConfig = $root.UpdateConfig.fromObject(object.updateConfig);
+        if (object.updateConfigChange != null) {
+            if (typeof object.updateConfigChange !== "object")
+                throw TypeError(".Change.updateConfigChange: object expected");
+            message.updateConfigChange = $root.Change.UpdateConfig.fromObject(object.updateConfigChange);
         }
-        if (object.updateTeamState != null) {
-            if (typeof object.updateTeamState !== "object")
-                throw TypeError(".Change.updateTeamState: object expected");
-            message.updateTeamState = $root.UpdateTeamState.fromObject(object.updateTeamState);
+        if (object.updateTeamStateChange != null) {
+            if (typeof object.updateTeamStateChange !== "object")
+                throw TypeError(".Change.updateTeamStateChange: object expected");
+            message.updateTeamStateChange = $root.Change.UpdateTeamState.fromObject(object.updateTeamStateChange);
         }
-        if (object.switchColors != null) {
-            if (typeof object.switchColors !== "object")
-                throw TypeError(".Change.switchColors: object expected");
-            message.switchColors = $root.SwitchColors.fromObject(object.switchColors);
+        if (object.switchColorsChange != null) {
+            if (typeof object.switchColorsChange !== "object")
+                throw TypeError(".Change.switchColorsChange: object expected");
+            message.switchColorsChange = $root.Change.SwitchColors.fromObject(object.switchColorsChange);
         }
-        if (object.revert != null) {
-            if (typeof object.revert !== "object")
-                throw TypeError(".Change.revert: object expected");
-            message.revert = $root.Revert.fromObject(object.revert);
+        if (object.revertChange != null) {
+            if (typeof object.revertChange !== "object")
+                throw TypeError(".Change.revertChange: object expected");
+            message.revertChange = $root.Change.Revert.fromObject(object.revertChange);
         }
-        if (object.newGameState != null) {
-            if (typeof object.newGameState !== "object")
-                throw TypeError(".Change.newGameState: object expected");
-            message.newGameState = $root.NewGameState.fromObject(object.newGameState);
+        if (object.newGameStateChange != null) {
+            if (typeof object.newGameStateChange !== "object")
+                throw TypeError(".Change.newGameStateChange: object expected");
+            message.newGameStateChange = $root.Change.NewGameState.fromObject(object.newGameStateChange);
         }
-        if (object.acceptProposalGroup != null) {
-            if (typeof object.acceptProposalGroup !== "object")
-                throw TypeError(".Change.acceptProposalGroup: object expected");
-            message.acceptProposalGroup = $root.AcceptProposalGroup.fromObject(object.acceptProposalGroup);
+        if (object.acceptProposalGroupChange != null) {
+            if (typeof object.acceptProposalGroupChange !== "object")
+                throw TypeError(".Change.acceptProposalGroupChange: object expected");
+            message.acceptProposalGroupChange = $root.Change.AcceptProposalGroup.fromObject(object.acceptProposalGroupChange);
         }
         return message;
     };
@@ -16662,92 +16662,92 @@ export const Change = $root.Change = (() => {
         }
         if (message.origin != null && message.hasOwnProperty("origin"))
             object.origin = message.origin;
-        if (message.newCommand != null && message.hasOwnProperty("newCommand")) {
-            object.newCommand = $root.NewCommand.toObject(message.newCommand, options);
+        if (message.newCommandChange != null && message.hasOwnProperty("newCommandChange")) {
+            object.newCommandChange = $root.Change.NewCommand.toObject(message.newCommandChange, options);
             if (options.oneofs)
-                object.change = "newCommand";
+                object.change = "newCommandChange";
         }
-        if (message.changeStage != null && message.hasOwnProperty("changeStage")) {
-            object.changeStage = $root.ChangeStage.toObject(message.changeStage, options);
+        if (message.changeStageChange != null && message.hasOwnProperty("changeStageChange")) {
+            object.changeStageChange = $root.Change.ChangeStage.toObject(message.changeStageChange, options);
             if (options.oneofs)
-                object.change = "changeStage";
+                object.change = "changeStageChange";
         }
-        if (message.setBallPlacementPos != null && message.hasOwnProperty("setBallPlacementPos")) {
-            object.setBallPlacementPos = $root.SetBallPlacementPos.toObject(message.setBallPlacementPos, options);
+        if (message.setBallPlacementPosChange != null && message.hasOwnProperty("setBallPlacementPosChange")) {
+            object.setBallPlacementPosChange = $root.Change.SetBallPlacementPos.toObject(message.setBallPlacementPosChange, options);
             if (options.oneofs)
-                object.change = "setBallPlacementPos";
+                object.change = "setBallPlacementPosChange";
         }
-        if (message.addYellowCard != null && message.hasOwnProperty("addYellowCard")) {
-            object.addYellowCard = $root.AddYellowCard.toObject(message.addYellowCard, options);
+        if (message.addYellowCardChange != null && message.hasOwnProperty("addYellowCardChange")) {
+            object.addYellowCardChange = $root.Change.AddYellowCard.toObject(message.addYellowCardChange, options);
             if (options.oneofs)
-                object.change = "addYellowCard";
+                object.change = "addYellowCardChange";
         }
-        if (message.addRedCard != null && message.hasOwnProperty("addRedCard")) {
-            object.addRedCard = $root.AddRedCard.toObject(message.addRedCard, options);
+        if (message.addRedCardChange != null && message.hasOwnProperty("addRedCardChange")) {
+            object.addRedCardChange = $root.Change.AddRedCard.toObject(message.addRedCardChange, options);
             if (options.oneofs)
-                object.change = "addRedCard";
+                object.change = "addRedCardChange";
         }
-        if (message.yellowCardOver != null && message.hasOwnProperty("yellowCardOver")) {
-            object.yellowCardOver = $root.YellowCardOver.toObject(message.yellowCardOver, options);
+        if (message.yellowCardOverChange != null && message.hasOwnProperty("yellowCardOverChange")) {
+            object.yellowCardOverChange = $root.Change.YellowCardOver.toObject(message.yellowCardOverChange, options);
             if (options.oneofs)
-                object.change = "yellowCardOver";
+                object.change = "yellowCardOverChange";
         }
-        if (message.addGameEvent != null && message.hasOwnProperty("addGameEvent")) {
-            object.addGameEvent = $root.AddGameEvent.toObject(message.addGameEvent, options);
+        if (message.addGameEventChange != null && message.hasOwnProperty("addGameEventChange")) {
+            object.addGameEventChange = $root.Change.AddGameEvent.toObject(message.addGameEventChange, options);
             if (options.oneofs)
-                object.change = "addGameEvent";
+                object.change = "addGameEventChange";
         }
-        if (message.addProposal != null && message.hasOwnProperty("addProposal")) {
-            object.addProposal = $root.AddProposal.toObject(message.addProposal, options);
+        if (message.addProposalChange != null && message.hasOwnProperty("addProposalChange")) {
+            object.addProposalChange = $root.Change.AddProposal.toObject(message.addProposalChange, options);
             if (options.oneofs)
-                object.change = "addProposal";
+                object.change = "addProposalChange";
         }
-        if (message.startBallPlacement != null && message.hasOwnProperty("startBallPlacement")) {
-            object.startBallPlacement = $root.StartBallPlacement.toObject(message.startBallPlacement, options);
+        if (message.startBallPlacementChange != null && message.hasOwnProperty("startBallPlacementChange")) {
+            object.startBallPlacementChange = $root.Change.StartBallPlacement.toObject(message.startBallPlacementChange, options);
             if (options.oneofs)
-                object.change = "startBallPlacement";
+                object.change = "startBallPlacementChange";
         }
-        if (message["continue"] != null && message.hasOwnProperty("continue")) {
-            object["continue"] = $root.Continue.toObject(message["continue"], options);
+        if (message.continueChange != null && message.hasOwnProperty("continueChange")) {
+            object.continueChange = $root.Change.Continue.toObject(message.continueChange, options);
             if (options.oneofs)
-                object.change = "continue";
+                object.change = "continueChange";
         }
-        if (message.updateConfig != null && message.hasOwnProperty("updateConfig")) {
-            object.updateConfig = $root.UpdateConfig.toObject(message.updateConfig, options);
+        if (message.updateConfigChange != null && message.hasOwnProperty("updateConfigChange")) {
+            object.updateConfigChange = $root.Change.UpdateConfig.toObject(message.updateConfigChange, options);
             if (options.oneofs)
-                object.change = "updateConfig";
+                object.change = "updateConfigChange";
         }
-        if (message.updateTeamState != null && message.hasOwnProperty("updateTeamState")) {
-            object.updateTeamState = $root.UpdateTeamState.toObject(message.updateTeamState, options);
+        if (message.updateTeamStateChange != null && message.hasOwnProperty("updateTeamStateChange")) {
+            object.updateTeamStateChange = $root.Change.UpdateTeamState.toObject(message.updateTeamStateChange, options);
             if (options.oneofs)
-                object.change = "updateTeamState";
+                object.change = "updateTeamStateChange";
         }
-        if (message.switchColors != null && message.hasOwnProperty("switchColors")) {
-            object.switchColors = $root.SwitchColors.toObject(message.switchColors, options);
+        if (message.switchColorsChange != null && message.hasOwnProperty("switchColorsChange")) {
+            object.switchColorsChange = $root.Change.SwitchColors.toObject(message.switchColorsChange, options);
             if (options.oneofs)
-                object.change = "switchColors";
+                object.change = "switchColorsChange";
         }
-        if (message.revert != null && message.hasOwnProperty("revert")) {
-            object.revert = $root.Revert.toObject(message.revert, options);
+        if (message.revertChange != null && message.hasOwnProperty("revertChange")) {
+            object.revertChange = $root.Change.Revert.toObject(message.revertChange, options);
             if (options.oneofs)
-                object.change = "revert";
+                object.change = "revertChange";
         }
         if (message.revertible != null && message.hasOwnProperty("revertible"))
             object.revertible = message.revertible;
-        if (message.newGameState != null && message.hasOwnProperty("newGameState")) {
-            object.newGameState = $root.NewGameState.toObject(message.newGameState, options);
+        if (message.newGameStateChange != null && message.hasOwnProperty("newGameStateChange")) {
+            object.newGameStateChange = $root.Change.NewGameState.toObject(message.newGameStateChange, options);
             if (options.oneofs)
-                object.change = "newGameState";
+                object.change = "newGameStateChange";
         }
-        if (message.acceptProposalGroup != null && message.hasOwnProperty("acceptProposalGroup")) {
-            object.acceptProposalGroup = $root.AcceptProposalGroup.toObject(message.acceptProposalGroup, options);
+        if (message.acceptProposalGroupChange != null && message.hasOwnProperty("acceptProposalGroupChange")) {
+            object.acceptProposalGroupChange = $root.Change.AcceptProposalGroup.toObject(message.acceptProposalGroupChange, options);
             if (options.oneofs)
-                object.change = "acceptProposalGroup";
+                object.change = "acceptProposalGroupChange";
         }
-        if (message.addPassiveGameEvent != null && message.hasOwnProperty("addPassiveGameEvent")) {
-            object.addPassiveGameEvent = $root.AddPassiveGameEvent.toObject(message.addPassiveGameEvent, options);
+        if (message.addPassiveGameEventChange != null && message.hasOwnProperty("addPassiveGameEventChange")) {
+            object.addPassiveGameEventChange = $root.Change.AddPassiveGameEvent.toObject(message.addPassiveGameEventChange, options);
             if (options.oneofs)
-                object.change = "addPassiveGameEvent";
+                object.change = "addPassiveGameEventChange";
         }
         return object;
     };
@@ -16778,4213 +16778,4213 @@ export const Change = $root.Change = (() => {
         return typeUrlPrefix + "/Change";
     };
 
-    return Change;
-})();
+    Change.NewCommand = (function() {
 
-export const NewCommand = $root.NewCommand = (() => {
+        /**
+         * Properties of a NewCommand.
+         * @memberof Change
+         * @interface INewCommand
+         * @property {ICommand|null} [command] NewCommand command
+         */
 
-    /**
-     * Properties of a NewCommand.
-     * @exports INewCommand
-     * @interface INewCommand
-     * @property {ICommand|null} [command] NewCommand command
-     */
+        /**
+         * Constructs a new NewCommand.
+         * @memberof Change
+         * @classdesc Represents a NewCommand.
+         * @implements INewCommand
+         * @constructor
+         * @param {Change.INewCommand=} [properties] Properties to set
+         */
+        function NewCommand(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
 
-    /**
-     * Constructs a new NewCommand.
-     * @exports NewCommand
-     * @classdesc Represents a NewCommand.
-     * @implements INewCommand
-     * @constructor
-     * @param {INewCommand=} [properties] Properties to set
-     */
-    function NewCommand(properties) {
-        if (properties)
-            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                if (properties[keys[i]] != null)
-                    this[keys[i]] = properties[keys[i]];
-    }
+        /**
+         * NewCommand command.
+         * @member {ICommand|null|undefined} command
+         * @memberof Change.NewCommand
+         * @instance
+         */
+        NewCommand.prototype.command = null;
 
-    /**
-     * NewCommand command.
-     * @member {ICommand|null|undefined} command
-     * @memberof NewCommand
-     * @instance
-     */
-    NewCommand.prototype.command = null;
+        /**
+         * Creates a new NewCommand instance using the specified properties.
+         * @function create
+         * @memberof Change.NewCommand
+         * @static
+         * @param {Change.INewCommand=} [properties] Properties to set
+         * @returns {Change.NewCommand} NewCommand instance
+         */
+        NewCommand.create = function create(properties) {
+            return new NewCommand(properties);
+        };
 
-    /**
-     * Creates a new NewCommand instance using the specified properties.
-     * @function create
-     * @memberof NewCommand
-     * @static
-     * @param {INewCommand=} [properties] Properties to set
-     * @returns {NewCommand} NewCommand instance
-     */
-    NewCommand.create = function create(properties) {
-        return new NewCommand(properties);
-    };
+        /**
+         * Encodes the specified NewCommand message. Does not implicitly {@link Change.NewCommand.verify|verify} messages.
+         * @function encode
+         * @memberof Change.NewCommand
+         * @static
+         * @param {Change.INewCommand} message NewCommand message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        NewCommand.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.command != null && Object.hasOwnProperty.call(message, "command"))
+                $root.Command.encode(message.command, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            return writer;
+        };
 
-    /**
-     * Encodes the specified NewCommand message. Does not implicitly {@link NewCommand.verify|verify} messages.
-     * @function encode
-     * @memberof NewCommand
-     * @static
-     * @param {INewCommand} message NewCommand message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    NewCommand.encode = function encode(message, writer) {
-        if (!writer)
-            writer = $Writer.create();
-        if (message.command != null && Object.hasOwnProperty.call(message, "command"))
-            $root.Command.encode(message.command, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-        return writer;
-    };
+        /**
+         * Encodes the specified NewCommand message, length delimited. Does not implicitly {@link Change.NewCommand.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof Change.NewCommand
+         * @static
+         * @param {Change.INewCommand} message NewCommand message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        NewCommand.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
 
-    /**
-     * Encodes the specified NewCommand message, length delimited. Does not implicitly {@link NewCommand.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof NewCommand
-     * @static
-     * @param {INewCommand} message NewCommand message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    NewCommand.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
-    };
-
-    /**
-     * Decodes a NewCommand message from the specified reader or buffer.
-     * @function decode
-     * @memberof NewCommand
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @param {number} [length] Message length if known beforehand
-     * @returns {NewCommand} NewCommand
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    NewCommand.decode = function decode(reader, length) {
-        if (!(reader instanceof $Reader))
-            reader = $Reader.create(reader);
-        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.NewCommand();
-        while (reader.pos < end) {
-            let tag = reader.uint32();
-            switch (tag >>> 3) {
-            case 1: {
-                    message.command = $root.Command.decode(reader, reader.uint32());
+        /**
+         * Decodes a NewCommand message from the specified reader or buffer.
+         * @function decode
+         * @memberof Change.NewCommand
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {Change.NewCommand} NewCommand
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        NewCommand.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Change.NewCommand();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1: {
+                        message.command = $root.Command.decode(reader, reader.uint32());
+                        break;
+                    }
+                default:
+                    reader.skipType(tag & 7);
                     break;
                 }
-            default:
-                reader.skipType(tag & 7);
-                break;
             }
-        }
-        return message;
-    };
+            return message;
+        };
 
-    /**
-     * Decodes a NewCommand message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof NewCommand
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {NewCommand} NewCommand
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    NewCommand.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
+        /**
+         * Decodes a NewCommand message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof Change.NewCommand
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {Change.NewCommand} NewCommand
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        NewCommand.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
 
-    /**
-     * Verifies a NewCommand message.
-     * @function verify
-     * @memberof NewCommand
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    NewCommand.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        if (message.command != null && message.hasOwnProperty("command")) {
-            let error = $root.Command.verify(message.command);
-            if (error)
-                return "command." + error;
-        }
-        return null;
-    };
+        /**
+         * Verifies a NewCommand message.
+         * @function verify
+         * @memberof Change.NewCommand
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        NewCommand.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.command != null && message.hasOwnProperty("command")) {
+                let error = $root.Command.verify(message.command);
+                if (error)
+                    return "command." + error;
+            }
+            return null;
+        };
 
-    /**
-     * Creates a NewCommand message from a plain object. Also converts values to their respective internal types.
-     * @function fromObject
-     * @memberof NewCommand
-     * @static
-     * @param {Object.<string,*>} object Plain object
-     * @returns {NewCommand} NewCommand
-     */
-    NewCommand.fromObject = function fromObject(object) {
-        if (object instanceof $root.NewCommand)
+        /**
+         * Creates a NewCommand message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof Change.NewCommand
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {Change.NewCommand} NewCommand
+         */
+        NewCommand.fromObject = function fromObject(object) {
+            if (object instanceof $root.Change.NewCommand)
+                return object;
+            let message = new $root.Change.NewCommand();
+            if (object.command != null) {
+                if (typeof object.command !== "object")
+                    throw TypeError(".Change.NewCommand.command: object expected");
+                message.command = $root.Command.fromObject(object.command);
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a NewCommand message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof Change.NewCommand
+         * @static
+         * @param {Change.NewCommand} message NewCommand
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        NewCommand.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults)
+                object.command = null;
+            if (message.command != null && message.hasOwnProperty("command"))
+                object.command = $root.Command.toObject(message.command, options);
             return object;
-        let message = new $root.NewCommand();
-        if (object.command != null) {
-            if (typeof object.command !== "object")
-                throw TypeError(".NewCommand.command: object expected");
-            message.command = $root.Command.fromObject(object.command);
+        };
+
+        /**
+         * Converts this NewCommand to JSON.
+         * @function toJSON
+         * @memberof Change.NewCommand
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        NewCommand.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the default type url for NewCommand
+         * @function getTypeUrl
+         * @memberof Change.NewCommand
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        NewCommand.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/Change.NewCommand";
+        };
+
+        return NewCommand;
+    })();
+
+    Change.ChangeStage = (function() {
+
+        /**
+         * Properties of a ChangeStage.
+         * @memberof Change
+         * @interface IChangeStage
+         * @property {Referee.Stage|null} [newStage] ChangeStage newStage
+         */
+
+        /**
+         * Constructs a new ChangeStage.
+         * @memberof Change
+         * @classdesc Represents a ChangeStage.
+         * @implements IChangeStage
+         * @constructor
+         * @param {Change.IChangeStage=} [properties] Properties to set
+         */
+        function ChangeStage(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
         }
-        return message;
-    };
 
-    /**
-     * Creates a plain object from a NewCommand message. Also converts values to other types if specified.
-     * @function toObject
-     * @memberof NewCommand
-     * @static
-     * @param {NewCommand} message NewCommand
-     * @param {$protobuf.IConversionOptions} [options] Conversion options
-     * @returns {Object.<string,*>} Plain object
-     */
-    NewCommand.toObject = function toObject(message, options) {
-        if (!options)
-            options = {};
-        let object = {};
-        if (options.defaults)
-            object.command = null;
-        if (message.command != null && message.hasOwnProperty("command"))
-            object.command = $root.Command.toObject(message.command, options);
-        return object;
-    };
+        /**
+         * ChangeStage newStage.
+         * @member {Referee.Stage} newStage
+         * @memberof Change.ChangeStage
+         * @instance
+         */
+        ChangeStage.prototype.newStage = 0;
 
-    /**
-     * Converts this NewCommand to JSON.
-     * @function toJSON
-     * @memberof NewCommand
-     * @instance
-     * @returns {Object.<string,*>} JSON object
-     */
-    NewCommand.prototype.toJSON = function toJSON() {
-        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-    };
+        /**
+         * Creates a new ChangeStage instance using the specified properties.
+         * @function create
+         * @memberof Change.ChangeStage
+         * @static
+         * @param {Change.IChangeStage=} [properties] Properties to set
+         * @returns {Change.ChangeStage} ChangeStage instance
+         */
+        ChangeStage.create = function create(properties) {
+            return new ChangeStage(properties);
+        };
 
-    /**
-     * Gets the default type url for NewCommand
-     * @function getTypeUrl
-     * @memberof NewCommand
-     * @static
-     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-     * @returns {string} The default type url
-     */
-    NewCommand.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-        if (typeUrlPrefix === undefined) {
-            typeUrlPrefix = "type.googleapis.com";
-        }
-        return typeUrlPrefix + "/NewCommand";
-    };
+        /**
+         * Encodes the specified ChangeStage message. Does not implicitly {@link Change.ChangeStage.verify|verify} messages.
+         * @function encode
+         * @memberof Change.ChangeStage
+         * @static
+         * @param {Change.IChangeStage} message ChangeStage message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ChangeStage.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.newStage != null && Object.hasOwnProperty.call(message, "newStage"))
+                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.newStage);
+            return writer;
+        };
 
-    return NewCommand;
-})();
+        /**
+         * Encodes the specified ChangeStage message, length delimited. Does not implicitly {@link Change.ChangeStage.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof Change.ChangeStage
+         * @static
+         * @param {Change.IChangeStage} message ChangeStage message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ChangeStage.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
 
-export const ChangeStage = $root.ChangeStage = (() => {
-
-    /**
-     * Properties of a ChangeStage.
-     * @exports IChangeStage
-     * @interface IChangeStage
-     * @property {Referee.Stage|null} [newStage] ChangeStage newStage
-     */
-
-    /**
-     * Constructs a new ChangeStage.
-     * @exports ChangeStage
-     * @classdesc Represents a ChangeStage.
-     * @implements IChangeStage
-     * @constructor
-     * @param {IChangeStage=} [properties] Properties to set
-     */
-    function ChangeStage(properties) {
-        if (properties)
-            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                if (properties[keys[i]] != null)
-                    this[keys[i]] = properties[keys[i]];
-    }
-
-    /**
-     * ChangeStage newStage.
-     * @member {Referee.Stage} newStage
-     * @memberof ChangeStage
-     * @instance
-     */
-    ChangeStage.prototype.newStage = 0;
-
-    /**
-     * Creates a new ChangeStage instance using the specified properties.
-     * @function create
-     * @memberof ChangeStage
-     * @static
-     * @param {IChangeStage=} [properties] Properties to set
-     * @returns {ChangeStage} ChangeStage instance
-     */
-    ChangeStage.create = function create(properties) {
-        return new ChangeStage(properties);
-    };
-
-    /**
-     * Encodes the specified ChangeStage message. Does not implicitly {@link ChangeStage.verify|verify} messages.
-     * @function encode
-     * @memberof ChangeStage
-     * @static
-     * @param {IChangeStage} message ChangeStage message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    ChangeStage.encode = function encode(message, writer) {
-        if (!writer)
-            writer = $Writer.create();
-        if (message.newStage != null && Object.hasOwnProperty.call(message, "newStage"))
-            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.newStage);
-        return writer;
-    };
-
-    /**
-     * Encodes the specified ChangeStage message, length delimited. Does not implicitly {@link ChangeStage.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof ChangeStage
-     * @static
-     * @param {IChangeStage} message ChangeStage message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    ChangeStage.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
-    };
-
-    /**
-     * Decodes a ChangeStage message from the specified reader or buffer.
-     * @function decode
-     * @memberof ChangeStage
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @param {number} [length] Message length if known beforehand
-     * @returns {ChangeStage} ChangeStage
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    ChangeStage.decode = function decode(reader, length) {
-        if (!(reader instanceof $Reader))
-            reader = $Reader.create(reader);
-        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.ChangeStage();
-        while (reader.pos < end) {
-            let tag = reader.uint32();
-            switch (tag >>> 3) {
-            case 1: {
-                    message.newStage = reader.int32();
+        /**
+         * Decodes a ChangeStage message from the specified reader or buffer.
+         * @function decode
+         * @memberof Change.ChangeStage
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {Change.ChangeStage} ChangeStage
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ChangeStage.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Change.ChangeStage();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1: {
+                        message.newStage = reader.int32();
+                        break;
+                    }
+                default:
+                    reader.skipType(tag & 7);
                     break;
                 }
-            default:
-                reader.skipType(tag & 7);
-                break;
             }
-        }
-        return message;
-    };
+            return message;
+        };
 
-    /**
-     * Decodes a ChangeStage message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof ChangeStage
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {ChangeStage} ChangeStage
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    ChangeStage.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
+        /**
+         * Decodes a ChangeStage message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof Change.ChangeStage
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {Change.ChangeStage} ChangeStage
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ChangeStage.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
 
-    /**
-     * Verifies a ChangeStage message.
-     * @function verify
-     * @memberof ChangeStage
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    ChangeStage.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        if (message.newStage != null && message.hasOwnProperty("newStage"))
-            switch (message.newStage) {
-            default:
-                return "newStage: enum value expected";
+        /**
+         * Verifies a ChangeStage message.
+         * @function verify
+         * @memberof Change.ChangeStage
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        ChangeStage.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.newStage != null && message.hasOwnProperty("newStage"))
+                switch (message.newStage) {
+                default:
+                    return "newStage: enum value expected";
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                case 8:
+                case 9:
+                case 10:
+                case 11:
+                case 12:
+                case 13:
+                    break;
+                }
+            return null;
+        };
+
+        /**
+         * Creates a ChangeStage message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof Change.ChangeStage
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {Change.ChangeStage} ChangeStage
+         */
+        ChangeStage.fromObject = function fromObject(object) {
+            if (object instanceof $root.Change.ChangeStage)
+                return object;
+            let message = new $root.Change.ChangeStage();
+            switch (object.newStage) {
+            case "NORMAL_FIRST_HALF_PRE":
             case 0:
+                message.newStage = 0;
+                break;
+            case "NORMAL_FIRST_HALF":
             case 1:
+                message.newStage = 1;
+                break;
+            case "NORMAL_HALF_TIME":
             case 2:
+                message.newStage = 2;
+                break;
+            case "NORMAL_SECOND_HALF_PRE":
             case 3:
+                message.newStage = 3;
+                break;
+            case "NORMAL_SECOND_HALF":
             case 4:
+                message.newStage = 4;
+                break;
+            case "EXTRA_TIME_BREAK":
             case 5:
+                message.newStage = 5;
+                break;
+            case "EXTRA_FIRST_HALF_PRE":
             case 6:
+                message.newStage = 6;
+                break;
+            case "EXTRA_FIRST_HALF":
             case 7:
+                message.newStage = 7;
+                break;
+            case "EXTRA_HALF_TIME":
             case 8:
+                message.newStage = 8;
+                break;
+            case "EXTRA_SECOND_HALF_PRE":
             case 9:
+                message.newStage = 9;
+                break;
+            case "EXTRA_SECOND_HALF":
             case 10:
+                message.newStage = 10;
+                break;
+            case "PENALTY_SHOOTOUT_BREAK":
             case 11:
+                message.newStage = 11;
+                break;
+            case "PENALTY_SHOOTOUT":
             case 12:
+                message.newStage = 12;
+                break;
+            case "POST_GAME":
             case 13:
+                message.newStage = 13;
                 break;
             }
-        return null;
-    };
+            return message;
+        };
 
-    /**
-     * Creates a ChangeStage message from a plain object. Also converts values to their respective internal types.
-     * @function fromObject
-     * @memberof ChangeStage
-     * @static
-     * @param {Object.<string,*>} object Plain object
-     * @returns {ChangeStage} ChangeStage
-     */
-    ChangeStage.fromObject = function fromObject(object) {
-        if (object instanceof $root.ChangeStage)
+        /**
+         * Creates a plain object from a ChangeStage message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof Change.ChangeStage
+         * @static
+         * @param {Change.ChangeStage} message ChangeStage
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        ChangeStage.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults)
+                object.newStage = options.enums === String ? "NORMAL_FIRST_HALF_PRE" : 0;
+            if (message.newStage != null && message.hasOwnProperty("newStage"))
+                object.newStage = options.enums === String ? $root.Referee.Stage[message.newStage] : message.newStage;
             return object;
-        let message = new $root.ChangeStage();
-        switch (object.newStage) {
-        case "NORMAL_FIRST_HALF_PRE":
-        case 0:
-            message.newStage = 0;
-            break;
-        case "NORMAL_FIRST_HALF":
-        case 1:
-            message.newStage = 1;
-            break;
-        case "NORMAL_HALF_TIME":
-        case 2:
-            message.newStage = 2;
-            break;
-        case "NORMAL_SECOND_HALF_PRE":
-        case 3:
-            message.newStage = 3;
-            break;
-        case "NORMAL_SECOND_HALF":
-        case 4:
-            message.newStage = 4;
-            break;
-        case "EXTRA_TIME_BREAK":
-        case 5:
-            message.newStage = 5;
-            break;
-        case "EXTRA_FIRST_HALF_PRE":
-        case 6:
-            message.newStage = 6;
-            break;
-        case "EXTRA_FIRST_HALF":
-        case 7:
-            message.newStage = 7;
-            break;
-        case "EXTRA_HALF_TIME":
-        case 8:
-            message.newStage = 8;
-            break;
-        case "EXTRA_SECOND_HALF_PRE":
-        case 9:
-            message.newStage = 9;
-            break;
-        case "EXTRA_SECOND_HALF":
-        case 10:
-            message.newStage = 10;
-            break;
-        case "PENALTY_SHOOTOUT_BREAK":
-        case 11:
-            message.newStage = 11;
-            break;
-        case "PENALTY_SHOOTOUT":
-        case 12:
-            message.newStage = 12;
-            break;
-        case "POST_GAME":
-        case 13:
-            message.newStage = 13;
-            break;
+        };
+
+        /**
+         * Converts this ChangeStage to JSON.
+         * @function toJSON
+         * @memberof Change.ChangeStage
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        ChangeStage.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the default type url for ChangeStage
+         * @function getTypeUrl
+         * @memberof Change.ChangeStage
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        ChangeStage.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/Change.ChangeStage";
+        };
+
+        return ChangeStage;
+    })();
+
+    Change.SetBallPlacementPos = (function() {
+
+        /**
+         * Properties of a SetBallPlacementPos.
+         * @memberof Change
+         * @interface ISetBallPlacementPos
+         * @property {IVector2|null} [pos] SetBallPlacementPos pos
+         */
+
+        /**
+         * Constructs a new SetBallPlacementPos.
+         * @memberof Change
+         * @classdesc Represents a SetBallPlacementPos.
+         * @implements ISetBallPlacementPos
+         * @constructor
+         * @param {Change.ISetBallPlacementPos=} [properties] Properties to set
+         */
+        function SetBallPlacementPos(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
         }
-        return message;
-    };
 
-    /**
-     * Creates a plain object from a ChangeStage message. Also converts values to other types if specified.
-     * @function toObject
-     * @memberof ChangeStage
-     * @static
-     * @param {ChangeStage} message ChangeStage
-     * @param {$protobuf.IConversionOptions} [options] Conversion options
-     * @returns {Object.<string,*>} Plain object
-     */
-    ChangeStage.toObject = function toObject(message, options) {
-        if (!options)
-            options = {};
-        let object = {};
-        if (options.defaults)
-            object.newStage = options.enums === String ? "NORMAL_FIRST_HALF_PRE" : 0;
-        if (message.newStage != null && message.hasOwnProperty("newStage"))
-            object.newStage = options.enums === String ? $root.Referee.Stage[message.newStage] : message.newStage;
-        return object;
-    };
+        /**
+         * SetBallPlacementPos pos.
+         * @member {IVector2|null|undefined} pos
+         * @memberof Change.SetBallPlacementPos
+         * @instance
+         */
+        SetBallPlacementPos.prototype.pos = null;
 
-    /**
-     * Converts this ChangeStage to JSON.
-     * @function toJSON
-     * @memberof ChangeStage
-     * @instance
-     * @returns {Object.<string,*>} JSON object
-     */
-    ChangeStage.prototype.toJSON = function toJSON() {
-        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-    };
+        /**
+         * Creates a new SetBallPlacementPos instance using the specified properties.
+         * @function create
+         * @memberof Change.SetBallPlacementPos
+         * @static
+         * @param {Change.ISetBallPlacementPos=} [properties] Properties to set
+         * @returns {Change.SetBallPlacementPos} SetBallPlacementPos instance
+         */
+        SetBallPlacementPos.create = function create(properties) {
+            return new SetBallPlacementPos(properties);
+        };
 
-    /**
-     * Gets the default type url for ChangeStage
-     * @function getTypeUrl
-     * @memberof ChangeStage
-     * @static
-     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-     * @returns {string} The default type url
-     */
-    ChangeStage.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-        if (typeUrlPrefix === undefined) {
-            typeUrlPrefix = "type.googleapis.com";
-        }
-        return typeUrlPrefix + "/ChangeStage";
-    };
+        /**
+         * Encodes the specified SetBallPlacementPos message. Does not implicitly {@link Change.SetBallPlacementPos.verify|verify} messages.
+         * @function encode
+         * @memberof Change.SetBallPlacementPos
+         * @static
+         * @param {Change.ISetBallPlacementPos} message SetBallPlacementPos message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        SetBallPlacementPos.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.pos != null && Object.hasOwnProperty.call(message, "pos"))
+                $root.Vector2.encode(message.pos, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            return writer;
+        };
 
-    return ChangeStage;
-})();
+        /**
+         * Encodes the specified SetBallPlacementPos message, length delimited. Does not implicitly {@link Change.SetBallPlacementPos.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof Change.SetBallPlacementPos
+         * @static
+         * @param {Change.ISetBallPlacementPos} message SetBallPlacementPos message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        SetBallPlacementPos.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
 
-export const SetBallPlacementPos = $root.SetBallPlacementPos = (() => {
-
-    /**
-     * Properties of a SetBallPlacementPos.
-     * @exports ISetBallPlacementPos
-     * @interface ISetBallPlacementPos
-     * @property {IVector2|null} [pos] SetBallPlacementPos pos
-     */
-
-    /**
-     * Constructs a new SetBallPlacementPos.
-     * @exports SetBallPlacementPos
-     * @classdesc Represents a SetBallPlacementPos.
-     * @implements ISetBallPlacementPos
-     * @constructor
-     * @param {ISetBallPlacementPos=} [properties] Properties to set
-     */
-    function SetBallPlacementPos(properties) {
-        if (properties)
-            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                if (properties[keys[i]] != null)
-                    this[keys[i]] = properties[keys[i]];
-    }
-
-    /**
-     * SetBallPlacementPos pos.
-     * @member {IVector2|null|undefined} pos
-     * @memberof SetBallPlacementPos
-     * @instance
-     */
-    SetBallPlacementPos.prototype.pos = null;
-
-    /**
-     * Creates a new SetBallPlacementPos instance using the specified properties.
-     * @function create
-     * @memberof SetBallPlacementPos
-     * @static
-     * @param {ISetBallPlacementPos=} [properties] Properties to set
-     * @returns {SetBallPlacementPos} SetBallPlacementPos instance
-     */
-    SetBallPlacementPos.create = function create(properties) {
-        return new SetBallPlacementPos(properties);
-    };
-
-    /**
-     * Encodes the specified SetBallPlacementPos message. Does not implicitly {@link SetBallPlacementPos.verify|verify} messages.
-     * @function encode
-     * @memberof SetBallPlacementPos
-     * @static
-     * @param {ISetBallPlacementPos} message SetBallPlacementPos message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    SetBallPlacementPos.encode = function encode(message, writer) {
-        if (!writer)
-            writer = $Writer.create();
-        if (message.pos != null && Object.hasOwnProperty.call(message, "pos"))
-            $root.Vector2.encode(message.pos, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-        return writer;
-    };
-
-    /**
-     * Encodes the specified SetBallPlacementPos message, length delimited. Does not implicitly {@link SetBallPlacementPos.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof SetBallPlacementPos
-     * @static
-     * @param {ISetBallPlacementPos} message SetBallPlacementPos message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    SetBallPlacementPos.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
-    };
-
-    /**
-     * Decodes a SetBallPlacementPos message from the specified reader or buffer.
-     * @function decode
-     * @memberof SetBallPlacementPos
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @param {number} [length] Message length if known beforehand
-     * @returns {SetBallPlacementPos} SetBallPlacementPos
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    SetBallPlacementPos.decode = function decode(reader, length) {
-        if (!(reader instanceof $Reader))
-            reader = $Reader.create(reader);
-        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.SetBallPlacementPos();
-        while (reader.pos < end) {
-            let tag = reader.uint32();
-            switch (tag >>> 3) {
-            case 1: {
-                    message.pos = $root.Vector2.decode(reader, reader.uint32());
+        /**
+         * Decodes a SetBallPlacementPos message from the specified reader or buffer.
+         * @function decode
+         * @memberof Change.SetBallPlacementPos
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {Change.SetBallPlacementPos} SetBallPlacementPos
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        SetBallPlacementPos.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Change.SetBallPlacementPos();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1: {
+                        message.pos = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
+                default:
+                    reader.skipType(tag & 7);
                     break;
                 }
-            default:
-                reader.skipType(tag & 7);
-                break;
             }
-        }
-        return message;
-    };
+            return message;
+        };
 
-    /**
-     * Decodes a SetBallPlacementPos message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof SetBallPlacementPos
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {SetBallPlacementPos} SetBallPlacementPos
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    SetBallPlacementPos.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
+        /**
+         * Decodes a SetBallPlacementPos message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof Change.SetBallPlacementPos
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {Change.SetBallPlacementPos} SetBallPlacementPos
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        SetBallPlacementPos.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
 
-    /**
-     * Verifies a SetBallPlacementPos message.
-     * @function verify
-     * @memberof SetBallPlacementPos
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    SetBallPlacementPos.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        if (message.pos != null && message.hasOwnProperty("pos")) {
-            let error = $root.Vector2.verify(message.pos);
-            if (error)
-                return "pos." + error;
-        }
-        return null;
-    };
+        /**
+         * Verifies a SetBallPlacementPos message.
+         * @function verify
+         * @memberof Change.SetBallPlacementPos
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        SetBallPlacementPos.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.pos != null && message.hasOwnProperty("pos")) {
+                let error = $root.Vector2.verify(message.pos);
+                if (error)
+                    return "pos." + error;
+            }
+            return null;
+        };
 
-    /**
-     * Creates a SetBallPlacementPos message from a plain object. Also converts values to their respective internal types.
-     * @function fromObject
-     * @memberof SetBallPlacementPos
-     * @static
-     * @param {Object.<string,*>} object Plain object
-     * @returns {SetBallPlacementPos} SetBallPlacementPos
-     */
-    SetBallPlacementPos.fromObject = function fromObject(object) {
-        if (object instanceof $root.SetBallPlacementPos)
+        /**
+         * Creates a SetBallPlacementPos message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof Change.SetBallPlacementPos
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {Change.SetBallPlacementPos} SetBallPlacementPos
+         */
+        SetBallPlacementPos.fromObject = function fromObject(object) {
+            if (object instanceof $root.Change.SetBallPlacementPos)
+                return object;
+            let message = new $root.Change.SetBallPlacementPos();
+            if (object.pos != null) {
+                if (typeof object.pos !== "object")
+                    throw TypeError(".Change.SetBallPlacementPos.pos: object expected");
+                message.pos = $root.Vector2.fromObject(object.pos);
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a SetBallPlacementPos message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof Change.SetBallPlacementPos
+         * @static
+         * @param {Change.SetBallPlacementPos} message SetBallPlacementPos
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        SetBallPlacementPos.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults)
+                object.pos = null;
+            if (message.pos != null && message.hasOwnProperty("pos"))
+                object.pos = $root.Vector2.toObject(message.pos, options);
             return object;
-        let message = new $root.SetBallPlacementPos();
-        if (object.pos != null) {
-            if (typeof object.pos !== "object")
-                throw TypeError(".SetBallPlacementPos.pos: object expected");
-            message.pos = $root.Vector2.fromObject(object.pos);
-        }
-        return message;
-    };
+        };
 
-    /**
-     * Creates a plain object from a SetBallPlacementPos message. Also converts values to other types if specified.
-     * @function toObject
-     * @memberof SetBallPlacementPos
-     * @static
-     * @param {SetBallPlacementPos} message SetBallPlacementPos
-     * @param {$protobuf.IConversionOptions} [options] Conversion options
-     * @returns {Object.<string,*>} Plain object
-     */
-    SetBallPlacementPos.toObject = function toObject(message, options) {
-        if (!options)
-            options = {};
-        let object = {};
-        if (options.defaults)
-            object.pos = null;
-        if (message.pos != null && message.hasOwnProperty("pos"))
-            object.pos = $root.Vector2.toObject(message.pos, options);
-        return object;
-    };
+        /**
+         * Converts this SetBallPlacementPos to JSON.
+         * @function toJSON
+         * @memberof Change.SetBallPlacementPos
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        SetBallPlacementPos.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
 
-    /**
-     * Converts this SetBallPlacementPos to JSON.
-     * @function toJSON
-     * @memberof SetBallPlacementPos
-     * @instance
-     * @returns {Object.<string,*>} JSON object
-     */
-    SetBallPlacementPos.prototype.toJSON = function toJSON() {
-        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-    };
-
-    /**
-     * Gets the default type url for SetBallPlacementPos
-     * @function getTypeUrl
-     * @memberof SetBallPlacementPos
-     * @static
-     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-     * @returns {string} The default type url
-     */
-    SetBallPlacementPos.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-        if (typeUrlPrefix === undefined) {
-            typeUrlPrefix = "type.googleapis.com";
-        }
-        return typeUrlPrefix + "/SetBallPlacementPos";
-    };
-
-    return SetBallPlacementPos;
-})();
-
-export const AddYellowCard = $root.AddYellowCard = (() => {
-
-    /**
-     * Properties of an AddYellowCard.
-     * @exports IAddYellowCard
-     * @interface IAddYellowCard
-     * @property {Team|null} [forTeam] AddYellowCard forTeam
-     * @property {IGameEvent|null} [causedByGameEvent] AddYellowCard causedByGameEvent
-     */
-
-    /**
-     * Constructs a new AddYellowCard.
-     * @exports AddYellowCard
-     * @classdesc Represents an AddYellowCard.
-     * @implements IAddYellowCard
-     * @constructor
-     * @param {IAddYellowCard=} [properties] Properties to set
-     */
-    function AddYellowCard(properties) {
-        if (properties)
-            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                if (properties[keys[i]] != null)
-                    this[keys[i]] = properties[keys[i]];
-    }
-
-    /**
-     * AddYellowCard forTeam.
-     * @member {Team} forTeam
-     * @memberof AddYellowCard
-     * @instance
-     */
-    AddYellowCard.prototype.forTeam = 0;
-
-    /**
-     * AddYellowCard causedByGameEvent.
-     * @member {IGameEvent|null|undefined} causedByGameEvent
-     * @memberof AddYellowCard
-     * @instance
-     */
-    AddYellowCard.prototype.causedByGameEvent = null;
-
-    /**
-     * Creates a new AddYellowCard instance using the specified properties.
-     * @function create
-     * @memberof AddYellowCard
-     * @static
-     * @param {IAddYellowCard=} [properties] Properties to set
-     * @returns {AddYellowCard} AddYellowCard instance
-     */
-    AddYellowCard.create = function create(properties) {
-        return new AddYellowCard(properties);
-    };
-
-    /**
-     * Encodes the specified AddYellowCard message. Does not implicitly {@link AddYellowCard.verify|verify} messages.
-     * @function encode
-     * @memberof AddYellowCard
-     * @static
-     * @param {IAddYellowCard} message AddYellowCard message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    AddYellowCard.encode = function encode(message, writer) {
-        if (!writer)
-            writer = $Writer.create();
-        if (message.forTeam != null && Object.hasOwnProperty.call(message, "forTeam"))
-            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.forTeam);
-        if (message.causedByGameEvent != null && Object.hasOwnProperty.call(message, "causedByGameEvent"))
-            $root.GameEvent.encode(message.causedByGameEvent, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-        return writer;
-    };
-
-    /**
-     * Encodes the specified AddYellowCard message, length delimited. Does not implicitly {@link AddYellowCard.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof AddYellowCard
-     * @static
-     * @param {IAddYellowCard} message AddYellowCard message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    AddYellowCard.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
-    };
-
-    /**
-     * Decodes an AddYellowCard message from the specified reader or buffer.
-     * @function decode
-     * @memberof AddYellowCard
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @param {number} [length] Message length if known beforehand
-     * @returns {AddYellowCard} AddYellowCard
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    AddYellowCard.decode = function decode(reader, length) {
-        if (!(reader instanceof $Reader))
-            reader = $Reader.create(reader);
-        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.AddYellowCard();
-        while (reader.pos < end) {
-            let tag = reader.uint32();
-            switch (tag >>> 3) {
-            case 1: {
-                    message.forTeam = reader.int32();
-                    break;
-                }
-            case 2: {
-                    message.causedByGameEvent = $root.GameEvent.decode(reader, reader.uint32());
-                    break;
-                }
-            default:
-                reader.skipType(tag & 7);
-                break;
+        /**
+         * Gets the default type url for SetBallPlacementPos
+         * @function getTypeUrl
+         * @memberof Change.SetBallPlacementPos
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        SetBallPlacementPos.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
             }
+            return typeUrlPrefix + "/Change.SetBallPlacementPos";
+        };
+
+        return SetBallPlacementPos;
+    })();
+
+    Change.AddYellowCard = (function() {
+
+        /**
+         * Properties of an AddYellowCard.
+         * @memberof Change
+         * @interface IAddYellowCard
+         * @property {Team|null} [forTeam] AddYellowCard forTeam
+         * @property {IGameEvent|null} [causedByGameEvent] AddYellowCard causedByGameEvent
+         */
+
+        /**
+         * Constructs a new AddYellowCard.
+         * @memberof Change
+         * @classdesc Represents an AddYellowCard.
+         * @implements IAddYellowCard
+         * @constructor
+         * @param {Change.IAddYellowCard=} [properties] Properties to set
+         */
+        function AddYellowCard(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
         }
-        return message;
-    };
 
-    /**
-     * Decodes an AddYellowCard message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof AddYellowCard
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {AddYellowCard} AddYellowCard
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    AddYellowCard.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
+        /**
+         * AddYellowCard forTeam.
+         * @member {Team} forTeam
+         * @memberof Change.AddYellowCard
+         * @instance
+         */
+        AddYellowCard.prototype.forTeam = 0;
 
-    /**
-     * Verifies an AddYellowCard message.
-     * @function verify
-     * @memberof AddYellowCard
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    AddYellowCard.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        if (message.forTeam != null && message.hasOwnProperty("forTeam"))
-            switch (message.forTeam) {
-            default:
-                return "forTeam: enum value expected";
+        /**
+         * AddYellowCard causedByGameEvent.
+         * @member {IGameEvent|null|undefined} causedByGameEvent
+         * @memberof Change.AddYellowCard
+         * @instance
+         */
+        AddYellowCard.prototype.causedByGameEvent = null;
+
+        /**
+         * Creates a new AddYellowCard instance using the specified properties.
+         * @function create
+         * @memberof Change.AddYellowCard
+         * @static
+         * @param {Change.IAddYellowCard=} [properties] Properties to set
+         * @returns {Change.AddYellowCard} AddYellowCard instance
+         */
+        AddYellowCard.create = function create(properties) {
+            return new AddYellowCard(properties);
+        };
+
+        /**
+         * Encodes the specified AddYellowCard message. Does not implicitly {@link Change.AddYellowCard.verify|verify} messages.
+         * @function encode
+         * @memberof Change.AddYellowCard
+         * @static
+         * @param {Change.IAddYellowCard} message AddYellowCard message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        AddYellowCard.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.forTeam != null && Object.hasOwnProperty.call(message, "forTeam"))
+                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.forTeam);
+            if (message.causedByGameEvent != null && Object.hasOwnProperty.call(message, "causedByGameEvent"))
+                $root.GameEvent.encode(message.causedByGameEvent, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+            return writer;
+        };
+
+        /**
+         * Encodes the specified AddYellowCard message, length delimited. Does not implicitly {@link Change.AddYellowCard.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof Change.AddYellowCard
+         * @static
+         * @param {Change.IAddYellowCard} message AddYellowCard message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        AddYellowCard.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes an AddYellowCard message from the specified reader or buffer.
+         * @function decode
+         * @memberof Change.AddYellowCard
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {Change.AddYellowCard} AddYellowCard
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        AddYellowCard.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Change.AddYellowCard();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1: {
+                        message.forTeam = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.causedByGameEvent = $root.GameEvent.decode(reader, reader.uint32());
+                        break;
+                    }
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes an AddYellowCard message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof Change.AddYellowCard
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {Change.AddYellowCard} AddYellowCard
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        AddYellowCard.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies an AddYellowCard message.
+         * @function verify
+         * @memberof Change.AddYellowCard
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        AddYellowCard.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.forTeam != null && message.hasOwnProperty("forTeam"))
+                switch (message.forTeam) {
+                default:
+                    return "forTeam: enum value expected";
+                case 0:
+                case 1:
+                case 2:
+                    break;
+                }
+            if (message.causedByGameEvent != null && message.hasOwnProperty("causedByGameEvent")) {
+                let error = $root.GameEvent.verify(message.causedByGameEvent);
+                if (error)
+                    return "causedByGameEvent." + error;
+            }
+            return null;
+        };
+
+        /**
+         * Creates an AddYellowCard message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof Change.AddYellowCard
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {Change.AddYellowCard} AddYellowCard
+         */
+        AddYellowCard.fromObject = function fromObject(object) {
+            if (object instanceof $root.Change.AddYellowCard)
+                return object;
+            let message = new $root.Change.AddYellowCard();
+            switch (object.forTeam) {
+            case "UNKNOWN":
             case 0:
+                message.forTeam = 0;
+                break;
+            case "YELLOW":
             case 1:
+                message.forTeam = 1;
+                break;
+            case "BLUE":
             case 2:
+                message.forTeam = 2;
                 break;
             }
-        if (message.causedByGameEvent != null && message.hasOwnProperty("causedByGameEvent")) {
-            let error = $root.GameEvent.verify(message.causedByGameEvent);
-            if (error)
-                return "causedByGameEvent." + error;
-        }
-        return null;
-    };
+            if (object.causedByGameEvent != null) {
+                if (typeof object.causedByGameEvent !== "object")
+                    throw TypeError(".Change.AddYellowCard.causedByGameEvent: object expected");
+                message.causedByGameEvent = $root.GameEvent.fromObject(object.causedByGameEvent);
+            }
+            return message;
+        };
 
-    /**
-     * Creates an AddYellowCard message from a plain object. Also converts values to their respective internal types.
-     * @function fromObject
-     * @memberof AddYellowCard
-     * @static
-     * @param {Object.<string,*>} object Plain object
-     * @returns {AddYellowCard} AddYellowCard
-     */
-    AddYellowCard.fromObject = function fromObject(object) {
-        if (object instanceof $root.AddYellowCard)
+        /**
+         * Creates a plain object from an AddYellowCard message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof Change.AddYellowCard
+         * @static
+         * @param {Change.AddYellowCard} message AddYellowCard
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        AddYellowCard.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.forTeam = options.enums === String ? "UNKNOWN" : 0;
+                object.causedByGameEvent = null;
+            }
+            if (message.forTeam != null && message.hasOwnProperty("forTeam"))
+                object.forTeam = options.enums === String ? $root.Team[message.forTeam] : message.forTeam;
+            if (message.causedByGameEvent != null && message.hasOwnProperty("causedByGameEvent"))
+                object.causedByGameEvent = $root.GameEvent.toObject(message.causedByGameEvent, options);
             return object;
-        let message = new $root.AddYellowCard();
-        switch (object.forTeam) {
-        case "UNKNOWN":
-        case 0:
-            message.forTeam = 0;
-            break;
-        case "YELLOW":
-        case 1:
-            message.forTeam = 1;
-            break;
-        case "BLUE":
-        case 2:
-            message.forTeam = 2;
-            break;
-        }
-        if (object.causedByGameEvent != null) {
-            if (typeof object.causedByGameEvent !== "object")
-                throw TypeError(".AddYellowCard.causedByGameEvent: object expected");
-            message.causedByGameEvent = $root.GameEvent.fromObject(object.causedByGameEvent);
-        }
-        return message;
-    };
+        };
 
-    /**
-     * Creates a plain object from an AddYellowCard message. Also converts values to other types if specified.
-     * @function toObject
-     * @memberof AddYellowCard
-     * @static
-     * @param {AddYellowCard} message AddYellowCard
-     * @param {$protobuf.IConversionOptions} [options] Conversion options
-     * @returns {Object.<string,*>} Plain object
-     */
-    AddYellowCard.toObject = function toObject(message, options) {
-        if (!options)
-            options = {};
-        let object = {};
-        if (options.defaults) {
-            object.forTeam = options.enums === String ? "UNKNOWN" : 0;
-            object.causedByGameEvent = null;
-        }
-        if (message.forTeam != null && message.hasOwnProperty("forTeam"))
-            object.forTeam = options.enums === String ? $root.Team[message.forTeam] : message.forTeam;
-        if (message.causedByGameEvent != null && message.hasOwnProperty("causedByGameEvent"))
-            object.causedByGameEvent = $root.GameEvent.toObject(message.causedByGameEvent, options);
-        return object;
-    };
+        /**
+         * Converts this AddYellowCard to JSON.
+         * @function toJSON
+         * @memberof Change.AddYellowCard
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        AddYellowCard.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
 
-    /**
-     * Converts this AddYellowCard to JSON.
-     * @function toJSON
-     * @memberof AddYellowCard
-     * @instance
-     * @returns {Object.<string,*>} JSON object
-     */
-    AddYellowCard.prototype.toJSON = function toJSON() {
-        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-    };
-
-    /**
-     * Gets the default type url for AddYellowCard
-     * @function getTypeUrl
-     * @memberof AddYellowCard
-     * @static
-     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-     * @returns {string} The default type url
-     */
-    AddYellowCard.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-        if (typeUrlPrefix === undefined) {
-            typeUrlPrefix = "type.googleapis.com";
-        }
-        return typeUrlPrefix + "/AddYellowCard";
-    };
-
-    return AddYellowCard;
-})();
-
-export const AddRedCard = $root.AddRedCard = (() => {
-
-    /**
-     * Properties of an AddRedCard.
-     * @exports IAddRedCard
-     * @interface IAddRedCard
-     * @property {Team|null} [forTeam] AddRedCard forTeam
-     * @property {IGameEvent|null} [causedByGameEvent] AddRedCard causedByGameEvent
-     */
-
-    /**
-     * Constructs a new AddRedCard.
-     * @exports AddRedCard
-     * @classdesc Represents an AddRedCard.
-     * @implements IAddRedCard
-     * @constructor
-     * @param {IAddRedCard=} [properties] Properties to set
-     */
-    function AddRedCard(properties) {
-        if (properties)
-            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                if (properties[keys[i]] != null)
-                    this[keys[i]] = properties[keys[i]];
-    }
-
-    /**
-     * AddRedCard forTeam.
-     * @member {Team} forTeam
-     * @memberof AddRedCard
-     * @instance
-     */
-    AddRedCard.prototype.forTeam = 0;
-
-    /**
-     * AddRedCard causedByGameEvent.
-     * @member {IGameEvent|null|undefined} causedByGameEvent
-     * @memberof AddRedCard
-     * @instance
-     */
-    AddRedCard.prototype.causedByGameEvent = null;
-
-    /**
-     * Creates a new AddRedCard instance using the specified properties.
-     * @function create
-     * @memberof AddRedCard
-     * @static
-     * @param {IAddRedCard=} [properties] Properties to set
-     * @returns {AddRedCard} AddRedCard instance
-     */
-    AddRedCard.create = function create(properties) {
-        return new AddRedCard(properties);
-    };
-
-    /**
-     * Encodes the specified AddRedCard message. Does not implicitly {@link AddRedCard.verify|verify} messages.
-     * @function encode
-     * @memberof AddRedCard
-     * @static
-     * @param {IAddRedCard} message AddRedCard message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    AddRedCard.encode = function encode(message, writer) {
-        if (!writer)
-            writer = $Writer.create();
-        if (message.forTeam != null && Object.hasOwnProperty.call(message, "forTeam"))
-            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.forTeam);
-        if (message.causedByGameEvent != null && Object.hasOwnProperty.call(message, "causedByGameEvent"))
-            $root.GameEvent.encode(message.causedByGameEvent, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-        return writer;
-    };
-
-    /**
-     * Encodes the specified AddRedCard message, length delimited. Does not implicitly {@link AddRedCard.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof AddRedCard
-     * @static
-     * @param {IAddRedCard} message AddRedCard message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    AddRedCard.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
-    };
-
-    /**
-     * Decodes an AddRedCard message from the specified reader or buffer.
-     * @function decode
-     * @memberof AddRedCard
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @param {number} [length] Message length if known beforehand
-     * @returns {AddRedCard} AddRedCard
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    AddRedCard.decode = function decode(reader, length) {
-        if (!(reader instanceof $Reader))
-            reader = $Reader.create(reader);
-        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.AddRedCard();
-        while (reader.pos < end) {
-            let tag = reader.uint32();
-            switch (tag >>> 3) {
-            case 1: {
-                    message.forTeam = reader.int32();
-                    break;
-                }
-            case 2: {
-                    message.causedByGameEvent = $root.GameEvent.decode(reader, reader.uint32());
-                    break;
-                }
-            default:
-                reader.skipType(tag & 7);
-                break;
+        /**
+         * Gets the default type url for AddYellowCard
+         * @function getTypeUrl
+         * @memberof Change.AddYellowCard
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        AddYellowCard.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
             }
+            return typeUrlPrefix + "/Change.AddYellowCard";
+        };
+
+        return AddYellowCard;
+    })();
+
+    Change.AddRedCard = (function() {
+
+        /**
+         * Properties of an AddRedCard.
+         * @memberof Change
+         * @interface IAddRedCard
+         * @property {Team|null} [forTeam] AddRedCard forTeam
+         * @property {IGameEvent|null} [causedByGameEvent] AddRedCard causedByGameEvent
+         */
+
+        /**
+         * Constructs a new AddRedCard.
+         * @memberof Change
+         * @classdesc Represents an AddRedCard.
+         * @implements IAddRedCard
+         * @constructor
+         * @param {Change.IAddRedCard=} [properties] Properties to set
+         */
+        function AddRedCard(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
         }
-        return message;
-    };
 
-    /**
-     * Decodes an AddRedCard message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof AddRedCard
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {AddRedCard} AddRedCard
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    AddRedCard.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
+        /**
+         * AddRedCard forTeam.
+         * @member {Team} forTeam
+         * @memberof Change.AddRedCard
+         * @instance
+         */
+        AddRedCard.prototype.forTeam = 0;
 
-    /**
-     * Verifies an AddRedCard message.
-     * @function verify
-     * @memberof AddRedCard
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    AddRedCard.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        if (message.forTeam != null && message.hasOwnProperty("forTeam"))
-            switch (message.forTeam) {
-            default:
-                return "forTeam: enum value expected";
+        /**
+         * AddRedCard causedByGameEvent.
+         * @member {IGameEvent|null|undefined} causedByGameEvent
+         * @memberof Change.AddRedCard
+         * @instance
+         */
+        AddRedCard.prototype.causedByGameEvent = null;
+
+        /**
+         * Creates a new AddRedCard instance using the specified properties.
+         * @function create
+         * @memberof Change.AddRedCard
+         * @static
+         * @param {Change.IAddRedCard=} [properties] Properties to set
+         * @returns {Change.AddRedCard} AddRedCard instance
+         */
+        AddRedCard.create = function create(properties) {
+            return new AddRedCard(properties);
+        };
+
+        /**
+         * Encodes the specified AddRedCard message. Does not implicitly {@link Change.AddRedCard.verify|verify} messages.
+         * @function encode
+         * @memberof Change.AddRedCard
+         * @static
+         * @param {Change.IAddRedCard} message AddRedCard message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        AddRedCard.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.forTeam != null && Object.hasOwnProperty.call(message, "forTeam"))
+                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.forTeam);
+            if (message.causedByGameEvent != null && Object.hasOwnProperty.call(message, "causedByGameEvent"))
+                $root.GameEvent.encode(message.causedByGameEvent, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+            return writer;
+        };
+
+        /**
+         * Encodes the specified AddRedCard message, length delimited. Does not implicitly {@link Change.AddRedCard.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof Change.AddRedCard
+         * @static
+         * @param {Change.IAddRedCard} message AddRedCard message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        AddRedCard.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes an AddRedCard message from the specified reader or buffer.
+         * @function decode
+         * @memberof Change.AddRedCard
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {Change.AddRedCard} AddRedCard
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        AddRedCard.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Change.AddRedCard();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1: {
+                        message.forTeam = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.causedByGameEvent = $root.GameEvent.decode(reader, reader.uint32());
+                        break;
+                    }
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes an AddRedCard message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof Change.AddRedCard
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {Change.AddRedCard} AddRedCard
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        AddRedCard.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies an AddRedCard message.
+         * @function verify
+         * @memberof Change.AddRedCard
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        AddRedCard.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.forTeam != null && message.hasOwnProperty("forTeam"))
+                switch (message.forTeam) {
+                default:
+                    return "forTeam: enum value expected";
+                case 0:
+                case 1:
+                case 2:
+                    break;
+                }
+            if (message.causedByGameEvent != null && message.hasOwnProperty("causedByGameEvent")) {
+                let error = $root.GameEvent.verify(message.causedByGameEvent);
+                if (error)
+                    return "causedByGameEvent." + error;
+            }
+            return null;
+        };
+
+        /**
+         * Creates an AddRedCard message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof Change.AddRedCard
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {Change.AddRedCard} AddRedCard
+         */
+        AddRedCard.fromObject = function fromObject(object) {
+            if (object instanceof $root.Change.AddRedCard)
+                return object;
+            let message = new $root.Change.AddRedCard();
+            switch (object.forTeam) {
+            case "UNKNOWN":
             case 0:
+                message.forTeam = 0;
+                break;
+            case "YELLOW":
             case 1:
+                message.forTeam = 1;
+                break;
+            case "BLUE":
             case 2:
+                message.forTeam = 2;
                 break;
             }
-        if (message.causedByGameEvent != null && message.hasOwnProperty("causedByGameEvent")) {
-            let error = $root.GameEvent.verify(message.causedByGameEvent);
-            if (error)
-                return "causedByGameEvent." + error;
-        }
-        return null;
-    };
+            if (object.causedByGameEvent != null) {
+                if (typeof object.causedByGameEvent !== "object")
+                    throw TypeError(".Change.AddRedCard.causedByGameEvent: object expected");
+                message.causedByGameEvent = $root.GameEvent.fromObject(object.causedByGameEvent);
+            }
+            return message;
+        };
 
-    /**
-     * Creates an AddRedCard message from a plain object. Also converts values to their respective internal types.
-     * @function fromObject
-     * @memberof AddRedCard
-     * @static
-     * @param {Object.<string,*>} object Plain object
-     * @returns {AddRedCard} AddRedCard
-     */
-    AddRedCard.fromObject = function fromObject(object) {
-        if (object instanceof $root.AddRedCard)
+        /**
+         * Creates a plain object from an AddRedCard message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof Change.AddRedCard
+         * @static
+         * @param {Change.AddRedCard} message AddRedCard
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        AddRedCard.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.forTeam = options.enums === String ? "UNKNOWN" : 0;
+                object.causedByGameEvent = null;
+            }
+            if (message.forTeam != null && message.hasOwnProperty("forTeam"))
+                object.forTeam = options.enums === String ? $root.Team[message.forTeam] : message.forTeam;
+            if (message.causedByGameEvent != null && message.hasOwnProperty("causedByGameEvent"))
+                object.causedByGameEvent = $root.GameEvent.toObject(message.causedByGameEvent, options);
             return object;
-        let message = new $root.AddRedCard();
-        switch (object.forTeam) {
-        case "UNKNOWN":
-        case 0:
-            message.forTeam = 0;
-            break;
-        case "YELLOW":
-        case 1:
-            message.forTeam = 1;
-            break;
-        case "BLUE":
-        case 2:
-            message.forTeam = 2;
-            break;
+        };
+
+        /**
+         * Converts this AddRedCard to JSON.
+         * @function toJSON
+         * @memberof Change.AddRedCard
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        AddRedCard.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the default type url for AddRedCard
+         * @function getTypeUrl
+         * @memberof Change.AddRedCard
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        AddRedCard.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/Change.AddRedCard";
+        };
+
+        return AddRedCard;
+    })();
+
+    Change.YellowCardOver = (function() {
+
+        /**
+         * Properties of a YellowCardOver.
+         * @memberof Change
+         * @interface IYellowCardOver
+         * @property {Team|null} [forTeam] YellowCardOver forTeam
+         */
+
+        /**
+         * Constructs a new YellowCardOver.
+         * @memberof Change
+         * @classdesc Represents a YellowCardOver.
+         * @implements IYellowCardOver
+         * @constructor
+         * @param {Change.IYellowCardOver=} [properties] Properties to set
+         */
+        function YellowCardOver(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
         }
-        if (object.causedByGameEvent != null) {
-            if (typeof object.causedByGameEvent !== "object")
-                throw TypeError(".AddRedCard.causedByGameEvent: object expected");
-            message.causedByGameEvent = $root.GameEvent.fromObject(object.causedByGameEvent);
-        }
-        return message;
-    };
 
-    /**
-     * Creates a plain object from an AddRedCard message. Also converts values to other types if specified.
-     * @function toObject
-     * @memberof AddRedCard
-     * @static
-     * @param {AddRedCard} message AddRedCard
-     * @param {$protobuf.IConversionOptions} [options] Conversion options
-     * @returns {Object.<string,*>} Plain object
-     */
-    AddRedCard.toObject = function toObject(message, options) {
-        if (!options)
-            options = {};
-        let object = {};
-        if (options.defaults) {
-            object.forTeam = options.enums === String ? "UNKNOWN" : 0;
-            object.causedByGameEvent = null;
-        }
-        if (message.forTeam != null && message.hasOwnProperty("forTeam"))
-            object.forTeam = options.enums === String ? $root.Team[message.forTeam] : message.forTeam;
-        if (message.causedByGameEvent != null && message.hasOwnProperty("causedByGameEvent"))
-            object.causedByGameEvent = $root.GameEvent.toObject(message.causedByGameEvent, options);
-        return object;
-    };
+        /**
+         * YellowCardOver forTeam.
+         * @member {Team} forTeam
+         * @memberof Change.YellowCardOver
+         * @instance
+         */
+        YellowCardOver.prototype.forTeam = 0;
 
-    /**
-     * Converts this AddRedCard to JSON.
-     * @function toJSON
-     * @memberof AddRedCard
-     * @instance
-     * @returns {Object.<string,*>} JSON object
-     */
-    AddRedCard.prototype.toJSON = function toJSON() {
-        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-    };
+        /**
+         * Creates a new YellowCardOver instance using the specified properties.
+         * @function create
+         * @memberof Change.YellowCardOver
+         * @static
+         * @param {Change.IYellowCardOver=} [properties] Properties to set
+         * @returns {Change.YellowCardOver} YellowCardOver instance
+         */
+        YellowCardOver.create = function create(properties) {
+            return new YellowCardOver(properties);
+        };
 
-    /**
-     * Gets the default type url for AddRedCard
-     * @function getTypeUrl
-     * @memberof AddRedCard
-     * @static
-     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-     * @returns {string} The default type url
-     */
-    AddRedCard.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-        if (typeUrlPrefix === undefined) {
-            typeUrlPrefix = "type.googleapis.com";
-        }
-        return typeUrlPrefix + "/AddRedCard";
-    };
+        /**
+         * Encodes the specified YellowCardOver message. Does not implicitly {@link Change.YellowCardOver.verify|verify} messages.
+         * @function encode
+         * @memberof Change.YellowCardOver
+         * @static
+         * @param {Change.IYellowCardOver} message YellowCardOver message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        YellowCardOver.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.forTeam != null && Object.hasOwnProperty.call(message, "forTeam"))
+                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.forTeam);
+            return writer;
+        };
 
-    return AddRedCard;
-})();
+        /**
+         * Encodes the specified YellowCardOver message, length delimited. Does not implicitly {@link Change.YellowCardOver.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof Change.YellowCardOver
+         * @static
+         * @param {Change.IYellowCardOver} message YellowCardOver message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        YellowCardOver.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
 
-export const YellowCardOver = $root.YellowCardOver = (() => {
-
-    /**
-     * Properties of a YellowCardOver.
-     * @exports IYellowCardOver
-     * @interface IYellowCardOver
-     * @property {Team|null} [forTeam] YellowCardOver forTeam
-     */
-
-    /**
-     * Constructs a new YellowCardOver.
-     * @exports YellowCardOver
-     * @classdesc Represents a YellowCardOver.
-     * @implements IYellowCardOver
-     * @constructor
-     * @param {IYellowCardOver=} [properties] Properties to set
-     */
-    function YellowCardOver(properties) {
-        if (properties)
-            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                if (properties[keys[i]] != null)
-                    this[keys[i]] = properties[keys[i]];
-    }
-
-    /**
-     * YellowCardOver forTeam.
-     * @member {Team} forTeam
-     * @memberof YellowCardOver
-     * @instance
-     */
-    YellowCardOver.prototype.forTeam = 0;
-
-    /**
-     * Creates a new YellowCardOver instance using the specified properties.
-     * @function create
-     * @memberof YellowCardOver
-     * @static
-     * @param {IYellowCardOver=} [properties] Properties to set
-     * @returns {YellowCardOver} YellowCardOver instance
-     */
-    YellowCardOver.create = function create(properties) {
-        return new YellowCardOver(properties);
-    };
-
-    /**
-     * Encodes the specified YellowCardOver message. Does not implicitly {@link YellowCardOver.verify|verify} messages.
-     * @function encode
-     * @memberof YellowCardOver
-     * @static
-     * @param {IYellowCardOver} message YellowCardOver message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    YellowCardOver.encode = function encode(message, writer) {
-        if (!writer)
-            writer = $Writer.create();
-        if (message.forTeam != null && Object.hasOwnProperty.call(message, "forTeam"))
-            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.forTeam);
-        return writer;
-    };
-
-    /**
-     * Encodes the specified YellowCardOver message, length delimited. Does not implicitly {@link YellowCardOver.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof YellowCardOver
-     * @static
-     * @param {IYellowCardOver} message YellowCardOver message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    YellowCardOver.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
-    };
-
-    /**
-     * Decodes a YellowCardOver message from the specified reader or buffer.
-     * @function decode
-     * @memberof YellowCardOver
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @param {number} [length] Message length if known beforehand
-     * @returns {YellowCardOver} YellowCardOver
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    YellowCardOver.decode = function decode(reader, length) {
-        if (!(reader instanceof $Reader))
-            reader = $Reader.create(reader);
-        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.YellowCardOver();
-        while (reader.pos < end) {
-            let tag = reader.uint32();
-            switch (tag >>> 3) {
-            case 1: {
-                    message.forTeam = reader.int32();
+        /**
+         * Decodes a YellowCardOver message from the specified reader or buffer.
+         * @function decode
+         * @memberof Change.YellowCardOver
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {Change.YellowCardOver} YellowCardOver
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        YellowCardOver.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Change.YellowCardOver();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1: {
+                        message.forTeam = reader.int32();
+                        break;
+                    }
+                default:
+                    reader.skipType(tag & 7);
                     break;
                 }
-            default:
-                reader.skipType(tag & 7);
-                break;
             }
-        }
-        return message;
-    };
+            return message;
+        };
 
-    /**
-     * Decodes a YellowCardOver message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof YellowCardOver
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {YellowCardOver} YellowCardOver
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    YellowCardOver.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
+        /**
+         * Decodes a YellowCardOver message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof Change.YellowCardOver
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {Change.YellowCardOver} YellowCardOver
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        YellowCardOver.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
 
-    /**
-     * Verifies a YellowCardOver message.
-     * @function verify
-     * @memberof YellowCardOver
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    YellowCardOver.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        if (message.forTeam != null && message.hasOwnProperty("forTeam"))
-            switch (message.forTeam) {
-            default:
-                return "forTeam: enum value expected";
+        /**
+         * Verifies a YellowCardOver message.
+         * @function verify
+         * @memberof Change.YellowCardOver
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        YellowCardOver.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.forTeam != null && message.hasOwnProperty("forTeam"))
+                switch (message.forTeam) {
+                default:
+                    return "forTeam: enum value expected";
+                case 0:
+                case 1:
+                case 2:
+                    break;
+                }
+            return null;
+        };
+
+        /**
+         * Creates a YellowCardOver message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof Change.YellowCardOver
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {Change.YellowCardOver} YellowCardOver
+         */
+        YellowCardOver.fromObject = function fromObject(object) {
+            if (object instanceof $root.Change.YellowCardOver)
+                return object;
+            let message = new $root.Change.YellowCardOver();
+            switch (object.forTeam) {
+            case "UNKNOWN":
             case 0:
+                message.forTeam = 0;
+                break;
+            case "YELLOW":
             case 1:
+                message.forTeam = 1;
+                break;
+            case "BLUE":
             case 2:
+                message.forTeam = 2;
                 break;
             }
-        return null;
-    };
+            return message;
+        };
 
-    /**
-     * Creates a YellowCardOver message from a plain object. Also converts values to their respective internal types.
-     * @function fromObject
-     * @memberof YellowCardOver
-     * @static
-     * @param {Object.<string,*>} object Plain object
-     * @returns {YellowCardOver} YellowCardOver
-     */
-    YellowCardOver.fromObject = function fromObject(object) {
-        if (object instanceof $root.YellowCardOver)
+        /**
+         * Creates a plain object from a YellowCardOver message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof Change.YellowCardOver
+         * @static
+         * @param {Change.YellowCardOver} message YellowCardOver
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        YellowCardOver.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults)
+                object.forTeam = options.enums === String ? "UNKNOWN" : 0;
+            if (message.forTeam != null && message.hasOwnProperty("forTeam"))
+                object.forTeam = options.enums === String ? $root.Team[message.forTeam] : message.forTeam;
             return object;
-        let message = new $root.YellowCardOver();
-        switch (object.forTeam) {
-        case "UNKNOWN":
-        case 0:
-            message.forTeam = 0;
-            break;
-        case "YELLOW":
-        case 1:
-            message.forTeam = 1;
-            break;
-        case "BLUE":
-        case 2:
-            message.forTeam = 2;
-            break;
+        };
+
+        /**
+         * Converts this YellowCardOver to JSON.
+         * @function toJSON
+         * @memberof Change.YellowCardOver
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        YellowCardOver.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the default type url for YellowCardOver
+         * @function getTypeUrl
+         * @memberof Change.YellowCardOver
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        YellowCardOver.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/Change.YellowCardOver";
+        };
+
+        return YellowCardOver;
+    })();
+
+    Change.AddGameEvent = (function() {
+
+        /**
+         * Properties of an AddGameEvent.
+         * @memberof Change
+         * @interface IAddGameEvent
+         * @property {IGameEvent|null} [gameEvent] AddGameEvent gameEvent
+         */
+
+        /**
+         * Constructs a new AddGameEvent.
+         * @memberof Change
+         * @classdesc Represents an AddGameEvent.
+         * @implements IAddGameEvent
+         * @constructor
+         * @param {Change.IAddGameEvent=} [properties] Properties to set
+         */
+        function AddGameEvent(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
         }
-        return message;
-    };
 
-    /**
-     * Creates a plain object from a YellowCardOver message. Also converts values to other types if specified.
-     * @function toObject
-     * @memberof YellowCardOver
-     * @static
-     * @param {YellowCardOver} message YellowCardOver
-     * @param {$protobuf.IConversionOptions} [options] Conversion options
-     * @returns {Object.<string,*>} Plain object
-     */
-    YellowCardOver.toObject = function toObject(message, options) {
-        if (!options)
-            options = {};
-        let object = {};
-        if (options.defaults)
-            object.forTeam = options.enums === String ? "UNKNOWN" : 0;
-        if (message.forTeam != null && message.hasOwnProperty("forTeam"))
-            object.forTeam = options.enums === String ? $root.Team[message.forTeam] : message.forTeam;
-        return object;
-    };
+        /**
+         * AddGameEvent gameEvent.
+         * @member {IGameEvent|null|undefined} gameEvent
+         * @memberof Change.AddGameEvent
+         * @instance
+         */
+        AddGameEvent.prototype.gameEvent = null;
 
-    /**
-     * Converts this YellowCardOver to JSON.
-     * @function toJSON
-     * @memberof YellowCardOver
-     * @instance
-     * @returns {Object.<string,*>} JSON object
-     */
-    YellowCardOver.prototype.toJSON = function toJSON() {
-        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-    };
+        /**
+         * Creates a new AddGameEvent instance using the specified properties.
+         * @function create
+         * @memberof Change.AddGameEvent
+         * @static
+         * @param {Change.IAddGameEvent=} [properties] Properties to set
+         * @returns {Change.AddGameEvent} AddGameEvent instance
+         */
+        AddGameEvent.create = function create(properties) {
+            return new AddGameEvent(properties);
+        };
 
-    /**
-     * Gets the default type url for YellowCardOver
-     * @function getTypeUrl
-     * @memberof YellowCardOver
-     * @static
-     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-     * @returns {string} The default type url
-     */
-    YellowCardOver.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-        if (typeUrlPrefix === undefined) {
-            typeUrlPrefix = "type.googleapis.com";
-        }
-        return typeUrlPrefix + "/YellowCardOver";
-    };
+        /**
+         * Encodes the specified AddGameEvent message. Does not implicitly {@link Change.AddGameEvent.verify|verify} messages.
+         * @function encode
+         * @memberof Change.AddGameEvent
+         * @static
+         * @param {Change.IAddGameEvent} message AddGameEvent message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        AddGameEvent.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.gameEvent != null && Object.hasOwnProperty.call(message, "gameEvent"))
+                $root.GameEvent.encode(message.gameEvent, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            return writer;
+        };
 
-    return YellowCardOver;
-})();
+        /**
+         * Encodes the specified AddGameEvent message, length delimited. Does not implicitly {@link Change.AddGameEvent.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof Change.AddGameEvent
+         * @static
+         * @param {Change.IAddGameEvent} message AddGameEvent message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        AddGameEvent.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
 
-export const AddGameEvent = $root.AddGameEvent = (() => {
-
-    /**
-     * Properties of an AddGameEvent.
-     * @exports IAddGameEvent
-     * @interface IAddGameEvent
-     * @property {IGameEvent|null} [gameEvent] AddGameEvent gameEvent
-     */
-
-    /**
-     * Constructs a new AddGameEvent.
-     * @exports AddGameEvent
-     * @classdesc Represents an AddGameEvent.
-     * @implements IAddGameEvent
-     * @constructor
-     * @param {IAddGameEvent=} [properties] Properties to set
-     */
-    function AddGameEvent(properties) {
-        if (properties)
-            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                if (properties[keys[i]] != null)
-                    this[keys[i]] = properties[keys[i]];
-    }
-
-    /**
-     * AddGameEvent gameEvent.
-     * @member {IGameEvent|null|undefined} gameEvent
-     * @memberof AddGameEvent
-     * @instance
-     */
-    AddGameEvent.prototype.gameEvent = null;
-
-    /**
-     * Creates a new AddGameEvent instance using the specified properties.
-     * @function create
-     * @memberof AddGameEvent
-     * @static
-     * @param {IAddGameEvent=} [properties] Properties to set
-     * @returns {AddGameEvent} AddGameEvent instance
-     */
-    AddGameEvent.create = function create(properties) {
-        return new AddGameEvent(properties);
-    };
-
-    /**
-     * Encodes the specified AddGameEvent message. Does not implicitly {@link AddGameEvent.verify|verify} messages.
-     * @function encode
-     * @memberof AddGameEvent
-     * @static
-     * @param {IAddGameEvent} message AddGameEvent message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    AddGameEvent.encode = function encode(message, writer) {
-        if (!writer)
-            writer = $Writer.create();
-        if (message.gameEvent != null && Object.hasOwnProperty.call(message, "gameEvent"))
-            $root.GameEvent.encode(message.gameEvent, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-        return writer;
-    };
-
-    /**
-     * Encodes the specified AddGameEvent message, length delimited. Does not implicitly {@link AddGameEvent.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof AddGameEvent
-     * @static
-     * @param {IAddGameEvent} message AddGameEvent message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    AddGameEvent.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
-    };
-
-    /**
-     * Decodes an AddGameEvent message from the specified reader or buffer.
-     * @function decode
-     * @memberof AddGameEvent
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @param {number} [length] Message length if known beforehand
-     * @returns {AddGameEvent} AddGameEvent
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    AddGameEvent.decode = function decode(reader, length) {
-        if (!(reader instanceof $Reader))
-            reader = $Reader.create(reader);
-        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.AddGameEvent();
-        while (reader.pos < end) {
-            let tag = reader.uint32();
-            switch (tag >>> 3) {
-            case 1: {
-                    message.gameEvent = $root.GameEvent.decode(reader, reader.uint32());
+        /**
+         * Decodes an AddGameEvent message from the specified reader or buffer.
+         * @function decode
+         * @memberof Change.AddGameEvent
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {Change.AddGameEvent} AddGameEvent
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        AddGameEvent.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Change.AddGameEvent();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1: {
+                        message.gameEvent = $root.GameEvent.decode(reader, reader.uint32());
+                        break;
+                    }
+                default:
+                    reader.skipType(tag & 7);
                     break;
                 }
-            default:
-                reader.skipType(tag & 7);
-                break;
             }
-        }
-        return message;
-    };
+            return message;
+        };
 
-    /**
-     * Decodes an AddGameEvent message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof AddGameEvent
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {AddGameEvent} AddGameEvent
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    AddGameEvent.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
+        /**
+         * Decodes an AddGameEvent message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof Change.AddGameEvent
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {Change.AddGameEvent} AddGameEvent
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        AddGameEvent.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
 
-    /**
-     * Verifies an AddGameEvent message.
-     * @function verify
-     * @memberof AddGameEvent
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    AddGameEvent.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        if (message.gameEvent != null && message.hasOwnProperty("gameEvent")) {
-            let error = $root.GameEvent.verify(message.gameEvent);
-            if (error)
-                return "gameEvent." + error;
-        }
-        return null;
-    };
+        /**
+         * Verifies an AddGameEvent message.
+         * @function verify
+         * @memberof Change.AddGameEvent
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        AddGameEvent.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.gameEvent != null && message.hasOwnProperty("gameEvent")) {
+                let error = $root.GameEvent.verify(message.gameEvent);
+                if (error)
+                    return "gameEvent." + error;
+            }
+            return null;
+        };
 
-    /**
-     * Creates an AddGameEvent message from a plain object. Also converts values to their respective internal types.
-     * @function fromObject
-     * @memberof AddGameEvent
-     * @static
-     * @param {Object.<string,*>} object Plain object
-     * @returns {AddGameEvent} AddGameEvent
-     */
-    AddGameEvent.fromObject = function fromObject(object) {
-        if (object instanceof $root.AddGameEvent)
+        /**
+         * Creates an AddGameEvent message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof Change.AddGameEvent
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {Change.AddGameEvent} AddGameEvent
+         */
+        AddGameEvent.fromObject = function fromObject(object) {
+            if (object instanceof $root.Change.AddGameEvent)
+                return object;
+            let message = new $root.Change.AddGameEvent();
+            if (object.gameEvent != null) {
+                if (typeof object.gameEvent !== "object")
+                    throw TypeError(".Change.AddGameEvent.gameEvent: object expected");
+                message.gameEvent = $root.GameEvent.fromObject(object.gameEvent);
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from an AddGameEvent message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof Change.AddGameEvent
+         * @static
+         * @param {Change.AddGameEvent} message AddGameEvent
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        AddGameEvent.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults)
+                object.gameEvent = null;
+            if (message.gameEvent != null && message.hasOwnProperty("gameEvent"))
+                object.gameEvent = $root.GameEvent.toObject(message.gameEvent, options);
             return object;
-        let message = new $root.AddGameEvent();
-        if (object.gameEvent != null) {
-            if (typeof object.gameEvent !== "object")
-                throw TypeError(".AddGameEvent.gameEvent: object expected");
-            message.gameEvent = $root.GameEvent.fromObject(object.gameEvent);
+        };
+
+        /**
+         * Converts this AddGameEvent to JSON.
+         * @function toJSON
+         * @memberof Change.AddGameEvent
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        AddGameEvent.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the default type url for AddGameEvent
+         * @function getTypeUrl
+         * @memberof Change.AddGameEvent
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        AddGameEvent.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/Change.AddGameEvent";
+        };
+
+        return AddGameEvent;
+    })();
+
+    Change.AddPassiveGameEvent = (function() {
+
+        /**
+         * Properties of an AddPassiveGameEvent.
+         * @memberof Change
+         * @interface IAddPassiveGameEvent
+         * @property {IGameEvent|null} [gameEvent] AddPassiveGameEvent gameEvent
+         */
+
+        /**
+         * Constructs a new AddPassiveGameEvent.
+         * @memberof Change
+         * @classdesc Represents an AddPassiveGameEvent.
+         * @implements IAddPassiveGameEvent
+         * @constructor
+         * @param {Change.IAddPassiveGameEvent=} [properties] Properties to set
+         */
+        function AddPassiveGameEvent(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
         }
-        return message;
-    };
 
-    /**
-     * Creates a plain object from an AddGameEvent message. Also converts values to other types if specified.
-     * @function toObject
-     * @memberof AddGameEvent
-     * @static
-     * @param {AddGameEvent} message AddGameEvent
-     * @param {$protobuf.IConversionOptions} [options] Conversion options
-     * @returns {Object.<string,*>} Plain object
-     */
-    AddGameEvent.toObject = function toObject(message, options) {
-        if (!options)
-            options = {};
-        let object = {};
-        if (options.defaults)
-            object.gameEvent = null;
-        if (message.gameEvent != null && message.hasOwnProperty("gameEvent"))
-            object.gameEvent = $root.GameEvent.toObject(message.gameEvent, options);
-        return object;
-    };
+        /**
+         * AddPassiveGameEvent gameEvent.
+         * @member {IGameEvent|null|undefined} gameEvent
+         * @memberof Change.AddPassiveGameEvent
+         * @instance
+         */
+        AddPassiveGameEvent.prototype.gameEvent = null;
 
-    /**
-     * Converts this AddGameEvent to JSON.
-     * @function toJSON
-     * @memberof AddGameEvent
-     * @instance
-     * @returns {Object.<string,*>} JSON object
-     */
-    AddGameEvent.prototype.toJSON = function toJSON() {
-        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-    };
+        /**
+         * Creates a new AddPassiveGameEvent instance using the specified properties.
+         * @function create
+         * @memberof Change.AddPassiveGameEvent
+         * @static
+         * @param {Change.IAddPassiveGameEvent=} [properties] Properties to set
+         * @returns {Change.AddPassiveGameEvent} AddPassiveGameEvent instance
+         */
+        AddPassiveGameEvent.create = function create(properties) {
+            return new AddPassiveGameEvent(properties);
+        };
 
-    /**
-     * Gets the default type url for AddGameEvent
-     * @function getTypeUrl
-     * @memberof AddGameEvent
-     * @static
-     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-     * @returns {string} The default type url
-     */
-    AddGameEvent.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-        if (typeUrlPrefix === undefined) {
-            typeUrlPrefix = "type.googleapis.com";
-        }
-        return typeUrlPrefix + "/AddGameEvent";
-    };
+        /**
+         * Encodes the specified AddPassiveGameEvent message. Does not implicitly {@link Change.AddPassiveGameEvent.verify|verify} messages.
+         * @function encode
+         * @memberof Change.AddPassiveGameEvent
+         * @static
+         * @param {Change.IAddPassiveGameEvent} message AddPassiveGameEvent message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        AddPassiveGameEvent.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.gameEvent != null && Object.hasOwnProperty.call(message, "gameEvent"))
+                $root.GameEvent.encode(message.gameEvent, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            return writer;
+        };
 
-    return AddGameEvent;
-})();
+        /**
+         * Encodes the specified AddPassiveGameEvent message, length delimited. Does not implicitly {@link Change.AddPassiveGameEvent.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof Change.AddPassiveGameEvent
+         * @static
+         * @param {Change.IAddPassiveGameEvent} message AddPassiveGameEvent message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        AddPassiveGameEvent.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
 
-export const AddPassiveGameEvent = $root.AddPassiveGameEvent = (() => {
-
-    /**
-     * Properties of an AddPassiveGameEvent.
-     * @exports IAddPassiveGameEvent
-     * @interface IAddPassiveGameEvent
-     * @property {IGameEvent|null} [gameEvent] AddPassiveGameEvent gameEvent
-     */
-
-    /**
-     * Constructs a new AddPassiveGameEvent.
-     * @exports AddPassiveGameEvent
-     * @classdesc Represents an AddPassiveGameEvent.
-     * @implements IAddPassiveGameEvent
-     * @constructor
-     * @param {IAddPassiveGameEvent=} [properties] Properties to set
-     */
-    function AddPassiveGameEvent(properties) {
-        if (properties)
-            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                if (properties[keys[i]] != null)
-                    this[keys[i]] = properties[keys[i]];
-    }
-
-    /**
-     * AddPassiveGameEvent gameEvent.
-     * @member {IGameEvent|null|undefined} gameEvent
-     * @memberof AddPassiveGameEvent
-     * @instance
-     */
-    AddPassiveGameEvent.prototype.gameEvent = null;
-
-    /**
-     * Creates a new AddPassiveGameEvent instance using the specified properties.
-     * @function create
-     * @memberof AddPassiveGameEvent
-     * @static
-     * @param {IAddPassiveGameEvent=} [properties] Properties to set
-     * @returns {AddPassiveGameEvent} AddPassiveGameEvent instance
-     */
-    AddPassiveGameEvent.create = function create(properties) {
-        return new AddPassiveGameEvent(properties);
-    };
-
-    /**
-     * Encodes the specified AddPassiveGameEvent message. Does not implicitly {@link AddPassiveGameEvent.verify|verify} messages.
-     * @function encode
-     * @memberof AddPassiveGameEvent
-     * @static
-     * @param {IAddPassiveGameEvent} message AddPassiveGameEvent message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    AddPassiveGameEvent.encode = function encode(message, writer) {
-        if (!writer)
-            writer = $Writer.create();
-        if (message.gameEvent != null && Object.hasOwnProperty.call(message, "gameEvent"))
-            $root.GameEvent.encode(message.gameEvent, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-        return writer;
-    };
-
-    /**
-     * Encodes the specified AddPassiveGameEvent message, length delimited. Does not implicitly {@link AddPassiveGameEvent.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof AddPassiveGameEvent
-     * @static
-     * @param {IAddPassiveGameEvent} message AddPassiveGameEvent message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    AddPassiveGameEvent.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
-    };
-
-    /**
-     * Decodes an AddPassiveGameEvent message from the specified reader or buffer.
-     * @function decode
-     * @memberof AddPassiveGameEvent
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @param {number} [length] Message length if known beforehand
-     * @returns {AddPassiveGameEvent} AddPassiveGameEvent
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    AddPassiveGameEvent.decode = function decode(reader, length) {
-        if (!(reader instanceof $Reader))
-            reader = $Reader.create(reader);
-        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.AddPassiveGameEvent();
-        while (reader.pos < end) {
-            let tag = reader.uint32();
-            switch (tag >>> 3) {
-            case 1: {
-                    message.gameEvent = $root.GameEvent.decode(reader, reader.uint32());
+        /**
+         * Decodes an AddPassiveGameEvent message from the specified reader or buffer.
+         * @function decode
+         * @memberof Change.AddPassiveGameEvent
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {Change.AddPassiveGameEvent} AddPassiveGameEvent
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        AddPassiveGameEvent.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Change.AddPassiveGameEvent();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1: {
+                        message.gameEvent = $root.GameEvent.decode(reader, reader.uint32());
+                        break;
+                    }
+                default:
+                    reader.skipType(tag & 7);
                     break;
                 }
-            default:
-                reader.skipType(tag & 7);
-                break;
             }
-        }
-        return message;
-    };
+            return message;
+        };
 
-    /**
-     * Decodes an AddPassiveGameEvent message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof AddPassiveGameEvent
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {AddPassiveGameEvent} AddPassiveGameEvent
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    AddPassiveGameEvent.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
+        /**
+         * Decodes an AddPassiveGameEvent message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof Change.AddPassiveGameEvent
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {Change.AddPassiveGameEvent} AddPassiveGameEvent
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        AddPassiveGameEvent.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
 
-    /**
-     * Verifies an AddPassiveGameEvent message.
-     * @function verify
-     * @memberof AddPassiveGameEvent
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    AddPassiveGameEvent.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        if (message.gameEvent != null && message.hasOwnProperty("gameEvent")) {
-            let error = $root.GameEvent.verify(message.gameEvent);
-            if (error)
-                return "gameEvent." + error;
-        }
-        return null;
-    };
+        /**
+         * Verifies an AddPassiveGameEvent message.
+         * @function verify
+         * @memberof Change.AddPassiveGameEvent
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        AddPassiveGameEvent.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.gameEvent != null && message.hasOwnProperty("gameEvent")) {
+                let error = $root.GameEvent.verify(message.gameEvent);
+                if (error)
+                    return "gameEvent." + error;
+            }
+            return null;
+        };
 
-    /**
-     * Creates an AddPassiveGameEvent message from a plain object. Also converts values to their respective internal types.
-     * @function fromObject
-     * @memberof AddPassiveGameEvent
-     * @static
-     * @param {Object.<string,*>} object Plain object
-     * @returns {AddPassiveGameEvent} AddPassiveGameEvent
-     */
-    AddPassiveGameEvent.fromObject = function fromObject(object) {
-        if (object instanceof $root.AddPassiveGameEvent)
+        /**
+         * Creates an AddPassiveGameEvent message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof Change.AddPassiveGameEvent
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {Change.AddPassiveGameEvent} AddPassiveGameEvent
+         */
+        AddPassiveGameEvent.fromObject = function fromObject(object) {
+            if (object instanceof $root.Change.AddPassiveGameEvent)
+                return object;
+            let message = new $root.Change.AddPassiveGameEvent();
+            if (object.gameEvent != null) {
+                if (typeof object.gameEvent !== "object")
+                    throw TypeError(".Change.AddPassiveGameEvent.gameEvent: object expected");
+                message.gameEvent = $root.GameEvent.fromObject(object.gameEvent);
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from an AddPassiveGameEvent message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof Change.AddPassiveGameEvent
+         * @static
+         * @param {Change.AddPassiveGameEvent} message AddPassiveGameEvent
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        AddPassiveGameEvent.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults)
+                object.gameEvent = null;
+            if (message.gameEvent != null && message.hasOwnProperty("gameEvent"))
+                object.gameEvent = $root.GameEvent.toObject(message.gameEvent, options);
             return object;
-        let message = new $root.AddPassiveGameEvent();
-        if (object.gameEvent != null) {
-            if (typeof object.gameEvent !== "object")
-                throw TypeError(".AddPassiveGameEvent.gameEvent: object expected");
-            message.gameEvent = $root.GameEvent.fromObject(object.gameEvent);
+        };
+
+        /**
+         * Converts this AddPassiveGameEvent to JSON.
+         * @function toJSON
+         * @memberof Change.AddPassiveGameEvent
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        AddPassiveGameEvent.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the default type url for AddPassiveGameEvent
+         * @function getTypeUrl
+         * @memberof Change.AddPassiveGameEvent
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        AddPassiveGameEvent.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/Change.AddPassiveGameEvent";
+        };
+
+        return AddPassiveGameEvent;
+    })();
+
+    Change.AddProposal = (function() {
+
+        /**
+         * Properties of an AddProposal.
+         * @memberof Change
+         * @interface IAddProposal
+         * @property {IProposal|null} [proposal] AddProposal proposal
+         */
+
+        /**
+         * Constructs a new AddProposal.
+         * @memberof Change
+         * @classdesc Represents an AddProposal.
+         * @implements IAddProposal
+         * @constructor
+         * @param {Change.IAddProposal=} [properties] Properties to set
+         */
+        function AddProposal(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
         }
-        return message;
-    };
 
-    /**
-     * Creates a plain object from an AddPassiveGameEvent message. Also converts values to other types if specified.
-     * @function toObject
-     * @memberof AddPassiveGameEvent
-     * @static
-     * @param {AddPassiveGameEvent} message AddPassiveGameEvent
-     * @param {$protobuf.IConversionOptions} [options] Conversion options
-     * @returns {Object.<string,*>} Plain object
-     */
-    AddPassiveGameEvent.toObject = function toObject(message, options) {
-        if (!options)
-            options = {};
-        let object = {};
-        if (options.defaults)
-            object.gameEvent = null;
-        if (message.gameEvent != null && message.hasOwnProperty("gameEvent"))
-            object.gameEvent = $root.GameEvent.toObject(message.gameEvent, options);
-        return object;
-    };
+        /**
+         * AddProposal proposal.
+         * @member {IProposal|null|undefined} proposal
+         * @memberof Change.AddProposal
+         * @instance
+         */
+        AddProposal.prototype.proposal = null;
 
-    /**
-     * Converts this AddPassiveGameEvent to JSON.
-     * @function toJSON
-     * @memberof AddPassiveGameEvent
-     * @instance
-     * @returns {Object.<string,*>} JSON object
-     */
-    AddPassiveGameEvent.prototype.toJSON = function toJSON() {
-        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-    };
+        /**
+         * Creates a new AddProposal instance using the specified properties.
+         * @function create
+         * @memberof Change.AddProposal
+         * @static
+         * @param {Change.IAddProposal=} [properties] Properties to set
+         * @returns {Change.AddProposal} AddProposal instance
+         */
+        AddProposal.create = function create(properties) {
+            return new AddProposal(properties);
+        };
 
-    /**
-     * Gets the default type url for AddPassiveGameEvent
-     * @function getTypeUrl
-     * @memberof AddPassiveGameEvent
-     * @static
-     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-     * @returns {string} The default type url
-     */
-    AddPassiveGameEvent.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-        if (typeUrlPrefix === undefined) {
-            typeUrlPrefix = "type.googleapis.com";
-        }
-        return typeUrlPrefix + "/AddPassiveGameEvent";
-    };
+        /**
+         * Encodes the specified AddProposal message. Does not implicitly {@link Change.AddProposal.verify|verify} messages.
+         * @function encode
+         * @memberof Change.AddProposal
+         * @static
+         * @param {Change.IAddProposal} message AddProposal message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        AddProposal.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.proposal != null && Object.hasOwnProperty.call(message, "proposal"))
+                $root.Proposal.encode(message.proposal, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            return writer;
+        };
 
-    return AddPassiveGameEvent;
-})();
+        /**
+         * Encodes the specified AddProposal message, length delimited. Does not implicitly {@link Change.AddProposal.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof Change.AddProposal
+         * @static
+         * @param {Change.IAddProposal} message AddProposal message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        AddProposal.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
 
-export const AddProposal = $root.AddProposal = (() => {
-
-    /**
-     * Properties of an AddProposal.
-     * @exports IAddProposal
-     * @interface IAddProposal
-     * @property {IProposal|null} [proposal] AddProposal proposal
-     */
-
-    /**
-     * Constructs a new AddProposal.
-     * @exports AddProposal
-     * @classdesc Represents an AddProposal.
-     * @implements IAddProposal
-     * @constructor
-     * @param {IAddProposal=} [properties] Properties to set
-     */
-    function AddProposal(properties) {
-        if (properties)
-            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                if (properties[keys[i]] != null)
-                    this[keys[i]] = properties[keys[i]];
-    }
-
-    /**
-     * AddProposal proposal.
-     * @member {IProposal|null|undefined} proposal
-     * @memberof AddProposal
-     * @instance
-     */
-    AddProposal.prototype.proposal = null;
-
-    /**
-     * Creates a new AddProposal instance using the specified properties.
-     * @function create
-     * @memberof AddProposal
-     * @static
-     * @param {IAddProposal=} [properties] Properties to set
-     * @returns {AddProposal} AddProposal instance
-     */
-    AddProposal.create = function create(properties) {
-        return new AddProposal(properties);
-    };
-
-    /**
-     * Encodes the specified AddProposal message. Does not implicitly {@link AddProposal.verify|verify} messages.
-     * @function encode
-     * @memberof AddProposal
-     * @static
-     * @param {IAddProposal} message AddProposal message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    AddProposal.encode = function encode(message, writer) {
-        if (!writer)
-            writer = $Writer.create();
-        if (message.proposal != null && Object.hasOwnProperty.call(message, "proposal"))
-            $root.Proposal.encode(message.proposal, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-        return writer;
-    };
-
-    /**
-     * Encodes the specified AddProposal message, length delimited. Does not implicitly {@link AddProposal.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof AddProposal
-     * @static
-     * @param {IAddProposal} message AddProposal message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    AddProposal.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
-    };
-
-    /**
-     * Decodes an AddProposal message from the specified reader or buffer.
-     * @function decode
-     * @memberof AddProposal
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @param {number} [length] Message length if known beforehand
-     * @returns {AddProposal} AddProposal
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    AddProposal.decode = function decode(reader, length) {
-        if (!(reader instanceof $Reader))
-            reader = $Reader.create(reader);
-        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.AddProposal();
-        while (reader.pos < end) {
-            let tag = reader.uint32();
-            switch (tag >>> 3) {
-            case 1: {
-                    message.proposal = $root.Proposal.decode(reader, reader.uint32());
+        /**
+         * Decodes an AddProposal message from the specified reader or buffer.
+         * @function decode
+         * @memberof Change.AddProposal
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {Change.AddProposal} AddProposal
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        AddProposal.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Change.AddProposal();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1: {
+                        message.proposal = $root.Proposal.decode(reader, reader.uint32());
+                        break;
+                    }
+                default:
+                    reader.skipType(tag & 7);
                     break;
                 }
-            default:
-                reader.skipType(tag & 7);
-                break;
             }
-        }
-        return message;
-    };
+            return message;
+        };
 
-    /**
-     * Decodes an AddProposal message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof AddProposal
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {AddProposal} AddProposal
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    AddProposal.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
+        /**
+         * Decodes an AddProposal message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof Change.AddProposal
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {Change.AddProposal} AddProposal
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        AddProposal.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
 
-    /**
-     * Verifies an AddProposal message.
-     * @function verify
-     * @memberof AddProposal
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    AddProposal.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        if (message.proposal != null && message.hasOwnProperty("proposal")) {
-            let error = $root.Proposal.verify(message.proposal);
-            if (error)
-                return "proposal." + error;
-        }
-        return null;
-    };
+        /**
+         * Verifies an AddProposal message.
+         * @function verify
+         * @memberof Change.AddProposal
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        AddProposal.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.proposal != null && message.hasOwnProperty("proposal")) {
+                let error = $root.Proposal.verify(message.proposal);
+                if (error)
+                    return "proposal." + error;
+            }
+            return null;
+        };
 
-    /**
-     * Creates an AddProposal message from a plain object. Also converts values to their respective internal types.
-     * @function fromObject
-     * @memberof AddProposal
-     * @static
-     * @param {Object.<string,*>} object Plain object
-     * @returns {AddProposal} AddProposal
-     */
-    AddProposal.fromObject = function fromObject(object) {
-        if (object instanceof $root.AddProposal)
+        /**
+         * Creates an AddProposal message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof Change.AddProposal
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {Change.AddProposal} AddProposal
+         */
+        AddProposal.fromObject = function fromObject(object) {
+            if (object instanceof $root.Change.AddProposal)
+                return object;
+            let message = new $root.Change.AddProposal();
+            if (object.proposal != null) {
+                if (typeof object.proposal !== "object")
+                    throw TypeError(".Change.AddProposal.proposal: object expected");
+                message.proposal = $root.Proposal.fromObject(object.proposal);
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from an AddProposal message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof Change.AddProposal
+         * @static
+         * @param {Change.AddProposal} message AddProposal
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        AddProposal.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults)
+                object.proposal = null;
+            if (message.proposal != null && message.hasOwnProperty("proposal"))
+                object.proposal = $root.Proposal.toObject(message.proposal, options);
             return object;
-        let message = new $root.AddProposal();
-        if (object.proposal != null) {
-            if (typeof object.proposal !== "object")
-                throw TypeError(".AddProposal.proposal: object expected");
-            message.proposal = $root.Proposal.fromObject(object.proposal);
-        }
-        return message;
-    };
+        };
 
-    /**
-     * Creates a plain object from an AddProposal message. Also converts values to other types if specified.
-     * @function toObject
-     * @memberof AddProposal
-     * @static
-     * @param {AddProposal} message AddProposal
-     * @param {$protobuf.IConversionOptions} [options] Conversion options
-     * @returns {Object.<string,*>} Plain object
-     */
-    AddProposal.toObject = function toObject(message, options) {
-        if (!options)
-            options = {};
-        let object = {};
-        if (options.defaults)
-            object.proposal = null;
-        if (message.proposal != null && message.hasOwnProperty("proposal"))
-            object.proposal = $root.Proposal.toObject(message.proposal, options);
-        return object;
-    };
+        /**
+         * Converts this AddProposal to JSON.
+         * @function toJSON
+         * @memberof Change.AddProposal
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        AddProposal.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
 
-    /**
-     * Converts this AddProposal to JSON.
-     * @function toJSON
-     * @memberof AddProposal
-     * @instance
-     * @returns {Object.<string,*>} JSON object
-     */
-    AddProposal.prototype.toJSON = function toJSON() {
-        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-    };
-
-    /**
-     * Gets the default type url for AddProposal
-     * @function getTypeUrl
-     * @memberof AddProposal
-     * @static
-     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-     * @returns {string} The default type url
-     */
-    AddProposal.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-        if (typeUrlPrefix === undefined) {
-            typeUrlPrefix = "type.googleapis.com";
-        }
-        return typeUrlPrefix + "/AddProposal";
-    };
-
-    return AddProposal;
-})();
-
-export const AcceptProposalGroup = $root.AcceptProposalGroup = (() => {
-
-    /**
-     * Properties of an AcceptProposalGroup.
-     * @exports IAcceptProposalGroup
-     * @interface IAcceptProposalGroup
-     * @property {number|null} [groupId] AcceptProposalGroup groupId
-     * @property {string|null} [acceptedBy] AcceptProposalGroup acceptedBy
-     */
-
-    /**
-     * Constructs a new AcceptProposalGroup.
-     * @exports AcceptProposalGroup
-     * @classdesc Represents an AcceptProposalGroup.
-     * @implements IAcceptProposalGroup
-     * @constructor
-     * @param {IAcceptProposalGroup=} [properties] Properties to set
-     */
-    function AcceptProposalGroup(properties) {
-        if (properties)
-            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                if (properties[keys[i]] != null)
-                    this[keys[i]] = properties[keys[i]];
-    }
-
-    /**
-     * AcceptProposalGroup groupId.
-     * @member {number} groupId
-     * @memberof AcceptProposalGroup
-     * @instance
-     */
-    AcceptProposalGroup.prototype.groupId = 0;
-
-    /**
-     * AcceptProposalGroup acceptedBy.
-     * @member {string} acceptedBy
-     * @memberof AcceptProposalGroup
-     * @instance
-     */
-    AcceptProposalGroup.prototype.acceptedBy = "";
-
-    /**
-     * Creates a new AcceptProposalGroup instance using the specified properties.
-     * @function create
-     * @memberof AcceptProposalGroup
-     * @static
-     * @param {IAcceptProposalGroup=} [properties] Properties to set
-     * @returns {AcceptProposalGroup} AcceptProposalGroup instance
-     */
-    AcceptProposalGroup.create = function create(properties) {
-        return new AcceptProposalGroup(properties);
-    };
-
-    /**
-     * Encodes the specified AcceptProposalGroup message. Does not implicitly {@link AcceptProposalGroup.verify|verify} messages.
-     * @function encode
-     * @memberof AcceptProposalGroup
-     * @static
-     * @param {IAcceptProposalGroup} message AcceptProposalGroup message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    AcceptProposalGroup.encode = function encode(message, writer) {
-        if (!writer)
-            writer = $Writer.create();
-        if (message.groupId != null && Object.hasOwnProperty.call(message, "groupId"))
-            writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.groupId);
-        if (message.acceptedBy != null && Object.hasOwnProperty.call(message, "acceptedBy"))
-            writer.uint32(/* id 2, wireType 2 =*/18).string(message.acceptedBy);
-        return writer;
-    };
-
-    /**
-     * Encodes the specified AcceptProposalGroup message, length delimited. Does not implicitly {@link AcceptProposalGroup.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof AcceptProposalGroup
-     * @static
-     * @param {IAcceptProposalGroup} message AcceptProposalGroup message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    AcceptProposalGroup.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
-    };
-
-    /**
-     * Decodes an AcceptProposalGroup message from the specified reader or buffer.
-     * @function decode
-     * @memberof AcceptProposalGroup
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @param {number} [length] Message length if known beforehand
-     * @returns {AcceptProposalGroup} AcceptProposalGroup
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    AcceptProposalGroup.decode = function decode(reader, length) {
-        if (!(reader instanceof $Reader))
-            reader = $Reader.create(reader);
-        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.AcceptProposalGroup();
-        while (reader.pos < end) {
-            let tag = reader.uint32();
-            switch (tag >>> 3) {
-            case 1: {
-                    message.groupId = reader.uint32();
-                    break;
-                }
-            case 2: {
-                    message.acceptedBy = reader.string();
-                    break;
-                }
-            default:
-                reader.skipType(tag & 7);
-                break;
+        /**
+         * Gets the default type url for AddProposal
+         * @function getTypeUrl
+         * @memberof Change.AddProposal
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        AddProposal.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
             }
+            return typeUrlPrefix + "/Change.AddProposal";
+        };
+
+        return AddProposal;
+    })();
+
+    Change.AcceptProposalGroup = (function() {
+
+        /**
+         * Properties of an AcceptProposalGroup.
+         * @memberof Change
+         * @interface IAcceptProposalGroup
+         * @property {number|null} [groupId] AcceptProposalGroup groupId
+         * @property {string|null} [acceptedBy] AcceptProposalGroup acceptedBy
+         */
+
+        /**
+         * Constructs a new AcceptProposalGroup.
+         * @memberof Change
+         * @classdesc Represents an AcceptProposalGroup.
+         * @implements IAcceptProposalGroup
+         * @constructor
+         * @param {Change.IAcceptProposalGroup=} [properties] Properties to set
+         */
+        function AcceptProposalGroup(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
         }
-        return message;
-    };
 
-    /**
-     * Decodes an AcceptProposalGroup message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof AcceptProposalGroup
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {AcceptProposalGroup} AcceptProposalGroup
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    AcceptProposalGroup.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
+        /**
+         * AcceptProposalGroup groupId.
+         * @member {number} groupId
+         * @memberof Change.AcceptProposalGroup
+         * @instance
+         */
+        AcceptProposalGroup.prototype.groupId = 0;
 
-    /**
-     * Verifies an AcceptProposalGroup message.
-     * @function verify
-     * @memberof AcceptProposalGroup
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    AcceptProposalGroup.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        if (message.groupId != null && message.hasOwnProperty("groupId"))
-            if (!$util.isInteger(message.groupId))
-                return "groupId: integer expected";
-        if (message.acceptedBy != null && message.hasOwnProperty("acceptedBy"))
-            if (!$util.isString(message.acceptedBy))
-                return "acceptedBy: string expected";
-        return null;
-    };
+        /**
+         * AcceptProposalGroup acceptedBy.
+         * @member {string} acceptedBy
+         * @memberof Change.AcceptProposalGroup
+         * @instance
+         */
+        AcceptProposalGroup.prototype.acceptedBy = "";
 
-    /**
-     * Creates an AcceptProposalGroup message from a plain object. Also converts values to their respective internal types.
-     * @function fromObject
-     * @memberof AcceptProposalGroup
-     * @static
-     * @param {Object.<string,*>} object Plain object
-     * @returns {AcceptProposalGroup} AcceptProposalGroup
-     */
-    AcceptProposalGroup.fromObject = function fromObject(object) {
-        if (object instanceof $root.AcceptProposalGroup)
+        /**
+         * Creates a new AcceptProposalGroup instance using the specified properties.
+         * @function create
+         * @memberof Change.AcceptProposalGroup
+         * @static
+         * @param {Change.IAcceptProposalGroup=} [properties] Properties to set
+         * @returns {Change.AcceptProposalGroup} AcceptProposalGroup instance
+         */
+        AcceptProposalGroup.create = function create(properties) {
+            return new AcceptProposalGroup(properties);
+        };
+
+        /**
+         * Encodes the specified AcceptProposalGroup message. Does not implicitly {@link Change.AcceptProposalGroup.verify|verify} messages.
+         * @function encode
+         * @memberof Change.AcceptProposalGroup
+         * @static
+         * @param {Change.IAcceptProposalGroup} message AcceptProposalGroup message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        AcceptProposalGroup.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.groupId != null && Object.hasOwnProperty.call(message, "groupId"))
+                writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.groupId);
+            if (message.acceptedBy != null && Object.hasOwnProperty.call(message, "acceptedBy"))
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.acceptedBy);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified AcceptProposalGroup message, length delimited. Does not implicitly {@link Change.AcceptProposalGroup.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof Change.AcceptProposalGroup
+         * @static
+         * @param {Change.IAcceptProposalGroup} message AcceptProposalGroup message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        AcceptProposalGroup.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes an AcceptProposalGroup message from the specified reader or buffer.
+         * @function decode
+         * @memberof Change.AcceptProposalGroup
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {Change.AcceptProposalGroup} AcceptProposalGroup
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        AcceptProposalGroup.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Change.AcceptProposalGroup();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1: {
+                        message.groupId = reader.uint32();
+                        break;
+                    }
+                case 2: {
+                        message.acceptedBy = reader.string();
+                        break;
+                    }
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes an AcceptProposalGroup message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof Change.AcceptProposalGroup
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {Change.AcceptProposalGroup} AcceptProposalGroup
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        AcceptProposalGroup.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies an AcceptProposalGroup message.
+         * @function verify
+         * @memberof Change.AcceptProposalGroup
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        AcceptProposalGroup.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.groupId != null && message.hasOwnProperty("groupId"))
+                if (!$util.isInteger(message.groupId))
+                    return "groupId: integer expected";
+            if (message.acceptedBy != null && message.hasOwnProperty("acceptedBy"))
+                if (!$util.isString(message.acceptedBy))
+                    return "acceptedBy: string expected";
+            return null;
+        };
+
+        /**
+         * Creates an AcceptProposalGroup message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof Change.AcceptProposalGroup
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {Change.AcceptProposalGroup} AcceptProposalGroup
+         */
+        AcceptProposalGroup.fromObject = function fromObject(object) {
+            if (object instanceof $root.Change.AcceptProposalGroup)
+                return object;
+            let message = new $root.Change.AcceptProposalGroup();
+            if (object.groupId != null)
+                message.groupId = object.groupId >>> 0;
+            if (object.acceptedBy != null)
+                message.acceptedBy = String(object.acceptedBy);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from an AcceptProposalGroup message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof Change.AcceptProposalGroup
+         * @static
+         * @param {Change.AcceptProposalGroup} message AcceptProposalGroup
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        AcceptProposalGroup.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.groupId = 0;
+                object.acceptedBy = "";
+            }
+            if (message.groupId != null && message.hasOwnProperty("groupId"))
+                object.groupId = message.groupId;
+            if (message.acceptedBy != null && message.hasOwnProperty("acceptedBy"))
+                object.acceptedBy = message.acceptedBy;
             return object;
-        let message = new $root.AcceptProposalGroup();
-        if (object.groupId != null)
-            message.groupId = object.groupId >>> 0;
-        if (object.acceptedBy != null)
-            message.acceptedBy = String(object.acceptedBy);
-        return message;
-    };
+        };
 
-    /**
-     * Creates a plain object from an AcceptProposalGroup message. Also converts values to other types if specified.
-     * @function toObject
-     * @memberof AcceptProposalGroup
-     * @static
-     * @param {AcceptProposalGroup} message AcceptProposalGroup
-     * @param {$protobuf.IConversionOptions} [options] Conversion options
-     * @returns {Object.<string,*>} Plain object
-     */
-    AcceptProposalGroup.toObject = function toObject(message, options) {
-        if (!options)
-            options = {};
-        let object = {};
-        if (options.defaults) {
-            object.groupId = 0;
-            object.acceptedBy = "";
-        }
-        if (message.groupId != null && message.hasOwnProperty("groupId"))
-            object.groupId = message.groupId;
-        if (message.acceptedBy != null && message.hasOwnProperty("acceptedBy"))
-            object.acceptedBy = message.acceptedBy;
-        return object;
-    };
+        /**
+         * Converts this AcceptProposalGroup to JSON.
+         * @function toJSON
+         * @memberof Change.AcceptProposalGroup
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        AcceptProposalGroup.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
 
-    /**
-     * Converts this AcceptProposalGroup to JSON.
-     * @function toJSON
-     * @memberof AcceptProposalGroup
-     * @instance
-     * @returns {Object.<string,*>} JSON object
-     */
-    AcceptProposalGroup.prototype.toJSON = function toJSON() {
-        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-    };
-
-    /**
-     * Gets the default type url for AcceptProposalGroup
-     * @function getTypeUrl
-     * @memberof AcceptProposalGroup
-     * @static
-     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-     * @returns {string} The default type url
-     */
-    AcceptProposalGroup.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-        if (typeUrlPrefix === undefined) {
-            typeUrlPrefix = "type.googleapis.com";
-        }
-        return typeUrlPrefix + "/AcceptProposalGroup";
-    };
-
-    return AcceptProposalGroup;
-})();
-
-export const StartBallPlacement = $root.StartBallPlacement = (() => {
-
-    /**
-     * Properties of a StartBallPlacement.
-     * @exports IStartBallPlacement
-     * @interface IStartBallPlacement
-     */
-
-    /**
-     * Constructs a new StartBallPlacement.
-     * @exports StartBallPlacement
-     * @classdesc Represents a StartBallPlacement.
-     * @implements IStartBallPlacement
-     * @constructor
-     * @param {IStartBallPlacement=} [properties] Properties to set
-     */
-    function StartBallPlacement(properties) {
-        if (properties)
-            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                if (properties[keys[i]] != null)
-                    this[keys[i]] = properties[keys[i]];
-    }
-
-    /**
-     * Creates a new StartBallPlacement instance using the specified properties.
-     * @function create
-     * @memberof StartBallPlacement
-     * @static
-     * @param {IStartBallPlacement=} [properties] Properties to set
-     * @returns {StartBallPlacement} StartBallPlacement instance
-     */
-    StartBallPlacement.create = function create(properties) {
-        return new StartBallPlacement(properties);
-    };
-
-    /**
-     * Encodes the specified StartBallPlacement message. Does not implicitly {@link StartBallPlacement.verify|verify} messages.
-     * @function encode
-     * @memberof StartBallPlacement
-     * @static
-     * @param {IStartBallPlacement} message StartBallPlacement message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    StartBallPlacement.encode = function encode(message, writer) {
-        if (!writer)
-            writer = $Writer.create();
-        return writer;
-    };
-
-    /**
-     * Encodes the specified StartBallPlacement message, length delimited. Does not implicitly {@link StartBallPlacement.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof StartBallPlacement
-     * @static
-     * @param {IStartBallPlacement} message StartBallPlacement message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    StartBallPlacement.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
-    };
-
-    /**
-     * Decodes a StartBallPlacement message from the specified reader or buffer.
-     * @function decode
-     * @memberof StartBallPlacement
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @param {number} [length] Message length if known beforehand
-     * @returns {StartBallPlacement} StartBallPlacement
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    StartBallPlacement.decode = function decode(reader, length) {
-        if (!(reader instanceof $Reader))
-            reader = $Reader.create(reader);
-        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.StartBallPlacement();
-        while (reader.pos < end) {
-            let tag = reader.uint32();
-            switch (tag >>> 3) {
-            default:
-                reader.skipType(tag & 7);
-                break;
+        /**
+         * Gets the default type url for AcceptProposalGroup
+         * @function getTypeUrl
+         * @memberof Change.AcceptProposalGroup
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        AcceptProposalGroup.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
             }
+            return typeUrlPrefix + "/Change.AcceptProposalGroup";
+        };
+
+        return AcceptProposalGroup;
+    })();
+
+    Change.StartBallPlacement = (function() {
+
+        /**
+         * Properties of a StartBallPlacement.
+         * @memberof Change
+         * @interface IStartBallPlacement
+         */
+
+        /**
+         * Constructs a new StartBallPlacement.
+         * @memberof Change
+         * @classdesc Represents a StartBallPlacement.
+         * @implements IStartBallPlacement
+         * @constructor
+         * @param {Change.IStartBallPlacement=} [properties] Properties to set
+         */
+        function StartBallPlacement(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
         }
-        return message;
-    };
 
-    /**
-     * Decodes a StartBallPlacement message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof StartBallPlacement
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {StartBallPlacement} StartBallPlacement
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    StartBallPlacement.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
+        /**
+         * Creates a new StartBallPlacement instance using the specified properties.
+         * @function create
+         * @memberof Change.StartBallPlacement
+         * @static
+         * @param {Change.IStartBallPlacement=} [properties] Properties to set
+         * @returns {Change.StartBallPlacement} StartBallPlacement instance
+         */
+        StartBallPlacement.create = function create(properties) {
+            return new StartBallPlacement(properties);
+        };
 
-    /**
-     * Verifies a StartBallPlacement message.
-     * @function verify
-     * @memberof StartBallPlacement
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    StartBallPlacement.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        return null;
-    };
+        /**
+         * Encodes the specified StartBallPlacement message. Does not implicitly {@link Change.StartBallPlacement.verify|verify} messages.
+         * @function encode
+         * @memberof Change.StartBallPlacement
+         * @static
+         * @param {Change.IStartBallPlacement} message StartBallPlacement message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        StartBallPlacement.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            return writer;
+        };
 
-    /**
-     * Creates a StartBallPlacement message from a plain object. Also converts values to their respective internal types.
-     * @function fromObject
-     * @memberof StartBallPlacement
-     * @static
-     * @param {Object.<string,*>} object Plain object
-     * @returns {StartBallPlacement} StartBallPlacement
-     */
-    StartBallPlacement.fromObject = function fromObject(object) {
-        if (object instanceof $root.StartBallPlacement)
-            return object;
-        return new $root.StartBallPlacement();
-    };
+        /**
+         * Encodes the specified StartBallPlacement message, length delimited. Does not implicitly {@link Change.StartBallPlacement.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof Change.StartBallPlacement
+         * @static
+         * @param {Change.IStartBallPlacement} message StartBallPlacement message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        StartBallPlacement.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
 
-    /**
-     * Creates a plain object from a StartBallPlacement message. Also converts values to other types if specified.
-     * @function toObject
-     * @memberof StartBallPlacement
-     * @static
-     * @param {StartBallPlacement} message StartBallPlacement
-     * @param {$protobuf.IConversionOptions} [options] Conversion options
-     * @returns {Object.<string,*>} Plain object
-     */
-    StartBallPlacement.toObject = function toObject() {
-        return {};
-    };
-
-    /**
-     * Converts this StartBallPlacement to JSON.
-     * @function toJSON
-     * @memberof StartBallPlacement
-     * @instance
-     * @returns {Object.<string,*>} JSON object
-     */
-    StartBallPlacement.prototype.toJSON = function toJSON() {
-        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-    };
-
-    /**
-     * Gets the default type url for StartBallPlacement
-     * @function getTypeUrl
-     * @memberof StartBallPlacement
-     * @static
-     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-     * @returns {string} The default type url
-     */
-    StartBallPlacement.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-        if (typeUrlPrefix === undefined) {
-            typeUrlPrefix = "type.googleapis.com";
-        }
-        return typeUrlPrefix + "/StartBallPlacement";
-    };
-
-    return StartBallPlacement;
-})();
-
-export const Continue = $root.Continue = (() => {
-
-    /**
-     * Properties of a Continue.
-     * @exports IContinue
-     * @interface IContinue
-     */
-
-    /**
-     * Constructs a new Continue.
-     * @exports Continue
-     * @classdesc Represents a Continue.
-     * @implements IContinue
-     * @constructor
-     * @param {IContinue=} [properties] Properties to set
-     */
-    function Continue(properties) {
-        if (properties)
-            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                if (properties[keys[i]] != null)
-                    this[keys[i]] = properties[keys[i]];
-    }
-
-    /**
-     * Creates a new Continue instance using the specified properties.
-     * @function create
-     * @memberof Continue
-     * @static
-     * @param {IContinue=} [properties] Properties to set
-     * @returns {Continue} Continue instance
-     */
-    Continue.create = function create(properties) {
-        return new Continue(properties);
-    };
-
-    /**
-     * Encodes the specified Continue message. Does not implicitly {@link Continue.verify|verify} messages.
-     * @function encode
-     * @memberof Continue
-     * @static
-     * @param {IContinue} message Continue message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    Continue.encode = function encode(message, writer) {
-        if (!writer)
-            writer = $Writer.create();
-        return writer;
-    };
-
-    /**
-     * Encodes the specified Continue message, length delimited. Does not implicitly {@link Continue.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof Continue
-     * @static
-     * @param {IContinue} message Continue message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    Continue.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
-    };
-
-    /**
-     * Decodes a Continue message from the specified reader or buffer.
-     * @function decode
-     * @memberof Continue
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @param {number} [length] Message length if known beforehand
-     * @returns {Continue} Continue
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    Continue.decode = function decode(reader, length) {
-        if (!(reader instanceof $Reader))
-            reader = $Reader.create(reader);
-        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Continue();
-        while (reader.pos < end) {
-            let tag = reader.uint32();
-            switch (tag >>> 3) {
-            default:
-                reader.skipType(tag & 7);
-                break;
+        /**
+         * Decodes a StartBallPlacement message from the specified reader or buffer.
+         * @function decode
+         * @memberof Change.StartBallPlacement
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {Change.StartBallPlacement} StartBallPlacement
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        StartBallPlacement.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Change.StartBallPlacement();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
             }
-        }
-        return message;
-    };
+            return message;
+        };
 
-    /**
-     * Decodes a Continue message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof Continue
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {Continue} Continue
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    Continue.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
+        /**
+         * Decodes a StartBallPlacement message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof Change.StartBallPlacement
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {Change.StartBallPlacement} StartBallPlacement
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        StartBallPlacement.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
 
-    /**
-     * Verifies a Continue message.
-     * @function verify
-     * @memberof Continue
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    Continue.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        return null;
-    };
+        /**
+         * Verifies a StartBallPlacement message.
+         * @function verify
+         * @memberof Change.StartBallPlacement
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        StartBallPlacement.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            return null;
+        };
 
-    /**
-     * Creates a Continue message from a plain object. Also converts values to their respective internal types.
-     * @function fromObject
-     * @memberof Continue
-     * @static
-     * @param {Object.<string,*>} object Plain object
-     * @returns {Continue} Continue
-     */
-    Continue.fromObject = function fromObject(object) {
-        if (object instanceof $root.Continue)
-            return object;
-        return new $root.Continue();
-    };
+        /**
+         * Creates a StartBallPlacement message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof Change.StartBallPlacement
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {Change.StartBallPlacement} StartBallPlacement
+         */
+        StartBallPlacement.fromObject = function fromObject(object) {
+            if (object instanceof $root.Change.StartBallPlacement)
+                return object;
+            return new $root.Change.StartBallPlacement();
+        };
 
-    /**
-     * Creates a plain object from a Continue message. Also converts values to other types if specified.
-     * @function toObject
-     * @memberof Continue
-     * @static
-     * @param {Continue} message Continue
-     * @param {$protobuf.IConversionOptions} [options] Conversion options
-     * @returns {Object.<string,*>} Plain object
-     */
-    Continue.toObject = function toObject() {
-        return {};
-    };
+        /**
+         * Creates a plain object from a StartBallPlacement message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof Change.StartBallPlacement
+         * @static
+         * @param {Change.StartBallPlacement} message StartBallPlacement
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        StartBallPlacement.toObject = function toObject() {
+            return {};
+        };
 
-    /**
-     * Converts this Continue to JSON.
-     * @function toJSON
-     * @memberof Continue
-     * @instance
-     * @returns {Object.<string,*>} JSON object
-     */
-    Continue.prototype.toJSON = function toJSON() {
-        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-    };
+        /**
+         * Converts this StartBallPlacement to JSON.
+         * @function toJSON
+         * @memberof Change.StartBallPlacement
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        StartBallPlacement.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
 
-    /**
-     * Gets the default type url for Continue
-     * @function getTypeUrl
-     * @memberof Continue
-     * @static
-     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-     * @returns {string} The default type url
-     */
-    Continue.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-        if (typeUrlPrefix === undefined) {
-            typeUrlPrefix = "type.googleapis.com";
-        }
-        return typeUrlPrefix + "/Continue";
-    };
-
-    return Continue;
-})();
-
-export const UpdateConfig = $root.UpdateConfig = (() => {
-
-    /**
-     * Properties of an UpdateConfig.
-     * @exports IUpdateConfig
-     * @interface IUpdateConfig
-     * @property {Division|null} [division] UpdateConfig division
-     * @property {Team|null} [firstKickoffTeam] UpdateConfig firstKickoffTeam
-     * @property {boolean|null} [autoContinue] UpdateConfig autoContinue
-     * @property {MatchType|null} [matchType] UpdateConfig matchType
-     */
-
-    /**
-     * Constructs a new UpdateConfig.
-     * @exports UpdateConfig
-     * @classdesc Represents an UpdateConfig.
-     * @implements IUpdateConfig
-     * @constructor
-     * @param {IUpdateConfig=} [properties] Properties to set
-     */
-    function UpdateConfig(properties) {
-        if (properties)
-            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                if (properties[keys[i]] != null)
-                    this[keys[i]] = properties[keys[i]];
-    }
-
-    /**
-     * UpdateConfig division.
-     * @member {Division} division
-     * @memberof UpdateConfig
-     * @instance
-     */
-    UpdateConfig.prototype.division = 0;
-
-    /**
-     * UpdateConfig firstKickoffTeam.
-     * @member {Team} firstKickoffTeam
-     * @memberof UpdateConfig
-     * @instance
-     */
-    UpdateConfig.prototype.firstKickoffTeam = 0;
-
-    /**
-     * UpdateConfig autoContinue.
-     * @member {boolean} autoContinue
-     * @memberof UpdateConfig
-     * @instance
-     */
-    UpdateConfig.prototype.autoContinue = false;
-
-    /**
-     * UpdateConfig matchType.
-     * @member {MatchType} matchType
-     * @memberof UpdateConfig
-     * @instance
-     */
-    UpdateConfig.prototype.matchType = 0;
-
-    /**
-     * Creates a new UpdateConfig instance using the specified properties.
-     * @function create
-     * @memberof UpdateConfig
-     * @static
-     * @param {IUpdateConfig=} [properties] Properties to set
-     * @returns {UpdateConfig} UpdateConfig instance
-     */
-    UpdateConfig.create = function create(properties) {
-        return new UpdateConfig(properties);
-    };
-
-    /**
-     * Encodes the specified UpdateConfig message. Does not implicitly {@link UpdateConfig.verify|verify} messages.
-     * @function encode
-     * @memberof UpdateConfig
-     * @static
-     * @param {IUpdateConfig} message UpdateConfig message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    UpdateConfig.encode = function encode(message, writer) {
-        if (!writer)
-            writer = $Writer.create();
-        if (message.division != null && Object.hasOwnProperty.call(message, "division"))
-            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.division);
-        if (message.firstKickoffTeam != null && Object.hasOwnProperty.call(message, "firstKickoffTeam"))
-            writer.uint32(/* id 2, wireType 0 =*/16).int32(message.firstKickoffTeam);
-        if (message.autoContinue != null && Object.hasOwnProperty.call(message, "autoContinue"))
-            writer.uint32(/* id 3, wireType 0 =*/24).bool(message.autoContinue);
-        if (message.matchType != null && Object.hasOwnProperty.call(message, "matchType"))
-            writer.uint32(/* id 4, wireType 0 =*/32).int32(message.matchType);
-        return writer;
-    };
-
-    /**
-     * Encodes the specified UpdateConfig message, length delimited. Does not implicitly {@link UpdateConfig.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof UpdateConfig
-     * @static
-     * @param {IUpdateConfig} message UpdateConfig message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    UpdateConfig.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
-    };
-
-    /**
-     * Decodes an UpdateConfig message from the specified reader or buffer.
-     * @function decode
-     * @memberof UpdateConfig
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @param {number} [length] Message length if known beforehand
-     * @returns {UpdateConfig} UpdateConfig
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    UpdateConfig.decode = function decode(reader, length) {
-        if (!(reader instanceof $Reader))
-            reader = $Reader.create(reader);
-        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.UpdateConfig();
-        while (reader.pos < end) {
-            let tag = reader.uint32();
-            switch (tag >>> 3) {
-            case 1: {
-                    message.division = reader.int32();
-                    break;
-                }
-            case 2: {
-                    message.firstKickoffTeam = reader.int32();
-                    break;
-                }
-            case 3: {
-                    message.autoContinue = reader.bool();
-                    break;
-                }
-            case 4: {
-                    message.matchType = reader.int32();
-                    break;
-                }
-            default:
-                reader.skipType(tag & 7);
-                break;
+        /**
+         * Gets the default type url for StartBallPlacement
+         * @function getTypeUrl
+         * @memberof Change.StartBallPlacement
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        StartBallPlacement.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
             }
+            return typeUrlPrefix + "/Change.StartBallPlacement";
+        };
+
+        return StartBallPlacement;
+    })();
+
+    Change.Continue = (function() {
+
+        /**
+         * Properties of a Continue.
+         * @memberof Change
+         * @interface IContinue
+         */
+
+        /**
+         * Constructs a new Continue.
+         * @memberof Change
+         * @classdesc Represents a Continue.
+         * @implements IContinue
+         * @constructor
+         * @param {Change.IContinue=} [properties] Properties to set
+         */
+        function Continue(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
         }
-        return message;
-    };
 
-    /**
-     * Decodes an UpdateConfig message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof UpdateConfig
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {UpdateConfig} UpdateConfig
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    UpdateConfig.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
+        /**
+         * Creates a new Continue instance using the specified properties.
+         * @function create
+         * @memberof Change.Continue
+         * @static
+         * @param {Change.IContinue=} [properties] Properties to set
+         * @returns {Change.Continue} Continue instance
+         */
+        Continue.create = function create(properties) {
+            return new Continue(properties);
+        };
 
-    /**
-     * Verifies an UpdateConfig message.
-     * @function verify
-     * @memberof UpdateConfig
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    UpdateConfig.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        if (message.division != null && message.hasOwnProperty("division"))
-            switch (message.division) {
-            default:
-                return "division: enum value expected";
+        /**
+         * Encodes the specified Continue message. Does not implicitly {@link Change.Continue.verify|verify} messages.
+         * @function encode
+         * @memberof Change.Continue
+         * @static
+         * @param {Change.IContinue} message Continue message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        Continue.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            return writer;
+        };
+
+        /**
+         * Encodes the specified Continue message, length delimited. Does not implicitly {@link Change.Continue.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof Change.Continue
+         * @static
+         * @param {Change.IContinue} message Continue message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        Continue.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a Continue message from the specified reader or buffer.
+         * @function decode
+         * @memberof Change.Continue
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {Change.Continue} Continue
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        Continue.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Change.Continue();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a Continue message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof Change.Continue
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {Change.Continue} Continue
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        Continue.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a Continue message.
+         * @function verify
+         * @memberof Change.Continue
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        Continue.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            return null;
+        };
+
+        /**
+         * Creates a Continue message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof Change.Continue
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {Change.Continue} Continue
+         */
+        Continue.fromObject = function fromObject(object) {
+            if (object instanceof $root.Change.Continue)
+                return object;
+            return new $root.Change.Continue();
+        };
+
+        /**
+         * Creates a plain object from a Continue message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof Change.Continue
+         * @static
+         * @param {Change.Continue} message Continue
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        Continue.toObject = function toObject() {
+            return {};
+        };
+
+        /**
+         * Converts this Continue to JSON.
+         * @function toJSON
+         * @memberof Change.Continue
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        Continue.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the default type url for Continue
+         * @function getTypeUrl
+         * @memberof Change.Continue
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        Continue.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/Change.Continue";
+        };
+
+        return Continue;
+    })();
+
+    Change.UpdateConfig = (function() {
+
+        /**
+         * Properties of an UpdateConfig.
+         * @memberof Change
+         * @interface IUpdateConfig
+         * @property {Division|null} [division] UpdateConfig division
+         * @property {Team|null} [firstKickoffTeam] UpdateConfig firstKickoffTeam
+         * @property {boolean|null} [autoContinue] UpdateConfig autoContinue
+         * @property {MatchType|null} [matchType] UpdateConfig matchType
+         */
+
+        /**
+         * Constructs a new UpdateConfig.
+         * @memberof Change
+         * @classdesc Represents an UpdateConfig.
+         * @implements IUpdateConfig
+         * @constructor
+         * @param {Change.IUpdateConfig=} [properties] Properties to set
+         */
+        function UpdateConfig(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * UpdateConfig division.
+         * @member {Division} division
+         * @memberof Change.UpdateConfig
+         * @instance
+         */
+        UpdateConfig.prototype.division = 0;
+
+        /**
+         * UpdateConfig firstKickoffTeam.
+         * @member {Team} firstKickoffTeam
+         * @memberof Change.UpdateConfig
+         * @instance
+         */
+        UpdateConfig.prototype.firstKickoffTeam = 0;
+
+        /**
+         * UpdateConfig autoContinue.
+         * @member {boolean} autoContinue
+         * @memberof Change.UpdateConfig
+         * @instance
+         */
+        UpdateConfig.prototype.autoContinue = false;
+
+        /**
+         * UpdateConfig matchType.
+         * @member {MatchType} matchType
+         * @memberof Change.UpdateConfig
+         * @instance
+         */
+        UpdateConfig.prototype.matchType = 0;
+
+        /**
+         * Creates a new UpdateConfig instance using the specified properties.
+         * @function create
+         * @memberof Change.UpdateConfig
+         * @static
+         * @param {Change.IUpdateConfig=} [properties] Properties to set
+         * @returns {Change.UpdateConfig} UpdateConfig instance
+         */
+        UpdateConfig.create = function create(properties) {
+            return new UpdateConfig(properties);
+        };
+
+        /**
+         * Encodes the specified UpdateConfig message. Does not implicitly {@link Change.UpdateConfig.verify|verify} messages.
+         * @function encode
+         * @memberof Change.UpdateConfig
+         * @static
+         * @param {Change.IUpdateConfig} message UpdateConfig message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        UpdateConfig.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.division != null && Object.hasOwnProperty.call(message, "division"))
+                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.division);
+            if (message.firstKickoffTeam != null && Object.hasOwnProperty.call(message, "firstKickoffTeam"))
+                writer.uint32(/* id 2, wireType 0 =*/16).int32(message.firstKickoffTeam);
+            if (message.autoContinue != null && Object.hasOwnProperty.call(message, "autoContinue"))
+                writer.uint32(/* id 3, wireType 0 =*/24).bool(message.autoContinue);
+            if (message.matchType != null && Object.hasOwnProperty.call(message, "matchType"))
+                writer.uint32(/* id 4, wireType 0 =*/32).int32(message.matchType);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified UpdateConfig message, length delimited. Does not implicitly {@link Change.UpdateConfig.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof Change.UpdateConfig
+         * @static
+         * @param {Change.IUpdateConfig} message UpdateConfig message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        UpdateConfig.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes an UpdateConfig message from the specified reader or buffer.
+         * @function decode
+         * @memberof Change.UpdateConfig
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {Change.UpdateConfig} UpdateConfig
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        UpdateConfig.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Change.UpdateConfig();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1: {
+                        message.division = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.firstKickoffTeam = reader.int32();
+                        break;
+                    }
+                case 3: {
+                        message.autoContinue = reader.bool();
+                        break;
+                    }
+                case 4: {
+                        message.matchType = reader.int32();
+                        break;
+                    }
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes an UpdateConfig message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof Change.UpdateConfig
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {Change.UpdateConfig} UpdateConfig
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        UpdateConfig.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies an UpdateConfig message.
+         * @function verify
+         * @memberof Change.UpdateConfig
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        UpdateConfig.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.division != null && message.hasOwnProperty("division"))
+                switch (message.division) {
+                default:
+                    return "division: enum value expected";
+                case 0:
+                case 1:
+                case 2:
+                    break;
+                }
+            if (message.firstKickoffTeam != null && message.hasOwnProperty("firstKickoffTeam"))
+                switch (message.firstKickoffTeam) {
+                default:
+                    return "firstKickoffTeam: enum value expected";
+                case 0:
+                case 1:
+                case 2:
+                    break;
+                }
+            if (message.autoContinue != null && message.hasOwnProperty("autoContinue"))
+                if (typeof message.autoContinue !== "boolean")
+                    return "autoContinue: boolean expected";
+            if (message.matchType != null && message.hasOwnProperty("matchType"))
+                switch (message.matchType) {
+                default:
+                    return "matchType: enum value expected";
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                    break;
+                }
+            return null;
+        };
+
+        /**
+         * Creates an UpdateConfig message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof Change.UpdateConfig
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {Change.UpdateConfig} UpdateConfig
+         */
+        UpdateConfig.fromObject = function fromObject(object) {
+            if (object instanceof $root.Change.UpdateConfig)
+                return object;
+            let message = new $root.Change.UpdateConfig();
+            switch (object.division) {
+            case "DIV_UNKNOWN":
             case 0:
+                message.division = 0;
+                break;
+            case "DIV_A":
             case 1:
+                message.division = 1;
+                break;
+            case "DIV_B":
             case 2:
+                message.division = 2;
                 break;
             }
-        if (message.firstKickoffTeam != null && message.hasOwnProperty("firstKickoffTeam"))
-            switch (message.firstKickoffTeam) {
-            default:
-                return "firstKickoffTeam: enum value expected";
+            switch (object.firstKickoffTeam) {
+            case "UNKNOWN":
             case 0:
+                message.firstKickoffTeam = 0;
+                break;
+            case "YELLOW":
             case 1:
+                message.firstKickoffTeam = 1;
+                break;
+            case "BLUE":
             case 2:
+                message.firstKickoffTeam = 2;
                 break;
             }
-        if (message.autoContinue != null && message.hasOwnProperty("autoContinue"))
-            if (typeof message.autoContinue !== "boolean")
-                return "autoContinue: boolean expected";
-        if (message.matchType != null && message.hasOwnProperty("matchType"))
-            switch (message.matchType) {
-            default:
-                return "matchType: enum value expected";
+            if (object.autoContinue != null)
+                message.autoContinue = Boolean(object.autoContinue);
+            switch (object.matchType) {
+            case "UNKNOWN_MATCH":
             case 0:
+                message.matchType = 0;
+                break;
+            case "GROUP_PHASE":
             case 1:
+                message.matchType = 1;
+                break;
+            case "ELIMINATION_PHASE":
             case 2:
+                message.matchType = 2;
+                break;
+            case "FRIENDLY":
             case 3:
+                message.matchType = 3;
                 break;
             }
-        return null;
-    };
+            return message;
+        };
 
-    /**
-     * Creates an UpdateConfig message from a plain object. Also converts values to their respective internal types.
-     * @function fromObject
-     * @memberof UpdateConfig
-     * @static
-     * @param {Object.<string,*>} object Plain object
-     * @returns {UpdateConfig} UpdateConfig
-     */
-    UpdateConfig.fromObject = function fromObject(object) {
-        if (object instanceof $root.UpdateConfig)
+        /**
+         * Creates a plain object from an UpdateConfig message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof Change.UpdateConfig
+         * @static
+         * @param {Change.UpdateConfig} message UpdateConfig
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        UpdateConfig.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.division = options.enums === String ? "DIV_UNKNOWN" : 0;
+                object.firstKickoffTeam = options.enums === String ? "UNKNOWN" : 0;
+                object.autoContinue = false;
+                object.matchType = options.enums === String ? "UNKNOWN_MATCH" : 0;
+            }
+            if (message.division != null && message.hasOwnProperty("division"))
+                object.division = options.enums === String ? $root.Division[message.division] : message.division;
+            if (message.firstKickoffTeam != null && message.hasOwnProperty("firstKickoffTeam"))
+                object.firstKickoffTeam = options.enums === String ? $root.Team[message.firstKickoffTeam] : message.firstKickoffTeam;
+            if (message.autoContinue != null && message.hasOwnProperty("autoContinue"))
+                object.autoContinue = message.autoContinue;
+            if (message.matchType != null && message.hasOwnProperty("matchType"))
+                object.matchType = options.enums === String ? $root.MatchType[message.matchType] : message.matchType;
             return object;
-        let message = new $root.UpdateConfig();
-        switch (object.division) {
-        case "DIV_UNKNOWN":
-        case 0:
-            message.division = 0;
-            break;
-        case "DIV_A":
-        case 1:
-            message.division = 1;
-            break;
-        case "DIV_B":
-        case 2:
-            message.division = 2;
-            break;
-        }
-        switch (object.firstKickoffTeam) {
-        case "UNKNOWN":
-        case 0:
-            message.firstKickoffTeam = 0;
-            break;
-        case "YELLOW":
-        case 1:
-            message.firstKickoffTeam = 1;
-            break;
-        case "BLUE":
-        case 2:
-            message.firstKickoffTeam = 2;
-            break;
-        }
-        if (object.autoContinue != null)
-            message.autoContinue = Boolean(object.autoContinue);
-        switch (object.matchType) {
-        case "UNKNOWN_MATCH":
-        case 0:
-            message.matchType = 0;
-            break;
-        case "GROUP_PHASE":
-        case 1:
-            message.matchType = 1;
-            break;
-        case "ELIMINATION_PHASE":
-        case 2:
-            message.matchType = 2;
-            break;
-        case "FRIENDLY":
-        case 3:
-            message.matchType = 3;
-            break;
-        }
-        return message;
-    };
+        };
 
-    /**
-     * Creates a plain object from an UpdateConfig message. Also converts values to other types if specified.
-     * @function toObject
-     * @memberof UpdateConfig
-     * @static
-     * @param {UpdateConfig} message UpdateConfig
-     * @param {$protobuf.IConversionOptions} [options] Conversion options
-     * @returns {Object.<string,*>} Plain object
-     */
-    UpdateConfig.toObject = function toObject(message, options) {
-        if (!options)
-            options = {};
-        let object = {};
-        if (options.defaults) {
-            object.division = options.enums === String ? "DIV_UNKNOWN" : 0;
-            object.firstKickoffTeam = options.enums === String ? "UNKNOWN" : 0;
-            object.autoContinue = false;
-            object.matchType = options.enums === String ? "UNKNOWN_MATCH" : 0;
-        }
-        if (message.division != null && message.hasOwnProperty("division"))
-            object.division = options.enums === String ? $root.Division[message.division] : message.division;
-        if (message.firstKickoffTeam != null && message.hasOwnProperty("firstKickoffTeam"))
-            object.firstKickoffTeam = options.enums === String ? $root.Team[message.firstKickoffTeam] : message.firstKickoffTeam;
-        if (message.autoContinue != null && message.hasOwnProperty("autoContinue"))
-            object.autoContinue = message.autoContinue;
-        if (message.matchType != null && message.hasOwnProperty("matchType"))
-            object.matchType = options.enums === String ? $root.MatchType[message.matchType] : message.matchType;
-        return object;
-    };
+        /**
+         * Converts this UpdateConfig to JSON.
+         * @function toJSON
+         * @memberof Change.UpdateConfig
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        UpdateConfig.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
 
-    /**
-     * Converts this UpdateConfig to JSON.
-     * @function toJSON
-     * @memberof UpdateConfig
-     * @instance
-     * @returns {Object.<string,*>} JSON object
-     */
-    UpdateConfig.prototype.toJSON = function toJSON() {
-        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-    };
-
-    /**
-     * Gets the default type url for UpdateConfig
-     * @function getTypeUrl
-     * @memberof UpdateConfig
-     * @static
-     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-     * @returns {string} The default type url
-     */
-    UpdateConfig.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-        if (typeUrlPrefix === undefined) {
-            typeUrlPrefix = "type.googleapis.com";
-        }
-        return typeUrlPrefix + "/UpdateConfig";
-    };
-
-    return UpdateConfig;
-})();
-
-export const UpdateTeamState = $root.UpdateTeamState = (() => {
-
-    /**
-     * Properties of an UpdateTeamState.
-     * @exports IUpdateTeamState
-     * @interface IUpdateTeamState
-     * @property {Team|null} [forTeam] UpdateTeamState forTeam
-     * @property {string|null} [teamName] UpdateTeamState teamName
-     * @property {number|null} [goals] UpdateTeamState goals
-     * @property {number|null} [goalkeeper] UpdateTeamState goalkeeper
-     * @property {number|null} [timeoutsLeft] UpdateTeamState timeoutsLeft
-     * @property {string|null} [timeoutTimeLeft] UpdateTeamState timeoutTimeLeft
-     * @property {boolean|null} [onPositiveHalf] UpdateTeamState onPositiveHalf
-     * @property {number|null} [ballPlacementFailures] UpdateTeamState ballPlacementFailures
-     * @property {boolean|null} [canPlaceBall] UpdateTeamState canPlaceBall
-     * @property {number|null} [challengeFlagsLeft] UpdateTeamState challengeFlagsLeft
-     * @property {boolean|null} [requestsBotSubstitution] UpdateTeamState requestsBotSubstitution
-     * @property {boolean|null} [requestsTimeout] UpdateTeamState requestsTimeout
-     * @property {boolean|null} [requestsChallenge] UpdateTeamState requestsChallenge
-     * @property {boolean|null} [requestsEmergencyStop] UpdateTeamState requestsEmergencyStop
-     * @property {IYellowCard|null} [yellowCard] UpdateTeamState yellowCard
-     * @property {IRedCard|null} [redCard] UpdateTeamState redCard
-     * @property {IFoul|null} [foul] UpdateTeamState foul
-     * @property {number|null} [removeYellowCard] UpdateTeamState removeYellowCard
-     * @property {number|null} [removeRedCard] UpdateTeamState removeRedCard
-     * @property {number|null} [removeFoul] UpdateTeamState removeFoul
-     */
-
-    /**
-     * Constructs a new UpdateTeamState.
-     * @exports UpdateTeamState
-     * @classdesc Represents an UpdateTeamState.
-     * @implements IUpdateTeamState
-     * @constructor
-     * @param {IUpdateTeamState=} [properties] Properties to set
-     */
-    function UpdateTeamState(properties) {
-        if (properties)
-            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                if (properties[keys[i]] != null)
-                    this[keys[i]] = properties[keys[i]];
-    }
-
-    /**
-     * UpdateTeamState forTeam.
-     * @member {Team} forTeam
-     * @memberof UpdateTeamState
-     * @instance
-     */
-    UpdateTeamState.prototype.forTeam = 0;
-
-    /**
-     * UpdateTeamState teamName.
-     * @member {string} teamName
-     * @memberof UpdateTeamState
-     * @instance
-     */
-    UpdateTeamState.prototype.teamName = "";
-
-    /**
-     * UpdateTeamState goals.
-     * @member {number} goals
-     * @memberof UpdateTeamState
-     * @instance
-     */
-    UpdateTeamState.prototype.goals = 0;
-
-    /**
-     * UpdateTeamState goalkeeper.
-     * @member {number} goalkeeper
-     * @memberof UpdateTeamState
-     * @instance
-     */
-    UpdateTeamState.prototype.goalkeeper = 0;
-
-    /**
-     * UpdateTeamState timeoutsLeft.
-     * @member {number} timeoutsLeft
-     * @memberof UpdateTeamState
-     * @instance
-     */
-    UpdateTeamState.prototype.timeoutsLeft = 0;
-
-    /**
-     * UpdateTeamState timeoutTimeLeft.
-     * @member {string} timeoutTimeLeft
-     * @memberof UpdateTeamState
-     * @instance
-     */
-    UpdateTeamState.prototype.timeoutTimeLeft = "";
-
-    /**
-     * UpdateTeamState onPositiveHalf.
-     * @member {boolean} onPositiveHalf
-     * @memberof UpdateTeamState
-     * @instance
-     */
-    UpdateTeamState.prototype.onPositiveHalf = false;
-
-    /**
-     * UpdateTeamState ballPlacementFailures.
-     * @member {number} ballPlacementFailures
-     * @memberof UpdateTeamState
-     * @instance
-     */
-    UpdateTeamState.prototype.ballPlacementFailures = 0;
-
-    /**
-     * UpdateTeamState canPlaceBall.
-     * @member {boolean} canPlaceBall
-     * @memberof UpdateTeamState
-     * @instance
-     */
-    UpdateTeamState.prototype.canPlaceBall = false;
-
-    /**
-     * UpdateTeamState challengeFlagsLeft.
-     * @member {number} challengeFlagsLeft
-     * @memberof UpdateTeamState
-     * @instance
-     */
-    UpdateTeamState.prototype.challengeFlagsLeft = 0;
-
-    /**
-     * UpdateTeamState requestsBotSubstitution.
-     * @member {boolean} requestsBotSubstitution
-     * @memberof UpdateTeamState
-     * @instance
-     */
-    UpdateTeamState.prototype.requestsBotSubstitution = false;
-
-    /**
-     * UpdateTeamState requestsTimeout.
-     * @member {boolean} requestsTimeout
-     * @memberof UpdateTeamState
-     * @instance
-     */
-    UpdateTeamState.prototype.requestsTimeout = false;
-
-    /**
-     * UpdateTeamState requestsChallenge.
-     * @member {boolean} requestsChallenge
-     * @memberof UpdateTeamState
-     * @instance
-     */
-    UpdateTeamState.prototype.requestsChallenge = false;
-
-    /**
-     * UpdateTeamState requestsEmergencyStop.
-     * @member {boolean} requestsEmergencyStop
-     * @memberof UpdateTeamState
-     * @instance
-     */
-    UpdateTeamState.prototype.requestsEmergencyStop = false;
-
-    /**
-     * UpdateTeamState yellowCard.
-     * @member {IYellowCard|null|undefined} yellowCard
-     * @memberof UpdateTeamState
-     * @instance
-     */
-    UpdateTeamState.prototype.yellowCard = null;
-
-    /**
-     * UpdateTeamState redCard.
-     * @member {IRedCard|null|undefined} redCard
-     * @memberof UpdateTeamState
-     * @instance
-     */
-    UpdateTeamState.prototype.redCard = null;
-
-    /**
-     * UpdateTeamState foul.
-     * @member {IFoul|null|undefined} foul
-     * @memberof UpdateTeamState
-     * @instance
-     */
-    UpdateTeamState.prototype.foul = null;
-
-    /**
-     * UpdateTeamState removeYellowCard.
-     * @member {number} removeYellowCard
-     * @memberof UpdateTeamState
-     * @instance
-     */
-    UpdateTeamState.prototype.removeYellowCard = 0;
-
-    /**
-     * UpdateTeamState removeRedCard.
-     * @member {number} removeRedCard
-     * @memberof UpdateTeamState
-     * @instance
-     */
-    UpdateTeamState.prototype.removeRedCard = 0;
-
-    /**
-     * UpdateTeamState removeFoul.
-     * @member {number} removeFoul
-     * @memberof UpdateTeamState
-     * @instance
-     */
-    UpdateTeamState.prototype.removeFoul = 0;
-
-    /**
-     * Creates a new UpdateTeamState instance using the specified properties.
-     * @function create
-     * @memberof UpdateTeamState
-     * @static
-     * @param {IUpdateTeamState=} [properties] Properties to set
-     * @returns {UpdateTeamState} UpdateTeamState instance
-     */
-    UpdateTeamState.create = function create(properties) {
-        return new UpdateTeamState(properties);
-    };
-
-    /**
-     * Encodes the specified UpdateTeamState message. Does not implicitly {@link UpdateTeamState.verify|verify} messages.
-     * @function encode
-     * @memberof UpdateTeamState
-     * @static
-     * @param {IUpdateTeamState} message UpdateTeamState message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    UpdateTeamState.encode = function encode(message, writer) {
-        if (!writer)
-            writer = $Writer.create();
-        if (message.forTeam != null && Object.hasOwnProperty.call(message, "forTeam"))
-            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.forTeam);
-        if (message.teamName != null && Object.hasOwnProperty.call(message, "teamName"))
-            writer.uint32(/* id 2, wireType 2 =*/18).string(message.teamName);
-        if (message.goals != null && Object.hasOwnProperty.call(message, "goals"))
-            writer.uint32(/* id 3, wireType 0 =*/24).int32(message.goals);
-        if (message.goalkeeper != null && Object.hasOwnProperty.call(message, "goalkeeper"))
-            writer.uint32(/* id 4, wireType 0 =*/32).int32(message.goalkeeper);
-        if (message.timeoutsLeft != null && Object.hasOwnProperty.call(message, "timeoutsLeft"))
-            writer.uint32(/* id 5, wireType 0 =*/40).int32(message.timeoutsLeft);
-        if (message.timeoutTimeLeft != null && Object.hasOwnProperty.call(message, "timeoutTimeLeft"))
-            writer.uint32(/* id 6, wireType 2 =*/50).string(message.timeoutTimeLeft);
-        if (message.onPositiveHalf != null && Object.hasOwnProperty.call(message, "onPositiveHalf"))
-            writer.uint32(/* id 7, wireType 0 =*/56).bool(message.onPositiveHalf);
-        if (message.ballPlacementFailures != null && Object.hasOwnProperty.call(message, "ballPlacementFailures"))
-            writer.uint32(/* id 8, wireType 0 =*/64).int32(message.ballPlacementFailures);
-        if (message.canPlaceBall != null && Object.hasOwnProperty.call(message, "canPlaceBall"))
-            writer.uint32(/* id 9, wireType 0 =*/72).bool(message.canPlaceBall);
-        if (message.requestsBotSubstitution != null && Object.hasOwnProperty.call(message, "requestsBotSubstitution"))
-            writer.uint32(/* id 10, wireType 0 =*/80).bool(message.requestsBotSubstitution);
-        if (message.redCard != null && Object.hasOwnProperty.call(message, "redCard"))
-            $root.RedCard.encode(message.redCard, writer.uint32(/* id 12, wireType 2 =*/98).fork()).ldelim();
-        if (message.foul != null && Object.hasOwnProperty.call(message, "foul"))
-            $root.Foul.encode(message.foul, writer.uint32(/* id 13, wireType 2 =*/106).fork()).ldelim();
-        if (message.removeYellowCard != null && Object.hasOwnProperty.call(message, "removeYellowCard"))
-            writer.uint32(/* id 14, wireType 0 =*/112).uint32(message.removeYellowCard);
-        if (message.removeRedCard != null && Object.hasOwnProperty.call(message, "removeRedCard"))
-            writer.uint32(/* id 15, wireType 0 =*/120).uint32(message.removeRedCard);
-        if (message.removeFoul != null && Object.hasOwnProperty.call(message, "removeFoul"))
-            writer.uint32(/* id 16, wireType 0 =*/128).uint32(message.removeFoul);
-        if (message.requestsTimeout != null && Object.hasOwnProperty.call(message, "requestsTimeout"))
-            writer.uint32(/* id 17, wireType 0 =*/136).bool(message.requestsTimeout);
-        if (message.requestsChallenge != null && Object.hasOwnProperty.call(message, "requestsChallenge"))
-            writer.uint32(/* id 18, wireType 0 =*/144).bool(message.requestsChallenge);
-        if (message.requestsEmergencyStop != null && Object.hasOwnProperty.call(message, "requestsEmergencyStop"))
-            writer.uint32(/* id 19, wireType 0 =*/152).bool(message.requestsEmergencyStop);
-        if (message.yellowCard != null && Object.hasOwnProperty.call(message, "yellowCard"))
-            $root.YellowCard.encode(message.yellowCard, writer.uint32(/* id 20, wireType 2 =*/162).fork()).ldelim();
-        if (message.challengeFlagsLeft != null && Object.hasOwnProperty.call(message, "challengeFlagsLeft"))
-            writer.uint32(/* id 21, wireType 0 =*/168).int32(message.challengeFlagsLeft);
-        return writer;
-    };
-
-    /**
-     * Encodes the specified UpdateTeamState message, length delimited. Does not implicitly {@link UpdateTeamState.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof UpdateTeamState
-     * @static
-     * @param {IUpdateTeamState} message UpdateTeamState message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    UpdateTeamState.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
-    };
-
-    /**
-     * Decodes an UpdateTeamState message from the specified reader or buffer.
-     * @function decode
-     * @memberof UpdateTeamState
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @param {number} [length] Message length if known beforehand
-     * @returns {UpdateTeamState} UpdateTeamState
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    UpdateTeamState.decode = function decode(reader, length) {
-        if (!(reader instanceof $Reader))
-            reader = $Reader.create(reader);
-        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.UpdateTeamState();
-        while (reader.pos < end) {
-            let tag = reader.uint32();
-            switch (tag >>> 3) {
-            case 1: {
-                    message.forTeam = reader.int32();
-                    break;
-                }
-            case 2: {
-                    message.teamName = reader.string();
-                    break;
-                }
-            case 3: {
-                    message.goals = reader.int32();
-                    break;
-                }
-            case 4: {
-                    message.goalkeeper = reader.int32();
-                    break;
-                }
-            case 5: {
-                    message.timeoutsLeft = reader.int32();
-                    break;
-                }
-            case 6: {
-                    message.timeoutTimeLeft = reader.string();
-                    break;
-                }
-            case 7: {
-                    message.onPositiveHalf = reader.bool();
-                    break;
-                }
-            case 8: {
-                    message.ballPlacementFailures = reader.int32();
-                    break;
-                }
-            case 9: {
-                    message.canPlaceBall = reader.bool();
-                    break;
-                }
-            case 21: {
-                    message.challengeFlagsLeft = reader.int32();
-                    break;
-                }
-            case 10: {
-                    message.requestsBotSubstitution = reader.bool();
-                    break;
-                }
-            case 17: {
-                    message.requestsTimeout = reader.bool();
-                    break;
-                }
-            case 18: {
-                    message.requestsChallenge = reader.bool();
-                    break;
-                }
-            case 19: {
-                    message.requestsEmergencyStop = reader.bool();
-                    break;
-                }
-            case 20: {
-                    message.yellowCard = $root.YellowCard.decode(reader, reader.uint32());
-                    break;
-                }
-            case 12: {
-                    message.redCard = $root.RedCard.decode(reader, reader.uint32());
-                    break;
-                }
-            case 13: {
-                    message.foul = $root.Foul.decode(reader, reader.uint32());
-                    break;
-                }
-            case 14: {
-                    message.removeYellowCard = reader.uint32();
-                    break;
-                }
-            case 15: {
-                    message.removeRedCard = reader.uint32();
-                    break;
-                }
-            case 16: {
-                    message.removeFoul = reader.uint32();
-                    break;
-                }
-            default:
-                reader.skipType(tag & 7);
-                break;
+        /**
+         * Gets the default type url for UpdateConfig
+         * @function getTypeUrl
+         * @memberof Change.UpdateConfig
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        UpdateConfig.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
             }
+            return typeUrlPrefix + "/Change.UpdateConfig";
+        };
+
+        return UpdateConfig;
+    })();
+
+    Change.UpdateTeamState = (function() {
+
+        /**
+         * Properties of an UpdateTeamState.
+         * @memberof Change
+         * @interface IUpdateTeamState
+         * @property {Team|null} [forTeam] UpdateTeamState forTeam
+         * @property {string|null} [teamName] UpdateTeamState teamName
+         * @property {number|null} [goals] UpdateTeamState goals
+         * @property {number|null} [goalkeeper] UpdateTeamState goalkeeper
+         * @property {number|null} [timeoutsLeft] UpdateTeamState timeoutsLeft
+         * @property {string|null} [timeoutTimeLeft] UpdateTeamState timeoutTimeLeft
+         * @property {boolean|null} [onPositiveHalf] UpdateTeamState onPositiveHalf
+         * @property {number|null} [ballPlacementFailures] UpdateTeamState ballPlacementFailures
+         * @property {boolean|null} [canPlaceBall] UpdateTeamState canPlaceBall
+         * @property {number|null} [challengeFlagsLeft] UpdateTeamState challengeFlagsLeft
+         * @property {boolean|null} [requestsBotSubstitution] UpdateTeamState requestsBotSubstitution
+         * @property {boolean|null} [requestsTimeout] UpdateTeamState requestsTimeout
+         * @property {boolean|null} [requestsChallenge] UpdateTeamState requestsChallenge
+         * @property {boolean|null} [requestsEmergencyStop] UpdateTeamState requestsEmergencyStop
+         * @property {IYellowCard|null} [yellowCard] UpdateTeamState yellowCard
+         * @property {IRedCard|null} [redCard] UpdateTeamState redCard
+         * @property {IFoul|null} [foul] UpdateTeamState foul
+         * @property {number|null} [removeYellowCard] UpdateTeamState removeYellowCard
+         * @property {number|null} [removeRedCard] UpdateTeamState removeRedCard
+         * @property {number|null} [removeFoul] UpdateTeamState removeFoul
+         */
+
+        /**
+         * Constructs a new UpdateTeamState.
+         * @memberof Change
+         * @classdesc Represents an UpdateTeamState.
+         * @implements IUpdateTeamState
+         * @constructor
+         * @param {Change.IUpdateTeamState=} [properties] Properties to set
+         */
+        function UpdateTeamState(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
         }
-        return message;
-    };
 
-    /**
-     * Decodes an UpdateTeamState message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof UpdateTeamState
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {UpdateTeamState} UpdateTeamState
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    UpdateTeamState.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
+        /**
+         * UpdateTeamState forTeam.
+         * @member {Team} forTeam
+         * @memberof Change.UpdateTeamState
+         * @instance
+         */
+        UpdateTeamState.prototype.forTeam = 0;
 
-    /**
-     * Verifies an UpdateTeamState message.
-     * @function verify
-     * @memberof UpdateTeamState
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    UpdateTeamState.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        if (message.forTeam != null && message.hasOwnProperty("forTeam"))
-            switch (message.forTeam) {
-            default:
-                return "forTeam: enum value expected";
+        /**
+         * UpdateTeamState teamName.
+         * @member {string} teamName
+         * @memberof Change.UpdateTeamState
+         * @instance
+         */
+        UpdateTeamState.prototype.teamName = "";
+
+        /**
+         * UpdateTeamState goals.
+         * @member {number} goals
+         * @memberof Change.UpdateTeamState
+         * @instance
+         */
+        UpdateTeamState.prototype.goals = 0;
+
+        /**
+         * UpdateTeamState goalkeeper.
+         * @member {number} goalkeeper
+         * @memberof Change.UpdateTeamState
+         * @instance
+         */
+        UpdateTeamState.prototype.goalkeeper = 0;
+
+        /**
+         * UpdateTeamState timeoutsLeft.
+         * @member {number} timeoutsLeft
+         * @memberof Change.UpdateTeamState
+         * @instance
+         */
+        UpdateTeamState.prototype.timeoutsLeft = 0;
+
+        /**
+         * UpdateTeamState timeoutTimeLeft.
+         * @member {string} timeoutTimeLeft
+         * @memberof Change.UpdateTeamState
+         * @instance
+         */
+        UpdateTeamState.prototype.timeoutTimeLeft = "";
+
+        /**
+         * UpdateTeamState onPositiveHalf.
+         * @member {boolean} onPositiveHalf
+         * @memberof Change.UpdateTeamState
+         * @instance
+         */
+        UpdateTeamState.prototype.onPositiveHalf = false;
+
+        /**
+         * UpdateTeamState ballPlacementFailures.
+         * @member {number} ballPlacementFailures
+         * @memberof Change.UpdateTeamState
+         * @instance
+         */
+        UpdateTeamState.prototype.ballPlacementFailures = 0;
+
+        /**
+         * UpdateTeamState canPlaceBall.
+         * @member {boolean} canPlaceBall
+         * @memberof Change.UpdateTeamState
+         * @instance
+         */
+        UpdateTeamState.prototype.canPlaceBall = false;
+
+        /**
+         * UpdateTeamState challengeFlagsLeft.
+         * @member {number} challengeFlagsLeft
+         * @memberof Change.UpdateTeamState
+         * @instance
+         */
+        UpdateTeamState.prototype.challengeFlagsLeft = 0;
+
+        /**
+         * UpdateTeamState requestsBotSubstitution.
+         * @member {boolean} requestsBotSubstitution
+         * @memberof Change.UpdateTeamState
+         * @instance
+         */
+        UpdateTeamState.prototype.requestsBotSubstitution = false;
+
+        /**
+         * UpdateTeamState requestsTimeout.
+         * @member {boolean} requestsTimeout
+         * @memberof Change.UpdateTeamState
+         * @instance
+         */
+        UpdateTeamState.prototype.requestsTimeout = false;
+
+        /**
+         * UpdateTeamState requestsChallenge.
+         * @member {boolean} requestsChallenge
+         * @memberof Change.UpdateTeamState
+         * @instance
+         */
+        UpdateTeamState.prototype.requestsChallenge = false;
+
+        /**
+         * UpdateTeamState requestsEmergencyStop.
+         * @member {boolean} requestsEmergencyStop
+         * @memberof Change.UpdateTeamState
+         * @instance
+         */
+        UpdateTeamState.prototype.requestsEmergencyStop = false;
+
+        /**
+         * UpdateTeamState yellowCard.
+         * @member {IYellowCard|null|undefined} yellowCard
+         * @memberof Change.UpdateTeamState
+         * @instance
+         */
+        UpdateTeamState.prototype.yellowCard = null;
+
+        /**
+         * UpdateTeamState redCard.
+         * @member {IRedCard|null|undefined} redCard
+         * @memberof Change.UpdateTeamState
+         * @instance
+         */
+        UpdateTeamState.prototype.redCard = null;
+
+        /**
+         * UpdateTeamState foul.
+         * @member {IFoul|null|undefined} foul
+         * @memberof Change.UpdateTeamState
+         * @instance
+         */
+        UpdateTeamState.prototype.foul = null;
+
+        /**
+         * UpdateTeamState removeYellowCard.
+         * @member {number} removeYellowCard
+         * @memberof Change.UpdateTeamState
+         * @instance
+         */
+        UpdateTeamState.prototype.removeYellowCard = 0;
+
+        /**
+         * UpdateTeamState removeRedCard.
+         * @member {number} removeRedCard
+         * @memberof Change.UpdateTeamState
+         * @instance
+         */
+        UpdateTeamState.prototype.removeRedCard = 0;
+
+        /**
+         * UpdateTeamState removeFoul.
+         * @member {number} removeFoul
+         * @memberof Change.UpdateTeamState
+         * @instance
+         */
+        UpdateTeamState.prototype.removeFoul = 0;
+
+        /**
+         * Creates a new UpdateTeamState instance using the specified properties.
+         * @function create
+         * @memberof Change.UpdateTeamState
+         * @static
+         * @param {Change.IUpdateTeamState=} [properties] Properties to set
+         * @returns {Change.UpdateTeamState} UpdateTeamState instance
+         */
+        UpdateTeamState.create = function create(properties) {
+            return new UpdateTeamState(properties);
+        };
+
+        /**
+         * Encodes the specified UpdateTeamState message. Does not implicitly {@link Change.UpdateTeamState.verify|verify} messages.
+         * @function encode
+         * @memberof Change.UpdateTeamState
+         * @static
+         * @param {Change.IUpdateTeamState} message UpdateTeamState message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        UpdateTeamState.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.forTeam != null && Object.hasOwnProperty.call(message, "forTeam"))
+                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.forTeam);
+            if (message.teamName != null && Object.hasOwnProperty.call(message, "teamName"))
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.teamName);
+            if (message.goals != null && Object.hasOwnProperty.call(message, "goals"))
+                writer.uint32(/* id 3, wireType 0 =*/24).int32(message.goals);
+            if (message.goalkeeper != null && Object.hasOwnProperty.call(message, "goalkeeper"))
+                writer.uint32(/* id 4, wireType 0 =*/32).int32(message.goalkeeper);
+            if (message.timeoutsLeft != null && Object.hasOwnProperty.call(message, "timeoutsLeft"))
+                writer.uint32(/* id 5, wireType 0 =*/40).int32(message.timeoutsLeft);
+            if (message.timeoutTimeLeft != null && Object.hasOwnProperty.call(message, "timeoutTimeLeft"))
+                writer.uint32(/* id 6, wireType 2 =*/50).string(message.timeoutTimeLeft);
+            if (message.onPositiveHalf != null && Object.hasOwnProperty.call(message, "onPositiveHalf"))
+                writer.uint32(/* id 7, wireType 0 =*/56).bool(message.onPositiveHalf);
+            if (message.ballPlacementFailures != null && Object.hasOwnProperty.call(message, "ballPlacementFailures"))
+                writer.uint32(/* id 8, wireType 0 =*/64).int32(message.ballPlacementFailures);
+            if (message.canPlaceBall != null && Object.hasOwnProperty.call(message, "canPlaceBall"))
+                writer.uint32(/* id 9, wireType 0 =*/72).bool(message.canPlaceBall);
+            if (message.requestsBotSubstitution != null && Object.hasOwnProperty.call(message, "requestsBotSubstitution"))
+                writer.uint32(/* id 10, wireType 0 =*/80).bool(message.requestsBotSubstitution);
+            if (message.redCard != null && Object.hasOwnProperty.call(message, "redCard"))
+                $root.RedCard.encode(message.redCard, writer.uint32(/* id 12, wireType 2 =*/98).fork()).ldelim();
+            if (message.foul != null && Object.hasOwnProperty.call(message, "foul"))
+                $root.Foul.encode(message.foul, writer.uint32(/* id 13, wireType 2 =*/106).fork()).ldelim();
+            if (message.removeYellowCard != null && Object.hasOwnProperty.call(message, "removeYellowCard"))
+                writer.uint32(/* id 14, wireType 0 =*/112).uint32(message.removeYellowCard);
+            if (message.removeRedCard != null && Object.hasOwnProperty.call(message, "removeRedCard"))
+                writer.uint32(/* id 15, wireType 0 =*/120).uint32(message.removeRedCard);
+            if (message.removeFoul != null && Object.hasOwnProperty.call(message, "removeFoul"))
+                writer.uint32(/* id 16, wireType 0 =*/128).uint32(message.removeFoul);
+            if (message.requestsTimeout != null && Object.hasOwnProperty.call(message, "requestsTimeout"))
+                writer.uint32(/* id 17, wireType 0 =*/136).bool(message.requestsTimeout);
+            if (message.requestsChallenge != null && Object.hasOwnProperty.call(message, "requestsChallenge"))
+                writer.uint32(/* id 18, wireType 0 =*/144).bool(message.requestsChallenge);
+            if (message.requestsEmergencyStop != null && Object.hasOwnProperty.call(message, "requestsEmergencyStop"))
+                writer.uint32(/* id 19, wireType 0 =*/152).bool(message.requestsEmergencyStop);
+            if (message.yellowCard != null && Object.hasOwnProperty.call(message, "yellowCard"))
+                $root.YellowCard.encode(message.yellowCard, writer.uint32(/* id 20, wireType 2 =*/162).fork()).ldelim();
+            if (message.challengeFlagsLeft != null && Object.hasOwnProperty.call(message, "challengeFlagsLeft"))
+                writer.uint32(/* id 21, wireType 0 =*/168).int32(message.challengeFlagsLeft);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified UpdateTeamState message, length delimited. Does not implicitly {@link Change.UpdateTeamState.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof Change.UpdateTeamState
+         * @static
+         * @param {Change.IUpdateTeamState} message UpdateTeamState message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        UpdateTeamState.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes an UpdateTeamState message from the specified reader or buffer.
+         * @function decode
+         * @memberof Change.UpdateTeamState
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {Change.UpdateTeamState} UpdateTeamState
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        UpdateTeamState.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Change.UpdateTeamState();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1: {
+                        message.forTeam = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.teamName = reader.string();
+                        break;
+                    }
+                case 3: {
+                        message.goals = reader.int32();
+                        break;
+                    }
+                case 4: {
+                        message.goalkeeper = reader.int32();
+                        break;
+                    }
+                case 5: {
+                        message.timeoutsLeft = reader.int32();
+                        break;
+                    }
+                case 6: {
+                        message.timeoutTimeLeft = reader.string();
+                        break;
+                    }
+                case 7: {
+                        message.onPositiveHalf = reader.bool();
+                        break;
+                    }
+                case 8: {
+                        message.ballPlacementFailures = reader.int32();
+                        break;
+                    }
+                case 9: {
+                        message.canPlaceBall = reader.bool();
+                        break;
+                    }
+                case 21: {
+                        message.challengeFlagsLeft = reader.int32();
+                        break;
+                    }
+                case 10: {
+                        message.requestsBotSubstitution = reader.bool();
+                        break;
+                    }
+                case 17: {
+                        message.requestsTimeout = reader.bool();
+                        break;
+                    }
+                case 18: {
+                        message.requestsChallenge = reader.bool();
+                        break;
+                    }
+                case 19: {
+                        message.requestsEmergencyStop = reader.bool();
+                        break;
+                    }
+                case 20: {
+                        message.yellowCard = $root.YellowCard.decode(reader, reader.uint32());
+                        break;
+                    }
+                case 12: {
+                        message.redCard = $root.RedCard.decode(reader, reader.uint32());
+                        break;
+                    }
+                case 13: {
+                        message.foul = $root.Foul.decode(reader, reader.uint32());
+                        break;
+                    }
+                case 14: {
+                        message.removeYellowCard = reader.uint32();
+                        break;
+                    }
+                case 15: {
+                        message.removeRedCard = reader.uint32();
+                        break;
+                    }
+                case 16: {
+                        message.removeFoul = reader.uint32();
+                        break;
+                    }
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes an UpdateTeamState message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof Change.UpdateTeamState
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {Change.UpdateTeamState} UpdateTeamState
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        UpdateTeamState.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies an UpdateTeamState message.
+         * @function verify
+         * @memberof Change.UpdateTeamState
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        UpdateTeamState.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.forTeam != null && message.hasOwnProperty("forTeam"))
+                switch (message.forTeam) {
+                default:
+                    return "forTeam: enum value expected";
+                case 0:
+                case 1:
+                case 2:
+                    break;
+                }
+            if (message.teamName != null && message.hasOwnProperty("teamName"))
+                if (!$util.isString(message.teamName))
+                    return "teamName: string expected";
+            if (message.goals != null && message.hasOwnProperty("goals"))
+                if (!$util.isInteger(message.goals))
+                    return "goals: integer expected";
+            if (message.goalkeeper != null && message.hasOwnProperty("goalkeeper"))
+                if (!$util.isInteger(message.goalkeeper))
+                    return "goalkeeper: integer expected";
+            if (message.timeoutsLeft != null && message.hasOwnProperty("timeoutsLeft"))
+                if (!$util.isInteger(message.timeoutsLeft))
+                    return "timeoutsLeft: integer expected";
+            if (message.timeoutTimeLeft != null && message.hasOwnProperty("timeoutTimeLeft"))
+                if (!$util.isString(message.timeoutTimeLeft))
+                    return "timeoutTimeLeft: string expected";
+            if (message.onPositiveHalf != null && message.hasOwnProperty("onPositiveHalf"))
+                if (typeof message.onPositiveHalf !== "boolean")
+                    return "onPositiveHalf: boolean expected";
+            if (message.ballPlacementFailures != null && message.hasOwnProperty("ballPlacementFailures"))
+                if (!$util.isInteger(message.ballPlacementFailures))
+                    return "ballPlacementFailures: integer expected";
+            if (message.canPlaceBall != null && message.hasOwnProperty("canPlaceBall"))
+                if (typeof message.canPlaceBall !== "boolean")
+                    return "canPlaceBall: boolean expected";
+            if (message.challengeFlagsLeft != null && message.hasOwnProperty("challengeFlagsLeft"))
+                if (!$util.isInteger(message.challengeFlagsLeft))
+                    return "challengeFlagsLeft: integer expected";
+            if (message.requestsBotSubstitution != null && message.hasOwnProperty("requestsBotSubstitution"))
+                if (typeof message.requestsBotSubstitution !== "boolean")
+                    return "requestsBotSubstitution: boolean expected";
+            if (message.requestsTimeout != null && message.hasOwnProperty("requestsTimeout"))
+                if (typeof message.requestsTimeout !== "boolean")
+                    return "requestsTimeout: boolean expected";
+            if (message.requestsChallenge != null && message.hasOwnProperty("requestsChallenge"))
+                if (typeof message.requestsChallenge !== "boolean")
+                    return "requestsChallenge: boolean expected";
+            if (message.requestsEmergencyStop != null && message.hasOwnProperty("requestsEmergencyStop"))
+                if (typeof message.requestsEmergencyStop !== "boolean")
+                    return "requestsEmergencyStop: boolean expected";
+            if (message.yellowCard != null && message.hasOwnProperty("yellowCard")) {
+                let error = $root.YellowCard.verify(message.yellowCard);
+                if (error)
+                    return "yellowCard." + error;
+            }
+            if (message.redCard != null && message.hasOwnProperty("redCard")) {
+                let error = $root.RedCard.verify(message.redCard);
+                if (error)
+                    return "redCard." + error;
+            }
+            if (message.foul != null && message.hasOwnProperty("foul")) {
+                let error = $root.Foul.verify(message.foul);
+                if (error)
+                    return "foul." + error;
+            }
+            if (message.removeYellowCard != null && message.hasOwnProperty("removeYellowCard"))
+                if (!$util.isInteger(message.removeYellowCard))
+                    return "removeYellowCard: integer expected";
+            if (message.removeRedCard != null && message.hasOwnProperty("removeRedCard"))
+                if (!$util.isInteger(message.removeRedCard))
+                    return "removeRedCard: integer expected";
+            if (message.removeFoul != null && message.hasOwnProperty("removeFoul"))
+                if (!$util.isInteger(message.removeFoul))
+                    return "removeFoul: integer expected";
+            return null;
+        };
+
+        /**
+         * Creates an UpdateTeamState message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof Change.UpdateTeamState
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {Change.UpdateTeamState} UpdateTeamState
+         */
+        UpdateTeamState.fromObject = function fromObject(object) {
+            if (object instanceof $root.Change.UpdateTeamState)
+                return object;
+            let message = new $root.Change.UpdateTeamState();
+            switch (object.forTeam) {
+            case "UNKNOWN":
             case 0:
+                message.forTeam = 0;
+                break;
+            case "YELLOW":
             case 1:
+                message.forTeam = 1;
+                break;
+            case "BLUE":
             case 2:
+                message.forTeam = 2;
                 break;
             }
-        if (message.teamName != null && message.hasOwnProperty("teamName"))
-            if (!$util.isString(message.teamName))
-                return "teamName: string expected";
-        if (message.goals != null && message.hasOwnProperty("goals"))
-            if (!$util.isInteger(message.goals))
-                return "goals: integer expected";
-        if (message.goalkeeper != null && message.hasOwnProperty("goalkeeper"))
-            if (!$util.isInteger(message.goalkeeper))
-                return "goalkeeper: integer expected";
-        if (message.timeoutsLeft != null && message.hasOwnProperty("timeoutsLeft"))
-            if (!$util.isInteger(message.timeoutsLeft))
-                return "timeoutsLeft: integer expected";
-        if (message.timeoutTimeLeft != null && message.hasOwnProperty("timeoutTimeLeft"))
-            if (!$util.isString(message.timeoutTimeLeft))
-                return "timeoutTimeLeft: string expected";
-        if (message.onPositiveHalf != null && message.hasOwnProperty("onPositiveHalf"))
-            if (typeof message.onPositiveHalf !== "boolean")
-                return "onPositiveHalf: boolean expected";
-        if (message.ballPlacementFailures != null && message.hasOwnProperty("ballPlacementFailures"))
-            if (!$util.isInteger(message.ballPlacementFailures))
-                return "ballPlacementFailures: integer expected";
-        if (message.canPlaceBall != null && message.hasOwnProperty("canPlaceBall"))
-            if (typeof message.canPlaceBall !== "boolean")
-                return "canPlaceBall: boolean expected";
-        if (message.challengeFlagsLeft != null && message.hasOwnProperty("challengeFlagsLeft"))
-            if (!$util.isInteger(message.challengeFlagsLeft))
-                return "challengeFlagsLeft: integer expected";
-        if (message.requestsBotSubstitution != null && message.hasOwnProperty("requestsBotSubstitution"))
-            if (typeof message.requestsBotSubstitution !== "boolean")
-                return "requestsBotSubstitution: boolean expected";
-        if (message.requestsTimeout != null && message.hasOwnProperty("requestsTimeout"))
-            if (typeof message.requestsTimeout !== "boolean")
-                return "requestsTimeout: boolean expected";
-        if (message.requestsChallenge != null && message.hasOwnProperty("requestsChallenge"))
-            if (typeof message.requestsChallenge !== "boolean")
-                return "requestsChallenge: boolean expected";
-        if (message.requestsEmergencyStop != null && message.hasOwnProperty("requestsEmergencyStop"))
-            if (typeof message.requestsEmergencyStop !== "boolean")
-                return "requestsEmergencyStop: boolean expected";
-        if (message.yellowCard != null && message.hasOwnProperty("yellowCard")) {
-            let error = $root.YellowCard.verify(message.yellowCard);
-            if (error)
-                return "yellowCard." + error;
-        }
-        if (message.redCard != null && message.hasOwnProperty("redCard")) {
-            let error = $root.RedCard.verify(message.redCard);
-            if (error)
-                return "redCard." + error;
-        }
-        if (message.foul != null && message.hasOwnProperty("foul")) {
-            let error = $root.Foul.verify(message.foul);
-            if (error)
-                return "foul." + error;
-        }
-        if (message.removeYellowCard != null && message.hasOwnProperty("removeYellowCard"))
-            if (!$util.isInteger(message.removeYellowCard))
-                return "removeYellowCard: integer expected";
-        if (message.removeRedCard != null && message.hasOwnProperty("removeRedCard"))
-            if (!$util.isInteger(message.removeRedCard))
-                return "removeRedCard: integer expected";
-        if (message.removeFoul != null && message.hasOwnProperty("removeFoul"))
-            if (!$util.isInteger(message.removeFoul))
-                return "removeFoul: integer expected";
-        return null;
-    };
-
-    /**
-     * Creates an UpdateTeamState message from a plain object. Also converts values to their respective internal types.
-     * @function fromObject
-     * @memberof UpdateTeamState
-     * @static
-     * @param {Object.<string,*>} object Plain object
-     * @returns {UpdateTeamState} UpdateTeamState
-     */
-    UpdateTeamState.fromObject = function fromObject(object) {
-        if (object instanceof $root.UpdateTeamState)
-            return object;
-        let message = new $root.UpdateTeamState();
-        switch (object.forTeam) {
-        case "UNKNOWN":
-        case 0:
-            message.forTeam = 0;
-            break;
-        case "YELLOW":
-        case 1:
-            message.forTeam = 1;
-            break;
-        case "BLUE":
-        case 2:
-            message.forTeam = 2;
-            break;
-        }
-        if (object.teamName != null)
-            message.teamName = String(object.teamName);
-        if (object.goals != null)
-            message.goals = object.goals | 0;
-        if (object.goalkeeper != null)
-            message.goalkeeper = object.goalkeeper | 0;
-        if (object.timeoutsLeft != null)
-            message.timeoutsLeft = object.timeoutsLeft | 0;
-        if (object.timeoutTimeLeft != null)
-            message.timeoutTimeLeft = String(object.timeoutTimeLeft);
-        if (object.onPositiveHalf != null)
-            message.onPositiveHalf = Boolean(object.onPositiveHalf);
-        if (object.ballPlacementFailures != null)
-            message.ballPlacementFailures = object.ballPlacementFailures | 0;
-        if (object.canPlaceBall != null)
-            message.canPlaceBall = Boolean(object.canPlaceBall);
-        if (object.challengeFlagsLeft != null)
-            message.challengeFlagsLeft = object.challengeFlagsLeft | 0;
-        if (object.requestsBotSubstitution != null)
-            message.requestsBotSubstitution = Boolean(object.requestsBotSubstitution);
-        if (object.requestsTimeout != null)
-            message.requestsTimeout = Boolean(object.requestsTimeout);
-        if (object.requestsChallenge != null)
-            message.requestsChallenge = Boolean(object.requestsChallenge);
-        if (object.requestsEmergencyStop != null)
-            message.requestsEmergencyStop = Boolean(object.requestsEmergencyStop);
-        if (object.yellowCard != null) {
-            if (typeof object.yellowCard !== "object")
-                throw TypeError(".UpdateTeamState.yellowCard: object expected");
-            message.yellowCard = $root.YellowCard.fromObject(object.yellowCard);
-        }
-        if (object.redCard != null) {
-            if (typeof object.redCard !== "object")
-                throw TypeError(".UpdateTeamState.redCard: object expected");
-            message.redCard = $root.RedCard.fromObject(object.redCard);
-        }
-        if (object.foul != null) {
-            if (typeof object.foul !== "object")
-                throw TypeError(".UpdateTeamState.foul: object expected");
-            message.foul = $root.Foul.fromObject(object.foul);
-        }
-        if (object.removeYellowCard != null)
-            message.removeYellowCard = object.removeYellowCard >>> 0;
-        if (object.removeRedCard != null)
-            message.removeRedCard = object.removeRedCard >>> 0;
-        if (object.removeFoul != null)
-            message.removeFoul = object.removeFoul >>> 0;
-        return message;
-    };
-
-    /**
-     * Creates a plain object from an UpdateTeamState message. Also converts values to other types if specified.
-     * @function toObject
-     * @memberof UpdateTeamState
-     * @static
-     * @param {UpdateTeamState} message UpdateTeamState
-     * @param {$protobuf.IConversionOptions} [options] Conversion options
-     * @returns {Object.<string,*>} Plain object
-     */
-    UpdateTeamState.toObject = function toObject(message, options) {
-        if (!options)
-            options = {};
-        let object = {};
-        if (options.defaults) {
-            object.forTeam = options.enums === String ? "UNKNOWN" : 0;
-            object.teamName = "";
-            object.goals = 0;
-            object.goalkeeper = 0;
-            object.timeoutsLeft = 0;
-            object.timeoutTimeLeft = "";
-            object.onPositiveHalf = false;
-            object.ballPlacementFailures = 0;
-            object.canPlaceBall = false;
-            object.requestsBotSubstitution = false;
-            object.redCard = null;
-            object.foul = null;
-            object.removeYellowCard = 0;
-            object.removeRedCard = 0;
-            object.removeFoul = 0;
-            object.requestsTimeout = false;
-            object.requestsChallenge = false;
-            object.requestsEmergencyStop = false;
-            object.yellowCard = null;
-            object.challengeFlagsLeft = 0;
-        }
-        if (message.forTeam != null && message.hasOwnProperty("forTeam"))
-            object.forTeam = options.enums === String ? $root.Team[message.forTeam] : message.forTeam;
-        if (message.teamName != null && message.hasOwnProperty("teamName"))
-            object.teamName = message.teamName;
-        if (message.goals != null && message.hasOwnProperty("goals"))
-            object.goals = message.goals;
-        if (message.goalkeeper != null && message.hasOwnProperty("goalkeeper"))
-            object.goalkeeper = message.goalkeeper;
-        if (message.timeoutsLeft != null && message.hasOwnProperty("timeoutsLeft"))
-            object.timeoutsLeft = message.timeoutsLeft;
-        if (message.timeoutTimeLeft != null && message.hasOwnProperty("timeoutTimeLeft"))
-            object.timeoutTimeLeft = message.timeoutTimeLeft;
-        if (message.onPositiveHalf != null && message.hasOwnProperty("onPositiveHalf"))
-            object.onPositiveHalf = message.onPositiveHalf;
-        if (message.ballPlacementFailures != null && message.hasOwnProperty("ballPlacementFailures"))
-            object.ballPlacementFailures = message.ballPlacementFailures;
-        if (message.canPlaceBall != null && message.hasOwnProperty("canPlaceBall"))
-            object.canPlaceBall = message.canPlaceBall;
-        if (message.requestsBotSubstitution != null && message.hasOwnProperty("requestsBotSubstitution"))
-            object.requestsBotSubstitution = message.requestsBotSubstitution;
-        if (message.redCard != null && message.hasOwnProperty("redCard"))
-            object.redCard = $root.RedCard.toObject(message.redCard, options);
-        if (message.foul != null && message.hasOwnProperty("foul"))
-            object.foul = $root.Foul.toObject(message.foul, options);
-        if (message.removeYellowCard != null && message.hasOwnProperty("removeYellowCard"))
-            object.removeYellowCard = message.removeYellowCard;
-        if (message.removeRedCard != null && message.hasOwnProperty("removeRedCard"))
-            object.removeRedCard = message.removeRedCard;
-        if (message.removeFoul != null && message.hasOwnProperty("removeFoul"))
-            object.removeFoul = message.removeFoul;
-        if (message.requestsTimeout != null && message.hasOwnProperty("requestsTimeout"))
-            object.requestsTimeout = message.requestsTimeout;
-        if (message.requestsChallenge != null && message.hasOwnProperty("requestsChallenge"))
-            object.requestsChallenge = message.requestsChallenge;
-        if (message.requestsEmergencyStop != null && message.hasOwnProperty("requestsEmergencyStop"))
-            object.requestsEmergencyStop = message.requestsEmergencyStop;
-        if (message.yellowCard != null && message.hasOwnProperty("yellowCard"))
-            object.yellowCard = $root.YellowCard.toObject(message.yellowCard, options);
-        if (message.challengeFlagsLeft != null && message.hasOwnProperty("challengeFlagsLeft"))
-            object.challengeFlagsLeft = message.challengeFlagsLeft;
-        return object;
-    };
-
-    /**
-     * Converts this UpdateTeamState to JSON.
-     * @function toJSON
-     * @memberof UpdateTeamState
-     * @instance
-     * @returns {Object.<string,*>} JSON object
-     */
-    UpdateTeamState.prototype.toJSON = function toJSON() {
-        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-    };
-
-    /**
-     * Gets the default type url for UpdateTeamState
-     * @function getTypeUrl
-     * @memberof UpdateTeamState
-     * @static
-     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-     * @returns {string} The default type url
-     */
-    UpdateTeamState.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-        if (typeUrlPrefix === undefined) {
-            typeUrlPrefix = "type.googleapis.com";
-        }
-        return typeUrlPrefix + "/UpdateTeamState";
-    };
-
-    return UpdateTeamState;
-})();
-
-export const SwitchColors = $root.SwitchColors = (() => {
-
-    /**
-     * Properties of a SwitchColors.
-     * @exports ISwitchColors
-     * @interface ISwitchColors
-     */
-
-    /**
-     * Constructs a new SwitchColors.
-     * @exports SwitchColors
-     * @classdesc Represents a SwitchColors.
-     * @implements ISwitchColors
-     * @constructor
-     * @param {ISwitchColors=} [properties] Properties to set
-     */
-    function SwitchColors(properties) {
-        if (properties)
-            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                if (properties[keys[i]] != null)
-                    this[keys[i]] = properties[keys[i]];
-    }
-
-    /**
-     * Creates a new SwitchColors instance using the specified properties.
-     * @function create
-     * @memberof SwitchColors
-     * @static
-     * @param {ISwitchColors=} [properties] Properties to set
-     * @returns {SwitchColors} SwitchColors instance
-     */
-    SwitchColors.create = function create(properties) {
-        return new SwitchColors(properties);
-    };
-
-    /**
-     * Encodes the specified SwitchColors message. Does not implicitly {@link SwitchColors.verify|verify} messages.
-     * @function encode
-     * @memberof SwitchColors
-     * @static
-     * @param {ISwitchColors} message SwitchColors message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    SwitchColors.encode = function encode(message, writer) {
-        if (!writer)
-            writer = $Writer.create();
-        return writer;
-    };
-
-    /**
-     * Encodes the specified SwitchColors message, length delimited. Does not implicitly {@link SwitchColors.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof SwitchColors
-     * @static
-     * @param {ISwitchColors} message SwitchColors message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    SwitchColors.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
-    };
-
-    /**
-     * Decodes a SwitchColors message from the specified reader or buffer.
-     * @function decode
-     * @memberof SwitchColors
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @param {number} [length] Message length if known beforehand
-     * @returns {SwitchColors} SwitchColors
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    SwitchColors.decode = function decode(reader, length) {
-        if (!(reader instanceof $Reader))
-            reader = $Reader.create(reader);
-        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.SwitchColors();
-        while (reader.pos < end) {
-            let tag = reader.uint32();
-            switch (tag >>> 3) {
-            default:
-                reader.skipType(tag & 7);
-                break;
+            if (object.teamName != null)
+                message.teamName = String(object.teamName);
+            if (object.goals != null)
+                message.goals = object.goals | 0;
+            if (object.goalkeeper != null)
+                message.goalkeeper = object.goalkeeper | 0;
+            if (object.timeoutsLeft != null)
+                message.timeoutsLeft = object.timeoutsLeft | 0;
+            if (object.timeoutTimeLeft != null)
+                message.timeoutTimeLeft = String(object.timeoutTimeLeft);
+            if (object.onPositiveHalf != null)
+                message.onPositiveHalf = Boolean(object.onPositiveHalf);
+            if (object.ballPlacementFailures != null)
+                message.ballPlacementFailures = object.ballPlacementFailures | 0;
+            if (object.canPlaceBall != null)
+                message.canPlaceBall = Boolean(object.canPlaceBall);
+            if (object.challengeFlagsLeft != null)
+                message.challengeFlagsLeft = object.challengeFlagsLeft | 0;
+            if (object.requestsBotSubstitution != null)
+                message.requestsBotSubstitution = Boolean(object.requestsBotSubstitution);
+            if (object.requestsTimeout != null)
+                message.requestsTimeout = Boolean(object.requestsTimeout);
+            if (object.requestsChallenge != null)
+                message.requestsChallenge = Boolean(object.requestsChallenge);
+            if (object.requestsEmergencyStop != null)
+                message.requestsEmergencyStop = Boolean(object.requestsEmergencyStop);
+            if (object.yellowCard != null) {
+                if (typeof object.yellowCard !== "object")
+                    throw TypeError(".Change.UpdateTeamState.yellowCard: object expected");
+                message.yellowCard = $root.YellowCard.fromObject(object.yellowCard);
             }
-        }
-        return message;
-    };
+            if (object.redCard != null) {
+                if (typeof object.redCard !== "object")
+                    throw TypeError(".Change.UpdateTeamState.redCard: object expected");
+                message.redCard = $root.RedCard.fromObject(object.redCard);
+            }
+            if (object.foul != null) {
+                if (typeof object.foul !== "object")
+                    throw TypeError(".Change.UpdateTeamState.foul: object expected");
+                message.foul = $root.Foul.fromObject(object.foul);
+            }
+            if (object.removeYellowCard != null)
+                message.removeYellowCard = object.removeYellowCard >>> 0;
+            if (object.removeRedCard != null)
+                message.removeRedCard = object.removeRedCard >>> 0;
+            if (object.removeFoul != null)
+                message.removeFoul = object.removeFoul >>> 0;
+            return message;
+        };
 
-    /**
-     * Decodes a SwitchColors message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof SwitchColors
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {SwitchColors} SwitchColors
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    SwitchColors.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
-
-    /**
-     * Verifies a SwitchColors message.
-     * @function verify
-     * @memberof SwitchColors
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    SwitchColors.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        return null;
-    };
-
-    /**
-     * Creates a SwitchColors message from a plain object. Also converts values to their respective internal types.
-     * @function fromObject
-     * @memberof SwitchColors
-     * @static
-     * @param {Object.<string,*>} object Plain object
-     * @returns {SwitchColors} SwitchColors
-     */
-    SwitchColors.fromObject = function fromObject(object) {
-        if (object instanceof $root.SwitchColors)
+        /**
+         * Creates a plain object from an UpdateTeamState message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof Change.UpdateTeamState
+         * @static
+         * @param {Change.UpdateTeamState} message UpdateTeamState
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        UpdateTeamState.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.forTeam = options.enums === String ? "UNKNOWN" : 0;
+                object.teamName = "";
+                object.goals = 0;
+                object.goalkeeper = 0;
+                object.timeoutsLeft = 0;
+                object.timeoutTimeLeft = "";
+                object.onPositiveHalf = false;
+                object.ballPlacementFailures = 0;
+                object.canPlaceBall = false;
+                object.requestsBotSubstitution = false;
+                object.redCard = null;
+                object.foul = null;
+                object.removeYellowCard = 0;
+                object.removeRedCard = 0;
+                object.removeFoul = 0;
+                object.requestsTimeout = false;
+                object.requestsChallenge = false;
+                object.requestsEmergencyStop = false;
+                object.yellowCard = null;
+                object.challengeFlagsLeft = 0;
+            }
+            if (message.forTeam != null && message.hasOwnProperty("forTeam"))
+                object.forTeam = options.enums === String ? $root.Team[message.forTeam] : message.forTeam;
+            if (message.teamName != null && message.hasOwnProperty("teamName"))
+                object.teamName = message.teamName;
+            if (message.goals != null && message.hasOwnProperty("goals"))
+                object.goals = message.goals;
+            if (message.goalkeeper != null && message.hasOwnProperty("goalkeeper"))
+                object.goalkeeper = message.goalkeeper;
+            if (message.timeoutsLeft != null && message.hasOwnProperty("timeoutsLeft"))
+                object.timeoutsLeft = message.timeoutsLeft;
+            if (message.timeoutTimeLeft != null && message.hasOwnProperty("timeoutTimeLeft"))
+                object.timeoutTimeLeft = message.timeoutTimeLeft;
+            if (message.onPositiveHalf != null && message.hasOwnProperty("onPositiveHalf"))
+                object.onPositiveHalf = message.onPositiveHalf;
+            if (message.ballPlacementFailures != null && message.hasOwnProperty("ballPlacementFailures"))
+                object.ballPlacementFailures = message.ballPlacementFailures;
+            if (message.canPlaceBall != null && message.hasOwnProperty("canPlaceBall"))
+                object.canPlaceBall = message.canPlaceBall;
+            if (message.requestsBotSubstitution != null && message.hasOwnProperty("requestsBotSubstitution"))
+                object.requestsBotSubstitution = message.requestsBotSubstitution;
+            if (message.redCard != null && message.hasOwnProperty("redCard"))
+                object.redCard = $root.RedCard.toObject(message.redCard, options);
+            if (message.foul != null && message.hasOwnProperty("foul"))
+                object.foul = $root.Foul.toObject(message.foul, options);
+            if (message.removeYellowCard != null && message.hasOwnProperty("removeYellowCard"))
+                object.removeYellowCard = message.removeYellowCard;
+            if (message.removeRedCard != null && message.hasOwnProperty("removeRedCard"))
+                object.removeRedCard = message.removeRedCard;
+            if (message.removeFoul != null && message.hasOwnProperty("removeFoul"))
+                object.removeFoul = message.removeFoul;
+            if (message.requestsTimeout != null && message.hasOwnProperty("requestsTimeout"))
+                object.requestsTimeout = message.requestsTimeout;
+            if (message.requestsChallenge != null && message.hasOwnProperty("requestsChallenge"))
+                object.requestsChallenge = message.requestsChallenge;
+            if (message.requestsEmergencyStop != null && message.hasOwnProperty("requestsEmergencyStop"))
+                object.requestsEmergencyStop = message.requestsEmergencyStop;
+            if (message.yellowCard != null && message.hasOwnProperty("yellowCard"))
+                object.yellowCard = $root.YellowCard.toObject(message.yellowCard, options);
+            if (message.challengeFlagsLeft != null && message.hasOwnProperty("challengeFlagsLeft"))
+                object.challengeFlagsLeft = message.challengeFlagsLeft;
             return object;
-        return new $root.SwitchColors();
-    };
+        };
 
-    /**
-     * Creates a plain object from a SwitchColors message. Also converts values to other types if specified.
-     * @function toObject
-     * @memberof SwitchColors
-     * @static
-     * @param {SwitchColors} message SwitchColors
-     * @param {$protobuf.IConversionOptions} [options] Conversion options
-     * @returns {Object.<string,*>} Plain object
-     */
-    SwitchColors.toObject = function toObject() {
-        return {};
-    };
+        /**
+         * Converts this UpdateTeamState to JSON.
+         * @function toJSON
+         * @memberof Change.UpdateTeamState
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        UpdateTeamState.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
 
-    /**
-     * Converts this SwitchColors to JSON.
-     * @function toJSON
-     * @memberof SwitchColors
-     * @instance
-     * @returns {Object.<string,*>} JSON object
-     */
-    SwitchColors.prototype.toJSON = function toJSON() {
-        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-    };
+        /**
+         * Gets the default type url for UpdateTeamState
+         * @function getTypeUrl
+         * @memberof Change.UpdateTeamState
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        UpdateTeamState.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/Change.UpdateTeamState";
+        };
 
-    /**
-     * Gets the default type url for SwitchColors
-     * @function getTypeUrl
-     * @memberof SwitchColors
-     * @static
-     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-     * @returns {string} The default type url
-     */
-    SwitchColors.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-        if (typeUrlPrefix === undefined) {
-            typeUrlPrefix = "type.googleapis.com";
+        return UpdateTeamState;
+    })();
+
+    Change.SwitchColors = (function() {
+
+        /**
+         * Properties of a SwitchColors.
+         * @memberof Change
+         * @interface ISwitchColors
+         */
+
+        /**
+         * Constructs a new SwitchColors.
+         * @memberof Change
+         * @classdesc Represents a SwitchColors.
+         * @implements ISwitchColors
+         * @constructor
+         * @param {Change.ISwitchColors=} [properties] Properties to set
+         */
+        function SwitchColors(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
         }
-        return typeUrlPrefix + "/SwitchColors";
-    };
 
-    return SwitchColors;
-})();
+        /**
+         * Creates a new SwitchColors instance using the specified properties.
+         * @function create
+         * @memberof Change.SwitchColors
+         * @static
+         * @param {Change.ISwitchColors=} [properties] Properties to set
+         * @returns {Change.SwitchColors} SwitchColors instance
+         */
+        SwitchColors.create = function create(properties) {
+            return new SwitchColors(properties);
+        };
 
-export const Revert = $root.Revert = (() => {
+        /**
+         * Encodes the specified SwitchColors message. Does not implicitly {@link Change.SwitchColors.verify|verify} messages.
+         * @function encode
+         * @memberof Change.SwitchColors
+         * @static
+         * @param {Change.ISwitchColors} message SwitchColors message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        SwitchColors.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            return writer;
+        };
 
-    /**
-     * Properties of a Revert.
-     * @exports IRevert
-     * @interface IRevert
-     * @property {number|null} [changeId] Revert changeId
-     */
+        /**
+         * Encodes the specified SwitchColors message, length delimited. Does not implicitly {@link Change.SwitchColors.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof Change.SwitchColors
+         * @static
+         * @param {Change.ISwitchColors} message SwitchColors message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        SwitchColors.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
 
-    /**
-     * Constructs a new Revert.
-     * @exports Revert
-     * @classdesc Represents a Revert.
-     * @implements IRevert
-     * @constructor
-     * @param {IRevert=} [properties] Properties to set
-     */
-    function Revert(properties) {
-        if (properties)
-            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                if (properties[keys[i]] != null)
-                    this[keys[i]] = properties[keys[i]];
-    }
-
-    /**
-     * Revert changeId.
-     * @member {number} changeId
-     * @memberof Revert
-     * @instance
-     */
-    Revert.prototype.changeId = 0;
-
-    /**
-     * Creates a new Revert instance using the specified properties.
-     * @function create
-     * @memberof Revert
-     * @static
-     * @param {IRevert=} [properties] Properties to set
-     * @returns {Revert} Revert instance
-     */
-    Revert.create = function create(properties) {
-        return new Revert(properties);
-    };
-
-    /**
-     * Encodes the specified Revert message. Does not implicitly {@link Revert.verify|verify} messages.
-     * @function encode
-     * @memberof Revert
-     * @static
-     * @param {IRevert} message Revert message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    Revert.encode = function encode(message, writer) {
-        if (!writer)
-            writer = $Writer.create();
-        if (message.changeId != null && Object.hasOwnProperty.call(message, "changeId"))
-            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.changeId);
-        return writer;
-    };
-
-    /**
-     * Encodes the specified Revert message, length delimited. Does not implicitly {@link Revert.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof Revert
-     * @static
-     * @param {IRevert} message Revert message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    Revert.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
-    };
-
-    /**
-     * Decodes a Revert message from the specified reader or buffer.
-     * @function decode
-     * @memberof Revert
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @param {number} [length] Message length if known beforehand
-     * @returns {Revert} Revert
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    Revert.decode = function decode(reader, length) {
-        if (!(reader instanceof $Reader))
-            reader = $Reader.create(reader);
-        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Revert();
-        while (reader.pos < end) {
-            let tag = reader.uint32();
-            switch (tag >>> 3) {
-            case 1: {
-                    message.changeId = reader.int32();
+        /**
+         * Decodes a SwitchColors message from the specified reader or buffer.
+         * @function decode
+         * @memberof Change.SwitchColors
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {Change.SwitchColors} SwitchColors
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        SwitchColors.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Change.SwitchColors();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                default:
+                    reader.skipType(tag & 7);
                     break;
                 }
-            default:
-                reader.skipType(tag & 7);
-                break;
             }
+            return message;
+        };
+
+        /**
+         * Decodes a SwitchColors message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof Change.SwitchColors
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {Change.SwitchColors} SwitchColors
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        SwitchColors.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a SwitchColors message.
+         * @function verify
+         * @memberof Change.SwitchColors
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        SwitchColors.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            return null;
+        };
+
+        /**
+         * Creates a SwitchColors message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof Change.SwitchColors
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {Change.SwitchColors} SwitchColors
+         */
+        SwitchColors.fromObject = function fromObject(object) {
+            if (object instanceof $root.Change.SwitchColors)
+                return object;
+            return new $root.Change.SwitchColors();
+        };
+
+        /**
+         * Creates a plain object from a SwitchColors message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof Change.SwitchColors
+         * @static
+         * @param {Change.SwitchColors} message SwitchColors
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        SwitchColors.toObject = function toObject() {
+            return {};
+        };
+
+        /**
+         * Converts this SwitchColors to JSON.
+         * @function toJSON
+         * @memberof Change.SwitchColors
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        SwitchColors.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the default type url for SwitchColors
+         * @function getTypeUrl
+         * @memberof Change.SwitchColors
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        SwitchColors.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/Change.SwitchColors";
+        };
+
+        return SwitchColors;
+    })();
+
+    Change.Revert = (function() {
+
+        /**
+         * Properties of a Revert.
+         * @memberof Change
+         * @interface IRevert
+         * @property {number|null} [changeId] Revert changeId
+         */
+
+        /**
+         * Constructs a new Revert.
+         * @memberof Change
+         * @classdesc Represents a Revert.
+         * @implements IRevert
+         * @constructor
+         * @param {Change.IRevert=} [properties] Properties to set
+         */
+        function Revert(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
         }
-        return message;
-    };
 
-    /**
-     * Decodes a Revert message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof Revert
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {Revert} Revert
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    Revert.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
+        /**
+         * Revert changeId.
+         * @member {number} changeId
+         * @memberof Change.Revert
+         * @instance
+         */
+        Revert.prototype.changeId = 0;
 
-    /**
-     * Verifies a Revert message.
-     * @function verify
-     * @memberof Revert
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    Revert.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        if (message.changeId != null && message.hasOwnProperty("changeId"))
-            if (!$util.isInteger(message.changeId))
-                return "changeId: integer expected";
-        return null;
-    };
+        /**
+         * Creates a new Revert instance using the specified properties.
+         * @function create
+         * @memberof Change.Revert
+         * @static
+         * @param {Change.IRevert=} [properties] Properties to set
+         * @returns {Change.Revert} Revert instance
+         */
+        Revert.create = function create(properties) {
+            return new Revert(properties);
+        };
 
-    /**
-     * Creates a Revert message from a plain object. Also converts values to their respective internal types.
-     * @function fromObject
-     * @memberof Revert
-     * @static
-     * @param {Object.<string,*>} object Plain object
-     * @returns {Revert} Revert
-     */
-    Revert.fromObject = function fromObject(object) {
-        if (object instanceof $root.Revert)
-            return object;
-        let message = new $root.Revert();
-        if (object.changeId != null)
-            message.changeId = object.changeId | 0;
-        return message;
-    };
+        /**
+         * Encodes the specified Revert message. Does not implicitly {@link Change.Revert.verify|verify} messages.
+         * @function encode
+         * @memberof Change.Revert
+         * @static
+         * @param {Change.IRevert} message Revert message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        Revert.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.changeId != null && Object.hasOwnProperty.call(message, "changeId"))
+                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.changeId);
+            return writer;
+        };
 
-    /**
-     * Creates a plain object from a Revert message. Also converts values to other types if specified.
-     * @function toObject
-     * @memberof Revert
-     * @static
-     * @param {Revert} message Revert
-     * @param {$protobuf.IConversionOptions} [options] Conversion options
-     * @returns {Object.<string,*>} Plain object
-     */
-    Revert.toObject = function toObject(message, options) {
-        if (!options)
-            options = {};
-        let object = {};
-        if (options.defaults)
-            object.changeId = 0;
-        if (message.changeId != null && message.hasOwnProperty("changeId"))
-            object.changeId = message.changeId;
-        return object;
-    };
+        /**
+         * Encodes the specified Revert message, length delimited. Does not implicitly {@link Change.Revert.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof Change.Revert
+         * @static
+         * @param {Change.IRevert} message Revert message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        Revert.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
 
-    /**
-     * Converts this Revert to JSON.
-     * @function toJSON
-     * @memberof Revert
-     * @instance
-     * @returns {Object.<string,*>} JSON object
-     */
-    Revert.prototype.toJSON = function toJSON() {
-        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-    };
-
-    /**
-     * Gets the default type url for Revert
-     * @function getTypeUrl
-     * @memberof Revert
-     * @static
-     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-     * @returns {string} The default type url
-     */
-    Revert.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-        if (typeUrlPrefix === undefined) {
-            typeUrlPrefix = "type.googleapis.com";
-        }
-        return typeUrlPrefix + "/Revert";
-    };
-
-    return Revert;
-})();
-
-export const NewGameState = $root.NewGameState = (() => {
-
-    /**
-     * Properties of a NewGameState.
-     * @exports INewGameState
-     * @interface INewGameState
-     * @property {IGameState|null} [gameState] NewGameState gameState
-     */
-
-    /**
-     * Constructs a new NewGameState.
-     * @exports NewGameState
-     * @classdesc Represents a NewGameState.
-     * @implements INewGameState
-     * @constructor
-     * @param {INewGameState=} [properties] Properties to set
-     */
-    function NewGameState(properties) {
-        if (properties)
-            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                if (properties[keys[i]] != null)
-                    this[keys[i]] = properties[keys[i]];
-    }
-
-    /**
-     * NewGameState gameState.
-     * @member {IGameState|null|undefined} gameState
-     * @memberof NewGameState
-     * @instance
-     */
-    NewGameState.prototype.gameState = null;
-
-    /**
-     * Creates a new NewGameState instance using the specified properties.
-     * @function create
-     * @memberof NewGameState
-     * @static
-     * @param {INewGameState=} [properties] Properties to set
-     * @returns {NewGameState} NewGameState instance
-     */
-    NewGameState.create = function create(properties) {
-        return new NewGameState(properties);
-    };
-
-    /**
-     * Encodes the specified NewGameState message. Does not implicitly {@link NewGameState.verify|verify} messages.
-     * @function encode
-     * @memberof NewGameState
-     * @static
-     * @param {INewGameState} message NewGameState message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    NewGameState.encode = function encode(message, writer) {
-        if (!writer)
-            writer = $Writer.create();
-        if (message.gameState != null && Object.hasOwnProperty.call(message, "gameState"))
-            $root.GameState.encode(message.gameState, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-        return writer;
-    };
-
-    /**
-     * Encodes the specified NewGameState message, length delimited. Does not implicitly {@link NewGameState.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof NewGameState
-     * @static
-     * @param {INewGameState} message NewGameState message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    NewGameState.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
-    };
-
-    /**
-     * Decodes a NewGameState message from the specified reader or buffer.
-     * @function decode
-     * @memberof NewGameState
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @param {number} [length] Message length if known beforehand
-     * @returns {NewGameState} NewGameState
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    NewGameState.decode = function decode(reader, length) {
-        if (!(reader instanceof $Reader))
-            reader = $Reader.create(reader);
-        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.NewGameState();
-        while (reader.pos < end) {
-            let tag = reader.uint32();
-            switch (tag >>> 3) {
-            case 1: {
-                    message.gameState = $root.GameState.decode(reader, reader.uint32());
+        /**
+         * Decodes a Revert message from the specified reader or buffer.
+         * @function decode
+         * @memberof Change.Revert
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {Change.Revert} Revert
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        Revert.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Change.Revert();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1: {
+                        message.changeId = reader.int32();
+                        break;
+                    }
+                default:
+                    reader.skipType(tag & 7);
                     break;
                 }
-            default:
-                reader.skipType(tag & 7);
-                break;
             }
-        }
-        return message;
-    };
+            return message;
+        };
 
-    /**
-     * Decodes a NewGameState message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof NewGameState
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {NewGameState} NewGameState
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    NewGameState.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
+        /**
+         * Decodes a Revert message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof Change.Revert
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {Change.Revert} Revert
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        Revert.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
 
-    /**
-     * Verifies a NewGameState message.
-     * @function verify
-     * @memberof NewGameState
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    NewGameState.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        if (message.gameState != null && message.hasOwnProperty("gameState")) {
-            let error = $root.GameState.verify(message.gameState);
-            if (error)
-                return "gameState." + error;
-        }
-        return null;
-    };
+        /**
+         * Verifies a Revert message.
+         * @function verify
+         * @memberof Change.Revert
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        Revert.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.changeId != null && message.hasOwnProperty("changeId"))
+                if (!$util.isInteger(message.changeId))
+                    return "changeId: integer expected";
+            return null;
+        };
 
-    /**
-     * Creates a NewGameState message from a plain object. Also converts values to their respective internal types.
-     * @function fromObject
-     * @memberof NewGameState
-     * @static
-     * @param {Object.<string,*>} object Plain object
-     * @returns {NewGameState} NewGameState
-     */
-    NewGameState.fromObject = function fromObject(object) {
-        if (object instanceof $root.NewGameState)
+        /**
+         * Creates a Revert message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof Change.Revert
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {Change.Revert} Revert
+         */
+        Revert.fromObject = function fromObject(object) {
+            if (object instanceof $root.Change.Revert)
+                return object;
+            let message = new $root.Change.Revert();
+            if (object.changeId != null)
+                message.changeId = object.changeId | 0;
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a Revert message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof Change.Revert
+         * @static
+         * @param {Change.Revert} message Revert
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        Revert.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults)
+                object.changeId = 0;
+            if (message.changeId != null && message.hasOwnProperty("changeId"))
+                object.changeId = message.changeId;
             return object;
-        let message = new $root.NewGameState();
-        if (object.gameState != null) {
-            if (typeof object.gameState !== "object")
-                throw TypeError(".NewGameState.gameState: object expected");
-            message.gameState = $root.GameState.fromObject(object.gameState);
+        };
+
+        /**
+         * Converts this Revert to JSON.
+         * @function toJSON
+         * @memberof Change.Revert
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        Revert.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the default type url for Revert
+         * @function getTypeUrl
+         * @memberof Change.Revert
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        Revert.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/Change.Revert";
+        };
+
+        return Revert;
+    })();
+
+    Change.NewGameState = (function() {
+
+        /**
+         * Properties of a NewGameState.
+         * @memberof Change
+         * @interface INewGameState
+         * @property {IGameState|null} [gameState] NewGameState gameState
+         */
+
+        /**
+         * Constructs a new NewGameState.
+         * @memberof Change
+         * @classdesc Represents a NewGameState.
+         * @implements INewGameState
+         * @constructor
+         * @param {Change.INewGameState=} [properties] Properties to set
+         */
+        function NewGameState(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
         }
-        return message;
-    };
 
-    /**
-     * Creates a plain object from a NewGameState message. Also converts values to other types if specified.
-     * @function toObject
-     * @memberof NewGameState
-     * @static
-     * @param {NewGameState} message NewGameState
-     * @param {$protobuf.IConversionOptions} [options] Conversion options
-     * @returns {Object.<string,*>} Plain object
-     */
-    NewGameState.toObject = function toObject(message, options) {
-        if (!options)
-            options = {};
-        let object = {};
-        if (options.defaults)
-            object.gameState = null;
-        if (message.gameState != null && message.hasOwnProperty("gameState"))
-            object.gameState = $root.GameState.toObject(message.gameState, options);
-        return object;
-    };
+        /**
+         * NewGameState gameState.
+         * @member {IGameState|null|undefined} gameState
+         * @memberof Change.NewGameState
+         * @instance
+         */
+        NewGameState.prototype.gameState = null;
 
-    /**
-     * Converts this NewGameState to JSON.
-     * @function toJSON
-     * @memberof NewGameState
-     * @instance
-     * @returns {Object.<string,*>} JSON object
-     */
-    NewGameState.prototype.toJSON = function toJSON() {
-        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-    };
+        /**
+         * Creates a new NewGameState instance using the specified properties.
+         * @function create
+         * @memberof Change.NewGameState
+         * @static
+         * @param {Change.INewGameState=} [properties] Properties to set
+         * @returns {Change.NewGameState} NewGameState instance
+         */
+        NewGameState.create = function create(properties) {
+            return new NewGameState(properties);
+        };
 
-    /**
-     * Gets the default type url for NewGameState
-     * @function getTypeUrl
-     * @memberof NewGameState
-     * @static
-     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-     * @returns {string} The default type url
-     */
-    NewGameState.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-        if (typeUrlPrefix === undefined) {
-            typeUrlPrefix = "type.googleapis.com";
-        }
-        return typeUrlPrefix + "/NewGameState";
-    };
+        /**
+         * Encodes the specified NewGameState message. Does not implicitly {@link Change.NewGameState.verify|verify} messages.
+         * @function encode
+         * @memberof Change.NewGameState
+         * @static
+         * @param {Change.INewGameState} message NewGameState message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        NewGameState.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.gameState != null && Object.hasOwnProperty.call(message, "gameState"))
+                $root.GameState.encode(message.gameState, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            return writer;
+        };
 
-    return NewGameState;
+        /**
+         * Encodes the specified NewGameState message, length delimited. Does not implicitly {@link Change.NewGameState.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof Change.NewGameState
+         * @static
+         * @param {Change.INewGameState} message NewGameState message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        NewGameState.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a NewGameState message from the specified reader or buffer.
+         * @function decode
+         * @memberof Change.NewGameState
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {Change.NewGameState} NewGameState
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        NewGameState.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Change.NewGameState();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1: {
+                        message.gameState = $root.GameState.decode(reader, reader.uint32());
+                        break;
+                    }
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a NewGameState message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof Change.NewGameState
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {Change.NewGameState} NewGameState
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        NewGameState.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a NewGameState message.
+         * @function verify
+         * @memberof Change.NewGameState
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        NewGameState.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.gameState != null && message.hasOwnProperty("gameState")) {
+                let error = $root.GameState.verify(message.gameState);
+                if (error)
+                    return "gameState." + error;
+            }
+            return null;
+        };
+
+        /**
+         * Creates a NewGameState message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof Change.NewGameState
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {Change.NewGameState} NewGameState
+         */
+        NewGameState.fromObject = function fromObject(object) {
+            if (object instanceof $root.Change.NewGameState)
+                return object;
+            let message = new $root.Change.NewGameState();
+            if (object.gameState != null) {
+                if (typeof object.gameState !== "object")
+                    throw TypeError(".Change.NewGameState.gameState: object expected");
+                message.gameState = $root.GameState.fromObject(object.gameState);
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a NewGameState message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof Change.NewGameState
+         * @static
+         * @param {Change.NewGameState} message NewGameState
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        NewGameState.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults)
+                object.gameState = null;
+            if (message.gameState != null && message.hasOwnProperty("gameState"))
+                object.gameState = $root.GameState.toObject(message.gameState, options);
+            return object;
+        };
+
+        /**
+         * Converts this NewGameState to JSON.
+         * @function toJSON
+         * @memberof Change.NewGameState
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        NewGameState.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the default type url for NewGameState
+         * @function getTypeUrl
+         * @memberof Change.NewGameState
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        NewGameState.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/Change.NewGameState";
+        };
+
+        return NewGameState;
+    })();
+
+    return Change;
 })();
 
 export const YellowCard = $root.YellowCard = (() => {

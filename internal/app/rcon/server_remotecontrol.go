@@ -305,7 +305,7 @@ func (c *RemoteControlClient) processRequest(request *RemoteControlToController)
 		if err := mayChangeKeeper(c.gcEngine.CurrentGcState(), currentState, teamState); err != nil {
 			return errors.Wrap(err, "Can not change keeper id")
 		}
-		c.updateTeamConfig(&statemachine.UpdateTeamState{
+		c.updateTeamConfig(&statemachine.Change_UpdateTeamState{
 			Goalkeeper: &x.DesiredKeeper,
 		})
 	}
@@ -316,7 +316,7 @@ func (c *RemoteControlClient) processRequest(request *RemoteControlToController)
 			if err := c.checkRequestRobotSubstitution(); err != nil {
 				return errors.Wrap(err, "Can not request robot substitution")
 			}
-			c.updateTeamConfig(&statemachine.UpdateTeamState{
+			c.updateTeamConfig(&statemachine.Change_UpdateTeamState{
 				RequestsBotSubstitution: &x.RequestRobotSubstitution,
 			})
 		}
@@ -329,7 +329,7 @@ func (c *RemoteControlClient) processRequest(request *RemoteControlToController)
 			if err := c.checkRequestTimeout(); err != nil {
 				return errors.Wrap(err, "Can not request timeout")
 			}
-			c.updateTeamConfig(&statemachine.UpdateTeamState{
+			c.updateTeamConfig(&statemachine.Change_UpdateTeamState{
 				RequestsTimeout: &x.RequestTimeout,
 			})
 		}
@@ -358,8 +358,8 @@ func (c *RemoteControlClient) processRequest(request *RemoteControlToController)
 			return errors.Wrap(err, "Can not stop timeout")
 		}
 		c.gcEngine.Enqueue(&statemachine.Change{
-			Change: &statemachine.Change_NewCommand{
-				NewCommand: &statemachine.NewCommand{
+			Change: &statemachine.Change_NewCommandChange{
+				NewCommandChange: &statemachine.Change_NewCommand{
 					Command: state.NewCommandNeutral(state.Command_HALT),
 				},
 			},
@@ -373,7 +373,7 @@ func (c *RemoteControlClient) processRequest(request *RemoteControlToController)
 			if err := c.checkRequestEmergencyStop(); err != nil {
 				return errors.Wrap(err, "Can not request emergency stop")
 			}
-			c.updateTeamConfig(&statemachine.UpdateTeamState{
+			c.updateTeamConfig(&statemachine.Change_UpdateTeamState{
 				RequestsEmergencyStop: &x.RequestEmergencyStop,
 			})
 		}
@@ -383,13 +383,13 @@ func (c *RemoteControlClient) processRequest(request *RemoteControlToController)
 	return nil
 }
 
-func (c *RemoteControlClient) updateTeamConfig(update *statemachine.UpdateTeamState) {
+func (c *RemoteControlClient) updateTeamConfig(update *statemachine.Change_UpdateTeamState) {
 	log.Println("Update team config via remote control: ", update.String())
 	update.ForTeam = c.team
 	err := c.gcEngine.EnqueueBlocking(&statemachine.Change{
 		Origin: origin(c.team),
-		Change: &statemachine.Change_UpdateTeamState{
-			UpdateTeamState: update,
+		Change: &statemachine.Change_UpdateTeamStateChange{
+			UpdateTeamStateChange: update,
 		},
 	})
 	if err != nil {

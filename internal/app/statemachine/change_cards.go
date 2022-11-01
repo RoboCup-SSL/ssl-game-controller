@@ -4,7 +4,7 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 )
 
-func (s *StateMachine) processChangeAddYellowCard(newState *state.State, change *AddYellowCard) (changes []*Change) {
+func (s *StateMachine) processChangeAddYellowCard(newState *state.State, change *Change_AddYellowCard) (changes []*Change) {
 	if activeYellowCards(newState.TeamInfo(*change.ForTeam).YellowCards) >= s.gameConfig.MultipleCardStep {
 		changes = append(changes, s.multipleYellowCardsChange(*change.ForTeam))
 	} else {
@@ -15,7 +15,7 @@ func (s *StateMachine) processChangeAddYellowCard(newState *state.State, change 
 	return
 }
 
-func (s *StateMachine) processChangeAddRedCard(newState *state.State, change *AddRedCard) (changes []*Change) {
+func (s *StateMachine) processChangeAddRedCard(newState *state.State, change *Change_AddRedCard) (changes []*Change) {
 	newState.TeamInfo(*change.ForTeam).AddRedCard(change.CausedByGameEvent)
 	s.updateMaxBots(newState)
 	return
@@ -49,8 +49,8 @@ func activeYellowCards(cards []*state.YellowCard) (count int32) {
 func (s *StateMachine) multipleYellowCardsChange(byTeam state.Team) *Change {
 	eventType := state.GameEvent_MULTIPLE_CARDS
 	return &Change{
-		Change: &Change_AddGameEvent{
-			AddGameEvent: &AddGameEvent{
+		Change: &Change_AddGameEventChange{
+			AddGameEventChange: &Change_AddGameEvent{
 				GameEvent: &state.GameEvent{
 					Type: &eventType,
 					Event: &state.GameEvent_MultipleCards_{

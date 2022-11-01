@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-func (s *StateMachine) processChangeAcceptProposals(newState *state.State, change *AcceptProposalGroup) (changes []*Change) {
+func (s *StateMachine) processChangeAcceptProposals(newState *state.State, change *Change_AcceptProposalGroup) (changes []*Change) {
 
 	numGroups := len(newState.ProposalGroups)
 	if int(*change.GroupId) >= numGroups {
@@ -17,8 +17,8 @@ func (s *StateMachine) processChangeAcceptProposals(newState *state.State, chang
 	group := newState.ProposalGroups[*change.GroupId]
 	majorityEvent := s.createMergedGameEvent(group.Proposals, change.AcceptedBy)
 	changes = append(changes, &Change{
-		Change: &Change_AddGameEvent{
-			AddGameEvent: &AddGameEvent{
+		Change: &Change_AddGameEventChange{
+			AddGameEventChange: &Change_AddGameEvent{
 				GameEvent: majorityEvent,
 			},
 		},

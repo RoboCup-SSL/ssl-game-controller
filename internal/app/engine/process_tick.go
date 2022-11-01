@@ -48,8 +48,8 @@ func (e *Engine) processTick() {
 			e.Enqueue(&statemachine.Change{
 				Origin:     &changeOriginEngine,
 				Revertible: &revertible,
-				Change: &statemachine.Change_NewGameState{
-					NewGameState: &statemachine.NewGameState{
+				Change: &statemachine.Change_NewGameStateChange{
+					NewGameStateChange: &statemachine.Change_NewGameState{
 						GameState: state.NewGameStateNeutral(state.GameState_RUNNING),
 					},
 				},
@@ -100,8 +100,8 @@ func (e *Engine) updateYellowCardTimes(teamState *state.TeamInfo, delta time.Dur
 			teamState.YellowCards[i].TimeRemaining = durationpb.New(0)
 			e.queue <- &statemachine.Change{
 				Origin: &changeOriginEngine,
-				Change: &statemachine.Change_YellowCardOver{
-					YellowCardOver: &statemachine.YellowCardOver{},
+				Change: &statemachine.Change_YellowCardOverChange{
+					YellowCardOverChange: &statemachine.Change_YellowCardOver{},
 				},
 			}
 		}

@@ -65,38 +65,38 @@ func (s *StateMachine) Process(currentState *state.State, change *Change) (newSt
 	newState = new(state.State)
 	proto.Merge(newState, currentState)
 	log.Printf("Processing change '%v'", change.StringJson())
-	if change.GetNewCommand() != nil {
-		newChanges = s.processChangeNewCommand(newState, change.GetNewCommand())
-	} else if change.GetChangeStage() != nil {
-		newChanges = s.processChangeChangeStage(newState, change.GetChangeStage())
-	} else if change.GetSetBallPlacementPos() != nil {
-		newChanges = s.processChangeSetBallPlacementPos(newState, change.GetSetBallPlacementPos())
-	} else if change.GetAddYellowCard() != nil {
-		newChanges = s.processChangeAddYellowCard(newState, change.GetAddYellowCard())
-	} else if change.GetAddRedCard() != nil {
-		newChanges = s.processChangeAddRedCard(newState, change.GetAddRedCard())
-	} else if change.GetYellowCardOver() != nil {
+	if change.GetNewCommandChange() != nil {
+		newChanges = s.processChangeNewCommand(newState, change.GetNewCommandChange())
+	} else if change.GetChangeStageChange() != nil {
+		newChanges = s.processChangeChangeStage(newState, change.GetChangeStageChange())
+	} else if change.GetSetBallPlacementPosChange() != nil {
+		newChanges = s.processChangeSetBallPlacementPos(newState, change.GetSetBallPlacementPosChange())
+	} else if change.GetAddYellowCardChange() != nil {
+		newChanges = s.processChangeAddYellowCard(newState, change.GetAddYellowCardChange())
+	} else if change.GetAddRedCardChange() != nil {
+		newChanges = s.processChangeAddRedCard(newState, change.GetAddRedCardChange())
+	} else if change.GetYellowCardOverChange() != nil {
 		newChanges = s.processChangeYellowCardOver(newState)
-	} else if change.GetUpdateConfig() != nil {
-		newChanges = s.processChangeUpdateConfig(newState, change.GetUpdateConfig())
-	} else if change.GetUpdateTeamState() != nil {
-		newChanges = s.processChangeUpdateTeamState(newState, change.GetUpdateTeamState())
-	} else if change.GetSwitchColors() != nil {
+	} else if change.GetUpdateConfigChange() != nil {
+		newChanges = s.processChangeUpdateConfig(newState, change.GetUpdateConfigChange())
+	} else if change.GetUpdateTeamStateChange() != nil {
+		newChanges = s.processChangeUpdateTeamState(newState, change.GetUpdateTeamStateChange())
+	} else if change.GetSwitchColorsChange() != nil {
 		newChanges = s.processChangeSwitchColors(newState)
-	} else if change.GetAddGameEvent() != nil {
-		newChanges = s.processChangeAddGameEvent(newState, change.GetAddGameEvent())
-	} else if change.GetAddPassiveGameEvent() != nil {
-		newChanges = s.processChangeAddPassiveGameEvent(change.GetAddPassiveGameEvent())
-	} else if change.GetStartBallPlacement() != nil {
+	} else if change.GetAddGameEventChange() != nil {
+		newChanges = s.processChangeAddGameEvent(newState, change.GetAddGameEventChange())
+	} else if change.GetAddPassiveGameEventChange() != nil {
+		newChanges = s.processChangeAddPassiveGameEvent(change.GetAddPassiveGameEventChange())
+	} else if change.GetStartBallPlacementChange() != nil {
 		newChanges = s.processChangeStartBallPlacement(newState)
-	} else if change.GetContinue() != nil {
+	} else if change.GetContinueChange() != nil {
 		newChanges = s.processChangeContinue(newState)
-	} else if change.GetAddProposal() != nil {
-		newChanges = s.processChangeAddProposal(newState, change.GetAddProposal())
-	} else if change.GetNewGameState() != nil {
-		newChanges = s.processNewGameState(newState, change.GetNewGameState())
-	} else if change.GetAcceptProposalGroup() != nil {
-		newChanges = s.processChangeAcceptProposals(newState, change.GetAcceptProposalGroup())
+	} else if change.GetAddProposalChange() != nil {
+		newChanges = s.processChangeAddProposal(newState, change.GetAddProposalChange())
+	} else if change.GetNewGameStateChange() != nil {
+		newChanges = s.processNewGameState(newState, change.GetNewGameStateChange())
+	} else if change.GetAcceptProposalGroupChange() != nil {
+		newChanges = s.processChangeAcceptProposals(newState, change.GetAcceptProposalGroupChange())
 	} else {
 		log.Println("Unhandled change in state machine: ", change.StringJson())
 	}

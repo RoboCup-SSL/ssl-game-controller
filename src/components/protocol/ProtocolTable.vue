@@ -82,7 +82,7 @@
             },
             revertProtocolEntry(id) {
                 submitChange({
-                    revert: {
+                    revertChange: {
                         changeId: id
                     }
                 });
@@ -102,24 +102,24 @@
             protocolForTeam(entry) {
                 let type = this.protocolType(entry);
                 switch (type) {
-                    case 'newCommand':
-                        return entry.change.newCommand.command.forTeam;
-                    case 'addYellowCard':
-                        return entry.change.addYellowCard.forTeam;
-                    case 'addRedCard':
-                        return entry.change.addRedCard.forTeam;
-                    case 'yellowCardOver':
-                        return entry.change.yellowCardOver.forTeam;
-                    case 'addGameEvent':
-                        return gameEventDetails(entry.change.addGameEvent.gameEvent).byTeam;
-                    case 'addPassiveGameEvent':
-                        return gameEventDetails(entry.change.addPassiveGameEvent.gameEvent).byTeam;
-                    case 'addProposal':
-                        return gameEventDetails(entry.change.addProposal.proposal.gameEvent).byTeam;
-                    case 'updateTeamState':
-                        return entry.change.updateTeamState.forTeam;
-                    case 'newGameState':
-                        return entry.change.newGameState.gameState.forTeam;
+                    case 'newCommandChange':
+                        return entry.change.newCommandChange.command.forTeam;
+                    case 'addYellowCardChange':
+                        return entry.change.addYellowCardChange.forTeam;
+                    case 'addRedCardChange':
+                        return entry.change.addRedCardChange.forTeam;
+                    case 'yellowCardOverChange':
+                        return entry.change.yellowCardOverChange.forTeam;
+                    case 'addGameEventChange':
+                        return gameEventDetails(entry.change.addGameEventChange.gameEvent).byTeam;
+                    case 'addPassiveGameEventChange':
+                        return gameEventDetails(entry.change.addPassiveGameEventChange.gameEvent).byTeam;
+                    case 'addProposalChange':
+                        return gameEventDetails(entry.change.addProposalChange.proposal.gameEvent).byTeam;
+                    case 'updateTeamStateChange':
+                        return entry.change.updateTeamStateChange.forTeam;
+                    case 'newGameStateChange':
+                        return entry.change.newGameStateChange.gameState.forTeam;
                     default:
                         return undefined;
                 }
@@ -127,11 +127,11 @@
             isFoul(entry) {
               let protocolType = this.protocolType(entry);
               let gameEventType;
-              if (protocolType === 'addGameEvent') {
+              if (protocolType === 'addGameEventChange') {
                 gameEventType = entry.change.addGameEvent.gameEvent.type;
-              } else if (protocolType === 'addProposal') {
+              } else if (protocolType === 'addProposalChange') {
                 gameEventType = entry.change.addProposal.proposal.gameEvent.type;
-              } else if (protocolType === 'addPassiveGameEvent') {
+              } else if (protocolType === 'addPassiveGameEventChange') {
                 gameEventType = entry.change.addPassiveGameEvent.gameEvent.type;
               } else {
                 return false;
@@ -158,39 +158,39 @@
             },
             iconForType(type) {
                 switch (type) {
-                    case 'newCommand':
+                    case 'newCommandChange':
                         return 'terminal';
-                    case 'changeStage':
+                    case 'changeStageChange':
                         return 'gavel';
-                    case 'setBallPlacementPos':
+                    case 'setBallPlacementPosChange':
                         return 'futbol';
-                    case 'addYellowCard':
+                    case 'addYellowCardChange':
                         return 'chess-board';
-                    case 'addRedCard':
+                    case 'addRedCardChange':
                         return 'chess-board';
-                    case 'yellowCardOver':
+                    case 'yellowCardOverChange':
                         return 'clock';
-                    case 'addGameEvent':
+                    case 'addGameEventChange':
                         return 'exclamation-triangle';
-                    case 'addPassiveGameEvent':
+                    case 'addPassiveGameEventChange':
                         return 'recycle';
-                    case 'addProposal':
+                    case 'addProposalChange':
                         return 'hand-point-up';
-                    case 'startBallPlacement':
+                    case 'startBallPlacementChange':
                         return 'futbol';
-                    case 'continue':
+                    case 'continueChange':
                         return 'bullhorn';
-                    case 'updateConfig':
+                    case 'updateConfigChange':
                         return 'edit';
-                    case 'updateTeamState':
+                    case 'updateTeamStateChange':
                         return 'edit';
-                    case 'switchColors':
+                    case 'switchColorsChange':
                         return 'edit';
-                    case 'revert':
+                    case 'revertChange':
                         return 'exclamation';
-                    case 'newGameState':
+                    case 'newGameStateChange':
                         return 'gavel';
-                    case 'acceptProposalGroup':
+                    case 'acceptProposalGroupChange':
                         return 'check-circle';
                     default:
                         return 'question-circle';
@@ -199,39 +199,39 @@
             titleForEntry(entry) {
                 let type = this.protocolType(entry);
                 switch (type) {
-                    case 'newCommand':
-                        return 'New command: ' + entry.change.newCommand.command.type;
-                    case 'changeStage':
-                        return 'New stage: ' + entry.change.changeStage.newStage;
-                    case 'setBallPlacementPos':
+                    case 'newCommandChange':
+                        return 'New command: ' + entry.change.newCommandChange.command.type;
+                    case 'changeStageChange':
+                        return 'New stage: ' + entry.change.changeStageChange.newStage;
+                    case 'setBallPlacementPosChange':
                         return 'New ball placement pos';
-                    case 'addYellowCard':
+                    case 'addYellowCardChange':
                         return 'Yellow card';
-                    case 'addRedCard':
+                    case 'addRedCardChange':
                         return 'Red card';
-                    case 'yellowCardOver':
+                    case 'yellowCardOverChange':
                         return 'Yellow card over';
-                    case 'addGameEvent':
-                        return 'New game event: ' + entry.change.addGameEvent.gameEvent.type;
-                    case 'addPassiveGameEvent':
-                        return 'New passive game event: ' + entry.change.addPassiveGameEvent.gameEvent.type;
-                    case 'addProposal':
-                        return 'New proposal: ' + entry.change.addProposal.proposal.gameEvent.type;
-                    case 'startBallPlacement':
+                    case 'addGameEventChange':
+                        return 'New game event: ' + entry.change.addGameEventChange.gameEvent.type;
+                    case 'addPassiveGameEventChange':
+                        return 'New passive game event: ' + entry.change.addPassiveGameEventChange.gameEvent.type;
+                    case 'addProposalChange':
+                        return 'New proposal: ' + entry.change.addProposalChange.proposal.gameEvent.type;
+                    case 'startBallPlacementChange':
                         return 'Start ball placement';
-                    case 'continue':
+                    case 'continueChange':
                         return 'Continue';
-                    case 'updateConfig':
+                    case 'updateConfigChange':
                         return 'Update config';
-                    case 'updateTeamState':
+                    case 'updateTeamStateChange':
                         return 'Update team state';
-                    case 'switchColors':
+                    case 'switchColorsChange':
                         return 'Switch colors';
-                    case 'revert':
+                    case 'revertChange':
                         return 'Revert';
-                    case 'newGameState':
-                        return 'New game state: ' + entry.change.newGameState.gameState.type;
-                    case 'acceptProposalGroup':
+                    case 'newGameStateChange':
+                        return 'New game state: ' + entry.change.newGameStateChange.gameState.type;
+                    case 'acceptProposalGroupChange':
                         return 'Accept proposals';
                     default:
                         return type;

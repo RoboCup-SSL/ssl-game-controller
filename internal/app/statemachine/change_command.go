@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-func (s *StateMachine) processChangeNewCommand(newState *state.State, newCommand *NewCommand) (changes []*Change) {
+func (s *StateMachine) processChangeNewCommand(newState *state.State, newCommand *Change_NewCommand) (changes []*Change) {
 	newState.GameState = s.newGameState(newState, newCommand)
 	newState.Command = newCommand.Command
 
@@ -31,8 +31,8 @@ func (s *StateMachine) processChangeNewCommand(newState *state.State, newCommand
 		if newState.Stage.IsPreStage() {
 			log.Print("Pre-Stage is over, because game is running now")
 			changes = append(changes, &Change{
-				Change: &Change_ChangeStage{
-					ChangeStage: &ChangeStage{
+				Change: &Change_ChangeStageChange{
+					ChangeStageChange: &Change_ChangeStage{
 						NewStage: newState.Stage.Next(),
 					},
 				},
@@ -60,7 +60,7 @@ func (s *StateMachine) nextCommandForCommand(newState *state.State) (command *st
 	return newState.NextCommand
 }
 
-func (s *StateMachine) newGameState(newState *state.State, newCommand *NewCommand) *state.GameState {
+func (s *StateMachine) newGameState(newState *state.State, newCommand *Change_NewCommand) *state.GameState {
 	switch *newCommand.Command.Type {
 	case state.Command_HALT:
 		return state.NewGameStateNeutral(state.GameState_HALT)

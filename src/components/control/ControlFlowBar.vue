@@ -42,7 +42,7 @@ export default {
             submitNewCommand(command, TEAM_UNKNOWN);
         },
         triggerContinue() {
-            submitChange({continue: {}});
+            submitChange({continueChange: {}});
         },
     },
     computed: {

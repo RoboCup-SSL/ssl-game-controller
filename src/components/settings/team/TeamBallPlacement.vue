@@ -19,7 +19,7 @@
         methods: {
             edit: function () {
                 submitChange({
-                    updateTeamState: {
+                    updateTeamStateChange: {
                         forTeam: this.teamColor,
                         canPlaceBall: !this.canPlaceBall
                     }

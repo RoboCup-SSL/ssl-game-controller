@@ -27,7 +27,7 @@
         methods: {
             updateBallPlacementFailures: function (v) {
                 submitChange({
-                    updateTeamState: {
+                    updateTeamStateChange: {
                         forTeam: this.teamColor,
                         ballPlacementFailures: Number(v)
                     }

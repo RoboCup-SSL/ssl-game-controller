@@ -206,8 +206,8 @@ func (s *TeamServer) processRequest(teamClient TeamClient, request *TeamToContro
 			log.Printf("Team %v requests to change bot substituation intent to %v", teamClient.id, x.SubstituteBot)
 			s.gcEngine.Enqueue(&statemachine.Change{
 				Origin: &teamClient.id,
-				Change: &statemachine.Change_UpdateTeamState{
-					UpdateTeamState: &statemachine.UpdateTeamState{
+				Change: &statemachine.Change_UpdateTeamStateChange{
+					UpdateTeamStateChange: &statemachine.Change_UpdateTeamState{
 						ForTeam:                 &teamClient.team,
 						RequestsBotSubstitution: &x.SubstituteBot,
 					}},
@@ -227,8 +227,8 @@ func (s *TeamServer) processRequest(teamClient TeamClient, request *TeamToContro
 		log.Printf("Team %v requests to change keeper to %v", teamClient.team, x.DesiredKeeper)
 		s.gcEngine.Enqueue(&statemachine.Change{
 			Origin: &teamClient.teamName,
-			Change: &statemachine.Change_UpdateTeamState{
-				UpdateTeamState: &statemachine.UpdateTeamState{
+			Change: &statemachine.Change_UpdateTeamStateChange{
+				UpdateTeamStateChange: &statemachine.Change_UpdateTeamState{
 					ForTeam:    &teamClient.team,
 					Goalkeeper: &x.DesiredKeeper,
 				}},

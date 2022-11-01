@@ -19,7 +19,7 @@
         methods: {
             updateTimeoutTimeLeft: function (v) {
                 submitChange({
-                    updateTeamState: {
+                    updateTeamStateChange: {
                         forTeam: this.teamColor,
                         timeoutTimeLeft: v
                     }

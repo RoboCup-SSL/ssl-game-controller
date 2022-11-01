@@ -31,8 +31,8 @@ func (e *Engine) processProposals() {
 			groupId := uint32(i)
 			acceptedBy := "Majority"
 			e.Enqueue(&statemachine.Change{
-				Change: &statemachine.Change_AcceptProposalGroup{
-					AcceptProposalGroup: &statemachine.AcceptProposalGroup{
+				Change: &statemachine.Change_AcceptProposalGroupChange{
+					AcceptProposalGroupChange: &statemachine.Change_AcceptProposalGroup{
 						GroupId:    &groupId,
 						AcceptedBy: &acceptedBy,
 					},

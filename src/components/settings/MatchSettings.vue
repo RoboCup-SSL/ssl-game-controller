@@ -71,16 +71,16 @@
                 resetMatch();
             },
             switchColor: function () {
-                submitChange({switchColors: {}});
+                submitChange({switchColorsChange: {}});
             },
             switchSides: function () {
-                submitChange({updateTeamState: {forTeam: TEAM_YELLOW, onPositiveHalf: !this.$store.state.matchState.teamState[TEAM_YELLOW].onPositiveHalf}});
+                submitChange({updateTeamStateChange: {forTeam: TEAM_YELLOW, onPositiveHalf: !this.$store.state.matchState.teamState[TEAM_YELLOW].onPositiveHalf}});
             },
             switchDivision(div) {
-                submitChange({updateConfig: {division: div}});
+                submitChange({updateConfigChange: {division: div}});
             },
             switchFirstKickoffTeam(team) {
-                submitChange({updateConfig: {firstKickoffTeam: team}});
+                submitChange({updateConfigChange: {firstKickoffTeam: team}});
             },
             showMsgBoxConfirmResetGame() {
                 this.$bvModal.msgBoxConfirm('Are sure to start a new game and reset the whole state? A backup file of the current state will be created.', {
@@ -105,7 +105,7 @@
                     })
             },
             updateMatchType(matchType) {
-                submitChange({updateConfig: {matchType: matchType}});
+                submitChange({updateConfigChange: {matchType: matchType}});
             }
         },
         computed: {

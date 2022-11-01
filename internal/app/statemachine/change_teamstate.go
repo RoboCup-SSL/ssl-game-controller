@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func (s *StateMachine) processChangeUpdateTeamState(newState *state.State, change *UpdateTeamState) (changes []*Change) {
+func (s *StateMachine) processChangeUpdateTeamState(newState *state.State, change *Change_UpdateTeamState) (changes []*Change) {
 	teamState := newState.TeamInfo(*change.ForTeam)
 	if change.TeamName != nil {
 		*teamState.Name = *change.TeamName

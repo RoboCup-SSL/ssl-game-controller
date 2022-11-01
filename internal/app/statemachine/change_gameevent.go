@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *AddGameEvent) (changes []*Change) {
+func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *Change_AddGameEvent) (changes []*Change) {
 
 	gameEvent := change.GameEvent
 	byTeam := gameEvent.ByTeam()
@@ -57,8 +57,8 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 	if addsYellowCard(*gameEvent.Type) && byTeam.Known() {
 		log.Printf("Team %v got a yellow card", byTeam)
 		changes = append(changes, &Change{
-			Change: &Change_AddYellowCard{
-				AddYellowCard: &AddYellowCard{
+			Change: &Change_AddYellowCardChange{
+				AddYellowCardChange: &Change_AddYellowCard{
 					ForTeam:           &byTeam,
 					CausedByGameEvent: gameEvent,
 				},
@@ -70,8 +70,8 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 	if addsRedCard(*gameEvent.Type) && byTeam.Known() {
 		log.Printf("Team %v got a red card", byTeam)
 		changes = append(changes, &Change{
-			Change: &Change_AddRedCard{
-				AddRedCard: &AddRedCard{
+			Change: &Change_AddRedCardChange{
+				AddRedCardChange: &Change_AddRedCard{
 					ForTeam:           &byTeam,
 					CausedByGameEvent: gameEvent,
 				},
@@ -206,8 +206,8 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 		if newState.GetAutoContinue() && newState.NextCommand != nil && byTeam == *newState.NextCommand.ForTeam {
 			log.Printf("Placement succeeded by team %v, which is also in favor. Can continue.", byTeam)
 			changes = append(changes, &Change{
-				Change: &Change_Continue{
-					Continue: &Continue{},
+				Change: &Change_ContinueChange{
+					ContinueChange: &Change_Continue{},
 				},
 			})
 		}

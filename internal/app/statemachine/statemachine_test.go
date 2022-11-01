@@ -28,8 +28,8 @@ func Test_Statemachine(t *testing.T) {
 				initState: func(s *state.State) {
 				},
 				change: &Change{
-					Change: &Change_NewCommand{
-						NewCommand: &NewCommand{
+					Change: &Change_NewCommandChange{
+						NewCommandChange: &Change_NewCommand{
 							Command: state.NewCommand(state.Command_DIRECT, state.Team_BLUE),
 						},
 					},
@@ -47,8 +47,8 @@ func Test_Statemachine(t *testing.T) {
 					*s.Stage = state.Referee_NORMAL_FIRST_HALF_PRE
 				},
 				change: &Change{
-					Change: &Change_ChangeStage{
-						ChangeStage: &ChangeStage{
+					Change: &Change_ChangeStageChange{
+						ChangeStageChange: &Change_ChangeStage{
 							NewStage: &firstHalf,
 						},
 					},

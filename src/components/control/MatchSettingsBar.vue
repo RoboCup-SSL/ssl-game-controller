@@ -54,20 +54,20 @@
         methods: {
             nextStage: function () {
                 submitChange({
-                    changeStage: {
+                    changeStageChange: {
                         newStage: getNextStage(this.$store.state.matchState.stage)
                     }
                 });
             },
             endGame: function () {
                 submitChange({
-                    changeStage: {
+                    changeStageChange: {
                         newStage: 'POST_GAME'
                     }
                 });
             },
             setAutoContinue(enabled) {
-                submitChange({updateConfig: {autoContinue: enabled}});
+                submitChange({updateConfigChange: {autoContinue: enabled}});
             },
         },
         computed: {

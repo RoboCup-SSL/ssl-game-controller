@@ -8,7 +8,7 @@ import (
 
 const similarLocationTolerance = 0.5
 
-func (s *StateMachine) processChangeAddProposal(newState *state.State, change *AddProposal) (changes []*Change) {
+func (s *StateMachine) processChangeAddProposal(newState *state.State, change *Change_AddProposal) (changes []*Change) {
 
 	if ok, pid := findGroup(change.Proposal, newState.ProposalGroups, s.gameConfig.AutoRefProposalTimeout); ok {
 		newState.ProposalGroups[pid].Proposals = append(newState.ProposalGroups[pid].Proposals, change.Proposal)

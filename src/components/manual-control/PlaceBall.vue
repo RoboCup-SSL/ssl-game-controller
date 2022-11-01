@@ -42,7 +42,7 @@
             sendEvent: function () {
                 console.log('place ' + this.model.team)
                 submitChange({
-                    setBallPlacementPos: {
+                    setBallPlacementPosChange: {
                         pos: convertStringLocation(this.model.location)
                     }
                 });

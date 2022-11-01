@@ -4,7 +4,7 @@ import (
 	"log"
 )
 
-func (s *StateMachine) processChangeAddPassiveGameEvent(change *AddPassiveGameEvent) (changes []*Change) {
+func (s *StateMachine) processChangeAddPassiveGameEvent(change *Change_AddPassiveGameEvent) (changes []*Change) {
 	log.Printf("Ignoring passive game event %v", change.GameEvent)
 	return
 }
