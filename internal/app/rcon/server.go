@@ -4,7 +4,6 @@ import (
 	"crypto"
 	"crypto/rsa"
 	"crypto/sha256"
-	"crypto/tls"
 	"crypto/x509"
 	"encoding/pem"
 	"github.com/google/uuid"
@@ -13,13 +12,11 @@ import (
 	"io/ioutil"
 	"log"
 	"net"
-	"os"
 	"strings"
 	"sync"
 )
 
 type Server struct {
-	Tls               bool
 	address           string
 	clients           map[string]*Client
 	trustedKeys       map[string]*rsa.PublicKey
@@ -54,11 +51,7 @@ func NewServer(address string) (s *Server) {
 func (s *Server) Start() {
 	var err error
 	s.running = true
-	if s.Tls {
-		s.listener, err = s.createTlsListener()
-	} else {
-		s.listener, err = s.createListener()
-	}
+	s.listener, err = s.createListener()
 	if err != nil {
 		s.running = false
 		log.Printf("Failed to listen on %v: %v", s.address, err)
@@ -127,32 +120,6 @@ func (s *Server) isRunning() bool {
 
 func (s *Server) createListener() (net.Listener, error) {
 	return net.Listen("tcp", s.address)
-}
-
-func (s *Server) createTlsListener() (net.Listener, error) {
-	config, err := s.loadTlsConfig()
-	if err != nil {
-		return nil, err
-	}
-
-	return tls.Listen("tcp", s.address, config)
-}
-
-func (s *Server) loadTlsConfig() (*tls.Config, error) {
-	if _, err := os.Stat("server.crt"); os.IsNotExist(err) {
-		return nil, errors.Wrap(err, "Missing certificate for TLS endpoint. Put a server.crt in the working dir")
-	}
-	if _, err := os.Stat("server.key"); os.IsNotExist(err) {
-		return nil, errors.Wrap(err, "Missing certificate key for TLS endpoint. Put a server.key in the working dir")
-	}
-
-	cer, err := tls.LoadX509KeyPair("server.crt", "server.key")
-	if err != nil {
-		return nil, errors.Wrap(err, "Could not load X509 key pair")
-	}
-
-	config := &tls.Config{Certificates: []tls.Certificate{cer}}
-	return config, nil
 }
 
 func (s *Server) CloseConnection(id string) {

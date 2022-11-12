@@ -68,8 +68,4 @@ The button shows the command that it will trigger.
 Active connections to teams are shown as an icon in the team overview.
 
 ## The controller crashes on start. What can I do?
-Try deleting the `state-store.json.stream` file in the working directory. It may got corrupted.
-
-## How can I use TLS?
-Generate a new `server.crt` for the game-controller with [tools/newX509KeyPair.sh](./tools/newX509KeyPair.sh).
-See instructions for the client part in the reference clients mentioned above.
+Try deleting the `state-store.json.stream` file in the working directory. It may have got corrupted.

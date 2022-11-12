@@ -85,21 +85,18 @@ type Server struct {
 // ServerAutoRef holds configs for the autoRef server
 type ServerAutoRef struct {
 	Address        string `yaml:"address"`
-	AddressTls     string `yaml:"address-tls"`
 	TrustedKeysDir string `yaml:"trusted-keys-dir"`
 }
 
 // ServerTeam holds configs for the team server
 type ServerTeam struct {
 	Address        string `yaml:"address"`
-	AddressTls     string `yaml:"address-tls"`
 	TrustedKeysDir string `yaml:"trusted-keys-dir"`
 }
 
 // RemoteControlTeam holds configs for the remote control server
 type RemoteControlTeam struct {
 	Address        string `yaml:"address"`
-	AddressTls     string `yaml:"address-tls"`
 	TrustedKeysDir string `yaml:"trusted-keys-dir"`
 }
 
@@ -210,13 +207,10 @@ func DefaultControllerConfig() (c Controller) {
 	c.Game.DefaultDivision = DivA
 
 	c.Server.AutoRef.Address = ":10007"
-	c.Server.AutoRef.AddressTls = ":10107"
 	c.Server.AutoRef.TrustedKeysDir = "config/trusted_keys/auto_ref"
 	c.Server.Team.Address = ":10008"
-	c.Server.Team.AddressTls = ":10108"
 	c.Server.Team.TrustedKeysDir = "config/trusted_keys/team"
 	c.Server.RemoteControl.Address = ":10011"
-	c.Server.RemoteControl.AddressTls = ":10111"
 	c.Server.RemoteControl.TrustedKeysDir = "config/trusted_keys/remote-control"
 	c.Server.Ci.Address = ":10009"
 
