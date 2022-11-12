@@ -12,27 +12,13 @@ message ControllerReply {
     // the token is used to avoid replay attacks
     // the token is always present in the very first message before the registration starts
     // the token is not present, if secure communication is not used
-    optional string next_token = 3;
+    reserved 3;
     // verification indicates if the last request could be verified (secure communication)
-    optional Verification verification = 4;
+    reserved 4;
 
     enum StatusCode {
         UNKNOWN_STATUS_CODE = 0;
         OK = 1;
         REJECTED = 2;
     }
-
-    enum Verification {
-        UNKNOWN_VERIFICATION = 0;
-        VERIFIED = 1;
-        UNVERIFIED = 2;
-    }
-}
-
-// Signature can be added to a request to let it be verfied by the controller
-message Signature {
-    // the token that was received with the last controller reply
-    required string token = 1;
-    // the PKCS1v15 signature of this message
-    required bytes pkcs1v15 = 2;
 }

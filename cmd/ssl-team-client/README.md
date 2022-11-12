@@ -7,7 +7,7 @@ The communication is established with a bidirectional TCP connection. Messages a
 
 The .proto files can be found in [../../proto](../../proto).
 
-The default port is `10008` for plain connections and 10108 for TLS encrypted connections. The IP to connect to can be determined using the multicast referee messages.
+The default port is `10008`. The IP to connect to can be determined using the multicast referee messages.
 
 ## Connection sequence
 The connection is described in the following sequence diagram:
@@ -17,31 +17,7 @@ The connection is described in the following sequence diagram:
 Source to generate the diagram: [communication_team.txt](./communication_team.txt)
 
 ## Connection stability
-Clients should deal with connection losts (reconnect). The game-controller may be restarted due to various reasons like crashes or other technical issues. Teams are not allowed to touch their system to reconnect to the game-controller, except during timeouts.
-
-## Secure connection
-The connection can optionally be secured by signing each request using a RSA key.
-
-The private key is used on the client side to sign the complete message, excluding the signature itself. 
-The public key must be provided to the game-controller. 
-By default, the game-controller searches for public keys in [config/trusted_keys/team](../../config/trusted_keys/team) with the pattern `<teamName>.pub.pem`. The team name is case-sensitive and must be equal to one of the team names that are send via the referee protocol (including spaces, etc.). Each team can only connect once.
-
-The [genKey.sh](../../tools/genKey.sh) script can be used to generate a new pair of public and private key.
-
-The controller sends a token with each reply. It must be included in the next request, when using the signature. The token is required to avoid replay attacks.
-
-If a public key is present for the team name provided during registration, a signature is required. Else, the signature is ignored. The controller reply indicates, if the last request could be verified.
-
-### A note to security
-There are currently two ways to secure the connection. Both are optional. And actually, even if you implement both, the connection is not 100% secure. This is, because the game-controller will be accessible by everyone during a tournament. So putting a private key/secret on the game-controller PC is no solution, as we can not keep it private.
-
-If you provide your public key and keep your private key secret, all messages, sent by you, can be verified by the game-controller. So, only you can change a keeper or reply to an advantage choice.
-However, messages from the game-controller can not be verified. They might even be dropped. Using TLS makes it a bit harder to manipulate the connection with quite little effort (because most languages have libraries for it), but the server key could still be stolen from the game-controller computer.
-
-You have the choice to either skip the security layers completely and trust the community or to implement one or two of the security layers, just to be sure.
-Providing the public key will at least help in avoiding that other teams accidentally connect as a wrong team.
-
-Ideas on how to make the protocol more secure without making it significantly more complex are welcome.
+Clients should deal with connection loss (reconnect). The game-controller may be restarted due to various reasons like crashes or other technical issues. Teams are not allowed to touch their system to reconnect to the game-controller, except during timeouts.
 
 ## Sample client
 The sample client, that is included in this folder, can be used to test the connection. It can be run with 

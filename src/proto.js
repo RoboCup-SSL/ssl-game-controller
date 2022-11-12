@@ -26414,9 +26414,7 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
      * @exports IGcStateTeam
      * @interface IGcStateTeam
      * @property {boolean|null} [connected] GcStateTeam connected
-     * @property {boolean|null} [connectionVerified] GcStateTeam connectionVerified
      * @property {boolean|null} [remoteControlConnected] GcStateTeam remoteControlConnected
-     * @property {boolean|null} [remoteControlConnectionVerified] GcStateTeam remoteControlConnectionVerified
      * @property {ITeamAdvantageChoice|null} [advantageChoice] GcStateTeam advantageChoice
      */
 
@@ -26444,28 +26442,12 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
     GcStateTeam.prototype.connected = false;
 
     /**
-     * GcStateTeam connectionVerified.
-     * @member {boolean} connectionVerified
-     * @memberof GcStateTeam
-     * @instance
-     */
-    GcStateTeam.prototype.connectionVerified = false;
-
-    /**
      * GcStateTeam remoteControlConnected.
      * @member {boolean} remoteControlConnected
      * @memberof GcStateTeam
      * @instance
      */
     GcStateTeam.prototype.remoteControlConnected = false;
-
-    /**
-     * GcStateTeam remoteControlConnectionVerified.
-     * @member {boolean} remoteControlConnectionVerified
-     * @memberof GcStateTeam
-     * @instance
-     */
-    GcStateTeam.prototype.remoteControlConnectionVerified = false;
 
     /**
      * GcStateTeam advantageChoice.
@@ -26501,12 +26483,8 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
             writer = $Writer.create();
         if (message.connected != null && Object.hasOwnProperty.call(message, "connected"))
             writer.uint32(/* id 1, wireType 0 =*/8).bool(message.connected);
-        if (message.connectionVerified != null && Object.hasOwnProperty.call(message, "connectionVerified"))
-            writer.uint32(/* id 2, wireType 0 =*/16).bool(message.connectionVerified);
         if (message.remoteControlConnected != null && Object.hasOwnProperty.call(message, "remoteControlConnected"))
             writer.uint32(/* id 3, wireType 0 =*/24).bool(message.remoteControlConnected);
-        if (message.remoteControlConnectionVerified != null && Object.hasOwnProperty.call(message, "remoteControlConnectionVerified"))
-            writer.uint32(/* id 4, wireType 0 =*/32).bool(message.remoteControlConnectionVerified);
         if (message.advantageChoice != null && Object.hasOwnProperty.call(message, "advantageChoice"))
             $root.TeamAdvantageChoice.encode(message.advantageChoice, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
         return writer;
@@ -26547,16 +26525,8 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
                     message.connected = reader.bool();
                     break;
                 }
-            case 2: {
-                    message.connectionVerified = reader.bool();
-                    break;
-                }
             case 3: {
                     message.remoteControlConnected = reader.bool();
-                    break;
-                }
-            case 4: {
-                    message.remoteControlConnectionVerified = reader.bool();
                     break;
                 }
             case 5: {
@@ -26601,15 +26571,9 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
         if (message.connected != null && message.hasOwnProperty("connected"))
             if (typeof message.connected !== "boolean")
                 return "connected: boolean expected";
-        if (message.connectionVerified != null && message.hasOwnProperty("connectionVerified"))
-            if (typeof message.connectionVerified !== "boolean")
-                return "connectionVerified: boolean expected";
         if (message.remoteControlConnected != null && message.hasOwnProperty("remoteControlConnected"))
             if (typeof message.remoteControlConnected !== "boolean")
                 return "remoteControlConnected: boolean expected";
-        if (message.remoteControlConnectionVerified != null && message.hasOwnProperty("remoteControlConnectionVerified"))
-            if (typeof message.remoteControlConnectionVerified !== "boolean")
-                return "remoteControlConnectionVerified: boolean expected";
         if (message.advantageChoice != null && message.hasOwnProperty("advantageChoice")) {
             let error = $root.TeamAdvantageChoice.verify(message.advantageChoice);
             if (error)
@@ -26632,12 +26596,8 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
         let message = new $root.GcStateTeam();
         if (object.connected != null)
             message.connected = Boolean(object.connected);
-        if (object.connectionVerified != null)
-            message.connectionVerified = Boolean(object.connectionVerified);
         if (object.remoteControlConnected != null)
             message.remoteControlConnected = Boolean(object.remoteControlConnected);
-        if (object.remoteControlConnectionVerified != null)
-            message.remoteControlConnectionVerified = Boolean(object.remoteControlConnectionVerified);
         if (object.advantageChoice != null) {
             if (typeof object.advantageChoice !== "object")
                 throw TypeError(".GcStateTeam.advantageChoice: object expected");
@@ -26661,19 +26621,13 @@ export const GcStateTeam = $root.GcStateTeam = (() => {
         let object = {};
         if (options.defaults) {
             object.connected = false;
-            object.connectionVerified = false;
             object.remoteControlConnected = false;
-            object.remoteControlConnectionVerified = false;
             object.advantageChoice = null;
         }
         if (message.connected != null && message.hasOwnProperty("connected"))
             object.connected = message.connected;
-        if (message.connectionVerified != null && message.hasOwnProperty("connectionVerified"))
-            object.connectionVerified = message.connectionVerified;
         if (message.remoteControlConnected != null && message.hasOwnProperty("remoteControlConnected"))
             object.remoteControlConnected = message.remoteControlConnected;
-        if (message.remoteControlConnectionVerified != null && message.hasOwnProperty("remoteControlConnectionVerified"))
-            object.remoteControlConnectionVerified = message.remoteControlConnectionVerified;
         if (message.advantageChoice != null && message.hasOwnProperty("advantageChoice"))
             object.advantageChoice = $root.TeamAdvantageChoice.toObject(message.advantageChoice, options);
         return object;
@@ -26944,7 +26898,6 @@ export const GcStateAutoRef = $root.GcStateAutoRef = (() => {
      * Properties of a GcStateAutoRef.
      * @exports IGcStateAutoRef
      * @interface IGcStateAutoRef
-     * @property {boolean|null} [connectionVerified] GcStateAutoRef connectionVerified
      */
 
     /**
@@ -26961,14 +26914,6 @@ export const GcStateAutoRef = $root.GcStateAutoRef = (() => {
                 if (properties[keys[i]] != null)
                     this[keys[i]] = properties[keys[i]];
     }
-
-    /**
-     * GcStateAutoRef connectionVerified.
-     * @member {boolean} connectionVerified
-     * @memberof GcStateAutoRef
-     * @instance
-     */
-    GcStateAutoRef.prototype.connectionVerified = false;
 
     /**
      * Creates a new GcStateAutoRef instance using the specified properties.
@@ -26994,8 +26939,6 @@ export const GcStateAutoRef = $root.GcStateAutoRef = (() => {
     GcStateAutoRef.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.connectionVerified != null && Object.hasOwnProperty.call(message, "connectionVerified"))
-            writer.uint32(/* id 1, wireType 0 =*/8).bool(message.connectionVerified);
         return writer;
     };
 
@@ -27030,10 +26973,6 @@ export const GcStateAutoRef = $root.GcStateAutoRef = (() => {
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
-            case 1: {
-                    message.connectionVerified = reader.bool();
-                    break;
-                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -27069,9 +27008,6 @@ export const GcStateAutoRef = $root.GcStateAutoRef = (() => {
     GcStateAutoRef.verify = function verify(message) {
         if (typeof message !== "object" || message === null)
             return "object expected";
-        if (message.connectionVerified != null && message.hasOwnProperty("connectionVerified"))
-            if (typeof message.connectionVerified !== "boolean")
-                return "connectionVerified: boolean expected";
         return null;
     };
 
@@ -27086,10 +27022,7 @@ export const GcStateAutoRef = $root.GcStateAutoRef = (() => {
     GcStateAutoRef.fromObject = function fromObject(object) {
         if (object instanceof $root.GcStateAutoRef)
             return object;
-        let message = new $root.GcStateAutoRef();
-        if (object.connectionVerified != null)
-            message.connectionVerified = Boolean(object.connectionVerified);
-        return message;
+        return new $root.GcStateAutoRef();
     };
 
     /**
@@ -27101,15 +27034,8 @@ export const GcStateAutoRef = $root.GcStateAutoRef = (() => {
      * @param {$protobuf.IConversionOptions} [options] Conversion options
      * @returns {Object.<string,*>} Plain object
      */
-    GcStateAutoRef.toObject = function toObject(message, options) {
-        if (!options)
-            options = {};
-        let object = {};
-        if (options.defaults)
-            object.connectionVerified = false;
-        if (message.connectionVerified != null && message.hasOwnProperty("connectionVerified"))
-            object.connectionVerified = message.connectionVerified;
-        return object;
+    GcStateAutoRef.toObject = function toObject() {
+        return {};
     };
 
     /**

@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"crypto/rsa"
 	"flag"
 	"fmt"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/geom"
@@ -20,21 +19,15 @@ import (
 var udpAddress = flag.String("udpAddress", "224.5.23.1:10003", "The multicast address of ssl-game-controller")
 var autoDetectAddress = flag.Bool("autoDetectHost", true, "Automatically detect the game-controller host and replace it with the host given in address")
 var refBoxAddr = flag.String("address", "localhost:10007", "Address to connect to")
-var privateKeyLocation = flag.String("privateKey", "", "A private key to be used to sign messages")
 var clientIdentifier = flag.String("identifier", "test", "The identifier of the client")
-
-var privateKey *rsa.PrivateKey
 
 type Client struct {
 	conn   net.Conn
 	reader *bufio.Reader
-	token  string
 }
 
 func main() {
 	flag.Parse()
-
-	privateKey = client.LoadPrivateKey(*privateKeyLocation)
 
 	if *autoDetectAddress {
 		log.Print("Trying to detect host based on incoming referee messages...")
@@ -108,16 +101,9 @@ func (c *Client) register() {
 	if err := sslconn.ReceiveMessage(c.reader, &reply); err != nil {
 		log.Fatal("Failed receiving controller reply: ", err)
 	}
-	if reply.GetControllerReply() == nil || reply.GetControllerReply().NextToken == nil {
-		log.Fatal("Missing next token")
-	}
 
 	registration := rcon.AutoRefRegistration{}
 	registration.Identifier = clientIdentifier
-	if privateKey != nil {
-		registration.Signature = &rcon.Signature{Token: reply.GetControllerReply().NextToken, Pkcs1V15: []byte{}}
-		registration.Signature.Pkcs1V15 = client.Sign(privateKey, &registration)
-	}
 	log.Print("Sending registration")
 	if err := sslconn.SendMessage(c.conn, &registration); err != nil {
 		log.Fatal("Failed sending registration: ", err)
@@ -135,11 +121,6 @@ func (c *Client) register() {
 		log.Fatal("Registration rejected: ", reason)
 	}
 	log.Printf("Successfully registered as %v", *clientIdentifier)
-	if reply.GetControllerReply().NextToken != nil {
-		c.token = *reply.GetControllerReply().NextToken
-	} else {
-		c.token = ""
-	}
 }
 
 func (c *Client) sendBallLeftField() {
@@ -198,11 +179,6 @@ func (c *Client) sendEmptyMessage() {
 }
 
 func (c *Client) sendRequest(request *rcon.AutoRefToController, doLog bool) {
-	if privateKey != nil {
-		request.Signature = &rcon.Signature{Token: &c.token, Pkcs1V15: []byte{}}
-		request.Signature.Pkcs1V15 = client.Sign(privateKey, request)
-	}
-
 	logIf(doLog, "Sending ", request)
 
 	if err := sslconn.SendMessage(c.conn, request); err != nil {
@@ -217,11 +193,6 @@ func (c *Client) sendRequest(request *rcon.AutoRefToController, doLog bool) {
 	logIf(doLog, "Received reply: ", reply)
 	if reply.GetControllerReply() == nil || reply.GetControllerReply().StatusCode == nil || *reply.GetControllerReply().StatusCode != rcon.ControllerReply_OK {
 		log.Fatal("Message rejected: ", *reply.GetControllerReply().Reason)
-	}
-	if reply.GetControllerReply().NextToken != nil {
-		c.token = *reply.GetControllerReply().NextToken
-	} else {
-		c.token = ""
 	}
 }
 

@@ -66,14 +66,7 @@ func (c *TeamClient) receiveRegistration(reader *bufio.Reader, server *TeamServe
 	if _, exists := server.GetClient(c.id); exists {
 		return errors.New("Team with given name already registered: " + c.id)
 	}
-	c.pubKey = server.trustedKeys[*registration.TeamName]
-	if c.pubKey != nil {
-		if err := c.Client.verifyMessage(&registration); err != nil {
-			return err
-		}
-	} else {
-		c.token = ""
-	}
+	c.token = ""
 
 	c.reply(c.Ok())
 
@@ -115,7 +108,6 @@ func (s *TeamServer) handleClientConnection(conn net.Conn) {
 			if teamState, ok := gcState.TeamState[client.team.String()]; ok {
 				connected := false
 				teamState.Connected = &connected
-				teamState.ConnectionVerified = &connected
 				teamState.AdvantageChoice = nil
 			} else {
 				log.Println("Team not connected: " + client.team.String())
@@ -129,7 +121,6 @@ func (s *TeamServer) handleClientConnection(conn net.Conn) {
 		if teamState, ok := gcState.TeamState[client.team.String()]; ok {
 			connected := true
 			teamState.Connected = &connected
-			teamState.ConnectionVerified = &client.verifiedConnection
 		}
 	})
 
@@ -141,12 +132,6 @@ func (s *TeamServer) handleClientConnection(conn net.Conn) {
 			}
 			log.Print(err)
 			continue
-		}
-		if client.pubKey != nil {
-			if err := client.verifyMessage(&req); err != nil {
-				client.reply(client.Reject(err.Error()))
-				continue
-			}
 		}
 		if err := s.processRequest(client, &req); err != nil {
 			client.reply(client.Reject(err.Error()))

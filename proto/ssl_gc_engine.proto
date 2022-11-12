@@ -31,14 +31,8 @@ message GcStateTeam {
     // true: The team is connected
     optional bool connected = 1;
 
-    // true: The team connected via TLS with a verified certificate
-    optional bool connection_verified = 2;
-
     // true: The remote control for the team is connected
     optional bool remote_control_connected = 3;
-
-    // true: The remote control for the team connected via TLS with a verified certificate
-    optional bool remote_control_connection_verified = 4;
 
     // the advantage choice of the team
     optional TeamAdvantageChoice advantage_choice = 5;
@@ -60,8 +54,7 @@ message TeamAdvantageChoice {
 
 // The GC state of an auto referee
 message GcStateAutoRef {
-    // true: The autoRef connected via TLS with a verified certificate
-    optional bool connection_verified = 1;
+    // currently no extra state
 }
 
 // GC state of a tracker

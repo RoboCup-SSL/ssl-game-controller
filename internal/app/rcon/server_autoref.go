@@ -42,14 +42,7 @@ func (c *AutoRefClient) receiveRegistration(reader *bufio.Reader, server *AutoRe
 	if _, exists := server.GetClient(c.id); exists {
 		return errors.Errorf("AutoRef Client with given identifier already registered: %v", server.GetClientIds())
 	}
-	c.pubKey = server.trustedKeys[c.id]
-	if c.pubKey != nil {
-		if err := c.Client.verifyMessage(&registration); err != nil {
-			return err
-		}
-	} else {
-		c.token = ""
-	}
+	c.token = ""
 
 	c.reply(c.Ok())
 
@@ -107,12 +100,6 @@ func (s *AutoRefServer) handleClientConnection(conn net.Conn) {
 			}
 			log.Print(err)
 			continue
-		}
-		if client.pubKey != nil {
-			if err := client.verifyMessage(&req); err != nil {
-				client.reply(client.Reject(err.Error()))
-				continue
-			}
 		}
 		if err := s.processRequest(client.id, &req); err != nil {
 			client.reply(client.Reject(err.Error()))

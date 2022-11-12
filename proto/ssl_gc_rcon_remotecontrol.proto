@@ -10,13 +10,13 @@ message RemoteControlRegistration {
     // the team to be controlled
     required Team team = 1;
     // signature can optionally be specified to enable secure communication
-    optional Signature signature = 2;
+    reserved 2;
 }
 
 // wrapper for all messages from the remote control to the controller
 message RemoteControlToController {
     // signature can optionally be specified to enable secure communication
-    optional Signature signature = 1;
+    reserved 1;
 
     oneof msg {
         // send a ping to the GC to test if the connection is still open.

@@ -10,7 +10,7 @@ message TeamRegistration {
     // the exact team name as published by the game-controller
     required string team_name = 1;
     // signature can optionally be specified to enable secure communication
-    optional Signature signature = 2;
+    reserved 2;
     // the team (relevant only if a team plays against itself)
     optional Team team = 3;
 }
@@ -18,7 +18,7 @@ message TeamRegistration {
 // wrapper for all messages from a team's computer to the controller
 message TeamToController {
     // signature can optionally be specified to enable secure communication
-    optional Signature signature = 1;
+    reserved 1;
 
     oneof msg {
         // request a new desired keeper id
@@ -48,7 +48,7 @@ enum AdvantageChoice {
 message ControllerToTeam {
     // reserve obsolete field ids
     reserved 2;
-    
+
     oneof msg {
         // a reply from the controller
         ControllerReply controller_reply = 1;

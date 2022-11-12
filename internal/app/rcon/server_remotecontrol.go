@@ -49,14 +49,7 @@ func (c *RemoteControlClient) receiveRegistration(reader *bufio.Reader, server *
 	if _, exists := server.GetClient(c.id); exists {
 		return errors.New("Team already registered: " + c.id)
 	}
-	c.pubKey = server.trustedKeys[c.id]
-	if c.pubKey != nil {
-		if err := c.Client.verifyMessage(&registration); err != nil {
-			return err
-		}
-	} else {
-		c.token = ""
-	}
+	c.token = ""
 
 	c.reply(c.Ok())
 
@@ -104,12 +97,6 @@ func (s *RemoteControlServer) handleClientConnection(conn net.Conn) {
 			log.Print(err)
 			continue
 		}
-		if client.pubKey != nil {
-			if err := client.verifyMessage(&req); err != nil {
-				client.reply(client.Reject(err.Error()))
-				continue
-			}
-		}
 		if err := client.processRequest(&req); err != nil {
 			client.reply(client.Reject(err.Error()))
 		} else {
@@ -122,7 +109,6 @@ func (s *RemoteControlServer) updateConnectionState(client RemoteControlClient, 
 	s.gcEngine.UpdateGcState(func(gcState *engine.GcState) {
 		if teamState, ok := gcState.TeamState[client.team.String()]; ok {
 			teamState.RemoteControlConnected = &connected
-			teamState.RemoteControlConnectionVerified = &client.verifiedConnection
 		}
 	})
 }
