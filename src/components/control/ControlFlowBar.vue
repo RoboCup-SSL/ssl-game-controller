@@ -13,6 +13,7 @@
             <b-button v-hotkey="keymapContinue"
                       ref="btnContinue"
                       :class="continueButtonClass"
+                      v-bind:disabled="continueDisabled"
                       v-on:click="triggerContinue">
                 Continue
                 <template v-if="botSubstitutionRequested && timeoutRequested"> with timeout and bot substitution</template>
@@ -76,6 +77,9 @@ export default {
         botSubstitutionRequested() {
             return this.$store.state.matchState.teamState[TEAM_YELLOW].requestsBotSubstitutionSince !== null
                 || this.$store.state.matchState.teamState[TEAM_BLUE].requestsBotSubstitutionSince !== null;
+        },
+        continueDisabled() {
+            return !this.nextCommand && !this.timeoutRequested && !this.botSubstitutionRequested;
         },
         stopAllowed() {
             return isNonPausedStage(this.$store.state.matchState)
