@@ -26,8 +26,8 @@
 </template>
 
 <script>
-    import {gameEventByTeam, gameEventDetailsList} from "../../gameEvents";
-    import {submitChange} from "../../submit";
+    import {gameEventByTeam, gameEventDetailsList} from "@/gameEvents";
+    import {submitChange} from "@/submit";
 
     export default {
         name: "EventProposals",

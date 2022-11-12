@@ -18,7 +18,7 @@
 </template>
 
 <script>
-    import {submitConfigUpdate} from "../../submit";
+    import {submitConfigUpdate} from "@/submit";
 
     export default {
         name: "TrackerConfig",

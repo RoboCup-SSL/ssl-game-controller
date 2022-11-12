@@ -48,8 +48,7 @@
 </template>
 
 <script>
-    import {stageNames, TEAM_YELLOW} from "../refereeState";
-    import {TEAM_BLUE} from "../refereeState";
+    import {stageNames, TEAM_YELLOW, TEAM_BLUE} from "@/refereeState";
 
     export default {
         name: 'GameStateBar',

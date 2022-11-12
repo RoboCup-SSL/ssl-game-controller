@@ -13,9 +13,9 @@
 <script>
     import LocationSelection from "../common/LocationSelection";
     import TeamSelection from "../common/TeamSelection";
-    import {convertStringLocation} from "../../refereeState";
-    import {isNumeric} from "../../util";
-    import {submitChange, submitNewCommand} from "../../submit";
+    import {convertStringLocation} from "@/refereeState";
+    import {isNumeric} from "@/util";
+    import {submitChange, submitNewCommand} from "@/submit";
 
     export default {
         name: "PlaceBall",

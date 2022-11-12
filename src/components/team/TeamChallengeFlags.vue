@@ -9,7 +9,7 @@
 
 <script>
     import EditableLabelNumber from "../common/EditableLabelNumber";
-    import {submitChange} from "../../submit";
+    import {submitChange} from "@/submit";
 
     export default {
         name: "TeamChallengeFlags",

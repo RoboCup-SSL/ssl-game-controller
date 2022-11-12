@@ -15,7 +15,7 @@
 </template>
 
 <script>
-    import {TEAM_BLUE, TEAM_YELLOW} from "../../refereeState";
+    import {TEAM_BLUE, TEAM_YELLOW} from "@/refereeState";
     import EditableLabelDuration from "../common/EditableLabelDuration";
     import TeamFoulsEditTable from "./TeamFoulsEditTable";
 

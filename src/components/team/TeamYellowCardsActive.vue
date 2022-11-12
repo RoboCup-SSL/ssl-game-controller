@@ -5,7 +5,7 @@
 </template>
 
 <script>
-    import {TEAM_BLUE, TEAM_YELLOW} from "../../refereeState";
+    import {TEAM_BLUE, TEAM_YELLOW} from "@/refereeState";
 
     export default {
         name: "TeamYellowCardsActive",

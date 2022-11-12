@@ -17,7 +17,7 @@
 <script>
     import EditableLabelDuration from "../common/EditableLabelDuration";
     import TeamYellowCardsEditTable from "./TeamYellowCardsEditTable";
-    import {TEAM_BLUE, TEAM_YELLOW} from "../../refereeState";
+    import {TEAM_BLUE, TEAM_YELLOW} from "@/refereeState";
 
     export default {
         name: "TeamYellowCardsEdit",

@@ -53,7 +53,7 @@
     import TeamScore from "./team/TeamScore";
     import TeamBallPlacement from "./team/TeamBallPlacement";
     import TeamHalf from "./team/TeamHalf";
-    import {TEAM_BLUE, TEAM_YELLOW} from "../../refereeState";
+    import {TEAM_BLUE, TEAM_YELLOW} from "@/refereeState";
 
     export default {
         name: "TeamSettings",

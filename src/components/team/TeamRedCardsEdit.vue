@@ -16,7 +16,7 @@
 
 <script>
     import TeamRedCardsEditTable from "./TeamRedCardsEditTable";
-    import {TEAM_BLUE, TEAM_YELLOW} from "../../refereeState";
+    import {TEAM_BLUE, TEAM_YELLOW} from "@/refereeState";
 
     export default {
         name: "TeamRedCardsEdit",

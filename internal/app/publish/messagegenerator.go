@@ -14,7 +14,6 @@ type MessageGenerator struct {
 	commandCounter   uint32
 	commandTimestamp uint64
 	quit             chan int
-	gcEngine         *engine.Engine
 	sourceIdentifier string
 	MessageConsumers []func(*state.Referee)
 	EngineHook       chan engine.HookOut

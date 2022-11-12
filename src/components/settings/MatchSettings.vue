@@ -8,27 +8,25 @@
                     right-label="Blue"
                     right-value="BLUE"
                     :callback="switchFirstKickoffTeam"
-                    :selected-value="firstKickoffTeam"
+                    :selected-value="firstKickoffTeam.toString()"
             />
 
             <label>Match type: </label>
             <EditableLabelSelect
                 :edit-mode="{active: true}"
-                :value="matchType"
+                :value="matchType.toString()"
                 :options="matchTypes"
                 :callback="updateMatchType"
             />
         </p>
 
         <b-button v-help-text="'Switch the colors of the teams, keep everything else'"
-                  v-on:click="switchColor"
-                  :disabled="forbidMatchControls">
+                  v-on:click="switchColor">
             Switch colors
         </b-button>
 
         <b-button v-help-text="'Switch the playing half (the goal) of the teams'"
-                  v-on:click="switchSides"
-                  :disabled="forbidMatchControls">
+                  v-on:click="switchSides">
             Switch sides
         </b-button>
 
@@ -38,8 +36,7 @@
                 right-label="Div B"
                 right-value="DIV_B"
                 :callback="switchDivision"
-                :selected-value="division"
-                :disabled="forbidMatchControls"
+                :selected-value="division.toString()"
         />
 
         <b-button v-help-text="'Start a new match by resetting everything'"
@@ -123,9 +120,6 @@
             },
             stopped() {
                 return this.state.command.type === 'STOP';
-            },
-            forbidMatchControls() {
-                return !this.stopped && !this.halted;
             },
             matchType() {
                 return this.state.matchType;

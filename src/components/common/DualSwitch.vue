@@ -2,14 +2,12 @@
     <div class="btn-group-toggle btn-group">
         <label v-help-text="leftTitle"
                :class="{btn:true, 'btn-active': (selectedValue === leftValue), 'btn-passive': (selectedValue !== leftValue)}"
-               @click="callback(leftValue)"
-               :disabled="disabled">
+               @click="callback(leftValue)">
             {{leftLabel}}
         </label>
         <label v-help-text="rightTitle"
                :class="{btn:true, 'btn-active': (selectedValue === rightValue), 'btn-passive': (selectedValue !== rightValue)}"
-               @click="callback(rightValue)"
-               :disabled="disabled">
+               @click="callback(rightValue)">
             {{rightLabel}}
         </label>
     </div>
@@ -33,10 +31,6 @@
             selectedValue: {
                 type: String,
                 default: ''
-            },
-            disabled: {
-                type: Boolean,
-                default: false
             },
         }
     }

@@ -23,8 +23,8 @@
 
 <script>
     import ControlTeamTimeout from "./ControlTeamTimeout";
-    import {isNonPausedStage, TEAM_BLUE, TEAM_YELLOW} from "../../refereeState";
-    import {submitChange, submitGameEvent, submitNewCommand} from "../../submit";
+    import {isNonPausedStage, TEAM_BLUE, TEAM_YELLOW} from "@/refereeState";
+    import {submitChange, submitGameEvent, submitNewCommand} from "@/submit";
 
     export default {
         name: "ManualControlTeam",
@@ -73,13 +73,6 @@
                     return {'ctrl+alt+numpad 7': this.sendDirect};
                 } else if (this.teamColor === TEAM_BLUE) {
                     return {'ctrl+alt+numpad 9': this.sendDirect};
-                }
-            },
-            keymapIndirect() {
-                if (this.teamColor === TEAM_YELLOW) {
-                    return {'ctrl+alt+numpad 4': this.sendIndirect};
-                } else if (this.teamColor === TEAM_BLUE) {
-                    return {'ctrl+alt+numpad 6': this.sendIndirect};
                 }
             },
             state() {

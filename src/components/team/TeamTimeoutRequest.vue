@@ -8,7 +8,7 @@
 </template>
 
 <script>
-    import {submitChange} from "../../submit";
+    import {submitChange} from "@/submit";
 
     export default {
         name: "TeamTimeoutRequest",

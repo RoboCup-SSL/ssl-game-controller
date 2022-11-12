@@ -16,7 +16,7 @@
     import BotSelection from "@/components/common/BotSelection";
     import LocationSelection from "@/components/common/LocationSelection";
     import {convertStringLocation} from "@/refereeState";
-    import {submitGameEvent} from "../../../submit";
+    import {submitGameEvent} from "@/submit";
 
     export default {
         name: "DefenderTooCloseToKickPoint",

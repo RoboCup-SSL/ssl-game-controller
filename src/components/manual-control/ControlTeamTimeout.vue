@@ -7,8 +7,8 @@
 </template>
 
 <script>
-    import {isNonPausedStage, isPreStage, TEAM_UNKNOWN} from "../../refereeState";
-    import {submitNewCommand} from "../../submit";
+    import {isNonPausedStage, isPreStage, TEAM_UNKNOWN} from "@/refereeState";
+    import {submitNewCommand} from "@/submit";
 
     export default {
         name: "ControlTeamTimeout",

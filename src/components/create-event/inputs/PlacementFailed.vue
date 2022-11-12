@@ -11,7 +11,7 @@
 
 <script>
     import TeamSelection from "@/components/common/TeamSelection";
-    import {submitGameEvent} from "../../../submit";
+    import {submitGameEvent} from "@/submit";
 
     export default {
         name: "PlacementFailed",

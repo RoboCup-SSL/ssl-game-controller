@@ -70,7 +70,7 @@
     import ManualControlTeam from "./ManualControlTeam";
     import ManualControlTeamMatchCommands from "./ManualControlTeamMatchCommands";
     import PlaceBall from "./PlaceBall";
-    import {TEAM_BLUE, TEAM_YELLOW} from "../../refereeState";
+    import {TEAM_BLUE, TEAM_YELLOW} from "@/refereeState";
 
     export default {
         name: "ManualControlView",

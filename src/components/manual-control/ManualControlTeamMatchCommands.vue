@@ -30,8 +30,8 @@
 
 <script>
     import ControlTeamTimeout from "./ControlTeamTimeout";
-    import {isNonPausedStage, TEAM_BLUE, TEAM_YELLOW} from "../../refereeState";
-    import {submitNewCommand} from "../../submit";
+    import {isNonPausedStage, TEAM_BLUE, TEAM_YELLOW} from "@/refereeState";
+    import {submitNewCommand} from "@/submit";
 
     export default {
         name: "ManualControlTeamMatchCommands",

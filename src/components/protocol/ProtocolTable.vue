@@ -48,8 +48,8 @@
 
 <script>
     import "../../date.format";
-    import {submitChange} from "../../submit";
-    import {gameEventDetails} from "../../gameEvents";
+    import {submitChange} from "@/submit";
+    import {gameEventDetails} from "@/gameEvents";
 
     export default {
         name: "EventTable",
@@ -128,11 +128,11 @@
               let protocolType = this.protocolType(entry);
               let gameEventType;
               if (protocolType === 'addGameEventChange') {
-                gameEventType = entry.change.addGameEvent.gameEvent.type;
+                gameEventType = entry.change.addGameEventChange.gameEvent.type;
               } else if (protocolType === 'addProposalChange') {
-                gameEventType = entry.change.addProposal.proposal.gameEvent.type;
+                gameEventType = entry.change.addProposalChange.proposal.gameEvent.type;
               } else if (protocolType === 'addPassiveGameEventChange') {
-                gameEventType = entry.change.addPassiveGameEvent.gameEvent.type;
+                gameEventType = entry.change.addPassiveGameEventChange.gameEvent.type;
               } else {
                 return false;
               }

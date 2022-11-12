@@ -308,7 +308,7 @@ func (e *Engine) processChange(change *statemachine.Change) (newChanges []*state
 		} else {
 			entry.State = entryToRevert.StatePre
 			if *entry.State.Command.Type != state.Command_HALT {
-				// halt the game after a revert - just to be save
+				// halt the game after a revert - just to be safe
 				haltChange := statemachine.Change{
 					Change: &statemachine.Change_NewCommandChange{
 						NewCommandChange: &statemachine.Change_NewCommand{

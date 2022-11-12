@@ -39,7 +39,7 @@
 </template>
 
 <script>
-    import {submitChange} from "../../submit";
+    import {submitChange} from "@/submit";
     import EditableLabelText from "../common/EditableLabelText";
 
     export default {

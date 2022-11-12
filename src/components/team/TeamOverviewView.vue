@@ -182,7 +182,7 @@
     import TeamTimeoutTime from "./TeamTimeoutTime";
     import TeamYellowCardNextDue from "./TeamYellowCardNextDue";
     import TeamYellowCardsActive from "./TeamYellowCardsActive";
-    import {TEAM_BLUE, TEAM_YELLOW} from "../../refereeState";
+    import {TEAM_BLUE, TEAM_YELLOW} from "@/refereeState";
     import TeamYellowCardsEdit from "./TeamYellowCardsEdit";
     import TeamRedCardsEdit from "./TeamRedCardsEdit";
     import TeamFoulsEdit from "./TeamFoulsEdit";
