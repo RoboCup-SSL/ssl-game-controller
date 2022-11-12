@@ -8,7 +8,52 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"sort"
 )
+
+var defaultTeams = []string{
+	"Unknown",
+	"AIS",
+	"AMC",
+	"CMμs",
+	"ER-Force",
+	"Immortals",
+	"ITAndroids",
+	"KgpKubs",
+	"KIKS",
+	"luhbots",
+	"MCT Susano Logics",
+	"MIT Roboteam",
+	"MRL",
+	"nAMeC",
+	"NAELIC",
+	"NEUIslanders",
+	"OMID",
+	"OP-AmP",
+	"Parsian",
+	"Ri-One",
+	"RFC Cambridge",
+	"Ri-one",
+	"RobôCin",
+	"RoboDragons",
+	"RoboFEI",
+	"RoboIME",
+	"RoboJackets",
+	"RoboTeam Twente",
+	"SRC",
+	"SSH",
+	"STOx’s",
+	"Sysmic Robotics",
+	"Test Team",
+	"TIGERs Mannheim",
+	"Tritons RCSC",
+	"ULtron",
+	"UMass Minutebots",
+	"UBC Thunderbots",
+	"URoboRus",
+	"Warthog Robotics",
+	"ZJUNlict",
+}
 
 func DefaultConfig() (x Config) {
 	x.AutoRefConfigs = map[string]*AutoRefConfig{}
@@ -16,7 +61,7 @@ func DefaultConfig() (x Config) {
 	for _, event := range state.GameEventsForBehaviorConfig() {
 		x.GameEventBehavior[event.String()] = Config_BEHAVIOR_ACCEPT_MAJORITY
 	}
-	x.Teams = []string{"Unknown", "Test Team"}
+	x.Teams = defaultTeams
 	return
 }
 
@@ -54,9 +99,19 @@ func (x *Config) ReadFrom(fileName string) (err error) {
 			x.GameEventBehavior[key] = value
 		}
 	}
-	if len(x.Teams) == 0 {
-		x.Teams = defConfig.Teams
+
+	uniqueTeams := map[string]bool{}
+	for _, t := range defaultTeams {
+		uniqueTeams[t] = true
 	}
+	for _, t := range x.Teams {
+		uniqueTeams[t] = true
+	}
+	x.Teams = make([]string, 0, len(uniqueTeams))
+	for t := range uniqueTeams {
+		x.Teams = append(x.Teams, t)
+	}
+	sort.Strings(x.Teams)
 
 	return
 }

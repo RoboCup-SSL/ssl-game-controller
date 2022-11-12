@@ -173,7 +173,7 @@ func DefaultControllerConfig() (c Controller) {
 	c.Network.VisionAddress = "224.5.23.2:10006"
 	c.Network.TrackerAddress = "224.5.23.2:10010"
 	c.Network.SkipInterfaces = []string{}
-	c.Game.StateStoreFile = "state-store.json.stream"
+	c.Game.StateStoreFile = "config/state-store.json.stream"
 	c.Game.YellowCardDuration = 2 * time.Minute
 	c.Game.YellowCardBotRemovalTime = 10 * time.Second
 	c.Game.TeamChoiceTimeout = 200 * time.Millisecond

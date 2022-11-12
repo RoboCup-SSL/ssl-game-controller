@@ -2,6 +2,8 @@
 node_modules
 /internal/app/ui/dist
 /config/state-store.json.stream
+/config/engine.yaml
+/config/ssl-game-controller.yaml
 
 # Editor directories and files
 .idea/*

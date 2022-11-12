@@ -29,7 +29,9 @@ docker run -p 8081:8081 \
   robocupssl/ssl-game-controller
 ```
 
-The controller will generate a default config file to [config/ssl-game-controller.yaml](config/ssl-game-controller.yaml) on the first start. Afterwards, you can change all settings there.
+The controller will generate a default configs to [config/](./config/) on the first start. Afterwards, you can change all settings there.
+
+For example, if you want to add a new team name temporarily, you can add it to [config/engine.yaml](./config/engine.yaml). If you want to add your team persistently, add it to `defaultTeams` in [internal/app/engine/config.go](internal/app/engine/config.go) and create a Pull Request on GitHub.
 
 ### Runtime Requirements
  * No software dependencies (except for development, see below)
