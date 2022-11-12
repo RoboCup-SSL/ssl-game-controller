@@ -29,24 +29,12 @@ export let getNextStage = function (stage) {
     return stage;
 };
 
-export let canEndGameFromStage = function (state) {
-    // Games can always end when a team has scored 10 goals, so we only restrict it to non paused stages
-    return isNonPausedStage(state);
-};
-
 export let isNonPausedStage = function (state) {
     return state.stage === 'NORMAL_FIRST_HALF'
         || state.stage === 'NORMAL_SECOND_HALF'
         || state.stage === 'EXTRA_FIRST_HALF'
         || state.stage === 'EXTRA_SECOND_HALF'
         || state.stage === 'PENALTY_SHOOTOUT';
-};
-
-export let isPausedStage = function (state) {
-    return state.stage === 'NORMAL_HALF_TIME'
-        || state.stage === 'EXTRA_TIME_BREAK'
-        || state.stage === 'EXTRA_HALF_TIME'
-        || state.stage === 'PENALTY_SHOOTOUT_BREAK';
 };
 
 export let isPreStage = function (state) {

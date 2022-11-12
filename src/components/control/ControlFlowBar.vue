@@ -13,8 +13,7 @@
             <b-button v-hotkey="keymapContinue"
                       ref="btnContinue"
                       :class="continueButtonClass"
-                      v-on:click="triggerContinue"
-                      v-bind:disabled="continueDisabled">
+                      v-on:click="triggerContinue">
                 Continue
                 <template v-if="botSubstitutionRequested && timeoutRequested"> with timeout and bot substitution</template>
                 <template v-else-if="botSubstitutionRequested"> with bot substitution</template>
@@ -67,19 +66,6 @@ export default {
         halted() {
             return this.$store.state.matchState.command.type === 'HALT';
         },
-        gameRunning() {
-            switch (this.$store.state.matchState.command.type) {
-                case 'FORCE_START':
-                case 'NORMAL_START':
-                case 'DIRECT':
-                case 'INDIRECT':
-                case 'KICKOFF':
-                case 'PENALTY':
-                case 'BALL_PLACEMENT':
-                    return true;
-            }
-            return false;
-        },
         timeoutActive() {
             return this.$store.state.matchState.command.type === 'TIMEOUT';
         },
@@ -90,9 +76,6 @@ export default {
         botSubstitutionRequested() {
             return this.$store.state.matchState.teamState[TEAM_YELLOW].requestsBotSubstitutionSince !== null
                 || this.$store.state.matchState.teamState[TEAM_BLUE].requestsBotSubstitutionSince !== null;
-        },
-        continueDisabled() {
-            return this.gameRunning || (!this.nextCommand && !this.timeoutRequested && !this.botSubstitutionRequested);
         },
         stopAllowed() {
             return isNonPausedStage(this.$store.state.matchState)
