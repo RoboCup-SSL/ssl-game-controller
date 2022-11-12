@@ -26,6 +26,7 @@ func NewAutoRefServer(address string, gcEngine *engine.Engine) (s *AutoRefServer
 	s.gcEngine = gcEngine
 	s.Server = NewServer(address)
 	s.connectionHandler = s.handleClientConnection
+	s.loadDefaultTrustedKeys("auto_ref")
 	return
 }
 

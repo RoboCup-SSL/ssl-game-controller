@@ -34,16 +34,26 @@ func NewGameController(cfg config.Controller) (c *GameController) {
 	c.messageGenerator = publish.NewMessageGenerator()
 	c.publisher = publish.NewPublisher(c.config.Network.PublishAddress, c.config.Network.PublishNif)
 	c.apiServer = api.NewServer(c.gcEngine)
+
 	c.autoRefServer = rcon.NewAutoRefServer(cfg.Server.AutoRef.Address, c.gcEngine)
+	c.autoRefServer.LoadTrustedKeys(cfg.Server.AutoRef.TrustedKeysDir)
+
 	c.teamServer = rcon.NewTeamServer(cfg.Server.Team.Address, c.gcEngine)
+	c.teamServer.LoadTrustedKeys(cfg.Server.Team.TrustedKeysDir)
+
 	c.remoteControlServer = rcon.NewRemoteControlServer(cfg.Server.RemoteControl.Address, c.gcEngine)
+	c.remoteControlServer.LoadTrustedKeys(cfg.Server.RemoteControl.TrustedKeysDir)
+
 	c.ciServer = ci.NewServer(cfg.Server.Ci.Address)
+
 	c.visionReceiver = vision.NewReceiver(cfg.Network.VisionAddress)
 	c.visionReceiver.GeometryCallback = c.gcEngine.ProcessGeometry
 	c.visionReceiver.MulticastServer.SkipInterfaces = cfg.Network.SkipInterfaces
+
 	c.trackerReceiver = tracker.NewReceiver(cfg.Network.TrackerAddress)
 	c.trackerReceiver.Callback = c.gcEngine.ProcessTrackerFrame
 	c.trackerReceiver.MulticastServer.SkipInterfaces = cfg.Network.SkipInterfaces
+
 	return
 }
 

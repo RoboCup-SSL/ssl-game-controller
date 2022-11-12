@@ -5,6 +5,7 @@ import (
 	"crypto/rsa"
 	"crypto/sha256"
 	"crypto/x509"
+	"embed"
 	"encoding/pem"
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
@@ -12,9 +13,13 @@ import (
 	"io/ioutil"
 	"log"
 	"net"
+	"os"
 	"strings"
 	"sync"
 )
+
+//go:embed trusted_keys/**/*
+var defaultTrustKeys embed.FS
 
 type Server struct {
 	address           string
@@ -161,31 +166,61 @@ func (c *Client) Reject(reason string) (reply *ControllerReply) {
 	return
 }
 
+func (s *Server) loadDefaultTrustedKeys(dirName string) {
+	baseDir := "trusted_keys/" + dirName
+	defaultFiles, err := defaultTrustKeys.ReadDir(baseDir)
+	if err != nil {
+		log.Print("Could not read default trusted keys: ", err)
+	} else {
+		for _, file := range defaultFiles {
+			if !file.IsDir() {
+				b, err := defaultTrustKeys.ReadFile(baseDir + "/" + file.Name())
+				if err != nil {
+					log.Print("Could not read default public key", err)
+				} else {
+					s.LoadTrustedKey(file.Name(), b)
+				}
+			}
+		}
+	}
+	log.Printf("Loaded %v embedded public keys", len(s.trustedKeys))
+}
+
 func (s *Server) LoadTrustedKeys(trustedKeysDir string) {
+	if _, err := os.Stat(trustedKeysDir); errors.Is(err, os.ErrNotExist) {
+		return
+	}
 	files, err := ioutil.ReadDir(trustedKeysDir)
 	if err != nil {
 		log.Print("Could not read trusted keys: ", err)
 		return
 	}
 	for _, file := range files {
-		if !file.IsDir() && strings.HasSuffix(file.Name(), ".pub.pem") {
-			pubKey := readPublicKey(trustedKeysDir + "/" + file.Name())
-			if pubKey != nil {
-				name := strings.Replace(file.Name(), ".pub.pem", "", 1)
-				s.trustedKeys[name] = pubKey
-				log.Printf("Loaded public key for %v", name)
+		if !file.IsDir() {
+			fullPath := trustedKeysDir + "/" + file.Name()
+			b, err := ioutil.ReadFile(fullPath)
+			if err != nil {
+				log.Print("Could not read public key at ", fullPath)
+			} else {
+				s.LoadTrustedKey(file.Name(), b)
 			}
 		}
 	}
 	log.Printf("Loaded %v public keys", len(s.trustedKeys))
 }
 
-func readPublicKey(filename string) *rsa.PublicKey {
-	b, err := ioutil.ReadFile(filename)
-	if err != nil {
-		log.Print("Could not find private key at ", filename)
-		return nil
+func (s *Server) LoadTrustedKey(filename string, data []byte) {
+	if strings.HasSuffix(filename, ".pub.pem") {
+		pubKey := readPublicKey(data)
+		if pubKey != nil {
+			name := strings.Replace(filename, ".pub.pem", "", 1)
+			s.trustedKeys[name] = pubKey
+			log.Printf("Loaded public key for %v", name)
+		}
 	}
+}
+
+func readPublicKey(b []byte) *rsa.PublicKey {
 	p, rest := pem.Decode(b)
 	if p == nil {
 		log.Print("Could not decode public key. Remaining data: ", string(rest))

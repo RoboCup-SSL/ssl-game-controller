@@ -29,6 +29,7 @@ func NewTeamServer(address string, gcEngine *engine.Engine) (s *TeamServer) {
 	s.gcEngine = gcEngine
 	s.Server = NewServer(address)
 	s.connectionHandler = s.handleClientConnection
+	s.loadDefaultTrustedKeys("team")
 	return
 }
 
@@ -72,12 +73,13 @@ func (c *TeamClient) receiveRegistration(reader *bufio.Reader, server *TeamServe
 			return err
 		}
 	} else {
+		log.Printf("No public key found: Connection is unverified")
 		c.token = ""
 	}
 
 	c.reply(c.Ok())
 
-	log.Printf("Team %v connected.", *registration.TeamName)
+	log.Printf("Team %v connected", *registration.TeamName)
 
 	return nil
 }
