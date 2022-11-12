@@ -14,34 +14,88 @@ services:
       - "-publishAddress"
       - "224.5.23.1:11003"
       - "-address"
-      - ":8080"
+      - ":8081"
     volumes:
       - "ssl-game-controller:/config:rw"
     network_mode: "${NETWORK_MODE}"
     ports:
-      - "8080:8080/tcp"
+      - "8081:8081/tcp"
 
   ssl-vision-client:
     image: "robocupssl/ssl-vision-client:1.6.0"
     command:
       - "-address"
-      - ":8081"
+      - ":8082"
       - "-visionAddress"
       - "224.5.23.2:10020"
     network_mode: "${NETWORK_MODE}"
     ports:
-      - "8081:8081/tcp"
+      - "8082:8082/tcp"
 
   ssl-status-board:
     image: "robocupssl/ssl-status-board:2.6.0"
     command:
       - "-address"
-      - ":8082"
+      - ":8083"
       - "-refereeAddress"
       - "224.5.23.1:11003"
     network_mode: "${NETWORK_MODE}"
     ports:
-      - "8082:8082/tcp"
+      - "8083:8083/tcp"
+
+  ssl-remote-control-yellow:
+    image: "robocupssl/ssl-remote-control:0.3.2"
+    command:
+      - "-address"
+      - ":8084"
+      - "-refereeAddress"
+      - "224.5.23.1:11003"
+      - "-team"
+      - "YELLOW"
+    network_mode: "${NETWORK_MODE}"
+    ports:
+      - "8084:8084/tcp"
+
+  ssl-remote-control-blue:
+    image: "robocupssl/ssl-remote-control:0.3.2"
+    command:
+      - "-address"
+      - ":8085"
+      - "-refereeAddress"
+      - "224.5.23.1:11003"
+      - "-team"
+      - "BLUE"
+    network_mode: "${NETWORK_MODE}"
+    ports:
+      - "8085:8085/tcp"
+
+  ssl-team-client-yellow:
+    image: "ssl-team-client"
+    build:
+      context: "."
+      dockerfile: cmd/ssl-team-client/Dockerfile
+    command:
+      - "-teamColor"
+      - "YELLOW"
+      - "-teamName"
+      - "Unknown"
+      - "-udpAddress"
+      - "224.5.23.1:11003"
+    network_mode: "${NETWORK_MODE}"
+
+  ssl-team-client-blue:
+    image: "ssl-team-client"
+    build:
+      context: "."
+      dockerfile: cmd/ssl-team-client/Dockerfile
+    command:
+      - "-teamColor"
+      - "BLUE"
+      - "-teamName"
+      - "Unknown"
+      - "-udpAddress"
+      - "224.5.23.1:11003"
+    network_mode: "${NETWORK_MODE}"
 
   autoref-tigers:
     image: "tigersmannheim/auto-referee:0.16.0"
