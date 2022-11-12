@@ -1,4 +1,4 @@
-# https://www.websequencediagrams.com/
+@startuml
 
 Team->Controller: establish TCP connection
 Controller->Controller: generate new token
@@ -18,3 +18,5 @@ Team->Controller: TeamToController
 Controller->Team: ControllerReply ( ok | reject )
 end
 end
+
+@enduml

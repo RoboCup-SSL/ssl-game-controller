@@ -1,5 +1,4 @@
-# https://www.websequencediagrams.com/
-
+@startuml
 RemoteControl->Controller: establish TCP connection
 Controller->Controller: generate new token
 Controller->RemoteControl: ControllerReply ( token )
@@ -12,3 +11,4 @@ loop
 RemoteControl->Controller: RemoteControlToController
 Controller->RemoteControl: ControllerReply ( ok | reject )
 end
+@enduml

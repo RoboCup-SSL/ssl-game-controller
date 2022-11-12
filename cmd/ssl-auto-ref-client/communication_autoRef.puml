@@ -1,4 +1,4 @@
-# https://www.websequencediagrams.com/
+@startuml
 
 AutoRef->Controller: establish TCP connection
 Controller->Controller: generate new token
@@ -12,3 +12,5 @@ loop
 AutoRef->Controller: AutoRefToController
 Controller->AutoRef: ControllerReply ( ok | reject )
 end
+
+@enduml
