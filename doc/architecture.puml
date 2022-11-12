@@ -1,0 +1,75 @@
+@startuml
+node "api" {
+}
+node "ci" {
+}
+node "config" {
+}
+node "engine" {
+}
+node "gc" {
+}
+node "geom" {
+}
+node "publish" {
+}
+node "rcon" {
+}
+node "sslconn" {
+}
+node "state" {
+}
+node "statemachine" {
+}
+node "store" {
+}
+node "tracker" {
+}
+node "ui" {
+}
+node "vision" {
+}
+
+"api" --> "engine"
+"api" --> "state"
+"api" --> "statemachine"
+"ci" --> "api"
+"ci" --> "engine"
+"ci" --> "sslconn"
+"ci" --> "state"
+"ci" --> "tracker"
+"ci" --> "vision"
+"engine" --> "config"
+"engine" --> "geom"
+"engine" --> "state"
+"engine" --> "statemachine"
+"engine" --> "store"
+"engine" --> "tracker"
+"engine" --> "vision"
+"gc" --> "api"
+"gc" --> "ci"
+"gc" --> "config"
+"gc" --> "engine"
+"gc" --> "publish"
+"gc" --> "rcon"
+"gc" --> "tracker"
+"gc" --> "vision"
+"geom" --> "config"
+"publish" --> "engine"
+"publish" --> "geom"
+"publish" --> "state"
+"publish" --> "statemachine"
+"rcon" --> "engine"
+"rcon" --> "sslconn"
+"rcon" --> "state"
+"rcon" --> "statemachine"
+"state" --> "config"
+"state" --> "geom"
+"statemachine" --> "config"
+"statemachine" --> "geom"
+"statemachine" --> "state"
+"store" --> "state"
+"store" --> "statemachine"
+"tracker" --> "geom"
+"tracker" --> "state"
+@enduml
