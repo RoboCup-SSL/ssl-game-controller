@@ -38,6 +38,11 @@
 
             <template v-slot:row-details="data">
                 <div class="row-details">
+                    <p>
+                        Match time: {{data.item.matchTimeElapsed}}
+                        <br/>
+                        Stage time: {{data.item.stageTimeElapsed}}
+                    </p>
                     <p>Change {{data.item.id}} by {{data.item.change.origin}}:</p>
                     <pre v-html="entryDetails(data.item)"/>
                 </div>

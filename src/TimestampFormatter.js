@@ -6,7 +6,7 @@ const padWithZero = function (value) {
 };
 
 const formatNsDuration = function (timestamp) {
-    const seconds = Math.round(Math.abs(timestamp) / 1e9);
+    const seconds = Math.floor(Math.abs(timestamp) / 1e9);
     const minutes = Math.floor(seconds / 60);
     const fullSeconds = seconds - minutes * 60;
     const sign = timestamp < 0 ? '-' : '';
