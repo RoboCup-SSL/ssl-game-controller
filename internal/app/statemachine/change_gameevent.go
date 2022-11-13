@@ -534,9 +534,3 @@ func (s *StateMachine) numActiveBallPlacementTeams(newState *state.State) int {
 	}
 	return possibleFailures
 }
-
-func microTimestampToTime(timestamp uint64) time.Time {
-	s := int64(timestamp / 1_000_000)
-	ns := (int64(timestamp) - s*1_000_000) * 1000
-	return time.Unix(s, ns)
-}

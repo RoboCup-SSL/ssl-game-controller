@@ -2,6 +2,7 @@ package engine
 
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/geom"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"log"
 )
@@ -11,7 +12,10 @@ func (e *Engine) processRunningToStop() {
 		return
 	}
 
-	if e.ballPlacementRequired() {
+	if e.currentState.NextCommand != nil &&
+		*e.currentState.NextCommand.Type == state.Command_PENALTY {
+		log.Printf("Running -> Stop: Penalty is next: (automatic) ball placement is not needed")
+	} else if e.ballPlacementRequired() {
 		log.Printf("Running -> Stop: Ball placement is needed")
 		e.Enqueue(&statemachine.Change{
 			Origin: &changeOriginEngine,
