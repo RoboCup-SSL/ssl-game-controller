@@ -210,7 +210,7 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 					ContinueChange: &Change_Continue{},
 				},
 			})
-			return
+			return // do not stop the game
 		}
 	}
 
@@ -455,7 +455,9 @@ func stopsTheGame(gameEvent state.GameEvent_Type) bool {
 		state.GameEvent_TOO_MANY_ROBOTS,
 		state.GameEvent_NO_PROGRESS_IN_GAME,
 		state.GameEvent_PENALTY_KICK_FAILED,
-		state.GameEvent_PLACEMENT_SUCCEEDED:
+		state.GameEvent_PLACEMENT_SUCCEEDED,
+		state.GameEvent_INVALID_GOAL,
+		state.GameEvent_GOAL:
 		return true
 	}
 	return false
