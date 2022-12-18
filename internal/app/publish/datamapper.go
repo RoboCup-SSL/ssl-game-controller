@@ -37,8 +37,6 @@ func mapCommand(command *state.Command) (c *state.Referee_Command) {
 		*c = state.Referee_FORCE_START
 	case state.Command_DIRECT:
 		*c = commandByTeam(*command.ForTeam, state.Referee_DIRECT_FREE_BLUE, state.Referee_DIRECT_FREE_YELLOW)
-	case state.Command_INDIRECT:
-		*c = commandByTeam(*command.ForTeam, state.Referee_INDIRECT_FREE_BLUE, state.Referee_INDIRECT_FREE_YELLOW)
 	case state.Command_KICKOFF:
 		*c = commandByTeam(*command.ForTeam, state.Referee_PREPARE_KICKOFF_BLUE, state.Referee_PREPARE_KICKOFF_YELLOW)
 	case state.Command_PENALTY:

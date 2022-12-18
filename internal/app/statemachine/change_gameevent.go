@@ -219,7 +219,7 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 		log.Printf("Reset current action time because defender of team %v was too close to kick point", byTeam)
 
 		switch *newState.Command.Type {
-		case state.Command_DIRECT, state.Command_INDIRECT:
+		case state.Command_DIRECT:
 			newState.CurrentActionTimeRemaining = durationpb.New(s.gameConfig.FreeKickTimeout[newState.Division.Div()])
 		case state.Command_NORMAL_START:
 			newState.CurrentActionTimeRemaining = durationpb.New(s.gameConfig.PrepareTimeout)

@@ -13,7 +13,7 @@ func (s *StateMachine) processChangeNewCommand(newState *state.State, newCommand
 	switch *newState.Command.Type {
 	case state.Command_BALL_PLACEMENT:
 		newState.CurrentActionTimeRemaining = durationpb.New(s.gameConfig.BallPlacementTime)
-	case state.Command_DIRECT, state.Command_INDIRECT:
+	case state.Command_DIRECT:
 		newState.CurrentActionTimeRemaining = durationpb.New(s.gameConfig.FreeKickTimeout[newState.Division.Div()])
 	case state.Command_KICKOFF, state.Command_PENALTY:
 		newState.CurrentActionTimeRemaining = durationpb.New(s.gameConfig.PrepareTimeout)
@@ -72,8 +72,6 @@ func (s *StateMachine) newGameState(newState *state.State, newCommand *Change_Ne
 	case state.Command_FORCE_START:
 		return state.NewGameStateNeutral(state.GameState_RUNNING)
 	case state.Command_DIRECT:
-		return state.NewGameStateWithTeam(state.GameState_FREE_KICK, *newCommand.Command.ForTeam)
-	case state.Command_INDIRECT:
 		return state.NewGameStateWithTeam(state.GameState_FREE_KICK, *newCommand.Command.ForTeam)
 	case state.Command_KICKOFF:
 		return state.NewGameStateWithTeam(state.GameState_KICKOFF, *newCommand.Command.ForTeam)

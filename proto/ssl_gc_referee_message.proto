@@ -96,9 +96,9 @@ message Referee {
         // The blue team may take a direct free kick.
         DIRECT_FREE_BLUE = 9;
         // The yellow team may take an indirect free kick.
-        INDIRECT_FREE_YELLOW = 10;
+        INDIRECT_FREE_YELLOW = 10 [deprecated = true];
         // The blue team may take an indirect free kick.
-        INDIRECT_FREE_BLUE = 11;
+        INDIRECT_FREE_BLUE = 11 [deprecated = true];
         // The yellow team is currently in a timeout.
         TIMEOUT_YELLOW = 12;
         // The blue team is currently in a timeout.

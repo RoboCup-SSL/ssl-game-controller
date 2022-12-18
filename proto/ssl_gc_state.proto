@@ -38,7 +38,7 @@ message Command {
         NORMAL_START = 3;
         FORCE_START = 4;
         DIRECT = 5;
-        INDIRECT = 6;
+        reserved 6; // INDIRECT
         KICKOFF = 7;
         PENALTY = 8;
         TIMEOUT = 9;

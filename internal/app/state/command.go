@@ -22,7 +22,6 @@ func (x *Command) NeedsTeam() bool {
 		Command_FORCE_START:
 		return false
 	case Command_DIRECT,
-		Command_INDIRECT,
 		Command_KICKOFF,
 		Command_PENALTY,
 		Command_TIMEOUT,
@@ -38,7 +37,6 @@ func (x *Command) NeedsTeam() bool {
 func (x *Command) IsRunning() bool {
 	switch *x.Type {
 	case Command_DIRECT,
-		Command_INDIRECT,
 		Command_NORMAL_START,
 		Command_FORCE_START:
 		return true

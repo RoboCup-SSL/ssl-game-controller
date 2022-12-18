@@ -84,8 +84,7 @@
             running() {
                 return this.state.command.type === 'FORCES_TART'
                     || this.state.command.type === 'NORMAL_START'
-                    || this.state.command.type === 'DIRECT'
-                    || this.state.command.type === 'INDIRECT';
+                    || this.state.command.type === 'DIRECT';
             },
             preparing() {
                 return this.state.command.type === 'KICKOFF' || this.state.command.type === 'PENALTY';

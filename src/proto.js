@@ -21872,7 +21872,6 @@ export const Command = $root.Command = (() => {
         case 3:
         case 4:
         case 5:
-        case 6:
         case 7:
         case 8:
         case 9:
@@ -21927,10 +21926,6 @@ export const Command = $root.Command = (() => {
         case "DIRECT":
         case 5:
             message.type = 5;
-            break;
-        case "INDIRECT":
-        case 6:
-            message.type = 6;
             break;
         case "KICKOFF":
         case 7:
@@ -22026,7 +22021,6 @@ export const Command = $root.Command = (() => {
      * @property {number} NORMAL_START=3 NORMAL_START value
      * @property {number} FORCE_START=4 FORCE_START value
      * @property {number} DIRECT=5 DIRECT value
-     * @property {number} INDIRECT=6 INDIRECT value
      * @property {number} KICKOFF=7 KICKOFF value
      * @property {number} PENALTY=8 PENALTY value
      * @property {number} TIMEOUT=9 TIMEOUT value
@@ -22040,7 +22034,6 @@ export const Command = $root.Command = (() => {
         values[valuesById[3] = "NORMAL_START"] = 3;
         values[valuesById[4] = "FORCE_START"] = 4;
         values[valuesById[5] = "DIRECT"] = 5;
-        values[valuesById[6] = "INDIRECT"] = 6;
         values[valuesById[7] = "KICKOFF"] = 7;
         values[valuesById[8] = "PENALTY"] = 8;
         values[valuesById[9] = "TIMEOUT"] = 9;
