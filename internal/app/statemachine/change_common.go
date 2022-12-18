@@ -2,8 +2,8 @@ package statemachine
 
 import "github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 
-// createCommandChange creates a change with a new command
-func (s *StateMachine) createCommandChange(command *state.Command) *Change {
+// CreateCommandChange creates a change with a new command
+func CreateCommandChange(command *state.Command) *Change {
 	return &Change{
 		Change: &Change_NewCommandChange{
 			NewCommandChange: &Change_NewCommand{
@@ -13,8 +13,8 @@ func (s *StateMachine) createCommandChange(command *state.Command) *Change {
 	}
 }
 
-// createGameEventChange creates a change with a new game event
-func createGameEventChange(eventType state.GameEvent_Type, event *state.GameEvent) *Change {
+// CreateGameEventChange creates a change with a new game event
+func CreateGameEventChange(eventType state.GameEvent_Type, event *state.GameEvent) *Change {
 	event.Type = &eventType
 	event.Origin = []string{changeOriginStateMachine}
 	return &Change{

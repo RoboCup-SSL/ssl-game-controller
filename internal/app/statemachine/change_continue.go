@@ -19,15 +19,15 @@ func (s *StateMachine) processChangeContinue(newState *state.State) (changes []*
 		newState.TeamInfo(state.Team_YELLOW).RequestsTimeoutSince != nil {
 		if newState.TeamInfo(state.Team_BLUE).RequestsTimeoutSince.AsTime().
 			Before(newState.TeamInfo(state.Team_YELLOW).RequestsTimeoutSince.AsTime()) {
-			changes = append(changes, s.createCommandChange(state.NewCommand(state.Command_TIMEOUT, state.Team_BLUE)))
+			changes = append(changes, CreateCommandChange(state.NewCommand(state.Command_TIMEOUT, state.Team_BLUE)))
 		} else {
-			changes = append(changes, s.createCommandChange(state.NewCommand(state.Command_TIMEOUT, state.Team_YELLOW)))
+			changes = append(changes, CreateCommandChange(state.NewCommand(state.Command_TIMEOUT, state.Team_YELLOW)))
 		}
 		continueCanceled = true
 	} else {
 		for _, team := range state.BothTeams() {
 			if newState.TeamInfo(team).RequestsTimeoutSince != nil {
-				changes = append(changes, s.createCommandChange(state.NewCommand(state.Command_TIMEOUT, team)))
+				changes = append(changes, CreateCommandChange(state.NewCommand(state.Command_TIMEOUT, team)))
 				continueCanceled = true
 			}
 		}
@@ -39,20 +39,20 @@ func (s *StateMachine) processChangeContinue(newState *state.State) (changes []*
 
 	if *newState.Command.Type == state.Command_HALT || *newState.Command.Type == state.Command_TIMEOUT {
 		log.Printf("Continue with STOP after %s", newState.Command.Type.String())
-		changes = append(changes, s.createCommandChange(state.NewCommandNeutral(state.Command_STOP)))
+		changes = append(changes, CreateCommandChange(state.NewCommandNeutral(state.Command_STOP)))
 	} else if newState.NextCommand != nil {
 		log.Printf("Continue with next command: %v", newState.NextCommand)
-		changes = append(changes, s.createCommandChange(newState.NextCommand))
+		changes = append(changes, CreateCommandChange(newState.NextCommand))
 	} else if *newState.Command.Type != state.Command_HALT {
 		log.Println("Halting the game as there is no known next command to continue with")
-		changes = append(changes, s.createCommandChange(state.NewCommandNeutral(state.Command_HALT)))
+		changes = append(changes, CreateCommandChange(state.NewCommandNeutral(state.Command_HALT)))
 	}
 	return
 }
 
 // botSubstitutionIntentEventChange creates a new change for bot substitution
 func (s *StateMachine) botSubstitutionIntentEventChange(byTeam state.Team) *Change {
-	return createGameEventChange(state.GameEvent_BOT_SUBSTITUTION, &state.GameEvent{
+	return CreateGameEventChange(state.GameEvent_BOT_SUBSTITUTION, &state.GameEvent{
 		Event: &state.GameEvent_BotSubstitution_{
 			BotSubstitution: &state.GameEvent_BotSubstitution{
 				ByTeam: &byTeam,
