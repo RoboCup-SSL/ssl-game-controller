@@ -75,7 +75,11 @@ func (s *BallPlacementPosDeterminer) Location() *geom.Vector2 {
 
 	// Scoring goals
 	case state.GameEvent_POSSIBLE_GOAL:
-		return nil
+		if s.Event.GetPossibleGoal().Location != nil {
+			location := s.Event.GetPossibleGoal().Location
+			return s.ballPlacementLocationGoalLine(location)
+		}
+		return s.keepCurrentPlacementPos()
 	case state.GameEvent_GOAL:
 		center := geom.NewVector2(0.0, 0.0)
 		return s.validateLocation(center)

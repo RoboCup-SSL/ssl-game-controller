@@ -30,7 +30,6 @@
 <script>
 import {submitGameEvent} from "@/submit";
 import {gameEventByTeam, gameEventDetailsList} from "@/gameEvents";
-import {TEAM_BLUE, TEAM_YELLOW} from "@/refereeState";
 
 export default {
     name: "CurrentEvents",
@@ -45,14 +44,6 @@ export default {
         },
         gameEventsPresent() {
             return this.gameEvents && this.gameEvents.length > 0;
-        },
-        goalOrBallLeftFieldEventPresent() {
-            for (let event of this.$store.state.matchState.gameEvents) {
-                if (event.type === 'GOAL' || event.type === 'BALL_LEFT_FIELD_GOAL_LINE') {
-                    return true;
-                }
-            }
-            return false;
         },
     },
     methods: {
@@ -72,11 +63,21 @@ export default {
                 this.selectedEvent = index;
             }
         },
+        isGameEventPresent(eventType) {
+            for (let event of this.$store.state.matchState.gameEvents) {
+                if (event.type === eventType) {
+                    return true;
+                }
+            }
+            return false;
+        },
         showAcceptAndRejectGoal(gameEvent) {
-            return !this.goalOrBallLeftFieldEventPresent && gameEvent.type === 'POSSIBLE_GOAL';
+            return gameEvent.type === 'POSSIBLE_GOAL'
+                && !this.isGameEventPresent('GOAL')
+                && !this.isGameEventPresent('INVALID_GOAL');
         },
         isChallengeFlag(gameEvent) {
-            return !this.goalOrBallLeftFieldEventPresent && gameEvent.type === 'CHALLENGE_FLAG';
+            return gameEvent.type === 'CHALLENGE_FLAG';
         },
         detailsList(gameEvent) {
             return gameEventDetailsList(gameEvent);
@@ -92,17 +93,12 @@ export default {
             });
         },
         rejectGoal(gameEvent) {
-            let team = gameEvent.possibleGoal.kickingTeam;
-            if (team === null) {
-                team = (gameEvent.possibleGoal.by_team === TEAM_BLUE) ? TEAM_YELLOW : TEAM_BLUE;
-            }
+            const goalEvent = gameEvent.possibleGoal;
+            goalEvent.message = "Rejected in UI"
             submitGameEvent({
-                type: 'BALL_LEFT_FIELD_GOAL_LINE',
-                ballLeftFieldGoalLine: {
-                    by_team: team,
-                    by_bot: gameEvent.possibleGoal.kickingBot,
-                    location: gameEvent.possibleGoal.location
-                }
+                type: 'INVALID_GOAL',
+                origins: gameEvent.origins,
+                goal: goalEvent,
             });
         },
     }

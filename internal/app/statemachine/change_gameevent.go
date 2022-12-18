@@ -360,7 +360,8 @@ func (s *StateMachine) nextCommandForEvent(newState *state.State, gameEvent *sta
 		state.GameEvent_BOT_DRIBBLED_BALL_TOO_FAR,
 		state.GameEvent_ATTACKER_DOUBLE_TOUCHED_BALL,
 		state.GameEvent_PENALTY_KICK_FAILED,
-		state.GameEvent_POSSIBLE_GOAL:
+		state.GameEvent_POSSIBLE_GOAL,
+		state.GameEvent_INVALID_GOAL:
 		if *newState.Stage == state.Referee_PENALTY_SHOOTOUT {
 			return state.NewCommand(state.Command_PENALTY, gameEvent.ByTeam().Opposite())
 		}
