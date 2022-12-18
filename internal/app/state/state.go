@@ -72,3 +72,13 @@ func (x *State) HasGameEventByTeam(t GameEvent_Type, team Team) bool {
 	}
 	return false
 }
+
+func (x *State) FindGameEvents(eventType GameEvent_Type) (events []*GameEvent) {
+	events = []*GameEvent{}
+	for _, event := range x.GameEvents {
+		if *event.Type == eventType {
+			events = append(events, event)
+		}
+	}
+	return events
+}

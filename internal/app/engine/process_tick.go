@@ -98,7 +98,7 @@ func (e *Engine) updateYellowCardTimes(teamState *state.TeamInfo, delta time.Dur
 		addDur(teamState.YellowCards[i].TimeRemaining, -delta)
 		if goDur(teamState.YellowCards[i].TimeRemaining) <= 0 {
 			teamState.YellowCards[i].TimeRemaining = durationpb.New(0)
-			e.queue <- &statemachine.Change{
+			e.changeQueue <- &statemachine.Change{
 				Origin: &changeOriginEngine,
 				Change: &statemachine.Change_YellowCardOverChange{
 					YellowCardOverChange: &statemachine.Change_YellowCardOver{},

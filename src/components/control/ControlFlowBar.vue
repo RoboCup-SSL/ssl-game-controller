@@ -3,46 +3,65 @@
         <div v-help-text="'Immediately stop all robots (' + Object.keys(keymapHalt)[0] + ')'">
             <b-button v-hotkey="keymapHalt"
                       ref="btnHalt"
-                      v-on:click="send('HALT')"
+                      v-on:click="sendHalt"
                       v-bind:disabled="halted">
                 Halt
             </b-button>
         </div>
 
-        <div v-help-text="'Continue based on last game event (' + Object.keys(keymapContinue)[0] + ')'">
+        <div v-help-text="'Continue with next action (' + Object.keys(keymapContinue)[0] + ')'">
             <b-button v-hotkey="keymapContinue"
                       ref="btnContinue"
                       :class="continueButtonClass"
-                      v-bind:disabled="continueDisabled"
+                      v-bind:disabled="continueAction === null"
                       v-on:click="triggerContinue">
-                Continue
-                <template v-if="botSubstitutionRequested && timeoutRequested"> with timeout and bot substitution</template>
-                <template v-else-if="botSubstitutionRequested"> with bot substitution</template>
-                <template v-else-if="timeoutRequested"> with timeout</template>
-                <template v-else-if="nextCommand && nextCommand.type">with
-                    <span :class="teamColorClass">{{ nextCommand.type }}</span>
-                </template>
-                <span v-for="issue of continuationIssues" v-bind:key="issue">
+                <template v-if="continueAction !== null">
+                    <template v-if="continueAction.type === 'HALT'">
+                        Halt
+                    </template>
+                    <template v-else-if="continueAction.type === 'STOP'">
+                        Stop
+                    </template>
+                    <template v-else-if="continueAction.type === 'NEXT_COMMAND'">
+                        <span :class="teamColorClass">{{ nextCommand.type }}</span>
+                    </template>
+                    <template v-else-if="continueAction.type === 'BALL_PLACEMENT'">
+                        <span :class="teamColorClass">Ball Placement</span>
+                    </template>
+                    <template v-else-if="continueAction.type === 'TIMEOUT_START'">
+                        <span :class="teamColorClass">Start Timeout</span>
+                    </template>
+                    <template v-else-if="continueAction.type === 'TIMEOUT_STOP'">
+                        <span :class="teamColorClass">Stop Timeout</span>
+                    </template>
+                    <template v-else-if="continueAction.type === 'BOT_SUBSTITUTION'">
+                        <span :class="teamColorClass">Bot Substitution</span>
+                    </template>
+                    <span v-for="issue of continuationIssues" v-bind:key="issue">
                     <br>
-                    - {{issue}}
+                    - {{ issue }}
                 </span>
+                </template>
+                <template v-else>
+                    No next action available
+                </template>
             </b-button>
         </div>
     </div>
 </template>
 
 <script>
-import {isNonPausedStage, isPreStage, TEAM_BLUE, TEAM_UNKNOWN, TEAM_YELLOW} from "@/refereeState";
-import {submitChange, submitNewCommand} from "@/submit";
+import {TEAM_BLUE, TEAM_UNKNOWN, TEAM_YELLOW} from "@/refereeState";
+import {submitContinueAction, submitNewCommand} from "@/submit";
 
 export default {
     name: "ControlFlowBar",
     methods: {
-        send: function (command) {
-            submitNewCommand(command, TEAM_UNKNOWN);
+        sendHalt() {
+            submitNewCommand('HALT', TEAM_UNKNOWN);
         },
         triggerContinue() {
-            submitChange({continueChange: {}});
+            submitContinueAction(this.continueAction)
         },
     },
     computed: {
@@ -50,7 +69,7 @@ export default {
             return {
                 'esc': () => {
                     if (!this.$refs.btnHalt.disabled) {
-                        this.send('HALT')
+                        this.sendHalt()
                     }
                 }
             }
@@ -67,57 +86,34 @@ export default {
         halted() {
             return this.$store.state.matchState.command.type === 'HALT';
         },
-        timeoutActive() {
-            return this.$store.state.matchState.command.type === 'TIMEOUT';
-        },
-        timeoutRequested() {
-            return this.$store.state.matchState.teamState[TEAM_YELLOW].requestsTimeoutSince !== null
-                || this.$store.state.matchState.teamState[TEAM_BLUE].requestsTimeoutSince !== null;
-        },
-        botSubstitutionRequested() {
-            return this.$store.state.matchState.teamState[TEAM_YELLOW].requestsBotSubstitutionSince !== null
-                || this.$store.state.matchState.teamState[TEAM_BLUE].requestsBotSubstitutionSince !== null;
-        },
-        continueDisabled() {
-            return !this.nextCommand && !this.timeoutRequested && !this.botSubstitutionRequested;
-        },
-        stopAllowed() {
-            return isNonPausedStage(this.$store.state.matchState)
-                || isPreStage(this.$store.state.matchState);
-        },
         nextCommand() {
-            if (this.halted) {
-                if (this.stopAllowed) {
-                    return {type: 'STOP'};
-                }
-                return null;
-            }
-            if (this.timeoutActive) {
-                return {type: 'STOP'}
-            }
-            if (!this.$store.state.matchState.nextCommand) {
-                return null;
-            }
             return this.$store.state.matchState.nextCommand;
+        },
+        continueAction() {
+            return this.$store.state.gcState.continueAction;
+        },
+        continuationIssues() {
+            if (this.continueAction === null) {
+                return []
+            }
+            return this.continueAction.continuationIssues
+        },
+        readyToContinue() {
+            return this.continueAction !== null &&
+                this.continueAction.continuationIssues.length === 0;
         },
         teamColorClass() {
             return {
-                'team-blue': this.nextCommand && this.nextCommand.forTeam === TEAM_BLUE,
-                'team-yellow': this.nextCommand && this.nextCommand.forTeam === TEAM_YELLOW
+                'team-blue': this.continueAction.forTeam === TEAM_BLUE,
+                'team-yellow': this.continueAction.forTeam === TEAM_YELLOW,
             }
         },
         continueButtonClass() {
-            if (this.$store.state.gcState.readyToContinue === null) {
-                return '';
-            }
-            if (this.$store.state.gcState.readyToContinue) {
+            if (this.readyToContinue) {
                 return 'continue-btn-ready';
             }
             return 'continue-btn-not-ready';
         },
-        continuationIssues() {
-            return this.$store.state.gcState.continuationIssues
-        }
     }
 }
 </script>

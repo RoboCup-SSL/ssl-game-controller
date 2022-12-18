@@ -19,7 +19,6 @@ type StateMachine struct {
 	stageTimes   map[state.Referee_Stage]time.Duration
 	rand         *rand.Rand
 	timeProvider timer.TimeProvider
-	AutoContinue bool
 }
 
 // NewStateMachine creates a new state machine
@@ -88,10 +87,6 @@ func (s *StateMachine) Process(currentState *state.State, change *Change) (newSt
 		newChanges = s.processChangeAddGameEvent(newState, change.GetAddGameEventChange())
 	} else if change.GetAddPassiveGameEventChange() != nil {
 		newChanges = s.processChangeAddPassiveGameEvent(change.GetAddPassiveGameEventChange())
-	} else if change.GetStartBallPlacementChange() != nil {
-		newChanges = s.processChangeStartBallPlacement(newState)
-	} else if change.GetContinueChange() != nil {
-		newChanges = s.processChangeContinue(newState)
 	} else if change.GetAddProposalChange() != nil {
 		newChanges = s.processChangeAddProposal(newState, change.GetAddProposalChange())
 	} else if change.GetNewGameStateChange() != nil {

@@ -46,7 +46,7 @@
     import Settings from "../settings/Settings";
     import {getNextStage, stageNames, isPreStage} from "@/refereeState";
     import NewEvent from "../create-event/NewEvent";
-    import {setAutoContinue, submitChange} from "@/submit";
+    import {submitChange, submitConfigUpdate} from "@/submit";
 
     export default {
         name: "MatchSettingsBar",
@@ -67,7 +67,9 @@
                 });
             },
             setAutoContinue(enabled) {
-                setAutoContinue(enabled);
+                submitConfigUpdate({
+                    autoContinue: enabled
+                });
             },
         },
         computed: {

@@ -118,7 +118,6 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 
 	// bot substitution
 	if *gameEvent.Type == state.GameEvent_BOT_SUBSTITUTION {
-		log.Printf("Halt the game, because team %v requested robot substitution", byTeam)
 		// reset robot substitution flags
 		for _, team := range state.BothTeams() {
 			newState.TeamInfo(team).RequestsBotSubstitutionSince = nil
@@ -182,17 +181,9 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 	if *gameEvent.Type == state.GameEvent_PLACEMENT_FAILED && byTeam.Known() {
 		*newState.TeamInfo(byTeam).BallPlacementFailures++
 		*newState.TeamInfo(byTeam).BallPlacementFailuresReached = *newState.TeamInfo(byTeam).BallPlacementFailures >= s.gameConfig.MultiplePlacementFailures
-		if s.allTeamsFailedPlacement(newState) {
-			log.Printf("Placement failed for all teams. The human ref must place the ball.")
-			if s.numActiveBallPlacementTeams(newState) == 2 {
-				// both teams failed, switch back to original command
-				newState.NextCommand = state.NewCommand(state.Command_DIRECT, byTeam.Opposite())
-			}
-			changes = append(changes, CreateCommandChange(state.NewCommandNeutral(state.Command_HALT)))
-		} else {
-			log.Printf("Placement failed for team %v. Team %v is awarded a free kick and places the ball.", byTeam, byTeam.Opposite())
+
+		if *newState.Division == state.Division_DIV_A && ballLeftField(newState) {
 			newState.NextCommand = state.NewCommand(state.Command_DIRECT, byTeam.Opposite())
-			changes = append(changes, CreateCommandChange(state.NewCommand(state.Command_BALL_PLACEMENT, byTeam.Opposite())))
 		}
 	}
 
@@ -501,29 +492,17 @@ func locationForRuleViolation(gameEvent *state.GameEvent) *geom.Vector2 {
 	return nil
 }
 
-// allTeamsFailedPlacement returns true if all teams failed placing the ball
-// It takes into account, how many teams are able to place the ball and how many failures happened
-func (s *StateMachine) allTeamsFailedPlacement(newState *state.State) bool {
-	possibleFailures := s.numActiveBallPlacementTeams(newState)
-
-	failures := 0
-	for _, e := range newState.GameEvents {
-		if *e.Type == state.GameEvent_PLACEMENT_FAILED {
-			failures++
-			if failures >= possibleFailures {
-				return true
-			}
+// ballLeftField returns true if the game was stopped because the ball left the field
+func ballLeftField(newState *state.State) bool {
+	for _, gameEvent := range newState.GameEvents {
+		switch *gameEvent.Type {
+		case
+			state.GameEvent_BALL_LEFT_FIELD_GOAL_LINE,
+			state.GameEvent_BALL_LEFT_FIELD_TOUCH_LINE,
+			state.GameEvent_AIMLESS_KICK,
+			state.GameEvent_POSSIBLE_GOAL:
+			return true
 		}
 	}
 	return false
-}
-
-func (s *StateMachine) numActiveBallPlacementTeams(newState *state.State) int {
-	possibleFailures := 0
-	for _, team := range state.BothTeams() {
-		if newState.TeamInfo(team).BallPlacementAllowed() {
-			possibleFailures++
-		}
-	}
-	return possibleFailures
 }

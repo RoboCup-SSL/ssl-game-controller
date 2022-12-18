@@ -41,8 +41,6 @@ message Change {
         AddGameEvent add_game_event_change = 8;
         AddPassiveGameEvent add_passive_game_event_change = 19;
         AddProposal add_proposal_change = 9;
-        StartBallPlacement start_ball_placement_change = 10;
-        Continue continue_change = 11;
         UpdateConfig update_config_change = 12;
         UpdateTeamState update_team_state_change = 13;
         SwitchColors switch_colors_change = 14;
@@ -115,14 +113,6 @@ message Change {
         optional uint32 group_id = 1;
         // An identifier of the acceptor
         optional string accepted_by = 2;
-    }
-
-    // Initiate ball placement
-    message StartBallPlacement {
-    }
-
-    // Continue with the next referee command
-    message Continue {
     }
 
     // Update some configuration

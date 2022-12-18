@@ -15963,8 +15963,6 @@ export const Change = $root.Change = (() => {
      * @property {Change.IAddGameEvent|null} [addGameEventChange] Change addGameEventChange
      * @property {Change.IAddPassiveGameEvent|null} [addPassiveGameEventChange] Change addPassiveGameEventChange
      * @property {Change.IAddProposal|null} [addProposalChange] Change addProposalChange
-     * @property {Change.IStartBallPlacement|null} [startBallPlacementChange] Change startBallPlacementChange
-     * @property {Change.IContinue|null} [continueChange] Change continueChange
      * @property {Change.IUpdateConfig|null} [updateConfigChange] Change updateConfigChange
      * @property {Change.IUpdateTeamState|null} [updateTeamStateChange] Change updateTeamStateChange
      * @property {Change.ISwitchColors|null} [switchColorsChange] Change switchColorsChange
@@ -16077,22 +16075,6 @@ export const Change = $root.Change = (() => {
     Change.prototype.addProposalChange = null;
 
     /**
-     * Change startBallPlacementChange.
-     * @member {Change.IStartBallPlacement|null|undefined} startBallPlacementChange
-     * @memberof Change
-     * @instance
-     */
-    Change.prototype.startBallPlacementChange = null;
-
-    /**
-     * Change continueChange.
-     * @member {Change.IContinue|null|undefined} continueChange
-     * @memberof Change
-     * @instance
-     */
-    Change.prototype.continueChange = null;
-
-    /**
      * Change updateConfigChange.
      * @member {Change.IUpdateConfig|null|undefined} updateConfigChange
      * @memberof Change
@@ -16145,12 +16127,12 @@ export const Change = $root.Change = (() => {
 
     /**
      * Change change.
-     * @member {"newCommandChange"|"changeStageChange"|"setBallPlacementPosChange"|"addYellowCardChange"|"addRedCardChange"|"yellowCardOverChange"|"addGameEventChange"|"addPassiveGameEventChange"|"addProposalChange"|"startBallPlacementChange"|"continueChange"|"updateConfigChange"|"updateTeamStateChange"|"switchColorsChange"|"revertChange"|"newGameStateChange"|"acceptProposalGroupChange"|undefined} change
+     * @member {"newCommandChange"|"changeStageChange"|"setBallPlacementPosChange"|"addYellowCardChange"|"addRedCardChange"|"yellowCardOverChange"|"addGameEventChange"|"addPassiveGameEventChange"|"addProposalChange"|"updateConfigChange"|"updateTeamStateChange"|"switchColorsChange"|"revertChange"|"newGameStateChange"|"acceptProposalGroupChange"|undefined} change
      * @memberof Change
      * @instance
      */
     Object.defineProperty(Change.prototype, "change", {
-        get: $util.oneOfGetter($oneOfFields = ["newCommandChange", "changeStageChange", "setBallPlacementPosChange", "addYellowCardChange", "addRedCardChange", "yellowCardOverChange", "addGameEventChange", "addPassiveGameEventChange", "addProposalChange", "startBallPlacementChange", "continueChange", "updateConfigChange", "updateTeamStateChange", "switchColorsChange", "revertChange", "newGameStateChange", "acceptProposalGroupChange"]),
+        get: $util.oneOfGetter($oneOfFields = ["newCommandChange", "changeStageChange", "setBallPlacementPosChange", "addYellowCardChange", "addRedCardChange", "yellowCardOverChange", "addGameEventChange", "addPassiveGameEventChange", "addProposalChange", "updateConfigChange", "updateTeamStateChange", "switchColorsChange", "revertChange", "newGameStateChange", "acceptProposalGroupChange"]),
         set: $util.oneOfSetter($oneOfFields)
     });
 
@@ -16196,10 +16178,6 @@ export const Change = $root.Change = (() => {
             $root.Change.AddGameEvent.encode(message.addGameEventChange, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
         if (message.addProposalChange != null && Object.hasOwnProperty.call(message, "addProposalChange"))
             $root.Change.AddProposal.encode(message.addProposalChange, writer.uint32(/* id 9, wireType 2 =*/74).fork()).ldelim();
-        if (message.startBallPlacementChange != null && Object.hasOwnProperty.call(message, "startBallPlacementChange"))
-            $root.Change.StartBallPlacement.encode(message.startBallPlacementChange, writer.uint32(/* id 10, wireType 2 =*/82).fork()).ldelim();
-        if (message.continueChange != null && Object.hasOwnProperty.call(message, "continueChange"))
-            $root.Change.Continue.encode(message.continueChange, writer.uint32(/* id 11, wireType 2 =*/90).fork()).ldelim();
         if (message.updateConfigChange != null && Object.hasOwnProperty.call(message, "updateConfigChange"))
             $root.Change.UpdateConfig.encode(message.updateConfigChange, writer.uint32(/* id 12, wireType 2 =*/98).fork()).ldelim();
         if (message.updateTeamStateChange != null && Object.hasOwnProperty.call(message, "updateTeamStateChange"))
@@ -16292,14 +16270,6 @@ export const Change = $root.Change = (() => {
                 }
             case 9: {
                     message.addProposalChange = $root.Change.AddProposal.decode(reader, reader.uint32());
-                    break;
-                }
-            case 10: {
-                    message.startBallPlacementChange = $root.Change.StartBallPlacement.decode(reader, reader.uint32());
-                    break;
-                }
-            case 11: {
-                    message.continueChange = $root.Change.Continue.decode(reader, reader.uint32());
                     break;
                 }
             case 12: {
@@ -16456,26 +16426,6 @@ export const Change = $root.Change = (() => {
                     return "addProposalChange." + error;
             }
         }
-        if (message.startBallPlacementChange != null && message.hasOwnProperty("startBallPlacementChange")) {
-            if (properties.change === 1)
-                return "change: multiple values";
-            properties.change = 1;
-            {
-                let error = $root.Change.StartBallPlacement.verify(message.startBallPlacementChange);
-                if (error)
-                    return "startBallPlacementChange." + error;
-            }
-        }
-        if (message.continueChange != null && message.hasOwnProperty("continueChange")) {
-            if (properties.change === 1)
-                return "change: multiple values";
-            properties.change = 1;
-            {
-                let error = $root.Change.Continue.verify(message.continueChange);
-                if (error)
-                    return "continueChange." + error;
-            }
-        }
         if (message.updateConfigChange != null && message.hasOwnProperty("updateConfigChange")) {
             if (properties.change === 1)
                 return "change: multiple values";
@@ -16600,16 +16550,6 @@ export const Change = $root.Change = (() => {
                 throw TypeError(".Change.addProposalChange: object expected");
             message.addProposalChange = $root.Change.AddProposal.fromObject(object.addProposalChange);
         }
-        if (object.startBallPlacementChange != null) {
-            if (typeof object.startBallPlacementChange !== "object")
-                throw TypeError(".Change.startBallPlacementChange: object expected");
-            message.startBallPlacementChange = $root.Change.StartBallPlacement.fromObject(object.startBallPlacementChange);
-        }
-        if (object.continueChange != null) {
-            if (typeof object.continueChange !== "object")
-                throw TypeError(".Change.continueChange: object expected");
-            message.continueChange = $root.Change.Continue.fromObject(object.continueChange);
-        }
         if (object.updateConfigChange != null) {
             if (typeof object.updateConfigChange !== "object")
                 throw TypeError(".Change.updateConfigChange: object expected");
@@ -16701,16 +16641,6 @@ export const Change = $root.Change = (() => {
             object.addProposalChange = $root.Change.AddProposal.toObject(message.addProposalChange, options);
             if (options.oneofs)
                 object.change = "addProposalChange";
-        }
-        if (message.startBallPlacementChange != null && message.hasOwnProperty("startBallPlacementChange")) {
-            object.startBallPlacementChange = $root.Change.StartBallPlacement.toObject(message.startBallPlacementChange, options);
-            if (options.oneofs)
-                object.change = "startBallPlacementChange";
-        }
-        if (message.continueChange != null && message.hasOwnProperty("continueChange")) {
-            object.continueChange = $root.Change.Continue.toObject(message.continueChange, options);
-            if (options.oneofs)
-                object.change = "continueChange";
         }
         if (message.updateConfigChange != null && message.hasOwnProperty("updateConfigChange")) {
             object.updateConfigChange = $root.Change.UpdateConfig.toObject(message.updateConfigChange, options);
@@ -19040,356 +18970,6 @@ export const Change = $root.Change = (() => {
         };
 
         return AcceptProposalGroup;
-    })();
-
-    Change.StartBallPlacement = (function() {
-
-        /**
-         * Properties of a StartBallPlacement.
-         * @memberof Change
-         * @interface IStartBallPlacement
-         */
-
-        /**
-         * Constructs a new StartBallPlacement.
-         * @memberof Change
-         * @classdesc Represents a StartBallPlacement.
-         * @implements IStartBallPlacement
-         * @constructor
-         * @param {Change.IStartBallPlacement=} [properties] Properties to set
-         */
-        function StartBallPlacement(properties) {
-            if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        /**
-         * Creates a new StartBallPlacement instance using the specified properties.
-         * @function create
-         * @memberof Change.StartBallPlacement
-         * @static
-         * @param {Change.IStartBallPlacement=} [properties] Properties to set
-         * @returns {Change.StartBallPlacement} StartBallPlacement instance
-         */
-        StartBallPlacement.create = function create(properties) {
-            return new StartBallPlacement(properties);
-        };
-
-        /**
-         * Encodes the specified StartBallPlacement message. Does not implicitly {@link Change.StartBallPlacement.verify|verify} messages.
-         * @function encode
-         * @memberof Change.StartBallPlacement
-         * @static
-         * @param {Change.IStartBallPlacement} message StartBallPlacement message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        StartBallPlacement.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            return writer;
-        };
-
-        /**
-         * Encodes the specified StartBallPlacement message, length delimited. Does not implicitly {@link Change.StartBallPlacement.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof Change.StartBallPlacement
-         * @static
-         * @param {Change.IStartBallPlacement} message StartBallPlacement message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        StartBallPlacement.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
-         * Decodes a StartBallPlacement message from the specified reader or buffer.
-         * @function decode
-         * @memberof Change.StartBallPlacement
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @param {number} [length] Message length if known beforehand
-         * @returns {Change.StartBallPlacement} StartBallPlacement
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        StartBallPlacement.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Change.StartBallPlacement();
-            while (reader.pos < end) {
-                let tag = reader.uint32();
-                switch (tag >>> 3) {
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        /**
-         * Decodes a StartBallPlacement message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof Change.StartBallPlacement
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {Change.StartBallPlacement} StartBallPlacement
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        StartBallPlacement.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a StartBallPlacement message.
-         * @function verify
-         * @memberof Change.StartBallPlacement
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        StartBallPlacement.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            return null;
-        };
-
-        /**
-         * Creates a StartBallPlacement message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof Change.StartBallPlacement
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {Change.StartBallPlacement} StartBallPlacement
-         */
-        StartBallPlacement.fromObject = function fromObject(object) {
-            if (object instanceof $root.Change.StartBallPlacement)
-                return object;
-            return new $root.Change.StartBallPlacement();
-        };
-
-        /**
-         * Creates a plain object from a StartBallPlacement message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof Change.StartBallPlacement
-         * @static
-         * @param {Change.StartBallPlacement} message StartBallPlacement
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        StartBallPlacement.toObject = function toObject() {
-            return {};
-        };
-
-        /**
-         * Converts this StartBallPlacement to JSON.
-         * @function toJSON
-         * @memberof Change.StartBallPlacement
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        StartBallPlacement.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        /**
-         * Gets the default type url for StartBallPlacement
-         * @function getTypeUrl
-         * @memberof Change.StartBallPlacement
-         * @static
-         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-         * @returns {string} The default type url
-         */
-        StartBallPlacement.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-            if (typeUrlPrefix === undefined) {
-                typeUrlPrefix = "type.googleapis.com";
-            }
-            return typeUrlPrefix + "/Change.StartBallPlacement";
-        };
-
-        return StartBallPlacement;
-    })();
-
-    Change.Continue = (function() {
-
-        /**
-         * Properties of a Continue.
-         * @memberof Change
-         * @interface IContinue
-         */
-
-        /**
-         * Constructs a new Continue.
-         * @memberof Change
-         * @classdesc Represents a Continue.
-         * @implements IContinue
-         * @constructor
-         * @param {Change.IContinue=} [properties] Properties to set
-         */
-        function Continue(properties) {
-            if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        /**
-         * Creates a new Continue instance using the specified properties.
-         * @function create
-         * @memberof Change.Continue
-         * @static
-         * @param {Change.IContinue=} [properties] Properties to set
-         * @returns {Change.Continue} Continue instance
-         */
-        Continue.create = function create(properties) {
-            return new Continue(properties);
-        };
-
-        /**
-         * Encodes the specified Continue message. Does not implicitly {@link Change.Continue.verify|verify} messages.
-         * @function encode
-         * @memberof Change.Continue
-         * @static
-         * @param {Change.IContinue} message Continue message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        Continue.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            return writer;
-        };
-
-        /**
-         * Encodes the specified Continue message, length delimited. Does not implicitly {@link Change.Continue.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof Change.Continue
-         * @static
-         * @param {Change.IContinue} message Continue message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        Continue.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
-         * Decodes a Continue message from the specified reader or buffer.
-         * @function decode
-         * @memberof Change.Continue
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @param {number} [length] Message length if known beforehand
-         * @returns {Change.Continue} Continue
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        Continue.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.Change.Continue();
-            while (reader.pos < end) {
-                let tag = reader.uint32();
-                switch (tag >>> 3) {
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        /**
-         * Decodes a Continue message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof Change.Continue
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {Change.Continue} Continue
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        Continue.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a Continue message.
-         * @function verify
-         * @memberof Change.Continue
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        Continue.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            return null;
-        };
-
-        /**
-         * Creates a Continue message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof Change.Continue
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {Change.Continue} Continue
-         */
-        Continue.fromObject = function fromObject(object) {
-            if (object instanceof $root.Change.Continue)
-                return object;
-            return new $root.Change.Continue();
-        };
-
-        /**
-         * Creates a plain object from a Continue message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof Change.Continue
-         * @static
-         * @param {Change.Continue} message Continue
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        Continue.toObject = function toObject() {
-            return {};
-        };
-
-        /**
-         * Converts this Continue to JSON.
-         * @function toJSON
-         * @memberof Change.Continue
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        Continue.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        /**
-         * Gets the default type url for Continue
-         * @function getTypeUrl
-         * @memberof Change.Continue
-         * @static
-         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-         * @returns {string} The default type url
-         */
-        Continue.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-            if (typeUrlPrefix === undefined) {
-                typeUrlPrefix = "type.googleapis.com";
-            }
-            return typeUrlPrefix + "/Change.Continue";
-        };
-
-        return Continue;
     })();
 
     Change.UpdateConfig = (function() {
@@ -25636,7 +25216,7 @@ export const Input = $root.Input = (() => {
      * @property {IChange|null} [change] Input change
      * @property {boolean|null} [resetMatch] Input resetMatch
      * @property {IConfig|null} [configDelta] Input configDelta
-     * @property {boolean|null} [autoContinue] Input autoContinue
+     * @property {IContinueAction|null} [continueAction] Input continueAction
      */
 
     /**
@@ -25679,12 +25259,12 @@ export const Input = $root.Input = (() => {
     Input.prototype.configDelta = null;
 
     /**
-     * Input autoContinue.
-     * @member {boolean} autoContinue
+     * Input continueAction.
+     * @member {IContinueAction|null|undefined} continueAction
      * @memberof Input
      * @instance
      */
-    Input.prototype.autoContinue = false;
+    Input.prototype.continueAction = null;
 
     /**
      * Creates a new Input instance using the specified properties.
@@ -25716,8 +25296,8 @@ export const Input = $root.Input = (() => {
             writer.uint32(/* id 2, wireType 0 =*/16).bool(message.resetMatch);
         if (message.configDelta != null && Object.hasOwnProperty.call(message, "configDelta"))
             $root.Config.encode(message.configDelta, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-        if (message.autoContinue != null && Object.hasOwnProperty.call(message, "autoContinue"))
-            writer.uint32(/* id 4, wireType 0 =*/32).bool(message.autoContinue);
+        if (message.continueAction != null && Object.hasOwnProperty.call(message, "continueAction"))
+            $root.ContinueAction.encode(message.continueAction, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
         return writer;
     };
 
@@ -25765,7 +25345,7 @@ export const Input = $root.Input = (() => {
                     break;
                 }
             case 4: {
-                    message.autoContinue = reader.bool();
+                    message.continueAction = $root.ContinueAction.decode(reader, reader.uint32());
                     break;
                 }
             default:
@@ -25816,9 +25396,11 @@ export const Input = $root.Input = (() => {
             if (error)
                 return "configDelta." + error;
         }
-        if (message.autoContinue != null && message.hasOwnProperty("autoContinue"))
-            if (typeof message.autoContinue !== "boolean")
-                return "autoContinue: boolean expected";
+        if (message.continueAction != null && message.hasOwnProperty("continueAction")) {
+            let error = $root.ContinueAction.verify(message.continueAction);
+            if (error)
+                return "continueAction." + error;
+        }
         return null;
     };
 
@@ -25846,8 +25428,11 @@ export const Input = $root.Input = (() => {
                 throw TypeError(".Input.configDelta: object expected");
             message.configDelta = $root.Config.fromObject(object.configDelta);
         }
-        if (object.autoContinue != null)
-            message.autoContinue = Boolean(object.autoContinue);
+        if (object.continueAction != null) {
+            if (typeof object.continueAction !== "object")
+                throw TypeError(".Input.continueAction: object expected");
+            message.continueAction = $root.ContinueAction.fromObject(object.continueAction);
+        }
         return message;
     };
 
@@ -25868,7 +25453,7 @@ export const Input = $root.Input = (() => {
             object.change = null;
             object.resetMatch = false;
             object.configDelta = null;
-            object.autoContinue = false;
+            object.continueAction = null;
         }
         if (message.change != null && message.hasOwnProperty("change"))
             object.change = $root.Change.toObject(message.change, options);
@@ -25876,8 +25461,8 @@ export const Input = $root.Input = (() => {
             object.resetMatch = message.resetMatch;
         if (message.configDelta != null && message.hasOwnProperty("configDelta"))
             object.configDelta = $root.Config.toObject(message.configDelta, options);
-        if (message.autoContinue != null && message.hasOwnProperty("autoContinue"))
-            object.autoContinue = message.autoContinue;
+        if (message.continueAction != null && message.hasOwnProperty("continueAction"))
+            object.continueAction = $root.ContinueAction.toObject(message.continueAction, options);
         return object;
     };
 
@@ -25920,9 +25505,7 @@ export const GcState = $root.GcState = (() => {
      * @property {Object.<string,IGcStateAutoRef>|null} [autoRefState] GcState autoRefState
      * @property {Object.<string,IGcStateTracker>|null} [trackerState] GcState trackerState
      * @property {IGcStateTracker|null} [trackerStateGc] GcState trackerStateGc
-     * @property {boolean|null} [readyToContinue] GcState readyToContinue
-     * @property {Array.<string>|null} [continuationIssues] GcState continuationIssues
-     * @property {boolean|null} [autoContinue] GcState autoContinue
+     * @property {IContinueAction|null} [continueAction] GcState continueAction
      */
 
     /**
@@ -25937,7 +25520,6 @@ export const GcState = $root.GcState = (() => {
         this.teamState = {};
         this.autoRefState = {};
         this.trackerState = {};
-        this.continuationIssues = [];
         if (properties)
             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
@@ -25977,28 +25559,12 @@ export const GcState = $root.GcState = (() => {
     GcState.prototype.trackerStateGc = null;
 
     /**
-     * GcState readyToContinue.
-     * @member {boolean} readyToContinue
+     * GcState continueAction.
+     * @member {IContinueAction|null|undefined} continueAction
      * @memberof GcState
      * @instance
      */
-    GcState.prototype.readyToContinue = false;
-
-    /**
-     * GcState continuationIssues.
-     * @member {Array.<string>} continuationIssues
-     * @memberof GcState
-     * @instance
-     */
-    GcState.prototype.continuationIssues = $util.emptyArray;
-
-    /**
-     * GcState autoContinue.
-     * @member {boolean} autoContinue
-     * @memberof GcState
-     * @instance
-     */
-    GcState.prototype.autoContinue = false;
+    GcState.prototype.continueAction = null;
 
     /**
      * Creates a new GcState instance using the specified properties.
@@ -26041,13 +25607,8 @@ export const GcState = $root.GcState = (() => {
             }
         if (message.trackerStateGc != null && Object.hasOwnProperty.call(message, "trackerStateGc"))
             $root.GcStateTracker.encode(message.trackerStateGc, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
-        if (message.readyToContinue != null && Object.hasOwnProperty.call(message, "readyToContinue"))
-            writer.uint32(/* id 5, wireType 0 =*/40).bool(message.readyToContinue);
-        if (message.continuationIssues != null && message.continuationIssues.length)
-            for (let i = 0; i < message.continuationIssues.length; ++i)
-                writer.uint32(/* id 6, wireType 2 =*/50).string(message.continuationIssues[i]);
-        if (message.autoContinue != null && Object.hasOwnProperty.call(message, "autoContinue"))
-            writer.uint32(/* id 7, wireType 0 =*/56).bool(message.autoContinue);
+        if (message.continueAction != null && Object.hasOwnProperty.call(message, "continueAction"))
+            $root.ContinueAction.encode(message.continueAction, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
         return writer;
     };
 
@@ -26155,18 +25716,8 @@ export const GcState = $root.GcState = (() => {
                     message.trackerStateGc = $root.GcStateTracker.decode(reader, reader.uint32());
                     break;
                 }
-            case 5: {
-                    message.readyToContinue = reader.bool();
-                    break;
-                }
-            case 6: {
-                    if (!(message.continuationIssues && message.continuationIssues.length))
-                        message.continuationIssues = [];
-                    message.continuationIssues.push(reader.string());
-                    break;
-                }
-            case 7: {
-                    message.autoContinue = reader.bool();
+            case 8: {
+                    message.continueAction = $root.ContinueAction.decode(reader, reader.uint32());
                     break;
                 }
             default:
@@ -26239,19 +25790,11 @@ export const GcState = $root.GcState = (() => {
             if (error)
                 return "trackerStateGc." + error;
         }
-        if (message.readyToContinue != null && message.hasOwnProperty("readyToContinue"))
-            if (typeof message.readyToContinue !== "boolean")
-                return "readyToContinue: boolean expected";
-        if (message.continuationIssues != null && message.hasOwnProperty("continuationIssues")) {
-            if (!Array.isArray(message.continuationIssues))
-                return "continuationIssues: array expected";
-            for (let i = 0; i < message.continuationIssues.length; ++i)
-                if (!$util.isString(message.continuationIssues[i]))
-                    return "continuationIssues: string[] expected";
+        if (message.continueAction != null && message.hasOwnProperty("continueAction")) {
+            let error = $root.ContinueAction.verify(message.continueAction);
+            if (error)
+                return "continueAction." + error;
         }
-        if (message.autoContinue != null && message.hasOwnProperty("autoContinue"))
-            if (typeof message.autoContinue !== "boolean")
-                return "autoContinue: boolean expected";
         return null;
     };
 
@@ -26302,17 +25845,11 @@ export const GcState = $root.GcState = (() => {
                 throw TypeError(".GcState.trackerStateGc: object expected");
             message.trackerStateGc = $root.GcStateTracker.fromObject(object.trackerStateGc);
         }
-        if (object.readyToContinue != null)
-            message.readyToContinue = Boolean(object.readyToContinue);
-        if (object.continuationIssues) {
-            if (!Array.isArray(object.continuationIssues))
-                throw TypeError(".GcState.continuationIssues: array expected");
-            message.continuationIssues = [];
-            for (let i = 0; i < object.continuationIssues.length; ++i)
-                message.continuationIssues[i] = String(object.continuationIssues[i]);
+        if (object.continueAction != null) {
+            if (typeof object.continueAction !== "object")
+                throw TypeError(".GcState.continueAction: object expected");
+            message.continueAction = $root.ContinueAction.fromObject(object.continueAction);
         }
-        if (object.autoContinue != null)
-            message.autoContinue = Boolean(object.autoContinue);
         return message;
     };
 
@@ -26329,8 +25866,6 @@ export const GcState = $root.GcState = (() => {
         if (!options)
             options = {};
         let object = {};
-        if (options.arrays || options.defaults)
-            object.continuationIssues = [];
         if (options.objects || options.defaults) {
             object.teamState = {};
             object.autoRefState = {};
@@ -26338,8 +25873,7 @@ export const GcState = $root.GcState = (() => {
         }
         if (options.defaults) {
             object.trackerStateGc = null;
-            object.readyToContinue = false;
-            object.autoContinue = false;
+            object.continueAction = null;
         }
         let keys2;
         if (message.teamState && (keys2 = Object.keys(message.teamState)).length) {
@@ -26359,15 +25893,8 @@ export const GcState = $root.GcState = (() => {
         }
         if (message.trackerStateGc != null && message.hasOwnProperty("trackerStateGc"))
             object.trackerStateGc = $root.GcStateTracker.toObject(message.trackerStateGc, options);
-        if (message.readyToContinue != null && message.hasOwnProperty("readyToContinue"))
-            object.readyToContinue = message.readyToContinue;
-        if (message.continuationIssues && message.continuationIssues.length) {
-            object.continuationIssues = [];
-            for (let j = 0; j < message.continuationIssues.length; ++j)
-                object.continuationIssues[j] = message.continuationIssues[j];
-        }
-        if (message.autoContinue != null && message.hasOwnProperty("autoContinue"))
-            object.autoContinue = message.autoContinue;
+        if (message.continueAction != null && message.hasOwnProperty("continueAction"))
+            object.continueAction = $root.ContinueAction.toObject(message.continueAction, options);
         return object;
     };
 
@@ -27908,6 +27435,381 @@ export const Robot = $root.Robot = (() => {
     return Robot;
 })();
 
+export const ContinueAction = $root.ContinueAction = (() => {
+
+    /**
+     * Properties of a ContinueAction.
+     * @exports IContinueAction
+     * @interface IContinueAction
+     * @property {ContinueAction.Type|null} [type] ContinueAction type
+     * @property {Team|null} [forTeam] ContinueAction forTeam
+     * @property {Array.<string>|null} [continuationIssues] ContinueAction continuationIssues
+     * @property {google.protobuf.ITimestamp|null} [readyAt] ContinueAction readyAt
+     */
+
+    /**
+     * Constructs a new ContinueAction.
+     * @exports ContinueAction
+     * @classdesc Represents a ContinueAction.
+     * @implements IContinueAction
+     * @constructor
+     * @param {IContinueAction=} [properties] Properties to set
+     */
+    function ContinueAction(properties) {
+        this.continuationIssues = [];
+        if (properties)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * ContinueAction type.
+     * @member {ContinueAction.Type} type
+     * @memberof ContinueAction
+     * @instance
+     */
+    ContinueAction.prototype.type = 1;
+
+    /**
+     * ContinueAction forTeam.
+     * @member {Team} forTeam
+     * @memberof ContinueAction
+     * @instance
+     */
+    ContinueAction.prototype.forTeam = 0;
+
+    /**
+     * ContinueAction continuationIssues.
+     * @member {Array.<string>} continuationIssues
+     * @memberof ContinueAction
+     * @instance
+     */
+    ContinueAction.prototype.continuationIssues = $util.emptyArray;
+
+    /**
+     * ContinueAction readyAt.
+     * @member {google.protobuf.ITimestamp|null|undefined} readyAt
+     * @memberof ContinueAction
+     * @instance
+     */
+    ContinueAction.prototype.readyAt = null;
+
+    /**
+     * Creates a new ContinueAction instance using the specified properties.
+     * @function create
+     * @memberof ContinueAction
+     * @static
+     * @param {IContinueAction=} [properties] Properties to set
+     * @returns {ContinueAction} ContinueAction instance
+     */
+    ContinueAction.create = function create(properties) {
+        return new ContinueAction(properties);
+    };
+
+    /**
+     * Encodes the specified ContinueAction message. Does not implicitly {@link ContinueAction.verify|verify} messages.
+     * @function encode
+     * @memberof ContinueAction
+     * @static
+     * @param {IContinueAction} message ContinueAction message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    ContinueAction.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.type != null && Object.hasOwnProperty.call(message, "type"))
+            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.type);
+        if (message.forTeam != null && Object.hasOwnProperty.call(message, "forTeam"))
+            writer.uint32(/* id 2, wireType 0 =*/16).int32(message.forTeam);
+        if (message.continuationIssues != null && message.continuationIssues.length)
+            for (let i = 0; i < message.continuationIssues.length; ++i)
+                writer.uint32(/* id 3, wireType 2 =*/26).string(message.continuationIssues[i]);
+        if (message.readyAt != null && Object.hasOwnProperty.call(message, "readyAt"))
+            $root.google.protobuf.Timestamp.encode(message.readyAt, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+        return writer;
+    };
+
+    /**
+     * Encodes the specified ContinueAction message, length delimited. Does not implicitly {@link ContinueAction.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof ContinueAction
+     * @static
+     * @param {IContinueAction} message ContinueAction message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    ContinueAction.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a ContinueAction message from the specified reader or buffer.
+     * @function decode
+     * @memberof ContinueAction
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {ContinueAction} ContinueAction
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    ContinueAction.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.ContinueAction();
+        while (reader.pos < end) {
+            let tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1: {
+                    message.type = reader.int32();
+                    break;
+                }
+            case 2: {
+                    message.forTeam = reader.int32();
+                    break;
+                }
+            case 3: {
+                    if (!(message.continuationIssues && message.continuationIssues.length))
+                        message.continuationIssues = [];
+                    message.continuationIssues.push(reader.string());
+                    break;
+                }
+            case 4: {
+                    message.readyAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
+                    break;
+                }
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes a ContinueAction message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof ContinueAction
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {ContinueAction} ContinueAction
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    ContinueAction.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a ContinueAction message.
+     * @function verify
+     * @memberof ContinueAction
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    ContinueAction.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (message.type != null && message.hasOwnProperty("type"))
+            switch (message.type) {
+            default:
+                return "type: enum value expected";
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+                break;
+            }
+        if (message.forTeam != null && message.hasOwnProperty("forTeam"))
+            switch (message.forTeam) {
+            default:
+                return "forTeam: enum value expected";
+            case 0:
+            case 1:
+            case 2:
+                break;
+            }
+        if (message.continuationIssues != null && message.hasOwnProperty("continuationIssues")) {
+            if (!Array.isArray(message.continuationIssues))
+                return "continuationIssues: array expected";
+            for (let i = 0; i < message.continuationIssues.length; ++i)
+                if (!$util.isString(message.continuationIssues[i]))
+                    return "continuationIssues: string[] expected";
+        }
+        if (message.readyAt != null && message.hasOwnProperty("readyAt")) {
+            let error = $root.google.protobuf.Timestamp.verify(message.readyAt);
+            if (error)
+                return "readyAt." + error;
+        }
+        return null;
+    };
+
+    /**
+     * Creates a ContinueAction message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof ContinueAction
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {ContinueAction} ContinueAction
+     */
+    ContinueAction.fromObject = function fromObject(object) {
+        if (object instanceof $root.ContinueAction)
+            return object;
+        let message = new $root.ContinueAction();
+        switch (object.type) {
+        case "HALT":
+        case 1:
+            message.type = 1;
+            break;
+        case "STOP":
+        case 2:
+            message.type = 2;
+            break;
+        case "NEXT_COMMAND":
+        case 3:
+            message.type = 3;
+            break;
+        case "BALL_PLACEMENT":
+        case 4:
+            message.type = 4;
+            break;
+        case "TIMEOUT_START":
+        case 5:
+            message.type = 5;
+            break;
+        case "TIMEOUT_STOP":
+        case 6:
+            message.type = 6;
+            break;
+        case "BOT_SUBSTITUTION":
+        case 7:
+            message.type = 7;
+            break;
+        }
+        switch (object.forTeam) {
+        case "UNKNOWN":
+        case 0:
+            message.forTeam = 0;
+            break;
+        case "YELLOW":
+        case 1:
+            message.forTeam = 1;
+            break;
+        case "BLUE":
+        case 2:
+            message.forTeam = 2;
+            break;
+        }
+        if (object.continuationIssues) {
+            if (!Array.isArray(object.continuationIssues))
+                throw TypeError(".ContinueAction.continuationIssues: array expected");
+            message.continuationIssues = [];
+            for (let i = 0; i < object.continuationIssues.length; ++i)
+                message.continuationIssues[i] = String(object.continuationIssues[i]);
+        }
+        if (object.readyAt != null) {
+            if (typeof object.readyAt !== "object")
+                throw TypeError(".ContinueAction.readyAt: object expected");
+            message.readyAt = $root.google.protobuf.Timestamp.fromObject(object.readyAt);
+        }
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a ContinueAction message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof ContinueAction
+     * @static
+     * @param {ContinueAction} message ContinueAction
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    ContinueAction.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        let object = {};
+        if (options.arrays || options.defaults)
+            object.continuationIssues = [];
+        if (options.defaults) {
+            object.type = options.enums === String ? "HALT" : 1;
+            object.forTeam = options.enums === String ? "UNKNOWN" : 0;
+            object.readyAt = null;
+        }
+        if (message.type != null && message.hasOwnProperty("type"))
+            object.type = options.enums === String ? $root.ContinueAction.Type[message.type] : message.type;
+        if (message.forTeam != null && message.hasOwnProperty("forTeam"))
+            object.forTeam = options.enums === String ? $root.Team[message.forTeam] : message.forTeam;
+        if (message.continuationIssues && message.continuationIssues.length) {
+            object.continuationIssues = [];
+            for (let j = 0; j < message.continuationIssues.length; ++j)
+                object.continuationIssues[j] = message.continuationIssues[j];
+        }
+        if (message.readyAt != null && message.hasOwnProperty("readyAt"))
+            object.readyAt = $root.google.protobuf.Timestamp.toObject(message.readyAt, options);
+        return object;
+    };
+
+    /**
+     * Converts this ContinueAction to JSON.
+     * @function toJSON
+     * @memberof ContinueAction
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    ContinueAction.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    /**
+     * Gets the default type url for ContinueAction
+     * @function getTypeUrl
+     * @memberof ContinueAction
+     * @static
+     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+     * @returns {string} The default type url
+     */
+    ContinueAction.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+        if (typeUrlPrefix === undefined) {
+            typeUrlPrefix = "type.googleapis.com";
+        }
+        return typeUrlPrefix + "/ContinueAction";
+    };
+
+    /**
+     * Type enum.
+     * @name ContinueAction.Type
+     * @enum {number}
+     * @property {number} HALT=1 HALT value
+     * @property {number} STOP=2 STOP value
+     * @property {number} NEXT_COMMAND=3 NEXT_COMMAND value
+     * @property {number} BALL_PLACEMENT=4 BALL_PLACEMENT value
+     * @property {number} TIMEOUT_START=5 TIMEOUT_START value
+     * @property {number} TIMEOUT_STOP=6 TIMEOUT_STOP value
+     * @property {number} BOT_SUBSTITUTION=7 BOT_SUBSTITUTION value
+     */
+    ContinueAction.Type = (function() {
+        const valuesById = {}, values = Object.create(valuesById);
+        values[valuesById[1] = "HALT"] = 1;
+        values[valuesById[2] = "STOP"] = 2;
+        values[valuesById[3] = "NEXT_COMMAND"] = 3;
+        values[valuesById[4] = "BALL_PLACEMENT"] = 4;
+        values[valuesById[5] = "TIMEOUT_START"] = 5;
+        values[valuesById[6] = "TIMEOUT_STOP"] = 6;
+        values[valuesById[7] = "BOT_SUBSTITUTION"] = 7;
+        return values;
+    })();
+
+    return ContinueAction;
+})();
+
 export const Config = $root.Config = (() => {
 
     /**
@@ -27918,6 +27820,7 @@ export const Config = $root.Config = (() => {
      * @property {Object.<string,IAutoRefConfig>|null} [autoRefConfigs] Config autoRefConfigs
      * @property {string|null} [activeTrackerSource] Config activeTrackerSource
      * @property {Array.<string>|null} [teams] Config teams
+     * @property {boolean|null} [autoContinue] Config autoContinue
      */
 
     /**
@@ -27971,6 +27874,14 @@ export const Config = $root.Config = (() => {
     Config.prototype.teams = $util.emptyArray;
 
     /**
+     * Config autoContinue.
+     * @member {boolean} autoContinue
+     * @memberof Config
+     * @instance
+     */
+    Config.prototype.autoContinue = false;
+
+    /**
      * Creates a new Config instance using the specified properties.
      * @function create
      * @memberof Config
@@ -28007,6 +27918,8 @@ export const Config = $root.Config = (() => {
         if (message.teams != null && message.teams.length)
             for (let i = 0; i < message.teams.length; ++i)
                 writer.uint32(/* id 4, wireType 2 =*/34).string(message.teams[i]);
+        if (message.autoContinue != null && Object.hasOwnProperty.call(message, "autoContinue"))
+            writer.uint32(/* id 5, wireType 0 =*/40).bool(message.autoContinue);
         return writer;
     };
 
@@ -28097,6 +28010,10 @@ export const Config = $root.Config = (() => {
                     message.teams.push(reader.string());
                     break;
                 }
+            case 5: {
+                    message.autoContinue = reader.bool();
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
@@ -28169,6 +28086,9 @@ export const Config = $root.Config = (() => {
                 if (!$util.isString(message.teams[i]))
                     return "teams: string[] expected";
         }
+        if (message.autoContinue != null && message.hasOwnProperty("autoContinue"))
+            if (typeof message.autoContinue !== "boolean")
+                return "autoContinue: boolean expected";
         return null;
     };
 
@@ -28235,6 +28155,8 @@ export const Config = $root.Config = (() => {
             for (let i = 0; i < object.teams.length; ++i)
                 message.teams[i] = String(object.teams[i]);
         }
+        if (object.autoContinue != null)
+            message.autoContinue = Boolean(object.autoContinue);
         return message;
     };
 
@@ -28257,8 +28179,10 @@ export const Config = $root.Config = (() => {
             object.gameEventBehavior = {};
             object.autoRefConfigs = {};
         }
-        if (options.defaults)
+        if (options.defaults) {
             object.activeTrackerSource = "";
+            object.autoContinue = false;
+        }
         let keys2;
         if (message.gameEventBehavior && (keys2 = Object.keys(message.gameEventBehavior)).length) {
             object.gameEventBehavior = {};
@@ -28277,6 +28201,8 @@ export const Config = $root.Config = (() => {
             for (let j = 0; j < message.teams.length; ++j)
                 object.teams[j] = message.teams[j];
         }
+        if (message.autoContinue != null && message.hasOwnProperty("autoContinue"))
+            object.autoContinue = message.autoContinue;
         return object;
     };
 

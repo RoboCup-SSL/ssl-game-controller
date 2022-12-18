@@ -62,6 +62,8 @@ func DefaultConfig() (x Config) {
 		x.GameEventBehavior[event.String()] = Config_BEHAVIOR_ACCEPT_MAJORITY
 	}
 	x.Teams = defaultTeams
+	x.AutoContinue = new(bool)
+	*x.AutoContinue = true
 	return
 }
 
@@ -112,6 +114,10 @@ func (x *Config) ReadFrom(fileName string) (err error) {
 		x.Teams = append(x.Teams, t)
 	}
 	sort.Strings(x.Teams)
+
+	if x.AutoContinue == nil {
+		x.AutoContinue = defConfig.AutoContinue
+	}
 
 	return
 }

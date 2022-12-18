@@ -25,3 +25,10 @@ func (x Team) Opposite() Team {
 	}
 	return x
 }
+
+// NewTeam allocates a new Team object and assigns the given value
+func NewTeam(team Team) *Team {
+	t := new(Team)
+	*t = team
+	return t
+}

@@ -33,6 +33,6 @@ export const submitConfigUpdate = function (configDelta) {
     vueApp.$socket.sendObj({configDelta});
 };
 
-export const setAutoContinue = function (enabled) {
-    vueApp.$socket.sendObj({autoContinue: enabled});
+export const submitContinueAction = function (action) {
+    vueApp.$socket.sendObj({continueAction: action});
 };

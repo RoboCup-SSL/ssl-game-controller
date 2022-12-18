@@ -12,6 +12,7 @@ import (
 	"google.golang.org/protobuf/types/known/durationpb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"log"
+	"math/rand"
 	"sync"
 	"time"
 )
@@ -26,7 +27,8 @@ type Engine struct {
 	stateStore               *store.Store
 	currentState             *state.State
 	stateMachine             *statemachine.StateMachine
-	queue                    chan *statemachine.Change
+	changeQueue              chan *statemachine.Change
+	continueQueue            chan *ContinueAction
 	hooks                    map[string]chan HookOut
 	timeProvider             timer.TimeProvider
 	lastTimeUpdate           time.Time
@@ -38,6 +40,7 @@ type Engine struct {
 	ballPlacementCoordinator BallPlacementCoordinator
 	botNumberProcessor       BotNumberProcessor
 	tickChanProvider         func() <-chan time.Time
+	rand                     *rand.Rand
 }
 
 // NewEngine creates a new engine
@@ -48,7 +51,8 @@ func NewEngine(gameConfig config.Game, engineConfig config.Engine) (e *Engine) {
 	e.gameConfig = gameConfig
 	e.stateStore = store.NewStore(gameConfig.StateStoreFile)
 	e.stateMachine = statemachine.NewStateMachine(gameConfig)
-	e.queue = make(chan *statemachine.Change, 100)
+	e.changeQueue = make(chan *statemachine.Change, 100)
+	e.continueQueue = make(chan *ContinueAction, 100)
 	e.hooks = map[string]chan HookOut{}
 	e.SetTimeProvider(func() time.Time { return time.Now() })
 	e.gcState = new(GcState)
@@ -59,8 +63,6 @@ func NewEngine(gameConfig config.Game, engineConfig config.Engine) (e *Engine) {
 	e.gcState.AutoRefState = map[string]*GcStateAutoRef{}
 	e.gcState.TrackerState = map[string]*GcStateTracker{}
 	e.gcState.TrackerStateGc = &GcStateTracker{}
-	e.gcState.AutoContinue = new(bool)
-	*e.gcState.AutoContinue = true
 	e.trackerLastUpdate = map[string]time.Time{}
 	e.noProgressDetector = NoProgressDetector{gcEngine: e}
 	e.ballPlacementCoordinator = BallPlacementCoordinator{gcEngine: e}
@@ -68,6 +70,7 @@ func NewEngine(gameConfig config.Game, engineConfig config.Engine) (e *Engine) {
 	e.tickChanProvider = func() <-chan time.Time {
 		return time.After(25 * time.Millisecond)
 	}
+	e.rand = rand.New(rand.NewSource(time.Now().Unix()))
 	return
 }
 
@@ -84,7 +87,12 @@ func (e *Engine) Enqueue(change *statemachine.Change) {
 		// Assume that changes from outside are by default revertible, except if the flag is already set
 		*change.Revertible = true
 	}
-	e.queue <- change
+	e.changeQueue <- change
+}
+
+// Continue adds the continue action to the continue queue
+func (e *Engine) Continue(action *ContinueAction) {
+	e.continueQueue <- action
 }
 
 // EnqueueBlocking adds the change to the change queue and waits for application
@@ -199,7 +207,8 @@ func (e *Engine) Start() error {
 func (e *Engine) Stop() {
 	e.mutex.Lock()
 	defer e.mutex.Unlock()
-	close(e.queue)
+	close(e.changeQueue)
+	close(e.continueQueue)
 	if err := e.stateStore.Close(); err != nil {
 		log.Printf("Could not close store: %v", err)
 	}
@@ -254,11 +263,16 @@ func (e *Engine) LatestChangeId() int32 {
 func (e *Engine) processChanges() {
 	for {
 		select {
-		case change, ok := <-e.queue:
+		case change, ok := <-e.changeQueue:
 			if !ok {
 				return
 			}
 			e.processChangeList([]*statemachine.Change{change})
+		case action, ok := <-e.continueQueue:
+			if !ok {
+				return
+			}
+			e.performContinueAction(action)
 		case <-e.tickChanProvider():
 			e.processTick()
 		}
@@ -274,14 +288,6 @@ func (e *Engine) ResetMatch() {
 	} else {
 		e.currentState = e.initialStateFromStore()
 	}
-}
-
-// SetAutoContinue enables or disables auto continuation
-func (e *Engine) SetAutoContinue(enabled bool) {
-	e.mutex.Lock()
-	defer e.mutex.Unlock()
-	log.Printf("Change auto continue to %v", enabled)
-	*e.gcState.AutoContinue = enabled
 }
 
 func (e *Engine) processChangeList(changes []*statemachine.Change) {
@@ -334,7 +340,6 @@ func (e *Engine) processChange(change *statemachine.Change) (newChanges []*state
 			}
 		}
 	} else {
-		e.stateMachine.AutoContinue = e.gcState.GetAutoContinue()
 		entry.State, newChanges = e.stateMachine.Process(e.currentState, change)
 	}
 
@@ -392,13 +397,6 @@ func (e *Engine) postProcessChange(entry *statemachine.StateChange) {
 		*change.GetChangeStageChange().NewStage == state.Referee_NORMAL_FIRST_HALF {
 		e.currentState.MatchTimeStart = timestamppb.New(e.timeProvider())
 	}
-	if change.GetNewCommandChange() != nil &&
-		*change.GetNewCommandChange().Command.Type == state.Command_STOP &&
-		// include STOP from last state as well, as game events may come in shortly after state changed to STOP
-		// for example if two robots dribbled ball to far, autoRefs will trigger two events after each other
-		(entry.StatePre.Command.IsRunning() || *entry.StatePre.Command.Type == state.Command_STOP) {
-		e.processRunningToStop()
-	}
 }
 
 // GetConfig returns a deep copy of the current config
@@ -432,6 +430,9 @@ func (e *Engine) UpdateConfig(delta *Config) {
 	}
 	if delta.ActiveTrackerSource != nil {
 		e.config.ActiveTrackerSource = delta.ActiveTrackerSource
+	}
+	if delta.AutoContinue != nil {
+		e.config.AutoContinue = delta.AutoContinue
 	}
 	log.Printf("Engine config updated to %v", e.config.StringJson())
 	if err := e.config.WriteTo(e.engineConfig.ConfigFilename); err != nil {

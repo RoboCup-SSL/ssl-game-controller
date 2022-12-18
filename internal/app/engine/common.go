@@ -49,11 +49,8 @@ func addDur(duration *durationpb.Duration, delta time.Duration) {
 	*duration = *durationpb.New(duration.AsDuration() + delta)
 }
 
-func (e *Engine) ballSteady() bool {
-	if e.gcState.TrackerStateGc.Ball == nil || e.gcState.TrackerStateGc.Ball.Vel == nil {
-		return true
-	}
-	return e.gcState.TrackerStateGc.Ball.Vel.ToVector2().Length() < ballSteadyThreshold
+func (e *Ball) IsSteady() bool {
+	return e.Vel == nil || e.Vel.ToVector2().Length() < ballSteadyThreshold
 }
 
 func (x *GcStateTracker) NumTeamRobots(team state.Team) (count int32) {
@@ -63,4 +60,11 @@ func (x *GcStateTracker) NumTeamRobots(team state.Team) (count int32) {
 		}
 	}
 	return
+}
+
+// NewContinueActionType allocates a new ContinueActionType object and assigns the given value
+func NewContinueActionType(action ContinueAction_Type) *ContinueAction_Type {
+	a := new(ContinueAction_Type)
+	*a = action
+	return a
 }
