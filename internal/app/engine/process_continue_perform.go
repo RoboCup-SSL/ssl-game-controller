@@ -26,19 +26,21 @@ func (e *Engine) performContinueAction(action *ContinueAction) {
 	case ContinueAction_NEXT_COMMAND:
 		e.Enqueue(statemachine.CreateCommandChange(e.currentState.NextCommand))
 	case ContinueAction_BALL_PLACEMENT:
-		if action.ForTeam != nil {
+		if action.ForTeam.Known() {
 			e.Enqueue(statemachine.CreateCommandChange(state.NewCommand(state.Command_BALL_PLACEMENT, *action.ForTeam)))
 		} else {
 			logWillNotContinue("No team for ball placement specified")
 		}
 	case ContinueAction_TIMEOUT_START:
-		if action.ForTeam != nil {
+		if action.ForTeam.Known() {
 			e.Enqueue(statemachine.CreateCommandChange(state.NewCommand(state.Command_TIMEOUT, *action.ForTeam)))
 		} else {
 			logWillNotContinue("No team for timeout specified")
 		}
 	case ContinueAction_BOT_SUBSTITUTION:
-		e.Enqueue(statemachine.CreateBotSubstitutionEventChange(action.ForTeam))
+		e.Enqueue(statemachine.CreateBotSubstitutionEventChange(*action.ForTeam))
+	case ContinueAction_NEXT_STAGE:
+		e.Enqueue(statemachine.CreateStageChange(e.currentState.Stage.Next()))
 	}
 }
 

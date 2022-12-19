@@ -438,6 +438,7 @@ func stopsTheGame(gameEvent state.GameEvent_Type) bool {
 		state.GameEvent_NO_PROGRESS_IN_GAME,
 		state.GameEvent_PENALTY_KICK_FAILED,
 		state.GameEvent_PLACEMENT_SUCCEEDED,
+		state.GameEvent_PLACEMENT_FAILED,
 		state.GameEvent_INVALID_GOAL,
 		state.GameEvent_GOAL:
 		return true

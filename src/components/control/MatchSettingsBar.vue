@@ -86,7 +86,7 @@
                 return this.$store.state.matchState.stage === 'POST_GAME';
             },
             autoContinue() {
-                return this.$store.state.gcState.autoContinue;
+                return this.$store.state.config.autoContinue;
             },
             keymapToggleAutoRef() {
                 return {

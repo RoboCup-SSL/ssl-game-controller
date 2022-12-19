@@ -27441,10 +27441,11 @@ export const ContinueAction = $root.ContinueAction = (() => {
      * Properties of a ContinueAction.
      * @exports IContinueAction
      * @interface IContinueAction
-     * @property {ContinueAction.Type|null} [type] ContinueAction type
-     * @property {Team|null} [forTeam] ContinueAction forTeam
+     * @property {ContinueAction.Type} type ContinueAction type
+     * @property {Team} forTeam ContinueAction forTeam
      * @property {Array.<string>|null} [continuationIssues] ContinueAction continuationIssues
      * @property {google.protobuf.ITimestamp|null} [readyAt] ContinueAction readyAt
+     * @property {boolean|null} [ready] ContinueAction ready
      */
 
     /**
@@ -27469,7 +27470,7 @@ export const ContinueAction = $root.ContinueAction = (() => {
      * @memberof ContinueAction
      * @instance
      */
-    ContinueAction.prototype.type = 1;
+    ContinueAction.prototype.type = 0;
 
     /**
      * ContinueAction forTeam.
@@ -27496,6 +27497,14 @@ export const ContinueAction = $root.ContinueAction = (() => {
     ContinueAction.prototype.readyAt = null;
 
     /**
+     * ContinueAction ready.
+     * @member {boolean} ready
+     * @memberof ContinueAction
+     * @instance
+     */
+    ContinueAction.prototype.ready = false;
+
+    /**
      * Creates a new ContinueAction instance using the specified properties.
      * @function create
      * @memberof ContinueAction
@@ -27519,15 +27528,15 @@ export const ContinueAction = $root.ContinueAction = (() => {
     ContinueAction.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
-        if (message.type != null && Object.hasOwnProperty.call(message, "type"))
-            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.type);
-        if (message.forTeam != null && Object.hasOwnProperty.call(message, "forTeam"))
-            writer.uint32(/* id 2, wireType 0 =*/16).int32(message.forTeam);
+        writer.uint32(/* id 1, wireType 0 =*/8).int32(message.type);
+        writer.uint32(/* id 2, wireType 0 =*/16).int32(message.forTeam);
         if (message.continuationIssues != null && message.continuationIssues.length)
             for (let i = 0; i < message.continuationIssues.length; ++i)
                 writer.uint32(/* id 3, wireType 2 =*/26).string(message.continuationIssues[i]);
         if (message.readyAt != null && Object.hasOwnProperty.call(message, "readyAt"))
             $root.google.protobuf.Timestamp.encode(message.readyAt, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+        if (message.ready != null && Object.hasOwnProperty.call(message, "ready"))
+            writer.uint32(/* id 5, wireType 0 =*/40).bool(message.ready);
         return writer;
     };
 
@@ -27580,11 +27589,19 @@ export const ContinueAction = $root.ContinueAction = (() => {
                     message.readyAt = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
                     break;
                 }
+            case 5: {
+                    message.ready = reader.bool();
+                    break;
+                }
             default:
                 reader.skipType(tag & 7);
                 break;
             }
         }
+        if (!message.hasOwnProperty("type"))
+            throw $util.ProtocolError("missing required 'type'", { instance: message });
+        if (!message.hasOwnProperty("forTeam"))
+            throw $util.ProtocolError("missing required 'forTeam'", { instance: message });
         return message;
     };
 
@@ -27615,28 +27632,28 @@ export const ContinueAction = $root.ContinueAction = (() => {
     ContinueAction.verify = function verify(message) {
         if (typeof message !== "object" || message === null)
             return "object expected";
-        if (message.type != null && message.hasOwnProperty("type"))
-            switch (message.type) {
-            default:
-                return "type: enum value expected";
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-            case 7:
-                break;
-            }
-        if (message.forTeam != null && message.hasOwnProperty("forTeam"))
-            switch (message.forTeam) {
-            default:
-                return "forTeam: enum value expected";
-            case 0:
-            case 1:
-            case 2:
-                break;
-            }
+        switch (message.type) {
+        default:
+            return "type: enum value expected";
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+            break;
+        }
+        switch (message.forTeam) {
+        default:
+            return "forTeam: enum value expected";
+        case 0:
+        case 1:
+        case 2:
+            break;
+        }
         if (message.continuationIssues != null && message.hasOwnProperty("continuationIssues")) {
             if (!Array.isArray(message.continuationIssues))
                 return "continuationIssues: array expected";
@@ -27649,6 +27666,9 @@ export const ContinueAction = $root.ContinueAction = (() => {
             if (error)
                 return "readyAt." + error;
         }
+        if (message.ready != null && message.hasOwnProperty("ready"))
+            if (typeof message.ready !== "boolean")
+                return "ready: boolean expected";
         return null;
     };
 
@@ -27665,6 +27685,10 @@ export const ContinueAction = $root.ContinueAction = (() => {
             return object;
         let message = new $root.ContinueAction();
         switch (object.type) {
+        case "UNKNOWN":
+        case 0:
+            message.type = 0;
+            break;
         case "HALT":
         case 1:
             message.type = 1;
@@ -27693,6 +27717,10 @@ export const ContinueAction = $root.ContinueAction = (() => {
         case 7:
             message.type = 7;
             break;
+        case "NEXT_STAGE":
+        case 8:
+            message.type = 8;
+            break;
         }
         switch (object.forTeam) {
         case "UNKNOWN":
@@ -27720,6 +27748,8 @@ export const ContinueAction = $root.ContinueAction = (() => {
                 throw TypeError(".ContinueAction.readyAt: object expected");
             message.readyAt = $root.google.protobuf.Timestamp.fromObject(object.readyAt);
         }
+        if (object.ready != null)
+            message.ready = Boolean(object.ready);
         return message;
     };
 
@@ -27739,9 +27769,10 @@ export const ContinueAction = $root.ContinueAction = (() => {
         if (options.arrays || options.defaults)
             object.continuationIssues = [];
         if (options.defaults) {
-            object.type = options.enums === String ? "HALT" : 1;
+            object.type = options.enums === String ? "UNKNOWN" : 0;
             object.forTeam = options.enums === String ? "UNKNOWN" : 0;
             object.readyAt = null;
+            object.ready = false;
         }
         if (message.type != null && message.hasOwnProperty("type"))
             object.type = options.enums === String ? $root.ContinueAction.Type[message.type] : message.type;
@@ -27754,6 +27785,8 @@ export const ContinueAction = $root.ContinueAction = (() => {
         }
         if (message.readyAt != null && message.hasOwnProperty("readyAt"))
             object.readyAt = $root.google.protobuf.Timestamp.toObject(message.readyAt, options);
+        if (message.ready != null && message.hasOwnProperty("ready"))
+            object.ready = message.ready;
         return object;
     };
 
@@ -27787,6 +27820,7 @@ export const ContinueAction = $root.ContinueAction = (() => {
      * Type enum.
      * @name ContinueAction.Type
      * @enum {number}
+     * @property {number} UNKNOWN=0 UNKNOWN value
      * @property {number} HALT=1 HALT value
      * @property {number} STOP=2 STOP value
      * @property {number} NEXT_COMMAND=3 NEXT_COMMAND value
@@ -27794,9 +27828,11 @@ export const ContinueAction = $root.ContinueAction = (() => {
      * @property {number} TIMEOUT_START=5 TIMEOUT_START value
      * @property {number} TIMEOUT_STOP=6 TIMEOUT_STOP value
      * @property {number} BOT_SUBSTITUTION=7 BOT_SUBSTITUTION value
+     * @property {number} NEXT_STAGE=8 NEXT_STAGE value
      */
     ContinueAction.Type = (function() {
         const valuesById = {}, values = Object.create(valuesById);
+        values[valuesById[0] = "UNKNOWN"] = 0;
         values[valuesById[1] = "HALT"] = 1;
         values[valuesById[2] = "STOP"] = 2;
         values[valuesById[3] = "NEXT_COMMAND"] = 3;
@@ -27804,6 +27840,7 @@ export const ContinueAction = $root.ContinueAction = (() => {
         values[valuesById[5] = "TIMEOUT_START"] = 5;
         values[valuesById[6] = "TIMEOUT_STOP"] = 6;
         values[valuesById[7] = "BOT_SUBSTITUTION"] = 7;
+        values[valuesById[8] = "NEXT_STAGE"] = 8;
         return values;
     })();
 

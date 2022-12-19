@@ -6,22 +6,31 @@ import (
 	"log"
 )
 
-func (e *Engine) nextAction() (*ContinueAction_Type, *state.Team) {
+func (e *Engine) nextAction() (ContinueAction_Type, state.Team) {
+	if e.currentState.Stage.IsPausedStage() {
+		if *e.currentState.Stage.Next() != *e.currentState.Stage {
+			return ContinueAction_NEXT_STAGE, state.Team_UNKNOWN
+		}
+		return ContinueAction_UNKNOWN, state.Team_UNKNOWN
+	}
+
 	if e.currentState.Command.IsRunning() ||
-		*e.currentState.Command.Type == state.Command_BALL_PLACEMENT ||
-		e.currentState.Stage.IsPausedStage() {
-		// match is running or ball placement in progress -> nothing to continue
-		return nil, nil
+		*e.currentState.Command.Type == state.Command_BALL_PLACEMENT {
+		return ContinueAction_STOP, state.Team_UNKNOWN
+	}
+
+	if *e.currentState.Command.Type == state.Command_TIMEOUT {
+		return ContinueAction_TIMEOUT_STOP, *e.currentState.Command.ForTeam
 	}
 
 	if e.currentState.TeamInfo(state.Team_BLUE).RequestsBotSubstitutionSince != nil &&
 		e.currentState.TeamInfo(state.Team_YELLOW).RequestsBotSubstitutionSince != nil {
-		return NewContinueActionType(ContinueAction_BOT_SUBSTITUTION), nil
+		return ContinueAction_BOT_SUBSTITUTION, state.Team_UNKNOWN
 	}
 
 	for _, team := range state.BothTeams() {
 		if e.currentState.TeamInfo(team).RequestsBotSubstitutionSince != nil {
-			return NewContinueActionType(ContinueAction_BOT_SUBSTITUTION), &team
+			return ContinueAction_BOT_SUBSTITUTION, team
 		}
 	}
 
@@ -29,14 +38,14 @@ func (e *Engine) nextAction() (*ContinueAction_Type, *state.Team) {
 		e.currentState.TeamInfo(state.Team_YELLOW).RequestsTimeoutSince != nil {
 		if e.currentState.TeamInfo(state.Team_BLUE).RequestsTimeoutSince.AsTime().
 			Before(e.currentState.TeamInfo(state.Team_YELLOW).RequestsTimeoutSince.AsTime()) {
-			return NewContinueActionType(ContinueAction_TIMEOUT_START), state.NewTeam(state.Team_BLUE)
+			return ContinueAction_TIMEOUT_START, state.Team_BLUE
 		} else {
-			return NewContinueActionType(ContinueAction_TIMEOUT_START), state.NewTeam(state.Team_YELLOW)
+			return ContinueAction_TIMEOUT_START, state.Team_YELLOW
 		}
 	} else {
 		for _, team := range state.BothTeams() {
 			if e.currentState.TeamInfo(team).RequestsTimeoutSince != nil {
-				return NewContinueActionType(ContinueAction_TIMEOUT_START), &team
+				return ContinueAction_TIMEOUT_START, team
 			}
 		}
 	}
@@ -44,23 +53,20 @@ func (e *Engine) nextAction() (*ContinueAction_Type, *state.Team) {
 	if e.ballPlacementRequired() {
 		placingTeam := e.ballPlacementTeam()
 		if placingTeam.Known() {
-			return NewContinueActionType(ContinueAction_BALL_PLACEMENT), &placingTeam
+			return ContinueAction_BALL_PLACEMENT, placingTeam
 		}
 	}
 
-	if *e.currentState.Command.Type == state.Command_TIMEOUT {
-		return NewContinueActionType(ContinueAction_TIMEOUT_STOP), nil
-	}
 	if *e.currentState.Command.Type == state.Command_HALT {
-		return NewContinueActionType(ContinueAction_STOP), nil
+		return ContinueAction_STOP, state.Team_UNKNOWN
 	}
 	if e.currentState.NextCommand != nil {
-		return NewContinueActionType(ContinueAction_NEXT_COMMAND), e.currentState.NextCommand.ForTeam
+		return ContinueAction_NEXT_COMMAND, *e.currentState.NextCommand.ForTeam
 	}
 	if *e.currentState.Command.Type != state.Command_HALT {
-		return NewContinueActionType(ContinueAction_HALT), nil
+		return ContinueAction_HALT, state.Team_UNKNOWN
 	}
-	return nil, nil
+	return ContinueAction_UNKNOWN, state.Team_UNKNOWN
 }
 
 func (e *Engine) ballPlacementRequired() bool {
@@ -73,6 +79,11 @@ func (e *Engine) ballPlacementRequired() bool {
 		(*e.currentState.NextCommand.Type == state.Command_PENALTY ||
 			*e.currentState.NextCommand.Type == state.Command_KICKOFF) {
 		// no ball placement for penalty kicks and kickoffs
+		return false
+	}
+
+	if len(e.currentState.FindGameEvents(state.GameEvent_PLACEMENT_SUCCEEDED)) > 0 {
+		// ball placement was already successful
 		return false
 	}
 

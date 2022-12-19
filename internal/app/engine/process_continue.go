@@ -12,7 +12,7 @@ const minPreparationTime = time.Second * 2
 func (e *Engine) processContinue() {
 
 	nextActionType, nextActionForTeam := e.nextAction()
-	if nextActionType == nil {
+	if nextActionType == ContinueAction_UNKNOWN {
 		e.gcState.ContinueAction = nil
 		return
 	}
@@ -21,26 +21,31 @@ func (e *Engine) processContinue() {
 		e.gcState.ContinueAction = &ContinueAction{}
 	}
 
+	var ready = true
 	var continuationIssues []string
-	if *nextActionType == ContinueAction_NEXT_COMMAND {
+	if nextActionType == ContinueAction_NEXT_COMMAND {
 		continuationIssues = e.findIssuesForContinuation()
 		issuesPresent := len(continuationIssues) > 0
 
 		if issuesPresent {
 			e.gcState.ContinueAction.ReadyAt = nil
+			ready = false
 		} else if e.gcState.ContinueAction.ReadyAt == nil {
 			e.gcState.ContinueAction.ReadyAt = timestamppb.New(e.timeProvider().Add(e.preparationTime()))
+			ready = false
 		} else {
 			preparationTimeLeft := e.gcState.ContinueAction.ReadyAt.AsTime().Sub(e.timeProvider())
+			ready = preparationTimeLeft <= 0
 			if preparationTimeLeft > 0 {
 				continuationIssues = append(continuationIssues, fmt.Sprintf("%.1fs left for preparation", preparationTimeLeft.Seconds()))
 			}
 		}
 	}
 
-	e.gcState.ContinueAction.Type = nextActionType
-	e.gcState.ContinueAction.ForTeam = nextActionForTeam
+	e.gcState.ContinueAction.Type = &nextActionType
+	e.gcState.ContinueAction.ForTeam = &nextActionForTeam
 	e.gcState.ContinueAction.ContinuationIssues = continuationIssues
+	e.gcState.ContinueAction.Ready = &ready
 
 	if len(continuationIssues) == 0 &&
 		*e.config.AutoContinue &&

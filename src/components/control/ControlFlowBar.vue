@@ -23,7 +23,7 @@
                         Stop
                     </template>
                     <template v-else-if="continueAction.type === 'NEXT_COMMAND'">
-                        <span :class="teamColorClass">{{ nextCommand.type }}</span>
+                        <span :class="teamColorClass">{{ nextCommand }}</span>
                     </template>
                     <template v-else-if="continueAction.type === 'BALL_PLACEMENT'">
                         <span :class="teamColorClass">Ball Placement</span>
@@ -36,6 +36,9 @@
                     </template>
                     <template v-else-if="continueAction.type === 'BOT_SUBSTITUTION'">
                         <span :class="teamColorClass">Bot Substitution</span>
+                    </template>
+                    <template v-else-if="continueAction.type === 'NEXT_STAGE'">
+                        <span :class="teamColorClass">Next stage</span>
                     </template>
                     <span v-for="issue of continuationIssues" v-bind:key="issue">
                     <br>
@@ -87,7 +90,11 @@ export default {
             return this.$store.state.matchState.command.type === 'HALT';
         },
         nextCommand() {
-            return this.$store.state.matchState.nextCommand;
+            const command = this.$store.state.matchState.nextCommand;
+            if (command !== null) {
+                return command.type;
+            }
+            return "";
         },
         continueAction() {
             return this.$store.state.gcState.continueAction;
@@ -100,13 +107,16 @@ export default {
         },
         readyToContinue() {
             return this.continueAction !== null &&
-                this.continueAction.continuationIssues.length === 0;
+                this.continueAction.ready;
         },
         teamColorClass() {
+            if (this.continueAction === null) {
+                return {};
+            }
             return {
                 'team-blue': this.continueAction.forTeam === TEAM_BLUE,
                 'team-yellow': this.continueAction.forTeam === TEAM_YELLOW,
-            }
+            };
         },
         continueButtonClass() {
             if (this.readyToContinue) {

@@ -99,10 +99,10 @@ message Robot {
 
 message ContinueAction {
     // type of action that will be performed next
-    optional Type type = 1;
+    required Type type = 1;
 
     // for which team (if team specific)
-    optional Team for_team = 2;
+    required Team for_team = 2;
 
     // list of issues that hinders the game from continuing
     repeated string continuation_issues = 3;
@@ -110,7 +110,11 @@ message ContinueAction {
     // timestamp at which the action will be ready (to give some preparation time)
     optional google.protobuf.Timestamp ready_at = 4;
 
+    // indication if the action is ready to continue
+    optional bool ready = 5;
+
     enum Type {
+        UNKNOWN = 0;
         HALT = 1;
         STOP = 2;
         NEXT_COMMAND = 3;
@@ -118,5 +122,6 @@ message ContinueAction {
         TIMEOUT_START = 5;
         TIMEOUT_STOP = 6;
         BOT_SUBSTITUTION = 7;
+        NEXT_STAGE = 8;
     }
 }

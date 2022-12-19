@@ -28,12 +28,23 @@ func CreateGameEventChange(eventType state.GameEvent_Type, event *state.GameEven
 }
 
 // CreateBotSubstitutionEventChange creates a new change for bot substitution
-func CreateBotSubstitutionEventChange(byTeam *state.Team) *Change {
+func CreateBotSubstitutionEventChange(byTeam state.Team) *Change {
 	return CreateGameEventChange(state.GameEvent_BOT_SUBSTITUTION, &state.GameEvent{
 		Event: &state.GameEvent_BotSubstitution_{
 			BotSubstitution: &state.GameEvent_BotSubstitution{
-				ByTeam: byTeam,
+				ByTeam: &byTeam,
 			},
 		},
 	})
+}
+
+// CreateStageChange creates a change with a new stage
+func CreateStageChange(stage *state.Referee_Stage) *Change {
+	return &Change{
+		Change: &Change_ChangeStageChange{
+			ChangeStageChange: &Change_ChangeStage{
+				NewStage: stage,
+			},
+		},
+	}
 }
