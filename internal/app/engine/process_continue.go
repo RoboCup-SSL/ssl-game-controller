@@ -53,8 +53,7 @@ func (e *Engine) preparationTime() time.Duration {
 	events := e.currentState.GameEvents
 	if len(events) > 0 {
 		lastEvent := events[len(events)-1]
-		if e.currentState.NextCommand.ForTeam != nil &&
-			*lastEvent.Type == state.GameEvent_PLACEMENT_SUCCEEDED &&
+		if *lastEvent.Type == state.GameEvent_PLACEMENT_SUCCEEDED &&
 			lastEvent.ByTeam() == *e.currentState.NextCommand.ForTeam {
 			return 0
 		}

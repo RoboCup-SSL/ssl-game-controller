@@ -9,7 +9,8 @@ func NewCommand(t Command_Type, forTeam Team) (c *Command) {
 
 // NewCommandNeutral creates a new command without a team
 func NewCommandNeutral(t Command_Type) (c *Command) {
-	return &Command{Type: &t}
+	forTeam := Team_UNKNOWN
+	return &Command{Type: &t, ForTeam: &forTeam}
 }
 
 // NeedsTeam returns true if the command must be specialized with a team

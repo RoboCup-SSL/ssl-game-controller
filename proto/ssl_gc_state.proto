@@ -29,7 +29,7 @@ message Foul {
 
 message Command {
     required Type type = 1;
-    optional Team for_team = 2;
+    required Team for_team = 2;
 
     enum Type {
         UNKNOWN = 0;

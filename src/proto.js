@@ -21303,7 +21303,7 @@ export const Command = $root.Command = (() => {
      * @exports ICommand
      * @interface ICommand
      * @property {Command.Type} type Command type
-     * @property {Team|null} [forTeam] Command forTeam
+     * @property {Team} forTeam Command forTeam
      */
 
     /**
@@ -21362,8 +21362,7 @@ export const Command = $root.Command = (() => {
         if (!writer)
             writer = $Writer.create();
         writer.uint32(/* id 1, wireType 0 =*/8).int32(message.type);
-        if (message.forTeam != null && Object.hasOwnProperty.call(message, "forTeam"))
-            writer.uint32(/* id 2, wireType 0 =*/16).int32(message.forTeam);
+        writer.uint32(/* id 2, wireType 0 =*/16).int32(message.forTeam);
         return writer;
     };
 
@@ -21413,6 +21412,8 @@ export const Command = $root.Command = (() => {
         }
         if (!message.hasOwnProperty("type"))
             throw $util.ProtocolError("missing required 'type'", { instance: message });
+        if (!message.hasOwnProperty("forTeam"))
+            throw $util.ProtocolError("missing required 'forTeam'", { instance: message });
         return message;
     };
 
@@ -21458,15 +21459,14 @@ export const Command = $root.Command = (() => {
         case 10:
             break;
         }
-        if (message.forTeam != null && message.hasOwnProperty("forTeam"))
-            switch (message.forTeam) {
-            default:
-                return "forTeam: enum value expected";
-            case 0:
-            case 1:
-            case 2:
-                break;
-            }
+        switch (message.forTeam) {
+        default:
+            return "forTeam: enum value expected";
+        case 0:
+        case 1:
+        case 2:
+            break;
+        }
         return null;
     };
 
