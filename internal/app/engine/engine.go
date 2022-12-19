@@ -87,6 +87,9 @@ func (e *Engine) Enqueue(change *statemachine.Change) {
 		// Assume that changes from outside are by default revertible, except if the flag is already set
 		*change.Revertible = true
 	}
+	if change.Origin == nil {
+		change.Origin = proto.String("Unknown")
+	}
 	e.changeQueue <- change
 }
 

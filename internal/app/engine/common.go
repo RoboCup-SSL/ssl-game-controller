@@ -26,6 +26,41 @@ func createGameEventChange(eventType state.GameEvent_Type, event *state.GameEven
 	}
 }
 
+// createCommandChange creates a change with a new command
+func createCommandChange(command *state.Command) *statemachine.Change {
+	return &statemachine.Change{
+		Origin: &changeOriginEngine,
+		Change: &statemachine.Change_NewCommandChange{
+			NewCommandChange: &statemachine.Change_NewCommand{
+				Command: command,
+			},
+		},
+	}
+}
+
+// createBotSubstitutionEventChange creates a new change for bot substitution
+func createBotSubstitutionEventChange(byTeam state.Team) *statemachine.Change {
+	return createGameEventChange(state.GameEvent_BOT_SUBSTITUTION, &state.GameEvent{
+		Event: &state.GameEvent_BotSubstitution_{
+			BotSubstitution: &state.GameEvent_BotSubstitution{
+				ByTeam: &byTeam,
+			},
+		},
+	})
+}
+
+// createStageChange creates a change with a new stage
+func createStageChange(stage *state.Referee_Stage) *statemachine.Change {
+	return &statemachine.Change{
+		Origin: &changeOriginEngine,
+		Change: &statemachine.Change_ChangeStageChange{
+			ChangeStageChange: &statemachine.Change_ChangeStage{
+				NewStage: stage,
+			},
+		},
+	}
+}
+
 func (e *Engine) findRobotInsideRadius(robots []*Robot, pos *geom.Vector2, radius float64) *Robot {
 	for _, robot := range robots {
 		distance := robot.Pos.DistanceTo(pos)
@@ -60,11 +95,4 @@ func (x *GcStateTracker) NumTeamRobots(team state.Team) (count int32) {
 		}
 	}
 	return
-}
-
-// NewContinueActionType allocates a new ContinueActionType object and assigns the given value
-func NewContinueActionType(action ContinueAction_Type) *ContinueAction_Type {
-	a := new(ContinueAction_Type)
-	*a = action
-	return a
 }

@@ -2,9 +2,10 @@ package statemachine
 
 import "github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 
-// CreateCommandChange creates a change with a new command
-func CreateCommandChange(command *state.Command) *Change {
+// createCommandChange creates a change with a new command
+func createCommandChange(command *state.Command) *Change {
 	return &Change{
+		Origin: &changeOriginStateMachine,
 		Change: &Change_NewCommandChange{
 			NewCommandChange: &Change_NewCommand{
 				Command: command,
@@ -13,8 +14,8 @@ func CreateCommandChange(command *state.Command) *Change {
 	}
 }
 
-// CreateGameEventChange creates a change with a new game event
-func CreateGameEventChange(eventType state.GameEvent_Type, event *state.GameEvent) *Change {
+// createGameEventChange creates a change with a new game event
+func createGameEventChange(eventType state.GameEvent_Type, event *state.GameEvent) *Change {
 	event.Type = &eventType
 	event.Origin = []string{changeOriginStateMachine}
 	return &Change{
@@ -22,28 +23,6 @@ func CreateGameEventChange(eventType state.GameEvent_Type, event *state.GameEven
 		Change: &Change_AddGameEventChange{
 			AddGameEventChange: &Change_AddGameEvent{
 				GameEvent: event,
-			},
-		},
-	}
-}
-
-// CreateBotSubstitutionEventChange creates a new change for bot substitution
-func CreateBotSubstitutionEventChange(byTeam state.Team) *Change {
-	return CreateGameEventChange(state.GameEvent_BOT_SUBSTITUTION, &state.GameEvent{
-		Event: &state.GameEvent_BotSubstitution_{
-			BotSubstitution: &state.GameEvent_BotSubstitution{
-				ByTeam: &byTeam,
-			},
-		},
-	})
-}
-
-// CreateStageChange creates a change with a new stage
-func CreateStageChange(stage *state.Referee_Stage) *Change {
-	return &Change{
-		Change: &Change_ChangeStageChange{
-			ChangeStageChange: &Change_ChangeStage{
-				NewStage: stage,
 			},
 		},
 	}

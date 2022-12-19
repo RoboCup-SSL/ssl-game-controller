@@ -88,7 +88,7 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 	if *gameEvent.Type == state.GameEvent_POSSIBLE_GOAL {
 		log.Printf("Halt the game, because team %v might have scored a goal", byTeam)
 		// halt the game to let the human referee decide if this was a valid goal
-		changes = append(changes, CreateCommandChange(state.NewCommandNeutral(state.Command_HALT)))
+		changes = append(changes, createCommandChange(state.NewCommandNeutral(state.Command_HALT)))
 
 		valid, message := s.isGoalValid(newState, gameEvent)
 
@@ -102,7 +102,7 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 					Goal: &goal,
 				},
 			}
-			changes = append(changes, CreateGameEventChange(state.GameEvent_GOAL, goalEvent))
+			changes = append(changes, createGameEventChange(state.GameEvent_GOAL, goalEvent))
 		} else if !valid {
 			goal := state.GameEvent_Goal{}
 			proto.Merge(&goal, gameEvent.GetPossibleGoal())
@@ -112,7 +112,7 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 					InvalidGoal: &goal,
 				},
 			}
-			changes = append(changes, CreateGameEventChange(state.GameEvent_INVALID_GOAL, goalEvent))
+			changes = append(changes, createGameEventChange(state.GameEvent_INVALID_GOAL, goalEvent))
 		}
 	}
 
@@ -123,7 +123,7 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 			newState.TeamInfo(team).RequestsBotSubstitutionSince = nil
 		}
 		// halt the game to allow teams to substitute robots
-		changes = append(changes, CreateCommandChange(state.NewCommandNeutral(state.Command_HALT)))
+		changes = append(changes, createCommandChange(state.NewCommandNeutral(state.Command_HALT)))
 	}
 
 	// too many robots
@@ -151,9 +151,9 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 	if *gameEvent.Type == state.GameEvent_EMERGENCY_STOP {
 		log.Printf("Initiate emergency stop for %v", byTeam)
 		if *newState.TeamInfo(byTeam).TimeoutsLeft > 0 {
-			changes = append(changes, CreateCommandChange(state.NewCommand(state.Command_TIMEOUT, byTeam)))
+			changes = append(changes, createCommandChange(state.NewCommand(state.Command_TIMEOUT, byTeam)))
 		} else {
-			changes = append(changes, CreateCommandChange(state.NewCommandNeutral(state.Command_HALT)))
+			changes = append(changes, createCommandChange(state.NewCommandNeutral(state.Command_HALT)))
 		}
 		newState.TeamInfo(byTeam).RequestsEmergencyStopSince = nil
 	}
@@ -215,7 +215,7 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 		isRuleViolationDuringPenalty(*gameEvent.Type) {
 		if byTeam == *newState.GameState.ForTeam {
 			// rule violation by attacking team -> no goal
-			changes = append(changes, CreateGameEventChange(state.GameEvent_PENALTY_KICK_FAILED, &state.GameEvent{
+			changes = append(changes, createGameEventChange(state.GameEvent_PENALTY_KICK_FAILED, &state.GameEvent{
 				Event: &state.GameEvent_PenaltyKickFailed_{
 					PenaltyKickFailed: &state.GameEvent_PenaltyKickFailed{
 						ByTeam:   &byTeam,
@@ -225,7 +225,7 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 			}))
 		} else if byTeam == newState.GameState.ForTeam.Opposite() {
 			// rule violation by defender team -> goal
-			changes = append(changes, CreateGameEventChange(state.GameEvent_GOAL, &state.GameEvent{
+			changes = append(changes, createGameEventChange(state.GameEvent_GOAL, &state.GameEvent{
 				Event: &state.GameEvent_Goal_{
 					Goal: &state.GameEvent_Goal{
 						ByTeam: &byTeam,
@@ -239,7 +239,7 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 	if *newState.Command.Type != state.Command_STOP &&
 		stopsTheGame(*gameEvent.Type) {
 		log.Printf("Stopping the game for event %v", *gameEvent.Type)
-		changes = append(changes, CreateCommandChange(state.NewCommandNeutral(state.Command_STOP)))
+		changes = append(changes, createCommandChange(state.NewCommandNeutral(state.Command_STOP)))
 	}
 
 	return
@@ -294,7 +294,7 @@ func (s *StateMachine) isGoalValid(newState *state.State, gameEvent *state.GameE
 
 // multipleFoulsChange creates a multiple fouls event change
 func (s *StateMachine) multipleFoulsChange(byTeam state.Team, events []*state.GameEvent) *Change {
-	return CreateGameEventChange(state.GameEvent_MULTIPLE_FOULS, &state.GameEvent{
+	return createGameEventChange(state.GameEvent_MULTIPLE_FOULS, &state.GameEvent{
 		Event: &state.GameEvent_MultipleFouls_{
 			MultipleFouls: &state.GameEvent_MultipleFouls{
 				ByTeam:           &byTeam,

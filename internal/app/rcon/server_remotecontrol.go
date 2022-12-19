@@ -343,7 +343,7 @@ func (c *RemoteControlClient) processRequest(request *RemoteControlToController)
 		eventType := state.GameEvent_CHALLENGE_FLAG
 		c.gcEngine.EnqueueGameEvent(&state.GameEvent{
 			Type:   &eventType,
-			Origin: []string{*origin(c.team)},
+			Origin: []string{*c.origin()},
 			Event: &state.GameEvent_ChallengeFlag_{
 				ChallengeFlag: &state.GameEvent_ChallengeFlag{
 					ByTeam: c.team,
@@ -358,6 +358,7 @@ func (c *RemoteControlClient) processRequest(request *RemoteControlToController)
 			return errors.Wrap(err, "Can not stop timeout")
 		}
 		c.gcEngine.Enqueue(&statemachine.Change{
+			Origin: c.origin(),
 			Change: &statemachine.Change_NewCommandChange{
 				NewCommandChange: &statemachine.Change_NewCommand{
 					Command: state.NewCommandNeutral(state.Command_HALT),
@@ -387,7 +388,7 @@ func (c *RemoteControlClient) updateTeamConfig(update *statemachine.Change_Updat
 	log.Println("Update team config via remote control: ", update.String())
 	update.ForTeam = c.team
 	err := c.gcEngine.EnqueueBlocking(&statemachine.Change{
-		Origin: origin(c.team),
+		Origin: c.origin(),
 		Change: &statemachine.Change_UpdateTeamStateChange{
 			UpdateTeamStateChange: update,
 		},
@@ -397,7 +398,7 @@ func (c *RemoteControlClient) updateTeamConfig(update *statemachine.Change_Updat
 	}
 }
 
-func origin(team *state.Team) *string {
-	origin := "Remote Control " + team.String()
+func (c *RemoteControlClient) origin() *string {
+	origin := "Remote Control " + c.team.String()
 	return &origin
 }

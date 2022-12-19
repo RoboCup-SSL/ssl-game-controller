@@ -6,6 +6,7 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/sslconn"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/tracker"
+	"google.golang.org/protobuf/proto"
 	"log"
 	"net"
 	"sync"
@@ -92,6 +93,7 @@ func (s *Server) serve(conn net.Conn) {
 
 		for _, in := range input.ApiInputs {
 			if in.Change != nil {
+				in.Change.Origin = proto.String("CI")
 				s.gcEngine.Enqueue(in.Change)
 			}
 			if in.ResetMatch != nil && *in.ResetMatch {

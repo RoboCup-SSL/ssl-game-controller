@@ -3,7 +3,6 @@ package engine
 import (
 	"fmt"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
-	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"log"
 )
 
@@ -20,27 +19,27 @@ func (e *Engine) performContinueAction(action *ContinueAction) {
 
 	switch *action.Type {
 	case ContinueAction_HALT:
-		e.Enqueue(statemachine.CreateCommandChange(state.NewCommandNeutral(state.Command_HALT)))
+		e.Enqueue(createCommandChange(state.NewCommandNeutral(state.Command_HALT)))
 	case ContinueAction_STOP, ContinueAction_TIMEOUT_STOP:
-		e.Enqueue(statemachine.CreateCommandChange(state.NewCommandNeutral(state.Command_STOP)))
+		e.Enqueue(createCommandChange(state.NewCommandNeutral(state.Command_STOP)))
 	case ContinueAction_NEXT_COMMAND:
-		e.Enqueue(statemachine.CreateCommandChange(e.currentState.NextCommand))
+		e.Enqueue(createCommandChange(e.currentState.NextCommand))
 	case ContinueAction_BALL_PLACEMENT:
 		if action.ForTeam.Known() {
-			e.Enqueue(statemachine.CreateCommandChange(state.NewCommand(state.Command_BALL_PLACEMENT, *action.ForTeam)))
+			e.Enqueue(createCommandChange(state.NewCommand(state.Command_BALL_PLACEMENT, *action.ForTeam)))
 		} else {
 			logWillNotContinue("No team for ball placement specified")
 		}
 	case ContinueAction_TIMEOUT_START:
 		if action.ForTeam.Known() {
-			e.Enqueue(statemachine.CreateCommandChange(state.NewCommand(state.Command_TIMEOUT, *action.ForTeam)))
+			e.Enqueue(createCommandChange(state.NewCommand(state.Command_TIMEOUT, *action.ForTeam)))
 		} else {
 			logWillNotContinue("No team for timeout specified")
 		}
 	case ContinueAction_BOT_SUBSTITUTION:
-		e.Enqueue(statemachine.CreateBotSubstitutionEventChange(*action.ForTeam))
+		e.Enqueue(createBotSubstitutionEventChange(*action.ForTeam))
 	case ContinueAction_NEXT_STAGE:
-		e.Enqueue(statemachine.CreateStageChange(e.currentState.Stage.Next()))
+		e.Enqueue(createStageChange(e.currentState.Stage.Next()))
 	}
 }
 
