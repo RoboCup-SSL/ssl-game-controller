@@ -124,3 +124,16 @@ services:
       - "10300/udp"
       - "10301/udp"
       - "10302/udp"
+
+  ssl-simulation-controller:
+    image: "robocupssl/ssl-simulation-controller:0.11.0"
+    command:
+      - "-refereeAddress"
+      - "224.5.23.1:11003"
+      - "-visionAddress"
+      - "224.5.23.2:10020"
+      - "-trackerAddress"
+      - "224.5.23.2:10010"
+      - "-simControlPort"
+      - "10300"
+    network_mode: "${NETWORK_MODE}"
