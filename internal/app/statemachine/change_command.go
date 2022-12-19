@@ -18,9 +18,7 @@ func (s *StateMachine) processChangeNewCommand(newState *state.State, newCommand
 	case state.Command_KICKOFF, state.Command_PENALTY:
 		newState.CurrentActionTimeRemaining = durationpb.New(s.gameConfig.PrepareTimeout)
 	case state.Command_TIMEOUT:
-		if *newState.TeamInfo(*newState.Command.ForTeam).TimeoutsLeft > 0 {
-			*newState.TeamInfo(*newState.Command.ForTeam).TimeoutsLeft--
-		}
+		*newState.TeamInfo(*newState.Command.ForTeam).TimeoutsLeft--
 		newState.TeamInfo(*newState.Command.ForTeam).RequestsTimeoutSince = nil
 	}
 

@@ -63,7 +63,7 @@ func (s *StateMachine) processChangeUpdateTeamState(newState *state.State, chang
 		}
 	}
 	if change.RequestsTimeout != nil {
-		if *change.RequestsTimeout {
+		if *change.RequestsTimeout && *teamState.TimeoutsLeft > 0 {
 			teamState.RequestsTimeoutSince = timestamppb.New(s.timeProvider())
 		} else {
 			teamState.RequestsTimeoutSince = nil
