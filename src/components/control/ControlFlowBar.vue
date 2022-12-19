@@ -111,10 +111,6 @@ export default {
             }
             return this.continueAction.continuationIssues
         },
-        readyToContinue() {
-            return this.continueAction !== null &&
-                this.continueAction.ready;
-        },
         teamColorClass() {
             if (this.continueAction === null) {
                 return {};
@@ -125,10 +121,15 @@ export default {
             };
         },
         continueButtonClass() {
-            if (this.readyToContinue) {
-                return 'continue-btn-ready';
+            if (this.continueAction === null) {
+                return {};
             }
-            return 'continue-btn-not-ready';
+            return {
+                'continue-btn-ready-auto': this.continueAction.state === 'READY_AUTO',
+                'continue-btn-ready-manual': this.continueAction.state === 'READY_MANUAL',
+                'continue-btn-blocked': this.continueAction.state === 'BLOCKED',
+                'continue-btn-waiting': this.continueAction.state === 'WAITING',
+            }
         },
     }
 }
@@ -145,11 +146,16 @@ export default {
     justify-content: center;
 }
 
-.continue-btn-ready {
+.continue-btn-ready-auto {
     background-color: green;
 }
-
-.continue-btn-not-ready {
+.continue-btn-ready-manual {
+    background-color: darkcyan;
+}
+.continue-btn-waiting {
+    background-color: orange;
+}
+.continue-btn-blocked {
     background-color: red;
 }
 

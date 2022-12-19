@@ -110,8 +110,8 @@ message ContinueAction {
     // timestamp at which the action will be ready (to give some preparation time)
     optional google.protobuf.Timestamp ready_at = 4;
 
-    // indication if the action is ready to continue
-    optional bool ready = 5;
+    // state of the action
+    optional State state = 5;
 
     enum Type {
         TYPE_UNKNOWN = 0;
@@ -125,5 +125,13 @@ message ContinueAction {
         TIMEOUT_STOP = 6;
         BOT_SUBSTITUTION = 7;
         NEXT_STAGE = 8;
+    }
+
+    enum State {
+        STATE_UNKNOWN = 0;
+        BLOCKED = 1;
+        WAITING = 2;
+        READY_AUTO = 3;
+        READY_MANUAL = 4;
     }
 }

@@ -11,7 +11,7 @@ func (e *Engine) nextAction() (ContinueAction_Type, state.Team) {
 		if *e.currentState.Stage.Next() != *e.currentState.Stage {
 			return ContinueAction_NEXT_STAGE, state.Team_UNKNOWN
 		}
-		return ContinueAction_UNKNOWN, state.Team_UNKNOWN
+		return ContinueAction_TYPE_UNKNOWN, state.Team_UNKNOWN
 	}
 
 	if e.currentState.Command.IsRunning() {
@@ -68,7 +68,7 @@ func (e *Engine) nextAction() (ContinueAction_Type, state.Team) {
 	if *e.currentState.Command.Type != state.Command_HALT {
 		return ContinueAction_HALT, state.Team_UNKNOWN
 	}
-	return ContinueAction_UNKNOWN, state.Team_UNKNOWN
+	return ContinueAction_TYPE_UNKNOWN, state.Team_UNKNOWN
 }
 
 func (e *Engine) ballPlacementRequired() bool {

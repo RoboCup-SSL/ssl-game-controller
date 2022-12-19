@@ -13,7 +13,7 @@ const minPreparationTime = time.Second * 2
 func (e *Engine) processContinue() {
 
 	nextActionType, nextActionForTeam := e.nextAction()
-	if nextActionType == ContinueAction_UNKNOWN {
+	if nextActionType == ContinueAction_TYPE_UNKNOWN {
 		e.gcState.ContinueAction = nil
 		return
 	}
@@ -22,7 +22,7 @@ func (e *Engine) processContinue() {
 		e.gcState.ContinueAction = &ContinueAction{}
 	}
 
-	var ready = true
+	var actionState = ContinueAction_STATE_UNKNOWN
 	var continuationIssues []string
 	if nextActionType == ContinueAction_NEXT_COMMAND {
 		continuationIssues = e.findIssuesForContinuation()
@@ -30,27 +30,31 @@ func (e *Engine) processContinue() {
 
 		if issuesPresent {
 			e.gcState.ContinueAction.ReadyAt = nil
-			ready = false
+			actionState = ContinueAction_BLOCKED
 		} else if e.gcState.ContinueAction.ReadyAt == nil {
 			e.gcState.ContinueAction.ReadyAt = timestamppb.New(e.timeProvider().Add(e.preparationTime()))
-			ready = false
+			actionState = ContinueAction_WAITING
 		} else {
 			preparationTimeLeft := e.gcState.ContinueAction.ReadyAt.AsTime().Sub(e.timeProvider())
-			ready = preparationTimeLeft <= 0
 			if preparationTimeLeft > 0 {
 				continuationIssues = append(continuationIssues, fmt.Sprintf("%.1fs left for preparation", preparationTimeLeft.Seconds()))
+				actionState = ContinueAction_WAITING
+			} else {
+				actionState = ContinueAction_READY_AUTO
 			}
 		}
+	} else if e.autoContinueFromAction(nextActionType) {
+		actionState = ContinueAction_READY_AUTO
+	} else {
+		actionState = ContinueAction_READY_MANUAL
 	}
 
 	e.gcState.ContinueAction.Type = &nextActionType
 	e.gcState.ContinueAction.ForTeam = &nextActionForTeam
 	e.gcState.ContinueAction.ContinuationIssues = continuationIssues
-	e.gcState.ContinueAction.Ready = &ready
+	e.gcState.ContinueAction.State = &actionState
 
-	if ready &&
-		*e.config.AutoContinue &&
-		e.autoContinueFromAction(nextActionType) {
+	if *e.config.AutoContinue && actionState == ContinueAction_READY_AUTO {
 		e.Continue(e.gcState.ContinueAction)
 	}
 }
@@ -59,7 +63,7 @@ func (e *Engine) autoContinueFromAction(action ContinueAction_Type) bool {
 	switch action {
 	case ContinueAction_RESUME_FROM_HALT:
 		return e.gameConfig.ContinueFromHalt
-	case ContinueAction_UNKNOWN,
+	case ContinueAction_TYPE_UNKNOWN,
 		ContinueAction_HALT,
 		ContinueAction_TIMEOUT_START,
 		ContinueAction_TIMEOUT_STOP,
