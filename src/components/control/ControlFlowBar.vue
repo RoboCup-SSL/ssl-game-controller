@@ -19,26 +19,32 @@
                     <template v-if="continueAction.type === 'HALT'">
                         Halt
                     </template>
-                    <template v-else-if="continueAction.type === 'STOP'">
+                    <template v-else-if="continueAction.type === 'RESUME_FROM_HALT'">
+                        Resume
+                    </template>
+                    <template v-else-if="continueAction.type === 'STOP_GAME'">
                         Stop
                     </template>
                     <template v-else-if="continueAction.type === 'NEXT_COMMAND'">
                         <span :class="teamColorClass">{{ nextCommand }}</span>
                     </template>
-                    <template v-else-if="continueAction.type === 'BALL_PLACEMENT'">
-                        <span :class="teamColorClass">Ball Placement</span>
+                    <template v-else-if="continueAction.type === 'BALL_PLACEMENT_START'">
+                        Start <span :class="teamColorClass">Ball Placement</span>
+                    </template>
+                    <template v-else-if="continueAction.type === 'BALL_PLACEMENT_CANCEL'">
+                        Cancel <span :class="teamColorClass">Ball Placement</span>
                     </template>
                     <template v-else-if="continueAction.type === 'TIMEOUT_START'">
-                        <span :class="teamColorClass">Start Timeout</span>
+                        Start <span :class="teamColorClass">Timeout</span>
                     </template>
                     <template v-else-if="continueAction.type === 'TIMEOUT_STOP'">
-                        <span :class="teamColorClass">Stop Timeout</span>
+                        Stop <span :class="teamColorClass">Timeout</span>
                     </template>
                     <template v-else-if="continueAction.type === 'BOT_SUBSTITUTION'">
-                        <span :class="teamColorClass">Bot Substitution</span>
+                        Start <span :class="teamColorClass">Bot Substitution</span>
                     </template>
                     <template v-else-if="continueAction.type === 'NEXT_STAGE'">
-                        <span :class="teamColorClass">Next stage</span>
+                        Next stage
                     </template>
                     <span v-for="issue of continuationIssues" v-bind:key="issue">
                     <br>

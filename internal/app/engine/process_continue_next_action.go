@@ -14,9 +14,11 @@ func (e *Engine) nextAction() (ContinueAction_Type, state.Team) {
 		return ContinueAction_UNKNOWN, state.Team_UNKNOWN
 	}
 
-	if e.currentState.Command.IsRunning() ||
-		*e.currentState.Command.Type == state.Command_BALL_PLACEMENT {
-		return ContinueAction_STOP, state.Team_UNKNOWN
+	if e.currentState.Command.IsRunning() {
+		return ContinueAction_STOP_GAME, state.Team_UNKNOWN
+	}
+	if *e.currentState.Command.Type == state.Command_BALL_PLACEMENT {
+		return ContinueAction_BALL_PLACEMENT_CANCEL, state.Team_UNKNOWN
 	}
 
 	if *e.currentState.Command.Type == state.Command_TIMEOUT {
@@ -53,12 +55,12 @@ func (e *Engine) nextAction() (ContinueAction_Type, state.Team) {
 	if e.ballPlacementRequired() {
 		placingTeam := e.ballPlacementTeam()
 		if placingTeam.Known() {
-			return ContinueAction_BALL_PLACEMENT, placingTeam
+			return ContinueAction_BALL_PLACEMENT_START, placingTeam
 		}
 	}
 
 	if *e.currentState.Command.Type == state.Command_HALT {
-		return ContinueAction_STOP, state.Team_UNKNOWN
+		return ContinueAction_RESUME_FROM_HALT, state.Team_UNKNOWN
 	}
 	if e.currentState.NextCommand != nil {
 		return ContinueAction_NEXT_COMMAND, *e.currentState.NextCommand.ForTeam

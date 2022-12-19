@@ -20,11 +20,14 @@ func (e *Engine) performContinueAction(action *ContinueAction) {
 	switch *action.Type {
 	case ContinueAction_HALT:
 		e.Enqueue(createCommandChange(state.NewCommandNeutral(state.Command_HALT)))
-	case ContinueAction_STOP, ContinueAction_TIMEOUT_STOP:
+	case ContinueAction_RESUME_FROM_HALT,
+		ContinueAction_TIMEOUT_STOP,
+		ContinueAction_STOP_GAME,
+		ContinueAction_BALL_PLACEMENT_CANCEL:
 		e.Enqueue(createCommandChange(state.NewCommandNeutral(state.Command_STOP)))
 	case ContinueAction_NEXT_COMMAND:
 		e.Enqueue(createCommandChange(e.currentState.NextCommand))
-	case ContinueAction_BALL_PLACEMENT:
+	case ContinueAction_BALL_PLACEMENT_START:
 		if action.ForTeam.Known() {
 			e.Enqueue(createCommandChange(state.NewCommand(state.Command_BALL_PLACEMENT, *action.ForTeam)))
 		} else {

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"google.golang.org/protobuf/types/known/timestamppb"
+	"log"
 	"time"
 )
 
@@ -47,10 +48,32 @@ func (e *Engine) processContinue() {
 	e.gcState.ContinueAction.ContinuationIssues = continuationIssues
 	e.gcState.ContinueAction.Ready = &ready
 
-	if len(continuationIssues) == 0 &&
+	if ready &&
 		*e.config.AutoContinue &&
-		(e.gameConfig.ContinueFromHalt || *e.currentState.Command.Type != state.Command_HALT) {
+		e.autoContinueFromAction(nextActionType) {
 		e.Continue(e.gcState.ContinueAction)
+	}
+}
+
+func (e *Engine) autoContinueFromAction(action ContinueAction_Type) bool {
+	switch action {
+	case ContinueAction_RESUME_FROM_HALT:
+		return e.gameConfig.ContinueFromHalt
+	case ContinueAction_UNKNOWN,
+		ContinueAction_HALT,
+		ContinueAction_TIMEOUT_START,
+		ContinueAction_TIMEOUT_STOP,
+		ContinueAction_BOT_SUBSTITUTION,
+		ContinueAction_NEXT_STAGE,
+		ContinueAction_BALL_PLACEMENT_CANCEL,
+		ContinueAction_STOP_GAME:
+		return false
+	case ContinueAction_NEXT_COMMAND,
+		ContinueAction_BALL_PLACEMENT_START:
+		return true
+	default:
+		log.Println("Unhandled action: ", action)
+		return false
 	}
 }
 

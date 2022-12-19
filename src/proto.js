@@ -27637,9 +27637,11 @@ export const ContinueAction = $root.ContinueAction = (() => {
             return "type: enum value expected";
         case 0:
         case 1:
+        case 10:
         case 2:
         case 3:
         case 4:
+        case 9:
         case 5:
         case 6:
         case 7:
@@ -27693,7 +27695,11 @@ export const ContinueAction = $root.ContinueAction = (() => {
         case 1:
             message.type = 1;
             break;
-        case "STOP":
+        case "RESUME_FROM_HALT":
+        case 10:
+            message.type = 10;
+            break;
+        case "STOP_GAME":
         case 2:
             message.type = 2;
             break;
@@ -27701,9 +27707,13 @@ export const ContinueAction = $root.ContinueAction = (() => {
         case 3:
             message.type = 3;
             break;
-        case "BALL_PLACEMENT":
+        case "BALL_PLACEMENT_START":
         case 4:
             message.type = 4;
+            break;
+        case "BALL_PLACEMENT_CANCEL":
+        case 9:
+            message.type = 9;
             break;
         case "TIMEOUT_START":
         case 5:
@@ -27822,9 +27832,11 @@ export const ContinueAction = $root.ContinueAction = (() => {
      * @enum {number}
      * @property {number} UNKNOWN=0 UNKNOWN value
      * @property {number} HALT=1 HALT value
-     * @property {number} STOP=2 STOP value
+     * @property {number} RESUME_FROM_HALT=10 RESUME_FROM_HALT value
+     * @property {number} STOP_GAME=2 STOP_GAME value
      * @property {number} NEXT_COMMAND=3 NEXT_COMMAND value
-     * @property {number} BALL_PLACEMENT=4 BALL_PLACEMENT value
+     * @property {number} BALL_PLACEMENT_START=4 BALL_PLACEMENT_START value
+     * @property {number} BALL_PLACEMENT_CANCEL=9 BALL_PLACEMENT_CANCEL value
      * @property {number} TIMEOUT_START=5 TIMEOUT_START value
      * @property {number} TIMEOUT_STOP=6 TIMEOUT_STOP value
      * @property {number} BOT_SUBSTITUTION=7 BOT_SUBSTITUTION value
@@ -27834,9 +27846,11 @@ export const ContinueAction = $root.ContinueAction = (() => {
         const valuesById = {}, values = Object.create(valuesById);
         values[valuesById[0] = "UNKNOWN"] = 0;
         values[valuesById[1] = "HALT"] = 1;
-        values[valuesById[2] = "STOP"] = 2;
+        values[valuesById[10] = "RESUME_FROM_HALT"] = 10;
+        values[valuesById[2] = "STOP_GAME"] = 2;
         values[valuesById[3] = "NEXT_COMMAND"] = 3;
-        values[valuesById[4] = "BALL_PLACEMENT"] = 4;
+        values[valuesById[4] = "BALL_PLACEMENT_START"] = 4;
+        values[valuesById[9] = "BALL_PLACEMENT_CANCEL"] = 9;
         values[valuesById[5] = "TIMEOUT_START"] = 5;
         values[valuesById[6] = "TIMEOUT_STOP"] = 6;
         values[valuesById[7] = "BOT_SUBSTITUTION"] = 7;
