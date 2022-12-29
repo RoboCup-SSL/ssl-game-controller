@@ -25505,7 +25505,7 @@ export const GcState = $root.GcState = (() => {
      * @property {Object.<string,IGcStateAutoRef>|null} [autoRefState] GcState autoRefState
      * @property {Object.<string,IGcStateTracker>|null} [trackerState] GcState trackerState
      * @property {IGcStateTracker|null} [trackerStateGc] GcState trackerStateGc
-     * @property {IContinueAction|null} [continueAction] GcState continueAction
+     * @property {Array.<IContinueAction>|null} [continueActions] GcState continueActions
      */
 
     /**
@@ -25520,6 +25520,7 @@ export const GcState = $root.GcState = (() => {
         this.teamState = {};
         this.autoRefState = {};
         this.trackerState = {};
+        this.continueActions = [];
         if (properties)
             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
@@ -25559,12 +25560,12 @@ export const GcState = $root.GcState = (() => {
     GcState.prototype.trackerStateGc = null;
 
     /**
-     * GcState continueAction.
-     * @member {IContinueAction|null|undefined} continueAction
+     * GcState continueActions.
+     * @member {Array.<IContinueAction>} continueActions
      * @memberof GcState
      * @instance
      */
-    GcState.prototype.continueAction = null;
+    GcState.prototype.continueActions = $util.emptyArray;
 
     /**
      * Creates a new GcState instance using the specified properties.
@@ -25607,8 +25608,9 @@ export const GcState = $root.GcState = (() => {
             }
         if (message.trackerStateGc != null && Object.hasOwnProperty.call(message, "trackerStateGc"))
             $root.GcStateTracker.encode(message.trackerStateGc, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
-        if (message.continueAction != null && Object.hasOwnProperty.call(message, "continueAction"))
-            $root.ContinueAction.encode(message.continueAction, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
+        if (message.continueActions != null && message.continueActions.length)
+            for (let i = 0; i < message.continueActions.length; ++i)
+                $root.ContinueAction.encode(message.continueActions[i], writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
         return writer;
     };
 
@@ -25717,7 +25719,9 @@ export const GcState = $root.GcState = (() => {
                     break;
                 }
             case 8: {
-                    message.continueAction = $root.ContinueAction.decode(reader, reader.uint32());
+                    if (!(message.continueActions && message.continueActions.length))
+                        message.continueActions = [];
+                    message.continueActions.push($root.ContinueAction.decode(reader, reader.uint32()));
                     break;
                 }
             default:
@@ -25790,10 +25794,14 @@ export const GcState = $root.GcState = (() => {
             if (error)
                 return "trackerStateGc." + error;
         }
-        if (message.continueAction != null && message.hasOwnProperty("continueAction")) {
-            let error = $root.ContinueAction.verify(message.continueAction);
-            if (error)
-                return "continueAction." + error;
+        if (message.continueActions != null && message.hasOwnProperty("continueActions")) {
+            if (!Array.isArray(message.continueActions))
+                return "continueActions: array expected";
+            for (let i = 0; i < message.continueActions.length; ++i) {
+                let error = $root.ContinueAction.verify(message.continueActions[i]);
+                if (error)
+                    return "continueActions." + error;
+            }
         }
         return null;
     };
@@ -25845,10 +25853,15 @@ export const GcState = $root.GcState = (() => {
                 throw TypeError(".GcState.trackerStateGc: object expected");
             message.trackerStateGc = $root.GcStateTracker.fromObject(object.trackerStateGc);
         }
-        if (object.continueAction != null) {
-            if (typeof object.continueAction !== "object")
-                throw TypeError(".GcState.continueAction: object expected");
-            message.continueAction = $root.ContinueAction.fromObject(object.continueAction);
+        if (object.continueActions) {
+            if (!Array.isArray(object.continueActions))
+                throw TypeError(".GcState.continueActions: array expected");
+            message.continueActions = [];
+            for (let i = 0; i < object.continueActions.length; ++i) {
+                if (typeof object.continueActions[i] !== "object")
+                    throw TypeError(".GcState.continueActions: object expected");
+                message.continueActions[i] = $root.ContinueAction.fromObject(object.continueActions[i]);
+            }
         }
         return message;
     };
@@ -25866,15 +25879,15 @@ export const GcState = $root.GcState = (() => {
         if (!options)
             options = {};
         let object = {};
+        if (options.arrays || options.defaults)
+            object.continueActions = [];
         if (options.objects || options.defaults) {
             object.teamState = {};
             object.autoRefState = {};
             object.trackerState = {};
         }
-        if (options.defaults) {
+        if (options.defaults)
             object.trackerStateGc = null;
-            object.continueAction = null;
-        }
         let keys2;
         if (message.teamState && (keys2 = Object.keys(message.teamState)).length) {
             object.teamState = {};
@@ -25893,8 +25906,11 @@ export const GcState = $root.GcState = (() => {
         }
         if (message.trackerStateGc != null && message.hasOwnProperty("trackerStateGc"))
             object.trackerStateGc = $root.GcStateTracker.toObject(message.trackerStateGc, options);
-        if (message.continueAction != null && message.hasOwnProperty("continueAction"))
-            object.continueAction = $root.ContinueAction.toObject(message.continueAction, options);
+        if (message.continueActions && message.continueActions.length) {
+            object.continueActions = [];
+            for (let j = 0; j < message.continueActions.length; ++j)
+                object.continueActions[j] = $root.ContinueAction.toObject(message.continueActions[j], options);
+        }
         return object;
     };
 
@@ -27639,6 +27655,7 @@ export const ContinueAction = $root.ContinueAction = (() => {
         case 1:
         case 10:
         case 2:
+        case 11:
         case 3:
         case 4:
         case 9:
@@ -27710,6 +27727,10 @@ export const ContinueAction = $root.ContinueAction = (() => {
         case "STOP_GAME":
         case 2:
             message.type = 2;
+            break;
+        case "RESUME_FROM_STOP":
+        case 11:
+            message.type = 11;
             break;
         case "NEXT_COMMAND":
         case 3:
@@ -27862,6 +27883,7 @@ export const ContinueAction = $root.ContinueAction = (() => {
      * @property {number} HALT=1 HALT value
      * @property {number} RESUME_FROM_HALT=10 RESUME_FROM_HALT value
      * @property {number} STOP_GAME=2 STOP_GAME value
+     * @property {number} RESUME_FROM_STOP=11 RESUME_FROM_STOP value
      * @property {number} NEXT_COMMAND=3 NEXT_COMMAND value
      * @property {number} BALL_PLACEMENT_START=4 BALL_PLACEMENT_START value
      * @property {number} BALL_PLACEMENT_CANCEL=9 BALL_PLACEMENT_CANCEL value
@@ -27876,6 +27898,7 @@ export const ContinueAction = $root.ContinueAction = (() => {
         values[valuesById[1] = "HALT"] = 1;
         values[valuesById[10] = "RESUME_FROM_HALT"] = 10;
         values[valuesById[2] = "STOP_GAME"] = 2;
+        values[valuesById[11] = "RESUME_FROM_STOP"] = 11;
         values[valuesById[3] = "NEXT_COMMAND"] = 3;
         values[valuesById[4] = "BALL_PLACEMENT_START"] = 4;
         values[valuesById[9] = "BALL_PLACEMENT_CANCEL"] = 9;

@@ -6,69 +6,139 @@ import (
 	"log"
 )
 
-func (e *Engine) nextAction() (ContinueAction_Type, state.Team) {
+func (e *Engine) nextAction() (actions []*ContinueAction) {
 	if e.currentState.Stage.IsPausedStage() {
 		if *e.currentState.Stage.Next() != *e.currentState.Stage {
-			return ContinueAction_NEXT_STAGE, state.Team_UNKNOWN
+			actions = append(actions, createContinueAction(
+				ContinueAction_NEXT_STAGE,
+				state.Team_UNKNOWN,
+				ContinueAction_READY_MANUAL,
+			))
 		}
-		return ContinueAction_TYPE_UNKNOWN, state.Team_UNKNOWN
+		// only possible action is to proceed to non-paused stage
+		return
 	}
 
 	if e.currentState.Command.IsRunning() {
-		return ContinueAction_STOP_GAME, state.Team_UNKNOWN
+		actions = append(actions, createContinueAction(
+			ContinueAction_STOP_GAME,
+			state.Team_UNKNOWN,
+			ContinueAction_READY_MANUAL,
+		))
 	}
+
 	if *e.currentState.Command.Type == state.Command_BALL_PLACEMENT {
-		return ContinueAction_BALL_PLACEMENT_CANCEL, state.Team_UNKNOWN
+		actions = append(actions, createContinueAction(
+			ContinueAction_BALL_PLACEMENT_CANCEL,
+			state.Team_UNKNOWN,
+			ContinueAction_READY_MANUAL,
+		))
 	}
 
 	if *e.currentState.Command.Type == state.Command_TIMEOUT {
-		return ContinueAction_TIMEOUT_STOP, *e.currentState.Command.ForTeam
+		actions = append(actions, createContinueAction(
+			ContinueAction_TIMEOUT_STOP,
+			*e.currentState.Command.ForTeam,
+			ContinueAction_READY_MANUAL,
+		))
 	}
 
-	if e.currentState.TeamInfo(state.Team_BLUE).RequestsBotSubstitutionSince != nil &&
-		e.currentState.TeamInfo(state.Team_YELLOW).RequestsBotSubstitutionSince != nil {
-		return ContinueAction_BOT_SUBSTITUTION, state.Team_UNKNOWN
-	}
-
-	for _, team := range state.BothTeams() {
-		if e.currentState.TeamInfo(team).RequestsBotSubstitutionSince != nil {
-			return ContinueAction_BOT_SUBSTITUTION, team
+	if *e.currentState.Command.Type == state.Command_STOP {
+		if e.currentState.StageTimeLeft.AsDuration() < 0 {
+			actions = append(actions, createContinueAction(
+				ContinueAction_NEXT_STAGE,
+				state.Team_UNKNOWN,
+				ContinueAction_READY_MANUAL,
+			))
 		}
-	}
 
-	if e.currentState.TeamInfo(state.Team_BLUE).RequestsTimeoutSince != nil &&
-		e.currentState.TeamInfo(state.Team_YELLOW).RequestsTimeoutSince != nil {
-		if e.currentState.TeamInfo(state.Team_BLUE).RequestsTimeoutSince.AsTime().
-			Before(e.currentState.TeamInfo(state.Team_YELLOW).RequestsTimeoutSince.AsTime()) {
-			return ContinueAction_TIMEOUT_START, state.Team_BLUE
-		} else {
-			return ContinueAction_TIMEOUT_START, state.Team_YELLOW
-		}
-	} else {
-		for _, team := range state.BothTeams() {
-			if e.currentState.TeamInfo(team).RequestsTimeoutSince != nil {
-				return ContinueAction_TIMEOUT_START, team
+		var teamRequestingBotSubstitution = e.teamRequestingBotSubstitution()
+		var teamRequestingTimeout = e.teamRequestingTimeout()
+		if teamRequestingBotSubstitution != nil {
+			actions = append(actions, createContinueAction(
+				ContinueAction_BOT_SUBSTITUTION,
+				*teamRequestingBotSubstitution,
+				ContinueAction_READY_AUTO,
+			))
+		} else if teamRequestingTimeout != nil {
+			actions = append(actions, createContinueAction(
+				ContinueAction_TIMEOUT_START,
+				*teamRequestingTimeout,
+				ContinueAction_READY_MANUAL,
+			))
+		} else if e.ballPlacementRequired() {
+			placingTeam := e.ballPlacementTeam()
+			if placingTeam.Known() {
+				actions = append(actions, createContinueAction(
+					ContinueAction_BALL_PLACEMENT_START,
+					placingTeam,
+					ContinueAction_READY_AUTO,
+				))
 			}
-		}
-	}
-
-	if e.ballPlacementRequired() {
-		placingTeam := e.ballPlacementTeam()
-		if placingTeam.Known() {
-			return ContinueAction_BALL_PLACEMENT_START, placingTeam
+		} else if e.currentState.NextCommand != nil {
+			actions = append(actions, e.createNextCommandContinueAction())
+		} else {
+			actions = append(actions, createContinueAction(
+				ContinueAction_RESUME_FROM_STOP,
+				state.Team_UNKNOWN,
+				ContinueAction_READY_MANUAL,
+			))
 		}
 	}
 
 	if *e.currentState.Command.Type == state.Command_HALT {
-		return ContinueAction_RESUME_FROM_HALT, state.Team_UNKNOWN
+		actions = append(actions, createContinueAction(
+			ContinueAction_RESUME_FROM_HALT,
+			state.Team_UNKNOWN,
+			ContinueAction_READY_AUTO,
+		))
 	}
-	if e.currentState.NextCommand != nil {
-		return ContinueAction_NEXT_COMMAND, *e.currentState.NextCommand.ForTeam
+
+	if *e.currentState.Command.Type != state.Command_HALT &&
+		*e.currentState.Command.Type != state.Command_TIMEOUT {
+		actions = append(actions, createContinueAction(
+			ContinueAction_HALT,
+			state.Team_UNKNOWN,
+			ContinueAction_READY_MANUAL,
+		))
 	}
-	if *e.currentState.Command.Type != state.Command_HALT {
-		return ContinueAction_HALT, state.Team_UNKNOWN
+
+	return
+}
+
+func (e *Engine) teamRequestingBotSubstitution() *state.Team {
+	var teams []state.Team
+	for _, team := range state.BothTeams() {
+		if e.currentState.TeamInfo(team).RequestsBotSubstitutionSince != nil {
+			teams = append(teams, team)
+		}
 	}
-	return ContinueAction_TYPE_UNKNOWN, state.Team_UNKNOWN
+	if len(teams) == 2 {
+		// UNKNOWN is used for both teams here
+		return state.NewTeam(state.Team_UNKNOWN)
+	} else if len(teams) == 1 {
+		return &teams[0]
+	}
+	return nil
+}
+
+func (e *Engine) teamRequestingTimeout() *state.Team {
+	requestBlue := e.currentState.TeamInfo(state.Team_BLUE).RequestsTimeoutSince
+	requestYellow := e.currentState.TeamInfo(state.Team_YELLOW).RequestsTimeoutSince
+	if requestBlue != nil && requestYellow != nil {
+		if requestBlue.AsTime().Before(requestYellow.AsTime()) {
+			return state.NewTeam(state.Team_BLUE)
+		} else {
+			return state.NewTeam(state.Team_YELLOW)
+		}
+	} else {
+		for _, team := range state.BothTeams() {
+			if e.currentState.TeamInfo(team).RequestsTimeoutSince != nil {
+				return &team
+			}
+		}
+	}
+	return nil
 }
 
 func (e *Engine) ballPlacementRequired() bool {

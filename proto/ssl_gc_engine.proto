@@ -21,9 +21,8 @@ message GcState {
     // the state of the currently selected tracker
     optional GcStateTracker tracker_state_gc = 4;
 
-    // the next action that will be executed when continuing.
-    // can not continue if no action is set.
-    optional ContinueAction continue_action = 8;
+    // the next actions that can be executed when continuing
+    repeated ContinueAction continue_actions = 8;
 }
 
 // The GC state for a single team
@@ -118,6 +117,7 @@ message ContinueAction {
         HALT = 1;
         RESUME_FROM_HALT = 10;
         STOP_GAME = 2;
+        RESUME_FROM_STOP = 11;
         NEXT_COMMAND = 3;
         BALL_PLACEMENT_START = 4;
         BALL_PLACEMENT_CANCEL = 9;

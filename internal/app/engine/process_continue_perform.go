@@ -1,22 +1,11 @@
 package engine
 
 import (
-	"fmt"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"log"
 )
 
 func (e *Engine) performContinueAction(action *ContinueAction) {
-	if e.gcState.ContinueAction == nil {
-		logWillNotContinue("No action available anymore")
-		return
-	}
-	if *e.gcState.ContinueAction.Type != *action.Type {
-		logWillNotContinue(fmt.Sprintf("Continue action type changed from %s to %s",
-			e.gcState.ContinueAction.Type.String(), action.Type.String()))
-		return
-	}
-
 	switch *action.Type {
 	case ContinueAction_HALT:
 		e.Enqueue(createCommandChange(state.NewCommandNeutral(state.Command_HALT)))
@@ -25,6 +14,8 @@ func (e *Engine) performContinueAction(action *ContinueAction) {
 		ContinueAction_STOP_GAME,
 		ContinueAction_BALL_PLACEMENT_CANCEL:
 		e.Enqueue(createCommandChange(state.NewCommandNeutral(state.Command_STOP)))
+	case ContinueAction_RESUME_FROM_STOP:
+		e.Enqueue(createCommandChange(state.NewCommandNeutral(state.Command_FORCE_START)))
 	case ContinueAction_NEXT_COMMAND:
 		e.Enqueue(createCommandChange(e.currentState.NextCommand))
 	case ContinueAction_BALL_PLACEMENT_START:
