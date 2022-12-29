@@ -215,11 +215,13 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 		isRuleViolationDuringPenalty(*gameEvent.Type) {
 		if byTeam == *newState.GameState.ForTeam {
 			// rule violation by attacking team -> no goal
+			reason := "Rule violation: " + gameEvent.Type.String()
 			changes = append(changes, createGameEventChange(state.GameEvent_PENALTY_KICK_FAILED, &state.GameEvent{
 				Event: &state.GameEvent_PenaltyKickFailed_{
 					PenaltyKickFailed: &state.GameEvent_PenaltyKickFailed{
 						ByTeam:   &byTeam,
 						Location: locationForRuleViolation(gameEvent),
+						Reason:   &reason,
 					},
 				},
 			}))

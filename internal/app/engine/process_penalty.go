@@ -13,11 +13,13 @@ func (e *Engine) processPenalty() {
 		if e.gcState.TrackerStateGc.Ball != nil {
 			location = e.gcState.TrackerStateGc.Ball.Pos.ToVector2()
 		}
+		reason := "Time run out"
 		e.Enqueue(createGameEventChange(state.GameEvent_PENALTY_KICK_FAILED, &state.GameEvent{
 			Event: &state.GameEvent_PenaltyKickFailed_{
 				PenaltyKickFailed: &state.GameEvent_PenaltyKickFailed{
 					ByTeam:   e.currentState.GameState.ForTeam,
 					Location: location,
+					Reason:   &reason,
 				},
 			},
 		}))

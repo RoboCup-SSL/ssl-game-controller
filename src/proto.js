@@ -13260,6 +13260,7 @@ export const GameEvent = $root.GameEvent = (() => {
          * @interface IPenaltyKickFailed
          * @property {Team} byTeam PenaltyKickFailed byTeam
          * @property {IVector2|null} [location] PenaltyKickFailed location
+         * @property {string|null} [reason] PenaltyKickFailed reason
          */
 
         /**
@@ -13294,6 +13295,14 @@ export const GameEvent = $root.GameEvent = (() => {
         PenaltyKickFailed.prototype.location = null;
 
         /**
+         * PenaltyKickFailed reason.
+         * @member {string} reason
+         * @memberof GameEvent.PenaltyKickFailed
+         * @instance
+         */
+        PenaltyKickFailed.prototype.reason = "";
+
+        /**
          * Creates a new PenaltyKickFailed instance using the specified properties.
          * @function create
          * @memberof GameEvent.PenaltyKickFailed
@@ -13320,6 +13329,8 @@ export const GameEvent = $root.GameEvent = (() => {
             writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
             if (message.location != null && Object.hasOwnProperty.call(message, "location"))
                 $root.Vector2.encode(message.location, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+            if (message.reason != null && Object.hasOwnProperty.call(message, "reason"))
+                writer.uint32(/* id 3, wireType 2 =*/26).string(message.reason);
             return writer;
         };
 
@@ -13360,6 +13371,10 @@ export const GameEvent = $root.GameEvent = (() => {
                     }
                 case 2: {
                         message.location = $root.Vector2.decode(reader, reader.uint32());
+                        break;
+                    }
+                case 3: {
+                        message.reason = reader.string();
                         break;
                     }
                 default:
@@ -13412,6 +13427,9 @@ export const GameEvent = $root.GameEvent = (() => {
                 if (error)
                     return "location." + error;
             }
+            if (message.reason != null && message.hasOwnProperty("reason"))
+                if (!$util.isString(message.reason))
+                    return "reason: string expected";
             return null;
         };
 
@@ -13446,6 +13464,8 @@ export const GameEvent = $root.GameEvent = (() => {
                     throw TypeError(".GameEvent.PenaltyKickFailed.location: object expected");
                 message.location = $root.Vector2.fromObject(object.location);
             }
+            if (object.reason != null)
+                message.reason = String(object.reason);
             return message;
         };
 
@@ -13465,11 +13485,14 @@ export const GameEvent = $root.GameEvent = (() => {
             if (options.defaults) {
                 object.byTeam = options.enums === String ? "UNKNOWN" : 0;
                 object.location = null;
+                object.reason = "";
             }
             if (message.byTeam != null && message.hasOwnProperty("byTeam"))
                 object.byTeam = options.enums === String ? $root.Team[message.byTeam] : message.byTeam;
             if (message.location != null && message.hasOwnProperty("location"))
                 object.location = $root.Vector2.toObject(message.location, options);
+            if (message.reason != null && message.hasOwnProperty("reason"))
+                object.reason = message.reason;
             return object;
         };
 
