@@ -63,6 +63,8 @@ type Game struct {
 	ContinueFromHalt                      bool                       `yaml:"continue-from-halt"`
 	ChallengeFlags                        int32                      `yaml:"challenge-flags"`
 	EmergencyStopGracePeriod              time.Duration              `yaml:"emergency-stop-grace-period"`
+	PreparationTimeAfterHalt              time.Duration              `yaml:"preparation-time-after-halt"`
+	PreparationTimeBeforeResume           time.Duration              `yaml:"preparation-time-before-resume"`
 }
 
 // Network holds configs for network communication
@@ -191,6 +193,8 @@ func DefaultControllerConfig() (c Controller) {
 	c.Game.AutoApproveGoals = false
 	c.Game.ChallengeFlags = 3
 	c.Game.EmergencyStopGracePeriod = 10 * time.Second
+	c.Game.PreparationTimeAfterHalt = 10 * time.Second
+	c.Game.PreparationTimeBeforeResume = 2 * time.Second
 
 	c.Game.Normal.HalfDuration = 5 * time.Minute
 	c.Game.Normal.HalfTimeDuration = 5 * time.Minute

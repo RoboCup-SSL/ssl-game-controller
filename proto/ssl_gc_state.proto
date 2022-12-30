@@ -114,4 +114,5 @@ message State {
     reserved 16;
     optional Team first_kickoff_team = 17;
     optional MatchType match_type = 18;
+    optional google.protobuf.Timestamp ready_continue_time = 20;
 }

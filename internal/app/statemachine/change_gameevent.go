@@ -190,6 +190,11 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 	// ball placement succeeded
 	if *gameEvent.Type == state.GameEvent_PLACEMENT_SUCCEEDED &&
 		byTeam.Known() {
+		if newState.NextCommand != nil &&
+			*newState.NextCommand.ForTeam == byTeam {
+			// continue immediately
+			newState.ReadyContinueTime = timestamppb.New(s.timeProvider())
+		}
 		if *newState.TeamInfo(byTeam).BallPlacementFailures > 0 {
 			*newState.TeamInfo(byTeam).BallPlacementFailures--
 		}

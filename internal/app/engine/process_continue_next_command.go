@@ -5,47 +5,56 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/geom"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"google.golang.org/protobuf/types/known/timestamppb"
-	"time"
 )
 
 const distanceToBallDuringPenalty = 1.0
 
-func (e *Engine) createNextCommandContinueAction() *ContinueAction {
-	var actionState = ContinueAction_STATE_UNKNOWN
+func (e *Engine) createNextCommandContinueAction(actionType ContinueAction_Type) *ContinueAction {
+	var actionState ContinueAction_State
 	var continuationIssues = e.findIssuesForContinuation(*e.currentState.Command.Type)
+
 	var readyAt *timestamppb.Timestamp
-	var issuesPresent = len(continuationIssues) > 0
-	var lastReadyAt *timestamppb.Timestamp
-
-	if len(e.gcState.ContinueActions) > 0 {
-		lastReadyAt = e.gcState.ContinueActions[0].ReadyAt
-	}
-
-	if issuesPresent {
-		readyAt = nil
+	if len(continuationIssues) > 0 {
 		actionState = ContinueAction_BLOCKED
-	} else if lastReadyAt == nil {
-		readyAt = timestamppb.New(e.timeProvider().Add(e.preparationTime()))
-		actionState = ContinueAction_WAITING
+		readyAt = timestamppb.New(e.timeProvider().Add(e.gameConfig.PreparationTimeBeforeResume))
 	} else {
-		readyAt = lastReadyAt
-		preparationTimeLeft := lastReadyAt.AsTime().Sub(e.timeProvider())
-		if preparationTimeLeft > 0 {
-			continuationIssues = append(continuationIssues, fmt.Sprintf("%.1fs left for preparation", preparationTimeLeft.Seconds()))
-			actionState = ContinueAction_WAITING
+		if len(e.gcState.ContinueActions) > 0 {
+			readyAt = maxTime(e.gcState.ContinueActions[0].ReadyAt, e.currentState.ReadyContinueTime)
 		} else {
+			readyAt = e.currentState.ReadyContinueTime
+		}
+		preparationTimeLeft := readyAt.AsTime().Sub(e.timeProvider())
+		if preparationTimeLeft > 0 {
+			actionState = ContinueAction_WAITING
+			continuationIssues = append(continuationIssues, fmt.Sprintf("%.1f s left for preparation", preparationTimeLeft.Seconds()))
+		} else if actionType == ContinueAction_NEXT_COMMAND {
 			actionState = ContinueAction_READY_AUTO
+		} else {
+			actionState = ContinueAction_READY_MANUAL
 		}
 	}
 
-	nextActionType := ContinueAction_NEXT_COMMAND
+	var forTeam *state.Team
+	if e.currentState.NextCommand != nil {
+		forTeam = e.currentState.NextCommand.ForTeam
+	} else {
+		forTeam = state.NewTeam(state.Team_UNKNOWN)
+	}
+
 	return &ContinueAction{
-		Type:               &nextActionType,
-		ForTeam:            e.currentState.NextCommand.ForTeam,
+		Type:               &actionType,
+		ForTeam:            forTeam,
 		State:              &actionState,
 		ContinuationIssues: continuationIssues,
 		ReadyAt:            readyAt,
 	}
+}
+
+func maxTime(t1, t2 *timestamppb.Timestamp) *timestamppb.Timestamp {
+	if t1.AsTime().After(t2.AsTime()) {
+		return t1
+	}
+	return t2
 }
 
 func (e *Engine) findIssuesForContinuation(command state.Command_Type) []string {
@@ -183,16 +192,4 @@ func (e *Engine) tooManyRobots(team state.Team) bool {
 	maxAllowed := *e.currentState.TeamState[team.String()].MaxAllowedBots
 	current := e.gcState.TrackerStateGc.NumTeamRobots(team)
 	return current > maxAllowed
-}
-
-func (e *Engine) preparationTime() time.Duration {
-	events := e.currentState.GameEvents
-	if len(events) > 0 {
-		lastEvent := events[len(events)-1]
-		if *lastEvent.Type == state.GameEvent_PLACEMENT_SUCCEEDED &&
-			lastEvent.ByTeam() == *e.currentState.NextCommand.ForTeam {
-			return 0
-		}
-	}
-	return minPreparationTime
 }

@@ -2,10 +2,7 @@ package engine
 
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
-	"time"
 )
-
-const minPreparationTime = time.Second * 2
 
 func (e *Engine) processContinue() {
 

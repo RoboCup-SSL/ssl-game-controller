@@ -3,10 +3,12 @@ package statemachine
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"google.golang.org/protobuf/types/known/durationpb"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"log"
 )
 
 func (s *StateMachine) processChangeNewCommand(newState *state.State, newCommand *Change_NewCommand) (changes []*Change) {
+	prevGameState := newState.GameState
 	newState.GameState = s.newGameState(newState, newCommand)
 	newState.Command = newCommand.Command
 
@@ -20,6 +22,16 @@ func (s *StateMachine) processChangeNewCommand(newState *state.State, newCommand
 	case state.Command_TIMEOUT:
 		*newState.TeamInfo(*newState.Command.ForTeam).TimeoutsLeft--
 		newState.TeamInfo(*newState.Command.ForTeam).RequestsTimeoutSince = nil
+	}
+
+	if *newState.GameState.Type == state.GameState_STOP {
+		if prevGameState.IsHalted() {
+			newState.ReadyContinueTime = timestamppb.New(s.timeProvider().Add(s.gameConfig.PreparationTimeAfterHalt))
+		} else if newState.ReadyContinueTime == nil {
+			newState.ReadyContinueTime = timestamppb.New(s.timeProvider().Add(s.gameConfig.PreparationTimeBeforeResume))
+		}
+	} else {
+		newState.ReadyContinueTime = nil
 	}
 
 	// determine next command

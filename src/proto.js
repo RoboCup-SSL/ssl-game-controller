@@ -23131,6 +23131,7 @@ export const State = $root.State = (() => {
      * @property {Division|null} [division] State division
      * @property {Team|null} [firstKickoffTeam] State firstKickoffTeam
      * @property {MatchType|null} [matchType] State matchType
+     * @property {google.protobuf.ITimestamp|null} [readyContinueTime] State readyContinueTime
      */
 
     /**
@@ -23272,6 +23273,14 @@ export const State = $root.State = (() => {
     State.prototype.matchType = 0;
 
     /**
+     * State readyContinueTime.
+     * @member {google.protobuf.ITimestamp|null|undefined} readyContinueTime
+     * @memberof State
+     * @instance
+     */
+    State.prototype.readyContinueTime = null;
+
+    /**
      * Creates a new State instance using the specified properties.
      * @function create
      * @memberof State
@@ -23330,6 +23339,8 @@ export const State = $root.State = (() => {
             writer.uint32(/* id 18, wireType 0 =*/144).int32(message.matchType);
         if (message.gameState != null && Object.hasOwnProperty.call(message, "gameState"))
             $root.GameState.encode(message.gameState, writer.uint32(/* id 19, wireType 2 =*/154).fork()).ldelim();
+        if (message.readyContinueTime != null && Object.hasOwnProperty.call(message, "readyContinueTime"))
+            $root.google.protobuf.Timestamp.encode(message.readyContinueTime, writer.uint32(/* id 20, wireType 2 =*/162).fork()).ldelim();
         return writer;
     };
 
@@ -23445,6 +23456,10 @@ export const State = $root.State = (() => {
                 }
             case 18: {
                     message.matchType = reader.int32();
+                    break;
+                }
+            case 20: {
+                    message.readyContinueTime = $root.google.protobuf.Timestamp.decode(reader, reader.uint32());
                     break;
                 }
             default:
@@ -23598,6 +23613,11 @@ export const State = $root.State = (() => {
             case 3:
                 break;
             }
+        if (message.readyContinueTime != null && message.hasOwnProperty("readyContinueTime")) {
+            let error = $root.google.protobuf.Timestamp.verify(message.readyContinueTime);
+            if (error)
+                return "readyContinueTime." + error;
+        }
         return null;
     };
 
@@ -23787,6 +23807,11 @@ export const State = $root.State = (() => {
             message.matchType = 3;
             break;
         }
+        if (object.readyContinueTime != null) {
+            if (typeof object.readyContinueTime !== "object")
+                throw TypeError(".State.readyContinueTime: object expected");
+            message.readyContinueTime = $root.google.protobuf.Timestamp.fromObject(object.readyContinueTime);
+        }
         return message;
     };
 
@@ -23822,6 +23847,7 @@ export const State = $root.State = (() => {
             object.firstKickoffTeam = options.enums === String ? "UNKNOWN" : 0;
             object.matchType = options.enums === String ? "UNKNOWN_MATCH" : 0;
             object.gameState = null;
+            object.readyContinueTime = null;
         }
         if (message.stage != null && message.hasOwnProperty("stage"))
             object.stage = options.enums === String ? $root.Referee.Stage[message.stage] : message.stage;
@@ -23863,6 +23889,8 @@ export const State = $root.State = (() => {
             object.matchType = options.enums === String ? $root.MatchType[message.matchType] : message.matchType;
         if (message.gameState != null && message.hasOwnProperty("gameState"))
             object.gameState = $root.GameState.toObject(message.gameState, options);
+        if (message.readyContinueTime != null && message.hasOwnProperty("readyContinueTime"))
+            object.readyContinueTime = $root.google.protobuf.Timestamp.toObject(message.readyContinueTime, options);
         return object;
     };
 

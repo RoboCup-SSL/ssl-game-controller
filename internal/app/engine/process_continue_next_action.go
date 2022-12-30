@@ -76,13 +76,9 @@ func (e *Engine) nextAction() (actions []*ContinueAction) {
 				))
 			}
 		} else if e.currentState.NextCommand != nil {
-			actions = append(actions, e.createNextCommandContinueAction())
+			actions = append(actions, e.createNextCommandContinueAction(ContinueAction_NEXT_COMMAND))
 		} else {
-			actions = append(actions, createContinueAction(
-				ContinueAction_RESUME_FROM_STOP,
-				state.Team_UNKNOWN,
-				ContinueAction_READY_MANUAL,
-			))
+			actions = append(actions, e.createNextCommandContinueAction(ContinueAction_RESUME_FROM_STOP))
 		}
 	}
 
@@ -90,7 +86,7 @@ func (e *Engine) nextAction() (actions []*ContinueAction) {
 		actions = append(actions, createContinueAction(
 			ContinueAction_RESUME_FROM_HALT,
 			state.Team_UNKNOWN,
-			ContinueAction_READY_AUTO,
+			ContinueAction_READY_MANUAL,
 		))
 	}
 
