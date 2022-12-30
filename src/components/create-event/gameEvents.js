@@ -18,7 +18,12 @@ export const matchProceedingEvents = [
         name: 'Placement succeeded',
         component: 'PlacementSucceeded',
         type: 'auto'
-    }
+    },
+    {
+        name: 'Penalty kick failed',
+        component: 'PenaltyKickFailed',
+        type: 'auto'
+    },
 ];
 export const ballLeftFieldEvents = [
     {

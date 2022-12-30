@@ -42,6 +42,7 @@
     import UnsportingBehaviorMinor from "./inputs/UnsportingBehaviorMinor"
     import PlacementSucceeded from "./inputs/PlacementSucceeded"
     import BoundaryCrossing from "./inputs/BoundaryCrossing";
+    import PenaltyKickFailed from "@/components/create-event/inputs/PenaltyKickFailed.vue";
 
     export default {
         name: "EventAccordion",
@@ -72,6 +73,7 @@
             UnsportingBehaviorMajor,
             UnsportingBehaviorMinor,
             PlacementSucceeded,
+            PenaltyKickFailed,
         },
         props: {
             accordionName: {
