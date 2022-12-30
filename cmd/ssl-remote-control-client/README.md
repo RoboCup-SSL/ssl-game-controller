@@ -14,7 +14,7 @@ The connection is described in the following sequence diagram:
 
 ![sequence diagram](https://www.websequencediagrams.com/cgi-bin/cdraw?lz=IyBodHRwczovL3d3dy53ZWJzZXF1ZW5jZWRpYWdyYW1zLmNvbS8KClJlbW90ZUNvbnRyb2wtPgACB2xlcjogZXN0YWJsaXNoIFRDUCBjb25uZWN0aW9uCgAbCgAjDmdlbmVyYXRlIG5ldyB0b2tlAB0OAF4NOiAAYQpSZXBseSAoAC0GICkAeBwAgSINUmVnaXN0cmF0aW9uICggdGVhbSwgWwB0Biwgc2lnbmF0dXJlIF0gKQCBKAwAgVgOdmVyaWZ5AIEdEgARFQBLCQCBKy5vayB8IHJlamVjdCApCgpsb29wAIE8KVRvAIMKCgA6PGVuZAo&s=napkin)
 
-Source to generate the diagram: [communication_remote-control.txt](./communication_remote-control.txt)
+Source to generate the diagram: [communication_remote-control.puml](./communication_remote-control.puml)
 
 ## Connection stability
 Clients should deal with connection losts (reconnect). The game-controller may be restarted due to various reasons like crashes or other technical issues.

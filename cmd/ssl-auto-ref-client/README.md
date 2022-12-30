@@ -14,7 +14,7 @@ The connection is described in the following sequence diagram:
 
 ![sequence diagram](https://www.websequencediagrams.com/cgi-bin/cdraw?lz=QXV0b1JlZi0-Q29udHJvbGxlcjogZXN0YWJsaXNoIFRDUCBjb25uZWN0aW9uCgAbCgAjDmdlbmVyYXRlIG5ldyB0b2tlAB0OAF4HOiAAWwpSZXBseSAoACcGICkKAHMVAIEWB1JlZ2lzdHJhdGlvbiAoIGlkZW50aWZpZXIsIFsAaAYsIHNpZ25hdHVyZSBdICkAgRwMAIFMDnZlcmlmeQCBERIAERUASwkAgSUob2sgfCByZWplY3QgKQoKbG9vcCAAgT0dVG8AggYMcXVlc3QANjZlbmQKCg&s=napkin)
 
-Source to generate the diagram: [communication_autoRef.txt](./communication_autoRef.txt)
+Source to generate the diagram: [communication_autoRef.puml](./communication_autoRef.puml)
 
 ## Connection stability
 Clients should deal with connection losts (reconnect). The game-controller may be restarted due to various reasons like crashes or other technical issues. AutoRefs should reconnect automatically after a connection lost without human interaction.

@@ -3,7 +3,7 @@ package config
 import (
 	"github.com/pkg/errors"
 	"gopkg.in/yaml.v2"
-	"io/ioutil"
+	"io"
 	"log"
 	"os"
 	"path/filepath"
@@ -137,7 +137,7 @@ func LoadControllerConfig(fileName string) (config Controller, err error) {
 	if err != nil {
 		return
 	}
-	b, err := ioutil.ReadAll(f)
+	b, err := io.ReadAll(f)
 	if err != nil {
 		return
 	}
@@ -161,7 +161,7 @@ func (c *Controller) WriteTo(fileName string) (err error) {
 		err = errors.Wrapf(err, "Could not create directory for config file: %v", fileName)
 		return
 	}
-	err = ioutil.WriteFile(fileName, b, 0600)
+	err = os.WriteFile(fileName, b, 0600)
 	return
 }
 

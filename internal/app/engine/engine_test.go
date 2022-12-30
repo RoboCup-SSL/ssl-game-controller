@@ -6,13 +6,12 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"github.com/go-test/deep"
 	"google.golang.org/protobuf/proto"
-	"io/ioutil"
 	"os"
 	"testing"
 )
 
 func Test_Engine(t *testing.T) {
-	tmpDir, err := ioutil.TempDir("", "")
+	tmpDir, err := os.MkdirTemp("", "")
 	if err != nil {
 		t.Fatal("Could not create a temporary directory: ", err)
 	}

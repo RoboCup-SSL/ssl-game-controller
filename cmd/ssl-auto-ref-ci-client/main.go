@@ -9,7 +9,6 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/tracker"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/vision"
-	"github.com/google/uuid"
 	"log"
 	"net"
 	"time"
@@ -18,8 +17,6 @@ import (
 var addressAutoRefCi = flag.String("addressAutoRef", "localhost:10013", "The address of the auto referee CI interface")
 var addressGcCi = flag.String("addressGc", "localhost:10009", "The address of the ssl-game-controller CI interface")
 
-var id = uuid.NewString()
-var name = "Test client"
 var detectionFrame = createSSlDetectionFrame()
 var refereeMsg *state.Referee
 var robotSpeed = float32(1)

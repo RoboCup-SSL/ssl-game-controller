@@ -4,7 +4,7 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/pkg/errors"
 	"google.golang.org/protobuf/encoding/protojson"
-	"io/ioutil"
+	"io"
 	"log"
 	"os"
 	"path/filepath"
@@ -74,7 +74,7 @@ func (x *Config) ReadFrom(fileName string) (err error) {
 	if err != nil {
 		return
 	}
-	b, err := ioutil.ReadAll(f)
+	b, err := io.ReadAll(f)
 	if err != nil {
 		return
 	}
@@ -151,7 +151,7 @@ func (x *Config) WriteTo(fileName string) (err error) {
 		err = errors.Wrapf(err, "Could not create directory for config file: %v", fileName)
 		return
 	}
-	err = ioutil.WriteFile(fileName, b, 0600)
+	err = os.WriteFile(fileName, b, 0600)
 	log.Printf("Written to %v", fileName)
 	return
 }

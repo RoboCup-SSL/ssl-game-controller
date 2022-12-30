@@ -77,16 +77,16 @@ Make sure to use non-standard ports whenever possible to avoid any interference 
 There are three modes that you can run the ssl-game-controller with:
 
 1. `system` (default): Use system time
-1. `vision`: Receive messages from ssl-vision and use the timestamps from these messages as the time source. This is mostly useful, when you produce your own ssl-vision frames from simulation.
-1. `ci`: Connect your software directly to the GC via TCP. You send the current timestamp and tracker packets and will receive the resulting referee message.
+2. `vision`: Receive messages from ssl-vision and use the timestamps from these messages as the time source. This is mostly useful, when you produce your own ssl-vision frames from simulation.
+3. `ci`: Connect your software directly to the GC via TCP. You send the current timestamp and tracker packets and will receive the resulting referee message.
 
 It is highly recommended using the `ci` mode when you integrate the GC with your own simulator.
-It has following advantages:
+It has the following advantages:
 
 1. No multicast network traffic is required that might be published to your local network (make sure to unset `network.publish-address`)
-1. You have full control of the data flow. The GC will not do anything asynchronously in the background
-1. You define the time and thus the speed.
-1. You provide the ssl-vision tracking data directly.
+2. You have full control of the data flow. The GC will not do anything asynchronously in the background
+3. You define the time and thus the speed.
+4. You provide the ssl-vision tracking data directly.
 
 If you use external simulators like grSim, you can consider using the `vision` mode instead.
 That way, the game-controller uses the time and speed of the simulator, even if it is not

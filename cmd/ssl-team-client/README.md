@@ -14,7 +14,7 @@ The connection is described in the following sequence diagram:
 
 ![sequence diagram](https://www.websequencediagrams.com/cgi-bin/cdraw?lz=IyBodHRwczovL3d3dy53ZWJzZXF1ZW5jZWRpYWdyYW1zLmNvbS8KClRlYW0tPkNvbnRyb2xsZXI6IGVzdGFibGlzaCBUQ1AgY29ubmVjdGlvbgoAGwoAIw5nZW5lcmF0ZSBuZXcgdG9rZQAdDlRlYW06IABYClJlcGx5ICgAJAYgKQBvE1RlYW1SZWdpc3RyYXRpb24gKCB0ZWFtTmFtZSwgWwBdBiwgc2lnbmF0dXJlIF0gKQCBEQwAgUEOdmVyaWZ5AIEGEgARFQBLCQCBHSVvayB8IHJlamVjdCApCgpsb29wCmFsdACBKAUgcmVxdWVzdHMgYSBjaGFuZ2UAgVIXVG8Agg8MAC8FAEozZWxzZSBjAIM9CQByDGRlY2lzAIMwEACDBRBUbwCCbwYAegYATV1uZAplbmQKCg&s=napkin)
 
-Source to generate the diagram: [communication_team.txt](./communication_team.txt)
+Source to generate the diagram: [communication_team.puml](./communication_team.puml)
 
 ## Connection stability
 Clients should deal with connection losts (reconnect). The game-controller may be restarted due to various reasons like crashes or other technical issues. Teams are not allowed to touch their system to reconnect to the game-controller, except during timeouts.

@@ -21,7 +21,7 @@ function generate_uml() {
 
   for f in **; do
     if [[ -d "$f" ]]; then
-      grep -ohP "$package_suffix/\K.+(?=\")" $f/*.go | sort | uniq | sed "s~^\(.*\)~\"$f\" --> \"\\1\"~" || true
+      grep -ohP "$package_suffix/\K.+(?=\")" "$f"/*.go | sort | uniq | sed "s~^\(.*\)~\"$f\" --> \"\\1\"~" || true
     fi
   done
 

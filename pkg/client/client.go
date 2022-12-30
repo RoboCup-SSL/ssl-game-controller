@@ -8,9 +8,9 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"google.golang.org/protobuf/proto"
-	"io/ioutil"
 	"log"
 	"net"
+	"os"
 	"strings"
 )
 
@@ -61,7 +61,7 @@ func LoadPrivateKey(privateKeyLocation string) *rsa.PrivateKey {
 
 // ReadPrivateKey reads a private RSA key from the given location, exiting on errors
 func ReadPrivateKey(privateKeyLocation string) *rsa.PrivateKey {
-	b, err := ioutil.ReadFile(privateKeyLocation)
+	b, err := os.ReadFile(privateKeyLocation)
 	if err != nil {
 		log.Fatal("Could not find private key at ", privateKeyLocation)
 	}

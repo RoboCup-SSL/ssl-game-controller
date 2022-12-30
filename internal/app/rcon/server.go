@@ -10,7 +10,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
 	"google.golang.org/protobuf/proto"
-	"io/ioutil"
 	"log"
 	"net"
 	"os"
@@ -190,7 +189,7 @@ func (s *Server) LoadTrustedKeys(trustedKeysDir string) {
 	if _, err := os.Stat(trustedKeysDir); errors.Is(err, os.ErrNotExist) {
 		return
 	}
-	files, err := ioutil.ReadDir(trustedKeysDir)
+	files, err := os.ReadDir(trustedKeysDir)
 	if err != nil {
 		log.Print("Could not read trusted keys: ", err)
 		return
@@ -198,7 +197,7 @@ func (s *Server) LoadTrustedKeys(trustedKeysDir string) {
 	for _, file := range files {
 		if !file.IsDir() {
 			fullPath := trustedKeysDir + "/" + file.Name()
-			b, err := ioutil.ReadFile(fullPath)
+			b, err := os.ReadFile(fullPath)
 			if err != nil {
 				log.Print("Could not read public key at ", fullPath)
 			} else {
