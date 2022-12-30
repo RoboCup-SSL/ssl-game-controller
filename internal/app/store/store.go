@@ -2,9 +2,12 @@ package store
 
 import (
 	"bufio"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"github.com/pkg/errors"
 	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"os"
 	"path/filepath"
 	"time"
@@ -98,10 +101,20 @@ func (s *Store) Load() error {
 	return nil
 }
 
-// Add adds a new entry to the store
-func (s *Store) Add(entry *statemachine.StateChange) error {
+// CreateEntry creates a new store entry without adding it to the store yet
+func (s *Store) CreateEntry(change *statemachine.Change, currentTime time.Time, currentState *state.State) *statemachine.StateChange {
+	entry := &statemachine.StateChange{}
 	entry.Id = new(int32)
 	*entry.Id = int32(len(s.entries))
+	entry.Change = change
+	entry.StatePre = new(state.State)
+	entry.Timestamp = timestamppb.New(currentTime)
+	proto.Merge(entry.StatePre, currentState)
+	return entry
+}
+
+// Add adds a new entry to the store
+func (s *Store) Add(entry *statemachine.StateChange) error {
 	s.entries = append(s.entries, entry)
 
 	jsonState, err := protojson.Marshal(entry)

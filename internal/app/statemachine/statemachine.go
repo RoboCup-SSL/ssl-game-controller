@@ -64,7 +64,6 @@ func (s *StateMachine) Process(currentState *state.State, change *Change) (newSt
 
 	newState = new(state.State)
 	proto.Merge(newState, currentState)
-	log.Printf("Processing change '%v'", change.StringJson())
 	if change.GetNewCommandChange() != nil {
 		newChanges = s.processChangeNewCommand(newState, change.GetNewCommandChange())
 	} else if change.GetChangeStageChange() != nil {
@@ -101,7 +100,6 @@ func (s *StateMachine) Process(currentState *state.State, change *Change) (newSt
 		newChanges[i].Origin = new(string)
 		*newChanges[i].Origin = changeOriginStateMachine
 	}
-	log.Printf("Change '%v' processed:\nfrom: %v\n  to: %v", change.StringJson(), currentState.StringJson(), newState.StringJson())
 
 	return
 }

@@ -307,13 +307,9 @@ func (e *Engine) processChangeList(changes []*statemachine.Change) {
 func (e *Engine) processChange(change *statemachine.Change) (newChanges []*statemachine.Change) {
 	e.mutex.Lock()
 	defer e.mutex.Unlock()
-	log.Printf("Engine: Process change '%v'", change.StringJson())
 
-	entry := &statemachine.StateChange{}
-	entry.Change = change
-	entry.StatePre = new(state.State)
-	entry.Timestamp = timestamppb.New(e.timeProvider())
-	proto.Merge(entry.StatePre, e.currentState)
+	var entry = e.stateStore.CreateEntry(change, e.timeProvider(), e.currentState)
+	log.Printf("Process change %d: %+v", *entry.Id, change.StringJson())
 
 	if change.GetRevertChange() != nil {
 		if change.GetRevertChange().ChangeId == nil {
@@ -350,14 +346,13 @@ func (e *Engine) processChange(change *statemachine.Change) (newChanges []*state
 
 	e.postProcessChange(entry)
 
-	log.Println("Add entry to state store")
 	if err := e.stateStore.Add(entry); err != nil {
 		log.Println("Could not add new state to store: ", err)
 	}
 	stateCopy := e.currentState.Clone()
 	hookOut := HookOut{Change: entry.Change, State: stateCopy}
 	for name, hook := range e.hooks {
-		log.Println("Notify hook ", name)
+		log.Println("Notify hook:", name)
 		select {
 		case hook <- hookOut:
 		default:
@@ -365,8 +360,7 @@ func (e *Engine) processChange(change *statemachine.Change) (newChanges []*state
 		}
 	}
 
-	log.Printf("Change produced %d new changes", len(newChanges))
-	log.Printf("Change '%v' processed", change.StringJson())
+	log.Printf("Processed change %d and produced %d new changes", *entry.Id, len(newChanges))
 	return
 }
 
