@@ -14,22 +14,22 @@
             Force Start (no next command available)
         </template>
         <template v-else-if="continueAction.type === 'NEXT_COMMAND'">
-            <span :class="teamColorClass">{{ nextCommand }}</span>
+            {{ nextCommand }} <span :class="teamColorClass">{{ forTeam }}</span>
         </template>
         <template v-else-if="continueAction.type === 'BALL_PLACEMENT_START'">
-            Start <span :class="teamColorClass">Ball Placement</span>
+            Start Ball Placement <span :class="teamColorClass">{{ forTeam }}</span>
         </template>
         <template v-else-if="continueAction.type === 'BALL_PLACEMENT_CANCEL'">
-            Cancel <span :class="teamColorClass">Ball Placement</span>
+            Cancel Ball Placement <span :class="teamColorClass">{{ forTeam }}</span>
         </template>
         <template v-else-if="continueAction.type === 'TIMEOUT_START'">
-            Start <span :class="teamColorClass">Timeout</span>
+            Start Timeout <span :class="teamColorClass">{{ forTeam }}</span>
         </template>
         <template v-else-if="continueAction.type === 'TIMEOUT_STOP'">
-            Stop <span :class="teamColorClass">Timeout</span>
+            Stop Timeout <span :class="teamColorClass">{{ forTeam }}</span>
         </template>
         <template v-else-if="continueAction.type === 'BOT_SUBSTITUTION'">
-            Start <span :class="teamColorClass">Bot Substitution</span>
+            Start Bot Substitution <span :class="teamColorClass">{{ forTeam }}</span>
         </template>
         <template v-else-if="continueAction.type === 'NEXT_STAGE'">
             Next stage
@@ -47,7 +47,7 @@ import {submitContinueAction} from "@/submit";
 export default {
     name: "ContinueButton",
     props: {
-      value: Object
+        value: Object
     },
     methods: {
         triggerContinue() {
@@ -56,7 +56,7 @@ export default {
     },
     computed: {
         continueAction() {
-          return this.value;
+            return this.value;
         },
         nextCommand() {
             const command = this.$store.state.matchState.nextCommand;
@@ -64,6 +64,12 @@ export default {
                 return command.type;
             }
             return "";
+        },
+        forTeam() {
+            if (this.continueAction.forTeam === 'BLUE' || this.continueAction.forTeam === 'YELLOW') {
+                return this.continueAction.forTeam;
+            }
+            return '';
         },
         continuationIssues() {
             return this.continueAction.continuationIssues
