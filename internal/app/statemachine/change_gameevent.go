@@ -35,7 +35,7 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 	newState.NextCommand = s.nextCommandForEvent(newState, gameEvent)
 
 	// Increment foul counter
-	if incrementsFoulCounter(*gameEvent.Type) {
+	if incrementsFoulCounter(newState, gameEvent) {
 		for _, team := range state.BothTeams() {
 			if byTeam == state.Team_UNKNOWN || byTeam == team {
 				log.Printf("Team %v got a foul for %v", byTeam, gameEvent)
@@ -375,8 +375,8 @@ func (s *StateMachine) nextCommandForEvent(newState *state.State, gameEvent *sta
 }
 
 // incrementsFoulCounter checks if the game event increments the foul counter
-func incrementsFoulCounter(gameEvent state.GameEvent_Type) bool {
-	switch gameEvent {
+func incrementsFoulCounter(currentState *state.State, gameEvent *state.GameEvent) bool {
+	switch *gameEvent.Type {
 	case
 		state.GameEvent_AIMLESS_KICK,
 		state.GameEvent_KEEPER_HELD_BALL,
@@ -384,7 +384,6 @@ func incrementsFoulCounter(gameEvent state.GameEvent_Type) bool {
 		state.GameEvent_BOT_DRIBBLED_BALL_TOO_FAR,
 		state.GameEvent_BOT_KICKED_BALL_TOO_FAST,
 		state.GameEvent_ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA,
-		state.GameEvent_BOT_INTERFERED_PLACEMENT,
 		state.GameEvent_BOT_CRASH_DRAWN,
 		state.GameEvent_BOT_CRASH_UNIQUE,
 		state.GameEvent_BOT_PUSHED_BOT,
@@ -394,6 +393,9 @@ func incrementsFoulCounter(gameEvent state.GameEvent_Type) bool {
 		state.GameEvent_DEFENDER_TOO_CLOSE_TO_KICK_POINT,
 		state.GameEvent_BOUNDARY_CROSSING:
 		return true
+	case state.GameEvent_BOT_INTERFERED_PLACEMENT:
+		// only first event counts as foul
+		return len(currentState.FindGameEventsByTeam(state.GameEvent_BOT_INTERFERED_PLACEMENT, gameEvent.ByTeam())) <= 1
 	}
 	return false
 }
