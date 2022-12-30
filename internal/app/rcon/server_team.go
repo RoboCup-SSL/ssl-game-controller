@@ -223,7 +223,7 @@ func (s *TeamServer) processRequest(teamClient TeamClient, request *TeamToContro
 			return errors.New("Can not change keeper while game is running.")
 		}
 
-		if err := mayChangeKeeper(s.gcEngine.CurrentGcState(), s.gcEngine.CurrentState(), &teamState); err != nil {
+		if err := mayChangeKeeper(s.gcEngine.TrackerState(), s.gcEngine.CurrentState(), &teamState); err != nil {
 			return errors.Wrap(err, "Team requests to change keeper, but: ")
 		}
 		log.Printf("Team %v requests to change keeper to %v", teamClient.team, x.DesiredKeeper)
@@ -240,11 +240,11 @@ func (s *TeamServer) processRequest(teamClient TeamClient, request *TeamToContro
 	return nil
 }
 
-func mayChangeKeeper(gcState *engine.GcState, currentState *state.State, teamState *state.TeamInfo) error {
+func mayChangeKeeper(trackerState *engine.GcStateTracker, currentState *state.State, teamState *state.TeamInfo) error {
 	if currentState.Stage.IsPreStage() || currentState.Stage.IsPausedStage() {
 		return nil
 	}
-	ball := gcState.TrackerStateGc.Ball
+	ball := trackerState.Ball
 	if ball != nil &&
 		((*teamState.OnPositiveHalf && *ball.Pos.X > 0) ||
 			(!*teamState.OnPositiveHalf && *ball.Pos.X < 0)) {

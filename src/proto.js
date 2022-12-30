@@ -25554,8 +25554,7 @@ export const GcState = $root.GcState = (() => {
      * @interface IGcState
      * @property {Object.<string,IGcStateTeam>|null} [teamState] GcState teamState
      * @property {Object.<string,IGcStateAutoRef>|null} [autoRefState] GcState autoRefState
-     * @property {Object.<string,IGcStateTracker>|null} [trackerState] GcState trackerState
-     * @property {IGcStateTracker|null} [trackerStateGc] GcState trackerStateGc
+     * @property {Object.<string,string>|null} [trackers] GcState trackers
      * @property {Array.<IContinueAction>|null} [continueActions] GcState continueActions
      */
 
@@ -25570,7 +25569,7 @@ export const GcState = $root.GcState = (() => {
     function GcState(properties) {
         this.teamState = {};
         this.autoRefState = {};
-        this.trackerState = {};
+        this.trackers = {};
         this.continueActions = [];
         if (properties)
             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
@@ -25595,20 +25594,12 @@ export const GcState = $root.GcState = (() => {
     GcState.prototype.autoRefState = $util.emptyObject;
 
     /**
-     * GcState trackerState.
-     * @member {Object.<string,IGcStateTracker>} trackerState
+     * GcState trackers.
+     * @member {Object.<string,string>} trackers
      * @memberof GcState
      * @instance
      */
-    GcState.prototype.trackerState = $util.emptyObject;
-
-    /**
-     * GcState trackerStateGc.
-     * @member {IGcStateTracker|null|undefined} trackerStateGc
-     * @memberof GcState
-     * @instance
-     */
-    GcState.prototype.trackerStateGc = null;
+    GcState.prototype.trackers = $util.emptyObject;
 
     /**
      * GcState continueActions.
@@ -25652,16 +25643,12 @@ export const GcState = $root.GcState = (() => {
                 writer.uint32(/* id 2, wireType 2 =*/18).fork().uint32(/* id 1, wireType 2 =*/10).string(keys[i]);
                 $root.GcStateAutoRef.encode(message.autoRefState[keys[i]], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim().ldelim();
             }
-        if (message.trackerState != null && Object.hasOwnProperty.call(message, "trackerState"))
-            for (let keys = Object.keys(message.trackerState), i = 0; i < keys.length; ++i) {
-                writer.uint32(/* id 3, wireType 2 =*/26).fork().uint32(/* id 1, wireType 2 =*/10).string(keys[i]);
-                $root.GcStateTracker.encode(message.trackerState[keys[i]], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim().ldelim();
-            }
-        if (message.trackerStateGc != null && Object.hasOwnProperty.call(message, "trackerStateGc"))
-            $root.GcStateTracker.encode(message.trackerStateGc, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+        if (message.trackers != null && Object.hasOwnProperty.call(message, "trackers"))
+            for (let keys = Object.keys(message.trackers), i = 0; i < keys.length; ++i)
+                writer.uint32(/* id 3, wireType 2 =*/26).fork().uint32(/* id 1, wireType 2 =*/10).string(keys[i]).uint32(/* id 2, wireType 2 =*/18).string(message.trackers[keys[i]]).ldelim();
         if (message.continueActions != null && message.continueActions.length)
             for (let i = 0; i < message.continueActions.length; ++i)
-                $root.ContinueAction.encode(message.continueActions[i], writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
+                $root.ContinueAction.encode(message.continueActions[i], writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
         return writer;
     };
 
@@ -25743,11 +25730,11 @@ export const GcState = $root.GcState = (() => {
                     break;
                 }
             case 3: {
-                    if (message.trackerState === $util.emptyObject)
-                        message.trackerState = {};
+                    if (message.trackers === $util.emptyObject)
+                        message.trackers = {};
                     let end2 = reader.uint32() + reader.pos;
                     key = "";
-                    value = null;
+                    value = "";
                     while (reader.pos < end2) {
                         let tag2 = reader.uint32();
                         switch (tag2 >>> 3) {
@@ -25755,21 +25742,17 @@ export const GcState = $root.GcState = (() => {
                             key = reader.string();
                             break;
                         case 2:
-                            value = $root.GcStateTracker.decode(reader, reader.uint32());
+                            value = reader.string();
                             break;
                         default:
                             reader.skipType(tag2 & 7);
                             break;
                         }
                     }
-                    message.trackerState[key] = value;
+                    message.trackers[key] = value;
                     break;
                 }
             case 4: {
-                    message.trackerStateGc = $root.GcStateTracker.decode(reader, reader.uint32());
-                    break;
-                }
-            case 8: {
                     if (!(message.continueActions && message.continueActions.length))
                         message.continueActions = [];
                     message.continueActions.push($root.ContinueAction.decode(reader, reader.uint32()));
@@ -25830,20 +25813,13 @@ export const GcState = $root.GcState = (() => {
                     return "autoRefState." + error;
             }
         }
-        if (message.trackerState != null && message.hasOwnProperty("trackerState")) {
-            if (!$util.isObject(message.trackerState))
-                return "trackerState: object expected";
-            let key = Object.keys(message.trackerState);
-            for (let i = 0; i < key.length; ++i) {
-                let error = $root.GcStateTracker.verify(message.trackerState[key[i]]);
-                if (error)
-                    return "trackerState." + error;
-            }
-        }
-        if (message.trackerStateGc != null && message.hasOwnProperty("trackerStateGc")) {
-            let error = $root.GcStateTracker.verify(message.trackerStateGc);
-            if (error)
-                return "trackerStateGc." + error;
+        if (message.trackers != null && message.hasOwnProperty("trackers")) {
+            if (!$util.isObject(message.trackers))
+                return "trackers: object expected";
+            let key = Object.keys(message.trackers);
+            for (let i = 0; i < key.length; ++i)
+                if (!$util.isString(message.trackers[key[i]]))
+                    return "trackers: string{k:string} expected";
         }
         if (message.continueActions != null && message.hasOwnProperty("continueActions")) {
             if (!Array.isArray(message.continueActions))
@@ -25889,20 +25865,12 @@ export const GcState = $root.GcState = (() => {
                 message.autoRefState[keys[i]] = $root.GcStateAutoRef.fromObject(object.autoRefState[keys[i]]);
             }
         }
-        if (object.trackerState) {
-            if (typeof object.trackerState !== "object")
-                throw TypeError(".GcState.trackerState: object expected");
-            message.trackerState = {};
-            for (let keys = Object.keys(object.trackerState), i = 0; i < keys.length; ++i) {
-                if (typeof object.trackerState[keys[i]] !== "object")
-                    throw TypeError(".GcState.trackerState: object expected");
-                message.trackerState[keys[i]] = $root.GcStateTracker.fromObject(object.trackerState[keys[i]]);
-            }
-        }
-        if (object.trackerStateGc != null) {
-            if (typeof object.trackerStateGc !== "object")
-                throw TypeError(".GcState.trackerStateGc: object expected");
-            message.trackerStateGc = $root.GcStateTracker.fromObject(object.trackerStateGc);
+        if (object.trackers) {
+            if (typeof object.trackers !== "object")
+                throw TypeError(".GcState.trackers: object expected");
+            message.trackers = {};
+            for (let keys = Object.keys(object.trackers), i = 0; i < keys.length; ++i)
+                message.trackers[keys[i]] = String(object.trackers[keys[i]]);
         }
         if (object.continueActions) {
             if (!Array.isArray(object.continueActions))
@@ -25935,10 +25903,8 @@ export const GcState = $root.GcState = (() => {
         if (options.objects || options.defaults) {
             object.teamState = {};
             object.autoRefState = {};
-            object.trackerState = {};
+            object.trackers = {};
         }
-        if (options.defaults)
-            object.trackerStateGc = null;
         let keys2;
         if (message.teamState && (keys2 = Object.keys(message.teamState)).length) {
             object.teamState = {};
@@ -25950,13 +25916,11 @@ export const GcState = $root.GcState = (() => {
             for (let j = 0; j < keys2.length; ++j)
                 object.autoRefState[keys2[j]] = $root.GcStateAutoRef.toObject(message.autoRefState[keys2[j]], options);
         }
-        if (message.trackerState && (keys2 = Object.keys(message.trackerState)).length) {
-            object.trackerState = {};
+        if (message.trackers && (keys2 = Object.keys(message.trackers)).length) {
+            object.trackers = {};
             for (let j = 0; j < keys2.length; ++j)
-                object.trackerState[keys2[j]] = $root.GcStateTracker.toObject(message.trackerState[keys2[j]], options);
+                object.trackers[keys2[j]] = message.trackers[keys2[j]];
         }
-        if (message.trackerStateGc != null && message.hasOwnProperty("trackerStateGc"))
-            object.trackerStateGc = $root.GcStateTracker.toObject(message.trackerStateGc, options);
         if (message.continueActions && message.continueActions.length) {
             object.continueActions = [];
             for (let j = 0; j < message.continueActions.length; ++j)

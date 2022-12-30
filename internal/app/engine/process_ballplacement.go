@@ -16,12 +16,12 @@ func (c *BallPlacementCoordinator) process() {
 	e := c.gcEngine
 
 	if *e.currentState.Command.Type != state.Command_BALL_PLACEMENT ||
-		e.gcState.TrackerStateGc.Ball == nil {
+		e.trackerStateGc.Ball == nil {
 		return
 	}
 
 	if c.ballPlacementStartPos == nil || c.ballPlacementStartTime == nil {
-		c.ballPlacementStartPos = e.gcState.TrackerStateGc.Ball.Pos.ToVector2()
+		c.ballPlacementStartPos = e.trackerStateGc.Ball.Pos.ToVector2()
 		c.ballPlacementStartTime = new(time.Time)
 		*c.ballPlacementStartTime = e.timeProvider()
 	}
@@ -41,10 +41,10 @@ func (c *BallPlacementCoordinator) process() {
 }
 
 func (c *BallPlacementCoordinator) remainingPlacementDistance() float32 {
-	if c.gcEngine.currentState.PlacementPos == nil || c.gcEngine.gcState.TrackerStateGc.Ball.Pos == nil {
+	if c.gcEngine.currentState.PlacementPos == nil || c.gcEngine.trackerStateGc.Ball.Pos == nil {
 		return -1
 	}
 	placementPos := c.gcEngine.currentState.PlacementPos
-	ballPos := c.gcEngine.gcState.TrackerStateGc.Ball.Pos.ToVector2()
+	ballPos := c.gcEngine.trackerStateGc.Ball.Pos.ToVector2()
 	return float32(placementPos.DistanceTo(ballPos))
 }

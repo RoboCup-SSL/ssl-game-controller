@@ -138,7 +138,7 @@ func (e *Engine) teamRequestingTimeout() *state.Team {
 }
 
 func (e *Engine) ballPlacementRequired() bool {
-	if e.currentState.PlacementPos == nil || e.gcState.TrackerStateGc.Ball == nil {
+	if e.currentState.PlacementPos == nil || e.trackerStateGc.Ball == nil {
 		// fallback if the fields are not set
 		return false
 	}
@@ -157,12 +157,12 @@ func (e *Engine) ballPlacementRequired() bool {
 
 	// The ball is stationary.
 	// Else, checking the following position checks make no sense, as the ball may roll out of or in those
-	if !e.gcState.TrackerStateGc.Ball.IsSteady() {
+	if !e.trackerStateGc.Ball.IsSteady() {
 		return true
 	}
 
 	placementPos := e.currentState.PlacementPos
-	ballPos := e.gcState.TrackerStateGc.Ball.Pos.ToVector2()
+	ballPos := e.trackerStateGc.Ball.Pos.ToVector2()
 
 	// The ball is closer than 1m to the designated position.
 	if ballPos.DistanceTo(placementPos) > e.gameConfig.BallPlacementRequiredDistance {

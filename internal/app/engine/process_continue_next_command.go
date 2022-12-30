@@ -13,16 +13,22 @@ func (e *Engine) createNextCommandContinueAction(actionType ContinueAction_Type)
 	var actionState ContinueAction_State
 	var continuationIssues = e.findIssuesForContinuation(*e.currentState.Command.Type)
 
+	var lastReadyAt *timestamppb.Timestamp
+	if len(e.gcState.ContinueActions) > 0 {
+		lastReadyAt = e.gcState.ContinueActions[0].ReadyAt
+	}
+
 	var readyAt *timestamppb.Timestamp
 	if len(continuationIssues) > 0 {
 		actionState = ContinueAction_BLOCKED
-		readyAt = timestamppb.New(e.timeProvider().Add(e.gameConfig.PreparationTimeBeforeResume))
+		readyAt = nil
 	} else {
-		if len(e.gcState.ContinueActions) > 0 {
-			readyAt = maxTime(e.gcState.ContinueActions[0].ReadyAt, e.currentState.ReadyContinueTime)
+		if lastReadyAt == nil {
+			readyAt = timestamppb.New(e.timeProvider().Add(e.gameConfig.PreparationTimeBeforeResume))
 		} else {
-			readyAt = e.currentState.ReadyContinueTime
+			readyAt = lastReadyAt
 		}
+		readyAt = maxTime(readyAt, e.currentState.ReadyContinueTime)
 		preparationTimeLeft := readyAt.AsTime().Sub(e.timeProvider())
 		if preparationTimeLeft > 0 {
 			actionState = ContinueAction_WAITING
@@ -59,7 +65,7 @@ func maxTime(t1, t2 *timestamppb.Timestamp) *timestamppb.Timestamp {
 
 func (e *Engine) findIssuesForContinuation(command state.Command_Type) []string {
 
-	if e.gcState.TrackerStateGc.Ball == nil {
+	if e.trackerStateGc.Ball == nil {
 		// No tracking data, can not check for issues
 		return []string{}
 	}
@@ -77,12 +83,12 @@ func (e *Engine) findIssuesForContinuation(command state.Command_Type) []string 
 }
 
 func (e *Engine) readyToContinueKickoff() (issues []string) {
-	ballToCenterCircleDist := e.gcState.TrackerStateGc.Ball.Pos.ToVector2().Length() - e.getGeometry().CenterCircleRadius
+	ballToCenterCircleDist := e.trackerStateGc.Ball.Pos.ToVector2().Length() - e.getGeometry().CenterCircleRadius
 	if ballToCenterCircleDist > 0 {
 		issues = append(issues, fmt.Sprintf("Ball is %.1f m away from center circle", ballToCenterCircleDist))
 	}
 
-	for _, robot := range e.gcState.TrackerStateGc.Robots {
+	for _, robot := range e.trackerStateGc.Robots {
 		if *e.currentState.TeamState[robot.Id.Team.String()].OnPositiveHalf {
 			if *robot.Pos.X < robotRadius {
 				issues = append(issues, fmt.Sprintf("Robot %s is not in its own half", robot.Id.PrettyString()))
@@ -108,10 +114,10 @@ func (e *Engine) readyToContinuePenalty() (issues []string) {
 	}
 
 	keeperTeamInfo := e.currentState.TeamState[keeperId.Team.String()]
-	ballPos := e.gcState.TrackerStateGc.Ball.Pos
+	ballPos := e.trackerStateGc.Ball.Pos
 
 	numAttackersInFrontOfBall := 0
-	for _, robot := range e.gcState.TrackerStateGc.Robots {
+	for _, robot := range e.trackerStateGc.Robots {
 		if *robot.Id.Id == *keeperId.Id && *robot.Id.Team == *keeperId.Team {
 			// it's the keeper
 			continue
@@ -144,18 +150,18 @@ func (e *Engine) readyToContinueFromStop() (issues []string) {
 		issues = append(issues, "Blue team has too many robots")
 	}
 	radius := e.gameConfig.DistanceToBallInStop + robotRadius - distanceThreshold
-	robotNearBall := e.findRobotInsideRadius(e.gcState.TrackerStateGc.Robots, e.gcState.TrackerStateGc.Ball.Pos.ToVector2(), radius)
+	robotNearBall := e.findRobotInsideRadius(e.trackerStateGc.Robots, e.trackerStateGc.Ball.Pos.ToVector2(), radius)
 	if robotNearBall != nil {
 		issues = append(issues, fmt.Sprintf("Robot %s is too close to ball", robotNearBall.Id.PrettyString()))
 	}
 	if e.currentState.PlacementPos != nil {
-		ballToPlacementPosDist := e.currentState.PlacementPos.DistanceTo(e.gcState.TrackerStateGc.Ball.Pos.ToVector2())
+		ballToPlacementPosDist := e.currentState.PlacementPos.DistanceTo(e.trackerStateGc.Ball.Pos.ToVector2())
 		if ballToPlacementPosDist > e.gameConfig.BallPlacementRequiredDistance {
 			issues = append(issues, fmt.Sprintf("Ball is %.2fm (>%.2fm) away from placement pos",
 				ballToPlacementPosDist, e.gameConfig.BallPlacementRequiredDistance))
 		}
 	}
-	if !e.gcState.TrackerStateGc.Ball.IsSteady() {
+	if !e.trackerStateGc.Ball.IsSteady() {
 		issues = append(issues, "Ball position is not steady")
 	}
 	return
@@ -172,7 +178,7 @@ func (e *Engine) penaltyKeeperId() *state.RobotId {
 }
 
 func (e *Engine) robotPos(robotId *state.RobotId) *geom.Vector2 {
-	for _, robot := range e.gcState.TrackerStateGc.Robots {
+	for _, robot := range e.trackerStateGc.Robots {
 		if *robot.Id.Id == *robotId.Id && *robot.Id.Team == *robotId.Team {
 			return robot.Pos
 		}
@@ -190,6 +196,6 @@ func (e *Engine) posInsideGoal(pos *geom.Vector2) bool {
 
 func (e *Engine) tooManyRobots(team state.Team) bool {
 	maxAllowed := *e.currentState.TeamState[team.String()].MaxAllowedBots
-	current := e.gcState.TrackerStateGc.NumTeamRobots(team)
+	current := e.trackerStateGc.NumTeamRobots(team)
 	return current > maxAllowed
 }

@@ -17,7 +17,7 @@ type NoProgressDetector struct {
 func (d *NoProgressDetector) process() {
 
 	if !d.gcEngine.currentState.Command.IsRunning() ||
-		d.gcEngine.gcState.TrackerStateGc.Ball == nil ||
+		d.gcEngine.trackerStateGc.Ball == nil ||
 		(d.gcEngine.currentState.CurrentActionTimeRemaining != nil && goDur(d.gcEngine.currentState.CurrentActionTimeRemaining) > 0) {
 		d.lastBallPos = nil
 		d.lastTime = nil
@@ -25,13 +25,13 @@ func (d *NoProgressDetector) process() {
 	}
 
 	if d.lastBallPos == nil {
-		d.lastBallPos = d.gcEngine.gcState.TrackerStateGc.Ball.Pos.ToVector2()
+		d.lastBallPos = d.gcEngine.trackerStateGc.Ball.Pos.ToVector2()
 		return
 	}
 
-	if d.lastBallPos.DistanceTo(d.gcEngine.gcState.TrackerStateGc.Ball.Pos.ToVector2()) > distanceTolerance {
+	if d.lastBallPos.DistanceTo(d.gcEngine.trackerStateGc.Ball.Pos.ToVector2()) > distanceTolerance {
 		d.lastTime = nil
-		d.lastBallPos = d.gcEngine.gcState.TrackerStateGc.Ball.Pos.ToVector2()
+		d.lastBallPos = d.gcEngine.trackerStateGc.Ball.Pos.ToVector2()
 		return
 	}
 
@@ -44,7 +44,7 @@ func (d *NoProgressDetector) process() {
 	timeSinceLastProgress := d.gcEngine.timeProvider().Sub(*d.lastTime)
 	if timeSinceLastProgress > d.gcEngine.gameConfig.NoProgressTimeout[d.gcEngine.currentState.Division.Div()] {
 		duration := float32(timeSinceLastProgress.Seconds())
-		location := d.gcEngine.gcState.TrackerStateGc.Ball.Pos.ToVector2()
+		location := d.gcEngine.trackerStateGc.Ball.Pos.ToVector2()
 		if d.gcEngine.IsGameEventEnabled(state.GameEvent_KEEPER_HELD_BALL) {
 			if ok, team := d.isBallInAnyDefenseArea(); ok {
 				d.gcEngine.Enqueue(createGameEventChange(state.GameEvent_KEEPER_HELD_BALL, &state.GameEvent{
@@ -75,7 +75,7 @@ func (d *NoProgressDetector) process() {
 func (d *NoProgressDetector) isBallInAnyDefenseArea() (bool, state.Team) {
 	for _, team := range state.BothTeams() {
 		defenseArea := geom.NewDefenseArea(d.gcEngine.getGeometry(), *d.gcEngine.currentState.TeamState[team.String()].OnPositiveHalf)
-		if defenseArea.IsPointInside(d.gcEngine.gcState.TrackerStateGc.Ball.Pos.ToVector2()) {
+		if defenseArea.IsPointInside(d.gcEngine.trackerStateGc.Ball.Pos.ToVector2()) {
 			return true, team
 		}
 	}

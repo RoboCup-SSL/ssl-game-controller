@@ -22,7 +22,15 @@ func (e *Engine) ProcessTrackerFrame(wrapperFrame *tracker.TrackerWrapperPacket)
 		Robots:     convertRobots(wrapperFrame.TrackedFrame.Robots),
 	}
 	e.trackerLastUpdate[*wrapperFrame.Uuid] = now
-	e.gcState.TrackerState[*wrapperFrame.Uuid] = &state
+	e.trackerState[*wrapperFrame.Uuid] = &state
+
+	var sourceName string
+	if wrapperFrame.SourceName != nil {
+		sourceName = *wrapperFrame.SourceName
+	} else {
+		sourceName = ""
+	}
+	e.gcState.Trackers[*wrapperFrame.Uuid] = sourceName
 
 	if e.config.ActiveTrackerSource == nil {
 		e.config.ActiveTrackerSource = state.Uuid
@@ -30,7 +38,7 @@ func (e *Engine) ProcessTrackerFrame(wrapperFrame *tracker.TrackerWrapperPacket)
 	}
 
 	if *e.config.ActiveTrackerSource == *wrapperFrame.Uuid {
-		e.gcState.TrackerStateGc = &state
+		e.trackerStateGc = &state
 	}
 }
 
@@ -40,13 +48,13 @@ func (e *Engine) processTrackerSources() {
 	if e.config.ActiveTrackerSource != nil && now.Sub(e.trackerLastUpdate[*e.config.ActiveTrackerSource]) > time.Second {
 		log.Printf("Tracker source %v timed out", *e.config.ActiveTrackerSource)
 		e.config.ActiveTrackerSource = nil
-		e.gcState.TrackerStateGc = &GcStateTracker{}
+		e.trackerStateGc = &GcStateTracker{}
 	}
 
 	// remove old states
-	for sourceId, state := range e.gcState.TrackerState {
+	for sourceId, state := range e.trackerState {
 		if now.Sub(e.trackerLastUpdate[*state.Uuid]) > time.Second {
-			delete(e.gcState.TrackerState, sourceId)
+			delete(e.trackerState, sourceId)
 		}
 	}
 }

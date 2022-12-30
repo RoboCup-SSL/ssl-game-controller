@@ -150,7 +150,7 @@ func (c *RemoteControlClient) replyWithState(reply *ControllerReply) {
 	yellowCardsDue := c.findYellowCardDueTimes()
 	availableRequests := c.findAvailableRequestTypes()
 	activeRequests := c.findActiveRequestTypes()
-	robotsOnField := c.gcEngine.CurrentGcState().TrackerStateGc.NumTeamRobots(*c.team)
+	robotsOnField := c.gcEngine.TrackerState().NumTeamRobots(*c.team)
 	timeoutTimeLeft := float32(teamState.TimeoutTimeLeft.AsDuration().Seconds())
 
 	response := &ControllerToRemoteControl{
@@ -293,7 +293,7 @@ func (c *RemoteControlClient) checkRequestChallengeFlag() error {
 func (c *RemoteControlClient) checkChangeKeeper() error {
 	currentState := c.gcEngine.CurrentState()
 	teamState := currentState.TeamState[c.team.String()]
-	return mayChangeKeeper(c.gcEngine.CurrentGcState(), currentState, teamState)
+	return mayChangeKeeper(c.gcEngine.TrackerState(), currentState, teamState)
 }
 
 func (c *RemoteControlClient) processRequest(request *RemoteControlToController) error {
@@ -302,7 +302,7 @@ func (c *RemoteControlClient) processRequest(request *RemoteControlToController)
 	teamState := currentState.TeamInfo(*c.team)
 
 	if x, ok := request.GetMsg().(*RemoteControlToController_DesiredKeeper); ok && *teamState.Goalkeeper != x.DesiredKeeper {
-		if err := mayChangeKeeper(c.gcEngine.CurrentGcState(), currentState, teamState); err != nil {
+		if err := mayChangeKeeper(c.gcEngine.TrackerState(), currentState, teamState); err != nil {
 			return errors.Wrap(err, "Can not change keeper id")
 		}
 		c.updateTeamConfig(&statemachine.Change_UpdateTeamState{

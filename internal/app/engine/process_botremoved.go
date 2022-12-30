@@ -47,7 +47,7 @@ func (e *Engine) processBotNumberPerTeam(team state.Team) {
 		e.gameConfig.YellowCardDuration-removalTime,
 	)
 
-	numBots := e.gcState.TrackerStateGc.NumTeamRobots(team)
+	numBots := e.trackerStateGc.NumTeamRobots(team)
 	numBotsAllowed := *teamInfo.MaxAllowedBots + newCards
 	if numBots > numBotsAllowed {
 
@@ -57,8 +57,8 @@ func (e *Engine) processBotNumberPerTeam(team state.Team) {
 		}
 
 		var ballPos *geom.Vector2
-		if e.gcState.TrackerStateGc.Ball != nil {
-			ballPos = e.gcState.TrackerStateGc.Ball.Pos.ToVector2()
+		if e.trackerStateGc.Ball != nil {
+			ballPos = e.trackerStateGc.Ball.Pos.ToVector2()
 		}
 		e.Enqueue(createGameEventChange(state.GameEvent_TOO_MANY_ROBOTS, &state.GameEvent{
 			Event: &state.GameEvent_TooManyRobots_{

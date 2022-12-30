@@ -19,7 +19,8 @@ export default new Vuex.Store({
         matchState: State.create(),
         config: Config.create(),
         protocol: [],
-        initialized: false
+        initialized: false,
+        numMessages: 0
     },
     mutations: {
         SOCKET_ONOPEN(state) {
@@ -30,6 +31,7 @@ export default new Vuex.Store({
         SOCKET_ONERROR() {
         },
         SOCKET_ONMESSAGE(state, message) {
+            state.numMessages++
             if (message.protocol) {
                 if (message.protocol.delta) {
                     state.protocol = message.protocol.entry.concat(state.protocol);

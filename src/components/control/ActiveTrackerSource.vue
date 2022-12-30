@@ -1,7 +1,7 @@
 <template>
     <div class="bottom-right">
-        <span v-if="trackerState">
-            Tracker source: {{trackerState.sourceName}}
+        <span v-if="activeTracker">
+            Tracker source: {{ activeTracker }}
         </span>
         <span v-else class="no-tracker-source">
             No tracker source connected
@@ -13,9 +13,9 @@
     export default {
         name: "ActiveTrackerSource",
         computed: {
-            trackerState() {
+            activeTracker() {
                 if(this.activeTrackerSource) {
-                    return this.$store.state.gcState.trackerState[this.activeTrackerSource];
+                    return this.$store.state.gcState.trackers[this.activeTrackerSource];
                 }
                 return null;
             },

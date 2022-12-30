@@ -4,9 +4,9 @@
             Connected tracker sources:
         </p>
         <ul>
-            <li v-for="(state, sourceId) in trackerState"
+            <li v-for="(sourceName, sourceId) in trackers"
                 :key="sourceId">
-                {{sourceId}} ({{state.sourceName}})
+                {{sourceName}} ({{sourceId}})
                 <b-button variant="primary"
                           @click="setActiveTrackerSource(sourceId)"
                           :disabled="sourceId === activeTrackerSource">
@@ -23,8 +23,8 @@
     export default {
         name: "TrackerConfig",
         computed: {
-            trackerState() {
-                return this.$store.state.gcState.trackerState;
+            trackers() {
+                return this.$store.state.gcState.trackers;
             },
             activeTrackerSource() {
                 return this.$store.state.config.activeTrackerSource;

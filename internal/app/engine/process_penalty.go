@@ -10,8 +10,8 @@ func (e *Engine) processPenalty() {
 		*e.currentState.GameState.Type == state.GameState_PENALTY &&
 		goDur(e.currentState.CurrentActionTimeRemaining) < 0 {
 		var location *geom.Vector2
-		if e.gcState.TrackerStateGc.Ball != nil {
-			location = e.gcState.TrackerStateGc.Ball.Pos.ToVector2()
+		if e.trackerStateGc.Ball != nil {
+			location = e.trackerStateGc.Ball.Pos.ToVector2()
 		}
 		reason := "Time run out"
 		e.Enqueue(createGameEventChange(state.GameEvent_PENALTY_KICK_FAILED, &state.GameEvent{

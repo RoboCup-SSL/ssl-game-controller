@@ -15,14 +15,11 @@ message GcState {
     // the states of the auto referees
     map<string, GcStateAutoRef> auto_ref_state = 2;
 
-    // the states of the attached trackers
-    map<string, GcStateTracker> tracker_state = 3;
-
-    // the state of the currently selected tracker
-    optional GcStateTracker tracker_state_gc = 4;
+    // the attached trackers (uuid -> source_name)
+    map<string, string> trackers = 3;
 
     // the next actions that can be executed when continuing
-    repeated ContinueAction continue_actions = 8;
+    repeated ContinueAction continue_actions = 4;
 }
 
 // The GC state for a single team

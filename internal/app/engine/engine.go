@@ -33,6 +33,8 @@ type Engine struct {
 	timeProvider             timer.TimeProvider
 	lastTimeUpdate           time.Time
 	gcState                  *GcState
+	trackerState             map[string]*GcStateTracker
+	trackerStateGc           *GcStateTracker
 	trackerLastUpdate        map[string]time.Time
 	mutex                    sync.Mutex
 	mutexEnqueueBlocking     sync.Mutex
@@ -61,8 +63,9 @@ func NewEngine(gameConfig config.Game, engineConfig config.Engine) (e *Engine) {
 		state.Team_BLUE.String():   new(GcStateTeam),
 	}
 	e.gcState.AutoRefState = map[string]*GcStateAutoRef{}
-	e.gcState.TrackerState = map[string]*GcStateTracker{}
-	e.gcState.TrackerStateGc = &GcStateTracker{}
+	e.gcState.Trackers = map[string]string{}
+	e.trackerState = map[string]*GcStateTracker{}
+	e.trackerStateGc = &GcStateTracker{}
 	e.trackerLastUpdate = map[string]time.Time{}
 	e.noProgressDetector = NoProgressDetector{gcEngine: e}
 	e.ballPlacementCoordinator = BallPlacementCoordinator{gcEngine: e}
@@ -222,6 +225,15 @@ func (e *Engine) CurrentState() (s *state.State) {
 	e.mutex.Lock()
 	defer e.mutex.Unlock()
 	return e.currentState.Clone()
+}
+
+// TrackerState returns a deep copy of the current tracker state
+func (e *Engine) TrackerState() (s *GcStateTracker) {
+	e.mutex.Lock()
+	defer e.mutex.Unlock()
+	s = new(GcStateTracker)
+	proto.Merge(s, e.trackerStateGc)
+	return
 }
 
 // CurrentGcState returns a deep copy of the current GC state
