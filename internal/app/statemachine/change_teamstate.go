@@ -38,7 +38,9 @@ func (s *StateMachine) processChangeUpdateTeamState(newState *state.State, chang
 		*teamState.BallPlacementFailures = *change.BallPlacementFailures
 		*teamState.BallPlacementFailuresReached = *teamState.BallPlacementFailures >= s.gameConfig.MultiplePlacementFailures
 	}
-	if change.CanPlaceBall != nil {
+	if change.CanPlaceBall != nil &&
+		// in division A, ball placement must not be switched off
+		(*change.CanPlaceBall || *newState.Division != state.Division_DIV_A) {
 		*teamState.CanPlaceBall = *change.CanPlaceBall
 	}
 	if change.ChallengeFlagsLeft != nil {

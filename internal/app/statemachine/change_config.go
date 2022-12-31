@@ -12,6 +12,12 @@ func (s *StateMachine) processChangeUpdateConfig(newState *state.State, change *
 		s.updateMaxBots(newState)
 		s.Geometry = s.gameConfig.DefaultGeometry[change.Division.Div()]
 		log.Printf("Updated geometry to %+v", s.Geometry)
+		if *change.Division == state.Division_DIV_A {
+			// in division A, both teams must be able to place ball
+			for _, team := range state.BothTeams() {
+				*newState.TeamState[team.String()].CanPlaceBall = true
+			}
+		}
 	}
 	if change.FirstKickoffTeam != nil {
 		log.Printf("Change first kickoff team to %v", *change.FirstKickoffTeam)
