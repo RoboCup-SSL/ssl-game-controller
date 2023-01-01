@@ -48,3 +48,14 @@ pbjs -t static-module -w es6 -o src/proto.js \
   proto/ssl_gc_state.proto \
   proto/ssl_gc_api.proto \
   proto/ssl_gc_engine.proto
+
+# generate typescript code for frontend v2
+target_dir="./frontend/src/proto"
+mkdir -p "${target_dir}"
+protoc -I"./proto" \
+    --plugin=./frontend/node_modules/.bin/protoc-gen-ts_proto \
+    --ts_proto_out="${target_dir}" \
+    --ts_proto_opt=esModuleInterop=true \
+    --ts_proto_opt=useOptionals=messages \
+    --ts_proto_opt=oneof=unions \
+    ./proto/ssl_gc_api.proto
