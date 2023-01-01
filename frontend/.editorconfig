@@ -1,0 +1,11 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+# 2 space indentation
+[*.{vue,ts}]
+indent_style = space
+indent_size = 2
+
+# 2 space indentation
+[*.{yaml,json}]
+indent_style = space
+indent_size = 2
