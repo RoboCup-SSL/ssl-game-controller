@@ -5,11 +5,15 @@ const store = useMatchStateStore()
 </script>
 
 <template>
-    <div>
-        {{ JSON.stringify(store) }}
+  <main>
+    <div class="full-state">
+      {{ JSON.stringify(store) }}
     </div>
+  </main>
 </template>
 
 <style scoped>
-
+.full-state {
+  margin: 10px
+}
 </style>
