@@ -1,10 +1,9 @@
 import {createApp} from 'vue'
 import App from './App.vue'
-import './assets/main.css'
 
 import {createPinia} from "pinia";
 import router from './router'
-import { Quasar } from 'quasar'
+import {Quasar} from 'quasar'
 
 import {control} from "@/plugins/control";
 
@@ -18,5 +17,11 @@ createApp(App)
   .use(router)
   .use(createPinia())
   .use(control)
-  .use(Quasar)
+  .use(Quasar, {
+    config: {
+      brand: {
+        primary: '#1ca3a3',
+      }
+    }
+  })
   .mount('#app')

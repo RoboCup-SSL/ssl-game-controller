@@ -2,12 +2,8 @@
 import {ref} from 'vue'
 
 const leftDrawerOpen = ref(false)
-const rightDrawerOpen = ref(false)
 const toggleLeftDrawer = () => {
   leftDrawerOpen.value = !leftDrawerOpen.value
-}
-const toggleRightDrawer = () => {
-  rightDrawerOpen.value = !rightDrawerOpen.value
 }
 </script>
 
@@ -24,22 +20,20 @@ const toggleRightDrawer = () => {
           </q-avatar>
           SSL-Game-Controller
         </q-toolbar-title>
-
-        <q-btn dense flat round icon="menu" @click="toggleRightDrawer"/>
       </q-toolbar>
 
       <q-tabs align="left">
         <q-route-tab to="/" label="Home"/>
-        <q-route-tab to="/about" label="About"/>
+        <q-route-tab to="/match" label="Match"/>
+        <q-route-tab to="/protocol" label="Protocol"/>
+        <q-route-tab to="/team-overview" label="Team Overview"/>
+        <q-route-tab to="/manual-control" label="Manual Control"/>
+        <q-route-tab to="/settings" label="Settings"/>
       </q-tabs>
     </q-header>
 
     <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
-      <!-- drawer content -->
-    </q-drawer>
-
-    <q-drawer show-if-above v-model="rightDrawerOpen" side="right" bordered>
-      <!-- drawer content -->
+      Foo?
     </q-drawer>
 
     <q-page-container>
@@ -48,6 +42,7 @@ const toggleRightDrawer = () => {
 
     <q-footer elevated class="bg-grey-8 text-white">
       <q-toolbar>
+        Status
       </q-toolbar>
     </q-footer>
 

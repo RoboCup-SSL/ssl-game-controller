@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import FullState from "@/components/FullState.vue";
 </script>
 
 <template>
   <main>
-    <FullState/>
+    <h1>Settings</h1>
   </main>
 </template>
