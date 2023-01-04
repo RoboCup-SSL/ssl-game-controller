@@ -34,7 +34,7 @@ export class ControlApi {
     const ws = new WebSocket(this.determineWebSocketAddress());
 
     ws.onmessage = (e) => {
-      this.latestOutput = Output.fromJSON(JSON.parse(e.data))
+      this.latestOutput = Output.fromObject(JSON.parse(e.data))
       for (const callback of this.consumer) {
         callback(this.latestOutput)
       }

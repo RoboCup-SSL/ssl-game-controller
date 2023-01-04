@@ -1,4911 +1,8287 @@
-/* eslint-disable */
-import Long from "long";
-import _m0 from "protobufjs/minimal";
-import { Team, teamFromJSON, teamToJSON } from "./ssl_gc_common";
-import { Vector2 } from "./ssl_gc_geometry";
-
-export const protobufPackage = "";
-
+// @ts-nocheck
 /**
- * GameEvent contains exactly one game event
- * Each game event has optional and required fields. The required fields are mandatory to process the event.
- * Some optional fields are only used for visualization, others are required to determine the ball placement position.
- * If fields are missing that are required for the ball placement position, no ball placement command will be issued.
- * Fields are marked optional to make testing and extending of the protocol easier.
- * An autoRef should ideally set all fields, except if there are good reasons to not do so.
- */
-export interface GameEvent {
-  type: GameEvent_Type;
-  /**
-   * The origins of this game event.
-   * Empty, if it originates from game controller.
-   * Contains autoRef name(s), if it originates from one or more autoRefs.
-   * Ignored if sent by autoRef to game controller.
-   */
-  origin: string[];
-  event?:
-    | { $case: "ballLeftFieldTouchLine"; ballLeftFieldTouchLine: GameEvent_BallLeftField }
-    | { $case: "ballLeftFieldGoalLine"; ballLeftFieldGoalLine: GameEvent_BallLeftField }
-    | { $case: "aimlessKick"; aimlessKick: GameEvent_AimlessKick }
-    | { $case: "attackerTooCloseToDefenseArea"; attackerTooCloseToDefenseArea: GameEvent_AttackerTooCloseToDefenseArea }
-    | { $case: "defenderInDefenseArea"; defenderInDefenseArea: GameEvent_DefenderInDefenseArea }
-    | { $case: "boundaryCrossing"; boundaryCrossing: GameEvent_BoundaryCrossing }
-    | { $case: "keeperHeldBall"; keeperHeldBall: GameEvent_KeeperHeldBall }
-    | { $case: "botDribbledBallTooFar"; botDribbledBallTooFar: GameEvent_BotDribbledBallTooFar }
-    | { $case: "botPushedBot"; botPushedBot: GameEvent_BotPushedBot }
-    | { $case: "botHeldBallDeliberately"; botHeldBallDeliberately: GameEvent_BotHeldBallDeliberately }
-    | { $case: "botTippedOver"; botTippedOver: GameEvent_BotTippedOver }
-    | {
-      $case: "attackerTouchedBallInDefenseArea";
-      attackerTouchedBallInDefenseArea: GameEvent_AttackerTouchedBallInDefenseArea;
-    }
-    | { $case: "botKickedBallTooFast"; botKickedBallTooFast: GameEvent_BotKickedBallTooFast }
-    | { $case: "botCrashUnique"; botCrashUnique: GameEvent_BotCrashUnique }
-    | { $case: "botCrashDrawn"; botCrashDrawn: GameEvent_BotCrashDrawn }
-    | { $case: "defenderTooCloseToKickPoint"; defenderTooCloseToKickPoint: GameEvent_DefenderTooCloseToKickPoint }
-    | { $case: "botTooFastInStop"; botTooFastInStop: GameEvent_BotTooFastInStop }
-    | { $case: "botInterferedPlacement"; botInterferedPlacement: GameEvent_BotInterferedPlacement }
-    | { $case: "possibleGoal"; possibleGoal: GameEvent_Goal }
-    | { $case: "goal"; goal: GameEvent_Goal }
-    | { $case: "invalidGoal"; invalidGoal: GameEvent_Goal }
-    | { $case: "attackerDoubleTouchedBall"; attackerDoubleTouchedBall: GameEvent_AttackerDoubleTouchedBall }
-    | { $case: "placementSucceeded"; placementSucceeded: GameEvent_PlacementSucceeded }
-    | { $case: "penaltyKickFailed"; penaltyKickFailed: GameEvent_PenaltyKickFailed }
-    | { $case: "noProgressInGame"; noProgressInGame: GameEvent_NoProgressInGame }
-    | { $case: "placementFailed"; placementFailed: GameEvent_PlacementFailed }
-    | { $case: "multipleCards"; multipleCards: GameEvent_MultipleCards }
-    | { $case: "multipleFouls"; multipleFouls: GameEvent_MultipleFouls }
-    | { $case: "botSubstitution"; botSubstitution: GameEvent_BotSubstitution }
-    | { $case: "tooManyRobots"; tooManyRobots: GameEvent_TooManyRobots }
-    | { $case: "challengeFlag"; challengeFlag: GameEvent_ChallengeFlag }
-    | { $case: "emergencyStop"; emergencyStop: GameEvent_EmergencyStop }
-    | { $case: "unsportingBehaviorMinor"; unsportingBehaviorMinor: GameEvent_UnsportingBehaviorMinor }
-    | { $case: "unsportingBehaviorMajor"; unsportingBehaviorMajor: GameEvent_UnsportingBehaviorMajor }
-    | { $case: "prepared"; prepared: GameEvent_Prepared }
-    | { $case: "indirectGoal"; indirectGoal: GameEvent_IndirectGoal }
-    | { $case: "chippedGoal"; chippedGoal: GameEvent_ChippedGoal }
-    | { $case: "kickTimeout"; kickTimeout: GameEvent_KickTimeout }
-    | {
-      $case: "attackerTouchedOpponentInDefenseArea";
-      attackerTouchedOpponentInDefenseArea: GameEvent_AttackerTouchedOpponentInDefenseArea;
-    }
-    | {
-      $case: "attackerTouchedOpponentInDefenseAreaSkipped";
-      attackerTouchedOpponentInDefenseAreaSkipped: GameEvent_AttackerTouchedOpponentInDefenseArea;
-    }
-    | { $case: "botCrashUniqueSkipped"; botCrashUniqueSkipped: GameEvent_BotCrashUnique }
-    | { $case: "botPushedBotSkipped"; botPushedBotSkipped: GameEvent_BotPushedBot }
-    | {
-      $case: "defenderInDefenseAreaPartially";
-      defenderInDefenseAreaPartially: GameEvent_DefenderInDefenseAreaPartially;
-    }
-    | { $case: "multiplePlacementFailures"; multiplePlacementFailures: GameEvent_MultiplePlacementFailures };
-}
-
-export enum GameEvent_Type {
-  UNKNOWN_GAME_EVENT_TYPE = 0,
-  /** BALL_LEFT_FIELD_TOUCH_LINE - triggered by autoRef */
-  BALL_LEFT_FIELD_TOUCH_LINE = 6,
-  /** BALL_LEFT_FIELD_GOAL_LINE - triggered by autoRef */
-  BALL_LEFT_FIELD_GOAL_LINE = 7,
-  /** AIMLESS_KICK - triggered by autoRef */
-  AIMLESS_KICK = 11,
-  /** ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA - triggered by autoRef */
-  ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA = 19,
-  /** DEFENDER_IN_DEFENSE_AREA - triggered by autoRef */
-  DEFENDER_IN_DEFENSE_AREA = 31,
-  /** BOUNDARY_CROSSING - triggered by autoRef */
-  BOUNDARY_CROSSING = 41,
-  /** KEEPER_HELD_BALL - triggered by GC */
-  KEEPER_HELD_BALL = 13,
-  /** BOT_DRIBBLED_BALL_TOO_FAR - triggered by autoRef */
-  BOT_DRIBBLED_BALL_TOO_FAR = 17,
-  /** BOT_PUSHED_BOT - triggered by human ref */
-  BOT_PUSHED_BOT = 24,
-  /** BOT_HELD_BALL_DELIBERATELY - triggered by human ref */
-  BOT_HELD_BALL_DELIBERATELY = 26,
-  /** BOT_TIPPED_OVER - triggered by human ref */
-  BOT_TIPPED_OVER = 27,
-  /** ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA - triggered by autoRef */
-  ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA = 15,
-  /** BOT_KICKED_BALL_TOO_FAST - triggered by autoRef */
-  BOT_KICKED_BALL_TOO_FAST = 18,
-  /** BOT_CRASH_UNIQUE - triggered by autoRef */
-  BOT_CRASH_UNIQUE = 22,
-  /** BOT_CRASH_DRAWN - triggered by autoRef */
-  BOT_CRASH_DRAWN = 21,
-  /** DEFENDER_TOO_CLOSE_TO_KICK_POINT - triggered by autoRef */
-  DEFENDER_TOO_CLOSE_TO_KICK_POINT = 29,
-  /** BOT_TOO_FAST_IN_STOP - triggered by autoRef */
-  BOT_TOO_FAST_IN_STOP = 28,
-  /** BOT_INTERFERED_PLACEMENT - triggered by autoRef */
-  BOT_INTERFERED_PLACEMENT = 20,
-  /** POSSIBLE_GOAL - triggered by autoRef */
-  POSSIBLE_GOAL = 39,
-  /** GOAL - triggered by GC */
-  GOAL = 8,
-  /** INVALID_GOAL - triggered by GC */
-  INVALID_GOAL = 42,
-  /** ATTACKER_DOUBLE_TOUCHED_BALL - triggered by autoRef */
-  ATTACKER_DOUBLE_TOUCHED_BALL = 14,
-  /** PLACEMENT_SUCCEEDED - triggered by autoRef */
-  PLACEMENT_SUCCEEDED = 5,
-  /** PENALTY_KICK_FAILED - triggered by GC and autoRef */
-  PENALTY_KICK_FAILED = 43,
-  /** NO_PROGRESS_IN_GAME - triggered by GC */
-  NO_PROGRESS_IN_GAME = 2,
-  /** PLACEMENT_FAILED - triggered by GC */
-  PLACEMENT_FAILED = 3,
-  /** MULTIPLE_CARDS - triggered by GC */
-  MULTIPLE_CARDS = 32,
-  /** MULTIPLE_FOULS - triggered by GC */
-  MULTIPLE_FOULS = 34,
-  /** BOT_SUBSTITUTION - triggered by GC */
-  BOT_SUBSTITUTION = 37,
-  /** TOO_MANY_ROBOTS - triggered by GC */
-  TOO_MANY_ROBOTS = 38,
-  /** CHALLENGE_FLAG - triggered by GC */
-  CHALLENGE_FLAG = 44,
-  /** EMERGENCY_STOP - triggered by GC */
-  EMERGENCY_STOP = 45,
-  /** UNSPORTING_BEHAVIOR_MINOR - triggered by human ref */
-  UNSPORTING_BEHAVIOR_MINOR = 35,
-  /** UNSPORTING_BEHAVIOR_MAJOR - triggered by human ref */
-  UNSPORTING_BEHAVIOR_MAJOR = 36,
-  /** @deprecated */
-  PREPARED = 1,
-  /** @deprecated */
-  INDIRECT_GOAL = 9,
-  /** @deprecated */
-  CHIPPED_GOAL = 10,
-  /** @deprecated */
-  KICK_TIMEOUT = 12,
-  /** @deprecated */
-  ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA = 16,
-  /** @deprecated */
-  ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA_SKIPPED = 40,
-  /** @deprecated */
-  BOT_CRASH_UNIQUE_SKIPPED = 23,
-  /** @deprecated */
-  BOT_PUSHED_BOT_SKIPPED = 25,
-  /** @deprecated */
-  DEFENDER_IN_DEFENSE_AREA_PARTIALLY = 30,
-  /** @deprecated */
-  MULTIPLE_PLACEMENT_FAILURES = 33,
-  UNRECOGNIZED = -1,
-}
-
-export function gameEvent_TypeFromJSON(object: any): GameEvent_Type {
-  switch (object) {
-    case 0:
-    case "UNKNOWN_GAME_EVENT_TYPE":
-      return GameEvent_Type.UNKNOWN_GAME_EVENT_TYPE;
-    case 6:
-    case "BALL_LEFT_FIELD_TOUCH_LINE":
-      return GameEvent_Type.BALL_LEFT_FIELD_TOUCH_LINE;
-    case 7:
-    case "BALL_LEFT_FIELD_GOAL_LINE":
-      return GameEvent_Type.BALL_LEFT_FIELD_GOAL_LINE;
-    case 11:
-    case "AIMLESS_KICK":
-      return GameEvent_Type.AIMLESS_KICK;
-    case 19:
-    case "ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA":
-      return GameEvent_Type.ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA;
-    case 31:
-    case "DEFENDER_IN_DEFENSE_AREA":
-      return GameEvent_Type.DEFENDER_IN_DEFENSE_AREA;
-    case 41:
-    case "BOUNDARY_CROSSING":
-      return GameEvent_Type.BOUNDARY_CROSSING;
-    case 13:
-    case "KEEPER_HELD_BALL":
-      return GameEvent_Type.KEEPER_HELD_BALL;
-    case 17:
-    case "BOT_DRIBBLED_BALL_TOO_FAR":
-      return GameEvent_Type.BOT_DRIBBLED_BALL_TOO_FAR;
-    case 24:
-    case "BOT_PUSHED_BOT":
-      return GameEvent_Type.BOT_PUSHED_BOT;
-    case 26:
-    case "BOT_HELD_BALL_DELIBERATELY":
-      return GameEvent_Type.BOT_HELD_BALL_DELIBERATELY;
-    case 27:
-    case "BOT_TIPPED_OVER":
-      return GameEvent_Type.BOT_TIPPED_OVER;
-    case 15:
-    case "ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA":
-      return GameEvent_Type.ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA;
-    case 18:
-    case "BOT_KICKED_BALL_TOO_FAST":
-      return GameEvent_Type.BOT_KICKED_BALL_TOO_FAST;
-    case 22:
-    case "BOT_CRASH_UNIQUE":
-      return GameEvent_Type.BOT_CRASH_UNIQUE;
-    case 21:
-    case "BOT_CRASH_DRAWN":
-      return GameEvent_Type.BOT_CRASH_DRAWN;
-    case 29:
-    case "DEFENDER_TOO_CLOSE_TO_KICK_POINT":
-      return GameEvent_Type.DEFENDER_TOO_CLOSE_TO_KICK_POINT;
-    case 28:
-    case "BOT_TOO_FAST_IN_STOP":
-      return GameEvent_Type.BOT_TOO_FAST_IN_STOP;
-    case 20:
-    case "BOT_INTERFERED_PLACEMENT":
-      return GameEvent_Type.BOT_INTERFERED_PLACEMENT;
-    case 39:
-    case "POSSIBLE_GOAL":
-      return GameEvent_Type.POSSIBLE_GOAL;
-    case 8:
-    case "GOAL":
-      return GameEvent_Type.GOAL;
-    case 42:
-    case "INVALID_GOAL":
-      return GameEvent_Type.INVALID_GOAL;
-    case 14:
-    case "ATTACKER_DOUBLE_TOUCHED_BALL":
-      return GameEvent_Type.ATTACKER_DOUBLE_TOUCHED_BALL;
-    case 5:
-    case "PLACEMENT_SUCCEEDED":
-      return GameEvent_Type.PLACEMENT_SUCCEEDED;
-    case 43:
-    case "PENALTY_KICK_FAILED":
-      return GameEvent_Type.PENALTY_KICK_FAILED;
-    case 2:
-    case "NO_PROGRESS_IN_GAME":
-      return GameEvent_Type.NO_PROGRESS_IN_GAME;
-    case 3:
-    case "PLACEMENT_FAILED":
-      return GameEvent_Type.PLACEMENT_FAILED;
-    case 32:
-    case "MULTIPLE_CARDS":
-      return GameEvent_Type.MULTIPLE_CARDS;
-    case 34:
-    case "MULTIPLE_FOULS":
-      return GameEvent_Type.MULTIPLE_FOULS;
-    case 37:
-    case "BOT_SUBSTITUTION":
-      return GameEvent_Type.BOT_SUBSTITUTION;
-    case 38:
-    case "TOO_MANY_ROBOTS":
-      return GameEvent_Type.TOO_MANY_ROBOTS;
-    case 44:
-    case "CHALLENGE_FLAG":
-      return GameEvent_Type.CHALLENGE_FLAG;
-    case 45:
-    case "EMERGENCY_STOP":
-      return GameEvent_Type.EMERGENCY_STOP;
-    case 35:
-    case "UNSPORTING_BEHAVIOR_MINOR":
-      return GameEvent_Type.UNSPORTING_BEHAVIOR_MINOR;
-    case 36:
-    case "UNSPORTING_BEHAVIOR_MAJOR":
-      return GameEvent_Type.UNSPORTING_BEHAVIOR_MAJOR;
-    case 1:
-    case "PREPARED":
-      return GameEvent_Type.PREPARED;
-    case 9:
-    case "INDIRECT_GOAL":
-      return GameEvent_Type.INDIRECT_GOAL;
-    case 10:
-    case "CHIPPED_GOAL":
-      return GameEvent_Type.CHIPPED_GOAL;
-    case 12:
-    case "KICK_TIMEOUT":
-      return GameEvent_Type.KICK_TIMEOUT;
-    case 16:
-    case "ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA":
-      return GameEvent_Type.ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA;
-    case 40:
-    case "ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA_SKIPPED":
-      return GameEvent_Type.ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA_SKIPPED;
-    case 23:
-    case "BOT_CRASH_UNIQUE_SKIPPED":
-      return GameEvent_Type.BOT_CRASH_UNIQUE_SKIPPED;
-    case 25:
-    case "BOT_PUSHED_BOT_SKIPPED":
-      return GameEvent_Type.BOT_PUSHED_BOT_SKIPPED;
-    case 30:
-    case "DEFENDER_IN_DEFENSE_AREA_PARTIALLY":
-      return GameEvent_Type.DEFENDER_IN_DEFENSE_AREA_PARTIALLY;
-    case 33:
-    case "MULTIPLE_PLACEMENT_FAILURES":
-      return GameEvent_Type.MULTIPLE_PLACEMENT_FAILURES;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return GameEvent_Type.UNRECOGNIZED;
-  }
-}
-
-export function gameEvent_TypeToJSON(object: GameEvent_Type): string {
-  switch (object) {
-    case GameEvent_Type.UNKNOWN_GAME_EVENT_TYPE:
-      return "UNKNOWN_GAME_EVENT_TYPE";
-    case GameEvent_Type.BALL_LEFT_FIELD_TOUCH_LINE:
-      return "BALL_LEFT_FIELD_TOUCH_LINE";
-    case GameEvent_Type.BALL_LEFT_FIELD_GOAL_LINE:
-      return "BALL_LEFT_FIELD_GOAL_LINE";
-    case GameEvent_Type.AIMLESS_KICK:
-      return "AIMLESS_KICK";
-    case GameEvent_Type.ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA:
-      return "ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA";
-    case GameEvent_Type.DEFENDER_IN_DEFENSE_AREA:
-      return "DEFENDER_IN_DEFENSE_AREA";
-    case GameEvent_Type.BOUNDARY_CROSSING:
-      return "BOUNDARY_CROSSING";
-    case GameEvent_Type.KEEPER_HELD_BALL:
-      return "KEEPER_HELD_BALL";
-    case GameEvent_Type.BOT_DRIBBLED_BALL_TOO_FAR:
-      return "BOT_DRIBBLED_BALL_TOO_FAR";
-    case GameEvent_Type.BOT_PUSHED_BOT:
-      return "BOT_PUSHED_BOT";
-    case GameEvent_Type.BOT_HELD_BALL_DELIBERATELY:
-      return "BOT_HELD_BALL_DELIBERATELY";
-    case GameEvent_Type.BOT_TIPPED_OVER:
-      return "BOT_TIPPED_OVER";
-    case GameEvent_Type.ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA:
-      return "ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA";
-    case GameEvent_Type.BOT_KICKED_BALL_TOO_FAST:
-      return "BOT_KICKED_BALL_TOO_FAST";
-    case GameEvent_Type.BOT_CRASH_UNIQUE:
-      return "BOT_CRASH_UNIQUE";
-    case GameEvent_Type.BOT_CRASH_DRAWN:
-      return "BOT_CRASH_DRAWN";
-    case GameEvent_Type.DEFENDER_TOO_CLOSE_TO_KICK_POINT:
-      return "DEFENDER_TOO_CLOSE_TO_KICK_POINT";
-    case GameEvent_Type.BOT_TOO_FAST_IN_STOP:
-      return "BOT_TOO_FAST_IN_STOP";
-    case GameEvent_Type.BOT_INTERFERED_PLACEMENT:
-      return "BOT_INTERFERED_PLACEMENT";
-    case GameEvent_Type.POSSIBLE_GOAL:
-      return "POSSIBLE_GOAL";
-    case GameEvent_Type.GOAL:
-      return "GOAL";
-    case GameEvent_Type.INVALID_GOAL:
-      return "INVALID_GOAL";
-    case GameEvent_Type.ATTACKER_DOUBLE_TOUCHED_BALL:
-      return "ATTACKER_DOUBLE_TOUCHED_BALL";
-    case GameEvent_Type.PLACEMENT_SUCCEEDED:
-      return "PLACEMENT_SUCCEEDED";
-    case GameEvent_Type.PENALTY_KICK_FAILED:
-      return "PENALTY_KICK_FAILED";
-    case GameEvent_Type.NO_PROGRESS_IN_GAME:
-      return "NO_PROGRESS_IN_GAME";
-    case GameEvent_Type.PLACEMENT_FAILED:
-      return "PLACEMENT_FAILED";
-    case GameEvent_Type.MULTIPLE_CARDS:
-      return "MULTIPLE_CARDS";
-    case GameEvent_Type.MULTIPLE_FOULS:
-      return "MULTIPLE_FOULS";
-    case GameEvent_Type.BOT_SUBSTITUTION:
-      return "BOT_SUBSTITUTION";
-    case GameEvent_Type.TOO_MANY_ROBOTS:
-      return "TOO_MANY_ROBOTS";
-    case GameEvent_Type.CHALLENGE_FLAG:
-      return "CHALLENGE_FLAG";
-    case GameEvent_Type.EMERGENCY_STOP:
-      return "EMERGENCY_STOP";
-    case GameEvent_Type.UNSPORTING_BEHAVIOR_MINOR:
-      return "UNSPORTING_BEHAVIOR_MINOR";
-    case GameEvent_Type.UNSPORTING_BEHAVIOR_MAJOR:
-      return "UNSPORTING_BEHAVIOR_MAJOR";
-    case GameEvent_Type.PREPARED:
-      return "PREPARED";
-    case GameEvent_Type.INDIRECT_GOAL:
-      return "INDIRECT_GOAL";
-    case GameEvent_Type.CHIPPED_GOAL:
-      return "CHIPPED_GOAL";
-    case GameEvent_Type.KICK_TIMEOUT:
-      return "KICK_TIMEOUT";
-    case GameEvent_Type.ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA:
-      return "ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA";
-    case GameEvent_Type.ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA_SKIPPED:
-      return "ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA_SKIPPED";
-    case GameEvent_Type.BOT_CRASH_UNIQUE_SKIPPED:
-      return "BOT_CRASH_UNIQUE_SKIPPED";
-    case GameEvent_Type.BOT_PUSHED_BOT_SKIPPED:
-      return "BOT_PUSHED_BOT_SKIPPED";
-    case GameEvent_Type.DEFENDER_IN_DEFENSE_AREA_PARTIALLY:
-      return "DEFENDER_IN_DEFENSE_AREA_PARTIALLY";
-    case GameEvent_Type.MULTIPLE_PLACEMENT_FAILURES:
-      return "MULTIPLE_PLACEMENT_FAILURES";
-    case GameEvent_Type.UNRECOGNIZED:
-    default:
-      return "UNRECOGNIZED";
-  }
-}
-
-/** the ball left the field normally */
-export interface GameEvent_BallLeftField {
-  /** the team that last touched the ball */
-  byTeam: Team;
-  /** the bot that last touched the ball */
-  byBot: number;
-  /** the location where the ball left the field [m] */
-  location?: Vector2;
-}
-
-/** the ball left the field via goal line and a team committed an aimless kick */
-export interface GameEvent_AimlessKick {
-  /** the team that last touched the ball */
-  byTeam: Team;
-  /** the bot that last touched the ball */
-  byBot: number;
-  /** the location where the ball left the field [m] */
-  location?: Vector2;
-  /** the location where the ball was last touched [m] */
-  kickLocation?: Vector2;
-}
-
-/** a team shot a goal */
-export interface GameEvent_Goal {
-  /** the team that scored the goal */
-  byTeam: Team;
-  /** the team that shot the goal (different from by_team for own goals) */
-  kickingTeam: Team;
-  /** the bot that shot the goal */
-  kickingBot: number;
-  /** the location where the ball entered the goal [m] */
-  location?: Vector2;
-  /** the location where the ball was kicked (for deciding if this was a valid goal) [m] */
-  kickLocation?: Vector2;
-  /** the maximum height the ball reached during the goal kick (for deciding if this was a valid goal) [m] */
-  maxBallHeight: number;
-  /** number of robots of scoring team when the ball entered the goal (for deciding if this was a valid goal) */
-  numRobotsByTeam: number;
-  /** The UNIX timestamp [μs] when the scoring team last touched the ball */
-  lastTouchByTeam: number;
-  /** An additional message with e.g. a reason for invalid goals */
-  message: string;
-}
-
-/** the ball entered the goal directly during an indirect free kick */
-export interface GameEvent_IndirectGoal {
-  /** the team that tried to shoot the goal */
-  byTeam: Team;
-  /** the bot that kicked the ball - at least the team must be set */
-  byBot: number;
-  /** the location where the ball entered the goal [m] */
-  location?: Vector2;
-  /** the location where the ball was kicked [m] */
-  kickLocation?: Vector2;
-}
-
-/** the ball entered the goal, but was initially chipped */
-export interface GameEvent_ChippedGoal {
-  /** the team that tried to shoot the goal */
-  byTeam: Team;
-  /** the bot that kicked the ball */
-  byBot: number;
-  /** the location where the ball entered the goal [m] */
-  location?: Vector2;
-  /** the location where the ball was kicked [m] */
-  kickLocation?: Vector2;
-  /** the maximum height [m] of the ball, before it entered the goal and since the last kick [m] */
-  maxBallHeight: number;
-}
-
-/** a bot moved too fast while the game was stopped */
-export interface GameEvent_BotTooFastInStop {
-  /** the team that found guilty */
-  byTeam: Team;
-  /** the bot that was too fast */
-  byBot: number;
-  /** the location of the bot [m] */
-  location?: Vector2;
-  /** the bot speed [m/s] */
-  speed: number;
-}
-
-/** a bot of the defending team got too close to the kick point during a free kick */
-export interface GameEvent_DefenderTooCloseToKickPoint {
-  /** the team that was found guilty */
-  byTeam: Team;
-  /** the bot that violates the distance to the kick point */
-  byBot: number;
-  /** the location of the bot [m] */
-  location?: Vector2;
-  /** the distance [m] from bot to the kick point (including the minimum radius) */
-  distance: number;
-}
-
-/** two robots crashed into each other with similar speeds */
-export interface GameEvent_BotCrashDrawn {
-  /** the bot of the yellow team */
-  botYellow: number;
-  /** the bot of the blue team */
-  botBlue: number;
-  /** the location of the crash (center between both bots) [m] */
-  location?: Vector2;
-  /** the calculated crash speed [m/s] of the two bots */
-  crashSpeed: number;
-  /** the difference [m/s] of the velocity of the two bots */
-  speedDiff: number;
-  /**
-   * the angle [rad] in the range [0, π] of the bot velocity vectors
-   * an angle of 0 rad (  0°) means, the bots barely touched each other
-   * an angle of π rad (180°) means, the bots crashed frontal into each other
-   */
-  crashAngle: number;
-}
-
-/** two robots crashed into each other and one team was found guilty to due significant speed difference */
-export interface GameEvent_BotCrashUnique {
-  /** the team that caused the crash */
-  byTeam: Team;
-  /** the bot that caused the crash */
-  violator: number;
-  /** the bot of the opposite team that was involved in the crash */
-  victim: number;
-  /** the location of the crash (center between both bots) [m] */
-  location?: Vector2;
-  /** the calculated crash speed vector [m/s] of the two bots */
-  crashSpeed: number;
-  /** the difference [m/s] of the velocity of the two bots */
-  speedDiff: number;
-  /**
-   * the angle [rad] in the range [0, π] of the bot velocity vectors
-   * an angle of 0 rad (  0°) means, the bots barely touched each other
-   * an angle of π rad (180°) means, the bots crashed frontal into each other
-   */
-  crashAngle: number;
-}
-
-/** a bot pushed another bot over a significant distance */
-export interface GameEvent_BotPushedBot {
-  /** the team that pushed the other team */
-  byTeam: Team;
-  /** the bot that pushed the other bot */
-  violator: number;
-  /** the bot of the opposite team that was pushed */
-  victim: number;
-  /** the location of the push (center between both bots) [m] */
-  location?: Vector2;
-  /** the pushed distance [m] */
-  pushedDistance: number;
-}
-
-/** a bot tipped over */
-export interface GameEvent_BotTippedOver {
-  /** the team that found guilty */
-  byTeam: Team;
-  /** the bot that tipped over */
-  byBot: number;
-  /** the location of the bot [m] */
-  location?: Vector2;
-  /** the location of the ball at the moment when this foul occurred [m] */
-  ballLocation?: Vector2;
-}
-
-/** a defender other than the keeper was fully located inside its own defense and touched the ball */
-export interface GameEvent_DefenderInDefenseArea {
-  /** the team that found guilty */
-  byTeam: Team;
-  /** the bot that is inside the penalty area */
-  byBot: number;
-  /** the location of the bot [m] */
-  location?: Vector2;
-  /** the distance [m] from bot case to the nearest point outside the defense area */
-  distance: number;
-}
-
-/** a defender other than the keeper was partially located inside its own defense area and touched the ball */
-export interface GameEvent_DefenderInDefenseAreaPartially {
-  /** the team that found guilty */
-  byTeam: Team;
-  /** the bot that is partially inside the penalty area */
-  byBot: number;
-  /** the location of the bot */
-  location?: Vector2;
-  /** the distance [m] that the bot is inside the penalty area */
-  distance: number;
-  /** the location of the ball at the moment when this foul occurred [m] */
-  ballLocation?: Vector2;
-}
-
-/** an attacker touched the ball inside the opponent defense area */
-export interface GameEvent_AttackerTouchedBallInDefenseArea {
-  /** the team that found guilty */
-  byTeam: Team;
-  /** the bot that is inside the penalty area */
-  byBot: number;
-  /** the location of the bot [m] */
-  location?: Vector2;
-  /** the distance [m] that the bot is inside the penalty area */
-  distance: number;
-}
-
-/** a bot kicked the ball too fast */
-export interface GameEvent_BotKickedBallTooFast {
-  /** the team that found guilty */
-  byTeam: Team;
-  /** the bot that kicked too fast */
-  byBot: number;
-  /** the location of the ball at the time of the highest speed [m] */
-  location?: Vector2;
-  /** the absolute initial ball speed (kick speed) [m/s] */
-  initialBallSpeed: number;
-  /** was the ball chipped? */
-  chipped: boolean;
-}
-
-/** a bot dribbled to ball too far */
-export interface GameEvent_BotDribbledBallTooFar {
-  /** the team that found guilty */
-  byTeam: Team;
-  /** the bot that dribbled too far */
-  byBot: number;
-  /** the location where the dribbling started [m] */
-  start?: Vector2;
-  /** the location where the maximum dribbling distance was reached [m] */
-  end?: Vector2;
-}
-
-/** an attacker touched the opponent robot inside defense area */
-export interface GameEvent_AttackerTouchedOpponentInDefenseArea {
-  /** the team that found guilty */
-  byTeam: Team;
-  /** the bot that touched the opponent robot */
-  byBot: number;
-  /** the bot of the opposite team that was touched */
-  victim: number;
-  /** the location of the contact point between both bots [m] */
-  location?: Vector2;
-}
-
-/** an attacker touched the ball multiple times when it was not allowed to */
-export interface GameEvent_AttackerDoubleTouchedBall {
-  /** the team that found guilty */
-  byTeam: Team;
-  /** the bot that touched the ball twice */
-  byBot: number;
-  /** the location of the ball when it was first touched [m] */
-  location?: Vector2;
-}
-
-/** an attacker was located too near to the opponent defense area during stop or free kick */
-export interface GameEvent_AttackerTooCloseToDefenseArea {
-  /** the team that found guilty */
-  byTeam: Team;
-  /** the bot that is too close to the defense area */
-  byBot: number;
-  /** the location of the bot [m] */
-  location?: Vector2;
-  /** the distance [m] of the bot to the penalty area */
-  distance: number;
-  /** the location of the ball at the moment when this foul occurred [m] */
-  ballLocation?: Vector2;
-}
-
-/** a bot held the ball for too long */
-export interface GameEvent_BotHeldBallDeliberately {
-  /** the team that found guilty */
-  byTeam: Team;
-  /** the bot that holds the ball */
-  byBot: number;
-  /** the location of the ball [m] */
-  location?: Vector2;
-  /** the duration [s] that the bot hold the ball */
-  duration: number;
-}
-
-/** a bot interfered the ball placement of the other team */
-export interface GameEvent_BotInterferedPlacement {
-  /** the team that found guilty */
-  byTeam: Team;
-  /** the bot that interfered the placement */
-  byBot: number;
-  /** the location of the bot [m] */
-  location?: Vector2;
-}
-
-/** a team collected multiple cards (yellow and red), which results in a penalty kick */
-export interface GameEvent_MultipleCards {
-  /** the team that received multiple yellow cards */
-  byTeam: Team;
-}
-
-/** a team collected multiple fouls, which results in a yellow card */
-export interface GameEvent_MultipleFouls {
-  /** the team that collected multiple fouls */
-  byTeam: Team;
-  /** the list of game events that caused the multiple fouls */
-  causedGameEvents: GameEvent[];
-}
-
-/** a team failed to place the ball multiple times in a row */
-export interface GameEvent_MultiplePlacementFailures {
-  /** the team that failed multiple times */
-  byTeam: Team;
-}
-
-/** timeout waiting for the attacking team to perform the free kick */
-export interface GameEvent_KickTimeout {
-  /** the team that that should have kicked */
-  byTeam: Team;
-  /** the location of the ball [m] */
-  location?: Vector2;
-  /** the time [s] that was waited */
-  time: number;
-}
-
-/** game was stuck */
-export interface GameEvent_NoProgressInGame {
-  /** the location of the ball */
-  location?: Vector2;
-  /** the time [s] that was waited */
-  time: number;
-}
-
-/** ball placement failed */
-export interface GameEvent_PlacementFailed {
-  /** the team that failed */
-  byTeam: Team;
-  /** the remaining distance [m] from ball to placement position */
-  remainingDistance: number;
-}
-
-/** a team was found guilty for minor unsporting behavior */
-export interface GameEvent_UnsportingBehaviorMinor {
-  /** the team that found guilty */
-  byTeam: Team;
-  /** an explanation of the situation and decision */
-  reason: string;
-}
-
-/** a team was found guilty for major unsporting behavior */
-export interface GameEvent_UnsportingBehaviorMajor {
-  /** the team that found guilty */
-  byTeam: Team;
-  /** an explanation of the situation and decision */
-  reason: string;
-}
-
-/** a keeper held the ball in its defense area for too long */
-export interface GameEvent_KeeperHeldBall {
-  /** the team that found guilty */
-  byTeam: Team;
-  /** the location of the ball [m] */
-  location?: Vector2;
-  /** the duration [s] that the keeper hold the ball */
-  duration: number;
-}
-
-/** a team successfully placed the ball */
-export interface GameEvent_PlacementSucceeded {
-  /** the team that did the placement */
-  byTeam: Team;
-  /** the time [s] taken for placing the ball */
-  timeTaken: number;
-  /** the distance [m] between placement location and actual ball position */
-  precision: number;
-  /** the distance [m] between the initial ball location and the placement position */
-  distance: number;
-}
-
-/** both teams are prepared - all conditions are met to continue (with kickoff or penalty kick) */
-export interface GameEvent_Prepared {
-  /** the time [s] taken for preparing */
-  timeTaken: number;
-}
-
-/** bots are being substituted by a team */
-export interface GameEvent_BotSubstitution {
-  /** the team that substitutes robots */
-  byTeam: Team;
-}
-
-/** A challenge flag, requested by a team previously, is flagged */
-export interface GameEvent_ChallengeFlag {
-  /** the team that requested the challenge flag */
-  byTeam: Team;
-}
-
-/** An emergency stop, requested by team previously, occurred */
-export interface GameEvent_EmergencyStop {
-  /** the team that substitutes robots */
-  byTeam: Team;
-}
-
-/** a team has too many robots on the field */
-export interface GameEvent_TooManyRobots {
-  /** the team that has too many robots */
-  byTeam: Team;
-  /** number of robots allowed at the moment */
-  numRobotsAllowed: number;
-  /** number of robots currently on the field */
-  numRobotsOnField: number;
-  /** the location of the ball at the moment when this foul occurred [m] */
-  ballLocation?: Vector2;
-}
-
-/** a robot chipped the ball over the field boundary out of the playing surface */
-export interface GameEvent_BoundaryCrossing {
-  /** the team that has too many robots */
-  byTeam: Team;
-  /** the location of the ball [m] */
-  location?: Vector2;
-}
-
-/** the penalty kick failed (by time or by keeper) */
-export interface GameEvent_PenaltyKickFailed {
-  /** the team that last touched the ball */
-  byTeam: Team;
-  /** the location of the ball at the moment of this event [m] */
-  location?: Vector2;
-  /** an explanation of the failure */
-  reason: string;
-}
-
-function createBaseGameEvent(): GameEvent {
-  return { type: 0, origin: [], event: undefined };
-}
-
-export const GameEvent = {
-  encode(message: GameEvent, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.type !== 0) {
-      writer.uint32(320).int32(message.type);
-    }
-    for (const v of message.origin) {
-      writer.uint32(330).string(v!);
-    }
-    if (message.event?.$case === "ballLeftFieldTouchLine") {
-      GameEvent_BallLeftField.encode(message.event.ballLeftFieldTouchLine, writer.uint32(50).fork()).ldelim();
-    }
-    if (message.event?.$case === "ballLeftFieldGoalLine") {
-      GameEvent_BallLeftField.encode(message.event.ballLeftFieldGoalLine, writer.uint32(58).fork()).ldelim();
-    }
-    if (message.event?.$case === "aimlessKick") {
-      GameEvent_AimlessKick.encode(message.event.aimlessKick, writer.uint32(90).fork()).ldelim();
-    }
-    if (message.event?.$case === "attackerTooCloseToDefenseArea") {
-      GameEvent_AttackerTooCloseToDefenseArea.encode(
-        message.event.attackerTooCloseToDefenseArea,
-        writer.uint32(154).fork(),
-      ).ldelim();
-    }
-    if (message.event?.$case === "defenderInDefenseArea") {
-      GameEvent_DefenderInDefenseArea.encode(message.event.defenderInDefenseArea, writer.uint32(250).fork()).ldelim();
-    }
-    if (message.event?.$case === "boundaryCrossing") {
-      GameEvent_BoundaryCrossing.encode(message.event.boundaryCrossing, writer.uint32(346).fork()).ldelim();
-    }
-    if (message.event?.$case === "keeperHeldBall") {
-      GameEvent_KeeperHeldBall.encode(message.event.keeperHeldBall, writer.uint32(106).fork()).ldelim();
-    }
-    if (message.event?.$case === "botDribbledBallTooFar") {
-      GameEvent_BotDribbledBallTooFar.encode(message.event.botDribbledBallTooFar, writer.uint32(138).fork()).ldelim();
-    }
-    if (message.event?.$case === "botPushedBot") {
-      GameEvent_BotPushedBot.encode(message.event.botPushedBot, writer.uint32(194).fork()).ldelim();
-    }
-    if (message.event?.$case === "botHeldBallDeliberately") {
-      GameEvent_BotHeldBallDeliberately.encode(message.event.botHeldBallDeliberately, writer.uint32(210).fork())
-        .ldelim();
-    }
-    if (message.event?.$case === "botTippedOver") {
-      GameEvent_BotTippedOver.encode(message.event.botTippedOver, writer.uint32(218).fork()).ldelim();
-    }
-    if (message.event?.$case === "attackerTouchedBallInDefenseArea") {
-      GameEvent_AttackerTouchedBallInDefenseArea.encode(
-        message.event.attackerTouchedBallInDefenseArea,
-        writer.uint32(122).fork(),
-      ).ldelim();
-    }
-    if (message.event?.$case === "botKickedBallTooFast") {
-      GameEvent_BotKickedBallTooFast.encode(message.event.botKickedBallTooFast, writer.uint32(146).fork()).ldelim();
-    }
-    if (message.event?.$case === "botCrashUnique") {
-      GameEvent_BotCrashUnique.encode(message.event.botCrashUnique, writer.uint32(178).fork()).ldelim();
-    }
-    if (message.event?.$case === "botCrashDrawn") {
-      GameEvent_BotCrashDrawn.encode(message.event.botCrashDrawn, writer.uint32(170).fork()).ldelim();
-    }
-    if (message.event?.$case === "defenderTooCloseToKickPoint") {
-      GameEvent_DefenderTooCloseToKickPoint.encode(message.event.defenderTooCloseToKickPoint, writer.uint32(234).fork())
-        .ldelim();
-    }
-    if (message.event?.$case === "botTooFastInStop") {
-      GameEvent_BotTooFastInStop.encode(message.event.botTooFastInStop, writer.uint32(226).fork()).ldelim();
-    }
-    if (message.event?.$case === "botInterferedPlacement") {
-      GameEvent_BotInterferedPlacement.encode(message.event.botInterferedPlacement, writer.uint32(162).fork()).ldelim();
-    }
-    if (message.event?.$case === "possibleGoal") {
-      GameEvent_Goal.encode(message.event.possibleGoal, writer.uint32(314).fork()).ldelim();
-    }
-    if (message.event?.$case === "goal") {
-      GameEvent_Goal.encode(message.event.goal, writer.uint32(66).fork()).ldelim();
-    }
-    if (message.event?.$case === "invalidGoal") {
-      GameEvent_Goal.encode(message.event.invalidGoal, writer.uint32(354).fork()).ldelim();
-    }
-    if (message.event?.$case === "attackerDoubleTouchedBall") {
-      GameEvent_AttackerDoubleTouchedBall.encode(message.event.attackerDoubleTouchedBall, writer.uint32(114).fork())
-        .ldelim();
-    }
-    if (message.event?.$case === "placementSucceeded") {
-      GameEvent_PlacementSucceeded.encode(message.event.placementSucceeded, writer.uint32(42).fork()).ldelim();
-    }
-    if (message.event?.$case === "penaltyKickFailed") {
-      GameEvent_PenaltyKickFailed.encode(message.event.penaltyKickFailed, writer.uint32(362).fork()).ldelim();
-    }
-    if (message.event?.$case === "noProgressInGame") {
-      GameEvent_NoProgressInGame.encode(message.event.noProgressInGame, writer.uint32(18).fork()).ldelim();
-    }
-    if (message.event?.$case === "placementFailed") {
-      GameEvent_PlacementFailed.encode(message.event.placementFailed, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.event?.$case === "multipleCards") {
-      GameEvent_MultipleCards.encode(message.event.multipleCards, writer.uint32(258).fork()).ldelim();
-    }
-    if (message.event?.$case === "multipleFouls") {
-      GameEvent_MultipleFouls.encode(message.event.multipleFouls, writer.uint32(274).fork()).ldelim();
-    }
-    if (message.event?.$case === "botSubstitution") {
-      GameEvent_BotSubstitution.encode(message.event.botSubstitution, writer.uint32(298).fork()).ldelim();
-    }
-    if (message.event?.$case === "tooManyRobots") {
-      GameEvent_TooManyRobots.encode(message.event.tooManyRobots, writer.uint32(306).fork()).ldelim();
-    }
-    if (message.event?.$case === "challengeFlag") {
-      GameEvent_ChallengeFlag.encode(message.event.challengeFlag, writer.uint32(370).fork()).ldelim();
-    }
-    if (message.event?.$case === "emergencyStop") {
-      GameEvent_EmergencyStop.encode(message.event.emergencyStop, writer.uint32(378).fork()).ldelim();
-    }
-    if (message.event?.$case === "unsportingBehaviorMinor") {
-      GameEvent_UnsportingBehaviorMinor.encode(message.event.unsportingBehaviorMinor, writer.uint32(282).fork())
-        .ldelim();
-    }
-    if (message.event?.$case === "unsportingBehaviorMajor") {
-      GameEvent_UnsportingBehaviorMajor.encode(message.event.unsportingBehaviorMajor, writer.uint32(290).fork())
-        .ldelim();
-    }
-    if (message.event?.$case === "prepared") {
-      GameEvent_Prepared.encode(message.event.prepared, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.event?.$case === "indirectGoal") {
-      GameEvent_IndirectGoal.encode(message.event.indirectGoal, writer.uint32(74).fork()).ldelim();
-    }
-    if (message.event?.$case === "chippedGoal") {
-      GameEvent_ChippedGoal.encode(message.event.chippedGoal, writer.uint32(82).fork()).ldelim();
-    }
-    if (message.event?.$case === "kickTimeout") {
-      GameEvent_KickTimeout.encode(message.event.kickTimeout, writer.uint32(98).fork()).ldelim();
-    }
-    if (message.event?.$case === "attackerTouchedOpponentInDefenseArea") {
-      GameEvent_AttackerTouchedOpponentInDefenseArea.encode(
-        message.event.attackerTouchedOpponentInDefenseArea,
-        writer.uint32(130).fork(),
-      ).ldelim();
-    }
-    if (message.event?.$case === "attackerTouchedOpponentInDefenseAreaSkipped") {
-      GameEvent_AttackerTouchedOpponentInDefenseArea.encode(
-        message.event.attackerTouchedOpponentInDefenseAreaSkipped,
-        writer.uint32(338).fork(),
-      ).ldelim();
-    }
-    if (message.event?.$case === "botCrashUniqueSkipped") {
-      GameEvent_BotCrashUnique.encode(message.event.botCrashUniqueSkipped, writer.uint32(186).fork()).ldelim();
-    }
-    if (message.event?.$case === "botPushedBotSkipped") {
-      GameEvent_BotPushedBot.encode(message.event.botPushedBotSkipped, writer.uint32(202).fork()).ldelim();
-    }
-    if (message.event?.$case === "defenderInDefenseAreaPartially") {
-      GameEvent_DefenderInDefenseAreaPartially.encode(
-        message.event.defenderInDefenseAreaPartially,
-        writer.uint32(242).fork(),
-      ).ldelim();
-    }
-    if (message.event?.$case === "multiplePlacementFailures") {
-      GameEvent_MultiplePlacementFailures.encode(message.event.multiplePlacementFailures, writer.uint32(266).fork())
-        .ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 40:
-          message.type = reader.int32() as any;
-          break;
-        case 41:
-          message.origin.push(reader.string());
-          break;
-        case 6:
-          message.event = {
-            $case: "ballLeftFieldTouchLine",
-            ballLeftFieldTouchLine: GameEvent_BallLeftField.decode(reader, reader.uint32()),
-          };
-          break;
-        case 7:
-          message.event = {
-            $case: "ballLeftFieldGoalLine",
-            ballLeftFieldGoalLine: GameEvent_BallLeftField.decode(reader, reader.uint32()),
-          };
-          break;
-        case 11:
-          message.event = { $case: "aimlessKick", aimlessKick: GameEvent_AimlessKick.decode(reader, reader.uint32()) };
-          break;
-        case 19:
-          message.event = {
-            $case: "attackerTooCloseToDefenseArea",
-            attackerTooCloseToDefenseArea: GameEvent_AttackerTooCloseToDefenseArea.decode(reader, reader.uint32()),
-          };
-          break;
-        case 31:
-          message.event = {
-            $case: "defenderInDefenseArea",
-            defenderInDefenseArea: GameEvent_DefenderInDefenseArea.decode(reader, reader.uint32()),
-          };
-          break;
-        case 43:
-          message.event = {
-            $case: "boundaryCrossing",
-            boundaryCrossing: GameEvent_BoundaryCrossing.decode(reader, reader.uint32()),
-          };
-          break;
-        case 13:
-          message.event = {
-            $case: "keeperHeldBall",
-            keeperHeldBall: GameEvent_KeeperHeldBall.decode(reader, reader.uint32()),
-          };
-          break;
-        case 17:
-          message.event = {
-            $case: "botDribbledBallTooFar",
-            botDribbledBallTooFar: GameEvent_BotDribbledBallTooFar.decode(reader, reader.uint32()),
-          };
-          break;
-        case 24:
-          message.event = {
-            $case: "botPushedBot",
-            botPushedBot: GameEvent_BotPushedBot.decode(reader, reader.uint32()),
-          };
-          break;
-        case 26:
-          message.event = {
-            $case: "botHeldBallDeliberately",
-            botHeldBallDeliberately: GameEvent_BotHeldBallDeliberately.decode(reader, reader.uint32()),
-          };
-          break;
-        case 27:
-          message.event = {
-            $case: "botTippedOver",
-            botTippedOver: GameEvent_BotTippedOver.decode(reader, reader.uint32()),
-          };
-          break;
-        case 15:
-          message.event = {
-            $case: "attackerTouchedBallInDefenseArea",
-            attackerTouchedBallInDefenseArea: GameEvent_AttackerTouchedBallInDefenseArea.decode(
-              reader,
-              reader.uint32(),
-            ),
-          };
-          break;
-        case 18:
-          message.event = {
-            $case: "botKickedBallTooFast",
-            botKickedBallTooFast: GameEvent_BotKickedBallTooFast.decode(reader, reader.uint32()),
-          };
-          break;
-        case 22:
-          message.event = {
-            $case: "botCrashUnique",
-            botCrashUnique: GameEvent_BotCrashUnique.decode(reader, reader.uint32()),
-          };
-          break;
-        case 21:
-          message.event = {
-            $case: "botCrashDrawn",
-            botCrashDrawn: GameEvent_BotCrashDrawn.decode(reader, reader.uint32()),
-          };
-          break;
-        case 29:
-          message.event = {
-            $case: "defenderTooCloseToKickPoint",
-            defenderTooCloseToKickPoint: GameEvent_DefenderTooCloseToKickPoint.decode(reader, reader.uint32()),
-          };
-          break;
-        case 28:
-          message.event = {
-            $case: "botTooFastInStop",
-            botTooFastInStop: GameEvent_BotTooFastInStop.decode(reader, reader.uint32()),
-          };
-          break;
-        case 20:
-          message.event = {
-            $case: "botInterferedPlacement",
-            botInterferedPlacement: GameEvent_BotInterferedPlacement.decode(reader, reader.uint32()),
-          };
-          break;
-        case 39:
-          message.event = { $case: "possibleGoal", possibleGoal: GameEvent_Goal.decode(reader, reader.uint32()) };
-          break;
-        case 8:
-          message.event = { $case: "goal", goal: GameEvent_Goal.decode(reader, reader.uint32()) };
-          break;
-        case 44:
-          message.event = { $case: "invalidGoal", invalidGoal: GameEvent_Goal.decode(reader, reader.uint32()) };
-          break;
-        case 14:
-          message.event = {
-            $case: "attackerDoubleTouchedBall",
-            attackerDoubleTouchedBall: GameEvent_AttackerDoubleTouchedBall.decode(reader, reader.uint32()),
-          };
-          break;
-        case 5:
-          message.event = {
-            $case: "placementSucceeded",
-            placementSucceeded: GameEvent_PlacementSucceeded.decode(reader, reader.uint32()),
-          };
-          break;
-        case 45:
-          message.event = {
-            $case: "penaltyKickFailed",
-            penaltyKickFailed: GameEvent_PenaltyKickFailed.decode(reader, reader.uint32()),
-          };
-          break;
-        case 2:
-          message.event = {
-            $case: "noProgressInGame",
-            noProgressInGame: GameEvent_NoProgressInGame.decode(reader, reader.uint32()),
-          };
-          break;
-        case 3:
-          message.event = {
-            $case: "placementFailed",
-            placementFailed: GameEvent_PlacementFailed.decode(reader, reader.uint32()),
-          };
-          break;
-        case 32:
-          message.event = {
-            $case: "multipleCards",
-            multipleCards: GameEvent_MultipleCards.decode(reader, reader.uint32()),
-          };
-          break;
-        case 34:
-          message.event = {
-            $case: "multipleFouls",
-            multipleFouls: GameEvent_MultipleFouls.decode(reader, reader.uint32()),
-          };
-          break;
-        case 37:
-          message.event = {
-            $case: "botSubstitution",
-            botSubstitution: GameEvent_BotSubstitution.decode(reader, reader.uint32()),
-          };
-          break;
-        case 38:
-          message.event = {
-            $case: "tooManyRobots",
-            tooManyRobots: GameEvent_TooManyRobots.decode(reader, reader.uint32()),
-          };
-          break;
-        case 46:
-          message.event = {
-            $case: "challengeFlag",
-            challengeFlag: GameEvent_ChallengeFlag.decode(reader, reader.uint32()),
-          };
-          break;
-        case 47:
-          message.event = {
-            $case: "emergencyStop",
-            emergencyStop: GameEvent_EmergencyStop.decode(reader, reader.uint32()),
-          };
-          break;
-        case 35:
-          message.event = {
-            $case: "unsportingBehaviorMinor",
-            unsportingBehaviorMinor: GameEvent_UnsportingBehaviorMinor.decode(reader, reader.uint32()),
-          };
-          break;
-        case 36:
-          message.event = {
-            $case: "unsportingBehaviorMajor",
-            unsportingBehaviorMajor: GameEvent_UnsportingBehaviorMajor.decode(reader, reader.uint32()),
-          };
-          break;
-        case 1:
-          message.event = { $case: "prepared", prepared: GameEvent_Prepared.decode(reader, reader.uint32()) };
-          break;
-        case 9:
-          message.event = {
-            $case: "indirectGoal",
-            indirectGoal: GameEvent_IndirectGoal.decode(reader, reader.uint32()),
-          };
-          break;
-        case 10:
-          message.event = { $case: "chippedGoal", chippedGoal: GameEvent_ChippedGoal.decode(reader, reader.uint32()) };
-          break;
-        case 12:
-          message.event = { $case: "kickTimeout", kickTimeout: GameEvent_KickTimeout.decode(reader, reader.uint32()) };
-          break;
-        case 16:
-          message.event = {
-            $case: "attackerTouchedOpponentInDefenseArea",
-            attackerTouchedOpponentInDefenseArea: GameEvent_AttackerTouchedOpponentInDefenseArea.decode(
-              reader,
-              reader.uint32(),
-            ),
-          };
-          break;
-        case 42:
-          message.event = {
-            $case: "attackerTouchedOpponentInDefenseAreaSkipped",
-            attackerTouchedOpponentInDefenseAreaSkipped: GameEvent_AttackerTouchedOpponentInDefenseArea.decode(
-              reader,
-              reader.uint32(),
-            ),
-          };
-          break;
-        case 23:
-          message.event = {
-            $case: "botCrashUniqueSkipped",
-            botCrashUniqueSkipped: GameEvent_BotCrashUnique.decode(reader, reader.uint32()),
-          };
-          break;
-        case 25:
-          message.event = {
-            $case: "botPushedBotSkipped",
-            botPushedBotSkipped: GameEvent_BotPushedBot.decode(reader, reader.uint32()),
-          };
-          break;
-        case 30:
-          message.event = {
-            $case: "defenderInDefenseAreaPartially",
-            defenderInDefenseAreaPartially: GameEvent_DefenderInDefenseAreaPartially.decode(reader, reader.uint32()),
-          };
-          break;
-        case 33:
-          message.event = {
-            $case: "multiplePlacementFailures",
-            multiplePlacementFailures: GameEvent_MultiplePlacementFailures.decode(reader, reader.uint32()),
-          };
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent {
-    return {
-      type: isSet(object.type) ? gameEvent_TypeFromJSON(object.type) : 0,
-      origin: Array.isArray(object?.origin) ? object.origin.map((e: any) => String(e)) : [],
-      event: isSet(object.ballLeftFieldTouchLine)
-        ? {
-          $case: "ballLeftFieldTouchLine",
-          ballLeftFieldTouchLine: GameEvent_BallLeftField.fromJSON(object.ballLeftFieldTouchLine),
+ * Generated by the protoc-gen-ts.  DO NOT EDIT!
+ * compiler version: 3.15.8
+ * source: ssl_gc_game_event.proto
+ * git: https://github.com/thesayyn/protoc-gen-ts */
+import * as dependency_1 from "./ssl_gc_common";
+import * as dependency_2 from "./ssl_gc_geometry";
+import * as pb_1 from "google-protobuf";
+export class GameEvent extends pb_1.Message {
+    #one_of_decls: number[][] = [[6, 7, 11, 19, 31, 43, 13, 17, 24, 26, 27, 15, 18, 22, 21, 29, 28, 20, 39, 8, 44, 14, 5, 45, 2, 3, 32, 34, 37, 38, 46, 47, 35, 36, 1, 9, 10, 12, 16, 42, 23, 25, 30, 33]];
+    constructor(data?: any[] | ({
+        type?: GameEvent.Type;
+        origin: string[];
+    } & (({
+        ballLeftFieldTouchLine?: GameEvent.BallLeftField;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: GameEvent.BallLeftField;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: GameEvent.AimlessKick;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: GameEvent.AttackerTooCloseToDefenseArea;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: GameEvent.DefenderInDefenseArea;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: GameEvent.BoundaryCrossing;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: GameEvent.KeeperHeldBall;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: GameEvent.BotDribbledBallTooFar;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: GameEvent.BotPushedBot;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: GameEvent.BotHeldBallDeliberately;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: GameEvent.BotTippedOver;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: GameEvent.AttackerTouchedBallInDefenseArea;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: GameEvent.BotKickedBallTooFast;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: GameEvent.BotCrashUnique;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: GameEvent.BotCrashDrawn;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: GameEvent.DefenderTooCloseToKickPoint;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: GameEvent.BotTooFastInStop;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: GameEvent.BotInterferedPlacement;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: GameEvent.Goal;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: GameEvent.Goal;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: GameEvent.Goal;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: GameEvent.AttackerDoubleTouchedBall;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: GameEvent.PlacementSucceeded;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: GameEvent.PenaltyKickFailed;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: GameEvent.NoProgressInGame;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: GameEvent.PlacementFailed;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: GameEvent.MultipleCards;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: GameEvent.MultipleFouls;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: GameEvent.BotSubstitution;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: GameEvent.TooManyRobots;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: GameEvent.ChallengeFlag;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: GameEvent.EmergencyStop;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: GameEvent.UnsportingBehaviorMinor;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: GameEvent.UnsportingBehaviorMajor;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        /** @deprecated*/
+        prepared?: GameEvent.Prepared;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        /** @deprecated*/
+        indirectGoal?: GameEvent.IndirectGoal;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        /** @deprecated*/
+        chippedGoal?: GameEvent.ChippedGoal;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        /** @deprecated*/
+        kickTimeout?: GameEvent.KickTimeout;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        /** @deprecated*/
+        attackerTouchedOpponentInDefenseArea?: GameEvent.AttackerTouchedOpponentInDefenseArea;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        /** @deprecated*/
+        attackerTouchedOpponentInDefenseAreaSkipped?: GameEvent.AttackerTouchedOpponentInDefenseArea;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        /** @deprecated*/
+        botCrashUniqueSkipped?: GameEvent.BotCrashUnique;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        /** @deprecated*/
+        botPushedBotSkipped?: GameEvent.BotPushedBot;
+        defenderInDefenseAreaPartially?: never;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        /** @deprecated*/
+        defenderInDefenseAreaPartially?: GameEvent.DefenderInDefenseAreaPartially;
+        multiplePlacementFailures?: never;
+    } | {
+        ballLeftFieldTouchLine?: never;
+        ballLeftFieldGoalLine?: never;
+        aimlessKick?: never;
+        attackerTooCloseToDefenseArea?: never;
+        defenderInDefenseArea?: never;
+        boundaryCrossing?: never;
+        keeperHeldBall?: never;
+        botDribbledBallTooFar?: never;
+        botPushedBot?: never;
+        botHeldBallDeliberately?: never;
+        botTippedOver?: never;
+        attackerTouchedBallInDefenseArea?: never;
+        botKickedBallTooFast?: never;
+        botCrashUnique?: never;
+        botCrashDrawn?: never;
+        defenderTooCloseToKickPoint?: never;
+        botTooFastInStop?: never;
+        botInterferedPlacement?: never;
+        possibleGoal?: never;
+        goal?: never;
+        invalidGoal?: never;
+        attackerDoubleTouchedBall?: never;
+        placementSucceeded?: never;
+        penaltyKickFailed?: never;
+        noProgressInGame?: never;
+        placementFailed?: never;
+        multipleCards?: never;
+        multipleFouls?: never;
+        botSubstitution?: never;
+        tooManyRobots?: never;
+        challengeFlag?: never;
+        emergencyStop?: never;
+        unsportingBehaviorMinor?: never;
+        unsportingBehaviorMajor?: never;
+        prepared?: never;
+        indirectGoal?: never;
+        chippedGoal?: never;
+        kickTimeout?: never;
+        attackerTouchedOpponentInDefenseArea?: never;
+        attackerTouchedOpponentInDefenseAreaSkipped?: never;
+        botCrashUniqueSkipped?: never;
+        botPushedBotSkipped?: never;
+        defenderInDefenseAreaPartially?: never;
+        /** @deprecated*/
+        multiplePlacementFailures?: GameEvent.MultiplePlacementFailures;
+    })))) {
+        super();
+        pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [41], this.#one_of_decls);
+        if (!Array.isArray(data) && typeof data == "object") {
+            if ("type" in data && data.type != undefined) {
+                this.type = data.type;
+            }
+            this.origin = data.origin;
+            if ("ballLeftFieldTouchLine" in data && data.ballLeftFieldTouchLine != undefined) {
+                this.ballLeftFieldTouchLine = data.ballLeftFieldTouchLine;
+            }
+            if ("ballLeftFieldGoalLine" in data && data.ballLeftFieldGoalLine != undefined) {
+                this.ballLeftFieldGoalLine = data.ballLeftFieldGoalLine;
+            }
+            if ("aimlessKick" in data && data.aimlessKick != undefined) {
+                this.aimlessKick = data.aimlessKick;
+            }
+            if ("attackerTooCloseToDefenseArea" in data && data.attackerTooCloseToDefenseArea != undefined) {
+                this.attackerTooCloseToDefenseArea = data.attackerTooCloseToDefenseArea;
+            }
+            if ("defenderInDefenseArea" in data && data.defenderInDefenseArea != undefined) {
+                this.defenderInDefenseArea = data.defenderInDefenseArea;
+            }
+            if ("boundaryCrossing" in data && data.boundaryCrossing != undefined) {
+                this.boundaryCrossing = data.boundaryCrossing;
+            }
+            if ("keeperHeldBall" in data && data.keeperHeldBall != undefined) {
+                this.keeperHeldBall = data.keeperHeldBall;
+            }
+            if ("botDribbledBallTooFar" in data && data.botDribbledBallTooFar != undefined) {
+                this.botDribbledBallTooFar = data.botDribbledBallTooFar;
+            }
+            if ("botPushedBot" in data && data.botPushedBot != undefined) {
+                this.botPushedBot = data.botPushedBot;
+            }
+            if ("botHeldBallDeliberately" in data && data.botHeldBallDeliberately != undefined) {
+                this.botHeldBallDeliberately = data.botHeldBallDeliberately;
+            }
+            if ("botTippedOver" in data && data.botTippedOver != undefined) {
+                this.botTippedOver = data.botTippedOver;
+            }
+            if ("attackerTouchedBallInDefenseArea" in data && data.attackerTouchedBallInDefenseArea != undefined) {
+                this.attackerTouchedBallInDefenseArea = data.attackerTouchedBallInDefenseArea;
+            }
+            if ("botKickedBallTooFast" in data && data.botKickedBallTooFast != undefined) {
+                this.botKickedBallTooFast = data.botKickedBallTooFast;
+            }
+            if ("botCrashUnique" in data && data.botCrashUnique != undefined) {
+                this.botCrashUnique = data.botCrashUnique;
+            }
+            if ("botCrashDrawn" in data && data.botCrashDrawn != undefined) {
+                this.botCrashDrawn = data.botCrashDrawn;
+            }
+            if ("defenderTooCloseToKickPoint" in data && data.defenderTooCloseToKickPoint != undefined) {
+                this.defenderTooCloseToKickPoint = data.defenderTooCloseToKickPoint;
+            }
+            if ("botTooFastInStop" in data && data.botTooFastInStop != undefined) {
+                this.botTooFastInStop = data.botTooFastInStop;
+            }
+            if ("botInterferedPlacement" in data && data.botInterferedPlacement != undefined) {
+                this.botInterferedPlacement = data.botInterferedPlacement;
+            }
+            if ("possibleGoal" in data && data.possibleGoal != undefined) {
+                this.possibleGoal = data.possibleGoal;
+            }
+            if ("goal" in data && data.goal != undefined) {
+                this.goal = data.goal;
+            }
+            if ("invalidGoal" in data && data.invalidGoal != undefined) {
+                this.invalidGoal = data.invalidGoal;
+            }
+            if ("attackerDoubleTouchedBall" in data && data.attackerDoubleTouchedBall != undefined) {
+                this.attackerDoubleTouchedBall = data.attackerDoubleTouchedBall;
+            }
+            if ("placementSucceeded" in data && data.placementSucceeded != undefined) {
+                this.placementSucceeded = data.placementSucceeded;
+            }
+            if ("penaltyKickFailed" in data && data.penaltyKickFailed != undefined) {
+                this.penaltyKickFailed = data.penaltyKickFailed;
+            }
+            if ("noProgressInGame" in data && data.noProgressInGame != undefined) {
+                this.noProgressInGame = data.noProgressInGame;
+            }
+            if ("placementFailed" in data && data.placementFailed != undefined) {
+                this.placementFailed = data.placementFailed;
+            }
+            if ("multipleCards" in data && data.multipleCards != undefined) {
+                this.multipleCards = data.multipleCards;
+            }
+            if ("multipleFouls" in data && data.multipleFouls != undefined) {
+                this.multipleFouls = data.multipleFouls;
+            }
+            if ("botSubstitution" in data && data.botSubstitution != undefined) {
+                this.botSubstitution = data.botSubstitution;
+            }
+            if ("tooManyRobots" in data && data.tooManyRobots != undefined) {
+                this.tooManyRobots = data.tooManyRobots;
+            }
+            if ("challengeFlag" in data && data.challengeFlag != undefined) {
+                this.challengeFlag = data.challengeFlag;
+            }
+            if ("emergencyStop" in data && data.emergencyStop != undefined) {
+                this.emergencyStop = data.emergencyStop;
+            }
+            if ("unsportingBehaviorMinor" in data && data.unsportingBehaviorMinor != undefined) {
+                this.unsportingBehaviorMinor = data.unsportingBehaviorMinor;
+            }
+            if ("unsportingBehaviorMajor" in data && data.unsportingBehaviorMajor != undefined) {
+                this.unsportingBehaviorMajor = data.unsportingBehaviorMajor;
+            }
+            if ("prepared" in data && data.prepared != undefined) {
+                this.prepared = data.prepared;
+            }
+            if ("indirectGoal" in data && data.indirectGoal != undefined) {
+                this.indirectGoal = data.indirectGoal;
+            }
+            if ("chippedGoal" in data && data.chippedGoal != undefined) {
+                this.chippedGoal = data.chippedGoal;
+            }
+            if ("kickTimeout" in data && data.kickTimeout != undefined) {
+                this.kickTimeout = data.kickTimeout;
+            }
+            if ("attackerTouchedOpponentInDefenseArea" in data && data.attackerTouchedOpponentInDefenseArea != undefined) {
+                this.attackerTouchedOpponentInDefenseArea = data.attackerTouchedOpponentInDefenseArea;
+            }
+            if ("attackerTouchedOpponentInDefenseAreaSkipped" in data && data.attackerTouchedOpponentInDefenseAreaSkipped != undefined) {
+                this.attackerTouchedOpponentInDefenseAreaSkipped = data.attackerTouchedOpponentInDefenseAreaSkipped;
+            }
+            if ("botCrashUniqueSkipped" in data && data.botCrashUniqueSkipped != undefined) {
+                this.botCrashUniqueSkipped = data.botCrashUniqueSkipped;
+            }
+            if ("botPushedBotSkipped" in data && data.botPushedBotSkipped != undefined) {
+                this.botPushedBotSkipped = data.botPushedBotSkipped;
+            }
+            if ("defenderInDefenseAreaPartially" in data && data.defenderInDefenseAreaPartially != undefined) {
+                this.defenderInDefenseAreaPartially = data.defenderInDefenseAreaPartially;
+            }
+            if ("multiplePlacementFailures" in data && data.multiplePlacementFailures != undefined) {
+                this.multiplePlacementFailures = data.multiplePlacementFailures;
+            }
         }
-        : isSet(object.ballLeftFieldGoalLine)
-        ? {
-          $case: "ballLeftFieldGoalLine",
-          ballLeftFieldGoalLine: GameEvent_BallLeftField.fromJSON(object.ballLeftFieldGoalLine),
+    }
+    get type() {
+        return pb_1.Message.getFieldWithDefault(this, 40, GameEvent.Type.UNKNOWN_GAME_EVENT_TYPE) as GameEvent.Type;
+    }
+    set type(value: GameEvent.Type) {
+        pb_1.Message.setField(this, 40, value);
+    }
+    get hasType() {
+        return pb_1.Message.getField(this, 40) != null;
+    }
+    get origin() {
+        return pb_1.Message.getFieldWithDefault(this, 41, []) as string[];
+    }
+    set origin(value: string[]) {
+        pb_1.Message.setField(this, 41, value);
+    }
+    get ballLeftFieldTouchLine() {
+        return pb_1.Message.getWrapperField(this, GameEvent.BallLeftField, 6) as GameEvent.BallLeftField;
+    }
+    set ballLeftFieldTouchLine(value: GameEvent.BallLeftField) {
+        pb_1.Message.setOneofWrapperField(this, 6, this.#one_of_decls[0], value);
+    }
+    get hasBallLeftFieldTouchLine() {
+        return pb_1.Message.getField(this, 6) != null;
+    }
+    get ballLeftFieldGoalLine() {
+        return pb_1.Message.getWrapperField(this, GameEvent.BallLeftField, 7) as GameEvent.BallLeftField;
+    }
+    set ballLeftFieldGoalLine(value: GameEvent.BallLeftField) {
+        pb_1.Message.setOneofWrapperField(this, 7, this.#one_of_decls[0], value);
+    }
+    get hasBallLeftFieldGoalLine() {
+        return pb_1.Message.getField(this, 7) != null;
+    }
+    get aimlessKick() {
+        return pb_1.Message.getWrapperField(this, GameEvent.AimlessKick, 11) as GameEvent.AimlessKick;
+    }
+    set aimlessKick(value: GameEvent.AimlessKick) {
+        pb_1.Message.setOneofWrapperField(this, 11, this.#one_of_decls[0], value);
+    }
+    get hasAimlessKick() {
+        return pb_1.Message.getField(this, 11) != null;
+    }
+    get attackerTooCloseToDefenseArea() {
+        return pb_1.Message.getWrapperField(this, GameEvent.AttackerTooCloseToDefenseArea, 19) as GameEvent.AttackerTooCloseToDefenseArea;
+    }
+    set attackerTooCloseToDefenseArea(value: GameEvent.AttackerTooCloseToDefenseArea) {
+        pb_1.Message.setOneofWrapperField(this, 19, this.#one_of_decls[0], value);
+    }
+    get hasAttackerTooCloseToDefenseArea() {
+        return pb_1.Message.getField(this, 19) != null;
+    }
+    get defenderInDefenseArea() {
+        return pb_1.Message.getWrapperField(this, GameEvent.DefenderInDefenseArea, 31) as GameEvent.DefenderInDefenseArea;
+    }
+    set defenderInDefenseArea(value: GameEvent.DefenderInDefenseArea) {
+        pb_1.Message.setOneofWrapperField(this, 31, this.#one_of_decls[0], value);
+    }
+    get hasDefenderInDefenseArea() {
+        return pb_1.Message.getField(this, 31) != null;
+    }
+    get boundaryCrossing() {
+        return pb_1.Message.getWrapperField(this, GameEvent.BoundaryCrossing, 43) as GameEvent.BoundaryCrossing;
+    }
+    set boundaryCrossing(value: GameEvent.BoundaryCrossing) {
+        pb_1.Message.setOneofWrapperField(this, 43, this.#one_of_decls[0], value);
+    }
+    get hasBoundaryCrossing() {
+        return pb_1.Message.getField(this, 43) != null;
+    }
+    get keeperHeldBall() {
+        return pb_1.Message.getWrapperField(this, GameEvent.KeeperHeldBall, 13) as GameEvent.KeeperHeldBall;
+    }
+    set keeperHeldBall(value: GameEvent.KeeperHeldBall) {
+        pb_1.Message.setOneofWrapperField(this, 13, this.#one_of_decls[0], value);
+    }
+    get hasKeeperHeldBall() {
+        return pb_1.Message.getField(this, 13) != null;
+    }
+    get botDribbledBallTooFar() {
+        return pb_1.Message.getWrapperField(this, GameEvent.BotDribbledBallTooFar, 17) as GameEvent.BotDribbledBallTooFar;
+    }
+    set botDribbledBallTooFar(value: GameEvent.BotDribbledBallTooFar) {
+        pb_1.Message.setOneofWrapperField(this, 17, this.#one_of_decls[0], value);
+    }
+    get hasBotDribbledBallTooFar() {
+        return pb_1.Message.getField(this, 17) != null;
+    }
+    get botPushedBot() {
+        return pb_1.Message.getWrapperField(this, GameEvent.BotPushedBot, 24) as GameEvent.BotPushedBot;
+    }
+    set botPushedBot(value: GameEvent.BotPushedBot) {
+        pb_1.Message.setOneofWrapperField(this, 24, this.#one_of_decls[0], value);
+    }
+    get hasBotPushedBot() {
+        return pb_1.Message.getField(this, 24) != null;
+    }
+    get botHeldBallDeliberately() {
+        return pb_1.Message.getWrapperField(this, GameEvent.BotHeldBallDeliberately, 26) as GameEvent.BotHeldBallDeliberately;
+    }
+    set botHeldBallDeliberately(value: GameEvent.BotHeldBallDeliberately) {
+        pb_1.Message.setOneofWrapperField(this, 26, this.#one_of_decls[0], value);
+    }
+    get hasBotHeldBallDeliberately() {
+        return pb_1.Message.getField(this, 26) != null;
+    }
+    get botTippedOver() {
+        return pb_1.Message.getWrapperField(this, GameEvent.BotTippedOver, 27) as GameEvent.BotTippedOver;
+    }
+    set botTippedOver(value: GameEvent.BotTippedOver) {
+        pb_1.Message.setOneofWrapperField(this, 27, this.#one_of_decls[0], value);
+    }
+    get hasBotTippedOver() {
+        return pb_1.Message.getField(this, 27) != null;
+    }
+    get attackerTouchedBallInDefenseArea() {
+        return pb_1.Message.getWrapperField(this, GameEvent.AttackerTouchedBallInDefenseArea, 15) as GameEvent.AttackerTouchedBallInDefenseArea;
+    }
+    set attackerTouchedBallInDefenseArea(value: GameEvent.AttackerTouchedBallInDefenseArea) {
+        pb_1.Message.setOneofWrapperField(this, 15, this.#one_of_decls[0], value);
+    }
+    get hasAttackerTouchedBallInDefenseArea() {
+        return pb_1.Message.getField(this, 15) != null;
+    }
+    get botKickedBallTooFast() {
+        return pb_1.Message.getWrapperField(this, GameEvent.BotKickedBallTooFast, 18) as GameEvent.BotKickedBallTooFast;
+    }
+    set botKickedBallTooFast(value: GameEvent.BotKickedBallTooFast) {
+        pb_1.Message.setOneofWrapperField(this, 18, this.#one_of_decls[0], value);
+    }
+    get hasBotKickedBallTooFast() {
+        return pb_1.Message.getField(this, 18) != null;
+    }
+    get botCrashUnique() {
+        return pb_1.Message.getWrapperField(this, GameEvent.BotCrashUnique, 22) as GameEvent.BotCrashUnique;
+    }
+    set botCrashUnique(value: GameEvent.BotCrashUnique) {
+        pb_1.Message.setOneofWrapperField(this, 22, this.#one_of_decls[0], value);
+    }
+    get hasBotCrashUnique() {
+        return pb_1.Message.getField(this, 22) != null;
+    }
+    get botCrashDrawn() {
+        return pb_1.Message.getWrapperField(this, GameEvent.BotCrashDrawn, 21) as GameEvent.BotCrashDrawn;
+    }
+    set botCrashDrawn(value: GameEvent.BotCrashDrawn) {
+        pb_1.Message.setOneofWrapperField(this, 21, this.#one_of_decls[0], value);
+    }
+    get hasBotCrashDrawn() {
+        return pb_1.Message.getField(this, 21) != null;
+    }
+    get defenderTooCloseToKickPoint() {
+        return pb_1.Message.getWrapperField(this, GameEvent.DefenderTooCloseToKickPoint, 29) as GameEvent.DefenderTooCloseToKickPoint;
+    }
+    set defenderTooCloseToKickPoint(value: GameEvent.DefenderTooCloseToKickPoint) {
+        pb_1.Message.setOneofWrapperField(this, 29, this.#one_of_decls[0], value);
+    }
+    get hasDefenderTooCloseToKickPoint() {
+        return pb_1.Message.getField(this, 29) != null;
+    }
+    get botTooFastInStop() {
+        return pb_1.Message.getWrapperField(this, GameEvent.BotTooFastInStop, 28) as GameEvent.BotTooFastInStop;
+    }
+    set botTooFastInStop(value: GameEvent.BotTooFastInStop) {
+        pb_1.Message.setOneofWrapperField(this, 28, this.#one_of_decls[0], value);
+    }
+    get hasBotTooFastInStop() {
+        return pb_1.Message.getField(this, 28) != null;
+    }
+    get botInterferedPlacement() {
+        return pb_1.Message.getWrapperField(this, GameEvent.BotInterferedPlacement, 20) as GameEvent.BotInterferedPlacement;
+    }
+    set botInterferedPlacement(value: GameEvent.BotInterferedPlacement) {
+        pb_1.Message.setOneofWrapperField(this, 20, this.#one_of_decls[0], value);
+    }
+    get hasBotInterferedPlacement() {
+        return pb_1.Message.getField(this, 20) != null;
+    }
+    get possibleGoal() {
+        return pb_1.Message.getWrapperField(this, GameEvent.Goal, 39) as GameEvent.Goal;
+    }
+    set possibleGoal(value: GameEvent.Goal) {
+        pb_1.Message.setOneofWrapperField(this, 39, this.#one_of_decls[0], value);
+    }
+    get hasPossibleGoal() {
+        return pb_1.Message.getField(this, 39) != null;
+    }
+    get goal() {
+        return pb_1.Message.getWrapperField(this, GameEvent.Goal, 8) as GameEvent.Goal;
+    }
+    set goal(value: GameEvent.Goal) {
+        pb_1.Message.setOneofWrapperField(this, 8, this.#one_of_decls[0], value);
+    }
+    get hasGoal() {
+        return pb_1.Message.getField(this, 8) != null;
+    }
+    get invalidGoal() {
+        return pb_1.Message.getWrapperField(this, GameEvent.Goal, 44) as GameEvent.Goal;
+    }
+    set invalidGoal(value: GameEvent.Goal) {
+        pb_1.Message.setOneofWrapperField(this, 44, this.#one_of_decls[0], value);
+    }
+    get hasInvalidGoal() {
+        return pb_1.Message.getField(this, 44) != null;
+    }
+    get attackerDoubleTouchedBall() {
+        return pb_1.Message.getWrapperField(this, GameEvent.AttackerDoubleTouchedBall, 14) as GameEvent.AttackerDoubleTouchedBall;
+    }
+    set attackerDoubleTouchedBall(value: GameEvent.AttackerDoubleTouchedBall) {
+        pb_1.Message.setOneofWrapperField(this, 14, this.#one_of_decls[0], value);
+    }
+    get hasAttackerDoubleTouchedBall() {
+        return pb_1.Message.getField(this, 14) != null;
+    }
+    get placementSucceeded() {
+        return pb_1.Message.getWrapperField(this, GameEvent.PlacementSucceeded, 5) as GameEvent.PlacementSucceeded;
+    }
+    set placementSucceeded(value: GameEvent.PlacementSucceeded) {
+        pb_1.Message.setOneofWrapperField(this, 5, this.#one_of_decls[0], value);
+    }
+    get hasPlacementSucceeded() {
+        return pb_1.Message.getField(this, 5) != null;
+    }
+    get penaltyKickFailed() {
+        return pb_1.Message.getWrapperField(this, GameEvent.PenaltyKickFailed, 45) as GameEvent.PenaltyKickFailed;
+    }
+    set penaltyKickFailed(value: GameEvent.PenaltyKickFailed) {
+        pb_1.Message.setOneofWrapperField(this, 45, this.#one_of_decls[0], value);
+    }
+    get hasPenaltyKickFailed() {
+        return pb_1.Message.getField(this, 45) != null;
+    }
+    get noProgressInGame() {
+        return pb_1.Message.getWrapperField(this, GameEvent.NoProgressInGame, 2) as GameEvent.NoProgressInGame;
+    }
+    set noProgressInGame(value: GameEvent.NoProgressInGame) {
+        pb_1.Message.setOneofWrapperField(this, 2, this.#one_of_decls[0], value);
+    }
+    get hasNoProgressInGame() {
+        return pb_1.Message.getField(this, 2) != null;
+    }
+    get placementFailed() {
+        return pb_1.Message.getWrapperField(this, GameEvent.PlacementFailed, 3) as GameEvent.PlacementFailed;
+    }
+    set placementFailed(value: GameEvent.PlacementFailed) {
+        pb_1.Message.setOneofWrapperField(this, 3, this.#one_of_decls[0], value);
+    }
+    get hasPlacementFailed() {
+        return pb_1.Message.getField(this, 3) != null;
+    }
+    get multipleCards() {
+        return pb_1.Message.getWrapperField(this, GameEvent.MultipleCards, 32) as GameEvent.MultipleCards;
+    }
+    set multipleCards(value: GameEvent.MultipleCards) {
+        pb_1.Message.setOneofWrapperField(this, 32, this.#one_of_decls[0], value);
+    }
+    get hasMultipleCards() {
+        return pb_1.Message.getField(this, 32) != null;
+    }
+    get multipleFouls() {
+        return pb_1.Message.getWrapperField(this, GameEvent.MultipleFouls, 34) as GameEvent.MultipleFouls;
+    }
+    set multipleFouls(value: GameEvent.MultipleFouls) {
+        pb_1.Message.setOneofWrapperField(this, 34, this.#one_of_decls[0], value);
+    }
+    get hasMultipleFouls() {
+        return pb_1.Message.getField(this, 34) != null;
+    }
+    get botSubstitution() {
+        return pb_1.Message.getWrapperField(this, GameEvent.BotSubstitution, 37) as GameEvent.BotSubstitution;
+    }
+    set botSubstitution(value: GameEvent.BotSubstitution) {
+        pb_1.Message.setOneofWrapperField(this, 37, this.#one_of_decls[0], value);
+    }
+    get hasBotSubstitution() {
+        return pb_1.Message.getField(this, 37) != null;
+    }
+    get tooManyRobots() {
+        return pb_1.Message.getWrapperField(this, GameEvent.TooManyRobots, 38) as GameEvent.TooManyRobots;
+    }
+    set tooManyRobots(value: GameEvent.TooManyRobots) {
+        pb_1.Message.setOneofWrapperField(this, 38, this.#one_of_decls[0], value);
+    }
+    get hasTooManyRobots() {
+        return pb_1.Message.getField(this, 38) != null;
+    }
+    get challengeFlag() {
+        return pb_1.Message.getWrapperField(this, GameEvent.ChallengeFlag, 46) as GameEvent.ChallengeFlag;
+    }
+    set challengeFlag(value: GameEvent.ChallengeFlag) {
+        pb_1.Message.setOneofWrapperField(this, 46, this.#one_of_decls[0], value);
+    }
+    get hasChallengeFlag() {
+        return pb_1.Message.getField(this, 46) != null;
+    }
+    get emergencyStop() {
+        return pb_1.Message.getWrapperField(this, GameEvent.EmergencyStop, 47) as GameEvent.EmergencyStop;
+    }
+    set emergencyStop(value: GameEvent.EmergencyStop) {
+        pb_1.Message.setOneofWrapperField(this, 47, this.#one_of_decls[0], value);
+    }
+    get hasEmergencyStop() {
+        return pb_1.Message.getField(this, 47) != null;
+    }
+    get unsportingBehaviorMinor() {
+        return pb_1.Message.getWrapperField(this, GameEvent.UnsportingBehaviorMinor, 35) as GameEvent.UnsportingBehaviorMinor;
+    }
+    set unsportingBehaviorMinor(value: GameEvent.UnsportingBehaviorMinor) {
+        pb_1.Message.setOneofWrapperField(this, 35, this.#one_of_decls[0], value);
+    }
+    get hasUnsportingBehaviorMinor() {
+        return pb_1.Message.getField(this, 35) != null;
+    }
+    get unsportingBehaviorMajor() {
+        return pb_1.Message.getWrapperField(this, GameEvent.UnsportingBehaviorMajor, 36) as GameEvent.UnsportingBehaviorMajor;
+    }
+    set unsportingBehaviorMajor(value: GameEvent.UnsportingBehaviorMajor) {
+        pb_1.Message.setOneofWrapperField(this, 36, this.#one_of_decls[0], value);
+    }
+    get hasUnsportingBehaviorMajor() {
+        return pb_1.Message.getField(this, 36) != null;
+    }
+    /** @deprecated*/
+    get prepared() {
+        return pb_1.Message.getWrapperField(this, GameEvent.Prepared, 1) as GameEvent.Prepared;
+    }
+    /** @deprecated*/
+    set prepared(value: GameEvent.Prepared) {
+        pb_1.Message.setOneofWrapperField(this, 1, this.#one_of_decls[0], value);
+    }
+    /** @deprecated*/
+    get hasPrepared() {
+        return pb_1.Message.getField(this, 1) != null;
+    }
+    /** @deprecated*/
+    get indirectGoal() {
+        return pb_1.Message.getWrapperField(this, GameEvent.IndirectGoal, 9) as GameEvent.IndirectGoal;
+    }
+    /** @deprecated*/
+    set indirectGoal(value: GameEvent.IndirectGoal) {
+        pb_1.Message.setOneofWrapperField(this, 9, this.#one_of_decls[0], value);
+    }
+    /** @deprecated*/
+    get hasIndirectGoal() {
+        return pb_1.Message.getField(this, 9) != null;
+    }
+    /** @deprecated*/
+    get chippedGoal() {
+        return pb_1.Message.getWrapperField(this, GameEvent.ChippedGoal, 10) as GameEvent.ChippedGoal;
+    }
+    /** @deprecated*/
+    set chippedGoal(value: GameEvent.ChippedGoal) {
+        pb_1.Message.setOneofWrapperField(this, 10, this.#one_of_decls[0], value);
+    }
+    /** @deprecated*/
+    get hasChippedGoal() {
+        return pb_1.Message.getField(this, 10) != null;
+    }
+    /** @deprecated*/
+    get kickTimeout() {
+        return pb_1.Message.getWrapperField(this, GameEvent.KickTimeout, 12) as GameEvent.KickTimeout;
+    }
+    /** @deprecated*/
+    set kickTimeout(value: GameEvent.KickTimeout) {
+        pb_1.Message.setOneofWrapperField(this, 12, this.#one_of_decls[0], value);
+    }
+    /** @deprecated*/
+    get hasKickTimeout() {
+        return pb_1.Message.getField(this, 12) != null;
+    }
+    /** @deprecated*/
+    get attackerTouchedOpponentInDefenseArea() {
+        return pb_1.Message.getWrapperField(this, GameEvent.AttackerTouchedOpponentInDefenseArea, 16) as GameEvent.AttackerTouchedOpponentInDefenseArea;
+    }
+    /** @deprecated*/
+    set attackerTouchedOpponentInDefenseArea(value: GameEvent.AttackerTouchedOpponentInDefenseArea) {
+        pb_1.Message.setOneofWrapperField(this, 16, this.#one_of_decls[0], value);
+    }
+    /** @deprecated*/
+    get hasAttackerTouchedOpponentInDefenseArea() {
+        return pb_1.Message.getField(this, 16) != null;
+    }
+    /** @deprecated*/
+    get attackerTouchedOpponentInDefenseAreaSkipped() {
+        return pb_1.Message.getWrapperField(this, GameEvent.AttackerTouchedOpponentInDefenseArea, 42) as GameEvent.AttackerTouchedOpponentInDefenseArea;
+    }
+    /** @deprecated*/
+    set attackerTouchedOpponentInDefenseAreaSkipped(value: GameEvent.AttackerTouchedOpponentInDefenseArea) {
+        pb_1.Message.setOneofWrapperField(this, 42, this.#one_of_decls[0], value);
+    }
+    /** @deprecated*/
+    get hasAttackerTouchedOpponentInDefenseAreaSkipped() {
+        return pb_1.Message.getField(this, 42) != null;
+    }
+    /** @deprecated*/
+    get botCrashUniqueSkipped() {
+        return pb_1.Message.getWrapperField(this, GameEvent.BotCrashUnique, 23) as GameEvent.BotCrashUnique;
+    }
+    /** @deprecated*/
+    set botCrashUniqueSkipped(value: GameEvent.BotCrashUnique) {
+        pb_1.Message.setOneofWrapperField(this, 23, this.#one_of_decls[0], value);
+    }
+    /** @deprecated*/
+    get hasBotCrashUniqueSkipped() {
+        return pb_1.Message.getField(this, 23) != null;
+    }
+    /** @deprecated*/
+    get botPushedBotSkipped() {
+        return pb_1.Message.getWrapperField(this, GameEvent.BotPushedBot, 25) as GameEvent.BotPushedBot;
+    }
+    /** @deprecated*/
+    set botPushedBotSkipped(value: GameEvent.BotPushedBot) {
+        pb_1.Message.setOneofWrapperField(this, 25, this.#one_of_decls[0], value);
+    }
+    /** @deprecated*/
+    get hasBotPushedBotSkipped() {
+        return pb_1.Message.getField(this, 25) != null;
+    }
+    /** @deprecated*/
+    get defenderInDefenseAreaPartially() {
+        return pb_1.Message.getWrapperField(this, GameEvent.DefenderInDefenseAreaPartially, 30) as GameEvent.DefenderInDefenseAreaPartially;
+    }
+    /** @deprecated*/
+    set defenderInDefenseAreaPartially(value: GameEvent.DefenderInDefenseAreaPartially) {
+        pb_1.Message.setOneofWrapperField(this, 30, this.#one_of_decls[0], value);
+    }
+    /** @deprecated*/
+    get hasDefenderInDefenseAreaPartially() {
+        return pb_1.Message.getField(this, 30) != null;
+    }
+    /** @deprecated*/
+    get multiplePlacementFailures() {
+        return pb_1.Message.getWrapperField(this, GameEvent.MultiplePlacementFailures, 33) as GameEvent.MultiplePlacementFailures;
+    }
+    /** @deprecated*/
+    set multiplePlacementFailures(value: GameEvent.MultiplePlacementFailures) {
+        pb_1.Message.setOneofWrapperField(this, 33, this.#one_of_decls[0], value);
+    }
+    /** @deprecated*/
+    get hasMultiplePlacementFailures() {
+        return pb_1.Message.getField(this, 33) != null;
+    }
+    get event() {
+        const cases: {
+            [index: number]: "none" | "ballLeftFieldTouchLine" | "ballLeftFieldGoalLine" | "aimlessKick" | "attackerTooCloseToDefenseArea" | "defenderInDefenseArea" | "boundaryCrossing" | "keeperHeldBall" | "botDribbledBallTooFar" | "botPushedBot" | "botHeldBallDeliberately" | "botTippedOver" | "attackerTouchedBallInDefenseArea" | "botKickedBallTooFast" | "botCrashUnique" | "botCrashDrawn" | "defenderTooCloseToKickPoint" | "botTooFastInStop" | "botInterferedPlacement" | "possibleGoal" | "goal" | "invalidGoal" | "attackerDoubleTouchedBall" | "placementSucceeded" | "penaltyKickFailed" | "noProgressInGame" | "placementFailed" | "multipleCards" | "multipleFouls" | "botSubstitution" | "tooManyRobots" | "challengeFlag" | "emergencyStop" | "unsportingBehaviorMinor" | "unsportingBehaviorMajor" | "prepared" | "indirectGoal" | "chippedGoal" | "kickTimeout" | "attackerTouchedOpponentInDefenseArea" | "attackerTouchedOpponentInDefenseAreaSkipped" | "botCrashUniqueSkipped" | "botPushedBotSkipped" | "defenderInDefenseAreaPartially" | "multiplePlacementFailures";
+        } = {
+            0: "none",
+            6: "ballLeftFieldTouchLine",
+            7: "ballLeftFieldGoalLine",
+            11: "aimlessKick",
+            19: "attackerTooCloseToDefenseArea",
+            31: "defenderInDefenseArea",
+            43: "boundaryCrossing",
+            13: "keeperHeldBall",
+            17: "botDribbledBallTooFar",
+            24: "botPushedBot",
+            26: "botHeldBallDeliberately",
+            27: "botTippedOver",
+            15: "attackerTouchedBallInDefenseArea",
+            18: "botKickedBallTooFast",
+            22: "botCrashUnique",
+            21: "botCrashDrawn",
+            29: "defenderTooCloseToKickPoint",
+            28: "botTooFastInStop",
+            20: "botInterferedPlacement",
+            39: "possibleGoal",
+            8: "goal",
+            44: "invalidGoal",
+            14: "attackerDoubleTouchedBall",
+            5: "placementSucceeded",
+            45: "penaltyKickFailed",
+            2: "noProgressInGame",
+            3: "placementFailed",
+            32: "multipleCards",
+            34: "multipleFouls",
+            37: "botSubstitution",
+            38: "tooManyRobots",
+            46: "challengeFlag",
+            47: "emergencyStop",
+            35: "unsportingBehaviorMinor",
+            36: "unsportingBehaviorMajor",
+            1: "prepared",
+            9: "indirectGoal",
+            10: "chippedGoal",
+            12: "kickTimeout",
+            16: "attackerTouchedOpponentInDefenseArea",
+            42: "attackerTouchedOpponentInDefenseAreaSkipped",
+            23: "botCrashUniqueSkipped",
+            25: "botPushedBotSkipped",
+            30: "defenderInDefenseAreaPartially",
+            33: "multiplePlacementFailures"
+        };
+        return cases[pb_1.Message.computeOneofCase(this, [6, 7, 11, 19, 31, 43, 13, 17, 24, 26, 27, 15, 18, 22, 21, 29, 28, 20, 39, 8, 44, 14, 5, 45, 2, 3, 32, 34, 37, 38, 46, 47, 35, 36, 1, 9, 10, 12, 16, 42, 23, 25, 30, 33])];
+    }
+    static fromObject(data: {
+        type?: GameEvent.Type;
+        origin: string[];
+        ballLeftFieldTouchLine?: ReturnType<typeof GameEvent.BallLeftField.prototype.toObject>;
+        ballLeftFieldGoalLine?: ReturnType<typeof GameEvent.BallLeftField.prototype.toObject>;
+        aimlessKick?: ReturnType<typeof GameEvent.AimlessKick.prototype.toObject>;
+        attackerTooCloseToDefenseArea?: ReturnType<typeof GameEvent.AttackerTooCloseToDefenseArea.prototype.toObject>;
+        defenderInDefenseArea?: ReturnType<typeof GameEvent.DefenderInDefenseArea.prototype.toObject>;
+        boundaryCrossing?: ReturnType<typeof GameEvent.BoundaryCrossing.prototype.toObject>;
+        keeperHeldBall?: ReturnType<typeof GameEvent.KeeperHeldBall.prototype.toObject>;
+        botDribbledBallTooFar?: ReturnType<typeof GameEvent.BotDribbledBallTooFar.prototype.toObject>;
+        botPushedBot?: ReturnType<typeof GameEvent.BotPushedBot.prototype.toObject>;
+        botHeldBallDeliberately?: ReturnType<typeof GameEvent.BotHeldBallDeliberately.prototype.toObject>;
+        botTippedOver?: ReturnType<typeof GameEvent.BotTippedOver.prototype.toObject>;
+        attackerTouchedBallInDefenseArea?: ReturnType<typeof GameEvent.AttackerTouchedBallInDefenseArea.prototype.toObject>;
+        botKickedBallTooFast?: ReturnType<typeof GameEvent.BotKickedBallTooFast.prototype.toObject>;
+        botCrashUnique?: ReturnType<typeof GameEvent.BotCrashUnique.prototype.toObject>;
+        botCrashDrawn?: ReturnType<typeof GameEvent.BotCrashDrawn.prototype.toObject>;
+        defenderTooCloseToKickPoint?: ReturnType<typeof GameEvent.DefenderTooCloseToKickPoint.prototype.toObject>;
+        botTooFastInStop?: ReturnType<typeof GameEvent.BotTooFastInStop.prototype.toObject>;
+        botInterferedPlacement?: ReturnType<typeof GameEvent.BotInterferedPlacement.prototype.toObject>;
+        possibleGoal?: ReturnType<typeof GameEvent.Goal.prototype.toObject>;
+        goal?: ReturnType<typeof GameEvent.Goal.prototype.toObject>;
+        invalidGoal?: ReturnType<typeof GameEvent.Goal.prototype.toObject>;
+        attackerDoubleTouchedBall?: ReturnType<typeof GameEvent.AttackerDoubleTouchedBall.prototype.toObject>;
+        placementSucceeded?: ReturnType<typeof GameEvent.PlacementSucceeded.prototype.toObject>;
+        penaltyKickFailed?: ReturnType<typeof GameEvent.PenaltyKickFailed.prototype.toObject>;
+        noProgressInGame?: ReturnType<typeof GameEvent.NoProgressInGame.prototype.toObject>;
+        placementFailed?: ReturnType<typeof GameEvent.PlacementFailed.prototype.toObject>;
+        multipleCards?: ReturnType<typeof GameEvent.MultipleCards.prototype.toObject>;
+        multipleFouls?: ReturnType<typeof GameEvent.MultipleFouls.prototype.toObject>;
+        botSubstitution?: ReturnType<typeof GameEvent.BotSubstitution.prototype.toObject>;
+        tooManyRobots?: ReturnType<typeof GameEvent.TooManyRobots.prototype.toObject>;
+        challengeFlag?: ReturnType<typeof GameEvent.ChallengeFlag.prototype.toObject>;
+        emergencyStop?: ReturnType<typeof GameEvent.EmergencyStop.prototype.toObject>;
+        unsportingBehaviorMinor?: ReturnType<typeof GameEvent.UnsportingBehaviorMinor.prototype.toObject>;
+        unsportingBehaviorMajor?: ReturnType<typeof GameEvent.UnsportingBehaviorMajor.prototype.toObject>;
+        prepared?: ReturnType<typeof GameEvent.Prepared.prototype.toObject>;
+        indirectGoal?: ReturnType<typeof GameEvent.IndirectGoal.prototype.toObject>;
+        chippedGoal?: ReturnType<typeof GameEvent.ChippedGoal.prototype.toObject>;
+        kickTimeout?: ReturnType<typeof GameEvent.KickTimeout.prototype.toObject>;
+        attackerTouchedOpponentInDefenseArea?: ReturnType<typeof GameEvent.AttackerTouchedOpponentInDefenseArea.prototype.toObject>;
+        attackerTouchedOpponentInDefenseAreaSkipped?: ReturnType<typeof GameEvent.AttackerTouchedOpponentInDefenseArea.prototype.toObject>;
+        botCrashUniqueSkipped?: ReturnType<typeof GameEvent.BotCrashUnique.prototype.toObject>;
+        botPushedBotSkipped?: ReturnType<typeof GameEvent.BotPushedBot.prototype.toObject>;
+        defenderInDefenseAreaPartially?: ReturnType<typeof GameEvent.DefenderInDefenseAreaPartially.prototype.toObject>;
+        multiplePlacementFailures?: ReturnType<typeof GameEvent.MultiplePlacementFailures.prototype.toObject>;
+    }): GameEvent {
+        const message = new GameEvent({
+            origin: data.origin
+        });
+        if (data.type != null) {
+            message.type = data.type;
         }
-        : isSet(object.aimlessKick)
-        ? { $case: "aimlessKick", aimlessKick: GameEvent_AimlessKick.fromJSON(object.aimlessKick) }
-        : isSet(object.attackerTooCloseToDefenseArea)
-        ? {
-          $case: "attackerTooCloseToDefenseArea",
-          attackerTooCloseToDefenseArea: GameEvent_AttackerTooCloseToDefenseArea.fromJSON(
-            object.attackerTooCloseToDefenseArea,
-          ),
+        if (data.ballLeftFieldTouchLine != null) {
+            message.ballLeftFieldTouchLine = GameEvent.BallLeftField.fromObject(data.ballLeftFieldTouchLine);
         }
-        : isSet(object.defenderInDefenseArea)
-        ? {
-          $case: "defenderInDefenseArea",
-          defenderInDefenseArea: GameEvent_DefenderInDefenseArea.fromJSON(object.defenderInDefenseArea),
+        if (data.ballLeftFieldGoalLine != null) {
+            message.ballLeftFieldGoalLine = GameEvent.BallLeftField.fromObject(data.ballLeftFieldGoalLine);
         }
-        : isSet(object.boundaryCrossing)
-        ? { $case: "boundaryCrossing", boundaryCrossing: GameEvent_BoundaryCrossing.fromJSON(object.boundaryCrossing) }
-        : isSet(object.keeperHeldBall)
-        ? { $case: "keeperHeldBall", keeperHeldBall: GameEvent_KeeperHeldBall.fromJSON(object.keeperHeldBall) }
-        : isSet(object.botDribbledBallTooFar)
-        ? {
-          $case: "botDribbledBallTooFar",
-          botDribbledBallTooFar: GameEvent_BotDribbledBallTooFar.fromJSON(object.botDribbledBallTooFar),
+        if (data.aimlessKick != null) {
+            message.aimlessKick = GameEvent.AimlessKick.fromObject(data.aimlessKick);
         }
-        : isSet(object.botPushedBot)
-        ? { $case: "botPushedBot", botPushedBot: GameEvent_BotPushedBot.fromJSON(object.botPushedBot) }
-        : isSet(object.botHeldBallDeliberately)
-        ? {
-          $case: "botHeldBallDeliberately",
-          botHeldBallDeliberately: GameEvent_BotHeldBallDeliberately.fromJSON(object.botHeldBallDeliberately),
+        if (data.attackerTooCloseToDefenseArea != null) {
+            message.attackerTooCloseToDefenseArea = GameEvent.AttackerTooCloseToDefenseArea.fromObject(data.attackerTooCloseToDefenseArea);
         }
-        : isSet(object.botTippedOver)
-        ? { $case: "botTippedOver", botTippedOver: GameEvent_BotTippedOver.fromJSON(object.botTippedOver) }
-        : isSet(object.attackerTouchedBallInDefenseArea)
-        ? {
-          $case: "attackerTouchedBallInDefenseArea",
-          attackerTouchedBallInDefenseArea: GameEvent_AttackerTouchedBallInDefenseArea.fromJSON(
-            object.attackerTouchedBallInDefenseArea,
-          ),
+        if (data.defenderInDefenseArea != null) {
+            message.defenderInDefenseArea = GameEvent.DefenderInDefenseArea.fromObject(data.defenderInDefenseArea);
         }
-        : isSet(object.botKickedBallTooFast)
-        ? {
-          $case: "botKickedBallTooFast",
-          botKickedBallTooFast: GameEvent_BotKickedBallTooFast.fromJSON(object.botKickedBallTooFast),
+        if (data.boundaryCrossing != null) {
+            message.boundaryCrossing = GameEvent.BoundaryCrossing.fromObject(data.boundaryCrossing);
         }
-        : isSet(object.botCrashUnique)
-        ? { $case: "botCrashUnique", botCrashUnique: GameEvent_BotCrashUnique.fromJSON(object.botCrashUnique) }
-        : isSet(object.botCrashDrawn)
-        ? { $case: "botCrashDrawn", botCrashDrawn: GameEvent_BotCrashDrawn.fromJSON(object.botCrashDrawn) }
-        : isSet(object.defenderTooCloseToKickPoint)
-        ? {
-          $case: "defenderTooCloseToKickPoint",
-          defenderTooCloseToKickPoint: GameEvent_DefenderTooCloseToKickPoint.fromJSON(
-            object.defenderTooCloseToKickPoint,
-          ),
+        if (data.keeperHeldBall != null) {
+            message.keeperHeldBall = GameEvent.KeeperHeldBall.fromObject(data.keeperHeldBall);
         }
-        : isSet(object.botTooFastInStop)
-        ? { $case: "botTooFastInStop", botTooFastInStop: GameEvent_BotTooFastInStop.fromJSON(object.botTooFastInStop) }
-        : isSet(object.botInterferedPlacement)
-        ? {
-          $case: "botInterferedPlacement",
-          botInterferedPlacement: GameEvent_BotInterferedPlacement.fromJSON(object.botInterferedPlacement),
+        if (data.botDribbledBallTooFar != null) {
+            message.botDribbledBallTooFar = GameEvent.BotDribbledBallTooFar.fromObject(data.botDribbledBallTooFar);
         }
-        : isSet(object.possibleGoal)
-        ? { $case: "possibleGoal", possibleGoal: GameEvent_Goal.fromJSON(object.possibleGoal) }
-        : isSet(object.goal)
-        ? { $case: "goal", goal: GameEvent_Goal.fromJSON(object.goal) }
-        : isSet(object.invalidGoal)
-        ? { $case: "invalidGoal", invalidGoal: GameEvent_Goal.fromJSON(object.invalidGoal) }
-        : isSet(object.attackerDoubleTouchedBall)
-        ? {
-          $case: "attackerDoubleTouchedBall",
-          attackerDoubleTouchedBall: GameEvent_AttackerDoubleTouchedBall.fromJSON(object.attackerDoubleTouchedBall),
+        if (data.botPushedBot != null) {
+            message.botPushedBot = GameEvent.BotPushedBot.fromObject(data.botPushedBot);
         }
-        : isSet(object.placementSucceeded)
-        ? {
-          $case: "placementSucceeded",
-          placementSucceeded: GameEvent_PlacementSucceeded.fromJSON(object.placementSucceeded),
+        if (data.botHeldBallDeliberately != null) {
+            message.botHeldBallDeliberately = GameEvent.BotHeldBallDeliberately.fromObject(data.botHeldBallDeliberately);
         }
-        : isSet(object.penaltyKickFailed)
-        ? {
-          $case: "penaltyKickFailed",
-          penaltyKickFailed: GameEvent_PenaltyKickFailed.fromJSON(object.penaltyKickFailed),
+        if (data.botTippedOver != null) {
+            message.botTippedOver = GameEvent.BotTippedOver.fromObject(data.botTippedOver);
         }
-        : isSet(object.noProgressInGame)
-        ? { $case: "noProgressInGame", noProgressInGame: GameEvent_NoProgressInGame.fromJSON(object.noProgressInGame) }
-        : isSet(object.placementFailed)
-        ? { $case: "placementFailed", placementFailed: GameEvent_PlacementFailed.fromJSON(object.placementFailed) }
-        : isSet(object.multipleCards)
-        ? { $case: "multipleCards", multipleCards: GameEvent_MultipleCards.fromJSON(object.multipleCards) }
-        : isSet(object.multipleFouls)
-        ? { $case: "multipleFouls", multipleFouls: GameEvent_MultipleFouls.fromJSON(object.multipleFouls) }
-        : isSet(object.botSubstitution)
-        ? { $case: "botSubstitution", botSubstitution: GameEvent_BotSubstitution.fromJSON(object.botSubstitution) }
-        : isSet(object.tooManyRobots)
-        ? { $case: "tooManyRobots", tooManyRobots: GameEvent_TooManyRobots.fromJSON(object.tooManyRobots) }
-        : isSet(object.challengeFlag)
-        ? { $case: "challengeFlag", challengeFlag: GameEvent_ChallengeFlag.fromJSON(object.challengeFlag) }
-        : isSet(object.emergencyStop)
-        ? { $case: "emergencyStop", emergencyStop: GameEvent_EmergencyStop.fromJSON(object.emergencyStop) }
-        : isSet(object.unsportingBehaviorMinor)
-        ? {
-          $case: "unsportingBehaviorMinor",
-          unsportingBehaviorMinor: GameEvent_UnsportingBehaviorMinor.fromJSON(object.unsportingBehaviorMinor),
+        if (data.attackerTouchedBallInDefenseArea != null) {
+            message.attackerTouchedBallInDefenseArea = GameEvent.AttackerTouchedBallInDefenseArea.fromObject(data.attackerTouchedBallInDefenseArea);
         }
-        : isSet(object.unsportingBehaviorMajor)
-        ? {
-          $case: "unsportingBehaviorMajor",
-          unsportingBehaviorMajor: GameEvent_UnsportingBehaviorMajor.fromJSON(object.unsportingBehaviorMajor),
+        if (data.botKickedBallTooFast != null) {
+            message.botKickedBallTooFast = GameEvent.BotKickedBallTooFast.fromObject(data.botKickedBallTooFast);
         }
-        : isSet(object.prepared)
-        ? { $case: "prepared", prepared: GameEvent_Prepared.fromJSON(object.prepared) }
-        : isSet(object.indirectGoal)
-        ? { $case: "indirectGoal", indirectGoal: GameEvent_IndirectGoal.fromJSON(object.indirectGoal) }
-        : isSet(object.chippedGoal)
-        ? { $case: "chippedGoal", chippedGoal: GameEvent_ChippedGoal.fromJSON(object.chippedGoal) }
-        : isSet(object.kickTimeout)
-        ? { $case: "kickTimeout", kickTimeout: GameEvent_KickTimeout.fromJSON(object.kickTimeout) }
-        : isSet(object.attackerTouchedOpponentInDefenseArea)
-        ? {
-          $case: "attackerTouchedOpponentInDefenseArea",
-          attackerTouchedOpponentInDefenseArea: GameEvent_AttackerTouchedOpponentInDefenseArea.fromJSON(
-            object.attackerTouchedOpponentInDefenseArea,
-          ),
+        if (data.botCrashUnique != null) {
+            message.botCrashUnique = GameEvent.BotCrashUnique.fromObject(data.botCrashUnique);
         }
-        : isSet(object.attackerTouchedOpponentInDefenseAreaSkipped)
-        ? {
-          $case: "attackerTouchedOpponentInDefenseAreaSkipped",
-          attackerTouchedOpponentInDefenseAreaSkipped: GameEvent_AttackerTouchedOpponentInDefenseArea.fromJSON(
-            object.attackerTouchedOpponentInDefenseAreaSkipped,
-          ),
+        if (data.botCrashDrawn != null) {
+            message.botCrashDrawn = GameEvent.BotCrashDrawn.fromObject(data.botCrashDrawn);
         }
-        : isSet(object.botCrashUniqueSkipped)
-        ? {
-          $case: "botCrashUniqueSkipped",
-          botCrashUniqueSkipped: GameEvent_BotCrashUnique.fromJSON(object.botCrashUniqueSkipped),
+        if (data.defenderTooCloseToKickPoint != null) {
+            message.defenderTooCloseToKickPoint = GameEvent.DefenderTooCloseToKickPoint.fromObject(data.defenderTooCloseToKickPoint);
         }
-        : isSet(object.botPushedBotSkipped)
-        ? {
-          $case: "botPushedBotSkipped",
-          botPushedBotSkipped: GameEvent_BotPushedBot.fromJSON(object.botPushedBotSkipped),
+        if (data.botTooFastInStop != null) {
+            message.botTooFastInStop = GameEvent.BotTooFastInStop.fromObject(data.botTooFastInStop);
         }
-        : isSet(object.defenderInDefenseAreaPartially)
-        ? {
-          $case: "defenderInDefenseAreaPartially",
-          defenderInDefenseAreaPartially: GameEvent_DefenderInDefenseAreaPartially.fromJSON(
-            object.defenderInDefenseAreaPartially,
-          ),
+        if (data.botInterferedPlacement != null) {
+            message.botInterferedPlacement = GameEvent.BotInterferedPlacement.fromObject(data.botInterferedPlacement);
         }
-        : isSet(object.multiplePlacementFailures)
-        ? {
-          $case: "multiplePlacementFailures",
-          multiplePlacementFailures: GameEvent_MultiplePlacementFailures.fromJSON(object.multiplePlacementFailures),
+        if (data.possibleGoal != null) {
+            message.possibleGoal = GameEvent.Goal.fromObject(data.possibleGoal);
         }
-        : undefined,
-    };
-  },
-
-  toJSON(message: GameEvent): unknown {
-    const obj: any = {};
-    message.type !== undefined && (obj.type = gameEvent_TypeToJSON(message.type));
-    if (message.origin) {
-      obj.origin = message.origin.map((e) => e);
-    } else {
-      obj.origin = [];
+        if (data.goal != null) {
+            message.goal = GameEvent.Goal.fromObject(data.goal);
+        }
+        if (data.invalidGoal != null) {
+            message.invalidGoal = GameEvent.Goal.fromObject(data.invalidGoal);
+        }
+        if (data.attackerDoubleTouchedBall != null) {
+            message.attackerDoubleTouchedBall = GameEvent.AttackerDoubleTouchedBall.fromObject(data.attackerDoubleTouchedBall);
+        }
+        if (data.placementSucceeded != null) {
+            message.placementSucceeded = GameEvent.PlacementSucceeded.fromObject(data.placementSucceeded);
+        }
+        if (data.penaltyKickFailed != null) {
+            message.penaltyKickFailed = GameEvent.PenaltyKickFailed.fromObject(data.penaltyKickFailed);
+        }
+        if (data.noProgressInGame != null) {
+            message.noProgressInGame = GameEvent.NoProgressInGame.fromObject(data.noProgressInGame);
+        }
+        if (data.placementFailed != null) {
+            message.placementFailed = GameEvent.PlacementFailed.fromObject(data.placementFailed);
+        }
+        if (data.multipleCards != null) {
+            message.multipleCards = GameEvent.MultipleCards.fromObject(data.multipleCards);
+        }
+        if (data.multipleFouls != null) {
+            message.multipleFouls = GameEvent.MultipleFouls.fromObject(data.multipleFouls);
+        }
+        if (data.botSubstitution != null) {
+            message.botSubstitution = GameEvent.BotSubstitution.fromObject(data.botSubstitution);
+        }
+        if (data.tooManyRobots != null) {
+            message.tooManyRobots = GameEvent.TooManyRobots.fromObject(data.tooManyRobots);
+        }
+        if (data.challengeFlag != null) {
+            message.challengeFlag = GameEvent.ChallengeFlag.fromObject(data.challengeFlag);
+        }
+        if (data.emergencyStop != null) {
+            message.emergencyStop = GameEvent.EmergencyStop.fromObject(data.emergencyStop);
+        }
+        if (data.unsportingBehaviorMinor != null) {
+            message.unsportingBehaviorMinor = GameEvent.UnsportingBehaviorMinor.fromObject(data.unsportingBehaviorMinor);
+        }
+        if (data.unsportingBehaviorMajor != null) {
+            message.unsportingBehaviorMajor = GameEvent.UnsportingBehaviorMajor.fromObject(data.unsportingBehaviorMajor);
+        }
+        if (data.prepared != null) {
+            message.prepared = GameEvent.Prepared.fromObject(data.prepared);
+        }
+        if (data.indirectGoal != null) {
+            message.indirectGoal = GameEvent.IndirectGoal.fromObject(data.indirectGoal);
+        }
+        if (data.chippedGoal != null) {
+            message.chippedGoal = GameEvent.ChippedGoal.fromObject(data.chippedGoal);
+        }
+        if (data.kickTimeout != null) {
+            message.kickTimeout = GameEvent.KickTimeout.fromObject(data.kickTimeout);
+        }
+        if (data.attackerTouchedOpponentInDefenseArea != null) {
+            message.attackerTouchedOpponentInDefenseArea = GameEvent.AttackerTouchedOpponentInDefenseArea.fromObject(data.attackerTouchedOpponentInDefenseArea);
+        }
+        if (data.attackerTouchedOpponentInDefenseAreaSkipped != null) {
+            message.attackerTouchedOpponentInDefenseAreaSkipped = GameEvent.AttackerTouchedOpponentInDefenseArea.fromObject(data.attackerTouchedOpponentInDefenseAreaSkipped);
+        }
+        if (data.botCrashUniqueSkipped != null) {
+            message.botCrashUniqueSkipped = GameEvent.BotCrashUnique.fromObject(data.botCrashUniqueSkipped);
+        }
+        if (data.botPushedBotSkipped != null) {
+            message.botPushedBotSkipped = GameEvent.BotPushedBot.fromObject(data.botPushedBotSkipped);
+        }
+        if (data.defenderInDefenseAreaPartially != null) {
+            message.defenderInDefenseAreaPartially = GameEvent.DefenderInDefenseAreaPartially.fromObject(data.defenderInDefenseAreaPartially);
+        }
+        if (data.multiplePlacementFailures != null) {
+            message.multiplePlacementFailures = GameEvent.MultiplePlacementFailures.fromObject(data.multiplePlacementFailures);
+        }
+        return message;
     }
-    message.event?.$case === "ballLeftFieldTouchLine" &&
-      (obj.ballLeftFieldTouchLine = message.event?.ballLeftFieldTouchLine
-        ? GameEvent_BallLeftField.toJSON(message.event?.ballLeftFieldTouchLine)
-        : undefined);
-    message.event?.$case === "ballLeftFieldGoalLine" &&
-      (obj.ballLeftFieldGoalLine = message.event?.ballLeftFieldGoalLine
-        ? GameEvent_BallLeftField.toJSON(message.event?.ballLeftFieldGoalLine)
-        : undefined);
-    message.event?.$case === "aimlessKick" && (obj.aimlessKick = message.event?.aimlessKick
-      ? GameEvent_AimlessKick.toJSON(message.event?.aimlessKick)
-      : undefined);
-    message.event?.$case === "attackerTooCloseToDefenseArea" &&
-      (obj.attackerTooCloseToDefenseArea = message.event?.attackerTooCloseToDefenseArea
-        ? GameEvent_AttackerTooCloseToDefenseArea.toJSON(message.event?.attackerTooCloseToDefenseArea)
-        : undefined);
-    message.event?.$case === "defenderInDefenseArea" &&
-      (obj.defenderInDefenseArea = message.event?.defenderInDefenseArea
-        ? GameEvent_DefenderInDefenseArea.toJSON(message.event?.defenderInDefenseArea)
-        : undefined);
-    message.event?.$case === "boundaryCrossing" && (obj.boundaryCrossing = message.event?.boundaryCrossing
-      ? GameEvent_BoundaryCrossing.toJSON(message.event?.boundaryCrossing)
-      : undefined);
-    message.event?.$case === "keeperHeldBall" && (obj.keeperHeldBall = message.event?.keeperHeldBall
-      ? GameEvent_KeeperHeldBall.toJSON(message.event?.keeperHeldBall)
-      : undefined);
-    message.event?.$case === "botDribbledBallTooFar" &&
-      (obj.botDribbledBallTooFar = message.event?.botDribbledBallTooFar
-        ? GameEvent_BotDribbledBallTooFar.toJSON(message.event?.botDribbledBallTooFar)
-        : undefined);
-    message.event?.$case === "botPushedBot" && (obj.botPushedBot = message.event?.botPushedBot
-      ? GameEvent_BotPushedBot.toJSON(message.event?.botPushedBot)
-      : undefined);
-    message.event?.$case === "botHeldBallDeliberately" &&
-      (obj.botHeldBallDeliberately = message.event?.botHeldBallDeliberately
-        ? GameEvent_BotHeldBallDeliberately.toJSON(message.event?.botHeldBallDeliberately)
-        : undefined);
-    message.event?.$case === "botTippedOver" && (obj.botTippedOver = message.event?.botTippedOver
-      ? GameEvent_BotTippedOver.toJSON(message.event?.botTippedOver)
-      : undefined);
-    message.event?.$case === "attackerTouchedBallInDefenseArea" &&
-      (obj.attackerTouchedBallInDefenseArea = message.event?.attackerTouchedBallInDefenseArea
-        ? GameEvent_AttackerTouchedBallInDefenseArea.toJSON(message.event?.attackerTouchedBallInDefenseArea)
-        : undefined);
-    message.event?.$case === "botKickedBallTooFast" && (obj.botKickedBallTooFast = message.event?.botKickedBallTooFast
-      ? GameEvent_BotKickedBallTooFast.toJSON(message.event?.botKickedBallTooFast)
-      : undefined);
-    message.event?.$case === "botCrashUnique" && (obj.botCrashUnique = message.event?.botCrashUnique
-      ? GameEvent_BotCrashUnique.toJSON(message.event?.botCrashUnique)
-      : undefined);
-    message.event?.$case === "botCrashDrawn" && (obj.botCrashDrawn = message.event?.botCrashDrawn
-      ? GameEvent_BotCrashDrawn.toJSON(message.event?.botCrashDrawn)
-      : undefined);
-    message.event?.$case === "defenderTooCloseToKickPoint" &&
-      (obj.defenderTooCloseToKickPoint = message.event?.defenderTooCloseToKickPoint
-        ? GameEvent_DefenderTooCloseToKickPoint.toJSON(message.event?.defenderTooCloseToKickPoint)
-        : undefined);
-    message.event?.$case === "botTooFastInStop" && (obj.botTooFastInStop = message.event?.botTooFastInStop
-      ? GameEvent_BotTooFastInStop.toJSON(message.event?.botTooFastInStop)
-      : undefined);
-    message.event?.$case === "botInterferedPlacement" &&
-      (obj.botInterferedPlacement = message.event?.botInterferedPlacement
-        ? GameEvent_BotInterferedPlacement.toJSON(message.event?.botInterferedPlacement)
-        : undefined);
-    message.event?.$case === "possibleGoal" &&
-      (obj.possibleGoal = message.event?.possibleGoal ? GameEvent_Goal.toJSON(message.event?.possibleGoal) : undefined);
-    message.event?.$case === "goal" &&
-      (obj.goal = message.event?.goal ? GameEvent_Goal.toJSON(message.event?.goal) : undefined);
-    message.event?.$case === "invalidGoal" &&
-      (obj.invalidGoal = message.event?.invalidGoal ? GameEvent_Goal.toJSON(message.event?.invalidGoal) : undefined);
-    message.event?.$case === "attackerDoubleTouchedBall" &&
-      (obj.attackerDoubleTouchedBall = message.event?.attackerDoubleTouchedBall
-        ? GameEvent_AttackerDoubleTouchedBall.toJSON(message.event?.attackerDoubleTouchedBall)
-        : undefined);
-    message.event?.$case === "placementSucceeded" && (obj.placementSucceeded = message.event?.placementSucceeded
-      ? GameEvent_PlacementSucceeded.toJSON(message.event?.placementSucceeded)
-      : undefined);
-    message.event?.$case === "penaltyKickFailed" && (obj.penaltyKickFailed = message.event?.penaltyKickFailed
-      ? GameEvent_PenaltyKickFailed.toJSON(message.event?.penaltyKickFailed)
-      : undefined);
-    message.event?.$case === "noProgressInGame" && (obj.noProgressInGame = message.event?.noProgressInGame
-      ? GameEvent_NoProgressInGame.toJSON(message.event?.noProgressInGame)
-      : undefined);
-    message.event?.$case === "placementFailed" && (obj.placementFailed = message.event?.placementFailed
-      ? GameEvent_PlacementFailed.toJSON(message.event?.placementFailed)
-      : undefined);
-    message.event?.$case === "multipleCards" && (obj.multipleCards = message.event?.multipleCards
-      ? GameEvent_MultipleCards.toJSON(message.event?.multipleCards)
-      : undefined);
-    message.event?.$case === "multipleFouls" && (obj.multipleFouls = message.event?.multipleFouls
-      ? GameEvent_MultipleFouls.toJSON(message.event?.multipleFouls)
-      : undefined);
-    message.event?.$case === "botSubstitution" && (obj.botSubstitution = message.event?.botSubstitution
-      ? GameEvent_BotSubstitution.toJSON(message.event?.botSubstitution)
-      : undefined);
-    message.event?.$case === "tooManyRobots" && (obj.tooManyRobots = message.event?.tooManyRobots
-      ? GameEvent_TooManyRobots.toJSON(message.event?.tooManyRobots)
-      : undefined);
-    message.event?.$case === "challengeFlag" && (obj.challengeFlag = message.event?.challengeFlag
-      ? GameEvent_ChallengeFlag.toJSON(message.event?.challengeFlag)
-      : undefined);
-    message.event?.$case === "emergencyStop" && (obj.emergencyStop = message.event?.emergencyStop
-      ? GameEvent_EmergencyStop.toJSON(message.event?.emergencyStop)
-      : undefined);
-    message.event?.$case === "unsportingBehaviorMinor" &&
-      (obj.unsportingBehaviorMinor = message.event?.unsportingBehaviorMinor
-        ? GameEvent_UnsportingBehaviorMinor.toJSON(message.event?.unsportingBehaviorMinor)
-        : undefined);
-    message.event?.$case === "unsportingBehaviorMajor" &&
-      (obj.unsportingBehaviorMajor = message.event?.unsportingBehaviorMajor
-        ? GameEvent_UnsportingBehaviorMajor.toJSON(message.event?.unsportingBehaviorMajor)
-        : undefined);
-    message.event?.$case === "prepared" &&
-      (obj.prepared = message.event?.prepared ? GameEvent_Prepared.toJSON(message.event?.prepared) : undefined);
-    message.event?.$case === "indirectGoal" && (obj.indirectGoal = message.event?.indirectGoal
-      ? GameEvent_IndirectGoal.toJSON(message.event?.indirectGoal)
-      : undefined);
-    message.event?.$case === "chippedGoal" && (obj.chippedGoal = message.event?.chippedGoal
-      ? GameEvent_ChippedGoal.toJSON(message.event?.chippedGoal)
-      : undefined);
-    message.event?.$case === "kickTimeout" && (obj.kickTimeout = message.event?.kickTimeout
-      ? GameEvent_KickTimeout.toJSON(message.event?.kickTimeout)
-      : undefined);
-    message.event?.$case === "attackerTouchedOpponentInDefenseArea" &&
-      (obj.attackerTouchedOpponentInDefenseArea = message.event?.attackerTouchedOpponentInDefenseArea
-        ? GameEvent_AttackerTouchedOpponentInDefenseArea.toJSON(message.event?.attackerTouchedOpponentInDefenseArea)
-        : undefined);
-    message.event?.$case === "attackerTouchedOpponentInDefenseAreaSkipped" &&
-      (obj.attackerTouchedOpponentInDefenseAreaSkipped = message.event?.attackerTouchedOpponentInDefenseAreaSkipped
-        ? GameEvent_AttackerTouchedOpponentInDefenseArea.toJSON(
-          message.event?.attackerTouchedOpponentInDefenseAreaSkipped,
-        )
-        : undefined);
-    message.event?.$case === "botCrashUniqueSkipped" &&
-      (obj.botCrashUniqueSkipped = message.event?.botCrashUniqueSkipped
-        ? GameEvent_BotCrashUnique.toJSON(message.event?.botCrashUniqueSkipped)
-        : undefined);
-    message.event?.$case === "botPushedBotSkipped" && (obj.botPushedBotSkipped = message.event?.botPushedBotSkipped
-      ? GameEvent_BotPushedBot.toJSON(message.event?.botPushedBotSkipped)
-      : undefined);
-    message.event?.$case === "defenderInDefenseAreaPartially" &&
-      (obj.defenderInDefenseAreaPartially = message.event?.defenderInDefenseAreaPartially
-        ? GameEvent_DefenderInDefenseAreaPartially.toJSON(message.event?.defenderInDefenseAreaPartially)
-        : undefined);
-    message.event?.$case === "multiplePlacementFailures" &&
-      (obj.multiplePlacementFailures = message.event?.multiplePlacementFailures
-        ? GameEvent_MultiplePlacementFailures.toJSON(message.event?.multiplePlacementFailures)
-        : undefined);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent>, I>>(object: I): GameEvent {
-    const message = createBaseGameEvent();
-    message.type = object.type ?? 0;
-    message.origin = object.origin?.map((e) => e) || [];
-    if (
-      object.event?.$case === "ballLeftFieldTouchLine" &&
-      object.event?.ballLeftFieldTouchLine !== undefined &&
-      object.event?.ballLeftFieldTouchLine !== null
-    ) {
-      message.event = {
-        $case: "ballLeftFieldTouchLine",
-        ballLeftFieldTouchLine: GameEvent_BallLeftField.fromPartial(object.event.ballLeftFieldTouchLine),
-      };
+    toObject() {
+        const data: {
+            type?: GameEvent.Type;
+            origin: string[];
+            ballLeftFieldTouchLine?: ReturnType<typeof GameEvent.BallLeftField.prototype.toObject>;
+            ballLeftFieldGoalLine?: ReturnType<typeof GameEvent.BallLeftField.prototype.toObject>;
+            aimlessKick?: ReturnType<typeof GameEvent.AimlessKick.prototype.toObject>;
+            attackerTooCloseToDefenseArea?: ReturnType<typeof GameEvent.AttackerTooCloseToDefenseArea.prototype.toObject>;
+            defenderInDefenseArea?: ReturnType<typeof GameEvent.DefenderInDefenseArea.prototype.toObject>;
+            boundaryCrossing?: ReturnType<typeof GameEvent.BoundaryCrossing.prototype.toObject>;
+            keeperHeldBall?: ReturnType<typeof GameEvent.KeeperHeldBall.prototype.toObject>;
+            botDribbledBallTooFar?: ReturnType<typeof GameEvent.BotDribbledBallTooFar.prototype.toObject>;
+            botPushedBot?: ReturnType<typeof GameEvent.BotPushedBot.prototype.toObject>;
+            botHeldBallDeliberately?: ReturnType<typeof GameEvent.BotHeldBallDeliberately.prototype.toObject>;
+            botTippedOver?: ReturnType<typeof GameEvent.BotTippedOver.prototype.toObject>;
+            attackerTouchedBallInDefenseArea?: ReturnType<typeof GameEvent.AttackerTouchedBallInDefenseArea.prototype.toObject>;
+            botKickedBallTooFast?: ReturnType<typeof GameEvent.BotKickedBallTooFast.prototype.toObject>;
+            botCrashUnique?: ReturnType<typeof GameEvent.BotCrashUnique.prototype.toObject>;
+            botCrashDrawn?: ReturnType<typeof GameEvent.BotCrashDrawn.prototype.toObject>;
+            defenderTooCloseToKickPoint?: ReturnType<typeof GameEvent.DefenderTooCloseToKickPoint.prototype.toObject>;
+            botTooFastInStop?: ReturnType<typeof GameEvent.BotTooFastInStop.prototype.toObject>;
+            botInterferedPlacement?: ReturnType<typeof GameEvent.BotInterferedPlacement.prototype.toObject>;
+            possibleGoal?: ReturnType<typeof GameEvent.Goal.prototype.toObject>;
+            goal?: ReturnType<typeof GameEvent.Goal.prototype.toObject>;
+            invalidGoal?: ReturnType<typeof GameEvent.Goal.prototype.toObject>;
+            attackerDoubleTouchedBall?: ReturnType<typeof GameEvent.AttackerDoubleTouchedBall.prototype.toObject>;
+            placementSucceeded?: ReturnType<typeof GameEvent.PlacementSucceeded.prototype.toObject>;
+            penaltyKickFailed?: ReturnType<typeof GameEvent.PenaltyKickFailed.prototype.toObject>;
+            noProgressInGame?: ReturnType<typeof GameEvent.NoProgressInGame.prototype.toObject>;
+            placementFailed?: ReturnType<typeof GameEvent.PlacementFailed.prototype.toObject>;
+            multipleCards?: ReturnType<typeof GameEvent.MultipleCards.prototype.toObject>;
+            multipleFouls?: ReturnType<typeof GameEvent.MultipleFouls.prototype.toObject>;
+            botSubstitution?: ReturnType<typeof GameEvent.BotSubstitution.prototype.toObject>;
+            tooManyRobots?: ReturnType<typeof GameEvent.TooManyRobots.prototype.toObject>;
+            challengeFlag?: ReturnType<typeof GameEvent.ChallengeFlag.prototype.toObject>;
+            emergencyStop?: ReturnType<typeof GameEvent.EmergencyStop.prototype.toObject>;
+            unsportingBehaviorMinor?: ReturnType<typeof GameEvent.UnsportingBehaviorMinor.prototype.toObject>;
+            unsportingBehaviorMajor?: ReturnType<typeof GameEvent.UnsportingBehaviorMajor.prototype.toObject>;
+            prepared?: ReturnType<typeof GameEvent.Prepared.prototype.toObject>;
+            indirectGoal?: ReturnType<typeof GameEvent.IndirectGoal.prototype.toObject>;
+            chippedGoal?: ReturnType<typeof GameEvent.ChippedGoal.prototype.toObject>;
+            kickTimeout?: ReturnType<typeof GameEvent.KickTimeout.prototype.toObject>;
+            attackerTouchedOpponentInDefenseArea?: ReturnType<typeof GameEvent.AttackerTouchedOpponentInDefenseArea.prototype.toObject>;
+            attackerTouchedOpponentInDefenseAreaSkipped?: ReturnType<typeof GameEvent.AttackerTouchedOpponentInDefenseArea.prototype.toObject>;
+            botCrashUniqueSkipped?: ReturnType<typeof GameEvent.BotCrashUnique.prototype.toObject>;
+            botPushedBotSkipped?: ReturnType<typeof GameEvent.BotPushedBot.prototype.toObject>;
+            defenderInDefenseAreaPartially?: ReturnType<typeof GameEvent.DefenderInDefenseAreaPartially.prototype.toObject>;
+            multiplePlacementFailures?: ReturnType<typeof GameEvent.MultiplePlacementFailures.prototype.toObject>;
+        } = {
+            origin: this.origin
+        };
+        if (this.type != null) {
+            data.type = this.type;
+        }
+        if (this.ballLeftFieldTouchLine != null) {
+            data.ballLeftFieldTouchLine = this.ballLeftFieldTouchLine.toObject();
+        }
+        if (this.ballLeftFieldGoalLine != null) {
+            data.ballLeftFieldGoalLine = this.ballLeftFieldGoalLine.toObject();
+        }
+        if (this.aimlessKick != null) {
+            data.aimlessKick = this.aimlessKick.toObject();
+        }
+        if (this.attackerTooCloseToDefenseArea != null) {
+            data.attackerTooCloseToDefenseArea = this.attackerTooCloseToDefenseArea.toObject();
+        }
+        if (this.defenderInDefenseArea != null) {
+            data.defenderInDefenseArea = this.defenderInDefenseArea.toObject();
+        }
+        if (this.boundaryCrossing != null) {
+            data.boundaryCrossing = this.boundaryCrossing.toObject();
+        }
+        if (this.keeperHeldBall != null) {
+            data.keeperHeldBall = this.keeperHeldBall.toObject();
+        }
+        if (this.botDribbledBallTooFar != null) {
+            data.botDribbledBallTooFar = this.botDribbledBallTooFar.toObject();
+        }
+        if (this.botPushedBot != null) {
+            data.botPushedBot = this.botPushedBot.toObject();
+        }
+        if (this.botHeldBallDeliberately != null) {
+            data.botHeldBallDeliberately = this.botHeldBallDeliberately.toObject();
+        }
+        if (this.botTippedOver != null) {
+            data.botTippedOver = this.botTippedOver.toObject();
+        }
+        if (this.attackerTouchedBallInDefenseArea != null) {
+            data.attackerTouchedBallInDefenseArea = this.attackerTouchedBallInDefenseArea.toObject();
+        }
+        if (this.botKickedBallTooFast != null) {
+            data.botKickedBallTooFast = this.botKickedBallTooFast.toObject();
+        }
+        if (this.botCrashUnique != null) {
+            data.botCrashUnique = this.botCrashUnique.toObject();
+        }
+        if (this.botCrashDrawn != null) {
+            data.botCrashDrawn = this.botCrashDrawn.toObject();
+        }
+        if (this.defenderTooCloseToKickPoint != null) {
+            data.defenderTooCloseToKickPoint = this.defenderTooCloseToKickPoint.toObject();
+        }
+        if (this.botTooFastInStop != null) {
+            data.botTooFastInStop = this.botTooFastInStop.toObject();
+        }
+        if (this.botInterferedPlacement != null) {
+            data.botInterferedPlacement = this.botInterferedPlacement.toObject();
+        }
+        if (this.possibleGoal != null) {
+            data.possibleGoal = this.possibleGoal.toObject();
+        }
+        if (this.goal != null) {
+            data.goal = this.goal.toObject();
+        }
+        if (this.invalidGoal != null) {
+            data.invalidGoal = this.invalidGoal.toObject();
+        }
+        if (this.attackerDoubleTouchedBall != null) {
+            data.attackerDoubleTouchedBall = this.attackerDoubleTouchedBall.toObject();
+        }
+        if (this.placementSucceeded != null) {
+            data.placementSucceeded = this.placementSucceeded.toObject();
+        }
+        if (this.penaltyKickFailed != null) {
+            data.penaltyKickFailed = this.penaltyKickFailed.toObject();
+        }
+        if (this.noProgressInGame != null) {
+            data.noProgressInGame = this.noProgressInGame.toObject();
+        }
+        if (this.placementFailed != null) {
+            data.placementFailed = this.placementFailed.toObject();
+        }
+        if (this.multipleCards != null) {
+            data.multipleCards = this.multipleCards.toObject();
+        }
+        if (this.multipleFouls != null) {
+            data.multipleFouls = this.multipleFouls.toObject();
+        }
+        if (this.botSubstitution != null) {
+            data.botSubstitution = this.botSubstitution.toObject();
+        }
+        if (this.tooManyRobots != null) {
+            data.tooManyRobots = this.tooManyRobots.toObject();
+        }
+        if (this.challengeFlag != null) {
+            data.challengeFlag = this.challengeFlag.toObject();
+        }
+        if (this.emergencyStop != null) {
+            data.emergencyStop = this.emergencyStop.toObject();
+        }
+        if (this.unsportingBehaviorMinor != null) {
+            data.unsportingBehaviorMinor = this.unsportingBehaviorMinor.toObject();
+        }
+        if (this.unsportingBehaviorMajor != null) {
+            data.unsportingBehaviorMajor = this.unsportingBehaviorMajor.toObject();
+        }
+        if (this.prepared != null) {
+            data.prepared = this.prepared.toObject();
+        }
+        if (this.indirectGoal != null) {
+            data.indirectGoal = this.indirectGoal.toObject();
+        }
+        if (this.chippedGoal != null) {
+            data.chippedGoal = this.chippedGoal.toObject();
+        }
+        if (this.kickTimeout != null) {
+            data.kickTimeout = this.kickTimeout.toObject();
+        }
+        if (this.attackerTouchedOpponentInDefenseArea != null) {
+            data.attackerTouchedOpponentInDefenseArea = this.attackerTouchedOpponentInDefenseArea.toObject();
+        }
+        if (this.attackerTouchedOpponentInDefenseAreaSkipped != null) {
+            data.attackerTouchedOpponentInDefenseAreaSkipped = this.attackerTouchedOpponentInDefenseAreaSkipped.toObject();
+        }
+        if (this.botCrashUniqueSkipped != null) {
+            data.botCrashUniqueSkipped = this.botCrashUniqueSkipped.toObject();
+        }
+        if (this.botPushedBotSkipped != null) {
+            data.botPushedBotSkipped = this.botPushedBotSkipped.toObject();
+        }
+        if (this.defenderInDefenseAreaPartially != null) {
+            data.defenderInDefenseAreaPartially = this.defenderInDefenseAreaPartially.toObject();
+        }
+        if (this.multiplePlacementFailures != null) {
+            data.multiplePlacementFailures = this.multiplePlacementFailures.toObject();
+        }
+        return data;
     }
-    if (
-      object.event?.$case === "ballLeftFieldGoalLine" &&
-      object.event?.ballLeftFieldGoalLine !== undefined &&
-      object.event?.ballLeftFieldGoalLine !== null
-    ) {
-      message.event = {
-        $case: "ballLeftFieldGoalLine",
-        ballLeftFieldGoalLine: GameEvent_BallLeftField.fromPartial(object.event.ballLeftFieldGoalLine),
-      };
+    serialize(): Uint8Array;
+    serialize(w: pb_1.BinaryWriter): void;
+    serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+        const writer = w || new pb_1.BinaryWriter();
+        if (this.hasType)
+            writer.writeEnum(40, this.type);
+        if (this.origin.length)
+            writer.writeRepeatedString(41, this.origin);
+        if (this.hasBallLeftFieldTouchLine)
+            writer.writeMessage(6, this.ballLeftFieldTouchLine, () => this.ballLeftFieldTouchLine.serialize(writer));
+        if (this.hasBallLeftFieldGoalLine)
+            writer.writeMessage(7, this.ballLeftFieldGoalLine, () => this.ballLeftFieldGoalLine.serialize(writer));
+        if (this.hasAimlessKick)
+            writer.writeMessage(11, this.aimlessKick, () => this.aimlessKick.serialize(writer));
+        if (this.hasAttackerTooCloseToDefenseArea)
+            writer.writeMessage(19, this.attackerTooCloseToDefenseArea, () => this.attackerTooCloseToDefenseArea.serialize(writer));
+        if (this.hasDefenderInDefenseArea)
+            writer.writeMessage(31, this.defenderInDefenseArea, () => this.defenderInDefenseArea.serialize(writer));
+        if (this.hasBoundaryCrossing)
+            writer.writeMessage(43, this.boundaryCrossing, () => this.boundaryCrossing.serialize(writer));
+        if (this.hasKeeperHeldBall)
+            writer.writeMessage(13, this.keeperHeldBall, () => this.keeperHeldBall.serialize(writer));
+        if (this.hasBotDribbledBallTooFar)
+            writer.writeMessage(17, this.botDribbledBallTooFar, () => this.botDribbledBallTooFar.serialize(writer));
+        if (this.hasBotPushedBot)
+            writer.writeMessage(24, this.botPushedBot, () => this.botPushedBot.serialize(writer));
+        if (this.hasBotHeldBallDeliberately)
+            writer.writeMessage(26, this.botHeldBallDeliberately, () => this.botHeldBallDeliberately.serialize(writer));
+        if (this.hasBotTippedOver)
+            writer.writeMessage(27, this.botTippedOver, () => this.botTippedOver.serialize(writer));
+        if (this.hasAttackerTouchedBallInDefenseArea)
+            writer.writeMessage(15, this.attackerTouchedBallInDefenseArea, () => this.attackerTouchedBallInDefenseArea.serialize(writer));
+        if (this.hasBotKickedBallTooFast)
+            writer.writeMessage(18, this.botKickedBallTooFast, () => this.botKickedBallTooFast.serialize(writer));
+        if (this.hasBotCrashUnique)
+            writer.writeMessage(22, this.botCrashUnique, () => this.botCrashUnique.serialize(writer));
+        if (this.hasBotCrashDrawn)
+            writer.writeMessage(21, this.botCrashDrawn, () => this.botCrashDrawn.serialize(writer));
+        if (this.hasDefenderTooCloseToKickPoint)
+            writer.writeMessage(29, this.defenderTooCloseToKickPoint, () => this.defenderTooCloseToKickPoint.serialize(writer));
+        if (this.hasBotTooFastInStop)
+            writer.writeMessage(28, this.botTooFastInStop, () => this.botTooFastInStop.serialize(writer));
+        if (this.hasBotInterferedPlacement)
+            writer.writeMessage(20, this.botInterferedPlacement, () => this.botInterferedPlacement.serialize(writer));
+        if (this.hasPossibleGoal)
+            writer.writeMessage(39, this.possibleGoal, () => this.possibleGoal.serialize(writer));
+        if (this.hasGoal)
+            writer.writeMessage(8, this.goal, () => this.goal.serialize(writer));
+        if (this.hasInvalidGoal)
+            writer.writeMessage(44, this.invalidGoal, () => this.invalidGoal.serialize(writer));
+        if (this.hasAttackerDoubleTouchedBall)
+            writer.writeMessage(14, this.attackerDoubleTouchedBall, () => this.attackerDoubleTouchedBall.serialize(writer));
+        if (this.hasPlacementSucceeded)
+            writer.writeMessage(5, this.placementSucceeded, () => this.placementSucceeded.serialize(writer));
+        if (this.hasPenaltyKickFailed)
+            writer.writeMessage(45, this.penaltyKickFailed, () => this.penaltyKickFailed.serialize(writer));
+        if (this.hasNoProgressInGame)
+            writer.writeMessage(2, this.noProgressInGame, () => this.noProgressInGame.serialize(writer));
+        if (this.hasPlacementFailed)
+            writer.writeMessage(3, this.placementFailed, () => this.placementFailed.serialize(writer));
+        if (this.hasMultipleCards)
+            writer.writeMessage(32, this.multipleCards, () => this.multipleCards.serialize(writer));
+        if (this.hasMultipleFouls)
+            writer.writeMessage(34, this.multipleFouls, () => this.multipleFouls.serialize(writer));
+        if (this.hasBotSubstitution)
+            writer.writeMessage(37, this.botSubstitution, () => this.botSubstitution.serialize(writer));
+        if (this.hasTooManyRobots)
+            writer.writeMessage(38, this.tooManyRobots, () => this.tooManyRobots.serialize(writer));
+        if (this.hasChallengeFlag)
+            writer.writeMessage(46, this.challengeFlag, () => this.challengeFlag.serialize(writer));
+        if (this.hasEmergencyStop)
+            writer.writeMessage(47, this.emergencyStop, () => this.emergencyStop.serialize(writer));
+        if (this.hasUnsportingBehaviorMinor)
+            writer.writeMessage(35, this.unsportingBehaviorMinor, () => this.unsportingBehaviorMinor.serialize(writer));
+        if (this.hasUnsportingBehaviorMajor)
+            writer.writeMessage(36, this.unsportingBehaviorMajor, () => this.unsportingBehaviorMajor.serialize(writer));
+        if (this.hasPrepared)
+            writer.writeMessage(1, this.prepared, () => this.prepared.serialize(writer));
+        if (this.hasIndirectGoal)
+            writer.writeMessage(9, this.indirectGoal, () => this.indirectGoal.serialize(writer));
+        if (this.hasChippedGoal)
+            writer.writeMessage(10, this.chippedGoal, () => this.chippedGoal.serialize(writer));
+        if (this.hasKickTimeout)
+            writer.writeMessage(12, this.kickTimeout, () => this.kickTimeout.serialize(writer));
+        if (this.hasAttackerTouchedOpponentInDefenseArea)
+            writer.writeMessage(16, this.attackerTouchedOpponentInDefenseArea, () => this.attackerTouchedOpponentInDefenseArea.serialize(writer));
+        if (this.hasAttackerTouchedOpponentInDefenseAreaSkipped)
+            writer.writeMessage(42, this.attackerTouchedOpponentInDefenseAreaSkipped, () => this.attackerTouchedOpponentInDefenseAreaSkipped.serialize(writer));
+        if (this.hasBotCrashUniqueSkipped)
+            writer.writeMessage(23, this.botCrashUniqueSkipped, () => this.botCrashUniqueSkipped.serialize(writer));
+        if (this.hasBotPushedBotSkipped)
+            writer.writeMessage(25, this.botPushedBotSkipped, () => this.botPushedBotSkipped.serialize(writer));
+        if (this.hasDefenderInDefenseAreaPartially)
+            writer.writeMessage(30, this.defenderInDefenseAreaPartially, () => this.defenderInDefenseAreaPartially.serialize(writer));
+        if (this.hasMultiplePlacementFailures)
+            writer.writeMessage(33, this.multiplePlacementFailures, () => this.multiplePlacementFailures.serialize(writer));
+        if (!w)
+            return writer.getResultBuffer();
     }
-    if (
-      object.event?.$case === "aimlessKick" &&
-      object.event?.aimlessKick !== undefined &&
-      object.event?.aimlessKick !== null
-    ) {
-      message.event = {
-        $case: "aimlessKick",
-        aimlessKick: GameEvent_AimlessKick.fromPartial(object.event.aimlessKick),
-      };
+    static deserialize(bytes: Uint8Array | pb_1.BinaryReader): GameEvent {
+        const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new GameEvent();
+        while (reader.nextField()) {
+            if (reader.isEndGroup())
+                break;
+            switch (reader.getFieldNumber()) {
+                case 40:
+                    message.type = reader.readEnum();
+                    break;
+                case 41:
+                    pb_1.Message.addToRepeatedField(message, 41, reader.readString());
+                    break;
+                case 6:
+                    reader.readMessage(message.ballLeftFieldTouchLine, () => message.ballLeftFieldTouchLine = GameEvent.BallLeftField.deserialize(reader));
+                    break;
+                case 7:
+                    reader.readMessage(message.ballLeftFieldGoalLine, () => message.ballLeftFieldGoalLine = GameEvent.BallLeftField.deserialize(reader));
+                    break;
+                case 11:
+                    reader.readMessage(message.aimlessKick, () => message.aimlessKick = GameEvent.AimlessKick.deserialize(reader));
+                    break;
+                case 19:
+                    reader.readMessage(message.attackerTooCloseToDefenseArea, () => message.attackerTooCloseToDefenseArea = GameEvent.AttackerTooCloseToDefenseArea.deserialize(reader));
+                    break;
+                case 31:
+                    reader.readMessage(message.defenderInDefenseArea, () => message.defenderInDefenseArea = GameEvent.DefenderInDefenseArea.deserialize(reader));
+                    break;
+                case 43:
+                    reader.readMessage(message.boundaryCrossing, () => message.boundaryCrossing = GameEvent.BoundaryCrossing.deserialize(reader));
+                    break;
+                case 13:
+                    reader.readMessage(message.keeperHeldBall, () => message.keeperHeldBall = GameEvent.KeeperHeldBall.deserialize(reader));
+                    break;
+                case 17:
+                    reader.readMessage(message.botDribbledBallTooFar, () => message.botDribbledBallTooFar = GameEvent.BotDribbledBallTooFar.deserialize(reader));
+                    break;
+                case 24:
+                    reader.readMessage(message.botPushedBot, () => message.botPushedBot = GameEvent.BotPushedBot.deserialize(reader));
+                    break;
+                case 26:
+                    reader.readMessage(message.botHeldBallDeliberately, () => message.botHeldBallDeliberately = GameEvent.BotHeldBallDeliberately.deserialize(reader));
+                    break;
+                case 27:
+                    reader.readMessage(message.botTippedOver, () => message.botTippedOver = GameEvent.BotTippedOver.deserialize(reader));
+                    break;
+                case 15:
+                    reader.readMessage(message.attackerTouchedBallInDefenseArea, () => message.attackerTouchedBallInDefenseArea = GameEvent.AttackerTouchedBallInDefenseArea.deserialize(reader));
+                    break;
+                case 18:
+                    reader.readMessage(message.botKickedBallTooFast, () => message.botKickedBallTooFast = GameEvent.BotKickedBallTooFast.deserialize(reader));
+                    break;
+                case 22:
+                    reader.readMessage(message.botCrashUnique, () => message.botCrashUnique = GameEvent.BotCrashUnique.deserialize(reader));
+                    break;
+                case 21:
+                    reader.readMessage(message.botCrashDrawn, () => message.botCrashDrawn = GameEvent.BotCrashDrawn.deserialize(reader));
+                    break;
+                case 29:
+                    reader.readMessage(message.defenderTooCloseToKickPoint, () => message.defenderTooCloseToKickPoint = GameEvent.DefenderTooCloseToKickPoint.deserialize(reader));
+                    break;
+                case 28:
+                    reader.readMessage(message.botTooFastInStop, () => message.botTooFastInStop = GameEvent.BotTooFastInStop.deserialize(reader));
+                    break;
+                case 20:
+                    reader.readMessage(message.botInterferedPlacement, () => message.botInterferedPlacement = GameEvent.BotInterferedPlacement.deserialize(reader));
+                    break;
+                case 39:
+                    reader.readMessage(message.possibleGoal, () => message.possibleGoal = GameEvent.Goal.deserialize(reader));
+                    break;
+                case 8:
+                    reader.readMessage(message.goal, () => message.goal = GameEvent.Goal.deserialize(reader));
+                    break;
+                case 44:
+                    reader.readMessage(message.invalidGoal, () => message.invalidGoal = GameEvent.Goal.deserialize(reader));
+                    break;
+                case 14:
+                    reader.readMessage(message.attackerDoubleTouchedBall, () => message.attackerDoubleTouchedBall = GameEvent.AttackerDoubleTouchedBall.deserialize(reader));
+                    break;
+                case 5:
+                    reader.readMessage(message.placementSucceeded, () => message.placementSucceeded = GameEvent.PlacementSucceeded.deserialize(reader));
+                    break;
+                case 45:
+                    reader.readMessage(message.penaltyKickFailed, () => message.penaltyKickFailed = GameEvent.PenaltyKickFailed.deserialize(reader));
+                    break;
+                case 2:
+                    reader.readMessage(message.noProgressInGame, () => message.noProgressInGame = GameEvent.NoProgressInGame.deserialize(reader));
+                    break;
+                case 3:
+                    reader.readMessage(message.placementFailed, () => message.placementFailed = GameEvent.PlacementFailed.deserialize(reader));
+                    break;
+                case 32:
+                    reader.readMessage(message.multipleCards, () => message.multipleCards = GameEvent.MultipleCards.deserialize(reader));
+                    break;
+                case 34:
+                    reader.readMessage(message.multipleFouls, () => message.multipleFouls = GameEvent.MultipleFouls.deserialize(reader));
+                    break;
+                case 37:
+                    reader.readMessage(message.botSubstitution, () => message.botSubstitution = GameEvent.BotSubstitution.deserialize(reader));
+                    break;
+                case 38:
+                    reader.readMessage(message.tooManyRobots, () => message.tooManyRobots = GameEvent.TooManyRobots.deserialize(reader));
+                    break;
+                case 46:
+                    reader.readMessage(message.challengeFlag, () => message.challengeFlag = GameEvent.ChallengeFlag.deserialize(reader));
+                    break;
+                case 47:
+                    reader.readMessage(message.emergencyStop, () => message.emergencyStop = GameEvent.EmergencyStop.deserialize(reader));
+                    break;
+                case 35:
+                    reader.readMessage(message.unsportingBehaviorMinor, () => message.unsportingBehaviorMinor = GameEvent.UnsportingBehaviorMinor.deserialize(reader));
+                    break;
+                case 36:
+                    reader.readMessage(message.unsportingBehaviorMajor, () => message.unsportingBehaviorMajor = GameEvent.UnsportingBehaviorMajor.deserialize(reader));
+                    break;
+                case 1:
+                    reader.readMessage(message.prepared, () => message.prepared = GameEvent.Prepared.deserialize(reader));
+                    break;
+                case 9:
+                    reader.readMessage(message.indirectGoal, () => message.indirectGoal = GameEvent.IndirectGoal.deserialize(reader));
+                    break;
+                case 10:
+                    reader.readMessage(message.chippedGoal, () => message.chippedGoal = GameEvent.ChippedGoal.deserialize(reader));
+                    break;
+                case 12:
+                    reader.readMessage(message.kickTimeout, () => message.kickTimeout = GameEvent.KickTimeout.deserialize(reader));
+                    break;
+                case 16:
+                    reader.readMessage(message.attackerTouchedOpponentInDefenseArea, () => message.attackerTouchedOpponentInDefenseArea = GameEvent.AttackerTouchedOpponentInDefenseArea.deserialize(reader));
+                    break;
+                case 42:
+                    reader.readMessage(message.attackerTouchedOpponentInDefenseAreaSkipped, () => message.attackerTouchedOpponentInDefenseAreaSkipped = GameEvent.AttackerTouchedOpponentInDefenseArea.deserialize(reader));
+                    break;
+                case 23:
+                    reader.readMessage(message.botCrashUniqueSkipped, () => message.botCrashUniqueSkipped = GameEvent.BotCrashUnique.deserialize(reader));
+                    break;
+                case 25:
+                    reader.readMessage(message.botPushedBotSkipped, () => message.botPushedBotSkipped = GameEvent.BotPushedBot.deserialize(reader));
+                    break;
+                case 30:
+                    reader.readMessage(message.defenderInDefenseAreaPartially, () => message.defenderInDefenseAreaPartially = GameEvent.DefenderInDefenseAreaPartially.deserialize(reader));
+                    break;
+                case 33:
+                    reader.readMessage(message.multiplePlacementFailures, () => message.multiplePlacementFailures = GameEvent.MultiplePlacementFailures.deserialize(reader));
+                    break;
+                default: reader.skipField();
+            }
+        }
+        return message;
     }
-    if (
-      object.event?.$case === "attackerTooCloseToDefenseArea" &&
-      object.event?.attackerTooCloseToDefenseArea !== undefined &&
-      object.event?.attackerTooCloseToDefenseArea !== null
-    ) {
-      message.event = {
-        $case: "attackerTooCloseToDefenseArea",
-        attackerTooCloseToDefenseArea: GameEvent_AttackerTooCloseToDefenseArea.fromPartial(
-          object.event.attackerTooCloseToDefenseArea,
-        ),
-      };
+    serializeBinary(): Uint8Array {
+        return this.serialize();
     }
-    if (
-      object.event?.$case === "defenderInDefenseArea" &&
-      object.event?.defenderInDefenseArea !== undefined &&
-      object.event?.defenderInDefenseArea !== null
-    ) {
-      message.event = {
-        $case: "defenderInDefenseArea",
-        defenderInDefenseArea: GameEvent_DefenderInDefenseArea.fromPartial(object.event.defenderInDefenseArea),
-      };
+    static deserializeBinary(bytes: Uint8Array): GameEvent {
+        return GameEvent.deserialize(bytes);
     }
-    if (
-      object.event?.$case === "boundaryCrossing" &&
-      object.event?.boundaryCrossing !== undefined &&
-      object.event?.boundaryCrossing !== null
-    ) {
-      message.event = {
-        $case: "boundaryCrossing",
-        boundaryCrossing: GameEvent_BoundaryCrossing.fromPartial(object.event.boundaryCrossing),
-      };
-    }
-    if (
-      object.event?.$case === "keeperHeldBall" &&
-      object.event?.keeperHeldBall !== undefined &&
-      object.event?.keeperHeldBall !== null
-    ) {
-      message.event = {
-        $case: "keeperHeldBall",
-        keeperHeldBall: GameEvent_KeeperHeldBall.fromPartial(object.event.keeperHeldBall),
-      };
-    }
-    if (
-      object.event?.$case === "botDribbledBallTooFar" &&
-      object.event?.botDribbledBallTooFar !== undefined &&
-      object.event?.botDribbledBallTooFar !== null
-    ) {
-      message.event = {
-        $case: "botDribbledBallTooFar",
-        botDribbledBallTooFar: GameEvent_BotDribbledBallTooFar.fromPartial(object.event.botDribbledBallTooFar),
-      };
-    }
-    if (
-      object.event?.$case === "botPushedBot" &&
-      object.event?.botPushedBot !== undefined &&
-      object.event?.botPushedBot !== null
-    ) {
-      message.event = {
-        $case: "botPushedBot",
-        botPushedBot: GameEvent_BotPushedBot.fromPartial(object.event.botPushedBot),
-      };
-    }
-    if (
-      object.event?.$case === "botHeldBallDeliberately" &&
-      object.event?.botHeldBallDeliberately !== undefined &&
-      object.event?.botHeldBallDeliberately !== null
-    ) {
-      message.event = {
-        $case: "botHeldBallDeliberately",
-        botHeldBallDeliberately: GameEvent_BotHeldBallDeliberately.fromPartial(object.event.botHeldBallDeliberately),
-      };
-    }
-    if (
-      object.event?.$case === "botTippedOver" &&
-      object.event?.botTippedOver !== undefined &&
-      object.event?.botTippedOver !== null
-    ) {
-      message.event = {
-        $case: "botTippedOver",
-        botTippedOver: GameEvent_BotTippedOver.fromPartial(object.event.botTippedOver),
-      };
-    }
-    if (
-      object.event?.$case === "attackerTouchedBallInDefenseArea" &&
-      object.event?.attackerTouchedBallInDefenseArea !== undefined &&
-      object.event?.attackerTouchedBallInDefenseArea !== null
-    ) {
-      message.event = {
-        $case: "attackerTouchedBallInDefenseArea",
-        attackerTouchedBallInDefenseArea: GameEvent_AttackerTouchedBallInDefenseArea.fromPartial(
-          object.event.attackerTouchedBallInDefenseArea,
-        ),
-      };
-    }
-    if (
-      object.event?.$case === "botKickedBallTooFast" &&
-      object.event?.botKickedBallTooFast !== undefined &&
-      object.event?.botKickedBallTooFast !== null
-    ) {
-      message.event = {
-        $case: "botKickedBallTooFast",
-        botKickedBallTooFast: GameEvent_BotKickedBallTooFast.fromPartial(object.event.botKickedBallTooFast),
-      };
-    }
-    if (
-      object.event?.$case === "botCrashUnique" &&
-      object.event?.botCrashUnique !== undefined &&
-      object.event?.botCrashUnique !== null
-    ) {
-      message.event = {
-        $case: "botCrashUnique",
-        botCrashUnique: GameEvent_BotCrashUnique.fromPartial(object.event.botCrashUnique),
-      };
-    }
-    if (
-      object.event?.$case === "botCrashDrawn" &&
-      object.event?.botCrashDrawn !== undefined &&
-      object.event?.botCrashDrawn !== null
-    ) {
-      message.event = {
-        $case: "botCrashDrawn",
-        botCrashDrawn: GameEvent_BotCrashDrawn.fromPartial(object.event.botCrashDrawn),
-      };
-    }
-    if (
-      object.event?.$case === "defenderTooCloseToKickPoint" &&
-      object.event?.defenderTooCloseToKickPoint !== undefined &&
-      object.event?.defenderTooCloseToKickPoint !== null
-    ) {
-      message.event = {
-        $case: "defenderTooCloseToKickPoint",
-        defenderTooCloseToKickPoint: GameEvent_DefenderTooCloseToKickPoint.fromPartial(
-          object.event.defenderTooCloseToKickPoint,
-        ),
-      };
-    }
-    if (
-      object.event?.$case === "botTooFastInStop" &&
-      object.event?.botTooFastInStop !== undefined &&
-      object.event?.botTooFastInStop !== null
-    ) {
-      message.event = {
-        $case: "botTooFastInStop",
-        botTooFastInStop: GameEvent_BotTooFastInStop.fromPartial(object.event.botTooFastInStop),
-      };
-    }
-    if (
-      object.event?.$case === "botInterferedPlacement" &&
-      object.event?.botInterferedPlacement !== undefined &&
-      object.event?.botInterferedPlacement !== null
-    ) {
-      message.event = {
-        $case: "botInterferedPlacement",
-        botInterferedPlacement: GameEvent_BotInterferedPlacement.fromPartial(object.event.botInterferedPlacement),
-      };
-    }
-    if (
-      object.event?.$case === "possibleGoal" &&
-      object.event?.possibleGoal !== undefined &&
-      object.event?.possibleGoal !== null
-    ) {
-      message.event = { $case: "possibleGoal", possibleGoal: GameEvent_Goal.fromPartial(object.event.possibleGoal) };
-    }
-    if (object.event?.$case === "goal" && object.event?.goal !== undefined && object.event?.goal !== null) {
-      message.event = { $case: "goal", goal: GameEvent_Goal.fromPartial(object.event.goal) };
-    }
-    if (
-      object.event?.$case === "invalidGoal" &&
-      object.event?.invalidGoal !== undefined &&
-      object.event?.invalidGoal !== null
-    ) {
-      message.event = { $case: "invalidGoal", invalidGoal: GameEvent_Goal.fromPartial(object.event.invalidGoal) };
-    }
-    if (
-      object.event?.$case === "attackerDoubleTouchedBall" &&
-      object.event?.attackerDoubleTouchedBall !== undefined &&
-      object.event?.attackerDoubleTouchedBall !== null
-    ) {
-      message.event = {
-        $case: "attackerDoubleTouchedBall",
-        attackerDoubleTouchedBall: GameEvent_AttackerDoubleTouchedBall.fromPartial(
-          object.event.attackerDoubleTouchedBall,
-        ),
-      };
-    }
-    if (
-      object.event?.$case === "placementSucceeded" &&
-      object.event?.placementSucceeded !== undefined &&
-      object.event?.placementSucceeded !== null
-    ) {
-      message.event = {
-        $case: "placementSucceeded",
-        placementSucceeded: GameEvent_PlacementSucceeded.fromPartial(object.event.placementSucceeded),
-      };
-    }
-    if (
-      object.event?.$case === "penaltyKickFailed" &&
-      object.event?.penaltyKickFailed !== undefined &&
-      object.event?.penaltyKickFailed !== null
-    ) {
-      message.event = {
-        $case: "penaltyKickFailed",
-        penaltyKickFailed: GameEvent_PenaltyKickFailed.fromPartial(object.event.penaltyKickFailed),
-      };
-    }
-    if (
-      object.event?.$case === "noProgressInGame" &&
-      object.event?.noProgressInGame !== undefined &&
-      object.event?.noProgressInGame !== null
-    ) {
-      message.event = {
-        $case: "noProgressInGame",
-        noProgressInGame: GameEvent_NoProgressInGame.fromPartial(object.event.noProgressInGame),
-      };
-    }
-    if (
-      object.event?.$case === "placementFailed" &&
-      object.event?.placementFailed !== undefined &&
-      object.event?.placementFailed !== null
-    ) {
-      message.event = {
-        $case: "placementFailed",
-        placementFailed: GameEvent_PlacementFailed.fromPartial(object.event.placementFailed),
-      };
-    }
-    if (
-      object.event?.$case === "multipleCards" &&
-      object.event?.multipleCards !== undefined &&
-      object.event?.multipleCards !== null
-    ) {
-      message.event = {
-        $case: "multipleCards",
-        multipleCards: GameEvent_MultipleCards.fromPartial(object.event.multipleCards),
-      };
-    }
-    if (
-      object.event?.$case === "multipleFouls" &&
-      object.event?.multipleFouls !== undefined &&
-      object.event?.multipleFouls !== null
-    ) {
-      message.event = {
-        $case: "multipleFouls",
-        multipleFouls: GameEvent_MultipleFouls.fromPartial(object.event.multipleFouls),
-      };
-    }
-    if (
-      object.event?.$case === "botSubstitution" &&
-      object.event?.botSubstitution !== undefined &&
-      object.event?.botSubstitution !== null
-    ) {
-      message.event = {
-        $case: "botSubstitution",
-        botSubstitution: GameEvent_BotSubstitution.fromPartial(object.event.botSubstitution),
-      };
-    }
-    if (
-      object.event?.$case === "tooManyRobots" &&
-      object.event?.tooManyRobots !== undefined &&
-      object.event?.tooManyRobots !== null
-    ) {
-      message.event = {
-        $case: "tooManyRobots",
-        tooManyRobots: GameEvent_TooManyRobots.fromPartial(object.event.tooManyRobots),
-      };
-    }
-    if (
-      object.event?.$case === "challengeFlag" &&
-      object.event?.challengeFlag !== undefined &&
-      object.event?.challengeFlag !== null
-    ) {
-      message.event = {
-        $case: "challengeFlag",
-        challengeFlag: GameEvent_ChallengeFlag.fromPartial(object.event.challengeFlag),
-      };
-    }
-    if (
-      object.event?.$case === "emergencyStop" &&
-      object.event?.emergencyStop !== undefined &&
-      object.event?.emergencyStop !== null
-    ) {
-      message.event = {
-        $case: "emergencyStop",
-        emergencyStop: GameEvent_EmergencyStop.fromPartial(object.event.emergencyStop),
-      };
-    }
-    if (
-      object.event?.$case === "unsportingBehaviorMinor" &&
-      object.event?.unsportingBehaviorMinor !== undefined &&
-      object.event?.unsportingBehaviorMinor !== null
-    ) {
-      message.event = {
-        $case: "unsportingBehaviorMinor",
-        unsportingBehaviorMinor: GameEvent_UnsportingBehaviorMinor.fromPartial(object.event.unsportingBehaviorMinor),
-      };
-    }
-    if (
-      object.event?.$case === "unsportingBehaviorMajor" &&
-      object.event?.unsportingBehaviorMajor !== undefined &&
-      object.event?.unsportingBehaviorMajor !== null
-    ) {
-      message.event = {
-        $case: "unsportingBehaviorMajor",
-        unsportingBehaviorMajor: GameEvent_UnsportingBehaviorMajor.fromPartial(object.event.unsportingBehaviorMajor),
-      };
-    }
-    if (object.event?.$case === "prepared" && object.event?.prepared !== undefined && object.event?.prepared !== null) {
-      message.event = { $case: "prepared", prepared: GameEvent_Prepared.fromPartial(object.event.prepared) };
-    }
-    if (
-      object.event?.$case === "indirectGoal" &&
-      object.event?.indirectGoal !== undefined &&
-      object.event?.indirectGoal !== null
-    ) {
-      message.event = {
-        $case: "indirectGoal",
-        indirectGoal: GameEvent_IndirectGoal.fromPartial(object.event.indirectGoal),
-      };
-    }
-    if (
-      object.event?.$case === "chippedGoal" &&
-      object.event?.chippedGoal !== undefined &&
-      object.event?.chippedGoal !== null
-    ) {
-      message.event = {
-        $case: "chippedGoal",
-        chippedGoal: GameEvent_ChippedGoal.fromPartial(object.event.chippedGoal),
-      };
-    }
-    if (
-      object.event?.$case === "kickTimeout" &&
-      object.event?.kickTimeout !== undefined &&
-      object.event?.kickTimeout !== null
-    ) {
-      message.event = {
-        $case: "kickTimeout",
-        kickTimeout: GameEvent_KickTimeout.fromPartial(object.event.kickTimeout),
-      };
-    }
-    if (
-      object.event?.$case === "attackerTouchedOpponentInDefenseArea" &&
-      object.event?.attackerTouchedOpponentInDefenseArea !== undefined &&
-      object.event?.attackerTouchedOpponentInDefenseArea !== null
-    ) {
-      message.event = {
-        $case: "attackerTouchedOpponentInDefenseArea",
-        attackerTouchedOpponentInDefenseArea: GameEvent_AttackerTouchedOpponentInDefenseArea.fromPartial(
-          object.event.attackerTouchedOpponentInDefenseArea,
-        ),
-      };
-    }
-    if (
-      object.event?.$case === "attackerTouchedOpponentInDefenseAreaSkipped" &&
-      object.event?.attackerTouchedOpponentInDefenseAreaSkipped !== undefined &&
-      object.event?.attackerTouchedOpponentInDefenseAreaSkipped !== null
-    ) {
-      message.event = {
-        $case: "attackerTouchedOpponentInDefenseAreaSkipped",
-        attackerTouchedOpponentInDefenseAreaSkipped: GameEvent_AttackerTouchedOpponentInDefenseArea.fromPartial(
-          object.event.attackerTouchedOpponentInDefenseAreaSkipped,
-        ),
-      };
-    }
-    if (
-      object.event?.$case === "botCrashUniqueSkipped" &&
-      object.event?.botCrashUniqueSkipped !== undefined &&
-      object.event?.botCrashUniqueSkipped !== null
-    ) {
-      message.event = {
-        $case: "botCrashUniqueSkipped",
-        botCrashUniqueSkipped: GameEvent_BotCrashUnique.fromPartial(object.event.botCrashUniqueSkipped),
-      };
-    }
-    if (
-      object.event?.$case === "botPushedBotSkipped" &&
-      object.event?.botPushedBotSkipped !== undefined &&
-      object.event?.botPushedBotSkipped !== null
-    ) {
-      message.event = {
-        $case: "botPushedBotSkipped",
-        botPushedBotSkipped: GameEvent_BotPushedBot.fromPartial(object.event.botPushedBotSkipped),
-      };
-    }
-    if (
-      object.event?.$case === "defenderInDefenseAreaPartially" &&
-      object.event?.defenderInDefenseAreaPartially !== undefined &&
-      object.event?.defenderInDefenseAreaPartially !== null
-    ) {
-      message.event = {
-        $case: "defenderInDefenseAreaPartially",
-        defenderInDefenseAreaPartially: GameEvent_DefenderInDefenseAreaPartially.fromPartial(
-          object.event.defenderInDefenseAreaPartially,
-        ),
-      };
-    }
-    if (
-      object.event?.$case === "multiplePlacementFailures" &&
-      object.event?.multiplePlacementFailures !== undefined &&
-      object.event?.multiplePlacementFailures !== null
-    ) {
-      message.event = {
-        $case: "multiplePlacementFailures",
-        multiplePlacementFailures: GameEvent_MultiplePlacementFailures.fromPartial(
-          object.event.multiplePlacementFailures,
-        ),
-      };
-    }
-    return message;
-  },
-};
-
-function createBaseGameEvent_BallLeftField(): GameEvent_BallLeftField {
-  return { byTeam: 0, byBot: 0, location: undefined };
 }
-
-export const GameEvent_BallLeftField = {
-  encode(message: GameEvent_BallLeftField, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
+export namespace GameEvent {
+    export enum Type {
+        UNKNOWN_GAME_EVENT_TYPE = 0,
+        BALL_LEFT_FIELD_TOUCH_LINE = 6,
+        BALL_LEFT_FIELD_GOAL_LINE = 7,
+        AIMLESS_KICK = 11,
+        ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA = 19,
+        DEFENDER_IN_DEFENSE_AREA = 31,
+        BOUNDARY_CROSSING = 41,
+        KEEPER_HELD_BALL = 13,
+        BOT_DRIBBLED_BALL_TOO_FAR = 17,
+        BOT_PUSHED_BOT = 24,
+        BOT_HELD_BALL_DELIBERATELY = 26,
+        BOT_TIPPED_OVER = 27,
+        ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA = 15,
+        BOT_KICKED_BALL_TOO_FAST = 18,
+        BOT_CRASH_UNIQUE = 22,
+        BOT_CRASH_DRAWN = 21,
+        DEFENDER_TOO_CLOSE_TO_KICK_POINT = 29,
+        BOT_TOO_FAST_IN_STOP = 28,
+        BOT_INTERFERED_PLACEMENT = 20,
+        POSSIBLE_GOAL = 39,
+        GOAL = 8,
+        INVALID_GOAL = 42,
+        ATTACKER_DOUBLE_TOUCHED_BALL = 14,
+        PLACEMENT_SUCCEEDED = 5,
+        PENALTY_KICK_FAILED = 43,
+        NO_PROGRESS_IN_GAME = 2,
+        PLACEMENT_FAILED = 3,
+        MULTIPLE_CARDS = 32,
+        MULTIPLE_FOULS = 34,
+        BOT_SUBSTITUTION = 37,
+        TOO_MANY_ROBOTS = 38,
+        CHALLENGE_FLAG = 44,
+        EMERGENCY_STOP = 45,
+        UNSPORTING_BEHAVIOR_MINOR = 35,
+        UNSPORTING_BEHAVIOR_MAJOR = 36,
+        /** @deprecated*/
+        PREPARED = 1,
+        /** @deprecated*/
+        INDIRECT_GOAL = 9,
+        /** @deprecated*/
+        CHIPPED_GOAL = 10,
+        /** @deprecated*/
+        KICK_TIMEOUT = 12,
+        /** @deprecated*/
+        ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA = 16,
+        /** @deprecated*/
+        ATTACKER_TOUCHED_OPPONENT_IN_DEFENSE_AREA_SKIPPED = 40,
+        /** @deprecated*/
+        BOT_CRASH_UNIQUE_SKIPPED = 23,
+        /** @deprecated*/
+        BOT_PUSHED_BOT_SKIPPED = 25,
+        /** @deprecated*/
+        DEFENDER_IN_DEFENSE_AREA_PARTIALLY = 30,
+        /** @deprecated*/
+        MULTIPLE_PLACEMENT_FAILURES = 33
+    }
+    export class BallLeftField extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+            byBot?: number;
+            location?: dependency_2.Vector2;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+                if ("byBot" in data && data.byBot != undefined) {
+                    this.byBot = data.byBot;
+                }
+                if ("location" in data && data.location != undefined) {
+                    this.location = data.location;
+                }
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        get byBot() {
+            return pb_1.Message.getFieldWithDefault(this, 2, 0) as number;
+        }
+        set byBot(value: number) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        get hasByBot() {
+            return pb_1.Message.getField(this, 2) != null;
+        }
+        get location() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 3) as dependency_2.Vector2;
+        }
+        set location(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 3, value);
+        }
+        get hasLocation() {
+            return pb_1.Message.getField(this, 3) != null;
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+            byBot?: number;
+            location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+        }): BallLeftField {
+            const message = new BallLeftField({
+                byTeam: data.byTeam
+            });
+            if (data.byBot != null) {
+                message.byBot = data.byBot;
+            }
+            if (data.location != null) {
+                message.location = dependency_2.Vector2.fromObject(data.location);
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+                byBot?: number;
+                location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            if (this.byBot != null) {
+                data.byBot = this.byBot;
+            }
+            if (this.location != null) {
+                data.location = this.location.toObject();
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (this.hasByBot)
+                writer.writeUint32(2, this.byBot);
+            if (this.hasLocation)
+                writer.writeMessage(3, this.location, () => this.location.serialize(writer));
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): BallLeftField {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new BallLeftField();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    case 2:
+                        message.byBot = reader.readUint32();
+                        break;
+                    case 3:
+                        reader.readMessage(message.location, () => message.location = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): BallLeftField {
+            return BallLeftField.deserialize(bytes);
+        }
+    }
+    export class AimlessKick extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+            byBot?: number;
+            location?: dependency_2.Vector2;
+            kickLocation?: dependency_2.Vector2;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+                if ("byBot" in data && data.byBot != undefined) {
+                    this.byBot = data.byBot;
+                }
+                if ("location" in data && data.location != undefined) {
+                    this.location = data.location;
+                }
+                if ("kickLocation" in data && data.kickLocation != undefined) {
+                    this.kickLocation = data.kickLocation;
+                }
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        get byBot() {
+            return pb_1.Message.getFieldWithDefault(this, 2, 0) as number;
+        }
+        set byBot(value: number) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        get hasByBot() {
+            return pb_1.Message.getField(this, 2) != null;
+        }
+        get location() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 3) as dependency_2.Vector2;
+        }
+        set location(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 3, value);
+        }
+        get hasLocation() {
+            return pb_1.Message.getField(this, 3) != null;
+        }
+        get kickLocation() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 4) as dependency_2.Vector2;
+        }
+        set kickLocation(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 4, value);
+        }
+        get hasKickLocation() {
+            return pb_1.Message.getField(this, 4) != null;
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+            byBot?: number;
+            location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            kickLocation?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+        }): AimlessKick {
+            const message = new AimlessKick({
+                byTeam: data.byTeam
+            });
+            if (data.byBot != null) {
+                message.byBot = data.byBot;
+            }
+            if (data.location != null) {
+                message.location = dependency_2.Vector2.fromObject(data.location);
+            }
+            if (data.kickLocation != null) {
+                message.kickLocation = dependency_2.Vector2.fromObject(data.kickLocation);
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+                byBot?: number;
+                location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+                kickLocation?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            if (this.byBot != null) {
+                data.byBot = this.byBot;
+            }
+            if (this.location != null) {
+                data.location = this.location.toObject();
+            }
+            if (this.kickLocation != null) {
+                data.kickLocation = this.kickLocation.toObject();
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (this.hasByBot)
+                writer.writeUint32(2, this.byBot);
+            if (this.hasLocation)
+                writer.writeMessage(3, this.location, () => this.location.serialize(writer));
+            if (this.hasKickLocation)
+                writer.writeMessage(4, this.kickLocation, () => this.kickLocation.serialize(writer));
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): AimlessKick {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new AimlessKick();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    case 2:
+                        message.byBot = reader.readUint32();
+                        break;
+                    case 3:
+                        reader.readMessage(message.location, () => message.location = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    case 4:
+                        reader.readMessage(message.kickLocation, () => message.kickLocation = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): AimlessKick {
+            return AimlessKick.deserialize(bytes);
+        }
+    }
+    export class Goal extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+            kickingTeam?: dependency_1.Team;
+            kickingBot?: number;
+            location?: dependency_2.Vector2;
+            kickLocation?: dependency_2.Vector2;
+            maxBallHeight?: number;
+            numRobotsByTeam?: number;
+            lastTouchByTeam?: number;
+            message?: string;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+                if ("kickingTeam" in data && data.kickingTeam != undefined) {
+                    this.kickingTeam = data.kickingTeam;
+                }
+                if ("kickingBot" in data && data.kickingBot != undefined) {
+                    this.kickingBot = data.kickingBot;
+                }
+                if ("location" in data && data.location != undefined) {
+                    this.location = data.location;
+                }
+                if ("kickLocation" in data && data.kickLocation != undefined) {
+                    this.kickLocation = data.kickLocation;
+                }
+                if ("maxBallHeight" in data && data.maxBallHeight != undefined) {
+                    this.maxBallHeight = data.maxBallHeight;
+                }
+                if ("numRobotsByTeam" in data && data.numRobotsByTeam != undefined) {
+                    this.numRobotsByTeam = data.numRobotsByTeam;
+                }
+                if ("lastTouchByTeam" in data && data.lastTouchByTeam != undefined) {
+                    this.lastTouchByTeam = data.lastTouchByTeam;
+                }
+                if ("message" in data && data.message != undefined) {
+                    this.message = data.message;
+                }
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        get kickingTeam() {
+            return pb_1.Message.getFieldWithDefault(this, 6, dependency_1.Team.UNKNOWN) as dependency_1.Team;
+        }
+        set kickingTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 6, value);
+        }
+        get hasKickingTeam() {
+            return pb_1.Message.getField(this, 6) != null;
+        }
+        get kickingBot() {
+            return pb_1.Message.getFieldWithDefault(this, 2, 0) as number;
+        }
+        set kickingBot(value: number) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        get hasKickingBot() {
+            return pb_1.Message.getField(this, 2) != null;
+        }
+        get location() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 3) as dependency_2.Vector2;
+        }
+        set location(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 3, value);
+        }
+        get hasLocation() {
+            return pb_1.Message.getField(this, 3) != null;
+        }
+        get kickLocation() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 4) as dependency_2.Vector2;
+        }
+        set kickLocation(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 4, value);
+        }
+        get hasKickLocation() {
+            return pb_1.Message.getField(this, 4) != null;
+        }
+        get maxBallHeight() {
+            return pb_1.Message.getFieldWithDefault(this, 5, 0) as number;
+        }
+        set maxBallHeight(value: number) {
+            pb_1.Message.setField(this, 5, value);
+        }
+        get hasMaxBallHeight() {
+            return pb_1.Message.getField(this, 5) != null;
+        }
+        get numRobotsByTeam() {
+            return pb_1.Message.getFieldWithDefault(this, 7, 0) as number;
+        }
+        set numRobotsByTeam(value: number) {
+            pb_1.Message.setField(this, 7, value);
+        }
+        get hasNumRobotsByTeam() {
+            return pb_1.Message.getField(this, 7) != null;
+        }
+        get lastTouchByTeam() {
+            return pb_1.Message.getFieldWithDefault(this, 8, 0) as number;
+        }
+        set lastTouchByTeam(value: number) {
+            pb_1.Message.setField(this, 8, value);
+        }
+        get hasLastTouchByTeam() {
+            return pb_1.Message.getField(this, 8) != null;
+        }
+        get message() {
+            return pb_1.Message.getFieldWithDefault(this, 9, "") as string;
+        }
+        set message(value: string) {
+            pb_1.Message.setField(this, 9, value);
+        }
+        get hasMessage() {
+            return pb_1.Message.getField(this, 9) != null;
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+            kickingTeam?: dependency_1.Team;
+            kickingBot?: number;
+            location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            kickLocation?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            maxBallHeight?: number;
+            numRobotsByTeam?: number;
+            lastTouchByTeam?: number;
+            message?: string;
+        }): Goal {
+            const message = new Goal({
+                byTeam: data.byTeam
+            });
+            if (data.kickingTeam != null) {
+                message.kickingTeam = data.kickingTeam;
+            }
+            if (data.kickingBot != null) {
+                message.kickingBot = data.kickingBot;
+            }
+            if (data.location != null) {
+                message.location = dependency_2.Vector2.fromObject(data.location);
+            }
+            if (data.kickLocation != null) {
+                message.kickLocation = dependency_2.Vector2.fromObject(data.kickLocation);
+            }
+            if (data.maxBallHeight != null) {
+                message.maxBallHeight = data.maxBallHeight;
+            }
+            if (data.numRobotsByTeam != null) {
+                message.numRobotsByTeam = data.numRobotsByTeam;
+            }
+            if (data.lastTouchByTeam != null) {
+                message.lastTouchByTeam = data.lastTouchByTeam;
+            }
+            if (data.message != null) {
+                message.message = data.message;
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+                kickingTeam?: dependency_1.Team;
+                kickingBot?: number;
+                location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+                kickLocation?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+                maxBallHeight?: number;
+                numRobotsByTeam?: number;
+                lastTouchByTeam?: number;
+                message?: string;
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            if (this.kickingTeam != null) {
+                data.kickingTeam = this.kickingTeam;
+            }
+            if (this.kickingBot != null) {
+                data.kickingBot = this.kickingBot;
+            }
+            if (this.location != null) {
+                data.location = this.location.toObject();
+            }
+            if (this.kickLocation != null) {
+                data.kickLocation = this.kickLocation.toObject();
+            }
+            if (this.maxBallHeight != null) {
+                data.maxBallHeight = this.maxBallHeight;
+            }
+            if (this.numRobotsByTeam != null) {
+                data.numRobotsByTeam = this.numRobotsByTeam;
+            }
+            if (this.lastTouchByTeam != null) {
+                data.lastTouchByTeam = this.lastTouchByTeam;
+            }
+            if (this.message != null) {
+                data.message = this.message;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (this.hasKickingTeam)
+                writer.writeEnum(6, this.kickingTeam);
+            if (this.hasKickingBot)
+                writer.writeUint32(2, this.kickingBot);
+            if (this.hasLocation)
+                writer.writeMessage(3, this.location, () => this.location.serialize(writer));
+            if (this.hasKickLocation)
+                writer.writeMessage(4, this.kickLocation, () => this.kickLocation.serialize(writer));
+            if (this.hasMaxBallHeight)
+                writer.writeFloat(5, this.maxBallHeight);
+            if (this.hasNumRobotsByTeam)
+                writer.writeUint32(7, this.numRobotsByTeam);
+            if (this.hasLastTouchByTeam)
+                writer.writeUint64(8, this.lastTouchByTeam);
+            if (this.hasMessage && this.message.length)
+                writer.writeString(9, this.message);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): Goal {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new Goal();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    case 6:
+                        message.kickingTeam = reader.readEnum();
+                        break;
+                    case 2:
+                        message.kickingBot = reader.readUint32();
+                        break;
+                    case 3:
+                        reader.readMessage(message.location, () => message.location = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    case 4:
+                        reader.readMessage(message.kickLocation, () => message.kickLocation = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    case 5:
+                        message.maxBallHeight = reader.readFloat();
+                        break;
+                    case 7:
+                        message.numRobotsByTeam = reader.readUint32();
+                        break;
+                    case 8:
+                        message.lastTouchByTeam = reader.readUint64();
+                        break;
+                    case 9:
+                        message.message = reader.readString();
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): Goal {
+            return Goal.deserialize(bytes);
+        }
+    }
+    export class IndirectGoal extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+            byBot?: number;
+            location?: dependency_2.Vector2;
+            kickLocation?: dependency_2.Vector2;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+                if ("byBot" in data && data.byBot != undefined) {
+                    this.byBot = data.byBot;
+                }
+                if ("location" in data && data.location != undefined) {
+                    this.location = data.location;
+                }
+                if ("kickLocation" in data && data.kickLocation != undefined) {
+                    this.kickLocation = data.kickLocation;
+                }
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        get byBot() {
+            return pb_1.Message.getFieldWithDefault(this, 2, 0) as number;
+        }
+        set byBot(value: number) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        get hasByBot() {
+            return pb_1.Message.getField(this, 2) != null;
+        }
+        get location() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 3) as dependency_2.Vector2;
+        }
+        set location(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 3, value);
+        }
+        get hasLocation() {
+            return pb_1.Message.getField(this, 3) != null;
+        }
+        get kickLocation() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 4) as dependency_2.Vector2;
+        }
+        set kickLocation(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 4, value);
+        }
+        get hasKickLocation() {
+            return pb_1.Message.getField(this, 4) != null;
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+            byBot?: number;
+            location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            kickLocation?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+        }): IndirectGoal {
+            const message = new IndirectGoal({
+                byTeam: data.byTeam
+            });
+            if (data.byBot != null) {
+                message.byBot = data.byBot;
+            }
+            if (data.location != null) {
+                message.location = dependency_2.Vector2.fromObject(data.location);
+            }
+            if (data.kickLocation != null) {
+                message.kickLocation = dependency_2.Vector2.fromObject(data.kickLocation);
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+                byBot?: number;
+                location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+                kickLocation?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            if (this.byBot != null) {
+                data.byBot = this.byBot;
+            }
+            if (this.location != null) {
+                data.location = this.location.toObject();
+            }
+            if (this.kickLocation != null) {
+                data.kickLocation = this.kickLocation.toObject();
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (this.hasByBot)
+                writer.writeUint32(2, this.byBot);
+            if (this.hasLocation)
+                writer.writeMessage(3, this.location, () => this.location.serialize(writer));
+            if (this.hasKickLocation)
+                writer.writeMessage(4, this.kickLocation, () => this.kickLocation.serialize(writer));
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): IndirectGoal {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new IndirectGoal();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    case 2:
+                        message.byBot = reader.readUint32();
+                        break;
+                    case 3:
+                        reader.readMessage(message.location, () => message.location = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    case 4:
+                        reader.readMessage(message.kickLocation, () => message.kickLocation = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): IndirectGoal {
+            return IndirectGoal.deserialize(bytes);
+        }
+    }
+    export class ChippedGoal extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+            byBot?: number;
+            location?: dependency_2.Vector2;
+            kickLocation?: dependency_2.Vector2;
+            maxBallHeight?: number;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+                if ("byBot" in data && data.byBot != undefined) {
+                    this.byBot = data.byBot;
+                }
+                if ("location" in data && data.location != undefined) {
+                    this.location = data.location;
+                }
+                if ("kickLocation" in data && data.kickLocation != undefined) {
+                    this.kickLocation = data.kickLocation;
+                }
+                if ("maxBallHeight" in data && data.maxBallHeight != undefined) {
+                    this.maxBallHeight = data.maxBallHeight;
+                }
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        get byBot() {
+            return pb_1.Message.getFieldWithDefault(this, 2, 0) as number;
+        }
+        set byBot(value: number) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        get hasByBot() {
+            return pb_1.Message.getField(this, 2) != null;
+        }
+        get location() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 3) as dependency_2.Vector2;
+        }
+        set location(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 3, value);
+        }
+        get hasLocation() {
+            return pb_1.Message.getField(this, 3) != null;
+        }
+        get kickLocation() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 4) as dependency_2.Vector2;
+        }
+        set kickLocation(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 4, value);
+        }
+        get hasKickLocation() {
+            return pb_1.Message.getField(this, 4) != null;
+        }
+        get maxBallHeight() {
+            return pb_1.Message.getFieldWithDefault(this, 5, 0) as number;
+        }
+        set maxBallHeight(value: number) {
+            pb_1.Message.setField(this, 5, value);
+        }
+        get hasMaxBallHeight() {
+            return pb_1.Message.getField(this, 5) != null;
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+            byBot?: number;
+            location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            kickLocation?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            maxBallHeight?: number;
+        }): ChippedGoal {
+            const message = new ChippedGoal({
+                byTeam: data.byTeam
+            });
+            if (data.byBot != null) {
+                message.byBot = data.byBot;
+            }
+            if (data.location != null) {
+                message.location = dependency_2.Vector2.fromObject(data.location);
+            }
+            if (data.kickLocation != null) {
+                message.kickLocation = dependency_2.Vector2.fromObject(data.kickLocation);
+            }
+            if (data.maxBallHeight != null) {
+                message.maxBallHeight = data.maxBallHeight;
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+                byBot?: number;
+                location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+                kickLocation?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+                maxBallHeight?: number;
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            if (this.byBot != null) {
+                data.byBot = this.byBot;
+            }
+            if (this.location != null) {
+                data.location = this.location.toObject();
+            }
+            if (this.kickLocation != null) {
+                data.kickLocation = this.kickLocation.toObject();
+            }
+            if (this.maxBallHeight != null) {
+                data.maxBallHeight = this.maxBallHeight;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (this.hasByBot)
+                writer.writeUint32(2, this.byBot);
+            if (this.hasLocation)
+                writer.writeMessage(3, this.location, () => this.location.serialize(writer));
+            if (this.hasKickLocation)
+                writer.writeMessage(4, this.kickLocation, () => this.kickLocation.serialize(writer));
+            if (this.hasMaxBallHeight)
+                writer.writeFloat(5, this.maxBallHeight);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): ChippedGoal {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new ChippedGoal();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    case 2:
+                        message.byBot = reader.readUint32();
+                        break;
+                    case 3:
+                        reader.readMessage(message.location, () => message.location = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    case 4:
+                        reader.readMessage(message.kickLocation, () => message.kickLocation = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    case 5:
+                        message.maxBallHeight = reader.readFloat();
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): ChippedGoal {
+            return ChippedGoal.deserialize(bytes);
+        }
+    }
+    export class BotTooFastInStop extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+            byBot?: number;
+            location?: dependency_2.Vector2;
+            speed?: number;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+                if ("byBot" in data && data.byBot != undefined) {
+                    this.byBot = data.byBot;
+                }
+                if ("location" in data && data.location != undefined) {
+                    this.location = data.location;
+                }
+                if ("speed" in data && data.speed != undefined) {
+                    this.speed = data.speed;
+                }
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        get byBot() {
+            return pb_1.Message.getFieldWithDefault(this, 2, 0) as number;
+        }
+        set byBot(value: number) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        get hasByBot() {
+            return pb_1.Message.getField(this, 2) != null;
+        }
+        get location() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 3) as dependency_2.Vector2;
+        }
+        set location(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 3, value);
+        }
+        get hasLocation() {
+            return pb_1.Message.getField(this, 3) != null;
+        }
+        get speed() {
+            return pb_1.Message.getFieldWithDefault(this, 4, 0) as number;
+        }
+        set speed(value: number) {
+            pb_1.Message.setField(this, 4, value);
+        }
+        get hasSpeed() {
+            return pb_1.Message.getField(this, 4) != null;
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+            byBot?: number;
+            location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            speed?: number;
+        }): BotTooFastInStop {
+            const message = new BotTooFastInStop({
+                byTeam: data.byTeam
+            });
+            if (data.byBot != null) {
+                message.byBot = data.byBot;
+            }
+            if (data.location != null) {
+                message.location = dependency_2.Vector2.fromObject(data.location);
+            }
+            if (data.speed != null) {
+                message.speed = data.speed;
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+                byBot?: number;
+                location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+                speed?: number;
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            if (this.byBot != null) {
+                data.byBot = this.byBot;
+            }
+            if (this.location != null) {
+                data.location = this.location.toObject();
+            }
+            if (this.speed != null) {
+                data.speed = this.speed;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (this.hasByBot)
+                writer.writeUint32(2, this.byBot);
+            if (this.hasLocation)
+                writer.writeMessage(3, this.location, () => this.location.serialize(writer));
+            if (this.hasSpeed)
+                writer.writeFloat(4, this.speed);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): BotTooFastInStop {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new BotTooFastInStop();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    case 2:
+                        message.byBot = reader.readUint32();
+                        break;
+                    case 3:
+                        reader.readMessage(message.location, () => message.location = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    case 4:
+                        message.speed = reader.readFloat();
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): BotTooFastInStop {
+            return BotTooFastInStop.deserialize(bytes);
+        }
+    }
+    export class DefenderTooCloseToKickPoint extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+            byBot?: number;
+            location?: dependency_2.Vector2;
+            distance?: number;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+                if ("byBot" in data && data.byBot != undefined) {
+                    this.byBot = data.byBot;
+                }
+                if ("location" in data && data.location != undefined) {
+                    this.location = data.location;
+                }
+                if ("distance" in data && data.distance != undefined) {
+                    this.distance = data.distance;
+                }
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        get byBot() {
+            return pb_1.Message.getFieldWithDefault(this, 2, 0) as number;
+        }
+        set byBot(value: number) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        get hasByBot() {
+            return pb_1.Message.getField(this, 2) != null;
+        }
+        get location() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 3) as dependency_2.Vector2;
+        }
+        set location(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 3, value);
+        }
+        get hasLocation() {
+            return pb_1.Message.getField(this, 3) != null;
+        }
+        get distance() {
+            return pb_1.Message.getFieldWithDefault(this, 4, 0) as number;
+        }
+        set distance(value: number) {
+            pb_1.Message.setField(this, 4, value);
+        }
+        get hasDistance() {
+            return pb_1.Message.getField(this, 4) != null;
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+            byBot?: number;
+            location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            distance?: number;
+        }): DefenderTooCloseToKickPoint {
+            const message = new DefenderTooCloseToKickPoint({
+                byTeam: data.byTeam
+            });
+            if (data.byBot != null) {
+                message.byBot = data.byBot;
+            }
+            if (data.location != null) {
+                message.location = dependency_2.Vector2.fromObject(data.location);
+            }
+            if (data.distance != null) {
+                message.distance = data.distance;
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+                byBot?: number;
+                location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+                distance?: number;
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            if (this.byBot != null) {
+                data.byBot = this.byBot;
+            }
+            if (this.location != null) {
+                data.location = this.location.toObject();
+            }
+            if (this.distance != null) {
+                data.distance = this.distance;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (this.hasByBot)
+                writer.writeUint32(2, this.byBot);
+            if (this.hasLocation)
+                writer.writeMessage(3, this.location, () => this.location.serialize(writer));
+            if (this.hasDistance)
+                writer.writeFloat(4, this.distance);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): DefenderTooCloseToKickPoint {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new DefenderTooCloseToKickPoint();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    case 2:
+                        message.byBot = reader.readUint32();
+                        break;
+                    case 3:
+                        reader.readMessage(message.location, () => message.location = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    case 4:
+                        message.distance = reader.readFloat();
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): DefenderTooCloseToKickPoint {
+            return DefenderTooCloseToKickPoint.deserialize(bytes);
+        }
+    }
+    export class BotCrashDrawn extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            botYellow?: number;
+            botBlue?: number;
+            location?: dependency_2.Vector2;
+            crashSpeed?: number;
+            speedDiff?: number;
+            crashAngle?: number;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                if ("botYellow" in data && data.botYellow != undefined) {
+                    this.botYellow = data.botYellow;
+                }
+                if ("botBlue" in data && data.botBlue != undefined) {
+                    this.botBlue = data.botBlue;
+                }
+                if ("location" in data && data.location != undefined) {
+                    this.location = data.location;
+                }
+                if ("crashSpeed" in data && data.crashSpeed != undefined) {
+                    this.crashSpeed = data.crashSpeed;
+                }
+                if ("speedDiff" in data && data.speedDiff != undefined) {
+                    this.speedDiff = data.speedDiff;
+                }
+                if ("crashAngle" in data && data.crashAngle != undefined) {
+                    this.crashAngle = data.crashAngle;
+                }
+            }
+        }
+        get botYellow() {
+            return pb_1.Message.getFieldWithDefault(this, 1, 0) as number;
+        }
+        set botYellow(value: number) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasBotYellow() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        get botBlue() {
+            return pb_1.Message.getFieldWithDefault(this, 2, 0) as number;
+        }
+        set botBlue(value: number) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        get hasBotBlue() {
+            return pb_1.Message.getField(this, 2) != null;
+        }
+        get location() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 3) as dependency_2.Vector2;
+        }
+        set location(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 3, value);
+        }
+        get hasLocation() {
+            return pb_1.Message.getField(this, 3) != null;
+        }
+        get crashSpeed() {
+            return pb_1.Message.getFieldWithDefault(this, 4, 0) as number;
+        }
+        set crashSpeed(value: number) {
+            pb_1.Message.setField(this, 4, value);
+        }
+        get hasCrashSpeed() {
+            return pb_1.Message.getField(this, 4) != null;
+        }
+        get speedDiff() {
+            return pb_1.Message.getFieldWithDefault(this, 5, 0) as number;
+        }
+        set speedDiff(value: number) {
+            pb_1.Message.setField(this, 5, value);
+        }
+        get hasSpeedDiff() {
+            return pb_1.Message.getField(this, 5) != null;
+        }
+        get crashAngle() {
+            return pb_1.Message.getFieldWithDefault(this, 6, 0) as number;
+        }
+        set crashAngle(value: number) {
+            pb_1.Message.setField(this, 6, value);
+        }
+        get hasCrashAngle() {
+            return pb_1.Message.getField(this, 6) != null;
+        }
+        static fromObject(data: {
+            botYellow?: number;
+            botBlue?: number;
+            location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            crashSpeed?: number;
+            speedDiff?: number;
+            crashAngle?: number;
+        }): BotCrashDrawn {
+            const message = new BotCrashDrawn({});
+            if (data.botYellow != null) {
+                message.botYellow = data.botYellow;
+            }
+            if (data.botBlue != null) {
+                message.botBlue = data.botBlue;
+            }
+            if (data.location != null) {
+                message.location = dependency_2.Vector2.fromObject(data.location);
+            }
+            if (data.crashSpeed != null) {
+                message.crashSpeed = data.crashSpeed;
+            }
+            if (data.speedDiff != null) {
+                message.speedDiff = data.speedDiff;
+            }
+            if (data.crashAngle != null) {
+                message.crashAngle = data.crashAngle;
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                botYellow?: number;
+                botBlue?: number;
+                location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+                crashSpeed?: number;
+                speedDiff?: number;
+                crashAngle?: number;
+            } = {};
+            if (this.botYellow != null) {
+                data.botYellow = this.botYellow;
+            }
+            if (this.botBlue != null) {
+                data.botBlue = this.botBlue;
+            }
+            if (this.location != null) {
+                data.location = this.location.toObject();
+            }
+            if (this.crashSpeed != null) {
+                data.crashSpeed = this.crashSpeed;
+            }
+            if (this.speedDiff != null) {
+                data.speedDiff = this.speedDiff;
+            }
+            if (this.crashAngle != null) {
+                data.crashAngle = this.crashAngle;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasBotYellow)
+                writer.writeUint32(1, this.botYellow);
+            if (this.hasBotBlue)
+                writer.writeUint32(2, this.botBlue);
+            if (this.hasLocation)
+                writer.writeMessage(3, this.location, () => this.location.serialize(writer));
+            if (this.hasCrashSpeed)
+                writer.writeFloat(4, this.crashSpeed);
+            if (this.hasSpeedDiff)
+                writer.writeFloat(5, this.speedDiff);
+            if (this.hasCrashAngle)
+                writer.writeFloat(6, this.crashAngle);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): BotCrashDrawn {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new BotCrashDrawn();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.botYellow = reader.readUint32();
+                        break;
+                    case 2:
+                        message.botBlue = reader.readUint32();
+                        break;
+                    case 3:
+                        reader.readMessage(message.location, () => message.location = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    case 4:
+                        message.crashSpeed = reader.readFloat();
+                        break;
+                    case 5:
+                        message.speedDiff = reader.readFloat();
+                        break;
+                    case 6:
+                        message.crashAngle = reader.readFloat();
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): BotCrashDrawn {
+            return BotCrashDrawn.deserialize(bytes);
+        }
+    }
+    export class BotCrashUnique extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+            violator?: number;
+            victim?: number;
+            location?: dependency_2.Vector2;
+            crashSpeed?: number;
+            speedDiff?: number;
+            crashAngle?: number;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+                if ("violator" in data && data.violator != undefined) {
+                    this.violator = data.violator;
+                }
+                if ("victim" in data && data.victim != undefined) {
+                    this.victim = data.victim;
+                }
+                if ("location" in data && data.location != undefined) {
+                    this.location = data.location;
+                }
+                if ("crashSpeed" in data && data.crashSpeed != undefined) {
+                    this.crashSpeed = data.crashSpeed;
+                }
+                if ("speedDiff" in data && data.speedDiff != undefined) {
+                    this.speedDiff = data.speedDiff;
+                }
+                if ("crashAngle" in data && data.crashAngle != undefined) {
+                    this.crashAngle = data.crashAngle;
+                }
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        get violator() {
+            return pb_1.Message.getFieldWithDefault(this, 2, 0) as number;
+        }
+        set violator(value: number) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        get hasViolator() {
+            return pb_1.Message.getField(this, 2) != null;
+        }
+        get victim() {
+            return pb_1.Message.getFieldWithDefault(this, 3, 0) as number;
+        }
+        set victim(value: number) {
+            pb_1.Message.setField(this, 3, value);
+        }
+        get hasVictim() {
+            return pb_1.Message.getField(this, 3) != null;
+        }
+        get location() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 4) as dependency_2.Vector2;
+        }
+        set location(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 4, value);
+        }
+        get hasLocation() {
+            return pb_1.Message.getField(this, 4) != null;
+        }
+        get crashSpeed() {
+            return pb_1.Message.getFieldWithDefault(this, 5, 0) as number;
+        }
+        set crashSpeed(value: number) {
+            pb_1.Message.setField(this, 5, value);
+        }
+        get hasCrashSpeed() {
+            return pb_1.Message.getField(this, 5) != null;
+        }
+        get speedDiff() {
+            return pb_1.Message.getFieldWithDefault(this, 6, 0) as number;
+        }
+        set speedDiff(value: number) {
+            pb_1.Message.setField(this, 6, value);
+        }
+        get hasSpeedDiff() {
+            return pb_1.Message.getField(this, 6) != null;
+        }
+        get crashAngle() {
+            return pb_1.Message.getFieldWithDefault(this, 7, 0) as number;
+        }
+        set crashAngle(value: number) {
+            pb_1.Message.setField(this, 7, value);
+        }
+        get hasCrashAngle() {
+            return pb_1.Message.getField(this, 7) != null;
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+            violator?: number;
+            victim?: number;
+            location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            crashSpeed?: number;
+            speedDiff?: number;
+            crashAngle?: number;
+        }): BotCrashUnique {
+            const message = new BotCrashUnique({
+                byTeam: data.byTeam
+            });
+            if (data.violator != null) {
+                message.violator = data.violator;
+            }
+            if (data.victim != null) {
+                message.victim = data.victim;
+            }
+            if (data.location != null) {
+                message.location = dependency_2.Vector2.fromObject(data.location);
+            }
+            if (data.crashSpeed != null) {
+                message.crashSpeed = data.crashSpeed;
+            }
+            if (data.speedDiff != null) {
+                message.speedDiff = data.speedDiff;
+            }
+            if (data.crashAngle != null) {
+                message.crashAngle = data.crashAngle;
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+                violator?: number;
+                victim?: number;
+                location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+                crashSpeed?: number;
+                speedDiff?: number;
+                crashAngle?: number;
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            if (this.violator != null) {
+                data.violator = this.violator;
+            }
+            if (this.victim != null) {
+                data.victim = this.victim;
+            }
+            if (this.location != null) {
+                data.location = this.location.toObject();
+            }
+            if (this.crashSpeed != null) {
+                data.crashSpeed = this.crashSpeed;
+            }
+            if (this.speedDiff != null) {
+                data.speedDiff = this.speedDiff;
+            }
+            if (this.crashAngle != null) {
+                data.crashAngle = this.crashAngle;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (this.hasViolator)
+                writer.writeUint32(2, this.violator);
+            if (this.hasVictim)
+                writer.writeUint32(3, this.victim);
+            if (this.hasLocation)
+                writer.writeMessage(4, this.location, () => this.location.serialize(writer));
+            if (this.hasCrashSpeed)
+                writer.writeFloat(5, this.crashSpeed);
+            if (this.hasSpeedDiff)
+                writer.writeFloat(6, this.speedDiff);
+            if (this.hasCrashAngle)
+                writer.writeFloat(7, this.crashAngle);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): BotCrashUnique {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new BotCrashUnique();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    case 2:
+                        message.violator = reader.readUint32();
+                        break;
+                    case 3:
+                        message.victim = reader.readUint32();
+                        break;
+                    case 4:
+                        reader.readMessage(message.location, () => message.location = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    case 5:
+                        message.crashSpeed = reader.readFloat();
+                        break;
+                    case 6:
+                        message.speedDiff = reader.readFloat();
+                        break;
+                    case 7:
+                        message.crashAngle = reader.readFloat();
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): BotCrashUnique {
+            return BotCrashUnique.deserialize(bytes);
+        }
+    }
+    export class BotPushedBot extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+            violator?: number;
+            victim?: number;
+            location?: dependency_2.Vector2;
+            pushedDistance?: number;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+                if ("violator" in data && data.violator != undefined) {
+                    this.violator = data.violator;
+                }
+                if ("victim" in data && data.victim != undefined) {
+                    this.victim = data.victim;
+                }
+                if ("location" in data && data.location != undefined) {
+                    this.location = data.location;
+                }
+                if ("pushedDistance" in data && data.pushedDistance != undefined) {
+                    this.pushedDistance = data.pushedDistance;
+                }
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        get violator() {
+            return pb_1.Message.getFieldWithDefault(this, 2, 0) as number;
+        }
+        set violator(value: number) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        get hasViolator() {
+            return pb_1.Message.getField(this, 2) != null;
+        }
+        get victim() {
+            return pb_1.Message.getFieldWithDefault(this, 3, 0) as number;
+        }
+        set victim(value: number) {
+            pb_1.Message.setField(this, 3, value);
+        }
+        get hasVictim() {
+            return pb_1.Message.getField(this, 3) != null;
+        }
+        get location() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 4) as dependency_2.Vector2;
+        }
+        set location(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 4, value);
+        }
+        get hasLocation() {
+            return pb_1.Message.getField(this, 4) != null;
+        }
+        get pushedDistance() {
+            return pb_1.Message.getFieldWithDefault(this, 5, 0) as number;
+        }
+        set pushedDistance(value: number) {
+            pb_1.Message.setField(this, 5, value);
+        }
+        get hasPushedDistance() {
+            return pb_1.Message.getField(this, 5) != null;
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+            violator?: number;
+            victim?: number;
+            location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            pushedDistance?: number;
+        }): BotPushedBot {
+            const message = new BotPushedBot({
+                byTeam: data.byTeam
+            });
+            if (data.violator != null) {
+                message.violator = data.violator;
+            }
+            if (data.victim != null) {
+                message.victim = data.victim;
+            }
+            if (data.location != null) {
+                message.location = dependency_2.Vector2.fromObject(data.location);
+            }
+            if (data.pushedDistance != null) {
+                message.pushedDistance = data.pushedDistance;
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+                violator?: number;
+                victim?: number;
+                location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+                pushedDistance?: number;
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            if (this.violator != null) {
+                data.violator = this.violator;
+            }
+            if (this.victim != null) {
+                data.victim = this.victim;
+            }
+            if (this.location != null) {
+                data.location = this.location.toObject();
+            }
+            if (this.pushedDistance != null) {
+                data.pushedDistance = this.pushedDistance;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (this.hasViolator)
+                writer.writeUint32(2, this.violator);
+            if (this.hasVictim)
+                writer.writeUint32(3, this.victim);
+            if (this.hasLocation)
+                writer.writeMessage(4, this.location, () => this.location.serialize(writer));
+            if (this.hasPushedDistance)
+                writer.writeFloat(5, this.pushedDistance);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): BotPushedBot {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new BotPushedBot();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    case 2:
+                        message.violator = reader.readUint32();
+                        break;
+                    case 3:
+                        message.victim = reader.readUint32();
+                        break;
+                    case 4:
+                        reader.readMessage(message.location, () => message.location = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    case 5:
+                        message.pushedDistance = reader.readFloat();
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): BotPushedBot {
+            return BotPushedBot.deserialize(bytes);
+        }
+    }
+    export class BotTippedOver extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+            byBot?: number;
+            location?: dependency_2.Vector2;
+            ballLocation?: dependency_2.Vector2;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+                if ("byBot" in data && data.byBot != undefined) {
+                    this.byBot = data.byBot;
+                }
+                if ("location" in data && data.location != undefined) {
+                    this.location = data.location;
+                }
+                if ("ballLocation" in data && data.ballLocation != undefined) {
+                    this.ballLocation = data.ballLocation;
+                }
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        get byBot() {
+            return pb_1.Message.getFieldWithDefault(this, 2, 0) as number;
+        }
+        set byBot(value: number) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        get hasByBot() {
+            return pb_1.Message.getField(this, 2) != null;
+        }
+        get location() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 3) as dependency_2.Vector2;
+        }
+        set location(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 3, value);
+        }
+        get hasLocation() {
+            return pb_1.Message.getField(this, 3) != null;
+        }
+        get ballLocation() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 4) as dependency_2.Vector2;
+        }
+        set ballLocation(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 4, value);
+        }
+        get hasBallLocation() {
+            return pb_1.Message.getField(this, 4) != null;
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+            byBot?: number;
+            location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            ballLocation?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+        }): BotTippedOver {
+            const message = new BotTippedOver({
+                byTeam: data.byTeam
+            });
+            if (data.byBot != null) {
+                message.byBot = data.byBot;
+            }
+            if (data.location != null) {
+                message.location = dependency_2.Vector2.fromObject(data.location);
+            }
+            if (data.ballLocation != null) {
+                message.ballLocation = dependency_2.Vector2.fromObject(data.ballLocation);
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+                byBot?: number;
+                location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+                ballLocation?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            if (this.byBot != null) {
+                data.byBot = this.byBot;
+            }
+            if (this.location != null) {
+                data.location = this.location.toObject();
+            }
+            if (this.ballLocation != null) {
+                data.ballLocation = this.ballLocation.toObject();
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (this.hasByBot)
+                writer.writeUint32(2, this.byBot);
+            if (this.hasLocation)
+                writer.writeMessage(3, this.location, () => this.location.serialize(writer));
+            if (this.hasBallLocation)
+                writer.writeMessage(4, this.ballLocation, () => this.ballLocation.serialize(writer));
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): BotTippedOver {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new BotTippedOver();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    case 2:
+                        message.byBot = reader.readUint32();
+                        break;
+                    case 3:
+                        reader.readMessage(message.location, () => message.location = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    case 4:
+                        reader.readMessage(message.ballLocation, () => message.ballLocation = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): BotTippedOver {
+            return BotTippedOver.deserialize(bytes);
+        }
+    }
+    export class DefenderInDefenseArea extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+            byBot?: number;
+            location?: dependency_2.Vector2;
+            distance?: number;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+                if ("byBot" in data && data.byBot != undefined) {
+                    this.byBot = data.byBot;
+                }
+                if ("location" in data && data.location != undefined) {
+                    this.location = data.location;
+                }
+                if ("distance" in data && data.distance != undefined) {
+                    this.distance = data.distance;
+                }
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        get byBot() {
+            return pb_1.Message.getFieldWithDefault(this, 2, 0) as number;
+        }
+        set byBot(value: number) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        get hasByBot() {
+            return pb_1.Message.getField(this, 2) != null;
+        }
+        get location() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 3) as dependency_2.Vector2;
+        }
+        set location(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 3, value);
+        }
+        get hasLocation() {
+            return pb_1.Message.getField(this, 3) != null;
+        }
+        get distance() {
+            return pb_1.Message.getFieldWithDefault(this, 4, 0) as number;
+        }
+        set distance(value: number) {
+            pb_1.Message.setField(this, 4, value);
+        }
+        get hasDistance() {
+            return pb_1.Message.getField(this, 4) != null;
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+            byBot?: number;
+            location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            distance?: number;
+        }): DefenderInDefenseArea {
+            const message = new DefenderInDefenseArea({
+                byTeam: data.byTeam
+            });
+            if (data.byBot != null) {
+                message.byBot = data.byBot;
+            }
+            if (data.location != null) {
+                message.location = dependency_2.Vector2.fromObject(data.location);
+            }
+            if (data.distance != null) {
+                message.distance = data.distance;
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+                byBot?: number;
+                location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+                distance?: number;
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            if (this.byBot != null) {
+                data.byBot = this.byBot;
+            }
+            if (this.location != null) {
+                data.location = this.location.toObject();
+            }
+            if (this.distance != null) {
+                data.distance = this.distance;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (this.hasByBot)
+                writer.writeUint32(2, this.byBot);
+            if (this.hasLocation)
+                writer.writeMessage(3, this.location, () => this.location.serialize(writer));
+            if (this.hasDistance)
+                writer.writeFloat(4, this.distance);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): DefenderInDefenseArea {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new DefenderInDefenseArea();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    case 2:
+                        message.byBot = reader.readUint32();
+                        break;
+                    case 3:
+                        reader.readMessage(message.location, () => message.location = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    case 4:
+                        message.distance = reader.readFloat();
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): DefenderInDefenseArea {
+            return DefenderInDefenseArea.deserialize(bytes);
+        }
+    }
+    export class DefenderInDefenseAreaPartially extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+            byBot?: number;
+            location?: dependency_2.Vector2;
+            distance?: number;
+            ballLocation?: dependency_2.Vector2;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+                if ("byBot" in data && data.byBot != undefined) {
+                    this.byBot = data.byBot;
+                }
+                if ("location" in data && data.location != undefined) {
+                    this.location = data.location;
+                }
+                if ("distance" in data && data.distance != undefined) {
+                    this.distance = data.distance;
+                }
+                if ("ballLocation" in data && data.ballLocation != undefined) {
+                    this.ballLocation = data.ballLocation;
+                }
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        get byBot() {
+            return pb_1.Message.getFieldWithDefault(this, 2, 0) as number;
+        }
+        set byBot(value: number) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        get hasByBot() {
+            return pb_1.Message.getField(this, 2) != null;
+        }
+        get location() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 3) as dependency_2.Vector2;
+        }
+        set location(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 3, value);
+        }
+        get hasLocation() {
+            return pb_1.Message.getField(this, 3) != null;
+        }
+        get distance() {
+            return pb_1.Message.getFieldWithDefault(this, 4, 0) as number;
+        }
+        set distance(value: number) {
+            pb_1.Message.setField(this, 4, value);
+        }
+        get hasDistance() {
+            return pb_1.Message.getField(this, 4) != null;
+        }
+        get ballLocation() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 5) as dependency_2.Vector2;
+        }
+        set ballLocation(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 5, value);
+        }
+        get hasBallLocation() {
+            return pb_1.Message.getField(this, 5) != null;
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+            byBot?: number;
+            location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            distance?: number;
+            ballLocation?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+        }): DefenderInDefenseAreaPartially {
+            const message = new DefenderInDefenseAreaPartially({
+                byTeam: data.byTeam
+            });
+            if (data.byBot != null) {
+                message.byBot = data.byBot;
+            }
+            if (data.location != null) {
+                message.location = dependency_2.Vector2.fromObject(data.location);
+            }
+            if (data.distance != null) {
+                message.distance = data.distance;
+            }
+            if (data.ballLocation != null) {
+                message.ballLocation = dependency_2.Vector2.fromObject(data.ballLocation);
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+                byBot?: number;
+                location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+                distance?: number;
+                ballLocation?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            if (this.byBot != null) {
+                data.byBot = this.byBot;
+            }
+            if (this.location != null) {
+                data.location = this.location.toObject();
+            }
+            if (this.distance != null) {
+                data.distance = this.distance;
+            }
+            if (this.ballLocation != null) {
+                data.ballLocation = this.ballLocation.toObject();
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (this.hasByBot)
+                writer.writeUint32(2, this.byBot);
+            if (this.hasLocation)
+                writer.writeMessage(3, this.location, () => this.location.serialize(writer));
+            if (this.hasDistance)
+                writer.writeFloat(4, this.distance);
+            if (this.hasBallLocation)
+                writer.writeMessage(5, this.ballLocation, () => this.ballLocation.serialize(writer));
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): DefenderInDefenseAreaPartially {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new DefenderInDefenseAreaPartially();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    case 2:
+                        message.byBot = reader.readUint32();
+                        break;
+                    case 3:
+                        reader.readMessage(message.location, () => message.location = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    case 4:
+                        message.distance = reader.readFloat();
+                        break;
+                    case 5:
+                        reader.readMessage(message.ballLocation, () => message.ballLocation = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): DefenderInDefenseAreaPartially {
+            return DefenderInDefenseAreaPartially.deserialize(bytes);
+        }
+    }
+    export class AttackerTouchedBallInDefenseArea extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+            byBot?: number;
+            location?: dependency_2.Vector2;
+            distance?: number;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+                if ("byBot" in data && data.byBot != undefined) {
+                    this.byBot = data.byBot;
+                }
+                if ("location" in data && data.location != undefined) {
+                    this.location = data.location;
+                }
+                if ("distance" in data && data.distance != undefined) {
+                    this.distance = data.distance;
+                }
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        get byBot() {
+            return pb_1.Message.getFieldWithDefault(this, 2, 0) as number;
+        }
+        set byBot(value: number) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        get hasByBot() {
+            return pb_1.Message.getField(this, 2) != null;
+        }
+        get location() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 3) as dependency_2.Vector2;
+        }
+        set location(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 3, value);
+        }
+        get hasLocation() {
+            return pb_1.Message.getField(this, 3) != null;
+        }
+        get distance() {
+            return pb_1.Message.getFieldWithDefault(this, 4, 0) as number;
+        }
+        set distance(value: number) {
+            pb_1.Message.setField(this, 4, value);
+        }
+        get hasDistance() {
+            return pb_1.Message.getField(this, 4) != null;
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+            byBot?: number;
+            location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            distance?: number;
+        }): AttackerTouchedBallInDefenseArea {
+            const message = new AttackerTouchedBallInDefenseArea({
+                byTeam: data.byTeam
+            });
+            if (data.byBot != null) {
+                message.byBot = data.byBot;
+            }
+            if (data.location != null) {
+                message.location = dependency_2.Vector2.fromObject(data.location);
+            }
+            if (data.distance != null) {
+                message.distance = data.distance;
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+                byBot?: number;
+                location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+                distance?: number;
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            if (this.byBot != null) {
+                data.byBot = this.byBot;
+            }
+            if (this.location != null) {
+                data.location = this.location.toObject();
+            }
+            if (this.distance != null) {
+                data.distance = this.distance;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (this.hasByBot)
+                writer.writeUint32(2, this.byBot);
+            if (this.hasLocation)
+                writer.writeMessage(3, this.location, () => this.location.serialize(writer));
+            if (this.hasDistance)
+                writer.writeFloat(4, this.distance);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): AttackerTouchedBallInDefenseArea {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new AttackerTouchedBallInDefenseArea();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    case 2:
+                        message.byBot = reader.readUint32();
+                        break;
+                    case 3:
+                        reader.readMessage(message.location, () => message.location = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    case 4:
+                        message.distance = reader.readFloat();
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): AttackerTouchedBallInDefenseArea {
+            return AttackerTouchedBallInDefenseArea.deserialize(bytes);
+        }
+    }
+    export class BotKickedBallTooFast extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+            byBot?: number;
+            location?: dependency_2.Vector2;
+            initialBallSpeed?: number;
+            chipped?: boolean;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+                if ("byBot" in data && data.byBot != undefined) {
+                    this.byBot = data.byBot;
+                }
+                if ("location" in data && data.location != undefined) {
+                    this.location = data.location;
+                }
+                if ("initialBallSpeed" in data && data.initialBallSpeed != undefined) {
+                    this.initialBallSpeed = data.initialBallSpeed;
+                }
+                if ("chipped" in data && data.chipped != undefined) {
+                    this.chipped = data.chipped;
+                }
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        get byBot() {
+            return pb_1.Message.getFieldWithDefault(this, 2, 0) as number;
+        }
+        set byBot(value: number) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        get hasByBot() {
+            return pb_1.Message.getField(this, 2) != null;
+        }
+        get location() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 3) as dependency_2.Vector2;
+        }
+        set location(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 3, value);
+        }
+        get hasLocation() {
+            return pb_1.Message.getField(this, 3) != null;
+        }
+        get initialBallSpeed() {
+            return pb_1.Message.getFieldWithDefault(this, 4, 0) as number;
+        }
+        set initialBallSpeed(value: number) {
+            pb_1.Message.setField(this, 4, value);
+        }
+        get hasInitialBallSpeed() {
+            return pb_1.Message.getField(this, 4) != null;
+        }
+        get chipped() {
+            return pb_1.Message.getFieldWithDefault(this, 5, false) as boolean;
+        }
+        set chipped(value: boolean) {
+            pb_1.Message.setField(this, 5, value);
+        }
+        get hasChipped() {
+            return pb_1.Message.getField(this, 5) != null;
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+            byBot?: number;
+            location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            initialBallSpeed?: number;
+            chipped?: boolean;
+        }): BotKickedBallTooFast {
+            const message = new BotKickedBallTooFast({
+                byTeam: data.byTeam
+            });
+            if (data.byBot != null) {
+                message.byBot = data.byBot;
+            }
+            if (data.location != null) {
+                message.location = dependency_2.Vector2.fromObject(data.location);
+            }
+            if (data.initialBallSpeed != null) {
+                message.initialBallSpeed = data.initialBallSpeed;
+            }
+            if (data.chipped != null) {
+                message.chipped = data.chipped;
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+                byBot?: number;
+                location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+                initialBallSpeed?: number;
+                chipped?: boolean;
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            if (this.byBot != null) {
+                data.byBot = this.byBot;
+            }
+            if (this.location != null) {
+                data.location = this.location.toObject();
+            }
+            if (this.initialBallSpeed != null) {
+                data.initialBallSpeed = this.initialBallSpeed;
+            }
+            if (this.chipped != null) {
+                data.chipped = this.chipped;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (this.hasByBot)
+                writer.writeUint32(2, this.byBot);
+            if (this.hasLocation)
+                writer.writeMessage(3, this.location, () => this.location.serialize(writer));
+            if (this.hasInitialBallSpeed)
+                writer.writeFloat(4, this.initialBallSpeed);
+            if (this.hasChipped)
+                writer.writeBool(5, this.chipped);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): BotKickedBallTooFast {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new BotKickedBallTooFast();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    case 2:
+                        message.byBot = reader.readUint32();
+                        break;
+                    case 3:
+                        reader.readMessage(message.location, () => message.location = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    case 4:
+                        message.initialBallSpeed = reader.readFloat();
+                        break;
+                    case 5:
+                        message.chipped = reader.readBool();
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): BotKickedBallTooFast {
+            return BotKickedBallTooFast.deserialize(bytes);
+        }
+    }
+    export class BotDribbledBallTooFar extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+            byBot?: number;
+            start?: dependency_2.Vector2;
+            end?: dependency_2.Vector2;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+                if ("byBot" in data && data.byBot != undefined) {
+                    this.byBot = data.byBot;
+                }
+                if ("start" in data && data.start != undefined) {
+                    this.start = data.start;
+                }
+                if ("end" in data && data.end != undefined) {
+                    this.end = data.end;
+                }
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        get byBot() {
+            return pb_1.Message.getFieldWithDefault(this, 2, 0) as number;
+        }
+        set byBot(value: number) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        get hasByBot() {
+            return pb_1.Message.getField(this, 2) != null;
+        }
+        get start() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 3) as dependency_2.Vector2;
+        }
+        set start(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 3, value);
+        }
+        get hasStart() {
+            return pb_1.Message.getField(this, 3) != null;
+        }
+        get end() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 4) as dependency_2.Vector2;
+        }
+        set end(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 4, value);
+        }
+        get hasEnd() {
+            return pb_1.Message.getField(this, 4) != null;
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+            byBot?: number;
+            start?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            end?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+        }): BotDribbledBallTooFar {
+            const message = new BotDribbledBallTooFar({
+                byTeam: data.byTeam
+            });
+            if (data.byBot != null) {
+                message.byBot = data.byBot;
+            }
+            if (data.start != null) {
+                message.start = dependency_2.Vector2.fromObject(data.start);
+            }
+            if (data.end != null) {
+                message.end = dependency_2.Vector2.fromObject(data.end);
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+                byBot?: number;
+                start?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+                end?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            if (this.byBot != null) {
+                data.byBot = this.byBot;
+            }
+            if (this.start != null) {
+                data.start = this.start.toObject();
+            }
+            if (this.end != null) {
+                data.end = this.end.toObject();
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (this.hasByBot)
+                writer.writeUint32(2, this.byBot);
+            if (this.hasStart)
+                writer.writeMessage(3, this.start, () => this.start.serialize(writer));
+            if (this.hasEnd)
+                writer.writeMessage(4, this.end, () => this.end.serialize(writer));
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): BotDribbledBallTooFar {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new BotDribbledBallTooFar();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    case 2:
+                        message.byBot = reader.readUint32();
+                        break;
+                    case 3:
+                        reader.readMessage(message.start, () => message.start = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    case 4:
+                        reader.readMessage(message.end, () => message.end = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): BotDribbledBallTooFar {
+            return BotDribbledBallTooFar.deserialize(bytes);
+        }
+    }
+    export class AttackerTouchedOpponentInDefenseArea extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+            byBot?: number;
+            victim?: number;
+            location?: dependency_2.Vector2;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+                if ("byBot" in data && data.byBot != undefined) {
+                    this.byBot = data.byBot;
+                }
+                if ("victim" in data && data.victim != undefined) {
+                    this.victim = data.victim;
+                }
+                if ("location" in data && data.location != undefined) {
+                    this.location = data.location;
+                }
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        get byBot() {
+            return pb_1.Message.getFieldWithDefault(this, 2, 0) as number;
+        }
+        set byBot(value: number) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        get hasByBot() {
+            return pb_1.Message.getField(this, 2) != null;
+        }
+        get victim() {
+            return pb_1.Message.getFieldWithDefault(this, 4, 0) as number;
+        }
+        set victim(value: number) {
+            pb_1.Message.setField(this, 4, value);
+        }
+        get hasVictim() {
+            return pb_1.Message.getField(this, 4) != null;
+        }
+        get location() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 3) as dependency_2.Vector2;
+        }
+        set location(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 3, value);
+        }
+        get hasLocation() {
+            return pb_1.Message.getField(this, 3) != null;
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+            byBot?: number;
+            victim?: number;
+            location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+        }): AttackerTouchedOpponentInDefenseArea {
+            const message = new AttackerTouchedOpponentInDefenseArea({
+                byTeam: data.byTeam
+            });
+            if (data.byBot != null) {
+                message.byBot = data.byBot;
+            }
+            if (data.victim != null) {
+                message.victim = data.victim;
+            }
+            if (data.location != null) {
+                message.location = dependency_2.Vector2.fromObject(data.location);
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+                byBot?: number;
+                victim?: number;
+                location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            if (this.byBot != null) {
+                data.byBot = this.byBot;
+            }
+            if (this.victim != null) {
+                data.victim = this.victim;
+            }
+            if (this.location != null) {
+                data.location = this.location.toObject();
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (this.hasByBot)
+                writer.writeUint32(2, this.byBot);
+            if (this.hasVictim)
+                writer.writeUint32(4, this.victim);
+            if (this.hasLocation)
+                writer.writeMessage(3, this.location, () => this.location.serialize(writer));
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): AttackerTouchedOpponentInDefenseArea {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new AttackerTouchedOpponentInDefenseArea();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    case 2:
+                        message.byBot = reader.readUint32();
+                        break;
+                    case 4:
+                        message.victim = reader.readUint32();
+                        break;
+                    case 3:
+                        reader.readMessage(message.location, () => message.location = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): AttackerTouchedOpponentInDefenseArea {
+            return AttackerTouchedOpponentInDefenseArea.deserialize(bytes);
+        }
+    }
+    export class AttackerDoubleTouchedBall extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+            byBot?: number;
+            location?: dependency_2.Vector2;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+                if ("byBot" in data && data.byBot != undefined) {
+                    this.byBot = data.byBot;
+                }
+                if ("location" in data && data.location != undefined) {
+                    this.location = data.location;
+                }
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        get byBot() {
+            return pb_1.Message.getFieldWithDefault(this, 2, 0) as number;
+        }
+        set byBot(value: number) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        get hasByBot() {
+            return pb_1.Message.getField(this, 2) != null;
+        }
+        get location() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 3) as dependency_2.Vector2;
+        }
+        set location(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 3, value);
+        }
+        get hasLocation() {
+            return pb_1.Message.getField(this, 3) != null;
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+            byBot?: number;
+            location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+        }): AttackerDoubleTouchedBall {
+            const message = new AttackerDoubleTouchedBall({
+                byTeam: data.byTeam
+            });
+            if (data.byBot != null) {
+                message.byBot = data.byBot;
+            }
+            if (data.location != null) {
+                message.location = dependency_2.Vector2.fromObject(data.location);
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+                byBot?: number;
+                location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            if (this.byBot != null) {
+                data.byBot = this.byBot;
+            }
+            if (this.location != null) {
+                data.location = this.location.toObject();
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (this.hasByBot)
+                writer.writeUint32(2, this.byBot);
+            if (this.hasLocation)
+                writer.writeMessage(3, this.location, () => this.location.serialize(writer));
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): AttackerDoubleTouchedBall {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new AttackerDoubleTouchedBall();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    case 2:
+                        message.byBot = reader.readUint32();
+                        break;
+                    case 3:
+                        reader.readMessage(message.location, () => message.location = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): AttackerDoubleTouchedBall {
+            return AttackerDoubleTouchedBall.deserialize(bytes);
+        }
+    }
+    export class AttackerTooCloseToDefenseArea extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+            byBot?: number;
+            location?: dependency_2.Vector2;
+            distance?: number;
+            ballLocation?: dependency_2.Vector2;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+                if ("byBot" in data && data.byBot != undefined) {
+                    this.byBot = data.byBot;
+                }
+                if ("location" in data && data.location != undefined) {
+                    this.location = data.location;
+                }
+                if ("distance" in data && data.distance != undefined) {
+                    this.distance = data.distance;
+                }
+                if ("ballLocation" in data && data.ballLocation != undefined) {
+                    this.ballLocation = data.ballLocation;
+                }
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        get byBot() {
+            return pb_1.Message.getFieldWithDefault(this, 2, 0) as number;
+        }
+        set byBot(value: number) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        get hasByBot() {
+            return pb_1.Message.getField(this, 2) != null;
+        }
+        get location() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 3) as dependency_2.Vector2;
+        }
+        set location(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 3, value);
+        }
+        get hasLocation() {
+            return pb_1.Message.getField(this, 3) != null;
+        }
+        get distance() {
+            return pb_1.Message.getFieldWithDefault(this, 4, 0) as number;
+        }
+        set distance(value: number) {
+            pb_1.Message.setField(this, 4, value);
+        }
+        get hasDistance() {
+            return pb_1.Message.getField(this, 4) != null;
+        }
+        get ballLocation() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 5) as dependency_2.Vector2;
+        }
+        set ballLocation(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 5, value);
+        }
+        get hasBallLocation() {
+            return pb_1.Message.getField(this, 5) != null;
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+            byBot?: number;
+            location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            distance?: number;
+            ballLocation?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+        }): AttackerTooCloseToDefenseArea {
+            const message = new AttackerTooCloseToDefenseArea({
+                byTeam: data.byTeam
+            });
+            if (data.byBot != null) {
+                message.byBot = data.byBot;
+            }
+            if (data.location != null) {
+                message.location = dependency_2.Vector2.fromObject(data.location);
+            }
+            if (data.distance != null) {
+                message.distance = data.distance;
+            }
+            if (data.ballLocation != null) {
+                message.ballLocation = dependency_2.Vector2.fromObject(data.ballLocation);
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+                byBot?: number;
+                location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+                distance?: number;
+                ballLocation?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            if (this.byBot != null) {
+                data.byBot = this.byBot;
+            }
+            if (this.location != null) {
+                data.location = this.location.toObject();
+            }
+            if (this.distance != null) {
+                data.distance = this.distance;
+            }
+            if (this.ballLocation != null) {
+                data.ballLocation = this.ballLocation.toObject();
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (this.hasByBot)
+                writer.writeUint32(2, this.byBot);
+            if (this.hasLocation)
+                writer.writeMessage(3, this.location, () => this.location.serialize(writer));
+            if (this.hasDistance)
+                writer.writeFloat(4, this.distance);
+            if (this.hasBallLocation)
+                writer.writeMessage(5, this.ballLocation, () => this.ballLocation.serialize(writer));
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): AttackerTooCloseToDefenseArea {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new AttackerTooCloseToDefenseArea();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    case 2:
+                        message.byBot = reader.readUint32();
+                        break;
+                    case 3:
+                        reader.readMessage(message.location, () => message.location = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    case 4:
+                        message.distance = reader.readFloat();
+                        break;
+                    case 5:
+                        reader.readMessage(message.ballLocation, () => message.ballLocation = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): AttackerTooCloseToDefenseArea {
+            return AttackerTooCloseToDefenseArea.deserialize(bytes);
+        }
+    }
+    export class BotHeldBallDeliberately extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+            byBot?: number;
+            location?: dependency_2.Vector2;
+            duration?: number;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+                if ("byBot" in data && data.byBot != undefined) {
+                    this.byBot = data.byBot;
+                }
+                if ("location" in data && data.location != undefined) {
+                    this.location = data.location;
+                }
+                if ("duration" in data && data.duration != undefined) {
+                    this.duration = data.duration;
+                }
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        get byBot() {
+            return pb_1.Message.getFieldWithDefault(this, 2, 0) as number;
+        }
+        set byBot(value: number) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        get hasByBot() {
+            return pb_1.Message.getField(this, 2) != null;
+        }
+        get location() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 3) as dependency_2.Vector2;
+        }
+        set location(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 3, value);
+        }
+        get hasLocation() {
+            return pb_1.Message.getField(this, 3) != null;
+        }
+        get duration() {
+            return pb_1.Message.getFieldWithDefault(this, 4, 0) as number;
+        }
+        set duration(value: number) {
+            pb_1.Message.setField(this, 4, value);
+        }
+        get hasDuration() {
+            return pb_1.Message.getField(this, 4) != null;
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+            byBot?: number;
+            location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            duration?: number;
+        }): BotHeldBallDeliberately {
+            const message = new BotHeldBallDeliberately({
+                byTeam: data.byTeam
+            });
+            if (data.byBot != null) {
+                message.byBot = data.byBot;
+            }
+            if (data.location != null) {
+                message.location = dependency_2.Vector2.fromObject(data.location);
+            }
+            if (data.duration != null) {
+                message.duration = data.duration;
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+                byBot?: number;
+                location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+                duration?: number;
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            if (this.byBot != null) {
+                data.byBot = this.byBot;
+            }
+            if (this.location != null) {
+                data.location = this.location.toObject();
+            }
+            if (this.duration != null) {
+                data.duration = this.duration;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (this.hasByBot)
+                writer.writeUint32(2, this.byBot);
+            if (this.hasLocation)
+                writer.writeMessage(3, this.location, () => this.location.serialize(writer));
+            if (this.hasDuration)
+                writer.writeFloat(4, this.duration);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): BotHeldBallDeliberately {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new BotHeldBallDeliberately();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    case 2:
+                        message.byBot = reader.readUint32();
+                        break;
+                    case 3:
+                        reader.readMessage(message.location, () => message.location = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    case 4:
+                        message.duration = reader.readFloat();
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): BotHeldBallDeliberately {
+            return BotHeldBallDeliberately.deserialize(bytes);
+        }
+    }
+    export class BotInterferedPlacement extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+            byBot?: number;
+            location?: dependency_2.Vector2;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+                if ("byBot" in data && data.byBot != undefined) {
+                    this.byBot = data.byBot;
+                }
+                if ("location" in data && data.location != undefined) {
+                    this.location = data.location;
+                }
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        get byBot() {
+            return pb_1.Message.getFieldWithDefault(this, 2, 0) as number;
+        }
+        set byBot(value: number) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        get hasByBot() {
+            return pb_1.Message.getField(this, 2) != null;
+        }
+        get location() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 3) as dependency_2.Vector2;
+        }
+        set location(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 3, value);
+        }
+        get hasLocation() {
+            return pb_1.Message.getField(this, 3) != null;
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+            byBot?: number;
+            location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+        }): BotInterferedPlacement {
+            const message = new BotInterferedPlacement({
+                byTeam: data.byTeam
+            });
+            if (data.byBot != null) {
+                message.byBot = data.byBot;
+            }
+            if (data.location != null) {
+                message.location = dependency_2.Vector2.fromObject(data.location);
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+                byBot?: number;
+                location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            if (this.byBot != null) {
+                data.byBot = this.byBot;
+            }
+            if (this.location != null) {
+                data.location = this.location.toObject();
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (this.hasByBot)
+                writer.writeUint32(2, this.byBot);
+            if (this.hasLocation)
+                writer.writeMessage(3, this.location, () => this.location.serialize(writer));
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): BotInterferedPlacement {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new BotInterferedPlacement();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    case 2:
+                        message.byBot = reader.readUint32();
+                        break;
+                    case 3:
+                        reader.readMessage(message.location, () => message.location = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): BotInterferedPlacement {
+            return BotInterferedPlacement.deserialize(bytes);
+        }
+    }
+    export class MultipleCards extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+        }): MultipleCards {
+            const message = new MultipleCards({
+                byTeam: data.byTeam
+            });
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): MultipleCards {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new MultipleCards();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): MultipleCards {
+            return MultipleCards.deserialize(bytes);
+        }
+    }
+    export class MultipleFouls extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+            causedGameEvents: GameEvent[];
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [2], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+                this.causedGameEvents = data.causedGameEvents;
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        get causedGameEvents() {
+            return pb_1.Message.getRepeatedWrapperField(this, GameEvent, 2) as GameEvent[];
+        }
+        set causedGameEvents(value: GameEvent[]) {
+            pb_1.Message.setRepeatedWrapperField(this, 2, value);
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+            causedGameEvents?: ReturnType<typeof GameEvent.prototype.toObject>[];
+        }): MultipleFouls {
+            const message = new MultipleFouls({
+                byTeam: data.byTeam,
+                causedGameEvents: data.causedGameEvents.map(item => GameEvent.fromObject(item))
+            });
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+                causedGameEvents?: ReturnType<typeof GameEvent.prototype.toObject>[];
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            if (this.causedGameEvents != null) {
+                data.causedGameEvents = this.causedGameEvents.map((item: GameEvent) => item.toObject());
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (this.causedGameEvents.length)
+                writer.writeRepeatedMessage(2, this.causedGameEvents, (item: GameEvent) => item.serialize(writer));
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): MultipleFouls {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new MultipleFouls();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    case 2:
+                        reader.readMessage(message.causedGameEvents, () => pb_1.Message.addToRepeatedWrapperField(message, 2, GameEvent.deserialize(reader), GameEvent));
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): MultipleFouls {
+            return MultipleFouls.deserialize(bytes);
+        }
+    }
+    export class MultiplePlacementFailures extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+        }): MultiplePlacementFailures {
+            const message = new MultiplePlacementFailures({
+                byTeam: data.byTeam
+            });
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): MultiplePlacementFailures {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new MultiplePlacementFailures();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): MultiplePlacementFailures {
+            return MultiplePlacementFailures.deserialize(bytes);
+        }
+    }
+    export class KickTimeout extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+            location?: dependency_2.Vector2;
+            time?: number;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+                if ("location" in data && data.location != undefined) {
+                    this.location = data.location;
+                }
+                if ("time" in data && data.time != undefined) {
+                    this.time = data.time;
+                }
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        get location() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 2) as dependency_2.Vector2;
+        }
+        set location(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 2, value);
+        }
+        get hasLocation() {
+            return pb_1.Message.getField(this, 2) != null;
+        }
+        get time() {
+            return pb_1.Message.getFieldWithDefault(this, 3, 0) as number;
+        }
+        set time(value: number) {
+            pb_1.Message.setField(this, 3, value);
+        }
+        get hasTime() {
+            return pb_1.Message.getField(this, 3) != null;
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+            location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            time?: number;
+        }): KickTimeout {
+            const message = new KickTimeout({
+                byTeam: data.byTeam
+            });
+            if (data.location != null) {
+                message.location = dependency_2.Vector2.fromObject(data.location);
+            }
+            if (data.time != null) {
+                message.time = data.time;
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+                location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+                time?: number;
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            if (this.location != null) {
+                data.location = this.location.toObject();
+            }
+            if (this.time != null) {
+                data.time = this.time;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (this.hasLocation)
+                writer.writeMessage(2, this.location, () => this.location.serialize(writer));
+            if (this.hasTime)
+                writer.writeFloat(3, this.time);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): KickTimeout {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new KickTimeout();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    case 2:
+                        reader.readMessage(message.location, () => message.location = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    case 3:
+                        message.time = reader.readFloat();
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): KickTimeout {
+            return KickTimeout.deserialize(bytes);
+        }
+    }
+    export class NoProgressInGame extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            location?: dependency_2.Vector2;
+            time?: number;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                if ("location" in data && data.location != undefined) {
+                    this.location = data.location;
+                }
+                if ("time" in data && data.time != undefined) {
+                    this.time = data.time;
+                }
+            }
+        }
+        get location() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 1) as dependency_2.Vector2;
+        }
+        set location(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 1, value);
+        }
+        get hasLocation() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        get time() {
+            return pb_1.Message.getFieldWithDefault(this, 2, 0) as number;
+        }
+        set time(value: number) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        get hasTime() {
+            return pb_1.Message.getField(this, 2) != null;
+        }
+        static fromObject(data: {
+            location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            time?: number;
+        }): NoProgressInGame {
+            const message = new NoProgressInGame({});
+            if (data.location != null) {
+                message.location = dependency_2.Vector2.fromObject(data.location);
+            }
+            if (data.time != null) {
+                message.time = data.time;
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+                time?: number;
+            } = {};
+            if (this.location != null) {
+                data.location = this.location.toObject();
+            }
+            if (this.time != null) {
+                data.time = this.time;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasLocation)
+                writer.writeMessage(1, this.location, () => this.location.serialize(writer));
+            if (this.hasTime)
+                writer.writeFloat(2, this.time);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): NoProgressInGame {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new NoProgressInGame();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        reader.readMessage(message.location, () => message.location = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    case 2:
+                        message.time = reader.readFloat();
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): NoProgressInGame {
+            return NoProgressInGame.deserialize(bytes);
+        }
+    }
+    export class PlacementFailed extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+            remainingDistance?: number;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+                if ("remainingDistance" in data && data.remainingDistance != undefined) {
+                    this.remainingDistance = data.remainingDistance;
+                }
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        get remainingDistance() {
+            return pb_1.Message.getFieldWithDefault(this, 2, 0) as number;
+        }
+        set remainingDistance(value: number) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        get hasRemainingDistance() {
+            return pb_1.Message.getField(this, 2) != null;
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+            remainingDistance?: number;
+        }): PlacementFailed {
+            const message = new PlacementFailed({
+                byTeam: data.byTeam
+            });
+            if (data.remainingDistance != null) {
+                message.remainingDistance = data.remainingDistance;
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+                remainingDistance?: number;
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            if (this.remainingDistance != null) {
+                data.remainingDistance = this.remainingDistance;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (this.hasRemainingDistance)
+                writer.writeFloat(2, this.remainingDistance);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): PlacementFailed {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new PlacementFailed();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    case 2:
+                        message.remainingDistance = reader.readFloat();
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): PlacementFailed {
+            return PlacementFailed.deserialize(bytes);
+        }
+    }
+    export class UnsportingBehaviorMinor extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+            reason: string;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+                this.reason = data.reason;
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        get reason() {
+            return pb_1.Message.getField(this, 2) as string;
+        }
+        set reason(value: string) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        get hasReason() {
+            return pb_1.Message.getField(this, 2) != null;
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+            reason?: string;
+        }): UnsportingBehaviorMinor {
+            const message = new UnsportingBehaviorMinor({
+                byTeam: data.byTeam,
+                reason: data.reason
+            });
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+                reason?: string;
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            if (this.reason != null) {
+                data.reason = this.reason;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (this.hasReason && this.reason.length)
+                writer.writeString(2, this.reason);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): UnsportingBehaviorMinor {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new UnsportingBehaviorMinor();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    case 2:
+                        message.reason = reader.readString();
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): UnsportingBehaviorMinor {
+            return UnsportingBehaviorMinor.deserialize(bytes);
+        }
+    }
+    export class UnsportingBehaviorMajor extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+            reason: string;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+                this.reason = data.reason;
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        get reason() {
+            return pb_1.Message.getField(this, 2) as string;
+        }
+        set reason(value: string) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        get hasReason() {
+            return pb_1.Message.getField(this, 2) != null;
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+            reason?: string;
+        }): UnsportingBehaviorMajor {
+            const message = new UnsportingBehaviorMajor({
+                byTeam: data.byTeam,
+                reason: data.reason
+            });
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+                reason?: string;
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            if (this.reason != null) {
+                data.reason = this.reason;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (this.hasReason && this.reason.length)
+                writer.writeString(2, this.reason);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): UnsportingBehaviorMajor {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new UnsportingBehaviorMajor();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    case 2:
+                        message.reason = reader.readString();
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): UnsportingBehaviorMajor {
+            return UnsportingBehaviorMajor.deserialize(bytes);
+        }
+    }
+    export class KeeperHeldBall extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+            location?: dependency_2.Vector2;
+            duration?: number;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+                if ("location" in data && data.location != undefined) {
+                    this.location = data.location;
+                }
+                if ("duration" in data && data.duration != undefined) {
+                    this.duration = data.duration;
+                }
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        get location() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 2) as dependency_2.Vector2;
+        }
+        set location(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 2, value);
+        }
+        get hasLocation() {
+            return pb_1.Message.getField(this, 2) != null;
+        }
+        get duration() {
+            return pb_1.Message.getFieldWithDefault(this, 3, 0) as number;
+        }
+        set duration(value: number) {
+            pb_1.Message.setField(this, 3, value);
+        }
+        get hasDuration() {
+            return pb_1.Message.getField(this, 3) != null;
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+            location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            duration?: number;
+        }): KeeperHeldBall {
+            const message = new KeeperHeldBall({
+                byTeam: data.byTeam
+            });
+            if (data.location != null) {
+                message.location = dependency_2.Vector2.fromObject(data.location);
+            }
+            if (data.duration != null) {
+                message.duration = data.duration;
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+                location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+                duration?: number;
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            if (this.location != null) {
+                data.location = this.location.toObject();
+            }
+            if (this.duration != null) {
+                data.duration = this.duration;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (this.hasLocation)
+                writer.writeMessage(2, this.location, () => this.location.serialize(writer));
+            if (this.hasDuration)
+                writer.writeFloat(3, this.duration);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): KeeperHeldBall {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new KeeperHeldBall();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    case 2:
+                        reader.readMessage(message.location, () => message.location = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    case 3:
+                        message.duration = reader.readFloat();
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): KeeperHeldBall {
+            return KeeperHeldBall.deserialize(bytes);
+        }
+    }
+    export class PlacementSucceeded extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+            timeTaken?: number;
+            precision?: number;
+            distance?: number;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+                if ("timeTaken" in data && data.timeTaken != undefined) {
+                    this.timeTaken = data.timeTaken;
+                }
+                if ("precision" in data && data.precision != undefined) {
+                    this.precision = data.precision;
+                }
+                if ("distance" in data && data.distance != undefined) {
+                    this.distance = data.distance;
+                }
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        get timeTaken() {
+            return pb_1.Message.getFieldWithDefault(this, 2, 0) as number;
+        }
+        set timeTaken(value: number) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        get hasTimeTaken() {
+            return pb_1.Message.getField(this, 2) != null;
+        }
+        get precision() {
+            return pb_1.Message.getFieldWithDefault(this, 3, 0) as number;
+        }
+        set precision(value: number) {
+            pb_1.Message.setField(this, 3, value);
+        }
+        get hasPrecision() {
+            return pb_1.Message.getField(this, 3) != null;
+        }
+        get distance() {
+            return pb_1.Message.getFieldWithDefault(this, 4, 0) as number;
+        }
+        set distance(value: number) {
+            pb_1.Message.setField(this, 4, value);
+        }
+        get hasDistance() {
+            return pb_1.Message.getField(this, 4) != null;
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+            timeTaken?: number;
+            precision?: number;
+            distance?: number;
+        }): PlacementSucceeded {
+            const message = new PlacementSucceeded({
+                byTeam: data.byTeam
+            });
+            if (data.timeTaken != null) {
+                message.timeTaken = data.timeTaken;
+            }
+            if (data.precision != null) {
+                message.precision = data.precision;
+            }
+            if (data.distance != null) {
+                message.distance = data.distance;
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+                timeTaken?: number;
+                precision?: number;
+                distance?: number;
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            if (this.timeTaken != null) {
+                data.timeTaken = this.timeTaken;
+            }
+            if (this.precision != null) {
+                data.precision = this.precision;
+            }
+            if (this.distance != null) {
+                data.distance = this.distance;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (this.hasTimeTaken)
+                writer.writeFloat(2, this.timeTaken);
+            if (this.hasPrecision)
+                writer.writeFloat(3, this.precision);
+            if (this.hasDistance)
+                writer.writeFloat(4, this.distance);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): PlacementSucceeded {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new PlacementSucceeded();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    case 2:
+                        message.timeTaken = reader.readFloat();
+                        break;
+                    case 3:
+                        message.precision = reader.readFloat();
+                        break;
+                    case 4:
+                        message.distance = reader.readFloat();
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): PlacementSucceeded {
+            return PlacementSucceeded.deserialize(bytes);
+        }
+    }
+    export class Prepared extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            timeTaken?: number;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                if ("timeTaken" in data && data.timeTaken != undefined) {
+                    this.timeTaken = data.timeTaken;
+                }
+            }
+        }
+        get timeTaken() {
+            return pb_1.Message.getFieldWithDefault(this, 1, 0) as number;
+        }
+        set timeTaken(value: number) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasTimeTaken() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        static fromObject(data: {
+            timeTaken?: number;
+        }): Prepared {
+            const message = new Prepared({});
+            if (data.timeTaken != null) {
+                message.timeTaken = data.timeTaken;
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                timeTaken?: number;
+            } = {};
+            if (this.timeTaken != null) {
+                data.timeTaken = this.timeTaken;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasTimeTaken)
+                writer.writeFloat(1, this.timeTaken);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): Prepared {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new Prepared();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.timeTaken = reader.readFloat();
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): Prepared {
+            return Prepared.deserialize(bytes);
+        }
+    }
+    export class BotSubstitution extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+        }): BotSubstitution {
+            const message = new BotSubstitution({
+                byTeam: data.byTeam
+            });
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): BotSubstitution {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new BotSubstitution();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): BotSubstitution {
+            return BotSubstitution.deserialize(bytes);
+        }
+    }
+    export class ChallengeFlag extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+        }): ChallengeFlag {
+            const message = new ChallengeFlag({
+                byTeam: data.byTeam
+            });
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): ChallengeFlag {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new ChallengeFlag();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): ChallengeFlag {
+            return ChallengeFlag.deserialize(bytes);
+        }
+    }
+    export class EmergencyStop extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+        }): EmergencyStop {
+            const message = new EmergencyStop({
+                byTeam: data.byTeam
+            });
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): EmergencyStop {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new EmergencyStop();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): EmergencyStop {
+            return EmergencyStop.deserialize(bytes);
+        }
+    }
+    export class TooManyRobots extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+            numRobotsAllowed?: number;
+            numRobotsOnField?: number;
+            ballLocation?: dependency_2.Vector2;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+                if ("numRobotsAllowed" in data && data.numRobotsAllowed != undefined) {
+                    this.numRobotsAllowed = data.numRobotsAllowed;
+                }
+                if ("numRobotsOnField" in data && data.numRobotsOnField != undefined) {
+                    this.numRobotsOnField = data.numRobotsOnField;
+                }
+                if ("ballLocation" in data && data.ballLocation != undefined) {
+                    this.ballLocation = data.ballLocation;
+                }
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        get numRobotsAllowed() {
+            return pb_1.Message.getFieldWithDefault(this, 2, 0) as number;
+        }
+        set numRobotsAllowed(value: number) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        get hasNumRobotsAllowed() {
+            return pb_1.Message.getField(this, 2) != null;
+        }
+        get numRobotsOnField() {
+            return pb_1.Message.getFieldWithDefault(this, 3, 0) as number;
+        }
+        set numRobotsOnField(value: number) {
+            pb_1.Message.setField(this, 3, value);
+        }
+        get hasNumRobotsOnField() {
+            return pb_1.Message.getField(this, 3) != null;
+        }
+        get ballLocation() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 4) as dependency_2.Vector2;
+        }
+        set ballLocation(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 4, value);
+        }
+        get hasBallLocation() {
+            return pb_1.Message.getField(this, 4) != null;
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+            numRobotsAllowed?: number;
+            numRobotsOnField?: number;
+            ballLocation?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+        }): TooManyRobots {
+            const message = new TooManyRobots({
+                byTeam: data.byTeam
+            });
+            if (data.numRobotsAllowed != null) {
+                message.numRobotsAllowed = data.numRobotsAllowed;
+            }
+            if (data.numRobotsOnField != null) {
+                message.numRobotsOnField = data.numRobotsOnField;
+            }
+            if (data.ballLocation != null) {
+                message.ballLocation = dependency_2.Vector2.fromObject(data.ballLocation);
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+                numRobotsAllowed?: number;
+                numRobotsOnField?: number;
+                ballLocation?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            if (this.numRobotsAllowed != null) {
+                data.numRobotsAllowed = this.numRobotsAllowed;
+            }
+            if (this.numRobotsOnField != null) {
+                data.numRobotsOnField = this.numRobotsOnField;
+            }
+            if (this.ballLocation != null) {
+                data.ballLocation = this.ballLocation.toObject();
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (this.hasNumRobotsAllowed)
+                writer.writeInt32(2, this.numRobotsAllowed);
+            if (this.hasNumRobotsOnField)
+                writer.writeInt32(3, this.numRobotsOnField);
+            if (this.hasBallLocation)
+                writer.writeMessage(4, this.ballLocation, () => this.ballLocation.serialize(writer));
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): TooManyRobots {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new TooManyRobots();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    case 2:
+                        message.numRobotsAllowed = reader.readInt32();
+                        break;
+                    case 3:
+                        message.numRobotsOnField = reader.readInt32();
+                        break;
+                    case 4:
+                        reader.readMessage(message.ballLocation, () => message.ballLocation = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): TooManyRobots {
+            return TooManyRobots.deserialize(bytes);
+        }
+    }
+    export class BoundaryCrossing extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+            location?: dependency_2.Vector2;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+                if ("location" in data && data.location != undefined) {
+                    this.location = data.location;
+                }
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        get location() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 2) as dependency_2.Vector2;
+        }
+        set location(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 2, value);
+        }
+        get hasLocation() {
+            return pb_1.Message.getField(this, 2) != null;
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+            location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+        }): BoundaryCrossing {
+            const message = new BoundaryCrossing({
+                byTeam: data.byTeam
+            });
+            if (data.location != null) {
+                message.location = dependency_2.Vector2.fromObject(data.location);
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+                location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            if (this.location != null) {
+                data.location = this.location.toObject();
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (this.hasLocation)
+                writer.writeMessage(2, this.location, () => this.location.serialize(writer));
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): BoundaryCrossing {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new BoundaryCrossing();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    case 2:
+                        reader.readMessage(message.location, () => message.location = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): BoundaryCrossing {
+            return BoundaryCrossing.deserialize(bytes);
+        }
+    }
+    export class PenaltyKickFailed extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            byTeam: dependency_1.Team;
+            location?: dependency_2.Vector2;
+            reason?: string;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                this.byTeam = data.byTeam;
+                if ("location" in data && data.location != undefined) {
+                    this.location = data.location;
+                }
+                if ("reason" in data && data.reason != undefined) {
+                    this.reason = data.reason;
+                }
+            }
+        }
+        get byTeam() {
+            return pb_1.Message.getField(this, 1) as dependency_1.Team;
+        }
+        set byTeam(value: dependency_1.Team) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get hasByTeam() {
+            return pb_1.Message.getField(this, 1) != null;
+        }
+        get location() {
+            return pb_1.Message.getWrapperField(this, dependency_2.Vector2, 2) as dependency_2.Vector2;
+        }
+        set location(value: dependency_2.Vector2) {
+            pb_1.Message.setWrapperField(this, 2, value);
+        }
+        get hasLocation() {
+            return pb_1.Message.getField(this, 2) != null;
+        }
+        get reason() {
+            return pb_1.Message.getFieldWithDefault(this, 3, "") as string;
+        }
+        set reason(value: string) {
+            pb_1.Message.setField(this, 3, value);
+        }
+        get hasReason() {
+            return pb_1.Message.getField(this, 3) != null;
+        }
+        static fromObject(data: {
+            byTeam?: dependency_1.Team;
+            location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+            reason?: string;
+        }): PenaltyKickFailed {
+            const message = new PenaltyKickFailed({
+                byTeam: data.byTeam
+            });
+            if (data.location != null) {
+                message.location = dependency_2.Vector2.fromObject(data.location);
+            }
+            if (data.reason != null) {
+                message.reason = data.reason;
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                byTeam?: dependency_1.Team;
+                location?: ReturnType<typeof dependency_2.Vector2.prototype.toObject>;
+                reason?: string;
+            } = {};
+            if (this.byTeam != null) {
+                data.byTeam = this.byTeam;
+            }
+            if (this.location != null) {
+                data.location = this.location.toObject();
+            }
+            if (this.reason != null) {
+                data.reason = this.reason;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.hasByTeam)
+                writer.writeEnum(1, this.byTeam);
+            if (this.hasLocation)
+                writer.writeMessage(2, this.location, () => this.location.serialize(writer));
+            if (this.hasReason && this.reason.length)
+                writer.writeString(3, this.reason);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): PenaltyKickFailed {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new PenaltyKickFailed();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.byTeam = reader.readEnum();
+                        break;
+                    case 2:
+                        reader.readMessage(message.location, () => message.location = dependency_2.Vector2.deserialize(reader));
+                        break;
+                    case 3:
+                        message.reason = reader.readString();
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): PenaltyKickFailed {
+            return PenaltyKickFailed.deserialize(bytes);
+        }
     }
-    if (message.byBot !== 0) {
-      writer.uint32(16).uint32(message.byBot);
-    }
-    if (message.location !== undefined) {
-      Vector2.encode(message.location, writer.uint32(26).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_BallLeftField {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_BallLeftField();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        case 2:
-          message.byBot = reader.uint32();
-          break;
-        case 3:
-          message.location = Vector2.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_BallLeftField {
-    return {
-      byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0,
-      byBot: isSet(object.byBot) ? Number(object.byBot) : 0,
-      location: isSet(object.location) ? Vector2.fromJSON(object.location) : undefined,
-    };
-  },
-
-  toJSON(message: GameEvent_BallLeftField): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    message.byBot !== undefined && (obj.byBot = Math.round(message.byBot));
-    message.location !== undefined && (obj.location = message.location ? Vector2.toJSON(message.location) : undefined);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_BallLeftField>, I>>(object: I): GameEvent_BallLeftField {
-    const message = createBaseGameEvent_BallLeftField();
-    message.byTeam = object.byTeam ?? 0;
-    message.byBot = object.byBot ?? 0;
-    message.location = (object.location !== undefined && object.location !== null)
-      ? Vector2.fromPartial(object.location)
-      : undefined;
-    return message;
-  },
-};
-
-function createBaseGameEvent_AimlessKick(): GameEvent_AimlessKick {
-  return { byTeam: 0, byBot: 0, location: undefined, kickLocation: undefined };
-}
-
-export const GameEvent_AimlessKick = {
-  encode(message: GameEvent_AimlessKick, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
-    }
-    if (message.byBot !== 0) {
-      writer.uint32(16).uint32(message.byBot);
-    }
-    if (message.location !== undefined) {
-      Vector2.encode(message.location, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.kickLocation !== undefined) {
-      Vector2.encode(message.kickLocation, writer.uint32(34).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_AimlessKick {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_AimlessKick();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        case 2:
-          message.byBot = reader.uint32();
-          break;
-        case 3:
-          message.location = Vector2.decode(reader, reader.uint32());
-          break;
-        case 4:
-          message.kickLocation = Vector2.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_AimlessKick {
-    return {
-      byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0,
-      byBot: isSet(object.byBot) ? Number(object.byBot) : 0,
-      location: isSet(object.location) ? Vector2.fromJSON(object.location) : undefined,
-      kickLocation: isSet(object.kickLocation) ? Vector2.fromJSON(object.kickLocation) : undefined,
-    };
-  },
-
-  toJSON(message: GameEvent_AimlessKick): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    message.byBot !== undefined && (obj.byBot = Math.round(message.byBot));
-    message.location !== undefined && (obj.location = message.location ? Vector2.toJSON(message.location) : undefined);
-    message.kickLocation !== undefined &&
-      (obj.kickLocation = message.kickLocation ? Vector2.toJSON(message.kickLocation) : undefined);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_AimlessKick>, I>>(object: I): GameEvent_AimlessKick {
-    const message = createBaseGameEvent_AimlessKick();
-    message.byTeam = object.byTeam ?? 0;
-    message.byBot = object.byBot ?? 0;
-    message.location = (object.location !== undefined && object.location !== null)
-      ? Vector2.fromPartial(object.location)
-      : undefined;
-    message.kickLocation = (object.kickLocation !== undefined && object.kickLocation !== null)
-      ? Vector2.fromPartial(object.kickLocation)
-      : undefined;
-    return message;
-  },
-};
-
-function createBaseGameEvent_Goal(): GameEvent_Goal {
-  return {
-    byTeam: 0,
-    kickingTeam: 0,
-    kickingBot: 0,
-    location: undefined,
-    kickLocation: undefined,
-    maxBallHeight: 0,
-    numRobotsByTeam: 0,
-    lastTouchByTeam: 0,
-    message: "",
-  };
-}
-
-export const GameEvent_Goal = {
-  encode(message: GameEvent_Goal, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
-    }
-    if (message.kickingTeam !== 0) {
-      writer.uint32(48).int32(message.kickingTeam);
-    }
-    if (message.kickingBot !== 0) {
-      writer.uint32(16).uint32(message.kickingBot);
-    }
-    if (message.location !== undefined) {
-      Vector2.encode(message.location, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.kickLocation !== undefined) {
-      Vector2.encode(message.kickLocation, writer.uint32(34).fork()).ldelim();
-    }
-    if (message.maxBallHeight !== 0) {
-      writer.uint32(45).float(message.maxBallHeight);
-    }
-    if (message.numRobotsByTeam !== 0) {
-      writer.uint32(56).uint32(message.numRobotsByTeam);
-    }
-    if (message.lastTouchByTeam !== 0) {
-      writer.uint32(64).uint64(message.lastTouchByTeam);
-    }
-    if (message.message !== "") {
-      writer.uint32(74).string(message.message);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_Goal {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_Goal();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        case 6:
-          message.kickingTeam = reader.int32() as any;
-          break;
-        case 2:
-          message.kickingBot = reader.uint32();
-          break;
-        case 3:
-          message.location = Vector2.decode(reader, reader.uint32());
-          break;
-        case 4:
-          message.kickLocation = Vector2.decode(reader, reader.uint32());
-          break;
-        case 5:
-          message.maxBallHeight = reader.float();
-          break;
-        case 7:
-          message.numRobotsByTeam = reader.uint32();
-          break;
-        case 8:
-          message.lastTouchByTeam = longToNumber(reader.uint64() as Long);
-          break;
-        case 9:
-          message.message = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_Goal {
-    return {
-      byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0,
-      kickingTeam: isSet(object.kickingTeam) ? teamFromJSON(object.kickingTeam) : 0,
-      kickingBot: isSet(object.kickingBot) ? Number(object.kickingBot) : 0,
-      location: isSet(object.location) ? Vector2.fromJSON(object.location) : undefined,
-      kickLocation: isSet(object.kickLocation) ? Vector2.fromJSON(object.kickLocation) : undefined,
-      maxBallHeight: isSet(object.maxBallHeight) ? Number(object.maxBallHeight) : 0,
-      numRobotsByTeam: isSet(object.numRobotsByTeam) ? Number(object.numRobotsByTeam) : 0,
-      lastTouchByTeam: isSet(object.lastTouchByTeam) ? Number(object.lastTouchByTeam) : 0,
-      message: isSet(object.message) ? String(object.message) : "",
-    };
-  },
-
-  toJSON(message: GameEvent_Goal): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    message.kickingTeam !== undefined && (obj.kickingTeam = teamToJSON(message.kickingTeam));
-    message.kickingBot !== undefined && (obj.kickingBot = Math.round(message.kickingBot));
-    message.location !== undefined && (obj.location = message.location ? Vector2.toJSON(message.location) : undefined);
-    message.kickLocation !== undefined &&
-      (obj.kickLocation = message.kickLocation ? Vector2.toJSON(message.kickLocation) : undefined);
-    message.maxBallHeight !== undefined && (obj.maxBallHeight = message.maxBallHeight);
-    message.numRobotsByTeam !== undefined && (obj.numRobotsByTeam = Math.round(message.numRobotsByTeam));
-    message.lastTouchByTeam !== undefined && (obj.lastTouchByTeam = Math.round(message.lastTouchByTeam));
-    message.message !== undefined && (obj.message = message.message);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_Goal>, I>>(object: I): GameEvent_Goal {
-    const message = createBaseGameEvent_Goal();
-    message.byTeam = object.byTeam ?? 0;
-    message.kickingTeam = object.kickingTeam ?? 0;
-    message.kickingBot = object.kickingBot ?? 0;
-    message.location = (object.location !== undefined && object.location !== null)
-      ? Vector2.fromPartial(object.location)
-      : undefined;
-    message.kickLocation = (object.kickLocation !== undefined && object.kickLocation !== null)
-      ? Vector2.fromPartial(object.kickLocation)
-      : undefined;
-    message.maxBallHeight = object.maxBallHeight ?? 0;
-    message.numRobotsByTeam = object.numRobotsByTeam ?? 0;
-    message.lastTouchByTeam = object.lastTouchByTeam ?? 0;
-    message.message = object.message ?? "";
-    return message;
-  },
-};
-
-function createBaseGameEvent_IndirectGoal(): GameEvent_IndirectGoal {
-  return { byTeam: 0, byBot: 0, location: undefined, kickLocation: undefined };
-}
-
-export const GameEvent_IndirectGoal = {
-  encode(message: GameEvent_IndirectGoal, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
-    }
-    if (message.byBot !== 0) {
-      writer.uint32(16).uint32(message.byBot);
-    }
-    if (message.location !== undefined) {
-      Vector2.encode(message.location, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.kickLocation !== undefined) {
-      Vector2.encode(message.kickLocation, writer.uint32(34).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_IndirectGoal {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_IndirectGoal();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        case 2:
-          message.byBot = reader.uint32();
-          break;
-        case 3:
-          message.location = Vector2.decode(reader, reader.uint32());
-          break;
-        case 4:
-          message.kickLocation = Vector2.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_IndirectGoal {
-    return {
-      byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0,
-      byBot: isSet(object.byBot) ? Number(object.byBot) : 0,
-      location: isSet(object.location) ? Vector2.fromJSON(object.location) : undefined,
-      kickLocation: isSet(object.kickLocation) ? Vector2.fromJSON(object.kickLocation) : undefined,
-    };
-  },
-
-  toJSON(message: GameEvent_IndirectGoal): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    message.byBot !== undefined && (obj.byBot = Math.round(message.byBot));
-    message.location !== undefined && (obj.location = message.location ? Vector2.toJSON(message.location) : undefined);
-    message.kickLocation !== undefined &&
-      (obj.kickLocation = message.kickLocation ? Vector2.toJSON(message.kickLocation) : undefined);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_IndirectGoal>, I>>(object: I): GameEvent_IndirectGoal {
-    const message = createBaseGameEvent_IndirectGoal();
-    message.byTeam = object.byTeam ?? 0;
-    message.byBot = object.byBot ?? 0;
-    message.location = (object.location !== undefined && object.location !== null)
-      ? Vector2.fromPartial(object.location)
-      : undefined;
-    message.kickLocation = (object.kickLocation !== undefined && object.kickLocation !== null)
-      ? Vector2.fromPartial(object.kickLocation)
-      : undefined;
-    return message;
-  },
-};
-
-function createBaseGameEvent_ChippedGoal(): GameEvent_ChippedGoal {
-  return { byTeam: 0, byBot: 0, location: undefined, kickLocation: undefined, maxBallHeight: 0 };
-}
-
-export const GameEvent_ChippedGoal = {
-  encode(message: GameEvent_ChippedGoal, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
-    }
-    if (message.byBot !== 0) {
-      writer.uint32(16).uint32(message.byBot);
-    }
-    if (message.location !== undefined) {
-      Vector2.encode(message.location, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.kickLocation !== undefined) {
-      Vector2.encode(message.kickLocation, writer.uint32(34).fork()).ldelim();
-    }
-    if (message.maxBallHeight !== 0) {
-      writer.uint32(45).float(message.maxBallHeight);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_ChippedGoal {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_ChippedGoal();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        case 2:
-          message.byBot = reader.uint32();
-          break;
-        case 3:
-          message.location = Vector2.decode(reader, reader.uint32());
-          break;
-        case 4:
-          message.kickLocation = Vector2.decode(reader, reader.uint32());
-          break;
-        case 5:
-          message.maxBallHeight = reader.float();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_ChippedGoal {
-    return {
-      byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0,
-      byBot: isSet(object.byBot) ? Number(object.byBot) : 0,
-      location: isSet(object.location) ? Vector2.fromJSON(object.location) : undefined,
-      kickLocation: isSet(object.kickLocation) ? Vector2.fromJSON(object.kickLocation) : undefined,
-      maxBallHeight: isSet(object.maxBallHeight) ? Number(object.maxBallHeight) : 0,
-    };
-  },
-
-  toJSON(message: GameEvent_ChippedGoal): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    message.byBot !== undefined && (obj.byBot = Math.round(message.byBot));
-    message.location !== undefined && (obj.location = message.location ? Vector2.toJSON(message.location) : undefined);
-    message.kickLocation !== undefined &&
-      (obj.kickLocation = message.kickLocation ? Vector2.toJSON(message.kickLocation) : undefined);
-    message.maxBallHeight !== undefined && (obj.maxBallHeight = message.maxBallHeight);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_ChippedGoal>, I>>(object: I): GameEvent_ChippedGoal {
-    const message = createBaseGameEvent_ChippedGoal();
-    message.byTeam = object.byTeam ?? 0;
-    message.byBot = object.byBot ?? 0;
-    message.location = (object.location !== undefined && object.location !== null)
-      ? Vector2.fromPartial(object.location)
-      : undefined;
-    message.kickLocation = (object.kickLocation !== undefined && object.kickLocation !== null)
-      ? Vector2.fromPartial(object.kickLocation)
-      : undefined;
-    message.maxBallHeight = object.maxBallHeight ?? 0;
-    return message;
-  },
-};
-
-function createBaseGameEvent_BotTooFastInStop(): GameEvent_BotTooFastInStop {
-  return { byTeam: 0, byBot: 0, location: undefined, speed: 0 };
-}
-
-export const GameEvent_BotTooFastInStop = {
-  encode(message: GameEvent_BotTooFastInStop, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
-    }
-    if (message.byBot !== 0) {
-      writer.uint32(16).uint32(message.byBot);
-    }
-    if (message.location !== undefined) {
-      Vector2.encode(message.location, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.speed !== 0) {
-      writer.uint32(37).float(message.speed);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_BotTooFastInStop {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_BotTooFastInStop();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        case 2:
-          message.byBot = reader.uint32();
-          break;
-        case 3:
-          message.location = Vector2.decode(reader, reader.uint32());
-          break;
-        case 4:
-          message.speed = reader.float();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_BotTooFastInStop {
-    return {
-      byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0,
-      byBot: isSet(object.byBot) ? Number(object.byBot) : 0,
-      location: isSet(object.location) ? Vector2.fromJSON(object.location) : undefined,
-      speed: isSet(object.speed) ? Number(object.speed) : 0,
-    };
-  },
-
-  toJSON(message: GameEvent_BotTooFastInStop): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    message.byBot !== undefined && (obj.byBot = Math.round(message.byBot));
-    message.location !== undefined && (obj.location = message.location ? Vector2.toJSON(message.location) : undefined);
-    message.speed !== undefined && (obj.speed = message.speed);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_BotTooFastInStop>, I>>(object: I): GameEvent_BotTooFastInStop {
-    const message = createBaseGameEvent_BotTooFastInStop();
-    message.byTeam = object.byTeam ?? 0;
-    message.byBot = object.byBot ?? 0;
-    message.location = (object.location !== undefined && object.location !== null)
-      ? Vector2.fromPartial(object.location)
-      : undefined;
-    message.speed = object.speed ?? 0;
-    return message;
-  },
-};
-
-function createBaseGameEvent_DefenderTooCloseToKickPoint(): GameEvent_DefenderTooCloseToKickPoint {
-  return { byTeam: 0, byBot: 0, location: undefined, distance: 0 };
-}
-
-export const GameEvent_DefenderTooCloseToKickPoint = {
-  encode(message: GameEvent_DefenderTooCloseToKickPoint, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
-    }
-    if (message.byBot !== 0) {
-      writer.uint32(16).uint32(message.byBot);
-    }
-    if (message.location !== undefined) {
-      Vector2.encode(message.location, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.distance !== 0) {
-      writer.uint32(37).float(message.distance);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_DefenderTooCloseToKickPoint {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_DefenderTooCloseToKickPoint();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        case 2:
-          message.byBot = reader.uint32();
-          break;
-        case 3:
-          message.location = Vector2.decode(reader, reader.uint32());
-          break;
-        case 4:
-          message.distance = reader.float();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_DefenderTooCloseToKickPoint {
-    return {
-      byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0,
-      byBot: isSet(object.byBot) ? Number(object.byBot) : 0,
-      location: isSet(object.location) ? Vector2.fromJSON(object.location) : undefined,
-      distance: isSet(object.distance) ? Number(object.distance) : 0,
-    };
-  },
-
-  toJSON(message: GameEvent_DefenderTooCloseToKickPoint): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    message.byBot !== undefined && (obj.byBot = Math.round(message.byBot));
-    message.location !== undefined && (obj.location = message.location ? Vector2.toJSON(message.location) : undefined);
-    message.distance !== undefined && (obj.distance = message.distance);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_DefenderTooCloseToKickPoint>, I>>(
-    object: I,
-  ): GameEvent_DefenderTooCloseToKickPoint {
-    const message = createBaseGameEvent_DefenderTooCloseToKickPoint();
-    message.byTeam = object.byTeam ?? 0;
-    message.byBot = object.byBot ?? 0;
-    message.location = (object.location !== undefined && object.location !== null)
-      ? Vector2.fromPartial(object.location)
-      : undefined;
-    message.distance = object.distance ?? 0;
-    return message;
-  },
-};
-
-function createBaseGameEvent_BotCrashDrawn(): GameEvent_BotCrashDrawn {
-  return { botYellow: 0, botBlue: 0, location: undefined, crashSpeed: 0, speedDiff: 0, crashAngle: 0 };
-}
-
-export const GameEvent_BotCrashDrawn = {
-  encode(message: GameEvent_BotCrashDrawn, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.botYellow !== 0) {
-      writer.uint32(8).uint32(message.botYellow);
-    }
-    if (message.botBlue !== 0) {
-      writer.uint32(16).uint32(message.botBlue);
-    }
-    if (message.location !== undefined) {
-      Vector2.encode(message.location, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.crashSpeed !== 0) {
-      writer.uint32(37).float(message.crashSpeed);
-    }
-    if (message.speedDiff !== 0) {
-      writer.uint32(45).float(message.speedDiff);
-    }
-    if (message.crashAngle !== 0) {
-      writer.uint32(53).float(message.crashAngle);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_BotCrashDrawn {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_BotCrashDrawn();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.botYellow = reader.uint32();
-          break;
-        case 2:
-          message.botBlue = reader.uint32();
-          break;
-        case 3:
-          message.location = Vector2.decode(reader, reader.uint32());
-          break;
-        case 4:
-          message.crashSpeed = reader.float();
-          break;
-        case 5:
-          message.speedDiff = reader.float();
-          break;
-        case 6:
-          message.crashAngle = reader.float();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_BotCrashDrawn {
-    return {
-      botYellow: isSet(object.botYellow) ? Number(object.botYellow) : 0,
-      botBlue: isSet(object.botBlue) ? Number(object.botBlue) : 0,
-      location: isSet(object.location) ? Vector2.fromJSON(object.location) : undefined,
-      crashSpeed: isSet(object.crashSpeed) ? Number(object.crashSpeed) : 0,
-      speedDiff: isSet(object.speedDiff) ? Number(object.speedDiff) : 0,
-      crashAngle: isSet(object.crashAngle) ? Number(object.crashAngle) : 0,
-    };
-  },
-
-  toJSON(message: GameEvent_BotCrashDrawn): unknown {
-    const obj: any = {};
-    message.botYellow !== undefined && (obj.botYellow = Math.round(message.botYellow));
-    message.botBlue !== undefined && (obj.botBlue = Math.round(message.botBlue));
-    message.location !== undefined && (obj.location = message.location ? Vector2.toJSON(message.location) : undefined);
-    message.crashSpeed !== undefined && (obj.crashSpeed = message.crashSpeed);
-    message.speedDiff !== undefined && (obj.speedDiff = message.speedDiff);
-    message.crashAngle !== undefined && (obj.crashAngle = message.crashAngle);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_BotCrashDrawn>, I>>(object: I): GameEvent_BotCrashDrawn {
-    const message = createBaseGameEvent_BotCrashDrawn();
-    message.botYellow = object.botYellow ?? 0;
-    message.botBlue = object.botBlue ?? 0;
-    message.location = (object.location !== undefined && object.location !== null)
-      ? Vector2.fromPartial(object.location)
-      : undefined;
-    message.crashSpeed = object.crashSpeed ?? 0;
-    message.speedDiff = object.speedDiff ?? 0;
-    message.crashAngle = object.crashAngle ?? 0;
-    return message;
-  },
-};
-
-function createBaseGameEvent_BotCrashUnique(): GameEvent_BotCrashUnique {
-  return { byTeam: 0, violator: 0, victim: 0, location: undefined, crashSpeed: 0, speedDiff: 0, crashAngle: 0 };
-}
-
-export const GameEvent_BotCrashUnique = {
-  encode(message: GameEvent_BotCrashUnique, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
-    }
-    if (message.violator !== 0) {
-      writer.uint32(16).uint32(message.violator);
-    }
-    if (message.victim !== 0) {
-      writer.uint32(24).uint32(message.victim);
-    }
-    if (message.location !== undefined) {
-      Vector2.encode(message.location, writer.uint32(34).fork()).ldelim();
-    }
-    if (message.crashSpeed !== 0) {
-      writer.uint32(45).float(message.crashSpeed);
-    }
-    if (message.speedDiff !== 0) {
-      writer.uint32(53).float(message.speedDiff);
-    }
-    if (message.crashAngle !== 0) {
-      writer.uint32(61).float(message.crashAngle);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_BotCrashUnique {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_BotCrashUnique();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        case 2:
-          message.violator = reader.uint32();
-          break;
-        case 3:
-          message.victim = reader.uint32();
-          break;
-        case 4:
-          message.location = Vector2.decode(reader, reader.uint32());
-          break;
-        case 5:
-          message.crashSpeed = reader.float();
-          break;
-        case 6:
-          message.speedDiff = reader.float();
-          break;
-        case 7:
-          message.crashAngle = reader.float();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_BotCrashUnique {
-    return {
-      byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0,
-      violator: isSet(object.violator) ? Number(object.violator) : 0,
-      victim: isSet(object.victim) ? Number(object.victim) : 0,
-      location: isSet(object.location) ? Vector2.fromJSON(object.location) : undefined,
-      crashSpeed: isSet(object.crashSpeed) ? Number(object.crashSpeed) : 0,
-      speedDiff: isSet(object.speedDiff) ? Number(object.speedDiff) : 0,
-      crashAngle: isSet(object.crashAngle) ? Number(object.crashAngle) : 0,
-    };
-  },
-
-  toJSON(message: GameEvent_BotCrashUnique): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    message.violator !== undefined && (obj.violator = Math.round(message.violator));
-    message.victim !== undefined && (obj.victim = Math.round(message.victim));
-    message.location !== undefined && (obj.location = message.location ? Vector2.toJSON(message.location) : undefined);
-    message.crashSpeed !== undefined && (obj.crashSpeed = message.crashSpeed);
-    message.speedDiff !== undefined && (obj.speedDiff = message.speedDiff);
-    message.crashAngle !== undefined && (obj.crashAngle = message.crashAngle);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_BotCrashUnique>, I>>(object: I): GameEvent_BotCrashUnique {
-    const message = createBaseGameEvent_BotCrashUnique();
-    message.byTeam = object.byTeam ?? 0;
-    message.violator = object.violator ?? 0;
-    message.victim = object.victim ?? 0;
-    message.location = (object.location !== undefined && object.location !== null)
-      ? Vector2.fromPartial(object.location)
-      : undefined;
-    message.crashSpeed = object.crashSpeed ?? 0;
-    message.speedDiff = object.speedDiff ?? 0;
-    message.crashAngle = object.crashAngle ?? 0;
-    return message;
-  },
-};
-
-function createBaseGameEvent_BotPushedBot(): GameEvent_BotPushedBot {
-  return { byTeam: 0, violator: 0, victim: 0, location: undefined, pushedDistance: 0 };
-}
-
-export const GameEvent_BotPushedBot = {
-  encode(message: GameEvent_BotPushedBot, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
-    }
-    if (message.violator !== 0) {
-      writer.uint32(16).uint32(message.violator);
-    }
-    if (message.victim !== 0) {
-      writer.uint32(24).uint32(message.victim);
-    }
-    if (message.location !== undefined) {
-      Vector2.encode(message.location, writer.uint32(34).fork()).ldelim();
-    }
-    if (message.pushedDistance !== 0) {
-      writer.uint32(45).float(message.pushedDistance);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_BotPushedBot {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_BotPushedBot();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        case 2:
-          message.violator = reader.uint32();
-          break;
-        case 3:
-          message.victim = reader.uint32();
-          break;
-        case 4:
-          message.location = Vector2.decode(reader, reader.uint32());
-          break;
-        case 5:
-          message.pushedDistance = reader.float();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_BotPushedBot {
-    return {
-      byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0,
-      violator: isSet(object.violator) ? Number(object.violator) : 0,
-      victim: isSet(object.victim) ? Number(object.victim) : 0,
-      location: isSet(object.location) ? Vector2.fromJSON(object.location) : undefined,
-      pushedDistance: isSet(object.pushedDistance) ? Number(object.pushedDistance) : 0,
-    };
-  },
-
-  toJSON(message: GameEvent_BotPushedBot): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    message.violator !== undefined && (obj.violator = Math.round(message.violator));
-    message.victim !== undefined && (obj.victim = Math.round(message.victim));
-    message.location !== undefined && (obj.location = message.location ? Vector2.toJSON(message.location) : undefined);
-    message.pushedDistance !== undefined && (obj.pushedDistance = message.pushedDistance);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_BotPushedBot>, I>>(object: I): GameEvent_BotPushedBot {
-    const message = createBaseGameEvent_BotPushedBot();
-    message.byTeam = object.byTeam ?? 0;
-    message.violator = object.violator ?? 0;
-    message.victim = object.victim ?? 0;
-    message.location = (object.location !== undefined && object.location !== null)
-      ? Vector2.fromPartial(object.location)
-      : undefined;
-    message.pushedDistance = object.pushedDistance ?? 0;
-    return message;
-  },
-};
-
-function createBaseGameEvent_BotTippedOver(): GameEvent_BotTippedOver {
-  return { byTeam: 0, byBot: 0, location: undefined, ballLocation: undefined };
-}
-
-export const GameEvent_BotTippedOver = {
-  encode(message: GameEvent_BotTippedOver, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
-    }
-    if (message.byBot !== 0) {
-      writer.uint32(16).uint32(message.byBot);
-    }
-    if (message.location !== undefined) {
-      Vector2.encode(message.location, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.ballLocation !== undefined) {
-      Vector2.encode(message.ballLocation, writer.uint32(34).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_BotTippedOver {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_BotTippedOver();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        case 2:
-          message.byBot = reader.uint32();
-          break;
-        case 3:
-          message.location = Vector2.decode(reader, reader.uint32());
-          break;
-        case 4:
-          message.ballLocation = Vector2.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_BotTippedOver {
-    return {
-      byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0,
-      byBot: isSet(object.byBot) ? Number(object.byBot) : 0,
-      location: isSet(object.location) ? Vector2.fromJSON(object.location) : undefined,
-      ballLocation: isSet(object.ballLocation) ? Vector2.fromJSON(object.ballLocation) : undefined,
-    };
-  },
-
-  toJSON(message: GameEvent_BotTippedOver): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    message.byBot !== undefined && (obj.byBot = Math.round(message.byBot));
-    message.location !== undefined && (obj.location = message.location ? Vector2.toJSON(message.location) : undefined);
-    message.ballLocation !== undefined &&
-      (obj.ballLocation = message.ballLocation ? Vector2.toJSON(message.ballLocation) : undefined);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_BotTippedOver>, I>>(object: I): GameEvent_BotTippedOver {
-    const message = createBaseGameEvent_BotTippedOver();
-    message.byTeam = object.byTeam ?? 0;
-    message.byBot = object.byBot ?? 0;
-    message.location = (object.location !== undefined && object.location !== null)
-      ? Vector2.fromPartial(object.location)
-      : undefined;
-    message.ballLocation = (object.ballLocation !== undefined && object.ballLocation !== null)
-      ? Vector2.fromPartial(object.ballLocation)
-      : undefined;
-    return message;
-  },
-};
-
-function createBaseGameEvent_DefenderInDefenseArea(): GameEvent_DefenderInDefenseArea {
-  return { byTeam: 0, byBot: 0, location: undefined, distance: 0 };
-}
-
-export const GameEvent_DefenderInDefenseArea = {
-  encode(message: GameEvent_DefenderInDefenseArea, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
-    }
-    if (message.byBot !== 0) {
-      writer.uint32(16).uint32(message.byBot);
-    }
-    if (message.location !== undefined) {
-      Vector2.encode(message.location, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.distance !== 0) {
-      writer.uint32(37).float(message.distance);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_DefenderInDefenseArea {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_DefenderInDefenseArea();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        case 2:
-          message.byBot = reader.uint32();
-          break;
-        case 3:
-          message.location = Vector2.decode(reader, reader.uint32());
-          break;
-        case 4:
-          message.distance = reader.float();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_DefenderInDefenseArea {
-    return {
-      byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0,
-      byBot: isSet(object.byBot) ? Number(object.byBot) : 0,
-      location: isSet(object.location) ? Vector2.fromJSON(object.location) : undefined,
-      distance: isSet(object.distance) ? Number(object.distance) : 0,
-    };
-  },
-
-  toJSON(message: GameEvent_DefenderInDefenseArea): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    message.byBot !== undefined && (obj.byBot = Math.round(message.byBot));
-    message.location !== undefined && (obj.location = message.location ? Vector2.toJSON(message.location) : undefined);
-    message.distance !== undefined && (obj.distance = message.distance);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_DefenderInDefenseArea>, I>>(
-    object: I,
-  ): GameEvent_DefenderInDefenseArea {
-    const message = createBaseGameEvent_DefenderInDefenseArea();
-    message.byTeam = object.byTeam ?? 0;
-    message.byBot = object.byBot ?? 0;
-    message.location = (object.location !== undefined && object.location !== null)
-      ? Vector2.fromPartial(object.location)
-      : undefined;
-    message.distance = object.distance ?? 0;
-    return message;
-  },
-};
-
-function createBaseGameEvent_DefenderInDefenseAreaPartially(): GameEvent_DefenderInDefenseAreaPartially {
-  return { byTeam: 0, byBot: 0, location: undefined, distance: 0, ballLocation: undefined };
-}
-
-export const GameEvent_DefenderInDefenseAreaPartially = {
-  encode(message: GameEvent_DefenderInDefenseAreaPartially, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
-    }
-    if (message.byBot !== 0) {
-      writer.uint32(16).uint32(message.byBot);
-    }
-    if (message.location !== undefined) {
-      Vector2.encode(message.location, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.distance !== 0) {
-      writer.uint32(37).float(message.distance);
-    }
-    if (message.ballLocation !== undefined) {
-      Vector2.encode(message.ballLocation, writer.uint32(42).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_DefenderInDefenseAreaPartially {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_DefenderInDefenseAreaPartially();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        case 2:
-          message.byBot = reader.uint32();
-          break;
-        case 3:
-          message.location = Vector2.decode(reader, reader.uint32());
-          break;
-        case 4:
-          message.distance = reader.float();
-          break;
-        case 5:
-          message.ballLocation = Vector2.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_DefenderInDefenseAreaPartially {
-    return {
-      byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0,
-      byBot: isSet(object.byBot) ? Number(object.byBot) : 0,
-      location: isSet(object.location) ? Vector2.fromJSON(object.location) : undefined,
-      distance: isSet(object.distance) ? Number(object.distance) : 0,
-      ballLocation: isSet(object.ballLocation) ? Vector2.fromJSON(object.ballLocation) : undefined,
-    };
-  },
-
-  toJSON(message: GameEvent_DefenderInDefenseAreaPartially): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    message.byBot !== undefined && (obj.byBot = Math.round(message.byBot));
-    message.location !== undefined && (obj.location = message.location ? Vector2.toJSON(message.location) : undefined);
-    message.distance !== undefined && (obj.distance = message.distance);
-    message.ballLocation !== undefined &&
-      (obj.ballLocation = message.ballLocation ? Vector2.toJSON(message.ballLocation) : undefined);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_DefenderInDefenseAreaPartially>, I>>(
-    object: I,
-  ): GameEvent_DefenderInDefenseAreaPartially {
-    const message = createBaseGameEvent_DefenderInDefenseAreaPartially();
-    message.byTeam = object.byTeam ?? 0;
-    message.byBot = object.byBot ?? 0;
-    message.location = (object.location !== undefined && object.location !== null)
-      ? Vector2.fromPartial(object.location)
-      : undefined;
-    message.distance = object.distance ?? 0;
-    message.ballLocation = (object.ballLocation !== undefined && object.ballLocation !== null)
-      ? Vector2.fromPartial(object.ballLocation)
-      : undefined;
-    return message;
-  },
-};
-
-function createBaseGameEvent_AttackerTouchedBallInDefenseArea(): GameEvent_AttackerTouchedBallInDefenseArea {
-  return { byTeam: 0, byBot: 0, location: undefined, distance: 0 };
-}
-
-export const GameEvent_AttackerTouchedBallInDefenseArea = {
-  encode(message: GameEvent_AttackerTouchedBallInDefenseArea, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
-    }
-    if (message.byBot !== 0) {
-      writer.uint32(16).uint32(message.byBot);
-    }
-    if (message.location !== undefined) {
-      Vector2.encode(message.location, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.distance !== 0) {
-      writer.uint32(37).float(message.distance);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_AttackerTouchedBallInDefenseArea {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_AttackerTouchedBallInDefenseArea();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        case 2:
-          message.byBot = reader.uint32();
-          break;
-        case 3:
-          message.location = Vector2.decode(reader, reader.uint32());
-          break;
-        case 4:
-          message.distance = reader.float();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_AttackerTouchedBallInDefenseArea {
-    return {
-      byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0,
-      byBot: isSet(object.byBot) ? Number(object.byBot) : 0,
-      location: isSet(object.location) ? Vector2.fromJSON(object.location) : undefined,
-      distance: isSet(object.distance) ? Number(object.distance) : 0,
-    };
-  },
-
-  toJSON(message: GameEvent_AttackerTouchedBallInDefenseArea): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    message.byBot !== undefined && (obj.byBot = Math.round(message.byBot));
-    message.location !== undefined && (obj.location = message.location ? Vector2.toJSON(message.location) : undefined);
-    message.distance !== undefined && (obj.distance = message.distance);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_AttackerTouchedBallInDefenseArea>, I>>(
-    object: I,
-  ): GameEvent_AttackerTouchedBallInDefenseArea {
-    const message = createBaseGameEvent_AttackerTouchedBallInDefenseArea();
-    message.byTeam = object.byTeam ?? 0;
-    message.byBot = object.byBot ?? 0;
-    message.location = (object.location !== undefined && object.location !== null)
-      ? Vector2.fromPartial(object.location)
-      : undefined;
-    message.distance = object.distance ?? 0;
-    return message;
-  },
-};
-
-function createBaseGameEvent_BotKickedBallTooFast(): GameEvent_BotKickedBallTooFast {
-  return { byTeam: 0, byBot: 0, location: undefined, initialBallSpeed: 0, chipped: false };
-}
-
-export const GameEvent_BotKickedBallTooFast = {
-  encode(message: GameEvent_BotKickedBallTooFast, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
-    }
-    if (message.byBot !== 0) {
-      writer.uint32(16).uint32(message.byBot);
-    }
-    if (message.location !== undefined) {
-      Vector2.encode(message.location, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.initialBallSpeed !== 0) {
-      writer.uint32(37).float(message.initialBallSpeed);
-    }
-    if (message.chipped === true) {
-      writer.uint32(40).bool(message.chipped);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_BotKickedBallTooFast {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_BotKickedBallTooFast();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        case 2:
-          message.byBot = reader.uint32();
-          break;
-        case 3:
-          message.location = Vector2.decode(reader, reader.uint32());
-          break;
-        case 4:
-          message.initialBallSpeed = reader.float();
-          break;
-        case 5:
-          message.chipped = reader.bool();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_BotKickedBallTooFast {
-    return {
-      byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0,
-      byBot: isSet(object.byBot) ? Number(object.byBot) : 0,
-      location: isSet(object.location) ? Vector2.fromJSON(object.location) : undefined,
-      initialBallSpeed: isSet(object.initialBallSpeed) ? Number(object.initialBallSpeed) : 0,
-      chipped: isSet(object.chipped) ? Boolean(object.chipped) : false,
-    };
-  },
-
-  toJSON(message: GameEvent_BotKickedBallTooFast): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    message.byBot !== undefined && (obj.byBot = Math.round(message.byBot));
-    message.location !== undefined && (obj.location = message.location ? Vector2.toJSON(message.location) : undefined);
-    message.initialBallSpeed !== undefined && (obj.initialBallSpeed = message.initialBallSpeed);
-    message.chipped !== undefined && (obj.chipped = message.chipped);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_BotKickedBallTooFast>, I>>(
-    object: I,
-  ): GameEvent_BotKickedBallTooFast {
-    const message = createBaseGameEvent_BotKickedBallTooFast();
-    message.byTeam = object.byTeam ?? 0;
-    message.byBot = object.byBot ?? 0;
-    message.location = (object.location !== undefined && object.location !== null)
-      ? Vector2.fromPartial(object.location)
-      : undefined;
-    message.initialBallSpeed = object.initialBallSpeed ?? 0;
-    message.chipped = object.chipped ?? false;
-    return message;
-  },
-};
-
-function createBaseGameEvent_BotDribbledBallTooFar(): GameEvent_BotDribbledBallTooFar {
-  return { byTeam: 0, byBot: 0, start: undefined, end: undefined };
-}
-
-export const GameEvent_BotDribbledBallTooFar = {
-  encode(message: GameEvent_BotDribbledBallTooFar, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
-    }
-    if (message.byBot !== 0) {
-      writer.uint32(16).uint32(message.byBot);
-    }
-    if (message.start !== undefined) {
-      Vector2.encode(message.start, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.end !== undefined) {
-      Vector2.encode(message.end, writer.uint32(34).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_BotDribbledBallTooFar {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_BotDribbledBallTooFar();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        case 2:
-          message.byBot = reader.uint32();
-          break;
-        case 3:
-          message.start = Vector2.decode(reader, reader.uint32());
-          break;
-        case 4:
-          message.end = Vector2.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_BotDribbledBallTooFar {
-    return {
-      byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0,
-      byBot: isSet(object.byBot) ? Number(object.byBot) : 0,
-      start: isSet(object.start) ? Vector2.fromJSON(object.start) : undefined,
-      end: isSet(object.end) ? Vector2.fromJSON(object.end) : undefined,
-    };
-  },
-
-  toJSON(message: GameEvent_BotDribbledBallTooFar): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    message.byBot !== undefined && (obj.byBot = Math.round(message.byBot));
-    message.start !== undefined && (obj.start = message.start ? Vector2.toJSON(message.start) : undefined);
-    message.end !== undefined && (obj.end = message.end ? Vector2.toJSON(message.end) : undefined);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_BotDribbledBallTooFar>, I>>(
-    object: I,
-  ): GameEvent_BotDribbledBallTooFar {
-    const message = createBaseGameEvent_BotDribbledBallTooFar();
-    message.byTeam = object.byTeam ?? 0;
-    message.byBot = object.byBot ?? 0;
-    message.start = (object.start !== undefined && object.start !== null)
-      ? Vector2.fromPartial(object.start)
-      : undefined;
-    message.end = (object.end !== undefined && object.end !== null) ? Vector2.fromPartial(object.end) : undefined;
-    return message;
-  },
-};
-
-function createBaseGameEvent_AttackerTouchedOpponentInDefenseArea(): GameEvent_AttackerTouchedOpponentInDefenseArea {
-  return { byTeam: 0, byBot: 0, victim: 0, location: undefined };
-}
-
-export const GameEvent_AttackerTouchedOpponentInDefenseArea = {
-  encode(
-    message: GameEvent_AttackerTouchedOpponentInDefenseArea,
-    writer: _m0.Writer = _m0.Writer.create(),
-  ): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
-    }
-    if (message.byBot !== 0) {
-      writer.uint32(16).uint32(message.byBot);
-    }
-    if (message.victim !== 0) {
-      writer.uint32(32).uint32(message.victim);
-    }
-    if (message.location !== undefined) {
-      Vector2.encode(message.location, writer.uint32(26).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_AttackerTouchedOpponentInDefenseArea {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_AttackerTouchedOpponentInDefenseArea();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        case 2:
-          message.byBot = reader.uint32();
-          break;
-        case 4:
-          message.victim = reader.uint32();
-          break;
-        case 3:
-          message.location = Vector2.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_AttackerTouchedOpponentInDefenseArea {
-    return {
-      byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0,
-      byBot: isSet(object.byBot) ? Number(object.byBot) : 0,
-      victim: isSet(object.victim) ? Number(object.victim) : 0,
-      location: isSet(object.location) ? Vector2.fromJSON(object.location) : undefined,
-    };
-  },
-
-  toJSON(message: GameEvent_AttackerTouchedOpponentInDefenseArea): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    message.byBot !== undefined && (obj.byBot = Math.round(message.byBot));
-    message.victim !== undefined && (obj.victim = Math.round(message.victim));
-    message.location !== undefined && (obj.location = message.location ? Vector2.toJSON(message.location) : undefined);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_AttackerTouchedOpponentInDefenseArea>, I>>(
-    object: I,
-  ): GameEvent_AttackerTouchedOpponentInDefenseArea {
-    const message = createBaseGameEvent_AttackerTouchedOpponentInDefenseArea();
-    message.byTeam = object.byTeam ?? 0;
-    message.byBot = object.byBot ?? 0;
-    message.victim = object.victim ?? 0;
-    message.location = (object.location !== undefined && object.location !== null)
-      ? Vector2.fromPartial(object.location)
-      : undefined;
-    return message;
-  },
-};
-
-function createBaseGameEvent_AttackerDoubleTouchedBall(): GameEvent_AttackerDoubleTouchedBall {
-  return { byTeam: 0, byBot: 0, location: undefined };
-}
-
-export const GameEvent_AttackerDoubleTouchedBall = {
-  encode(message: GameEvent_AttackerDoubleTouchedBall, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
-    }
-    if (message.byBot !== 0) {
-      writer.uint32(16).uint32(message.byBot);
-    }
-    if (message.location !== undefined) {
-      Vector2.encode(message.location, writer.uint32(26).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_AttackerDoubleTouchedBall {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_AttackerDoubleTouchedBall();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        case 2:
-          message.byBot = reader.uint32();
-          break;
-        case 3:
-          message.location = Vector2.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_AttackerDoubleTouchedBall {
-    return {
-      byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0,
-      byBot: isSet(object.byBot) ? Number(object.byBot) : 0,
-      location: isSet(object.location) ? Vector2.fromJSON(object.location) : undefined,
-    };
-  },
-
-  toJSON(message: GameEvent_AttackerDoubleTouchedBall): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    message.byBot !== undefined && (obj.byBot = Math.round(message.byBot));
-    message.location !== undefined && (obj.location = message.location ? Vector2.toJSON(message.location) : undefined);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_AttackerDoubleTouchedBall>, I>>(
-    object: I,
-  ): GameEvent_AttackerDoubleTouchedBall {
-    const message = createBaseGameEvent_AttackerDoubleTouchedBall();
-    message.byTeam = object.byTeam ?? 0;
-    message.byBot = object.byBot ?? 0;
-    message.location = (object.location !== undefined && object.location !== null)
-      ? Vector2.fromPartial(object.location)
-      : undefined;
-    return message;
-  },
-};
-
-function createBaseGameEvent_AttackerTooCloseToDefenseArea(): GameEvent_AttackerTooCloseToDefenseArea {
-  return { byTeam: 0, byBot: 0, location: undefined, distance: 0, ballLocation: undefined };
-}
-
-export const GameEvent_AttackerTooCloseToDefenseArea = {
-  encode(message: GameEvent_AttackerTooCloseToDefenseArea, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
-    }
-    if (message.byBot !== 0) {
-      writer.uint32(16).uint32(message.byBot);
-    }
-    if (message.location !== undefined) {
-      Vector2.encode(message.location, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.distance !== 0) {
-      writer.uint32(37).float(message.distance);
-    }
-    if (message.ballLocation !== undefined) {
-      Vector2.encode(message.ballLocation, writer.uint32(42).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_AttackerTooCloseToDefenseArea {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_AttackerTooCloseToDefenseArea();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        case 2:
-          message.byBot = reader.uint32();
-          break;
-        case 3:
-          message.location = Vector2.decode(reader, reader.uint32());
-          break;
-        case 4:
-          message.distance = reader.float();
-          break;
-        case 5:
-          message.ballLocation = Vector2.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_AttackerTooCloseToDefenseArea {
-    return {
-      byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0,
-      byBot: isSet(object.byBot) ? Number(object.byBot) : 0,
-      location: isSet(object.location) ? Vector2.fromJSON(object.location) : undefined,
-      distance: isSet(object.distance) ? Number(object.distance) : 0,
-      ballLocation: isSet(object.ballLocation) ? Vector2.fromJSON(object.ballLocation) : undefined,
-    };
-  },
-
-  toJSON(message: GameEvent_AttackerTooCloseToDefenseArea): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    message.byBot !== undefined && (obj.byBot = Math.round(message.byBot));
-    message.location !== undefined && (obj.location = message.location ? Vector2.toJSON(message.location) : undefined);
-    message.distance !== undefined && (obj.distance = message.distance);
-    message.ballLocation !== undefined &&
-      (obj.ballLocation = message.ballLocation ? Vector2.toJSON(message.ballLocation) : undefined);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_AttackerTooCloseToDefenseArea>, I>>(
-    object: I,
-  ): GameEvent_AttackerTooCloseToDefenseArea {
-    const message = createBaseGameEvent_AttackerTooCloseToDefenseArea();
-    message.byTeam = object.byTeam ?? 0;
-    message.byBot = object.byBot ?? 0;
-    message.location = (object.location !== undefined && object.location !== null)
-      ? Vector2.fromPartial(object.location)
-      : undefined;
-    message.distance = object.distance ?? 0;
-    message.ballLocation = (object.ballLocation !== undefined && object.ballLocation !== null)
-      ? Vector2.fromPartial(object.ballLocation)
-      : undefined;
-    return message;
-  },
-};
-
-function createBaseGameEvent_BotHeldBallDeliberately(): GameEvent_BotHeldBallDeliberately {
-  return { byTeam: 0, byBot: 0, location: undefined, duration: 0 };
-}
-
-export const GameEvent_BotHeldBallDeliberately = {
-  encode(message: GameEvent_BotHeldBallDeliberately, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
-    }
-    if (message.byBot !== 0) {
-      writer.uint32(16).uint32(message.byBot);
-    }
-    if (message.location !== undefined) {
-      Vector2.encode(message.location, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.duration !== 0) {
-      writer.uint32(37).float(message.duration);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_BotHeldBallDeliberately {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_BotHeldBallDeliberately();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        case 2:
-          message.byBot = reader.uint32();
-          break;
-        case 3:
-          message.location = Vector2.decode(reader, reader.uint32());
-          break;
-        case 4:
-          message.duration = reader.float();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_BotHeldBallDeliberately {
-    return {
-      byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0,
-      byBot: isSet(object.byBot) ? Number(object.byBot) : 0,
-      location: isSet(object.location) ? Vector2.fromJSON(object.location) : undefined,
-      duration: isSet(object.duration) ? Number(object.duration) : 0,
-    };
-  },
-
-  toJSON(message: GameEvent_BotHeldBallDeliberately): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    message.byBot !== undefined && (obj.byBot = Math.round(message.byBot));
-    message.location !== undefined && (obj.location = message.location ? Vector2.toJSON(message.location) : undefined);
-    message.duration !== undefined && (obj.duration = message.duration);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_BotHeldBallDeliberately>, I>>(
-    object: I,
-  ): GameEvent_BotHeldBallDeliberately {
-    const message = createBaseGameEvent_BotHeldBallDeliberately();
-    message.byTeam = object.byTeam ?? 0;
-    message.byBot = object.byBot ?? 0;
-    message.location = (object.location !== undefined && object.location !== null)
-      ? Vector2.fromPartial(object.location)
-      : undefined;
-    message.duration = object.duration ?? 0;
-    return message;
-  },
-};
-
-function createBaseGameEvent_BotInterferedPlacement(): GameEvent_BotInterferedPlacement {
-  return { byTeam: 0, byBot: 0, location: undefined };
-}
-
-export const GameEvent_BotInterferedPlacement = {
-  encode(message: GameEvent_BotInterferedPlacement, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
-    }
-    if (message.byBot !== 0) {
-      writer.uint32(16).uint32(message.byBot);
-    }
-    if (message.location !== undefined) {
-      Vector2.encode(message.location, writer.uint32(26).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_BotInterferedPlacement {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_BotInterferedPlacement();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        case 2:
-          message.byBot = reader.uint32();
-          break;
-        case 3:
-          message.location = Vector2.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_BotInterferedPlacement {
-    return {
-      byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0,
-      byBot: isSet(object.byBot) ? Number(object.byBot) : 0,
-      location: isSet(object.location) ? Vector2.fromJSON(object.location) : undefined,
-    };
-  },
-
-  toJSON(message: GameEvent_BotInterferedPlacement): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    message.byBot !== undefined && (obj.byBot = Math.round(message.byBot));
-    message.location !== undefined && (obj.location = message.location ? Vector2.toJSON(message.location) : undefined);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_BotInterferedPlacement>, I>>(
-    object: I,
-  ): GameEvent_BotInterferedPlacement {
-    const message = createBaseGameEvent_BotInterferedPlacement();
-    message.byTeam = object.byTeam ?? 0;
-    message.byBot = object.byBot ?? 0;
-    message.location = (object.location !== undefined && object.location !== null)
-      ? Vector2.fromPartial(object.location)
-      : undefined;
-    return message;
-  },
-};
-
-function createBaseGameEvent_MultipleCards(): GameEvent_MultipleCards {
-  return { byTeam: 0 };
-}
-
-export const GameEvent_MultipleCards = {
-  encode(message: GameEvent_MultipleCards, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_MultipleCards {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_MultipleCards();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_MultipleCards {
-    return { byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0 };
-  },
-
-  toJSON(message: GameEvent_MultipleCards): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_MultipleCards>, I>>(object: I): GameEvent_MultipleCards {
-    const message = createBaseGameEvent_MultipleCards();
-    message.byTeam = object.byTeam ?? 0;
-    return message;
-  },
-};
-
-function createBaseGameEvent_MultipleFouls(): GameEvent_MultipleFouls {
-  return { byTeam: 0, causedGameEvents: [] };
-}
-
-export const GameEvent_MultipleFouls = {
-  encode(message: GameEvent_MultipleFouls, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
-    }
-    for (const v of message.causedGameEvents) {
-      GameEvent.encode(v!, writer.uint32(18).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_MultipleFouls {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_MultipleFouls();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        case 2:
-          message.causedGameEvents.push(GameEvent.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_MultipleFouls {
-    return {
-      byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0,
-      causedGameEvents: Array.isArray(object?.causedGameEvents)
-        ? object.causedGameEvents.map((e: any) => GameEvent.fromJSON(e))
-        : [],
-    };
-  },
-
-  toJSON(message: GameEvent_MultipleFouls): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    if (message.causedGameEvents) {
-      obj.causedGameEvents = message.causedGameEvents.map((e) => e ? GameEvent.toJSON(e) : undefined);
-    } else {
-      obj.causedGameEvents = [];
-    }
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_MultipleFouls>, I>>(object: I): GameEvent_MultipleFouls {
-    const message = createBaseGameEvent_MultipleFouls();
-    message.byTeam = object.byTeam ?? 0;
-    message.causedGameEvents = object.causedGameEvents?.map((e) => GameEvent.fromPartial(e)) || [];
-    return message;
-  },
-};
-
-function createBaseGameEvent_MultiplePlacementFailures(): GameEvent_MultiplePlacementFailures {
-  return { byTeam: 0 };
-}
-
-export const GameEvent_MultiplePlacementFailures = {
-  encode(message: GameEvent_MultiplePlacementFailures, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_MultiplePlacementFailures {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_MultiplePlacementFailures();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_MultiplePlacementFailures {
-    return { byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0 };
-  },
-
-  toJSON(message: GameEvent_MultiplePlacementFailures): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_MultiplePlacementFailures>, I>>(
-    object: I,
-  ): GameEvent_MultiplePlacementFailures {
-    const message = createBaseGameEvent_MultiplePlacementFailures();
-    message.byTeam = object.byTeam ?? 0;
-    return message;
-  },
-};
-
-function createBaseGameEvent_KickTimeout(): GameEvent_KickTimeout {
-  return { byTeam: 0, location: undefined, time: 0 };
-}
-
-export const GameEvent_KickTimeout = {
-  encode(message: GameEvent_KickTimeout, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
-    }
-    if (message.location !== undefined) {
-      Vector2.encode(message.location, writer.uint32(18).fork()).ldelim();
-    }
-    if (message.time !== 0) {
-      writer.uint32(29).float(message.time);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_KickTimeout {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_KickTimeout();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        case 2:
-          message.location = Vector2.decode(reader, reader.uint32());
-          break;
-        case 3:
-          message.time = reader.float();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_KickTimeout {
-    return {
-      byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0,
-      location: isSet(object.location) ? Vector2.fromJSON(object.location) : undefined,
-      time: isSet(object.time) ? Number(object.time) : 0,
-    };
-  },
-
-  toJSON(message: GameEvent_KickTimeout): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    message.location !== undefined && (obj.location = message.location ? Vector2.toJSON(message.location) : undefined);
-    message.time !== undefined && (obj.time = message.time);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_KickTimeout>, I>>(object: I): GameEvent_KickTimeout {
-    const message = createBaseGameEvent_KickTimeout();
-    message.byTeam = object.byTeam ?? 0;
-    message.location = (object.location !== undefined && object.location !== null)
-      ? Vector2.fromPartial(object.location)
-      : undefined;
-    message.time = object.time ?? 0;
-    return message;
-  },
-};
-
-function createBaseGameEvent_NoProgressInGame(): GameEvent_NoProgressInGame {
-  return { location: undefined, time: 0 };
-}
-
-export const GameEvent_NoProgressInGame = {
-  encode(message: GameEvent_NoProgressInGame, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.location !== undefined) {
-      Vector2.encode(message.location, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.time !== 0) {
-      writer.uint32(21).float(message.time);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_NoProgressInGame {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_NoProgressInGame();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.location = Vector2.decode(reader, reader.uint32());
-          break;
-        case 2:
-          message.time = reader.float();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_NoProgressInGame {
-    return {
-      location: isSet(object.location) ? Vector2.fromJSON(object.location) : undefined,
-      time: isSet(object.time) ? Number(object.time) : 0,
-    };
-  },
-
-  toJSON(message: GameEvent_NoProgressInGame): unknown {
-    const obj: any = {};
-    message.location !== undefined && (obj.location = message.location ? Vector2.toJSON(message.location) : undefined);
-    message.time !== undefined && (obj.time = message.time);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_NoProgressInGame>, I>>(object: I): GameEvent_NoProgressInGame {
-    const message = createBaseGameEvent_NoProgressInGame();
-    message.location = (object.location !== undefined && object.location !== null)
-      ? Vector2.fromPartial(object.location)
-      : undefined;
-    message.time = object.time ?? 0;
-    return message;
-  },
-};
-
-function createBaseGameEvent_PlacementFailed(): GameEvent_PlacementFailed {
-  return { byTeam: 0, remainingDistance: 0 };
-}
-
-export const GameEvent_PlacementFailed = {
-  encode(message: GameEvent_PlacementFailed, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
-    }
-    if (message.remainingDistance !== 0) {
-      writer.uint32(21).float(message.remainingDistance);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_PlacementFailed {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_PlacementFailed();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        case 2:
-          message.remainingDistance = reader.float();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_PlacementFailed {
-    return {
-      byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0,
-      remainingDistance: isSet(object.remainingDistance) ? Number(object.remainingDistance) : 0,
-    };
-  },
-
-  toJSON(message: GameEvent_PlacementFailed): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    message.remainingDistance !== undefined && (obj.remainingDistance = message.remainingDistance);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_PlacementFailed>, I>>(object: I): GameEvent_PlacementFailed {
-    const message = createBaseGameEvent_PlacementFailed();
-    message.byTeam = object.byTeam ?? 0;
-    message.remainingDistance = object.remainingDistance ?? 0;
-    return message;
-  },
-};
-
-function createBaseGameEvent_UnsportingBehaviorMinor(): GameEvent_UnsportingBehaviorMinor {
-  return { byTeam: 0, reason: "" };
-}
-
-export const GameEvent_UnsportingBehaviorMinor = {
-  encode(message: GameEvent_UnsportingBehaviorMinor, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
-    }
-    if (message.reason !== "") {
-      writer.uint32(18).string(message.reason);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_UnsportingBehaviorMinor {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_UnsportingBehaviorMinor();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        case 2:
-          message.reason = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_UnsportingBehaviorMinor {
-    return {
-      byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0,
-      reason: isSet(object.reason) ? String(object.reason) : "",
-    };
-  },
-
-  toJSON(message: GameEvent_UnsportingBehaviorMinor): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    message.reason !== undefined && (obj.reason = message.reason);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_UnsportingBehaviorMinor>, I>>(
-    object: I,
-  ): GameEvent_UnsportingBehaviorMinor {
-    const message = createBaseGameEvent_UnsportingBehaviorMinor();
-    message.byTeam = object.byTeam ?? 0;
-    message.reason = object.reason ?? "";
-    return message;
-  },
-};
-
-function createBaseGameEvent_UnsportingBehaviorMajor(): GameEvent_UnsportingBehaviorMajor {
-  return { byTeam: 0, reason: "" };
-}
-
-export const GameEvent_UnsportingBehaviorMajor = {
-  encode(message: GameEvent_UnsportingBehaviorMajor, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
-    }
-    if (message.reason !== "") {
-      writer.uint32(18).string(message.reason);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_UnsportingBehaviorMajor {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_UnsportingBehaviorMajor();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        case 2:
-          message.reason = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_UnsportingBehaviorMajor {
-    return {
-      byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0,
-      reason: isSet(object.reason) ? String(object.reason) : "",
-    };
-  },
-
-  toJSON(message: GameEvent_UnsportingBehaviorMajor): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    message.reason !== undefined && (obj.reason = message.reason);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_UnsportingBehaviorMajor>, I>>(
-    object: I,
-  ): GameEvent_UnsportingBehaviorMajor {
-    const message = createBaseGameEvent_UnsportingBehaviorMajor();
-    message.byTeam = object.byTeam ?? 0;
-    message.reason = object.reason ?? "";
-    return message;
-  },
-};
-
-function createBaseGameEvent_KeeperHeldBall(): GameEvent_KeeperHeldBall {
-  return { byTeam: 0, location: undefined, duration: 0 };
-}
-
-export const GameEvent_KeeperHeldBall = {
-  encode(message: GameEvent_KeeperHeldBall, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
-    }
-    if (message.location !== undefined) {
-      Vector2.encode(message.location, writer.uint32(18).fork()).ldelim();
-    }
-    if (message.duration !== 0) {
-      writer.uint32(29).float(message.duration);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_KeeperHeldBall {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_KeeperHeldBall();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        case 2:
-          message.location = Vector2.decode(reader, reader.uint32());
-          break;
-        case 3:
-          message.duration = reader.float();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_KeeperHeldBall {
-    return {
-      byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0,
-      location: isSet(object.location) ? Vector2.fromJSON(object.location) : undefined,
-      duration: isSet(object.duration) ? Number(object.duration) : 0,
-    };
-  },
-
-  toJSON(message: GameEvent_KeeperHeldBall): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    message.location !== undefined && (obj.location = message.location ? Vector2.toJSON(message.location) : undefined);
-    message.duration !== undefined && (obj.duration = message.duration);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_KeeperHeldBall>, I>>(object: I): GameEvent_KeeperHeldBall {
-    const message = createBaseGameEvent_KeeperHeldBall();
-    message.byTeam = object.byTeam ?? 0;
-    message.location = (object.location !== undefined && object.location !== null)
-      ? Vector2.fromPartial(object.location)
-      : undefined;
-    message.duration = object.duration ?? 0;
-    return message;
-  },
-};
-
-function createBaseGameEvent_PlacementSucceeded(): GameEvent_PlacementSucceeded {
-  return { byTeam: 0, timeTaken: 0, precision: 0, distance: 0 };
-}
-
-export const GameEvent_PlacementSucceeded = {
-  encode(message: GameEvent_PlacementSucceeded, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
-    }
-    if (message.timeTaken !== 0) {
-      writer.uint32(21).float(message.timeTaken);
-    }
-    if (message.precision !== 0) {
-      writer.uint32(29).float(message.precision);
-    }
-    if (message.distance !== 0) {
-      writer.uint32(37).float(message.distance);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_PlacementSucceeded {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_PlacementSucceeded();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        case 2:
-          message.timeTaken = reader.float();
-          break;
-        case 3:
-          message.precision = reader.float();
-          break;
-        case 4:
-          message.distance = reader.float();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_PlacementSucceeded {
-    return {
-      byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0,
-      timeTaken: isSet(object.timeTaken) ? Number(object.timeTaken) : 0,
-      precision: isSet(object.precision) ? Number(object.precision) : 0,
-      distance: isSet(object.distance) ? Number(object.distance) : 0,
-    };
-  },
-
-  toJSON(message: GameEvent_PlacementSucceeded): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    message.timeTaken !== undefined && (obj.timeTaken = message.timeTaken);
-    message.precision !== undefined && (obj.precision = message.precision);
-    message.distance !== undefined && (obj.distance = message.distance);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_PlacementSucceeded>, I>>(object: I): GameEvent_PlacementSucceeded {
-    const message = createBaseGameEvent_PlacementSucceeded();
-    message.byTeam = object.byTeam ?? 0;
-    message.timeTaken = object.timeTaken ?? 0;
-    message.precision = object.precision ?? 0;
-    message.distance = object.distance ?? 0;
-    return message;
-  },
-};
-
-function createBaseGameEvent_Prepared(): GameEvent_Prepared {
-  return { timeTaken: 0 };
-}
-
-export const GameEvent_Prepared = {
-  encode(message: GameEvent_Prepared, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.timeTaken !== 0) {
-      writer.uint32(13).float(message.timeTaken);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_Prepared {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_Prepared();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.timeTaken = reader.float();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_Prepared {
-    return { timeTaken: isSet(object.timeTaken) ? Number(object.timeTaken) : 0 };
-  },
-
-  toJSON(message: GameEvent_Prepared): unknown {
-    const obj: any = {};
-    message.timeTaken !== undefined && (obj.timeTaken = message.timeTaken);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_Prepared>, I>>(object: I): GameEvent_Prepared {
-    const message = createBaseGameEvent_Prepared();
-    message.timeTaken = object.timeTaken ?? 0;
-    return message;
-  },
-};
-
-function createBaseGameEvent_BotSubstitution(): GameEvent_BotSubstitution {
-  return { byTeam: 0 };
-}
-
-export const GameEvent_BotSubstitution = {
-  encode(message: GameEvent_BotSubstitution, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_BotSubstitution {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_BotSubstitution();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_BotSubstitution {
-    return { byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0 };
-  },
-
-  toJSON(message: GameEvent_BotSubstitution): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_BotSubstitution>, I>>(object: I): GameEvent_BotSubstitution {
-    const message = createBaseGameEvent_BotSubstitution();
-    message.byTeam = object.byTeam ?? 0;
-    return message;
-  },
-};
-
-function createBaseGameEvent_ChallengeFlag(): GameEvent_ChallengeFlag {
-  return { byTeam: 0 };
-}
-
-export const GameEvent_ChallengeFlag = {
-  encode(message: GameEvent_ChallengeFlag, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_ChallengeFlag {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_ChallengeFlag();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_ChallengeFlag {
-    return { byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0 };
-  },
-
-  toJSON(message: GameEvent_ChallengeFlag): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_ChallengeFlag>, I>>(object: I): GameEvent_ChallengeFlag {
-    const message = createBaseGameEvent_ChallengeFlag();
-    message.byTeam = object.byTeam ?? 0;
-    return message;
-  },
-};
-
-function createBaseGameEvent_EmergencyStop(): GameEvent_EmergencyStop {
-  return { byTeam: 0 };
-}
-
-export const GameEvent_EmergencyStop = {
-  encode(message: GameEvent_EmergencyStop, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_EmergencyStop {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_EmergencyStop();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_EmergencyStop {
-    return { byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0 };
-  },
-
-  toJSON(message: GameEvent_EmergencyStop): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_EmergencyStop>, I>>(object: I): GameEvent_EmergencyStop {
-    const message = createBaseGameEvent_EmergencyStop();
-    message.byTeam = object.byTeam ?? 0;
-    return message;
-  },
-};
-
-function createBaseGameEvent_TooManyRobots(): GameEvent_TooManyRobots {
-  return { byTeam: 0, numRobotsAllowed: 0, numRobotsOnField: 0, ballLocation: undefined };
-}
-
-export const GameEvent_TooManyRobots = {
-  encode(message: GameEvent_TooManyRobots, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
-    }
-    if (message.numRobotsAllowed !== 0) {
-      writer.uint32(16).int32(message.numRobotsAllowed);
-    }
-    if (message.numRobotsOnField !== 0) {
-      writer.uint32(24).int32(message.numRobotsOnField);
-    }
-    if (message.ballLocation !== undefined) {
-      Vector2.encode(message.ballLocation, writer.uint32(34).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_TooManyRobots {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_TooManyRobots();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        case 2:
-          message.numRobotsAllowed = reader.int32();
-          break;
-        case 3:
-          message.numRobotsOnField = reader.int32();
-          break;
-        case 4:
-          message.ballLocation = Vector2.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_TooManyRobots {
-    return {
-      byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0,
-      numRobotsAllowed: isSet(object.numRobotsAllowed) ? Number(object.numRobotsAllowed) : 0,
-      numRobotsOnField: isSet(object.numRobotsOnField) ? Number(object.numRobotsOnField) : 0,
-      ballLocation: isSet(object.ballLocation) ? Vector2.fromJSON(object.ballLocation) : undefined,
-    };
-  },
-
-  toJSON(message: GameEvent_TooManyRobots): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    message.numRobotsAllowed !== undefined && (obj.numRobotsAllowed = Math.round(message.numRobotsAllowed));
-    message.numRobotsOnField !== undefined && (obj.numRobotsOnField = Math.round(message.numRobotsOnField));
-    message.ballLocation !== undefined &&
-      (obj.ballLocation = message.ballLocation ? Vector2.toJSON(message.ballLocation) : undefined);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_TooManyRobots>, I>>(object: I): GameEvent_TooManyRobots {
-    const message = createBaseGameEvent_TooManyRobots();
-    message.byTeam = object.byTeam ?? 0;
-    message.numRobotsAllowed = object.numRobotsAllowed ?? 0;
-    message.numRobotsOnField = object.numRobotsOnField ?? 0;
-    message.ballLocation = (object.ballLocation !== undefined && object.ballLocation !== null)
-      ? Vector2.fromPartial(object.ballLocation)
-      : undefined;
-    return message;
-  },
-};
-
-function createBaseGameEvent_BoundaryCrossing(): GameEvent_BoundaryCrossing {
-  return { byTeam: 0, location: undefined };
-}
-
-export const GameEvent_BoundaryCrossing = {
-  encode(message: GameEvent_BoundaryCrossing, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
-    }
-    if (message.location !== undefined) {
-      Vector2.encode(message.location, writer.uint32(18).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_BoundaryCrossing {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_BoundaryCrossing();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        case 2:
-          message.location = Vector2.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_BoundaryCrossing {
-    return {
-      byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0,
-      location: isSet(object.location) ? Vector2.fromJSON(object.location) : undefined,
-    };
-  },
-
-  toJSON(message: GameEvent_BoundaryCrossing): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    message.location !== undefined && (obj.location = message.location ? Vector2.toJSON(message.location) : undefined);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_BoundaryCrossing>, I>>(object: I): GameEvent_BoundaryCrossing {
-    const message = createBaseGameEvent_BoundaryCrossing();
-    message.byTeam = object.byTeam ?? 0;
-    message.location = (object.location !== undefined && object.location !== null)
-      ? Vector2.fromPartial(object.location)
-      : undefined;
-    return message;
-  },
-};
-
-function createBaseGameEvent_PenaltyKickFailed(): GameEvent_PenaltyKickFailed {
-  return { byTeam: 0, location: undefined, reason: "" };
-}
-
-export const GameEvent_PenaltyKickFailed = {
-  encode(message: GameEvent_PenaltyKickFailed, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.byTeam !== 0) {
-      writer.uint32(8).int32(message.byTeam);
-    }
-    if (message.location !== undefined) {
-      Vector2.encode(message.location, writer.uint32(18).fork()).ldelim();
-    }
-    if (message.reason !== "") {
-      writer.uint32(26).string(message.reason);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GameEvent_PenaltyKickFailed {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGameEvent_PenaltyKickFailed();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.byTeam = reader.int32() as any;
-          break;
-        case 2:
-          message.location = Vector2.decode(reader, reader.uint32());
-          break;
-        case 3:
-          message.reason = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GameEvent_PenaltyKickFailed {
-    return {
-      byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : 0,
-      location: isSet(object.location) ? Vector2.fromJSON(object.location) : undefined,
-      reason: isSet(object.reason) ? String(object.reason) : "",
-    };
-  },
-
-  toJSON(message: GameEvent_PenaltyKickFailed): unknown {
-    const obj: any = {};
-    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
-    message.location !== undefined && (obj.location = message.location ? Vector2.toJSON(message.location) : undefined);
-    message.reason !== undefined && (obj.reason = message.reason);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GameEvent_PenaltyKickFailed>, I>>(object: I): GameEvent_PenaltyKickFailed {
-    const message = createBaseGameEvent_PenaltyKickFailed();
-    message.byTeam = object.byTeam ?? 0;
-    message.location = (object.location !== undefined && object.location !== null)
-      ? Vector2.fromPartial(object.location)
-      : undefined;
-    message.reason = object.reason ?? "";
-    return message;
-  },
-};
-
-declare var self: any | undefined;
-declare var window: any | undefined;
-declare var global: any | undefined;
-var tsProtoGlobalThis: any = (() => {
-  if (typeof globalThis !== "undefined") {
-    return globalThis;
-  }
-  if (typeof self !== "undefined") {
-    return self;
-  }
-  if (typeof window !== "undefined") {
-    return window;
-  }
-  if (typeof global !== "undefined") {
-    return global;
-  }
-  throw "Unable to locate global object";
-})();
-
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
-
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends { $case: string } ? { [K in keyof Omit<T, "$case">]?: DeepPartial<T[K]> } & { $case: T["$case"] }
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
-  : Partial<T>;
-
-type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
-
-function longToNumber(long: Long): number {
-  if (long.gt(Number.MAX_SAFE_INTEGER)) {
-    throw new tsProtoGlobalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
-  }
-  return long.toNumber();
-}
-
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
-}
-
-function isSet(value: any): boolean {
-  return value !== null && value !== undefined;
 }

@@ -2,7 +2,7 @@ import {defineStore} from "pinia";
 import {State} from "@/proto/ssl_gc_state";
 
 export const useMatchStateStore = defineStore('matchState', {
-    state: () => (State.fromJSON({})),
+    state: () => (new State()),
     getters: {
     },
     actions: {

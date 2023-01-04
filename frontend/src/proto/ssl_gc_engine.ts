@@ -1,1118 +1,1005 @@
-/* eslint-disable */
-import _m0 from "protobufjs/minimal";
-import { Timestamp } from "./google/protobuf/timestamp";
-import { RobotId, Team, teamFromJSON, teamToJSON } from "./ssl_gc_common";
-import { Vector2, Vector3 } from "./ssl_gc_geometry";
-
-export const protobufPackage = "";
-
-/** The GC state contains settings and state independent of the match state */
-export interface GcState {
-  /** the state of each team */
-  teamState: { [key: string]: GcStateTeam };
-  /** the states of the auto referees */
-  autoRefState: { [key: string]: GcStateAutoRef };
-  /** the attached trackers (uuid -> source_name) */
-  trackers: { [key: string]: string };
-  /** the next actions that can be executed when continuing */
-  continueActions: ContinueAction[];
-}
-
-export interface GcState_TeamStateEntry {
-  key: string;
-  value?: GcStateTeam;
-}
-
-export interface GcState_AutoRefStateEntry {
-  key: string;
-  value?: GcStateAutoRef;
-}
-
-export interface GcState_TrackersEntry {
-  key: string;
-  value: string;
-}
-
-/** The GC state for a single team */
-export interface GcStateTeam {
-  /** true: The team is connected */
-  connected: boolean;
-  /** true: The team connected via TLS with a verified certificate */
-  connectionVerified: boolean;
-  /** true: The remote control for the team is connected */
-  remoteControlConnected: boolean;
-  /** true: The remote control for the team connected via TLS with a verified certificate */
-  remoteControlConnectionVerified: boolean;
-  /** the advantage choice of the team */
-  advantageChoice?: TeamAdvantageChoice;
-}
-
-/** The choice from a team regarding the advantage rule */
-export interface TeamAdvantageChoice {
-  /** the choice of the team */
-  choice: TeamAdvantageChoice_AdvantageChoice;
-}
-
-/** possible advantage choices */
-export enum TeamAdvantageChoice_AdvantageChoice {
-  /** STOP - stop the game */
-  STOP = 0,
-  /** CONTINUE - keep the match running */
-  CONTINUE = 1,
-  UNRECOGNIZED = -1,
-}
-
-export function teamAdvantageChoice_AdvantageChoiceFromJSON(object: any): TeamAdvantageChoice_AdvantageChoice {
-  switch (object) {
-    case 0:
-    case "STOP":
-      return TeamAdvantageChoice_AdvantageChoice.STOP;
-    case 1:
-    case "CONTINUE":
-      return TeamAdvantageChoice_AdvantageChoice.CONTINUE;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return TeamAdvantageChoice_AdvantageChoice.UNRECOGNIZED;
-  }
-}
-
-export function teamAdvantageChoice_AdvantageChoiceToJSON(object: TeamAdvantageChoice_AdvantageChoice): string {
-  switch (object) {
-    case TeamAdvantageChoice_AdvantageChoice.STOP:
-      return "STOP";
-    case TeamAdvantageChoice_AdvantageChoice.CONTINUE:
-      return "CONTINUE";
-    case TeamAdvantageChoice_AdvantageChoice.UNRECOGNIZED:
-    default:
-      return "UNRECOGNIZED";
-  }
-}
-
-/** The GC state of an auto referee */
-export interface GcStateAutoRef {
-  /** true: The autoRef connected via TLS with a verified certificate */
-  connectionVerified: boolean;
-}
-
-/** GC state of a tracker */
-export interface GcStateTracker {
-  /** Name of the source */
-  sourceName: string;
-  /** UUID of the source */
-  uuid: string;
-  /** Current ball */
-  ball?: Ball;
-  /** Current robots */
-  robots: Robot[];
-}
-
-/** The ball state */
-export interface Ball {
-  /** ball position [m] */
-  pos?: Vector3;
-  /** ball velocity [m/s] */
-  vel?: Vector3;
-}
-
-/** The robot state */
-export interface Robot {
-  /** robot id and team */
-  id?: RobotId;
-  /** robot position [m] */
-  pos?: Vector2;
-}
-
-export interface ContinueAction {
-  /** type of action that will be performed next */
-  type: ContinueAction_Type;
-  /** for which team (if team specific) */
-  forTeam: Team;
-  /** list of issues that hinders the game from continuing */
-  continuationIssues: string[];
-  /** timestamp at which the action will be ready (to give some preparation time) */
-  readyAt?: Date;
-  /** state of the action */
-  state: ContinueAction_State;
-}
-
-export enum ContinueAction_Type {
-  TYPE_UNKNOWN = 0,
-  HALT = 1,
-  RESUME_FROM_HALT = 10,
-  STOP_GAME = 2,
-  RESUME_FROM_STOP = 11,
-  NEXT_COMMAND = 3,
-  BALL_PLACEMENT_START = 4,
-  BALL_PLACEMENT_CANCEL = 9,
-  TIMEOUT_START = 5,
-  TIMEOUT_STOP = 6,
-  BOT_SUBSTITUTION = 7,
-  NEXT_STAGE = 8,
-  UNRECOGNIZED = -1,
-}
-
-export function continueAction_TypeFromJSON(object: any): ContinueAction_Type {
-  switch (object) {
-    case 0:
-    case "TYPE_UNKNOWN":
-      return ContinueAction_Type.TYPE_UNKNOWN;
-    case 1:
-    case "HALT":
-      return ContinueAction_Type.HALT;
-    case 10:
-    case "RESUME_FROM_HALT":
-      return ContinueAction_Type.RESUME_FROM_HALT;
-    case 2:
-    case "STOP_GAME":
-      return ContinueAction_Type.STOP_GAME;
-    case 11:
-    case "RESUME_FROM_STOP":
-      return ContinueAction_Type.RESUME_FROM_STOP;
-    case 3:
-    case "NEXT_COMMAND":
-      return ContinueAction_Type.NEXT_COMMAND;
-    case 4:
-    case "BALL_PLACEMENT_START":
-      return ContinueAction_Type.BALL_PLACEMENT_START;
-    case 9:
-    case "BALL_PLACEMENT_CANCEL":
-      return ContinueAction_Type.BALL_PLACEMENT_CANCEL;
-    case 5:
-    case "TIMEOUT_START":
-      return ContinueAction_Type.TIMEOUT_START;
-    case 6:
-    case "TIMEOUT_STOP":
-      return ContinueAction_Type.TIMEOUT_STOP;
-    case 7:
-    case "BOT_SUBSTITUTION":
-      return ContinueAction_Type.BOT_SUBSTITUTION;
-    case 8:
-    case "NEXT_STAGE":
-      return ContinueAction_Type.NEXT_STAGE;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return ContinueAction_Type.UNRECOGNIZED;
-  }
-}
-
-export function continueAction_TypeToJSON(object: ContinueAction_Type): string {
-  switch (object) {
-    case ContinueAction_Type.TYPE_UNKNOWN:
-      return "TYPE_UNKNOWN";
-    case ContinueAction_Type.HALT:
-      return "HALT";
-    case ContinueAction_Type.RESUME_FROM_HALT:
-      return "RESUME_FROM_HALT";
-    case ContinueAction_Type.STOP_GAME:
-      return "STOP_GAME";
-    case ContinueAction_Type.RESUME_FROM_STOP:
-      return "RESUME_FROM_STOP";
-    case ContinueAction_Type.NEXT_COMMAND:
-      return "NEXT_COMMAND";
-    case ContinueAction_Type.BALL_PLACEMENT_START:
-      return "BALL_PLACEMENT_START";
-    case ContinueAction_Type.BALL_PLACEMENT_CANCEL:
-      return "BALL_PLACEMENT_CANCEL";
-    case ContinueAction_Type.TIMEOUT_START:
-      return "TIMEOUT_START";
-    case ContinueAction_Type.TIMEOUT_STOP:
-      return "TIMEOUT_STOP";
-    case ContinueAction_Type.BOT_SUBSTITUTION:
-      return "BOT_SUBSTITUTION";
-    case ContinueAction_Type.NEXT_STAGE:
-      return "NEXT_STAGE";
-    case ContinueAction_Type.UNRECOGNIZED:
-    default:
-      return "UNRECOGNIZED";
-  }
-}
-
-export enum ContinueAction_State {
-  STATE_UNKNOWN = 0,
-  BLOCKED = 1,
-  WAITING = 2,
-  READY_AUTO = 3,
-  READY_MANUAL = 4,
-  UNRECOGNIZED = -1,
-}
-
-export function continueAction_StateFromJSON(object: any): ContinueAction_State {
-  switch (object) {
-    case 0:
-    case "STATE_UNKNOWN":
-      return ContinueAction_State.STATE_UNKNOWN;
-    case 1:
-    case "BLOCKED":
-      return ContinueAction_State.BLOCKED;
-    case 2:
-    case "WAITING":
-      return ContinueAction_State.WAITING;
-    case 3:
-    case "READY_AUTO":
-      return ContinueAction_State.READY_AUTO;
-    case 4:
-    case "READY_MANUAL":
-      return ContinueAction_State.READY_MANUAL;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return ContinueAction_State.UNRECOGNIZED;
-  }
-}
-
-export function continueAction_StateToJSON(object: ContinueAction_State): string {
-  switch (object) {
-    case ContinueAction_State.STATE_UNKNOWN:
-      return "STATE_UNKNOWN";
-    case ContinueAction_State.BLOCKED:
-      return "BLOCKED";
-    case ContinueAction_State.WAITING:
-      return "WAITING";
-    case ContinueAction_State.READY_AUTO:
-      return "READY_AUTO";
-    case ContinueAction_State.READY_MANUAL:
-      return "READY_MANUAL";
-    case ContinueAction_State.UNRECOGNIZED:
-    default:
-      return "UNRECOGNIZED";
-  }
-}
-
-function createBaseGcState(): GcState {
-  return { teamState: {}, autoRefState: {}, trackers: {}, continueActions: [] };
-}
-
-export const GcState = {
-  encode(message: GcState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    Object.entries(message.teamState).forEach(([key, value]) => {
-      GcState_TeamStateEntry.encode({ key: key as any, value }, writer.uint32(10).fork()).ldelim();
-    });
-    Object.entries(message.autoRefState).forEach(([key, value]) => {
-      GcState_AutoRefStateEntry.encode({ key: key as any, value }, writer.uint32(18).fork()).ldelim();
-    });
-    Object.entries(message.trackers).forEach(([key, value]) => {
-      GcState_TrackersEntry.encode({ key: key as any, value }, writer.uint32(26).fork()).ldelim();
-    });
-    for (const v of message.continueActions) {
-      ContinueAction.encode(v!, writer.uint32(34).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GcState {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGcState();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          const entry1 = GcState_TeamStateEntry.decode(reader, reader.uint32());
-          if (entry1.value !== undefined) {
-            message.teamState[entry1.key] = entry1.value;
-          }
-          break;
-        case 2:
-          const entry2 = GcState_AutoRefStateEntry.decode(reader, reader.uint32());
-          if (entry2.value !== undefined) {
-            message.autoRefState[entry2.key] = entry2.value;
-          }
-          break;
-        case 3:
-          const entry3 = GcState_TrackersEntry.decode(reader, reader.uint32());
-          if (entry3.value !== undefined) {
-            message.trackers[entry3.key] = entry3.value;
-          }
-          break;
-        case 4:
-          message.continueActions.push(ContinueAction.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GcState {
-    return {
-      teamState: isObject(object.teamState)
-        ? Object.entries(object.teamState).reduce<{ [key: string]: GcStateTeam }>((acc, [key, value]) => {
-          acc[key] = GcStateTeam.fromJSON(value);
-          return acc;
-        }, {})
-        : {},
-      autoRefState: isObject(object.autoRefState)
-        ? Object.entries(object.autoRefState).reduce<{ [key: string]: GcStateAutoRef }>((acc, [key, value]) => {
-          acc[key] = GcStateAutoRef.fromJSON(value);
-          return acc;
-        }, {})
-        : {},
-      trackers: isObject(object.trackers)
-        ? Object.entries(object.trackers).reduce<{ [key: string]: string }>((acc, [key, value]) => {
-          acc[key] = String(value);
-          return acc;
-        }, {})
-        : {},
-      continueActions: Array.isArray(object?.continueActions)
-        ? object.continueActions.map((e: any) => ContinueAction.fromJSON(e))
-        : [],
-    };
-  },
-
-  toJSON(message: GcState): unknown {
-    const obj: any = {};
-    obj.teamState = {};
-    if (message.teamState) {
-      Object.entries(message.teamState).forEach(([k, v]) => {
-        obj.teamState[k] = GcStateTeam.toJSON(v);
-      });
-    }
-    obj.autoRefState = {};
-    if (message.autoRefState) {
-      Object.entries(message.autoRefState).forEach(([k, v]) => {
-        obj.autoRefState[k] = GcStateAutoRef.toJSON(v);
-      });
-    }
-    obj.trackers = {};
-    if (message.trackers) {
-      Object.entries(message.trackers).forEach(([k, v]) => {
-        obj.trackers[k] = v;
-      });
-    }
-    if (message.continueActions) {
-      obj.continueActions = message.continueActions.map((e) => e ? ContinueAction.toJSON(e) : undefined);
-    } else {
-      obj.continueActions = [];
-    }
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GcState>, I>>(object: I): GcState {
-    const message = createBaseGcState();
-    message.teamState = Object.entries(object.teamState ?? {}).reduce<{ [key: string]: GcStateTeam }>(
-      (acc, [key, value]) => {
-        if (value !== undefined) {
-          acc[key] = GcStateTeam.fromPartial(value);
+// @ts-nocheck
+/**
+ * Generated by the protoc-gen-ts.  DO NOT EDIT!
+ * compiler version: 3.15.8
+ * source: ssl_gc_engine.proto
+ * git: https://github.com/thesayyn/protoc-gen-ts */
+import * as dependency_1 from "./ssl_gc_geometry";
+import * as dependency_2 from "./ssl_gc_common";
+import * as dependency_3 from "./google/protobuf/timestamp";
+import * as pb_1 from "google-protobuf";
+export class GcState extends pb_1.Message {
+    #one_of_decls: number[][] = [];
+    constructor(data?: any[] | {
+        teamState: Map<string, GcStateTeam>;
+        autoRefState: Map<string, GcStateAutoRef>;
+        trackers: Map<string, string>;
+        continueActions: ContinueAction[];
+    }) {
+        super();
+        pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [4], this.#one_of_decls);
+        if (!Array.isArray(data) && typeof data == "object") {
+            this.teamState = data.teamState;
+            this.autoRefState = data.autoRefState;
+            this.trackers = data.trackers;
+            this.continueActions = data.continueActions;
         }
-        return acc;
-      },
-      {},
-    );
-    message.autoRefState = Object.entries(object.autoRefState ?? {}).reduce<{ [key: string]: GcStateAutoRef }>(
-      (acc, [key, value]) => {
-        if (value !== undefined) {
-          acc[key] = GcStateAutoRef.fromPartial(value);
+        if (!this.teamState)
+            this.teamState = new Map();
+        if (!this.autoRefState)
+            this.autoRefState = new Map();
+        if (!this.trackers)
+            this.trackers = new Map();
+    }
+    get teamState() {
+        return pb_1.Message.getField(this, 1) as any as Map<string, GcStateTeam>;
+    }
+    set teamState(value: Map<string, GcStateTeam>) {
+        pb_1.Message.setField(this, 1, value as any);
+    }
+    get autoRefState() {
+        return pb_1.Message.getField(this, 2) as any as Map<string, GcStateAutoRef>;
+    }
+    set autoRefState(value: Map<string, GcStateAutoRef>) {
+        pb_1.Message.setField(this, 2, value as any);
+    }
+    get trackers() {
+        return pb_1.Message.getField(this, 3) as any as Map<string, string>;
+    }
+    set trackers(value: Map<string, string>) {
+        pb_1.Message.setField(this, 3, value as any);
+    }
+    get continueActions() {
+        return pb_1.Message.getRepeatedWrapperField(this, ContinueAction, 4) as ContinueAction[];
+    }
+    set continueActions(value: ContinueAction[]) {
+        pb_1.Message.setRepeatedWrapperField(this, 4, value);
+    }
+    static fromObject(data: {
+        teamState?: {
+            [key: string]: ReturnType<typeof GcStateTeam.prototype.toObject>;
+        };
+        autoRefState?: {
+            [key: string]: ReturnType<typeof GcStateAutoRef.prototype.toObject>;
+        };
+        trackers?: {
+            [key: string]: string;
+        };
+        continueActions?: ReturnType<typeof ContinueAction.prototype.toObject>[];
+    }): GcState {
+        const message = new GcState({
+            teamState: new Map(Object.entries(data.teamState).map(([key, value]) => [key, GcStateTeam.fromObject(value)])),
+            autoRefState: new Map(Object.entries(data.autoRefState).map(([key, value]) => [key, GcStateAutoRef.fromObject(value)])),
+            trackers: new Map(Object.entries(data.trackers)),
+            continueActions: data.continueActions.map(item => ContinueAction.fromObject(item))
+        });
+        return message;
+    }
+    toObject() {
+        const data: {
+            teamState?: {
+                [key: string]: ReturnType<typeof GcStateTeam.prototype.toObject>;
+            };
+            autoRefState?: {
+                [key: string]: ReturnType<typeof GcStateAutoRef.prototype.toObject>;
+            };
+            trackers?: {
+                [key: string]: string;
+            };
+            continueActions?: ReturnType<typeof ContinueAction.prototype.toObject>[];
+        } = {};
+        if (this.teamState.size > 0) {
+            data.teamState = Object.fromEntries(Array.from(this.teamState).map(([key, value]) => [key, value.toObject()]));
         }
-        return acc;
-      },
-      {},
-    );
-    message.trackers = Object.entries(object.trackers ?? {}).reduce<{ [key: string]: string }>((acc, [key, value]) => {
-      if (value !== undefined) {
-        acc[key] = String(value);
-      }
-      return acc;
-    }, {});
-    message.continueActions = object.continueActions?.map((e) => ContinueAction.fromPartial(e)) || [];
-    return message;
-  },
-};
-
-function createBaseGcState_TeamStateEntry(): GcState_TeamStateEntry {
-  return { key: "", value: undefined };
+        if (this.autoRefState.size > 0) {
+            data.autoRefState = Object.fromEntries(Array.from(this.autoRefState).map(([key, value]) => [key, value.toObject()]));
+        }
+        if (this.trackers.size > 0) {
+            data.trackers = Object.fromEntries(this.trackers);
+        }
+        if (this.continueActions != null) {
+            data.continueActions = this.continueActions.map((item: ContinueAction) => item.toObject());
+        }
+        return data;
+    }
+    serialize(): Uint8Array;
+    serialize(w: pb_1.BinaryWriter): void;
+    serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+        const writer = w || new pb_1.BinaryWriter();
+        for (const [key, value] of this.teamState) {
+            writer.writeMessage(1, this.teamState, () => {
+                writer.writeString(1, key);
+                writer.writeMessage(2, value, () => value.serialize(writer));
+            });
+        }
+        for (const [key, value] of this.autoRefState) {
+            writer.writeMessage(2, this.autoRefState, () => {
+                writer.writeString(1, key);
+                writer.writeMessage(2, value, () => value.serialize(writer));
+            });
+        }
+        for (const [key, value] of this.trackers) {
+            writer.writeMessage(3, this.trackers, () => {
+                writer.writeString(1, key);
+                writer.writeString(2, value);
+            });
+        }
+        if (this.continueActions.length)
+            writer.writeRepeatedMessage(4, this.continueActions, (item: ContinueAction) => item.serialize(writer));
+        if (!w)
+            return writer.getResultBuffer();
+    }
+    static deserialize(bytes: Uint8Array | pb_1.BinaryReader): GcState {
+        const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new GcState();
+        while (reader.nextField()) {
+            if (reader.isEndGroup())
+                break;
+            switch (reader.getFieldNumber()) {
+                case 1:
+                    reader.readMessage(message, () => pb_1.Map.deserializeBinary(message.teamState as any, reader, reader.readString, () => {
+                        let value;
+                        reader.readMessage(message, () => value = GcStateTeam.deserialize(reader));
+                        return value;
+                    }));
+                    break;
+                case 2:
+                    reader.readMessage(message, () => pb_1.Map.deserializeBinary(message.autoRefState as any, reader, reader.readString, () => {
+                        let value;
+                        reader.readMessage(message, () => value = GcStateAutoRef.deserialize(reader));
+                        return value;
+                    }));
+                    break;
+                case 3:
+                    reader.readMessage(message, () => pb_1.Map.deserializeBinary(message.trackers as any, reader, reader.readString, reader.readString));
+                    break;
+                case 4:
+                    reader.readMessage(message.continueActions, () => pb_1.Message.addToRepeatedWrapperField(message, 4, ContinueAction.deserialize(reader), ContinueAction));
+                    break;
+                default: reader.skipField();
+            }
+        }
+        return message;
+    }
+    serializeBinary(): Uint8Array {
+        return this.serialize();
+    }
+    static deserializeBinary(bytes: Uint8Array): GcState {
+        return GcState.deserialize(bytes);
+    }
 }
-
-export const GcState_TeamStateEntry = {
-  encode(message: GcState_TeamStateEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.key !== "") {
-      writer.uint32(10).string(message.key);
+export class GcStateTeam extends pb_1.Message {
+    #one_of_decls: number[][] = [];
+    constructor(data?: any[] | {
+        connected?: boolean;
+        connectionVerified?: boolean;
+        remoteControlConnected?: boolean;
+        remoteControlConnectionVerified?: boolean;
+        advantageChoice?: TeamAdvantageChoice;
+    }) {
+        super();
+        pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+        if (!Array.isArray(data) && typeof data == "object") {
+            if ("connected" in data && data.connected != undefined) {
+                this.connected = data.connected;
+            }
+            if ("connectionVerified" in data && data.connectionVerified != undefined) {
+                this.connectionVerified = data.connectionVerified;
+            }
+            if ("remoteControlConnected" in data && data.remoteControlConnected != undefined) {
+                this.remoteControlConnected = data.remoteControlConnected;
+            }
+            if ("remoteControlConnectionVerified" in data && data.remoteControlConnectionVerified != undefined) {
+                this.remoteControlConnectionVerified = data.remoteControlConnectionVerified;
+            }
+            if ("advantageChoice" in data && data.advantageChoice != undefined) {
+                this.advantageChoice = data.advantageChoice;
+            }
+        }
     }
-    if (message.value !== undefined) {
-      GcStateTeam.encode(message.value, writer.uint32(18).fork()).ldelim();
+    get connected() {
+        return pb_1.Message.getFieldWithDefault(this, 1, false) as boolean;
     }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GcState_TeamStateEntry {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGcState_TeamStateEntry();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.key = reader.string();
-          break;
-        case 2:
-          message.value = GcStateTeam.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
+    set connected(value: boolean) {
+        pb_1.Message.setField(this, 1, value);
     }
-    return message;
-  },
-
-  fromJSON(object: any): GcState_TeamStateEntry {
-    return {
-      key: isSet(object.key) ? String(object.key) : "",
-      value: isSet(object.value) ? GcStateTeam.fromJSON(object.value) : undefined,
-    };
-  },
-
-  toJSON(message: GcState_TeamStateEntry): unknown {
-    const obj: any = {};
-    message.key !== undefined && (obj.key = message.key);
-    message.value !== undefined && (obj.value = message.value ? GcStateTeam.toJSON(message.value) : undefined);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GcState_TeamStateEntry>, I>>(object: I): GcState_TeamStateEntry {
-    const message = createBaseGcState_TeamStateEntry();
-    message.key = object.key ?? "";
-    message.value = (object.value !== undefined && object.value !== null)
-      ? GcStateTeam.fromPartial(object.value)
-      : undefined;
-    return message;
-  },
-};
-
-function createBaseGcState_AutoRefStateEntry(): GcState_AutoRefStateEntry {
-  return { key: "", value: undefined };
+    get hasConnected() {
+        return pb_1.Message.getField(this, 1) != null;
+    }
+    get connectionVerified() {
+        return pb_1.Message.getFieldWithDefault(this, 2, false) as boolean;
+    }
+    set connectionVerified(value: boolean) {
+        pb_1.Message.setField(this, 2, value);
+    }
+    get hasConnectionVerified() {
+        return pb_1.Message.getField(this, 2) != null;
+    }
+    get remoteControlConnected() {
+        return pb_1.Message.getFieldWithDefault(this, 3, false) as boolean;
+    }
+    set remoteControlConnected(value: boolean) {
+        pb_1.Message.setField(this, 3, value);
+    }
+    get hasRemoteControlConnected() {
+        return pb_1.Message.getField(this, 3) != null;
+    }
+    get remoteControlConnectionVerified() {
+        return pb_1.Message.getFieldWithDefault(this, 4, false) as boolean;
+    }
+    set remoteControlConnectionVerified(value: boolean) {
+        pb_1.Message.setField(this, 4, value);
+    }
+    get hasRemoteControlConnectionVerified() {
+        return pb_1.Message.getField(this, 4) != null;
+    }
+    get advantageChoice() {
+        return pb_1.Message.getWrapperField(this, TeamAdvantageChoice, 5) as TeamAdvantageChoice;
+    }
+    set advantageChoice(value: TeamAdvantageChoice) {
+        pb_1.Message.setWrapperField(this, 5, value);
+    }
+    get hasAdvantageChoice() {
+        return pb_1.Message.getField(this, 5) != null;
+    }
+    static fromObject(data: {
+        connected?: boolean;
+        connectionVerified?: boolean;
+        remoteControlConnected?: boolean;
+        remoteControlConnectionVerified?: boolean;
+        advantageChoice?: ReturnType<typeof TeamAdvantageChoice.prototype.toObject>;
+    }): GcStateTeam {
+        const message = new GcStateTeam({});
+        if (data.connected != null) {
+            message.connected = data.connected;
+        }
+        if (data.connectionVerified != null) {
+            message.connectionVerified = data.connectionVerified;
+        }
+        if (data.remoteControlConnected != null) {
+            message.remoteControlConnected = data.remoteControlConnected;
+        }
+        if (data.remoteControlConnectionVerified != null) {
+            message.remoteControlConnectionVerified = data.remoteControlConnectionVerified;
+        }
+        if (data.advantageChoice != null) {
+            message.advantageChoice = TeamAdvantageChoice.fromObject(data.advantageChoice);
+        }
+        return message;
+    }
+    toObject() {
+        const data: {
+            connected?: boolean;
+            connectionVerified?: boolean;
+            remoteControlConnected?: boolean;
+            remoteControlConnectionVerified?: boolean;
+            advantageChoice?: ReturnType<typeof TeamAdvantageChoice.prototype.toObject>;
+        } = {};
+        if (this.connected != null) {
+            data.connected = this.connected;
+        }
+        if (this.connectionVerified != null) {
+            data.connectionVerified = this.connectionVerified;
+        }
+        if (this.remoteControlConnected != null) {
+            data.remoteControlConnected = this.remoteControlConnected;
+        }
+        if (this.remoteControlConnectionVerified != null) {
+            data.remoteControlConnectionVerified = this.remoteControlConnectionVerified;
+        }
+        if (this.advantageChoice != null) {
+            data.advantageChoice = this.advantageChoice.toObject();
+        }
+        return data;
+    }
+    serialize(): Uint8Array;
+    serialize(w: pb_1.BinaryWriter): void;
+    serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+        const writer = w || new pb_1.BinaryWriter();
+        if (this.hasConnected)
+            writer.writeBool(1, this.connected);
+        if (this.hasConnectionVerified)
+            writer.writeBool(2, this.connectionVerified);
+        if (this.hasRemoteControlConnected)
+            writer.writeBool(3, this.remoteControlConnected);
+        if (this.hasRemoteControlConnectionVerified)
+            writer.writeBool(4, this.remoteControlConnectionVerified);
+        if (this.hasAdvantageChoice)
+            writer.writeMessage(5, this.advantageChoice, () => this.advantageChoice.serialize(writer));
+        if (!w)
+            return writer.getResultBuffer();
+    }
+    static deserialize(bytes: Uint8Array | pb_1.BinaryReader): GcStateTeam {
+        const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new GcStateTeam();
+        while (reader.nextField()) {
+            if (reader.isEndGroup())
+                break;
+            switch (reader.getFieldNumber()) {
+                case 1:
+                    message.connected = reader.readBool();
+                    break;
+                case 2:
+                    message.connectionVerified = reader.readBool();
+                    break;
+                case 3:
+                    message.remoteControlConnected = reader.readBool();
+                    break;
+                case 4:
+                    message.remoteControlConnectionVerified = reader.readBool();
+                    break;
+                case 5:
+                    reader.readMessage(message.advantageChoice, () => message.advantageChoice = TeamAdvantageChoice.deserialize(reader));
+                    break;
+                default: reader.skipField();
+            }
+        }
+        return message;
+    }
+    serializeBinary(): Uint8Array {
+        return this.serialize();
+    }
+    static deserializeBinary(bytes: Uint8Array): GcStateTeam {
+        return GcStateTeam.deserialize(bytes);
+    }
 }
-
-export const GcState_AutoRefStateEntry = {
-  encode(message: GcState_AutoRefStateEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.key !== "") {
-      writer.uint32(10).string(message.key);
+export class TeamAdvantageChoice extends pb_1.Message {
+    #one_of_decls: number[][] = [];
+    constructor(data?: any[] | {
+        choice?: TeamAdvantageChoice.AdvantageChoice;
+    }) {
+        super();
+        pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+        if (!Array.isArray(data) && typeof data == "object") {
+            if ("choice" in data && data.choice != undefined) {
+                this.choice = data.choice;
+            }
+        }
     }
-    if (message.value !== undefined) {
-      GcStateAutoRef.encode(message.value, writer.uint32(18).fork()).ldelim();
+    get choice() {
+        return pb_1.Message.getFieldWithDefault(this, 1, TeamAdvantageChoice.AdvantageChoice.STOP) as TeamAdvantageChoice.AdvantageChoice;
     }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GcState_AutoRefStateEntry {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGcState_AutoRefStateEntry();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.key = reader.string();
-          break;
-        case 2:
-          message.value = GcStateAutoRef.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
+    set choice(value: TeamAdvantageChoice.AdvantageChoice) {
+        pb_1.Message.setField(this, 1, value);
     }
-    return message;
-  },
-
-  fromJSON(object: any): GcState_AutoRefStateEntry {
-    return {
-      key: isSet(object.key) ? String(object.key) : "",
-      value: isSet(object.value) ? GcStateAutoRef.fromJSON(object.value) : undefined,
-    };
-  },
-
-  toJSON(message: GcState_AutoRefStateEntry): unknown {
-    const obj: any = {};
-    message.key !== undefined && (obj.key = message.key);
-    message.value !== undefined && (obj.value = message.value ? GcStateAutoRef.toJSON(message.value) : undefined);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GcState_AutoRefStateEntry>, I>>(object: I): GcState_AutoRefStateEntry {
-    const message = createBaseGcState_AutoRefStateEntry();
-    message.key = object.key ?? "";
-    message.value = (object.value !== undefined && object.value !== null)
-      ? GcStateAutoRef.fromPartial(object.value)
-      : undefined;
-    return message;
-  },
-};
-
-function createBaseGcState_TrackersEntry(): GcState_TrackersEntry {
-  return { key: "", value: "" };
+    get hasChoice() {
+        return pb_1.Message.getField(this, 1) != null;
+    }
+    static fromObject(data: {
+        choice?: TeamAdvantageChoice.AdvantageChoice;
+    }): TeamAdvantageChoice {
+        const message = new TeamAdvantageChoice({});
+        if (data.choice != null) {
+            message.choice = data.choice;
+        }
+        return message;
+    }
+    toObject() {
+        const data: {
+            choice?: TeamAdvantageChoice.AdvantageChoice;
+        } = {};
+        if (this.choice != null) {
+            data.choice = this.choice;
+        }
+        return data;
+    }
+    serialize(): Uint8Array;
+    serialize(w: pb_1.BinaryWriter): void;
+    serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+        const writer = w || new pb_1.BinaryWriter();
+        if (this.hasChoice)
+            writer.writeEnum(1, this.choice);
+        if (!w)
+            return writer.getResultBuffer();
+    }
+    static deserialize(bytes: Uint8Array | pb_1.BinaryReader): TeamAdvantageChoice {
+        const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new TeamAdvantageChoice();
+        while (reader.nextField()) {
+            if (reader.isEndGroup())
+                break;
+            switch (reader.getFieldNumber()) {
+                case 1:
+                    message.choice = reader.readEnum();
+                    break;
+                default: reader.skipField();
+            }
+        }
+        return message;
+    }
+    serializeBinary(): Uint8Array {
+        return this.serialize();
+    }
+    static deserializeBinary(bytes: Uint8Array): TeamAdvantageChoice {
+        return TeamAdvantageChoice.deserialize(bytes);
+    }
 }
-
-export const GcState_TrackersEntry = {
-  encode(message: GcState_TrackersEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.key !== "") {
-      writer.uint32(10).string(message.key);
+export namespace TeamAdvantageChoice {
+    export enum AdvantageChoice {
+        STOP = 0,
+        CONTINUE = 1
     }
-    if (message.value !== "") {
-      writer.uint32(18).string(message.value);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GcState_TrackersEntry {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGcState_TrackersEntry();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.key = reader.string();
-          break;
-        case 2:
-          message.value = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GcState_TrackersEntry {
-    return { key: isSet(object.key) ? String(object.key) : "", value: isSet(object.value) ? String(object.value) : "" };
-  },
-
-  toJSON(message: GcState_TrackersEntry): unknown {
-    const obj: any = {};
-    message.key !== undefined && (obj.key = message.key);
-    message.value !== undefined && (obj.value = message.value);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GcState_TrackersEntry>, I>>(object: I): GcState_TrackersEntry {
-    const message = createBaseGcState_TrackersEntry();
-    message.key = object.key ?? "";
-    message.value = object.value ?? "";
-    return message;
-  },
-};
-
-function createBaseGcStateTeam(): GcStateTeam {
-  return {
-    connected: false,
-    connectionVerified: false,
-    remoteControlConnected: false,
-    remoteControlConnectionVerified: false,
-    advantageChoice: undefined,
-  };
 }
-
-export const GcStateTeam = {
-  encode(message: GcStateTeam, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.connected === true) {
-      writer.uint32(8).bool(message.connected);
+export class GcStateAutoRef extends pb_1.Message {
+    #one_of_decls: number[][] = [];
+    constructor(data?: any[] | {
+        connectionVerified?: boolean;
+    }) {
+        super();
+        pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+        if (!Array.isArray(data) && typeof data == "object") {
+            if ("connectionVerified" in data && data.connectionVerified != undefined) {
+                this.connectionVerified = data.connectionVerified;
+            }
+        }
     }
-    if (message.connectionVerified === true) {
-      writer.uint32(16).bool(message.connectionVerified);
+    get connectionVerified() {
+        return pb_1.Message.getFieldWithDefault(this, 1, false) as boolean;
     }
-    if (message.remoteControlConnected === true) {
-      writer.uint32(24).bool(message.remoteControlConnected);
+    set connectionVerified(value: boolean) {
+        pb_1.Message.setField(this, 1, value);
     }
-    if (message.remoteControlConnectionVerified === true) {
-      writer.uint32(32).bool(message.remoteControlConnectionVerified);
+    get hasConnectionVerified() {
+        return pb_1.Message.getField(this, 1) != null;
     }
-    if (message.advantageChoice !== undefined) {
-      TeamAdvantageChoice.encode(message.advantageChoice, writer.uint32(42).fork()).ldelim();
+    static fromObject(data: {
+        connectionVerified?: boolean;
+    }): GcStateAutoRef {
+        const message = new GcStateAutoRef({});
+        if (data.connectionVerified != null) {
+            message.connectionVerified = data.connectionVerified;
+        }
+        return message;
     }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GcStateTeam {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGcStateTeam();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.connected = reader.bool();
-          break;
-        case 2:
-          message.connectionVerified = reader.bool();
-          break;
-        case 3:
-          message.remoteControlConnected = reader.bool();
-          break;
-        case 4:
-          message.remoteControlConnectionVerified = reader.bool();
-          break;
-        case 5:
-          message.advantageChoice = TeamAdvantageChoice.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
+    toObject() {
+        const data: {
+            connectionVerified?: boolean;
+        } = {};
+        if (this.connectionVerified != null) {
+            data.connectionVerified = this.connectionVerified;
+        }
+        return data;
     }
-    return message;
-  },
-
-  fromJSON(object: any): GcStateTeam {
-    return {
-      connected: isSet(object.connected) ? Boolean(object.connected) : false,
-      connectionVerified: isSet(object.connectionVerified) ? Boolean(object.connectionVerified) : false,
-      remoteControlConnected: isSet(object.remoteControlConnected) ? Boolean(object.remoteControlConnected) : false,
-      remoteControlConnectionVerified: isSet(object.remoteControlConnectionVerified)
-        ? Boolean(object.remoteControlConnectionVerified)
-        : false,
-      advantageChoice: isSet(object.advantageChoice) ? TeamAdvantageChoice.fromJSON(object.advantageChoice) : undefined,
-    };
-  },
-
-  toJSON(message: GcStateTeam): unknown {
-    const obj: any = {};
-    message.connected !== undefined && (obj.connected = message.connected);
-    message.connectionVerified !== undefined && (obj.connectionVerified = message.connectionVerified);
-    message.remoteControlConnected !== undefined && (obj.remoteControlConnected = message.remoteControlConnected);
-    message.remoteControlConnectionVerified !== undefined &&
-      (obj.remoteControlConnectionVerified = message.remoteControlConnectionVerified);
-    message.advantageChoice !== undefined &&
-      (obj.advantageChoice = message.advantageChoice ? TeamAdvantageChoice.toJSON(message.advantageChoice) : undefined);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GcStateTeam>, I>>(object: I): GcStateTeam {
-    const message = createBaseGcStateTeam();
-    message.connected = object.connected ?? false;
-    message.connectionVerified = object.connectionVerified ?? false;
-    message.remoteControlConnected = object.remoteControlConnected ?? false;
-    message.remoteControlConnectionVerified = object.remoteControlConnectionVerified ?? false;
-    message.advantageChoice = (object.advantageChoice !== undefined && object.advantageChoice !== null)
-      ? TeamAdvantageChoice.fromPartial(object.advantageChoice)
-      : undefined;
-    return message;
-  },
-};
-
-function createBaseTeamAdvantageChoice(): TeamAdvantageChoice {
-  return { choice: 0 };
+    serialize(): Uint8Array;
+    serialize(w: pb_1.BinaryWriter): void;
+    serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+        const writer = w || new pb_1.BinaryWriter();
+        if (this.hasConnectionVerified)
+            writer.writeBool(1, this.connectionVerified);
+        if (!w)
+            return writer.getResultBuffer();
+    }
+    static deserialize(bytes: Uint8Array | pb_1.BinaryReader): GcStateAutoRef {
+        const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new GcStateAutoRef();
+        while (reader.nextField()) {
+            if (reader.isEndGroup())
+                break;
+            switch (reader.getFieldNumber()) {
+                case 1:
+                    message.connectionVerified = reader.readBool();
+                    break;
+                default: reader.skipField();
+            }
+        }
+        return message;
+    }
+    serializeBinary(): Uint8Array {
+        return this.serialize();
+    }
+    static deserializeBinary(bytes: Uint8Array): GcStateAutoRef {
+        return GcStateAutoRef.deserialize(bytes);
+    }
 }
-
-export const TeamAdvantageChoice = {
-  encode(message: TeamAdvantageChoice, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.choice !== 0) {
-      writer.uint32(8).int32(message.choice);
+export class GcStateTracker extends pb_1.Message {
+    #one_of_decls: number[][] = [];
+    constructor(data?: any[] | {
+        sourceName?: string;
+        uuid?: string;
+        ball?: Ball;
+        robots: Robot[];
+    }) {
+        super();
+        pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [3], this.#one_of_decls);
+        if (!Array.isArray(data) && typeof data == "object") {
+            if ("sourceName" in data && data.sourceName != undefined) {
+                this.sourceName = data.sourceName;
+            }
+            if ("uuid" in data && data.uuid != undefined) {
+                this.uuid = data.uuid;
+            }
+            if ("ball" in data && data.ball != undefined) {
+                this.ball = data.ball;
+            }
+            this.robots = data.robots;
+        }
     }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): TeamAdvantageChoice {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseTeamAdvantageChoice();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.choice = reader.int32() as any;
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
+    get sourceName() {
+        return pb_1.Message.getFieldWithDefault(this, 1, "") as string;
     }
-    return message;
-  },
-
-  fromJSON(object: any): TeamAdvantageChoice {
-    return { choice: isSet(object.choice) ? teamAdvantageChoice_AdvantageChoiceFromJSON(object.choice) : 0 };
-  },
-
-  toJSON(message: TeamAdvantageChoice): unknown {
-    const obj: any = {};
-    message.choice !== undefined && (obj.choice = teamAdvantageChoice_AdvantageChoiceToJSON(message.choice));
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<TeamAdvantageChoice>, I>>(object: I): TeamAdvantageChoice {
-    const message = createBaseTeamAdvantageChoice();
-    message.choice = object.choice ?? 0;
-    return message;
-  },
-};
-
-function createBaseGcStateAutoRef(): GcStateAutoRef {
-  return { connectionVerified: false };
+    set sourceName(value: string) {
+        pb_1.Message.setField(this, 1, value);
+    }
+    get hasSourceName() {
+        return pb_1.Message.getField(this, 1) != null;
+    }
+    get uuid() {
+        return pb_1.Message.getFieldWithDefault(this, 4, "") as string;
+    }
+    set uuid(value: string) {
+        pb_1.Message.setField(this, 4, value);
+    }
+    get hasUuid() {
+        return pb_1.Message.getField(this, 4) != null;
+    }
+    get ball() {
+        return pb_1.Message.getWrapperField(this, Ball, 2) as Ball;
+    }
+    set ball(value: Ball) {
+        pb_1.Message.setWrapperField(this, 2, value);
+    }
+    get hasBall() {
+        return pb_1.Message.getField(this, 2) != null;
+    }
+    get robots() {
+        return pb_1.Message.getRepeatedWrapperField(this, Robot, 3) as Robot[];
+    }
+    set robots(value: Robot[]) {
+        pb_1.Message.setRepeatedWrapperField(this, 3, value);
+    }
+    static fromObject(data: {
+        sourceName?: string;
+        uuid?: string;
+        ball?: ReturnType<typeof Ball.prototype.toObject>;
+        robots?: ReturnType<typeof Robot.prototype.toObject>[];
+    }): GcStateTracker {
+        const message = new GcStateTracker({
+            robots: data.robots.map(item => Robot.fromObject(item))
+        });
+        if (data.sourceName != null) {
+            message.sourceName = data.sourceName;
+        }
+        if (data.uuid != null) {
+            message.uuid = data.uuid;
+        }
+        if (data.ball != null) {
+            message.ball = Ball.fromObject(data.ball);
+        }
+        return message;
+    }
+    toObject() {
+        const data: {
+            sourceName?: string;
+            uuid?: string;
+            ball?: ReturnType<typeof Ball.prototype.toObject>;
+            robots?: ReturnType<typeof Robot.prototype.toObject>[];
+        } = {};
+        if (this.sourceName != null) {
+            data.sourceName = this.sourceName;
+        }
+        if (this.uuid != null) {
+            data.uuid = this.uuid;
+        }
+        if (this.ball != null) {
+            data.ball = this.ball.toObject();
+        }
+        if (this.robots != null) {
+            data.robots = this.robots.map((item: Robot) => item.toObject());
+        }
+        return data;
+    }
+    serialize(): Uint8Array;
+    serialize(w: pb_1.BinaryWriter): void;
+    serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+        const writer = w || new pb_1.BinaryWriter();
+        if (this.hasSourceName && this.sourceName.length)
+            writer.writeString(1, this.sourceName);
+        if (this.hasUuid && this.uuid.length)
+            writer.writeString(4, this.uuid);
+        if (this.hasBall)
+            writer.writeMessage(2, this.ball, () => this.ball.serialize(writer));
+        if (this.robots.length)
+            writer.writeRepeatedMessage(3, this.robots, (item: Robot) => item.serialize(writer));
+        if (!w)
+            return writer.getResultBuffer();
+    }
+    static deserialize(bytes: Uint8Array | pb_1.BinaryReader): GcStateTracker {
+        const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new GcStateTracker();
+        while (reader.nextField()) {
+            if (reader.isEndGroup())
+                break;
+            switch (reader.getFieldNumber()) {
+                case 1:
+                    message.sourceName = reader.readString();
+                    break;
+                case 4:
+                    message.uuid = reader.readString();
+                    break;
+                case 2:
+                    reader.readMessage(message.ball, () => message.ball = Ball.deserialize(reader));
+                    break;
+                case 3:
+                    reader.readMessage(message.robots, () => pb_1.Message.addToRepeatedWrapperField(message, 3, Robot.deserialize(reader), Robot));
+                    break;
+                default: reader.skipField();
+            }
+        }
+        return message;
+    }
+    serializeBinary(): Uint8Array {
+        return this.serialize();
+    }
+    static deserializeBinary(bytes: Uint8Array): GcStateTracker {
+        return GcStateTracker.deserialize(bytes);
+    }
 }
-
-export const GcStateAutoRef = {
-  encode(message: GcStateAutoRef, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.connectionVerified === true) {
-      writer.uint32(8).bool(message.connectionVerified);
+export class Ball extends pb_1.Message {
+    #one_of_decls: number[][] = [];
+    constructor(data?: any[] | {
+        pos?: dependency_1.Vector3;
+        vel?: dependency_1.Vector3;
+    }) {
+        super();
+        pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+        if (!Array.isArray(data) && typeof data == "object") {
+            if ("pos" in data && data.pos != undefined) {
+                this.pos = data.pos;
+            }
+            if ("vel" in data && data.vel != undefined) {
+                this.vel = data.vel;
+            }
+        }
     }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GcStateAutoRef {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGcStateAutoRef();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.connectionVerified = reader.bool();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
+    get pos() {
+        return pb_1.Message.getWrapperField(this, dependency_1.Vector3, 1) as dependency_1.Vector3;
     }
-    return message;
-  },
-
-  fromJSON(object: any): GcStateAutoRef {
-    return { connectionVerified: isSet(object.connectionVerified) ? Boolean(object.connectionVerified) : false };
-  },
-
-  toJSON(message: GcStateAutoRef): unknown {
-    const obj: any = {};
-    message.connectionVerified !== undefined && (obj.connectionVerified = message.connectionVerified);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GcStateAutoRef>, I>>(object: I): GcStateAutoRef {
-    const message = createBaseGcStateAutoRef();
-    message.connectionVerified = object.connectionVerified ?? false;
-    return message;
-  },
-};
-
-function createBaseGcStateTracker(): GcStateTracker {
-  return { sourceName: "", uuid: "", ball: undefined, robots: [] };
+    set pos(value: dependency_1.Vector3) {
+        pb_1.Message.setWrapperField(this, 1, value);
+    }
+    get hasPos() {
+        return pb_1.Message.getField(this, 1) != null;
+    }
+    get vel() {
+        return pb_1.Message.getWrapperField(this, dependency_1.Vector3, 2) as dependency_1.Vector3;
+    }
+    set vel(value: dependency_1.Vector3) {
+        pb_1.Message.setWrapperField(this, 2, value);
+    }
+    get hasVel() {
+        return pb_1.Message.getField(this, 2) != null;
+    }
+    static fromObject(data: {
+        pos?: ReturnType<typeof dependency_1.Vector3.prototype.toObject>;
+        vel?: ReturnType<typeof dependency_1.Vector3.prototype.toObject>;
+    }): Ball {
+        const message = new Ball({});
+        if (data.pos != null) {
+            message.pos = dependency_1.Vector3.fromObject(data.pos);
+        }
+        if (data.vel != null) {
+            message.vel = dependency_1.Vector3.fromObject(data.vel);
+        }
+        return message;
+    }
+    toObject() {
+        const data: {
+            pos?: ReturnType<typeof dependency_1.Vector3.prototype.toObject>;
+            vel?: ReturnType<typeof dependency_1.Vector3.prototype.toObject>;
+        } = {};
+        if (this.pos != null) {
+            data.pos = this.pos.toObject();
+        }
+        if (this.vel != null) {
+            data.vel = this.vel.toObject();
+        }
+        return data;
+    }
+    serialize(): Uint8Array;
+    serialize(w: pb_1.BinaryWriter): void;
+    serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+        const writer = w || new pb_1.BinaryWriter();
+        if (this.hasPos)
+            writer.writeMessage(1, this.pos, () => this.pos.serialize(writer));
+        if (this.hasVel)
+            writer.writeMessage(2, this.vel, () => this.vel.serialize(writer));
+        if (!w)
+            return writer.getResultBuffer();
+    }
+    static deserialize(bytes: Uint8Array | pb_1.BinaryReader): Ball {
+        const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new Ball();
+        while (reader.nextField()) {
+            if (reader.isEndGroup())
+                break;
+            switch (reader.getFieldNumber()) {
+                case 1:
+                    reader.readMessage(message.pos, () => message.pos = dependency_1.Vector3.deserialize(reader));
+                    break;
+                case 2:
+                    reader.readMessage(message.vel, () => message.vel = dependency_1.Vector3.deserialize(reader));
+                    break;
+                default: reader.skipField();
+            }
+        }
+        return message;
+    }
+    serializeBinary(): Uint8Array {
+        return this.serialize();
+    }
+    static deserializeBinary(bytes: Uint8Array): Ball {
+        return Ball.deserialize(bytes);
+    }
 }
-
-export const GcStateTracker = {
-  encode(message: GcStateTracker, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.sourceName !== "") {
-      writer.uint32(10).string(message.sourceName);
+export class Robot extends pb_1.Message {
+    #one_of_decls: number[][] = [];
+    constructor(data?: any[] | {
+        id?: dependency_2.RobotId;
+        pos?: dependency_1.Vector2;
+    }) {
+        super();
+        pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+        if (!Array.isArray(data) && typeof data == "object") {
+            if ("id" in data && data.id != undefined) {
+                this.id = data.id;
+            }
+            if ("pos" in data && data.pos != undefined) {
+                this.pos = data.pos;
+            }
+        }
     }
-    if (message.uuid !== "") {
-      writer.uint32(34).string(message.uuid);
+    get id() {
+        return pb_1.Message.getWrapperField(this, dependency_2.RobotId, 1) as dependency_2.RobotId;
     }
-    if (message.ball !== undefined) {
-      Ball.encode(message.ball, writer.uint32(18).fork()).ldelim();
+    set id(value: dependency_2.RobotId) {
+        pb_1.Message.setWrapperField(this, 1, value);
     }
-    for (const v of message.robots) {
-      Robot.encode(v!, writer.uint32(26).fork()).ldelim();
+    get hasId() {
+        return pb_1.Message.getField(this, 1) != null;
     }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GcStateTracker {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGcStateTracker();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.sourceName = reader.string();
-          break;
-        case 4:
-          message.uuid = reader.string();
-          break;
-        case 2:
-          message.ball = Ball.decode(reader, reader.uint32());
-          break;
-        case 3:
-          message.robots.push(Robot.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
+    get pos() {
+        return pb_1.Message.getWrapperField(this, dependency_1.Vector2, 2) as dependency_1.Vector2;
     }
-    return message;
-  },
-
-  fromJSON(object: any): GcStateTracker {
-    return {
-      sourceName: isSet(object.sourceName) ? String(object.sourceName) : "",
-      uuid: isSet(object.uuid) ? String(object.uuid) : "",
-      ball: isSet(object.ball) ? Ball.fromJSON(object.ball) : undefined,
-      robots: Array.isArray(object?.robots) ? object.robots.map((e: any) => Robot.fromJSON(e)) : [],
-    };
-  },
-
-  toJSON(message: GcStateTracker): unknown {
-    const obj: any = {};
-    message.sourceName !== undefined && (obj.sourceName = message.sourceName);
-    message.uuid !== undefined && (obj.uuid = message.uuid);
-    message.ball !== undefined && (obj.ball = message.ball ? Ball.toJSON(message.ball) : undefined);
-    if (message.robots) {
-      obj.robots = message.robots.map((e) => e ? Robot.toJSON(e) : undefined);
-    } else {
-      obj.robots = [];
+    set pos(value: dependency_1.Vector2) {
+        pb_1.Message.setWrapperField(this, 2, value);
     }
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GcStateTracker>, I>>(object: I): GcStateTracker {
-    const message = createBaseGcStateTracker();
-    message.sourceName = object.sourceName ?? "";
-    message.uuid = object.uuid ?? "";
-    message.ball = (object.ball !== undefined && object.ball !== null) ? Ball.fromPartial(object.ball) : undefined;
-    message.robots = object.robots?.map((e) => Robot.fromPartial(e)) || [];
-    return message;
-  },
-};
-
-function createBaseBall(): Ball {
-  return { pos: undefined, vel: undefined };
+    get hasPos() {
+        return pb_1.Message.getField(this, 2) != null;
+    }
+    static fromObject(data: {
+        id?: ReturnType<typeof dependency_2.RobotId.prototype.toObject>;
+        pos?: ReturnType<typeof dependency_1.Vector2.prototype.toObject>;
+    }): Robot {
+        const message = new Robot({});
+        if (data.id != null) {
+            message.id = dependency_2.RobotId.fromObject(data.id);
+        }
+        if (data.pos != null) {
+            message.pos = dependency_1.Vector2.fromObject(data.pos);
+        }
+        return message;
+    }
+    toObject() {
+        const data: {
+            id?: ReturnType<typeof dependency_2.RobotId.prototype.toObject>;
+            pos?: ReturnType<typeof dependency_1.Vector2.prototype.toObject>;
+        } = {};
+        if (this.id != null) {
+            data.id = this.id.toObject();
+        }
+        if (this.pos != null) {
+            data.pos = this.pos.toObject();
+        }
+        return data;
+    }
+    serialize(): Uint8Array;
+    serialize(w: pb_1.BinaryWriter): void;
+    serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+        const writer = w || new pb_1.BinaryWriter();
+        if (this.hasId)
+            writer.writeMessage(1, this.id, () => this.id.serialize(writer));
+        if (this.hasPos)
+            writer.writeMessage(2, this.pos, () => this.pos.serialize(writer));
+        if (!w)
+            return writer.getResultBuffer();
+    }
+    static deserialize(bytes: Uint8Array | pb_1.BinaryReader): Robot {
+        const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new Robot();
+        while (reader.nextField()) {
+            if (reader.isEndGroup())
+                break;
+            switch (reader.getFieldNumber()) {
+                case 1:
+                    reader.readMessage(message.id, () => message.id = dependency_2.RobotId.deserialize(reader));
+                    break;
+                case 2:
+                    reader.readMessage(message.pos, () => message.pos = dependency_1.Vector2.deserialize(reader));
+                    break;
+                default: reader.skipField();
+            }
+        }
+        return message;
+    }
+    serializeBinary(): Uint8Array {
+        return this.serialize();
+    }
+    static deserializeBinary(bytes: Uint8Array): Robot {
+        return Robot.deserialize(bytes);
+    }
 }
-
-export const Ball = {
-  encode(message: Ball, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.pos !== undefined) {
-      Vector3.encode(message.pos, writer.uint32(10).fork()).ldelim();
+export class ContinueAction extends pb_1.Message {
+    #one_of_decls: number[][] = [];
+    constructor(data?: any[] | {
+        type: ContinueAction.Type;
+        forTeam: dependency_2.Team;
+        continuationIssues: string[];
+        readyAt?: dependency_3.google.protobuf.Timestamp;
+        state?: ContinueAction.State;
+    }) {
+        super();
+        pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [3], this.#one_of_decls);
+        if (!Array.isArray(data) && typeof data == "object") {
+            this.type = data.type;
+            this.forTeam = data.forTeam;
+            this.continuationIssues = data.continuationIssues;
+            if ("readyAt" in data && data.readyAt != undefined) {
+                this.readyAt = data.readyAt;
+            }
+            if ("state" in data && data.state != undefined) {
+                this.state = data.state;
+            }
+        }
     }
-    if (message.vel !== undefined) {
-      Vector3.encode(message.vel, writer.uint32(18).fork()).ldelim();
+    get type() {
+        return pb_1.Message.getField(this, 1) as ContinueAction.Type;
     }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): Ball {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseBall();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.pos = Vector3.decode(reader, reader.uint32());
-          break;
-        case 2:
-          message.vel = Vector3.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
+    set type(value: ContinueAction.Type) {
+        pb_1.Message.setField(this, 1, value);
     }
-    return message;
-  },
-
-  fromJSON(object: any): Ball {
-    return {
-      pos: isSet(object.pos) ? Vector3.fromJSON(object.pos) : undefined,
-      vel: isSet(object.vel) ? Vector3.fromJSON(object.vel) : undefined,
-    };
-  },
-
-  toJSON(message: Ball): unknown {
-    const obj: any = {};
-    message.pos !== undefined && (obj.pos = message.pos ? Vector3.toJSON(message.pos) : undefined);
-    message.vel !== undefined && (obj.vel = message.vel ? Vector3.toJSON(message.vel) : undefined);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<Ball>, I>>(object: I): Ball {
-    const message = createBaseBall();
-    message.pos = (object.pos !== undefined && object.pos !== null) ? Vector3.fromPartial(object.pos) : undefined;
-    message.vel = (object.vel !== undefined && object.vel !== null) ? Vector3.fromPartial(object.vel) : undefined;
-    return message;
-  },
-};
-
-function createBaseRobot(): Robot {
-  return { id: undefined, pos: undefined };
+    get hasType() {
+        return pb_1.Message.getField(this, 1) != null;
+    }
+    get forTeam() {
+        return pb_1.Message.getField(this, 2) as dependency_2.Team;
+    }
+    set forTeam(value: dependency_2.Team) {
+        pb_1.Message.setField(this, 2, value);
+    }
+    get hasForTeam() {
+        return pb_1.Message.getField(this, 2) != null;
+    }
+    get continuationIssues() {
+        return pb_1.Message.getFieldWithDefault(this, 3, []) as string[];
+    }
+    set continuationIssues(value: string[]) {
+        pb_1.Message.setField(this, 3, value);
+    }
+    get readyAt() {
+        return pb_1.Message.getWrapperField(this, dependency_3.google.protobuf.Timestamp, 4) as dependency_3.google.protobuf.Timestamp;
+    }
+    set readyAt(value: dependency_3.google.protobuf.Timestamp) {
+        pb_1.Message.setWrapperField(this, 4, value);
+    }
+    get hasReadyAt() {
+        return pb_1.Message.getField(this, 4) != null;
+    }
+    get state() {
+        return pb_1.Message.getFieldWithDefault(this, 5, ContinueAction.State.STATE_UNKNOWN) as ContinueAction.State;
+    }
+    set state(value: ContinueAction.State) {
+        pb_1.Message.setField(this, 5, value);
+    }
+    get hasState() {
+        return pb_1.Message.getField(this, 5) != null;
+    }
+    static fromObject(data: {
+        type?: ContinueAction.Type;
+        forTeam?: dependency_2.Team;
+        continuationIssues: string[];
+        readyAt?: ReturnType<typeof dependency_3.google.protobuf.Timestamp.prototype.toObject>;
+        state?: ContinueAction.State;
+    }): ContinueAction {
+        const message = new ContinueAction({
+            type: data.type,
+            forTeam: data.forTeam,
+            continuationIssues: data.continuationIssues
+        });
+        if (data.readyAt != null) {
+            message.readyAt = dependency_3.google.protobuf.Timestamp.fromObject(data.readyAt);
+        }
+        if (data.state != null) {
+            message.state = data.state;
+        }
+        return message;
+    }
+    toObject() {
+        const data: {
+            type?: ContinueAction.Type;
+            forTeam?: dependency_2.Team;
+            continuationIssues: string[];
+            readyAt?: ReturnType<typeof dependency_3.google.protobuf.Timestamp.prototype.toObject>;
+            state?: ContinueAction.State;
+        } = {
+            continuationIssues: this.continuationIssues
+        };
+        if (this.type != null) {
+            data.type = this.type;
+        }
+        if (this.forTeam != null) {
+            data.forTeam = this.forTeam;
+        }
+        if (this.readyAt != null) {
+            data.readyAt = this.readyAt.toObject();
+        }
+        if (this.state != null) {
+            data.state = this.state;
+        }
+        return data;
+    }
+    serialize(): Uint8Array;
+    serialize(w: pb_1.BinaryWriter): void;
+    serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+        const writer = w || new pb_1.BinaryWriter();
+        if (this.hasType)
+            writer.writeEnum(1, this.type);
+        if (this.hasForTeam)
+            writer.writeEnum(2, this.forTeam);
+        if (this.continuationIssues.length)
+            writer.writeRepeatedString(3, this.continuationIssues);
+        if (this.hasReadyAt)
+            writer.writeMessage(4, this.readyAt, () => this.readyAt.serialize(writer));
+        if (this.hasState)
+            writer.writeEnum(5, this.state);
+        if (!w)
+            return writer.getResultBuffer();
+    }
+    static deserialize(bytes: Uint8Array | pb_1.BinaryReader): ContinueAction {
+        const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new ContinueAction();
+        while (reader.nextField()) {
+            if (reader.isEndGroup())
+                break;
+            switch (reader.getFieldNumber()) {
+                case 1:
+                    message.type = reader.readEnum();
+                    break;
+                case 2:
+                    message.forTeam = reader.readEnum();
+                    break;
+                case 3:
+                    pb_1.Message.addToRepeatedField(message, 3, reader.readString());
+                    break;
+                case 4:
+                    reader.readMessage(message.readyAt, () => message.readyAt = dependency_3.google.protobuf.Timestamp.deserialize(reader));
+                    break;
+                case 5:
+                    message.state = reader.readEnum();
+                    break;
+                default: reader.skipField();
+            }
+        }
+        return message;
+    }
+    serializeBinary(): Uint8Array {
+        return this.serialize();
+    }
+    static deserializeBinary(bytes: Uint8Array): ContinueAction {
+        return ContinueAction.deserialize(bytes);
+    }
 }
-
-export const Robot = {
-  encode(message: Robot, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== undefined) {
-      RobotId.encode(message.id, writer.uint32(10).fork()).ldelim();
+export namespace ContinueAction {
+    export enum Type {
+        TYPE_UNKNOWN = 0,
+        HALT = 1,
+        RESUME_FROM_HALT = 10,
+        STOP_GAME = 2,
+        RESUME_FROM_STOP = 11,
+        NEXT_COMMAND = 3,
+        BALL_PLACEMENT_START = 4,
+        BALL_PLACEMENT_CANCEL = 9,
+        TIMEOUT_START = 5,
+        TIMEOUT_STOP = 6,
+        BOT_SUBSTITUTION = 7,
+        NEXT_STAGE = 8
     }
-    if (message.pos !== undefined) {
-      Vector2.encode(message.pos, writer.uint32(18).fork()).ldelim();
+    export enum State {
+        STATE_UNKNOWN = 0,
+        BLOCKED = 1,
+        WAITING = 2,
+        READY_AUTO = 3,
+        READY_MANUAL = 4
     }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): Robot {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRobot();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.id = RobotId.decode(reader, reader.uint32());
-          break;
-        case 2:
-          message.pos = Vector2.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): Robot {
-    return {
-      id: isSet(object.id) ? RobotId.fromJSON(object.id) : undefined,
-      pos: isSet(object.pos) ? Vector2.fromJSON(object.pos) : undefined,
-    };
-  },
-
-  toJSON(message: Robot): unknown {
-    const obj: any = {};
-    message.id !== undefined && (obj.id = message.id ? RobotId.toJSON(message.id) : undefined);
-    message.pos !== undefined && (obj.pos = message.pos ? Vector2.toJSON(message.pos) : undefined);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<Robot>, I>>(object: I): Robot {
-    const message = createBaseRobot();
-    message.id = (object.id !== undefined && object.id !== null) ? RobotId.fromPartial(object.id) : undefined;
-    message.pos = (object.pos !== undefined && object.pos !== null) ? Vector2.fromPartial(object.pos) : undefined;
-    return message;
-  },
-};
-
-function createBaseContinueAction(): ContinueAction {
-  return { type: 0, forTeam: 0, continuationIssues: [], readyAt: undefined, state: 0 };
-}
-
-export const ContinueAction = {
-  encode(message: ContinueAction, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.type !== 0) {
-      writer.uint32(8).int32(message.type);
-    }
-    if (message.forTeam !== 0) {
-      writer.uint32(16).int32(message.forTeam);
-    }
-    for (const v of message.continuationIssues) {
-      writer.uint32(26).string(v!);
-    }
-    if (message.readyAt !== undefined) {
-      Timestamp.encode(toTimestamp(message.readyAt), writer.uint32(34).fork()).ldelim();
-    }
-    if (message.state !== 0) {
-      writer.uint32(40).int32(message.state);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): ContinueAction {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseContinueAction();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.type = reader.int32() as any;
-          break;
-        case 2:
-          message.forTeam = reader.int32() as any;
-          break;
-        case 3:
-          message.continuationIssues.push(reader.string());
-          break;
-        case 4:
-          message.readyAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
-          break;
-        case 5:
-          message.state = reader.int32() as any;
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): ContinueAction {
-    return {
-      type: isSet(object.type) ? continueAction_TypeFromJSON(object.type) : 0,
-      forTeam: isSet(object.forTeam) ? teamFromJSON(object.forTeam) : 0,
-      continuationIssues: Array.isArray(object?.continuationIssues)
-        ? object.continuationIssues.map((e: any) => String(e))
-        : [],
-      readyAt: isSet(object.readyAt) ? fromJsonTimestamp(object.readyAt) : undefined,
-      state: isSet(object.state) ? continueAction_StateFromJSON(object.state) : 0,
-    };
-  },
-
-  toJSON(message: ContinueAction): unknown {
-    const obj: any = {};
-    message.type !== undefined && (obj.type = continueAction_TypeToJSON(message.type));
-    message.forTeam !== undefined && (obj.forTeam = teamToJSON(message.forTeam));
-    if (message.continuationIssues) {
-      obj.continuationIssues = message.continuationIssues.map((e) => e);
-    } else {
-      obj.continuationIssues = [];
-    }
-    message.readyAt !== undefined && (obj.readyAt = message.readyAt.toISOString());
-    message.state !== undefined && (obj.state = continueAction_StateToJSON(message.state));
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<ContinueAction>, I>>(object: I): ContinueAction {
-    const message = createBaseContinueAction();
-    message.type = object.type ?? 0;
-    message.forTeam = object.forTeam ?? 0;
-    message.continuationIssues = object.continuationIssues?.map((e) => e) || [];
-    message.readyAt = object.readyAt ?? undefined;
-    message.state = object.state ?? 0;
-    return message;
-  },
-};
-
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
-
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends { $case: string } ? { [K in keyof Omit<T, "$case">]?: DeepPartial<T[K]> } & { $case: T["$case"] }
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
-  : Partial<T>;
-
-type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
-
-function toTimestamp(date: Date): Timestamp {
-  const seconds = date.getTime() / 1_000;
-  const nanos = (date.getTime() % 1_000) * 1_000_000;
-  return { seconds, nanos };
-}
-
-function fromTimestamp(t: Timestamp): Date {
-  let millis = t.seconds * 1_000;
-  millis += t.nanos / 1_000_000;
-  return new Date(millis);
-}
-
-function fromJsonTimestamp(o: any): Date {
-  if (o instanceof Date) {
-    return o;
-  } else if (typeof o === "string") {
-    return new Date(o);
-  } else {
-    return fromTimestamp(Timestamp.fromJSON(o));
-  }
-}
-
-function isObject(value: any): boolean {
-  return typeof value === "object" && value !== null;
-}
-
-function isSet(value: any): boolean {
-  return value !== null && value !== undefined;
 }
