@@ -7,7 +7,7 @@ const store = useMatchStateStore()
 <template>
   <main>
     <div class="full-state">
-      {{ JSON.stringify(store) }}
+      <pre>{{ JSON.stringify(store.matchState.toObject(), null, 2) }}</pre>
     </div>
   </main>
 </template>
