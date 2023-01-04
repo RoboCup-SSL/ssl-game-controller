@@ -2,12 +2,15 @@ import {defineStore} from "pinia";
 import {GcState} from "@/proto/ssl_gc_engine";
 
 export const useGcStateStore = defineStore('gcState', {
-    state: () => (new GcState()),
-    getters: {
+  state: () => {
+    return {
+      gcState: new GcState()
+    }
+  },
+  getters: {},
+  actions: {
+    update(newState: GcState) {
+      this.gcState = newState
     },
-    actions: {
-        update(newState: GcState) {
-            this.$state = newState
-        },
-    },
+  },
 })
