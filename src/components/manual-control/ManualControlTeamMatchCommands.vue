@@ -82,7 +82,7 @@
                 return this.state.command.type === 'HALT';
             },
             running() {
-                return this.state.command.type === 'FORCES_TART'
+                return this.state.command.type === 'FORCE_START'
                     || this.state.command.type === 'NORMAL_START'
                     || this.state.command.type === 'DIRECT';
             },
