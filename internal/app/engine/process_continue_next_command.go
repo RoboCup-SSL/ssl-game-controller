@@ -14,8 +14,9 @@ func (e *Engine) createNextCommandContinueAction(actionType ContinueAction_Type)
 	var continuationIssues = e.findIssuesForContinuation(*e.currentState.Command.Type)
 
 	var lastReadyAt *timestamppb.Timestamp
-	if len(e.gcState.ContinueActions) > 0 {
-		lastReadyAt = e.gcState.ContinueActions[0].ReadyAt
+	var lastContinueAction = e.LastContinueAction(actionType)
+	if lastContinueAction != nil {
+		lastReadyAt = lastContinueAction.ReadyAt
 	}
 
 	var readyAt *timestamppb.Timestamp
@@ -54,6 +55,15 @@ func (e *Engine) createNextCommandContinueAction(actionType ContinueAction_Type)
 		ContinuationIssues: continuationIssues,
 		ReadyAt:            readyAt,
 	}
+}
+
+func (e *Engine) LastContinueAction(actionType ContinueAction_Type) *ContinueAction {
+	for _, action := range e.gcState.ContinueActions {
+		if *action.Type == actionType {
+			return action
+		}
+	}
+	return nil
 }
 
 func maxTime(t1, t2 *timestamppb.Timestamp) *timestamppb.Timestamp {

@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-func (e *Engine) nextAction() (actions []*ContinueAction) {
+func (e *Engine) nextActions() (actions []*ContinueAction) {
 	if e.currentState.Stage.IsPausedStage() {
 		if *e.currentState.Stage.Next() != *e.currentState.Stage {
 			actions = append(actions, createContinueAction(
