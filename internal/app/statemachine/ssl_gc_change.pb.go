@@ -119,6 +119,7 @@ type Change struct {
 	// Is this change revertible?
 	Revertible *bool `protobuf:"varint,16,opt,name=revertible" json:"revertible,omitempty"`
 	// Types that are assignable to Change:
+	//
 	//	*Change_NewCommandChange
 	//	*Change_ChangeStageChange
 	//	*Change_SetBallPlacementPosChange

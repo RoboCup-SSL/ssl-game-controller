@@ -53,9 +53,13 @@ pbjs -t static-module -w es6 -o src/proto.js \
 target_dir="./frontend/src/proto"
 mkdir -p "${target_dir}"
 protoc -I"./proto" \
-    --plugin=./frontend/node_modules/.bin/protoc-gen-ts \
-    --ts_out="${target_dir}" \
-    --ts_opt=json_names \
+    --plugin=./frontend/node_modules/.bin/protoc-gen-ts_proto \
+    --ts_proto_out="${target_dir}" \
+    --ts_proto_opt=oneof=unions \
+    --ts_proto_opt=outputEncodeMethods=false \
+    --ts_proto_opt=outputPartialMethods=false \
+    --ts_proto_opt=stringEnums=true \
+    --ts_proto_opt=exportCommonSymbols=false \
     ./proto/ssl_gc_api.proto
-# Ignore type checks for now - Generated code is not fully compatible with strict type checking: https://github.com/thesayyn/protoc-gen-ts/issues/154
-sed -i '1s;^;// @ts-nocheck\n;' "${target_dir}"/*.ts
+
+

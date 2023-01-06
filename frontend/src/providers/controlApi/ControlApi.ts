@@ -1,6 +1,6 @@
 import {Input, Output} from "@/proto/ssl_gc_api";
-import {Change} from "@/proto/ssl_gc_change";
-import {Command} from "@/proto/ssl_gc_state";
+import type {Change} from "@/proto/ssl_gc_change";
+import type {Command, Command_Type} from "@/proto/ssl_gc_state";
 import type {GameEvent} from "@/proto/ssl_gc_game_event";
 import type {ContinueAction} from "@/proto/ssl_gc_engine";
 import type {Config} from "@/proto/ssl_gc_engine_config";
@@ -17,54 +17,86 @@ export class ControlApi {
   }
 
 
-  public NewCommandNeutral(type: Command.Type) {
-    this.NewCommand(new Command({type, forTeam: Team.UNKNOWN}))
+  public NewCommandNeutral(type: Command_Type) {
+    this.NewCommand({type, forTeam: Team.UNKNOWN})
   }
 
-  public NewCommandForTeam(type: Command.Type, forTeam: Team) {
-    this.NewCommand(new Command({type, forTeam}))
+  public NewCommandForTeam(type: Command_Type, forTeam: Team) {
+    this.NewCommand({type, forTeam})
   }
 
   public NewCommand(command: Command) {
-    this.SubmitChange(Change.fromObject({
-      newCommandChange: {
-        command
+    this.SubmitChange({
+      origin: "UI",
+      revertible: true,
+      change: {
+        $case: 'newCommandChange',
+        newCommandChange: {
+          command
+        }
       }
-    }))
+    })
   }
 
   public AddGameEvent(gameEvent: GameEvent) {
-    gameEvent.origin = ["UI"]
-    this.SubmitChange(Change.fromObject({
-      addGameEventChange: {
-        gameEvent
+    if (gameEvent.origin.length == 0) {
+      gameEvent.origin = ["UI"]
+    }
+    this.SubmitChange({
+      origin: "UI",
+      revertible: true,
+      change: {
+        $case: 'addGameEventChange',
+        addGameEventChange: {
+          gameEvent
+        }
       }
-    }))
+    })
   }
 
   public ChangeConfig(configDelta: Config) {
-    this.Send(new Input({configDelta}))
+    this.Send({
+      change: undefined,
+      resetMatch: false,
+      configDelta,
+      continueAction: undefined
+    })
   }
 
   public ResetMatch() {
-    this.Send(new Input({resetMatch: true}))
+    this.Send({
+      change: undefined,
+      resetMatch: true,
+      configDelta: undefined,
+      continueAction: undefined
+    })
   }
 
   public Continue(continueAction: ContinueAction) {
-    this.Send(new Input({continueAction}))
+    this.Send({
+      change: undefined,
+      resetMatch: false,
+      configDelta: undefined,
+      continueAction
+    })
   }
 
   public SubmitChange(change: Change) {
-    this.Send(new Input({change}))
+    this.Send({
+      change,
+      resetMatch: false,
+      configDelta: undefined,
+      continueAction: undefined
+    })
   }
 
   public Send(request: Input) {
     const ws = this.ws
     if (ws) {
-      const json = JSON.stringify(request.toObject())
+      const json = JSON.stringify(Input.toJSON(request))
       ws.send(json)
     } else {
-      console.warn("No WebSocket connection. Dropping ", request.toObject())
+      console.warn("No WebSocket connection. Dropping ", request)
     }
   }
 
@@ -84,7 +116,7 @@ export class ControlApi {
     const ws = new WebSocket(this.determineWebSocketAddress());
 
     ws.onmessage = (e) => {
-      this.latestOutput = Output.fromObject(JSON.parse(e.data))
+      this.latestOutput = Output.fromJSON(JSON.parse(e.data))
       for (const callback of this.consumer) {
         callback(this.latestOutput)
       }

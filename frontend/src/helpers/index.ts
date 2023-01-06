@@ -1,49 +1,76 @@
-import {Referee} from "@/proto/ssl_gc_referee_message";
-import Stage = Referee.Stage;
+import {Referee_Stage} from "@/proto/ssl_gc_referee_message";
 
-export const stageNames = new Map<Stage, string>([
-  [Stage.NORMAL_FIRST_HALF_PRE, 'Pre-First Half'],
-  [Stage.NORMAL_FIRST_HALF, 'First Half'],
-  [Stage.NORMAL_HALF_TIME, 'Half Time'],
-  [Stage.NORMAL_SECOND_HALF_PRE, 'Pre-Second Half'],
-  [Stage.NORMAL_SECOND_HALF, 'Second Half'],
-  [Stage.EXTRA_TIME_BREAK, 'Overtime Break'],
-  [Stage.EXTRA_FIRST_HALF_PRE, 'Pre-Overtime First Half'],
-  [Stage.EXTRA_FIRST_HALF, 'Overtime First Half'],
-  [Stage.EXTRA_HALF_TIME, 'Overtime Half Time'],
-  [Stage.EXTRA_SECOND_HALF_PRE, 'Pre-Overtime Second Half'],
-  [Stage.EXTRA_SECOND_HALF, 'Overtime Second Half'],
-  [Stage.PENALTY_SHOOTOUT_BREAK, 'Shootout Break'],
-  [Stage.PENALTY_SHOOTOUT, 'Shootout'],
-  [Stage.POST_GAME, 'End of Game'],
+export const stageNames = new Map<Referee_Stage, string>([
+  [Referee_Stage.NORMAL_FIRST_HALF_PRE, 'Pre-First Half'],
+  [Referee_Stage.NORMAL_FIRST_HALF, 'First Half'],
+  [Referee_Stage.NORMAL_HALF_TIME, 'Half Time'],
+  [Referee_Stage.NORMAL_SECOND_HALF_PRE, 'Pre-Second Half'],
+  [Referee_Stage.NORMAL_SECOND_HALF, 'Second Half'],
+  [Referee_Stage.EXTRA_TIME_BREAK, 'Overtime Break'],
+  [Referee_Stage.EXTRA_FIRST_HALF_PRE, 'Pre-Overtime First Half'],
+  [Referee_Stage.EXTRA_FIRST_HALF, 'Overtime First Half'],
+  [Referee_Stage.EXTRA_HALF_TIME, 'Overtime Half Time'],
+  [Referee_Stage.EXTRA_SECOND_HALF_PRE, 'Pre-Overtime Second Half'],
+  [Referee_Stage.EXTRA_SECOND_HALF, 'Overtime Second Half'],
+  [Referee_Stage.PENALTY_SHOOTOUT_BREAK, 'Shootout Break'],
+  [Referee_Stage.PENALTY_SHOOTOUT, 'Shootout'],
+  [Referee_Stage.POST_GAME, 'End of Game'],
 ]);
 
-export const getNextStage = function (stage: Stage): Stage {
-  if (stage < Stage.POST_GAME) {
-    return stage + 1
+export const getNextStage = function (stage: Referee_Stage): Referee_Stage {
+  switch (stage) {
+    case Referee_Stage.NORMAL_FIRST_HALF_PRE:
+      return Referee_Stage.NORMAL_FIRST_HALF
+    case Referee_Stage.NORMAL_FIRST_HALF:
+      return Referee_Stage.NORMAL_HALF_TIME
+    case Referee_Stage.NORMAL_HALF_TIME:
+      return Referee_Stage.NORMAL_SECOND_HALF_PRE
+    case Referee_Stage.NORMAL_SECOND_HALF_PRE:
+      return Referee_Stage.NORMAL_SECOND_HALF
+    case Referee_Stage.NORMAL_SECOND_HALF:
+      return Referee_Stage.EXTRA_TIME_BREAK
+    case Referee_Stage.EXTRA_TIME_BREAK:
+      return Referee_Stage.EXTRA_FIRST_HALF_PRE
+    case Referee_Stage.EXTRA_FIRST_HALF_PRE:
+      return Referee_Stage.EXTRA_FIRST_HALF
+    case Referee_Stage.EXTRA_FIRST_HALF:
+      return Referee_Stage.EXTRA_HALF_TIME
+    case Referee_Stage.EXTRA_HALF_TIME:
+      return Referee_Stage.EXTRA_SECOND_HALF_PRE
+    case Referee_Stage.EXTRA_SECOND_HALF_PRE:
+      return Referee_Stage.EXTRA_SECOND_HALF
+    case Referee_Stage.EXTRA_SECOND_HALF:
+      return Referee_Stage.PENALTY_SHOOTOUT_BREAK
+    case Referee_Stage.PENALTY_SHOOTOUT_BREAK:
+      return Referee_Stage.PENALTY_SHOOTOUT
+    case Referee_Stage.PENALTY_SHOOTOUT:
+      return Referee_Stage.POST_GAME
+    case Referee_Stage.POST_GAME:
+    case Referee_Stage.UNRECOGNIZED:
+    default:
+      return Referee_Stage.POST_GAME
   }
-  return stage
-};
-
-export const isPausedStage = function (stage: Stage): boolean {
-  return stage.toString() === Stage[Stage.NORMAL_HALF_TIME]
-    || stage.toString() === Stage[Stage.EXTRA_TIME_BREAK]
-    || stage.toString() === Stage[Stage.EXTRA_HALF_TIME]
-    || stage.toString() === Stage[Stage.PENALTY_SHOOTOUT_BREAK]
-    || stage.toString() === Stage[Stage.POST_GAME]
 }
 
-export const isRunningStage = function (stage: Stage): boolean {
-  return stage.toString() === Stage[Stage.NORMAL_FIRST_HALF]
-    || stage.toString() === Stage[Stage.NORMAL_SECOND_HALF]
-    || stage.toString() === Stage[Stage.EXTRA_FIRST_HALF]
-    || stage.toString() === Stage[Stage.EXTRA_SECOND_HALF]
-    || stage.toString() === Stage[Stage.PENALTY_SHOOTOUT]
+export const isPausedStage = function (stage: Referee_Stage): boolean {
+  return stage.toString() === Referee_Stage[Referee_Stage.NORMAL_HALF_TIME]
+    || stage.toString() === Referee_Stage[Referee_Stage.EXTRA_TIME_BREAK]
+    || stage.toString() === Referee_Stage[Referee_Stage.EXTRA_HALF_TIME]
+    || stage.toString() === Referee_Stage[Referee_Stage.PENALTY_SHOOTOUT_BREAK]
+    || stage.toString() === Referee_Stage[Referee_Stage.POST_GAME]
+}
+
+export const isRunningStage = function (stage: Referee_Stage): boolean {
+  return stage.toString() === Referee_Stage[Referee_Stage.NORMAL_FIRST_HALF]
+    || stage.toString() === Referee_Stage[Referee_Stage.NORMAL_SECOND_HALF]
+    || stage.toString() === Referee_Stage[Referee_Stage.EXTRA_FIRST_HALF]
+    || stage.toString() === Referee_Stage[Referee_Stage.EXTRA_SECOND_HALF]
+    || stage.toString() === Referee_Stage[Referee_Stage.PENALTY_SHOOTOUT]
 };
 
-export const isPreStage = function (stage: Stage): boolean {
-  return stage.toString() === Stage[Stage.NORMAL_FIRST_HALF_PRE]
-    || stage.toString() === Stage[Stage.NORMAL_SECOND_HALF_PRE]
-    || stage.toString() === Stage[Stage.EXTRA_FIRST_HALF_PRE]
-    || stage.toString() === Stage[Stage.EXTRA_SECOND_HALF_PRE]
+export const isPreStage = function (stage: Referee_Stage): boolean {
+  return stage.toString() === Referee_Stage[Referee_Stage.NORMAL_FIRST_HALF_PRE]
+    || stage.toString() === Referee_Stage[Referee_Stage.NORMAL_SECOND_HALF_PRE]
+    || stage.toString() === Referee_Stage[Referee_Stage.EXTRA_FIRST_HALF_PRE]
+    || stage.toString() === Referee_Stage[Referee_Stage.EXTRA_SECOND_HALF_PRE]
 };

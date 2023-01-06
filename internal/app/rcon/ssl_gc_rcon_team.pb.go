@@ -159,6 +159,7 @@ type TeamToController struct {
 	// signature can optionally be specified to enable secure communication
 	Signature *Signature `protobuf:"bytes,1,opt,name=signature" json:"signature,omitempty"`
 	// Types that are assignable to Msg:
+	//
 	//	*TeamToController_DesiredKeeper
 	//	*TeamToController_AdvantageChoice
 	//	*TeamToController_SubstituteBot
@@ -280,6 +281,7 @@ type ControllerToTeam struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Types that are assignable to Msg:
+	//
 	//	*ControllerToTeam_ControllerReply
 	Msg isControllerToTeam_Msg `protobuf_oneof:"msg"`
 }

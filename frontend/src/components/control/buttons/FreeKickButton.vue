@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import {computed, inject} from "vue";
-import {ControlApi} from "@/providers/controlApi/ControlApi";
-import {Command} from "@/proto/ssl_gc_state";
+import type {ControlApi} from "@/providers/controlApi/ControlApi";
+import {Command_Type} from "@/proto/ssl_gc_state";
 import ControlButton from "@/components/control/buttons/ControlButton.vue";
 import {useMatchStateStore} from "@/store/matchState";
-import {Team} from "@/proto/ssl_gc_common";
-import Type = Command.Type;
+import type {Team} from "@/proto/ssl_gc_common";
 
 const props = defineProps<{
   team: Team,
@@ -15,7 +14,7 @@ const store = useMatchStateStore()
 const control = inject<ControlApi>('control-api')
 
 const sendCommand = () => {
-  control?.NewCommandForTeam(Type.DIRECT, props.team)
+  control?.NewCommandForTeam(Command_Type.DIRECT, props.team)
 }
 
 const disable = computed(() => {

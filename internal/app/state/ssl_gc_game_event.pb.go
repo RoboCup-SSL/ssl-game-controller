@@ -236,6 +236,7 @@ type GameEvent struct {
 	// the event that occurred
 	//
 	// Types that are assignable to Event:
+	//
 	//	*GameEvent_BallLeftFieldTouchLine
 	//	*GameEvent_BallLeftFieldGoalLine
 	//	*GameEvent_AimlessKick_

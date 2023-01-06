@@ -389,9 +389,9 @@ type Referee struct {
 	// The time will not be reset. It can get negative.
 	// An autoRef would raise an appropriate event, if the time gets negative.
 	// Possible actions where this time is relevant:
-	//  * free kicks
-	//  * kickoff, penalty kick, force start
-	//  * ball placement
+	//   - free kicks
+	//   - kickoff, penalty kick, force start
+	//   - ball placement
 	CurrentActionTimeRemaining *int32 `protobuf:"varint,15,opt,name=current_action_time_remaining,json=currentActionTimeRemaining" json:"current_action_time_remaining,omitempty"`
 }
 

@@ -144,6 +144,7 @@ type ControllerToAutoRef struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Types that are assignable to Msg:
+	//
 	//	*ControllerToAutoRef_ControllerReply
 	Msg isControllerToAutoRef_Msg `protobuf_oneof:"msg"`
 }

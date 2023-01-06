@@ -1,25 +1,24 @@
 import {defineStore} from "pinia";
-import {GameState, State} from "@/proto/ssl_gc_state";
-import Type = GameState.Type;
+import {GameState_Type, State} from "@/proto/ssl_gc_state";
 
 export const useMatchStateStore = defineStore('matchState', {
   state: () => {
     return {
-      matchState: new State()
+      matchState: State.fromJSON({})
     }
   },
   getters: {
     isKickoff: (state) => {
-      return state.matchState.gameState.type.toString() === Type[Type.KICKOFF]
+      return state.matchState.gameState?.type === GameState_Type.KICKOFF
     },
     isPenalty: (state) => {
-      return state.matchState.gameState.type.toString() === Type[Type.PENALTY]
+      return state.matchState.gameState?.type.toString() === GameState_Type.PENALTY
     },
     isStop: (state) => {
-      return state.matchState.gameState.type.toString() === Type[Type.STOP]
+      return state.matchState.gameState?.type.toString() === GameState_Type.STOP
     },
     isTimeout: (state) => {
-      return state.matchState.gameState.type.toString() === Type[Type.TIMEOUT]
+      return state.matchState.gameState?.type.toString() === GameState_Type.TIMEOUT
     },
   },
   actions: {
