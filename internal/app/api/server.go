@@ -237,7 +237,9 @@ func (a *Server) handleNewEventMessage(b []byte) {
 	}
 
 	if in.Change != nil {
-		in.Change.Origin = proto.String("UI")
+		if in.Change.Origin == nil || len(*in.Change.Origin) == 0 {
+			in.Change.Origin = proto.String("UI")
+		}
 		a.gcEngine.Enqueue(in.Change)
 	}
 	if in.ResetMatch != nil && *in.ResetMatch {
