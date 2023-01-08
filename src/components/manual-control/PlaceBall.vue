@@ -40,7 +40,6 @@
         },
         methods: {
             sendEvent: function () {
-                console.log('place ' + this.model.team)
                 submitChange({
                     setBallPlacementPosChange: {
                         pos: convertStringLocation(this.model.location)
