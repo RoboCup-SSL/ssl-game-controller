@@ -28,6 +28,7 @@ const toggleLeftDrawer = () => {
         <q-route-tab to="/protocol" label="Protocol"/>
         <q-route-tab to="/team-overview" label="Team Overview"/>
         <q-route-tab to="/manual-control" label="Manual Control"/>
+        <q-route-tab to="/place-ball" label="Place Ball"/>
         <q-route-tab to="/settings" label="Settings"/>
       </q-tabs>
     </q-header>
@@ -36,7 +37,7 @@ const toggleLeftDrawer = () => {
       Foo?
     </q-drawer>
 
-    <q-page-container>
+    <q-page-container class="q-mt-sm">
       <router-view/>
     </q-page-container>
 

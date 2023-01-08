@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ManualControl from "@/components/control/manual/ManualControl.vue";
+import ManualControl from "@/components/control/ManualControl.vue";
 </script>
 
 <template>

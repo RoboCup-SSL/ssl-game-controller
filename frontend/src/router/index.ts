@@ -30,6 +30,11 @@ const router = createRouter({
       component: () => import('../views/ManualControlView.vue')
     },
     {
+      path: '/place-ball',
+      name: 'place-ball',
+      component: () => import('../views/PlaceBallView.vue')
+    },
+    {
       path: '/settings',
       name: 'settings',
       component: () => import('../views/SettingsView.vue')

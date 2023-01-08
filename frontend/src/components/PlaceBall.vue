@@ -2,11 +2,11 @@
 import {useMatchStateStore} from "@/store/matchState";
 import {computed, inject, ref} from "vue";
 import ControlButton from "@/components/control/buttons/ControlButton.vue";
-import {ControlApi} from "@/providers/controlApi/ControlApi";
+import type {ControlApi} from "@/providers/controlApi/ControlApi";
 import {Command_Type} from "@/proto/ssl_gc_state";
 import {isPausedStage} from "@/helpers";
 import {Team} from "@/proto/ssl_gc_common";
-import {Vector2} from "@/proto/ssl_gc_geometry";
+import type {Vector2} from "@/proto/ssl_gc_geometry";
 
 const store = useMatchStateStore()
 const control = inject<ControlApi>('control-api')

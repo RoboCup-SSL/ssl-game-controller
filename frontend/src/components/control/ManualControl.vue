@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import PlaceBall from "@/components/control/manual/PlaceBall.vue";
 import HaltButton from "@/components/control/buttons/HaltButton.vue";
 import {Team} from "@/proto/ssl_gc_common";
 import StopButton from "@/components/control/buttons/StopButton.vue";
@@ -28,22 +27,18 @@ const teams = [Team.YELLOW, Team.BLUE]
     </div>
   </div>
 
-  <q-separator/>
+  <q-separator spaced/>
 
   <div class="row">
     <div class="col-grow column" v-for="team in teams">
       <FreeKickButton :team="team"/>
       <KickoffButton :team="team"/>
       <PenaltyButton :team="team"/>
-      <q-separator/>
+      <q-separator spaced/>
       <YellowCardButton :team="team"/>
       <RedCardButton :team="team"/>
       <GoalButton :team="team"/>
       <TimeoutButton :team="team"/>
     </div>
   </div>
-
-  <q-separator spaced/>
-
-  <PlaceBall/>
 </template>
