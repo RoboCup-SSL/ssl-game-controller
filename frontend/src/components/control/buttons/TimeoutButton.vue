@@ -40,5 +40,5 @@ const disable = computed(() => {
 </script>
 
 <template>
-  <ControlButton :label="label" :disable="disable" :action="toggle"/>
+  <ControlButton :label="label" :disable="disable" :action="toggle" :team="team"/>
 </template>

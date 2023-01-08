@@ -1,53 +1,137 @@
 <script setup lang="ts">
 import {useMatchStateStore} from "@/store/matchState";
-import {ref} from "vue";
+import {computed, inject, ref} from "vue";
+import ControlButton from "@/components/control/buttons/ControlButton.vue";
+import {ControlApi} from "@/providers/controlApi/ControlApi";
+import {Command_Type} from "@/proto/ssl_gc_state";
+import {isPausedStage} from "@/helpers";
+import {Team} from "@/proto/ssl_gc_common";
+import {Vector2} from "@/proto/ssl_gc_geometry";
 
 const store = useMatchStateStore()
-const ballX = ref(0.0)
-const ballY = ref(0.0)
+const control = inject<ControlApi>('control-api')
+
+const minMaxX = ref(7)
+const minMaxY = ref(5)
+
+const newBallPos = ref({x: 0, y: 0} as Vector2)
+
+const curBallPos = computed(() => {
+  if (store.matchState.placementPos) {
+    return store.matchState.placementPos as Vector2
+  }
+  return {x: 0, y: 0} as Vector2
+})
+
+const resetBallPos = function () {
+  newBallPos.value = structuredClone(curBallPos.value)
+}
+
+const placeBall = (team: Team) => {
+  control?.SubmitChange({
+    origin: "UI",
+    revertible: true,
+    change: {
+      $case: "setBallPlacementPosChange",
+      setBallPlacementPosChange: {
+        pos: {
+          x: newBallPos.value.x,
+          y: newBallPos.value.y,
+        }
+      }
+    }
+  })
+  control?.NewCommandForTeam(Command_Type.BALL_PLACEMENT, team)
+}
+
+const disable = computed(() => {
+  return store.matchState.command?.type !== Command_Type.STOP
+    || isPausedStage(store.matchState.stage)
+})
 </script>
 
 <template>
-  <div class="q-pa-md q-pb-lg">
-    <q-list dense>
+  <div class="row">
+    <ControlButton class="col-grow" label="Place ball"
+                   v-for="team in [Team.YELLOW, Team.BLUE]"
+                   :disable="disable"
+                   :action="() => placeBall(team)" :team="team"/>
+  </div>
+
+  <div class="q-px-md">
+    <div class="q-pt-xl">
       <q-item>
         <q-item-section avatar>
           X
         </q-item-section>
         <q-item-section>
           <q-slider
-            v-model="ballX"
-            :min="-5"
-            :max="5"
+            v-model="newBallPos.x"
+            :min="-minMaxX"
+            :max="minMaxX"
             :step="0.1"
+            selection-color="transparent"
             label
-            :label-value="ballX + ' m'"
+            :label-value="newBallPos.x + ' m'"
             label-always
           />
+          <q-slider class="slider-current"
+
+                    v-model="curBallPos.x"
+                    :min="-minMaxX"
+                    :max="minMaxX"
+                    :step="0.1"
+                    selection-color="transparent"
+                    color="info"
+                    disable
+          />
         </q-item-section>
+        <q-item-section avatar />
       </q-item>
+    </div>
+    <q-separator/>
+    <div class="q-pb-lg">
       <q-item>
         <q-item-section avatar>
           Y
         </q-item-section>
         <q-item-section>
           <q-slider
-            v-model="ballY"
-            :min="-3"
-            :max="3"
+            v-model="curBallPos.y"
+            :min="-minMaxY"
+            :max="minMaxY"
             :step="0.1"
+            selection-color="transparent"
+            color="info"
+            disable
+          />
+          <q-slider
+            v-model="newBallPos.y"
+            :min="-minMaxY"
+            :max="minMaxY"
+            :step="0.1"
+            selection-color="transparent"
             label
-            :label-value="ballY + ' m'"
+            :label-value="newBallPos.y + ' m'"
             label-always
             switch-label-side
           />
         </q-item-section>
+        <q-item-section avatar />
       </q-item>
-    </q-list>
+    </div>
 
-    <q-btn color="primary" label="Place ball"/>
+    <div class="row wrap justify-evenly q-mt-md">
+      <ControlButton label="Reset placement position"
+                     :disable="false"
+                     :action="resetBallPos"/>
+    </div>
   </div>
 </template>
 
 <style scoped>
+.q-item {
+  padding-bottom: 0;
+  padding-top: 0;
+}
 </style>

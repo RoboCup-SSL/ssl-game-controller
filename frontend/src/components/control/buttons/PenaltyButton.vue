@@ -24,5 +24,5 @@ const disable = computed(() => {
 </script>
 
 <template>
-  <ControlButton label="Penalty" :disable="disable" :action="sendCommand"/>
+  <ControlButton label="Penalty" :disable="disable" :action="sendCommand" :team="team"/>
 </template>

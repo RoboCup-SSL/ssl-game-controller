@@ -29,5 +29,5 @@ const submit = () => {
 </script>
 
 <template>
-  <ControlButton label="Red Card" :disable="false" :action="submit"/>
+  <ControlButton label="Red Card" :disable="false" :action="submit" :team="team"/>
 </template>

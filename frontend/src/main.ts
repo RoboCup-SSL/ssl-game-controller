@@ -7,6 +7,8 @@ import {Quasar} from 'quasar'
 
 import {control} from "@/plugins/control";
 
+import "@/assets/main.css"
+
 // Import icon libraries
 import '@quasar/extras/material-icons/material-icons.css'
 
@@ -21,6 +23,7 @@ createApp(App)
     config: {
       brand: {
         primary: '#1ca3a3',
+        secondary: '#8511bb',
       }
     }
   })
