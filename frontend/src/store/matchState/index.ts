@@ -1,10 +1,20 @@
 import {defineStore} from "pinia";
 import {GameState_Type, State} from "@/proto/ssl_gc_state";
+import {Team} from "@/proto/ssl_gc_common";
 
 export const useMatchStateStore = defineStore('matchState', {
   state: () => {
     return {
-      matchState: State.fromJSON({})
+      matchState: {
+        teamState: {
+          [Team.YELLOW]: {
+            goalkeeper: 5
+          },
+          [Team.BLUE]: {
+            goalkeeper: 15
+          }
+        }
+      } as State
     }
   },
   getters: {

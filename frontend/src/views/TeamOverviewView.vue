@@ -1,8 +1,7 @@
 <script setup lang="ts">
+import Teams from "@/components/Teams.vue";
 </script>
 
 <template>
-  <main>
-    <h1>Team Overview</h1>
-  </main>
+  <Teams/>
 </template>

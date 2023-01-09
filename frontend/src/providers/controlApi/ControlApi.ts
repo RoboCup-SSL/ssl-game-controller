@@ -1,5 +1,5 @@
 import {Input, Output} from "@/proto/ssl_gc_api";
-import type {Change} from "@/proto/ssl_gc_change";
+import type {Change, Change_UpdateConfig, Change_UpdateTeamState} from "@/proto/ssl_gc_change";
 import type {Command, Command_Type} from "@/proto/ssl_gc_state";
 import type {GameEvent} from "@/proto/ssl_gc_game_event";
 import type {ContinueAction} from "@/proto/ssl_gc_engine";
@@ -50,6 +50,28 @@ export class ControlApi {
         addGameEventChange: {
           gameEvent
         }
+      }
+    })
+  }
+
+  public UpdateMatchConfig(updateConfigChange: Change_UpdateConfig) {
+    this.SubmitChange({
+      origin: "UI",
+      revertible: true,
+      change: {
+        $case: 'updateConfigChange',
+        updateConfigChange
+      }
+    })
+  }
+
+  public UpdateTeamState(updateTeamStateChange: Change_UpdateTeamState) {
+    this.SubmitChange({
+      origin: "UI",
+      revertible: true,
+      change: {
+        $case: 'updateTeamStateChange',
+        updateTeamStateChange
       }
     })
   }
