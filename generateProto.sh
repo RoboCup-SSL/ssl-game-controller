@@ -60,6 +60,7 @@ protoc -I"./proto" \
     --ts_proto_opt=outputPartialMethods=false \
     --ts_proto_opt=stringEnums=true \
     --ts_proto_opt=exportCommonSymbols=false \
+    --ts_proto_opt=emitImportedFiles=false \
     ./proto/ssl_gc_api.proto
 
 
