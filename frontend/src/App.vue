@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {ref} from 'vue'
+import MatchStateToolbar from "@/components/MatchStateToolbar.vue";
 
 const leftDrawerOpen = ref(false)
 const toggleLeftDrawer = () => {
@@ -42,9 +43,7 @@ const toggleLeftDrawer = () => {
     </q-page-container>
 
     <q-footer elevated class="bg-grey-8 text-white">
-      <q-toolbar>
-        Status
-      </q-toolbar>
+      <MatchStateToolbar/>
     </q-footer>
 
   </q-layout>

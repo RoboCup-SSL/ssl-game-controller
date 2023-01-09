@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.15.9",
+    "format-duration": "^3.0.1",
     "pinia": "^2.0.28",
     "quasar": "^2.11.3",
     "vue": "^3.2.45",
