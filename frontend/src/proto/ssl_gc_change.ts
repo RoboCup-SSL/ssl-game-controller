@@ -16,29 +16,23 @@ import { Command, Foul, GameState, Proposal, RedCard, State, YellowCard } from "
 /** A state change */
 export interface StateChange {
   /** A unique increasing id */
-  id: number;
+  id?: number;
   /** The previous state */
-  statePre:
-    | State
-    | undefined;
+  statePre?: State;
   /** The state after the change was applied */
-  state:
-    | State
-    | undefined;
+  state?: State;
   /** The change itself */
-  change:
-    | Change
-    | undefined;
+  change?: Change;
   /** The timestamp when the change was triggered */
-  timestamp: Date | undefined;
+  timestamp?: Date;
 }
 
 /** A certain change */
 export interface Change {
   /** An identifier of the origin that triggered the change */
-  origin: string;
+  origin?: string;
   /** Is this change revertible? */
-  revertible: boolean;
+  revertible?: boolean;
   change?:
     | { $case: "newCommandChange"; newCommandChange: Change_NewCommand }
     | { $case: "changeStageChange"; changeStageChange: Change_ChangeStage }
@@ -60,127 +54,121 @@ export interface Change {
 /** New referee command */
 export interface Change_NewCommand {
   /** The command */
-  command: Command | undefined;
+  command?: Command;
 }
 
 /** Switch to a new stage */
 export interface Change_ChangeStage {
   /** The new stage */
-  newStage: Referee_Stage;
+  newStage?: Referee_Stage;
 }
 
 /** Set the ball placement pos */
 export interface Change_SetBallPlacementPos {
   /** The position in [m] */
-  pos: Vector2 | undefined;
+  pos?: Vector2;
 }
 
 /** Add a new yellow card */
 export interface Change_AddYellowCard {
   /** The team that the card is for */
-  forTeam: Team;
+  forTeam?: Team;
   /** The game event that caused the card */
-  causedByGameEvent: GameEvent | undefined;
+  causedByGameEvent?: GameEvent;
 }
 
 /** Add a new red card */
 export interface Change_AddRedCard {
   /** The team that the card is for */
-  forTeam: Team;
+  forTeam?: Team;
   /** The game event that caused the card */
-  causedByGameEvent: GameEvent | undefined;
+  causedByGameEvent?: GameEvent;
 }
 
 /** Trigger when a yellow card timed out */
 export interface Change_YellowCardOver {
   /** The team that the card was for */
-  forTeam: Team;
+  forTeam?: Team;
 }
 
 /** Add a new game event */
 export interface Change_AddGameEvent {
   /** The game event */
-  gameEvent: GameEvent | undefined;
+  gameEvent?: GameEvent;
 }
 
 /** Add a new passive game event (that is only logged, but does not automatically trigger anything) */
 export interface Change_AddPassiveGameEvent {
   /** The game event */
-  gameEvent: GameEvent | undefined;
+  gameEvent?: GameEvent;
 }
 
 /** Add a new proposal (i.e. from an auto referee for majority voting) */
 export interface Change_AddProposal {
   /** The proposal */
-  proposal: Proposal | undefined;
+  proposal?: Proposal;
 }
 
 /** Accept a proposal group (that contain one or more proposals of the same type) */
 export interface Change_AcceptProposalGroup {
   /** The id of the group */
-  groupId: number;
+  groupId?: number;
   /** An identifier of the acceptor */
-  acceptedBy: string;
+  acceptedBy?: string;
 }
 
 /** Update some configuration */
 export interface Change_UpdateConfig {
   /** The division to play with */
-  division: Division;
+  division?: Division;
   /** the team that does/did the first kick off */
-  firstKickoffTeam: Team;
+  firstKickoffTeam?: Team;
   /** The match type */
-  matchType: MatchType;
+  matchType?: MatchType;
 }
 
 /** Update the current state of a team (all fields that should be updated are set) */
 export interface Change_UpdateTeamState {
   /** The team */
-  forTeam: Team;
+  forTeam?: Team;
   /** Change the name of the team */
-  teamName: string;
+  teamName?: string;
   /** Change the number of goals that the teams has at the moment */
-  goals: number;
+  goals?: number;
   /** The id of the goal keeper */
-  goalkeeper: number;
+  goalkeeper?: number;
   /** The number of timeouts that the team has left */
-  timeoutsLeft: number;
+  timeoutsLeft?: number;
   /** The timeout time that the team has left */
-  timeoutTimeLeft: string;
+  timeoutTimeLeft?: string;
   /** Does the team play on the positive or the negative half (in ssl-vision coordinates)? */
-  onPositiveHalf: boolean;
+  onPositiveHalf?: boolean;
   /** The number of ball placement failures */
-  ballPlacementFailures: number;
+  ballPlacementFailures?: number;
   /** Can the team place the ball, or is ball placement for this team disabled and should be skipped? */
-  canPlaceBall: boolean;
+  canPlaceBall?: boolean;
   /** The number of challenge flags that the team has left */
-  challengeFlagsLeft: number;
+  challengeFlagsLeft?: number;
   /** Does the team want to substitute a robot in the next possible situation? */
-  requestsBotSubstitution: boolean;
+  requestsBotSubstitution?: boolean;
   /** Does the team want to take a timeout in the next possible situation? */
-  requestsTimeout: boolean;
+  requestsTimeout?: boolean;
   /** Does the team want to challenge a recent decision of the referee? */
-  requestsChallenge: boolean;
+  requestsChallenge?: boolean;
   /** Does the team want to request an emergency stop? */
-  requestsEmergencyStop: boolean;
+  requestsEmergencyStop?: boolean;
   /** Update a certain yellow card of the team */
-  yellowCard:
-    | YellowCard
-    | undefined;
+  yellowCard?: YellowCard;
   /** Update a certain red card of the team */
-  redCard:
-    | RedCard
-    | undefined;
+  redCard?: RedCard;
   /** Update a certain foul of the team */
-  foul:
-    | Foul
-    | undefined;
+  foul?: Foul;
   /** Remove the yellow card with this id */
-  removeYellowCard: number;
+  removeYellowCard?: number;
   /** Remove the red card with this id */
-  removeRedCard: number;
+  removeRedCard?: number;
   /** Remove the foul with this id */
-  removeFoul: number;
+  removeFoul?: number;
 }
 
 /** Switch the team colors */
@@ -190,13 +178,13 @@ export interface Change_SwitchColors {
 /** Revert a certain change */
 export interface Change_Revert {
   /** The id of the change */
-  changeId: number;
+  changeId?: number;
 }
 
 /** Change the current game state */
 export interface Change_NewGameState {
   /** The new game state */
-  gameState: GameState | undefined;
+  gameState?: GameState;
 }
 
 function createBaseStateChange(): StateChange {

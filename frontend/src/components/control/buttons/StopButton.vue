@@ -15,6 +15,7 @@ const sendCommand = () => {
 
 const disable = computed(() => {
   return store.matchState.command?.type === Command_Type.STOP
+    || !store.matchState.stage
     || isPausedStage(store.matchState.stage)
 })
 

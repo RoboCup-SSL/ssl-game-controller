@@ -6,23 +6,23 @@ import { Vector2, Vector3 } from "./ssl_gc_geometry";
 /** The GC state contains settings and state independent of the match state */
 export interface GcState {
   /** the state of each team */
-  teamState: { [key: string]: GcStateTeam };
+  teamState?: { [key: string]: GcStateTeam };
   /** the states of the auto referees */
-  autoRefState: { [key: string]: GcStateAutoRef };
+  autoRefState?: { [key: string]: GcStateAutoRef };
   /** the attached trackers (uuid -> source_name) */
-  trackers: { [key: string]: string };
+  trackers?: { [key: string]: string };
   /** the next actions that can be executed when continuing */
-  continueActions: ContinueAction[];
+  continueActions?: ContinueAction[];
 }
 
 export interface GcState_TeamStateEntry {
   key: string;
-  value: GcStateTeam | undefined;
+  value?: GcStateTeam;
 }
 
 export interface GcState_AutoRefStateEntry {
   key: string;
-  value: GcStateAutoRef | undefined;
+  value?: GcStateAutoRef;
 }
 
 export interface GcState_TrackersEntry {
@@ -33,21 +33,21 @@ export interface GcState_TrackersEntry {
 /** The GC state for a single team */
 export interface GcStateTeam {
   /** true: The team is connected */
-  connected: boolean;
+  connected?: boolean;
   /** true: The team connected via TLS with a verified certificate */
-  connectionVerified: boolean;
+  connectionVerified?: boolean;
   /** true: The remote control for the team is connected */
-  remoteControlConnected: boolean;
+  remoteControlConnected?: boolean;
   /** true: The remote control for the team connected via TLS with a verified certificate */
-  remoteControlConnectionVerified: boolean;
+  remoteControlConnectionVerified?: boolean;
   /** the advantage choice of the team */
-  advantageChoice: TeamAdvantageChoice | undefined;
+  advantageChoice?: TeamAdvantageChoice;
 }
 
 /** The choice from a team regarding the advantage rule */
 export interface TeamAdvantageChoice {
   /** the choice of the team */
-  choice: TeamAdvantageChoice_AdvantageChoice;
+  choice?: TeamAdvantageChoice_AdvantageChoice;
 }
 
 /** possible advantage choices */
@@ -89,56 +89,48 @@ export function teamAdvantageChoice_AdvantageChoiceToJSON(object: TeamAdvantageC
 /** The GC state of an auto referee */
 export interface GcStateAutoRef {
   /** true: The autoRef connected via TLS with a verified certificate */
-  connectionVerified: boolean;
+  connectionVerified?: boolean;
 }
 
 /** GC state of a tracker */
 export interface GcStateTracker {
   /** Name of the source */
-  sourceName: string;
+  sourceName?: string;
   /** UUID of the source */
-  uuid: string;
+  uuid?: string;
   /** Current ball */
-  ball:
-    | Ball
-    | undefined;
+  ball?: Ball;
   /** Current robots */
-  robots: Robot[];
+  robots?: Robot[];
 }
 
 /** The ball state */
 export interface Ball {
   /** ball position [m] */
-  pos:
-    | Vector3
-    | undefined;
+  pos?: Vector3;
   /** ball velocity [m/s] */
-  vel: Vector3 | undefined;
+  vel?: Vector3;
 }
 
 /** The robot state */
 export interface Robot {
   /** robot id and team */
-  id:
-    | RobotId
-    | undefined;
+  id?: RobotId;
   /** robot position [m] */
-  pos: Vector2 | undefined;
+  pos?: Vector2;
 }
 
 export interface ContinueAction {
   /** type of action that will be performed next */
-  type: ContinueAction_Type;
+  type?: ContinueAction_Type;
   /** for which team (if team specific) */
-  forTeam: Team;
+  forTeam?: Team;
   /** list of issues that hinders the game from continuing */
-  continuationIssues: string[];
+  continuationIssues?: string[];
   /** timestamp at which the action will be ready (to give some preparation time) */
-  readyAt:
-    | Date
-    | undefined;
+  readyAt?: Date;
   /** state of the action */
-  state: ContinueAction_State;
+  state?: ContinueAction_State;
 }
 
 export enum ContinueAction_Type {

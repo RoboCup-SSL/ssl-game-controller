@@ -24,7 +24,10 @@ const stageTimeLeft = computed(() => {
   return "-"
 })
 const stageName = computed(() => {
-  return stageNames.get(store.matchState.stage)
+  if (store.matchState.stage) {
+    return stageNames.get(store.matchState.stage)
+  }
+  return "unknown"
 })
 const gameState = computed(() => {
   return store.matchState.gameState

@@ -53,14 +53,20 @@ pbjs -t static-module -w es6 -o src/proto.js \
 target_dir="./frontend/src/proto"
 mkdir -p "${target_dir}"
 protoc -I"./proto" \
-    --plugin=./frontend/node_modules/.bin/protoc-gen-ts_proto \
-    --ts_proto_out="${target_dir}" \
-    --ts_proto_opt=oneof=unions \
-    --ts_proto_opt=outputEncodeMethods=false \
-    --ts_proto_opt=outputPartialMethods=false \
-    --ts_proto_opt=stringEnums=true \
-    --ts_proto_opt=exportCommonSymbols=false \
-    --ts_proto_opt=emitImportedFiles=false \
-    ./proto/ssl_gc_api.proto
-
-
+  --plugin=./frontend/node_modules/.bin/protoc-gen-ts_proto \
+  --ts_proto_out="${target_dir}" \
+  --ts_proto_opt=oneof=unions \
+  --ts_proto_opt=outputEncodeMethods=false \
+  --ts_proto_opt=outputPartialMethods=false \
+  --ts_proto_opt=stringEnums=true \
+  --ts_proto_opt=exportCommonSymbols=false \
+  --ts_proto_opt=emitImportedFiles=false \
+  --ts_proto_opt=useOptionals=all \
+  proto/ssl_gc_common.proto \
+  proto/ssl_gc_geometry.proto \
+  proto/ssl_gc_game_event.proto \
+  proto/ssl_gc_referee_message.proto \
+  proto/ssl_gc_change.proto \
+  proto/ssl_gc_state.proto \
+  proto/ssl_gc_api.proto \
+  proto/ssl_gc_engine.proto

@@ -2,15 +2,15 @@
 
 /** A vector with two dimensions */
 export interface Vector2 {
-  x: number;
-  y: number;
+  x?: number;
+  y?: number;
 }
 
 /** A vector with three dimensions */
 export interface Vector3 {
-  x: number;
-  y: number;
-  z: number;
+  x?: number;
+  y?: number;
+  z?: number;
 }
 
 function createBaseVector2(): Vector2 {

@@ -8,19 +8,13 @@ import { State } from "./ssl_gc_state";
 /** Message format that is pushed from the GC to the client */
 export interface Output {
   /** The current match state */
-  matchState:
-    | State
-    | undefined;
+  matchState?: State;
   /** The current GC state */
-  gcState:
-    | GcState
-    | undefined;
+  gcState?: GcState;
   /** The protocol */
-  protocol:
-    | Protocol
-    | undefined;
+  protocol?: Protocol;
   /** The engine config */
-  config: Config | undefined;
+  config?: Config;
 }
 
 /** The game protocol */
@@ -30,41 +24,33 @@ export interface Protocol {
    * Entries that were already sent are not sent again, because the protocol is immutable anyway.
    * But if the game is reset, the whole protocol must be replaced. That's what this flag is for.
    */
-  delta: boolean;
+  delta?: boolean;
   /** The (delta) list of entries */
-  entry: ProtocolEntry[];
+  entry?: ProtocolEntry[];
 }
 
 /** A protocol entry of a change */
 export interface ProtocolEntry {
   /** Id of the entry */
-  id: number;
+  id?: number;
   /** The change that was made */
-  change:
-    | Change
-    | undefined;
+  change?: Change;
   /** The match time elapsed when this change was made */
-  matchTimeElapsed:
-    | Duration
-    | undefined;
+  matchTimeElapsed?: Duration;
   /** The stage time elapsed when this change was made */
-  stageTimeElapsed: Duration | undefined;
+  stageTimeElapsed?: Duration;
 }
 
 /** Message format that can be send from the client to the GC */
 export interface Input {
   /** A change to be enqueued into the GC engine */
-  change:
-    | Change
-    | undefined;
+  change?: Change;
   /** Reset the match */
-  resetMatch: boolean;
+  resetMatch?: boolean;
   /** An updated config delta */
-  configDelta:
-    | Config
-    | undefined;
+  configDelta?: Config;
   /** Continue with action */
-  continueAction: ContinueAction | undefined;
+  continueAction?: ContinueAction;
 }
 
 function createBaseOutput(): Output {

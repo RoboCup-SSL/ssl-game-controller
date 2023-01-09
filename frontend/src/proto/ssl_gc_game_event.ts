@@ -11,14 +11,14 @@ import { Vector2 } from "./ssl_gc_geometry";
  * An autoRef should ideally set all fields, except if there are good reasons to not do so.
  */
 export interface GameEvent {
-  type: GameEvent_Type;
+  type?: GameEvent_Type;
   /**
    * The origins of this game event.
    * Empty, if it originates from game controller.
    * Contains autoRef name(s), if it originates from one or more autoRefs.
    * Ignored if sent by autoRef to game controller.
    */
-  origin: string[];
+  origin?: string[];
   event?:
     | { $case: "ballLeftFieldTouchLine"; ballLeftFieldTouchLine: GameEvent_BallLeftField }
     | { $case: "ballLeftFieldGoalLine"; ballLeftFieldGoalLine: GameEvent_BallLeftField }
@@ -416,469 +416,423 @@ export function gameEvent_TypeToJSON(object: GameEvent_Type): string {
 /** the ball left the field normally */
 export interface GameEvent_BallLeftField {
   /** the team that last touched the ball */
-  byTeam: Team;
+  byTeam?: Team;
   /** the bot that last touched the ball */
-  byBot: number;
+  byBot?: number;
   /** the location where the ball left the field [m] */
-  location: Vector2 | undefined;
+  location?: Vector2;
 }
 
 /** the ball left the field via goal line and a team committed an aimless kick */
 export interface GameEvent_AimlessKick {
   /** the team that last touched the ball */
-  byTeam: Team;
+  byTeam?: Team;
   /** the bot that last touched the ball */
-  byBot: number;
+  byBot?: number;
   /** the location where the ball left the field [m] */
-  location:
-    | Vector2
-    | undefined;
+  location?: Vector2;
   /** the location where the ball was last touched [m] */
-  kickLocation: Vector2 | undefined;
+  kickLocation?: Vector2;
 }
 
 /** a team shot a goal */
 export interface GameEvent_Goal {
   /** the team that scored the goal */
-  byTeam: Team;
+  byTeam?: Team;
   /** the team that shot the goal (different from by_team for own goals) */
-  kickingTeam: Team;
+  kickingTeam?: Team;
   /** the bot that shot the goal */
-  kickingBot: number;
+  kickingBot?: number;
   /** the location where the ball entered the goal [m] */
-  location:
-    | Vector2
-    | undefined;
+  location?: Vector2;
   /** the location where the ball was kicked (for deciding if this was a valid goal) [m] */
-  kickLocation:
-    | Vector2
-    | undefined;
+  kickLocation?: Vector2;
   /** the maximum height the ball reached during the goal kick (for deciding if this was a valid goal) [m] */
-  maxBallHeight: number;
+  maxBallHeight?: number;
   /** number of robots of scoring team when the ball entered the goal (for deciding if this was a valid goal) */
-  numRobotsByTeam: number;
+  numRobotsByTeam?: number;
   /** The UNIX timestamp [μs] when the scoring team last touched the ball */
-  lastTouchByTeam: number;
+  lastTouchByTeam?: number;
   /** An additional message with e.g. a reason for invalid goals */
-  message: string;
+  message?: string;
 }
 
 /** the ball entered the goal directly during an indirect free kick */
 export interface GameEvent_IndirectGoal {
   /** the team that tried to shoot the goal */
-  byTeam: Team;
+  byTeam?: Team;
   /** the bot that kicked the ball - at least the team must be set */
-  byBot: number;
+  byBot?: number;
   /** the location where the ball entered the goal [m] */
-  location:
-    | Vector2
-    | undefined;
+  location?: Vector2;
   /** the location where the ball was kicked [m] */
-  kickLocation: Vector2 | undefined;
+  kickLocation?: Vector2;
 }
 
 /** the ball entered the goal, but was initially chipped */
 export interface GameEvent_ChippedGoal {
   /** the team that tried to shoot the goal */
-  byTeam: Team;
+  byTeam?: Team;
   /** the bot that kicked the ball */
-  byBot: number;
+  byBot?: number;
   /** the location where the ball entered the goal [m] */
-  location:
-    | Vector2
-    | undefined;
+  location?: Vector2;
   /** the location where the ball was kicked [m] */
-  kickLocation:
-    | Vector2
-    | undefined;
+  kickLocation?: Vector2;
   /** the maximum height [m] of the ball, before it entered the goal and since the last kick [m] */
-  maxBallHeight: number;
+  maxBallHeight?: number;
 }
 
 /** a bot moved too fast while the game was stopped */
 export interface GameEvent_BotTooFastInStop {
   /** the team that found guilty */
-  byTeam: Team;
+  byTeam?: Team;
   /** the bot that was too fast */
-  byBot: number;
+  byBot?: number;
   /** the location of the bot [m] */
-  location:
-    | Vector2
-    | undefined;
+  location?: Vector2;
   /** the bot speed [m/s] */
-  speed: number;
+  speed?: number;
 }
 
 /** a bot of the defending team got too close to the kick point during a free kick */
 export interface GameEvent_DefenderTooCloseToKickPoint {
   /** the team that was found guilty */
-  byTeam: Team;
+  byTeam?: Team;
   /** the bot that violates the distance to the kick point */
-  byBot: number;
+  byBot?: number;
   /** the location of the bot [m] */
-  location:
-    | Vector2
-    | undefined;
+  location?: Vector2;
   /** the distance [m] from bot to the kick point (including the minimum radius) */
-  distance: number;
+  distance?: number;
 }
 
 /** two robots crashed into each other with similar speeds */
 export interface GameEvent_BotCrashDrawn {
   /** the bot of the yellow team */
-  botYellow: number;
+  botYellow?: number;
   /** the bot of the blue team */
-  botBlue: number;
+  botBlue?: number;
   /** the location of the crash (center between both bots) [m] */
-  location:
-    | Vector2
-    | undefined;
+  location?: Vector2;
   /** the calculated crash speed [m/s] of the two bots */
-  crashSpeed: number;
+  crashSpeed?: number;
   /** the difference [m/s] of the velocity of the two bots */
-  speedDiff: number;
+  speedDiff?: number;
   /**
    * the angle [rad] in the range [0, π] of the bot velocity vectors
    * an angle of 0 rad (  0°) means, the bots barely touched each other
    * an angle of π rad (180°) means, the bots crashed frontal into each other
    */
-  crashAngle: number;
+  crashAngle?: number;
 }
 
 /** two robots crashed into each other and one team was found guilty to due significant speed difference */
 export interface GameEvent_BotCrashUnique {
   /** the team that caused the crash */
-  byTeam: Team;
+  byTeam?: Team;
   /** the bot that caused the crash */
-  violator: number;
+  violator?: number;
   /** the bot of the opposite team that was involved in the crash */
-  victim: number;
+  victim?: number;
   /** the location of the crash (center between both bots) [m] */
-  location:
-    | Vector2
-    | undefined;
+  location?: Vector2;
   /** the calculated crash speed vector [m/s] of the two bots */
-  crashSpeed: number;
+  crashSpeed?: number;
   /** the difference [m/s] of the velocity of the two bots */
-  speedDiff: number;
+  speedDiff?: number;
   /**
    * the angle [rad] in the range [0, π] of the bot velocity vectors
    * an angle of 0 rad (  0°) means, the bots barely touched each other
    * an angle of π rad (180°) means, the bots crashed frontal into each other
    */
-  crashAngle: number;
+  crashAngle?: number;
 }
 
 /** a bot pushed another bot over a significant distance */
 export interface GameEvent_BotPushedBot {
   /** the team that pushed the other team */
-  byTeam: Team;
+  byTeam?: Team;
   /** the bot that pushed the other bot */
-  violator: number;
+  violator?: number;
   /** the bot of the opposite team that was pushed */
-  victim: number;
+  victim?: number;
   /** the location of the push (center between both bots) [m] */
-  location:
-    | Vector2
-    | undefined;
+  location?: Vector2;
   /** the pushed distance [m] */
-  pushedDistance: number;
+  pushedDistance?: number;
 }
 
 /** a bot tipped over */
 export interface GameEvent_BotTippedOver {
   /** the team that found guilty */
-  byTeam: Team;
+  byTeam?: Team;
   /** the bot that tipped over */
-  byBot: number;
+  byBot?: number;
   /** the location of the bot [m] */
-  location:
-    | Vector2
-    | undefined;
+  location?: Vector2;
   /** the location of the ball at the moment when this foul occurred [m] */
-  ballLocation: Vector2 | undefined;
+  ballLocation?: Vector2;
 }
 
 /** a defender other than the keeper was fully located inside its own defense and touched the ball */
 export interface GameEvent_DefenderInDefenseArea {
   /** the team that found guilty */
-  byTeam: Team;
+  byTeam?: Team;
   /** the bot that is inside the penalty area */
-  byBot: number;
+  byBot?: number;
   /** the location of the bot [m] */
-  location:
-    | Vector2
-    | undefined;
+  location?: Vector2;
   /** the distance [m] from bot case to the nearest point outside the defense area */
-  distance: number;
+  distance?: number;
 }
 
 /** a defender other than the keeper was partially located inside its own defense area and touched the ball */
 export interface GameEvent_DefenderInDefenseAreaPartially {
   /** the team that found guilty */
-  byTeam: Team;
+  byTeam?: Team;
   /** the bot that is partially inside the penalty area */
-  byBot: number;
+  byBot?: number;
   /** the location of the bot */
-  location:
-    | Vector2
-    | undefined;
+  location?: Vector2;
   /** the distance [m] that the bot is inside the penalty area */
-  distance: number;
+  distance?: number;
   /** the location of the ball at the moment when this foul occurred [m] */
-  ballLocation: Vector2 | undefined;
+  ballLocation?: Vector2;
 }
 
 /** an attacker touched the ball inside the opponent defense area */
 export interface GameEvent_AttackerTouchedBallInDefenseArea {
   /** the team that found guilty */
-  byTeam: Team;
+  byTeam?: Team;
   /** the bot that is inside the penalty area */
-  byBot: number;
+  byBot?: number;
   /** the location of the bot [m] */
-  location:
-    | Vector2
-    | undefined;
+  location?: Vector2;
   /** the distance [m] that the bot is inside the penalty area */
-  distance: number;
+  distance?: number;
 }
 
 /** a bot kicked the ball too fast */
 export interface GameEvent_BotKickedBallTooFast {
   /** the team that found guilty */
-  byTeam: Team;
+  byTeam?: Team;
   /** the bot that kicked too fast */
-  byBot: number;
+  byBot?: number;
   /** the location of the ball at the time of the highest speed [m] */
-  location:
-    | Vector2
-    | undefined;
+  location?: Vector2;
   /** the absolute initial ball speed (kick speed) [m/s] */
-  initialBallSpeed: number;
+  initialBallSpeed?: number;
   /** was the ball chipped? */
-  chipped: boolean;
+  chipped?: boolean;
 }
 
 /** a bot dribbled to ball too far */
 export interface GameEvent_BotDribbledBallTooFar {
   /** the team that found guilty */
-  byTeam: Team;
+  byTeam?: Team;
   /** the bot that dribbled too far */
-  byBot: number;
+  byBot?: number;
   /** the location where the dribbling started [m] */
-  start:
-    | Vector2
-    | undefined;
+  start?: Vector2;
   /** the location where the maximum dribbling distance was reached [m] */
-  end: Vector2 | undefined;
+  end?: Vector2;
 }
 
 /** an attacker touched the opponent robot inside defense area */
 export interface GameEvent_AttackerTouchedOpponentInDefenseArea {
   /** the team that found guilty */
-  byTeam: Team;
+  byTeam?: Team;
   /** the bot that touched the opponent robot */
-  byBot: number;
+  byBot?: number;
   /** the bot of the opposite team that was touched */
-  victim: number;
+  victim?: number;
   /** the location of the contact point between both bots [m] */
-  location: Vector2 | undefined;
+  location?: Vector2;
 }
 
 /** an attacker touched the ball multiple times when it was not allowed to */
 export interface GameEvent_AttackerDoubleTouchedBall {
   /** the team that found guilty */
-  byTeam: Team;
+  byTeam?: Team;
   /** the bot that touched the ball twice */
-  byBot: number;
+  byBot?: number;
   /** the location of the ball when it was first touched [m] */
-  location: Vector2 | undefined;
+  location?: Vector2;
 }
 
 /** an attacker was located too near to the opponent defense area during stop or free kick */
 export interface GameEvent_AttackerTooCloseToDefenseArea {
   /** the team that found guilty */
-  byTeam: Team;
+  byTeam?: Team;
   /** the bot that is too close to the defense area */
-  byBot: number;
+  byBot?: number;
   /** the location of the bot [m] */
-  location:
-    | Vector2
-    | undefined;
+  location?: Vector2;
   /** the distance [m] of the bot to the penalty area */
-  distance: number;
+  distance?: number;
   /** the location of the ball at the moment when this foul occurred [m] */
-  ballLocation: Vector2 | undefined;
+  ballLocation?: Vector2;
 }
 
 /** a bot held the ball for too long */
 export interface GameEvent_BotHeldBallDeliberately {
   /** the team that found guilty */
-  byTeam: Team;
+  byTeam?: Team;
   /** the bot that holds the ball */
-  byBot: number;
+  byBot?: number;
   /** the location of the ball [m] */
-  location:
-    | Vector2
-    | undefined;
+  location?: Vector2;
   /** the duration [s] that the bot hold the ball */
-  duration: number;
+  duration?: number;
 }
 
 /** a bot interfered the ball placement of the other team */
 export interface GameEvent_BotInterferedPlacement {
   /** the team that found guilty */
-  byTeam: Team;
+  byTeam?: Team;
   /** the bot that interfered the placement */
-  byBot: number;
+  byBot?: number;
   /** the location of the bot [m] */
-  location: Vector2 | undefined;
+  location?: Vector2;
 }
 
 /** a team collected multiple cards (yellow and red), which results in a penalty kick */
 export interface GameEvent_MultipleCards {
   /** the team that received multiple yellow cards */
-  byTeam: Team;
+  byTeam?: Team;
 }
 
 /** a team collected multiple fouls, which results in a yellow card */
 export interface GameEvent_MultipleFouls {
   /** the team that collected multiple fouls */
-  byTeam: Team;
+  byTeam?: Team;
   /** the list of game events that caused the multiple fouls */
-  causedGameEvents: GameEvent[];
+  causedGameEvents?: GameEvent[];
 }
 
 /** a team failed to place the ball multiple times in a row */
 export interface GameEvent_MultiplePlacementFailures {
   /** the team that failed multiple times */
-  byTeam: Team;
+  byTeam?: Team;
 }
 
 /** timeout waiting for the attacking team to perform the free kick */
 export interface GameEvent_KickTimeout {
   /** the team that that should have kicked */
-  byTeam: Team;
+  byTeam?: Team;
   /** the location of the ball [m] */
-  location:
-    | Vector2
-    | undefined;
+  location?: Vector2;
   /** the time [s] that was waited */
-  time: number;
+  time?: number;
 }
 
 /** game was stuck */
 export interface GameEvent_NoProgressInGame {
   /** the location of the ball */
-  location:
-    | Vector2
-    | undefined;
+  location?: Vector2;
   /** the time [s] that was waited */
-  time: number;
+  time?: number;
 }
 
 /** ball placement failed */
 export interface GameEvent_PlacementFailed {
   /** the team that failed */
-  byTeam: Team;
+  byTeam?: Team;
   /** the remaining distance [m] from ball to placement position */
-  remainingDistance: number;
+  remainingDistance?: number;
 }
 
 /** a team was found guilty for minor unsporting behavior */
 export interface GameEvent_UnsportingBehaviorMinor {
   /** the team that found guilty */
-  byTeam: Team;
+  byTeam?: Team;
   /** an explanation of the situation and decision */
-  reason: string;
+  reason?: string;
 }
 
 /** a team was found guilty for major unsporting behavior */
 export interface GameEvent_UnsportingBehaviorMajor {
   /** the team that found guilty */
-  byTeam: Team;
+  byTeam?: Team;
   /** an explanation of the situation and decision */
-  reason: string;
+  reason?: string;
 }
 
 /** a keeper held the ball in its defense area for too long */
 export interface GameEvent_KeeperHeldBall {
   /** the team that found guilty */
-  byTeam: Team;
+  byTeam?: Team;
   /** the location of the ball [m] */
-  location:
-    | Vector2
-    | undefined;
+  location?: Vector2;
   /** the duration [s] that the keeper hold the ball */
-  duration: number;
+  duration?: number;
 }
 
 /** a team successfully placed the ball */
 export interface GameEvent_PlacementSucceeded {
   /** the team that did the placement */
-  byTeam: Team;
+  byTeam?: Team;
   /** the time [s] taken for placing the ball */
-  timeTaken: number;
+  timeTaken?: number;
   /** the distance [m] between placement location and actual ball position */
-  precision: number;
+  precision?: number;
   /** the distance [m] between the initial ball location and the placement position */
-  distance: number;
+  distance?: number;
 }
 
 /** both teams are prepared - all conditions are met to continue (with kickoff or penalty kick) */
 export interface GameEvent_Prepared {
   /** the time [s] taken for preparing */
-  timeTaken: number;
+  timeTaken?: number;
 }
 
 /** bots are being substituted by a team */
 export interface GameEvent_BotSubstitution {
   /** the team that substitutes robots */
-  byTeam: Team;
+  byTeam?: Team;
 }
 
 /** A challenge flag, requested by a team previously, is flagged */
 export interface GameEvent_ChallengeFlag {
   /** the team that requested the challenge flag */
-  byTeam: Team;
+  byTeam?: Team;
 }
 
 /** An emergency stop, requested by team previously, occurred */
 export interface GameEvent_EmergencyStop {
   /** the team that substitutes robots */
-  byTeam: Team;
+  byTeam?: Team;
 }
 
 /** a team has too many robots on the field */
 export interface GameEvent_TooManyRobots {
   /** the team that has too many robots */
-  byTeam: Team;
+  byTeam?: Team;
   /** number of robots allowed at the moment */
-  numRobotsAllowed: number;
+  numRobotsAllowed?: number;
   /** number of robots currently on the field */
-  numRobotsOnField: number;
+  numRobotsOnField?: number;
   /** the location of the ball at the moment when this foul occurred [m] */
-  ballLocation: Vector2 | undefined;
+  ballLocation?: Vector2;
 }
 
 /** a robot chipped the ball over the field boundary out of the playing surface */
 export interface GameEvent_BoundaryCrossing {
   /** the team that has too many robots */
-  byTeam: Team;
+  byTeam?: Team;
   /** the location of the ball [m] */
-  location: Vector2 | undefined;
+  location?: Vector2;
 }
 
 /** the penalty kick failed (by time or by keeper) */
 export interface GameEvent_PenaltyKickFailed {
   /** the team that last touched the ball */
-  byTeam: Team;
+  byTeam?: Team;
   /** the location of the ball at the moment of this event [m] */
-  location:
-    | Vector2
-    | undefined;
+  location?: Vector2;
   /** an explanation of the failure */
-  reason: string;
+  reason?: string;
 }
 
 function createBaseGameEvent(): GameEvent {

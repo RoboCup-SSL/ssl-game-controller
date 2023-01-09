@@ -57,15 +57,15 @@ export interface Referee {
    * A random UUID of the source that is kept constant at the source while running
    * If multiple sources are broadcasting to the same network, this id can be used to identify individual sources
    */
-  sourceIdentifier: string;
+  sourceIdentifier?: string;
   /** The match type is a meta information about the current match that helps to process the logs after a competition */
-  matchType: MatchType;
+  matchType?: MatchType;
   /**
    * The UNIX timestamp when the packet was sent, in microseconds.
    * Divide by 1,000,000 to get a time_t.
    */
-  packetTimestamp: number;
-  stage: Referee_Stage;
+  packetTimestamp?: number;
+  stage?: Referee_Stage;
   /**
    * The number of microseconds left in the stage.
    * The following stages have this value; the rest do not:
@@ -81,31 +81,29 @@ export interface Referee {
    * If the stage runs over its specified time, this value
    * becomes negative.
    */
-  stageTimeLeft: number;
-  command: Referee_Command;
+  stageTimeLeft?: number;
+  command?: Referee_Command;
   /** The number of commands issued since startup (mod 2^32). */
-  commandCounter: number;
+  commandCounter?: number;
   /**
    * The UNIX timestamp when the command was issued, in microseconds.
    * This value changes only when a new command is issued, not on each packet.
    */
-  commandTimestamp: number;
+  commandTimestamp?: number;
   /** Information about the two teams. */
-  yellow: Referee_TeamInfo | undefined;
-  blue: Referee_TeamInfo | undefined;
-  designatedPosition:
-    | Referee_Point
-    | undefined;
+  yellow?: Referee_TeamInfo;
+  blue?: Referee_TeamInfo;
+  designatedPosition?: Referee_Point;
   /**
    * Information about the direction of play.
    * True, if the blue team will have it's goal on the positive x-axis of the ssl-vision coordinate system.
    * Obviously, the yellow team will play on the opposite half.
    */
-  blueTeamOnPositiveHalf: boolean;
+  blueTeamOnPositiveHalf?: boolean;
   /** The command that will be issued after the current stoppage and ball placement to continue the game. */
-  nextCommand: Referee_Command;
-  gameEvents: GameEvent[];
-  gameEventProposals: GameEventProposalGroup[];
+  nextCommand?: Referee_Command;
+  gameEvents?: GameEvent[];
+  gameEventProposals?: GameEventProposalGroup[];
   /**
    * The time in microseconds that is remaining until the current action times out
    * The time will not be reset. It can get negative.
@@ -115,7 +113,7 @@ export interface Referee {
    *  * kickoff, penalty kick, force start
    *  * ball placement
    */
-  currentActionTimeRemaining: number;
+  currentActionTimeRemaining?: number;
 }
 
 /** These are the "coarse" stages of the game. */
@@ -430,40 +428,40 @@ export function referee_CommandToJSON(object: Referee_Command): string {
 /** Information about a single team. */
 export interface Referee_TeamInfo {
   /** The team's name (empty string if operator has not typed anything). */
-  name: string;
+  name?: string;
   /** The number of goals scored by the team during normal play and overtime. */
-  score: number;
+  score?: number;
   /** The number of red cards issued to the team since the beginning of the game. */
-  redCards: number;
+  redCards?: number;
   /**
    * The amount of time (in microseconds) left on each yellow card issued to the team.
    * If no yellow cards are issued, this array has no elements.
    * Otherwise, times are ordered from smallest to largest.
    */
-  yellowCardTimes: number[];
+  yellowCardTimes?: number[];
   /** The total number of yellow cards ever issued to the team. */
-  yellowCards: number;
+  yellowCards?: number;
   /**
    * The number of timeouts this team can still call.
    * If in a timeout right now, that timeout is excluded.
    */
-  timeouts: number;
+  timeouts?: number;
   /** The number of microseconds of timeout this team can use. */
-  timeoutTime: number;
+  timeoutTime?: number;
   /** The pattern number of this team's goalkeeper. */
-  goalkeeper: number;
+  goalkeeper?: number;
   /** The total number of countable fouls that act towards yellow cards */
-  foulCounter: number;
+  foulCounter?: number;
   /** The number of consecutive ball placement failures of this team */
-  ballPlacementFailures: number;
+  ballPlacementFailures?: number;
   /** Indicate if the team is able and allowed to place the ball */
-  canPlaceBall: boolean;
+  canPlaceBall?: boolean;
   /** The maximum number of bots allowed on the field based on division and cards */
-  maxAllowedBots: number;
+  maxAllowedBots?: number;
   /** The team has submitted an intent to substitute one or more robots at the next chance */
-  botSubstitutionIntent: boolean;
+  botSubstitutionIntent?: boolean;
   /** Indicate if the team reached the maximum allowed ball placement failures and is thus not allowed to place the ball anymore */
-  ballPlacementFailuresReached: boolean;
+  ballPlacementFailuresReached?: boolean;
 }
 
 /**
@@ -473,16 +471,16 @@ export interface Referee_TeamInfo {
  * both absent (in the case of any other command).
  */
 export interface Referee_Point {
-  x: number;
-  y: number;
+  x?: number;
+  y?: number;
 }
 
 /** List of matching proposals */
 export interface GameEventProposalGroup {
   /** The proposed game event. */
-  gameEvent: GameEvent[];
+  gameEvent?: GameEvent[];
   /** Whether the proposal group was accepted */
-  accepted: boolean;
+  accepted?: boolean;
 }
 
 function createBaseReferee(): Referee {

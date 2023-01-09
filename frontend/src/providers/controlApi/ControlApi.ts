@@ -39,7 +39,7 @@ export class ControlApi {
   }
 
   public AddGameEvent(gameEvent: GameEvent) {
-    if (gameEvent.origin.length == 0) {
+    if (gameEvent.origin?.length === 0) {
       gameEvent.origin = ["UI"]
     }
     this.SubmitChange({
@@ -56,37 +56,25 @@ export class ControlApi {
 
   public ChangeConfig(configDelta: Config) {
     this.Send({
-      change: undefined,
-      resetMatch: false,
-      configDelta,
-      continueAction: undefined
+      configDelta
     })
   }
 
   public ResetMatch() {
     this.Send({
-      change: undefined,
-      resetMatch: true,
-      configDelta: undefined,
-      continueAction: undefined
+      resetMatch: true
     })
   }
 
   public Continue(continueAction: ContinueAction) {
     this.Send({
-      change: undefined,
-      resetMatch: false,
-      configDelta: undefined,
       continueAction
     })
   }
 
   public SubmitChange(change: Change) {
     this.Send({
-      change,
-      resetMatch: false,
-      configDelta: undefined,
-      continueAction: undefined
+      change
     })
   }
 

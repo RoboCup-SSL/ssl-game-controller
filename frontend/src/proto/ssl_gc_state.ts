@@ -14,25 +14,25 @@ import {
 } from "./ssl_gc_referee_message";
 
 export interface YellowCard {
-  id: number;
-  causedByGameEvent: GameEvent | undefined;
-  timeRemaining: Duration | undefined;
+  id?: number;
+  causedByGameEvent?: GameEvent;
+  timeRemaining?: Duration;
 }
 
 export interface RedCard {
-  id: number;
-  causedByGameEvent: GameEvent | undefined;
+  id?: number;
+  causedByGameEvent?: GameEvent;
 }
 
 export interface Foul {
-  id: number;
-  causedByGameEvent: GameEvent | undefined;
-  timestamp: Date | undefined;
+  id?: number;
+  causedByGameEvent?: GameEvent;
+  timestamp?: Date;
 }
 
 export interface Command {
-  type: Command_Type;
-  forTeam: Team;
+  type?: Command_Type;
+  forTeam?: Team;
 }
 
 export enum Command_Type {
@@ -117,8 +117,8 @@ export function command_TypeToJSON(object: Command_Type): string {
 }
 
 export interface GameState {
-  type: GameState_Type;
-  forTeam: Team;
+  type?: GameState_Type;
+  forTeam?: Team;
 }
 
 export enum GameState_Type {
@@ -198,62 +198,60 @@ export function gameState_TypeToJSON(object: GameState_Type): string {
 
 export interface Proposal {
   /** The timestamp when the game event proposal occurred */
-  timestamp:
-    | Date
-    | undefined;
+  timestamp?: Date;
   /** The proposed game event. */
-  gameEvent: GameEvent | undefined;
+  gameEvent?: GameEvent;
 }
 
 export interface ProposalGroup {
   /** List of proposals in this group */
-  proposals: Proposal[];
+  proposals?: Proposal[];
   /** Whether the proposal group was accepted */
-  accepted: boolean;
+  accepted?: boolean;
 }
 
 export interface TeamInfo {
-  name: string;
-  goals: number;
-  goalkeeper: number;
-  yellowCards: YellowCard[];
-  redCards: RedCard[];
-  timeoutsLeft: number;
-  timeoutTimeLeft: Duration | undefined;
-  onPositiveHalf: boolean;
-  fouls: Foul[];
-  ballPlacementFailures: number;
-  ballPlacementFailuresReached: boolean;
-  canPlaceBall: boolean;
-  maxAllowedBots: number;
-  requestsBotSubstitutionSince: Date | undefined;
-  requestsTimeoutSince: Date | undefined;
-  requestsEmergencyStopSince: Date | undefined;
-  challengeFlags: number;
+  name?: string;
+  goals?: number;
+  goalkeeper?: number;
+  yellowCards?: YellowCard[];
+  redCards?: RedCard[];
+  timeoutsLeft?: number;
+  timeoutTimeLeft?: Duration;
+  onPositiveHalf?: boolean;
+  fouls?: Foul[];
+  ballPlacementFailures?: number;
+  ballPlacementFailuresReached?: boolean;
+  canPlaceBall?: boolean;
+  maxAllowedBots?: number;
+  requestsBotSubstitutionSince?: Date;
+  requestsTimeoutSince?: Date;
+  requestsEmergencyStopSince?: Date;
+  challengeFlags?: number;
 }
 
 export interface State {
-  stage: Referee_Stage;
-  command: Command | undefined;
-  gameState: GameState | undefined;
-  stageTimeElapsed: Duration | undefined;
-  stageTimeLeft: Duration | undefined;
-  matchTimeStart: Date | undefined;
-  teamState: { [key: string]: TeamInfo };
-  placementPos: Vector2 | undefined;
-  nextCommand: Command | undefined;
-  currentActionTimeRemaining: Duration | undefined;
-  gameEvents: GameEvent[];
-  proposalGroups: ProposalGroup[];
-  division: Division;
-  firstKickoffTeam: Team;
-  matchType: MatchType;
-  readyContinueTime: Date | undefined;
+  stage?: Referee_Stage;
+  command?: Command;
+  gameState?: GameState;
+  stageTimeElapsed?: Duration;
+  stageTimeLeft?: Duration;
+  matchTimeStart?: Date;
+  teamState?: { [key: string]: TeamInfo };
+  placementPos?: Vector2;
+  nextCommand?: Command;
+  currentActionTimeRemaining?: Duration;
+  gameEvents?: GameEvent[];
+  proposalGroups?: ProposalGroup[];
+  division?: Division;
+  firstKickoffTeam?: Team;
+  matchType?: MatchType;
+  readyContinueTime?: Date;
 }
 
 export interface State_TeamStateEntry {
   key: string;
-  value: TeamInfo | undefined;
+  value?: TeamInfo;
 }
 
 function createBaseYellowCard(): YellowCard {

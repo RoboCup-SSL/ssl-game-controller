@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import {computed, inject} from "vue";
 import type {ControlApi} from "@/providers/controlApi/ControlApi";
+import type {Team} from "@/proto/ssl_gc_common";
 import ControlButton from "@/components/control/buttons/ControlButton.vue";
 import {useMatchStateStore} from "@/store/matchState";
-import {Team} from "@/proto/ssl_gc_common";
 import {isPausedStage} from "@/helpers";
 import {Command_Type} from "@/proto/ssl_gc_state";
 
@@ -15,7 +15,7 @@ const store = useMatchStateStore()
 const control = inject<ControlApi>('control-api')
 
 const timeoutRunning = computed(() => {
-  return store.isTimeout && store.matchState.gameState?.forTeam.toString() === Team[props.team]
+  return store.isTimeout && store.matchState.gameState?.forTeam === props.team
 })
 
 const label = computed(() => {
@@ -34,7 +34,7 @@ const toggle = () => {
 }
 
 const disable = computed(() => {
-  return isPausedStage(store.matchState.stage)
+  return !store.matchState.stage || isPausedStage(store.matchState.stage)
 })
 
 </script>

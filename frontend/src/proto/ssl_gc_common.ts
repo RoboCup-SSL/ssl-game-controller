@@ -86,9 +86,9 @@ export function divisionToJSON(object: Division): string {
 /** RobotId is the combination of a team and a robot id */
 export interface RobotId {
   /** the robot number */
-  id: number;
+  id?: number;
   /** the team that the robot belongs to */
-  team: Team;
+  team?: Team;
 }
 
 function createBaseRobotId(): RobotId {

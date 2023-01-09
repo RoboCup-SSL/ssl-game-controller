@@ -14,7 +14,7 @@ const sendCommand = () => {
 }
 
 const disable = computed(() => {
-  return !store.isStop || !isRunningStage(store.matchState.stage)
+  return !store.isStop || !store.matchState.stage || !isRunningStage(store.matchState.stage)
 })
 
 </script>
