@@ -26,5 +26,5 @@ const onUpdate = (value: number) => {
 </script>
 
 <template>
-  <NumberInput :value="currentKeeperId" :on-update="onUpdate"/>
+  <NumberInput :model="currentKeeperId" @onUpdate="onUpdate"/>
 </template>

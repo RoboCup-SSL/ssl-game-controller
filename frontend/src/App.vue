@@ -34,7 +34,7 @@ const toggleLeftDrawer = () => {
       </q-tabs>
     </q-header>
 
-    <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
+    <q-drawer v-model="leftDrawerOpen" side="left" bordered>
       Foo?
     </q-drawer>
 

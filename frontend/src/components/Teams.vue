@@ -1,21 +1,30 @@
 <script setup lang="ts">
-import {ref} from "vue";
+import {computed} from "vue";
 import TeamBadge from "@/components/common/TeamBadge.vue";
 import {Team} from "@/proto/ssl_gc_common";
 import GoalKeeperId from "@/components/team/GoalKeeperId.vue";
+import {useMatchStateStore} from "@/store/matchState";
 
-const id = ref(0)
+const store = useMatchStateStore()
 
+const teamNameYellow = computed(() => {
+  return store.matchState.teamState?.[Team.YELLOW].name!
+})
+const teamNameBlue = computed(() => {
+  return store.matchState.teamState?.[Team.BLUE].name!
+})
 </script>
 
 <template>
   <div class="column">
     <div class="row full-width">
-      <div class="col"> Team
+      <div class="col cell">
+        {{teamNameYellow}}
         <TeamBadge :team="Team.YELLOW"/>
       </div>
       <div class="col"></div>
-      <div class="col"> Team
+      <div class="col cell">
+        {{teamNameBlue}}
         <TeamBadge :team="Team.BLUE"/>
       </div>
     </div>
@@ -23,7 +32,7 @@ const id = ref(0)
       <div class="col">
         <GoalKeeperId :team="Team.YELLOW"/>
       </div>
-      <div class="col">
+      <div class="col cell">
         Goal Keeper
       </div>
       <div class="col">
@@ -32,3 +41,11 @@ const id = ref(0)
     </div>
   </div>
 </template>
+
+<style scoped>
+.cell {
+  text-align: center;
+  margin: auto;
+  font-size: large;
+}
+</style>

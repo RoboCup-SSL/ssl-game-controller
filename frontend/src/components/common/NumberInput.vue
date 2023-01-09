@@ -2,19 +2,19 @@
 import {computed, ref, watch} from "vue";
 
 const props = defineProps<{
-  value: number,
-  onUpdate: (value: number) => any
+  model: number,
 }>()
+const emit = defineEmits(['onUpdate'])
 
-const model = ref(structuredClone(props.value))
-const value = computed(() => props.value)
+const model = ref(structuredClone(props.model))
+const value = computed(() => props.model)
 watch(value, (newValue) => {
   model.value = newValue
 })
 
 const onBlur = () => {
   if (model.value !== value.value) {
-    props.onUpdate(model.value)
+    emit('onUpdate', model.value)
     model.value = structuredClone(value.value)
   }
 }
@@ -22,6 +22,7 @@ const onBlur = () => {
 
 <template>
   <q-input
+    input-class="text-center"
     filled
     type="number"
     v-model="model"

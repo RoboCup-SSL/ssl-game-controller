@@ -33,5 +33,9 @@ const shown = computed(() => {
 </script>
 
 <template>
-  <q-badge :class="{'q-mx-xs': !floating}" v-if="shown" :color="color" :floating="floating" :label="label"/>
+  <q-badge :class="{'q-mx-xs': !floating}"
+           v-if="shown"
+           :color="color"
+           :floating="floating"
+           :label="label"/>
 </template>
