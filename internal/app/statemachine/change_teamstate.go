@@ -12,6 +12,10 @@ import (
 )
 
 func (s *StateMachine) processChangeUpdateTeamState(newState *state.State, change *Change_UpdateTeamState) (changes []*Change) {
+	if change.ForTeam == nil {
+		log.Println("No team specified for team state change")
+		return
+	}
 	teamState := newState.TeamInfo(*change.ForTeam)
 	if change.TeamName != nil {
 		*teamState.Name = *change.TeamName
