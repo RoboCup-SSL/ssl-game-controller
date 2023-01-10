@@ -12,7 +12,7 @@ defineProps<{
 </script>
 
 <template>
-  <q-btn class="q-mx-md q-my-xs" color="primary" @click="action()" :disable="disable" :label="label">
+  <q-btn class="q-mx-md q-my-xs" color="primary" @click="action" :disable="disable" :label="label">
     <TeamBadge :team="team" floating/>
   </q-btn>
 </template>

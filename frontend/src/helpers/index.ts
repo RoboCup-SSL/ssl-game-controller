@@ -1,4 +1,5 @@
 import {Referee_Stage} from "@/proto/ssl_gc_referee_message";
+import {Command_Type} from "@/proto/ssl_gc_state";
 
 export const stageNames = new Map<Referee_Stage, string>([
   [Referee_Stage.NORMAL_FIRST_HALF_PRE, 'Pre-First Half'],
@@ -16,6 +17,18 @@ export const stageNames = new Map<Referee_Stage, string>([
   [Referee_Stage.PENALTY_SHOOTOUT, 'Shootout'],
   [Referee_Stage.POST_GAME, 'End of Game'],
 ]);
+
+export const commandNames = new Map<Command_Type, string>([
+  [Command_Type.HALT, 'Halt'],
+  [Command_Type.STOP, 'Stop'],
+  [Command_Type.NORMAL_START, 'Normal Start'],
+  [Command_Type.FORCE_START, 'Force Start'],
+  [Command_Type.DIRECT, 'Free kick'],
+  [Command_Type.KICKOFF, 'Kick-off'],
+  [Command_Type.PENALTY, 'Penalty kick'],
+  [Command_Type.TIMEOUT, 'Timeout'],
+  [Command_Type.BALL_PLACEMENT, 'Ball Placement'],
+])
 
 export const getNextStage = function (stage: Referee_Stage): Referee_Stage {
   switch (stage) {
