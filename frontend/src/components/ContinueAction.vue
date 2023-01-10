@@ -18,7 +18,7 @@ const team = computed(() => {
 })
 
 const color = computed(() => {
-  switch(props.action.state) {
+  switch (props.action.state) {
     case ContinueAction_State.READY_AUTO:
       return 'positive'
     case ContinueAction_State.READY_MANUAL:
@@ -33,7 +33,7 @@ const color = computed(() => {
 })
 
 const label = computed(() => {
-  switch(props.action.type) {
+  switch (props.action.type) {
     case ContinueAction_Type.HALT:
       return 'Halt'
     case ContinueAction_Type.RESUME_FROM_HALT:
@@ -64,6 +64,10 @@ const label = computed(() => {
   }
 })
 
+const issues = computed(() => {
+  return props.action.continuationIssues
+})
+
 const submitAction = () => {
   control?.Continue(props.action)
 }
@@ -74,6 +78,12 @@ const submitAction = () => {
          :color="color"
          @click="submitAction"
          :label="label">
+    <q-list dense>
+      <q-item v-for="issue in issues">
+        <q-icon name="warning" color="warning"></q-icon>
+        {{ issue }}
+      </q-item>
+    </q-list>
     <TeamBadge :team="team" floating/>
   </q-btn>
 </template>
