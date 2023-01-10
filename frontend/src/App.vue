@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {ref} from 'vue'
 import MatchStateToolbar from "@/components/MatchStateToolbar.vue";
+import ActiveTrackerSource from "@/components/ActiveTrackerSource.vue";
 
 const leftDrawerOpen = ref(false)
 const toggleLeftDrawer = () => {
@@ -21,6 +22,8 @@ const toggleLeftDrawer = () => {
           </q-avatar>
           SSL-Game-Controller
         </q-toolbar-title>
+
+        <ActiveTrackerSource/>
       </q-toolbar>
 
       <q-tabs align="left">

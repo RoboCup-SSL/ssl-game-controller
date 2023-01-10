@@ -88,7 +88,7 @@ export const useMatchStateStore = defineStore('matchState', {
     },
   },
   actions: {
-    update(newState: State) {
+    updateGcState(newState: State) {
       this.matchState = newState
     },
   },

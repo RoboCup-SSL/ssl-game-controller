@@ -12,14 +12,17 @@ export const control = {
     const matchStateStore = useMatchStateStore()
     controlApi.RegisterConsumer((output: Output) => {
       if (output.matchState) {
-        matchStateStore.update(output.matchState)
+        matchStateStore.updateGcState(output.matchState)
       }
     })
 
     const gcStateStore = useGcStateStore()
     controlApi.RegisterConsumer((output: Output) => {
       if (output.gcState) {
-        gcStateStore.update(output.gcState)
+        gcStateStore.updateGcState(output.gcState)
+      }
+      if (output.config) {
+        gcStateStore.updateConfig(output.config)
       }
     })
   }

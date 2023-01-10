@@ -1,5 +1,6 @@
 import {defineStore} from "pinia";
 import {GcState, TeamAdvantageChoice_AdvantageChoice} from "@/proto/ssl_gc_engine";
+import type {Config} from "@/proto/ssl_gc_engine_config";
 
 export const useGcStateStore = defineStore('gcState', {
   state: () => {
@@ -24,13 +25,18 @@ export const useGcStateStore = defineStore('gcState', {
         autoRefState: {},
         trackers: {},
         continueActions: [],
-      } as GcState
+      } as GcState,
+      config: {
+      } as Config
     }
   },
   getters: {},
   actions: {
-    update(newState: GcState) {
-      this.gcState = newState
+    updateGcState(gcState: GcState) {
+      this.gcState = gcState
+    },
+    updateConfig(config: Config) {
+      this.config = config
     },
   },
 })
