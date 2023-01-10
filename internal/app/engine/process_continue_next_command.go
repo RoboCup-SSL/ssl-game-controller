@@ -98,15 +98,25 @@ func (e *Engine) readyToContinueKickoff() (issues []string) {
 		issues = append(issues, fmt.Sprintf("Ball is %.1f m away from center circle", ballToCenterCircleDist))
 	}
 
+	var badRobots []*Robot
 	for _, robot := range e.trackerStateGc.Robots {
 		if *e.currentState.TeamState[robot.Id.Team.String()].OnPositiveHalf {
 			if *robot.Pos.X < robotRadius {
-				issues = append(issues, fmt.Sprintf("Robot %s is not in its own half", robot.Id.PrettyString()))
+				badRobots = append(badRobots, robot)
 			}
 		} else if *robot.Pos.X > -robotRadius {
-			issues = append(issues, fmt.Sprintf("Robot %s is not in its own half", robot.Id.PrettyString()))
+			badRobots = append(badRobots, robot)
 		}
 	}
+
+	if len(badRobots) < 3 {
+		for _, robot := range badRobots {
+			issues = append(issues, fmt.Sprintf("Robot %s is not in its own half", robot.Id.PrettyString()))
+		}
+	} else {
+		issues = append(issues, "Multiple robots are not in their own half")
+	}
+
 	return issues
 }
 
@@ -127,6 +137,7 @@ func (e *Engine) readyToContinuePenalty() (issues []string) {
 	ballPos := e.trackerStateGc.Ball.Pos
 
 	numAttackersInFrontOfBall := 0
+	var badRobots []*Robot
 	for _, robot := range e.trackerStateGc.Robots {
 		if *robot.Id.Id == *keeperId.Id && *robot.Id.Team == *keeperId.Team {
 			// it's the keeper
@@ -140,14 +151,21 @@ func (e *Engine) readyToContinuePenalty() (issues []string) {
 			continue
 		}
 		if *robot.Id.Team == *keeperId.Team {
-			issues = append(issues, fmt.Sprintf(
-				"Robot %s does not keep required distance to ball", robot.Id.PrettyString()))
+			badRobots = append(badRobots, robot)
 		} else if numAttackersInFrontOfBall >= 1 {
-			issues = append(issues, fmt.Sprintf(
-				"Robot %s does not keep required distance to ball", robot.Id.PrettyString()))
+			badRobots = append(badRobots, robot)
 		} else {
 			numAttackersInFrontOfBall++
 		}
+	}
+
+	if len(badRobots) < 3 {
+		for _, robot := range badRobots {
+			issues = append(issues, fmt.Sprintf(
+				"Robot %s does not keep required distance to ball", robot.Id.PrettyString()))
+		}
+	} else {
+		issues = append(issues, "Multiple robots do not keep required distance to ball")
 	}
 	return
 }
