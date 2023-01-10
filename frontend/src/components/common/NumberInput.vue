@@ -3,6 +3,7 @@ import {computed, ref, watch} from "vue";
 
 const props = defineProps<{
   model: number,
+  suffix?: string,
 }>()
 const emit = defineEmits(['onUpdate'])
 
@@ -23,7 +24,9 @@ const onBlur = () => {
 <template>
   <q-input
     input-class="text-center"
-    filled
+    rounded outlined
+    dense
+    :suffix="suffix"
     type="number"
     v-model="model"
     @blur="onBlur"

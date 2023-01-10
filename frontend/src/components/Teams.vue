@@ -4,6 +4,10 @@ import TeamBadge from "@/components/common/TeamBadge.vue";
 import {Team} from "@/proto/ssl_gc_common";
 import GoalKeeperId from "@/components/team/GoalKeeperId.vue";
 import {useMatchStateStore} from "@/store/matchState";
+import TimeoutsLeft from "@/components/team/TimeoutsLeft.vue";
+import TimeoutTimeLeft from "@/components/team/TimeoutTimeLeft.vue";
+import PlacementFailures from "@/components/team/PlacementFailures.vue";
+import ChallengeFlags from "@/components/team/ChallengeFlags.vue";
 
 const store = useMatchStateStore()
 
@@ -16,27 +20,78 @@ const teamNameBlue = computed(() => {
 </script>
 
 <template>
-  <div class="column">
-    <div class="row full-width">
-      <div class="col cell">
-        {{teamNameYellow}}
-        <TeamBadge :team="Team.YELLOW"/>
+  <div class="q-mx-xl">
+    <div class="column">
+      <div class="row">
+        <div class="col cell">
+          {{ teamNameYellow }}
+          <TeamBadge :team="Team.YELLOW"/>
+        </div>
+        <div class="col"></div>
+        <div class="col cell">
+          {{ teamNameBlue }}
+          <TeamBadge :team="Team.BLUE"/>
+        </div>
       </div>
-      <div class="col"></div>
-      <div class="col cell">
-        {{teamNameBlue}}
-        <TeamBadge :team="Team.BLUE"/>
+      <div class="row">
+        <div class="col">
+          <GoalKeeperId :team="Team.YELLOW"/>
+        </div>
+        <div class="col cell">
+          goal keeper
+        </div>
+        <div class="col">
+          <GoalKeeperId :team="Team.BLUE"/>
+        </div>
       </div>
-    </div>
-    <div class="row full-width">
-      <div class="col">
-        <GoalKeeperId :team="Team.YELLOW"/>
+      <div class="row">
+        <div class="col">
+          <TimeoutsLeft :team="Team.YELLOW"/>
+        </div>
+        <div class="col cell">
+          timeouts left
+        </div>
+        <div class="col">
+          <TimeoutsLeft :team="Team.BLUE"/>
+        </div>
       </div>
-      <div class="col cell">
-        Goal Keeper
+      <div class="row full-width">
+        <div class="col">
+          <TimeoutTimeLeft :team="Team.YELLOW"/>
+        </div>
+        <div class="col cell">
+          timeout time left
+        </div>
+        <div class="col">
+          <TimeoutTimeLeft :team="Team.BLUE"/>
+        </div>
       </div>
-      <div class="col">
-        <GoalKeeperId :team="Team.BLUE"/>
+      <div class="row full-width">
+        <div class="col">
+          <PlacementFailures :team="Team.YELLOW"/>
+        </div>
+        <div class="col cell">
+          placement failures
+        </div>
+        <div class="col">
+          <PlacementFailures :team="Team.BLUE"/>
+        </div>
+      </div>
+      <div class="row full-width">
+        <div class="col">
+          <ChallengeFlags :team="Team.YELLOW"/>
+        </div>
+        <div class="col cell">
+          challenge flags left
+        </div>
+        <div class="col">
+          <ChallengeFlags :team="Team.BLUE"/>
+        </div>
+      </div>
+      <div class="row full-width">
+        <div class="col">
+          <q-separator spaced/>
+        </div>
       </div>
     </div>
   </div>
