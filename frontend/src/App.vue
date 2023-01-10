@@ -41,8 +41,10 @@ const toggleLeftDrawer = () => {
       Foo?
     </q-drawer>
 
-    <q-page-container class="q-mt-sm">
-      <router-view/>
+    <q-page-container>
+      <div class="q-mt-sm">
+        <router-view/>
+      </div>
     </q-page-container>
 
     <q-footer elevated class="bg-grey-8 text-white">
