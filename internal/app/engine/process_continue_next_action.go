@@ -43,6 +43,31 @@ func (e *Engine) nextActions() (actions []*ContinueAction) {
 		))
 	}
 
+	if e.currentState.Command.IsPrepare() {
+		if e.currentState.NextCommand != nil {
+			actions = append(actions, e.createNextCommandContinueAction(ContinueAction_NEXT_COMMAND))
+		}
+		actions = append(actions, createContinueAction(
+			ContinueAction_STOP_GAME,
+			state.Team_UNKNOWN,
+			ContinueAction_READY_MANUAL,
+		))
+	}
+
+	if *e.currentState.Command.Type == state.Command_STOP || *e.currentState.Command.Type == state.Command_HALT {
+		for _, team := range state.BothTeams() {
+			if e.currentState.HasGameEventByTeam(state.GameEvent_POSSIBLE_GOAL, team) &&
+				!e.currentState.HasGameEventByTeam(state.GameEvent_GOAL, team) &&
+				!e.currentState.HasGameEventByTeam(state.GameEvent_INVALID_GOAL, team) {
+				actions = append(actions, createContinueAction(
+					ContinueAction_ACCEPT_GOAL,
+					team,
+					ContinueAction_READY_MANUAL,
+				))
+			}
+		}
+	}
+
 	if *e.currentState.Command.Type == state.Command_STOP {
 		if e.currentState.StageTimeLeft.AsDuration() < 0 {
 			actions = append(actions, createContinueAction(

@@ -2,6 +2,7 @@ package engine
 
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
+	"google.golang.org/protobuf/proto"
 	"log"
 )
 
@@ -34,6 +35,24 @@ func (e *Engine) performContinueAction(action *ContinueAction) {
 		e.Enqueue(createBotSubstitutionEventChange(*action.ForTeam))
 	case ContinueAction_NEXT_STAGE:
 		e.Enqueue(createStageChange(e.currentState.Stage.Next()))
+	case ContinueAction_ACCEPT_GOAL:
+		possibleGoals := e.currentState.FindGameEventsByTeam(state.GameEvent_POSSIBLE_GOAL, *action.ForTeam)
+		if len(possibleGoals) == 1 {
+			possibleGoal := possibleGoals[0]
+			goal := state.GameEvent_Goal{}
+			proto.Merge(&goal, possibleGoal.GetPossibleGoal())
+			goal.Message = new(string)
+			*goal.Message = "Accepted by GC operator"
+			goalEvent := &state.GameEvent{
+				Event: &state.GameEvent_Goal_{
+					Goal: &goal,
+				},
+			}
+			e.Enqueue(createGameEventChange(state.GameEvent_GOAL, goalEvent))
+		} else {
+			log.Println("No possible goal event present to accept")
+		}
+
 	}
 }
 

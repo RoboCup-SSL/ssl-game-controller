@@ -56,11 +56,13 @@ const label = computed(() => {
       return 'Start Bot Substitution'
     case ContinueAction_Type.NEXT_STAGE:
       return 'Next Stage'
+    case ContinueAction_Type.ACCEPT_GOAL:
+      return 'Accept Goal'
     case ContinueAction_Type.TYPE_UNKNOWN:
     case ContinueAction_Type.UNRECOGNIZED:
     default:
       console.warn("Unhandled action: ", props.action.type)
-      return ''
+      return props.action.type
   }
 })
 

@@ -122,6 +122,7 @@ message ContinueAction {
         TIMEOUT_STOP = 6;
         BOT_SUBSTITUTION = 7;
         NEXT_STAGE = 8;
+        ACCEPT_GOAL = 12;
     }
 
     enum State {
