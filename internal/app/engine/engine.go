@@ -443,7 +443,6 @@ func (e *Engine) UpdateConfig(delta *Config) {
 	if delta.AutoContinue != nil {
 		e.config.AutoContinue = delta.AutoContinue
 	}
-	log.Printf("Engine config updated to %v", e.config.StringJson())
 	if err := e.config.WriteTo(e.engineConfig.ConfigFilename); err != nil {
 		log.Printf("Could not write engine config: %v", err)
 	}

@@ -152,7 +152,6 @@ func (x *Config) WriteTo(fileName string) (err error) {
 		return
 	}
 	err = os.WriteFile(fileName, b, 0600)
-	log.Printf("Written to %v", fileName)
 	return
 }
 
