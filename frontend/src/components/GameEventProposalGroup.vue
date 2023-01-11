@@ -1,0 +1,59 @@
+<script setup lang="ts">
+import {computed, inject} from "vue";
+import {ProposalGroup} from "@/proto/ssl_gc_state";
+import GameEventProposal from "@/components/GameEventProposal.vue";
+import {ControlApi} from "@/providers/controlApi/ControlApi";
+
+const props = defineProps<{
+  proposalGroup: ProposalGroup,
+  groupId: number,
+}>()
+
+const control = inject<ControlApi>('control-api')
+
+const proposals = computed(() => {
+  return props.proposalGroup.proposals
+})
+
+const label = computed(() => {
+  return Array.from(new Set(proposals.value?.map(p => p.gameEvent?.type)).values()).join(" / ")
+})
+
+const pending = computed(() => {
+  return !props.proposalGroup.accepted
+})
+
+const groupIcon = computed(() => {
+  if (props.proposalGroup.accepted) {
+    return 'check_circle'
+  }
+  return 'pending'
+})
+
+const acceptGroup = () => {
+  control?.AcceptProposalGroup(props.groupId)
+}
+</script>
+
+<template>
+  <q-expansion-item
+    expand-separator
+    expand-icon-toggle
+    :default-opened="pending"
+  >
+    <template v-slot:header>
+      <q-item-section side>
+        <q-icon :name="groupIcon"/>
+      </q-item-section>
+      <q-item-section>
+        <q-item-label>{{ label }}</q-item-label>
+      </q-item-section>
+      <q-item-section side v-if="pending">
+        <q-btn flat dense round icon="done" @click="acceptGroup"/>
+      </q-item-section>
+    </template>
+    <q-list>
+      <GameEventProposal :proposal="proposal" v-for="proposal in proposals"/>
+    </q-list>
+  </q-expansion-item>
+</template>

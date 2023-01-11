@@ -76,6 +76,20 @@ export class ControlApi {
     })
   }
 
+  public AcceptProposalGroup(groupId: number) {
+    this.SubmitChange({
+      origin: "UI",
+      revertible: true,
+      change: {
+        $case: 'acceptProposalGroupChange',
+        acceptProposalGroupChange: {
+          groupId,
+          acceptedBy: "UI"
+        }
+      }
+    })
+  }
+
   public ChangeConfig(configDelta: Config) {
     this.Send({
       configDelta
