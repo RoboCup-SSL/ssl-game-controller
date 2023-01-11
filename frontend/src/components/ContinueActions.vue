@@ -6,7 +6,7 @@ import ContinueAction from "@/components/ContinueAction.vue";
 const store = useGcStateStore()
 
 const actions = computed(() => {
-  return store.gcState.continueActions?.reverse()
+  return store.gcState.continueActions
 })
 
 </script>
