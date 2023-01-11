@@ -62,11 +62,12 @@ protoc -I"./proto" \
   --ts_proto_opt=exportCommonSymbols=false \
   --ts_proto_opt=emitImportedFiles=false \
   --ts_proto_opt=useOptionals=all \
+  proto/ssl_gc_api.proto \
+  proto/ssl_gc_state.proto \
   proto/ssl_gc_common.proto \
   proto/ssl_gc_geometry.proto \
   proto/ssl_gc_game_event.proto \
   proto/ssl_gc_referee_message.proto \
   proto/ssl_gc_change.proto \
-  proto/ssl_gc_state.proto \
-  proto/ssl_gc_api.proto \
-  proto/ssl_gc_engine.proto
+  proto/ssl_gc_engine.proto \
+  proto/ssl_gc_engine_config.proto

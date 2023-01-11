@@ -3,15 +3,15 @@
 /** The engine config */
 export interface Config {
   /** The behavior for each game event */
-  gameEventBehavior: { [key: string]: Config_Behavior };
+  gameEventBehavior?: { [key: string]: Config_Behavior };
   /** The config for each auto referee */
-  autoRefConfigs: { [key: string]: AutoRefConfig };
+  autoRefConfigs?: { [key: string]: AutoRefConfig };
   /** The selected tracker source */
-  activeTrackerSource: string;
+  activeTrackerSource?: string;
   /** The list of available teams */
-  teams: string[];
+  teams?: string[];
   /** Enable or disable auto continuation */
-  autoContinue: boolean;
+  autoContinue?: boolean;
 }
 
 /** Behaviors for each game event */
@@ -85,13 +85,13 @@ export interface Config_GameEventBehaviorEntry {
 
 export interface Config_AutoRefConfigsEntry {
   key: string;
-  value: AutoRefConfig | undefined;
+  value?: AutoRefConfig;
 }
 
 /** The config for an auto referee */
 export interface AutoRefConfig {
   /** The game event behaviors for this auto referee */
-  gameEventBehavior: { [key: string]: AutoRefConfig_Behavior };
+  gameEventBehavior?: { [key: string]: AutoRefConfig_Behavior };
 }
 
 /** Behaviors for the game events reported by this auto referee */
