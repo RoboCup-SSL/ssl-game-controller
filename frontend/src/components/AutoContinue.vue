@@ -7,15 +7,15 @@ import ToggleInput from "@/components/common/ToggleInput.vue";
 const store = useGcStateStore()
 const control = inject<ControlApi>('control-api')
 
-const autoContinue = computed(() => {
+const model = computed(() => {
   return store.config.autoContinue
 })
 
 const onChange = () => {
-  control?.ChangeConfig({autoContinue: !autoContinue.value})
+  control?.ChangeConfig({autoContinue: !model.value})
 }
 </script>
 
 <template>
-  <ToggleInput :model="autoContinue" label="Continue automatically" @onUpdate="onChange"/>
+  <ToggleInput :model="model" label="Continue automatically" @onUpdate="onChange"/>
 </template>

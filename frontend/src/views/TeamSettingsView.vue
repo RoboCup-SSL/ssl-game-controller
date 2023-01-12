@@ -88,11 +88,6 @@ const teamNameBlue = computed(() => {
           <ChallengeFlags :team="Team.BLUE"/>
         </div>
       </div>
-      <div class="row full-width">
-        <div class="col">
-          <q-separator spaced/>
-        </div>
-      </div>
     </div>
   </div>
 </template>

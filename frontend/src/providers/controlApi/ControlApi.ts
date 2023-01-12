@@ -27,8 +27,6 @@ export class ControlApi {
 
   public NewCommand(command: Command) {
     this.SubmitChange({
-      origin: "UI",
-      revertible: true,
       change: {
         $case: 'newCommandChange',
         newCommandChange: {
@@ -43,8 +41,6 @@ export class ControlApi {
       gameEvent.origin = ["UI"]
     }
     this.SubmitChange({
-      origin: "UI",
-      revertible: true,
       change: {
         $case: 'addGameEventChange',
         addGameEventChange: {
@@ -56,8 +52,6 @@ export class ControlApi {
 
   public UpdateMatchConfig(updateConfigChange: Change_UpdateConfig) {
     this.SubmitChange({
-      origin: "UI",
-      revertible: true,
       change: {
         $case: 'updateConfigChange',
         updateConfigChange
@@ -67,8 +61,6 @@ export class ControlApi {
 
   public UpdateTeamState(updateTeamStateChange: Change_UpdateTeamState) {
     this.SubmitChange({
-      origin: "UI",
-      revertible: true,
       change: {
         $case: 'updateTeamStateChange',
         updateTeamStateChange
@@ -78,8 +70,6 @@ export class ControlApi {
 
   public AcceptProposalGroup(groupId: number) {
     this.SubmitChange({
-      origin: "UI",
-      revertible: true,
       change: {
         $case: 'acceptProposalGroupChange',
         acceptProposalGroupChange: {
@@ -109,6 +99,9 @@ export class ControlApi {
   }
 
   public SubmitChange(change: Change) {
+    if (!change.origin) {
+      change.origin = "UI"
+    }
     this.Send({
       change
     })
