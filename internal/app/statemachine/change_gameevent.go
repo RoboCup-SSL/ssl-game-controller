@@ -331,10 +331,6 @@ func (s *StateMachine) convertAimlessKick(gameEvent *state.GameEvent) *state.Gam
 
 // nextCommandForEvent determines the next command for the given event or returns the currently set one
 func (s *StateMachine) nextCommandForEvent(newState *state.State, gameEvent *state.GameEvent) (command *state.Command) {
-	if *newState.Command.Type == state.Command_PENALTY || *newState.Command.Type == state.Command_KICKOFF {
-		return state.NewCommand(state.Command_NORMAL_START, state.Team_UNKNOWN)
-	}
-
 	switch *gameEvent.Type {
 	case state.GameEvent_BALL_LEFT_FIELD_GOAL_LINE,
 		state.GameEvent_BALL_LEFT_FIELD_TOUCH_LINE,

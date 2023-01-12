@@ -123,6 +123,7 @@ message ContinueAction {
         BOT_SUBSTITUTION = 7;
         NEXT_STAGE = 8;
         ACCEPT_GOAL = 12;
+        NORMAL_START = 13;
     }
 
     enum State {

@@ -58,6 +58,8 @@ const label = computed(() => {
       return 'Next Stage'
     case ContinueAction_Type.ACCEPT_GOAL:
       return 'Accept Goal'
+    case ContinueAction_Type.NORMAL_START:
+      return 'Normal Start'
     case ContinueAction_Type.TYPE_UNKNOWN:
     case ContinueAction_Type.UNRECOGNIZED:
     default:

@@ -27679,6 +27679,7 @@ export const ContinueAction = $root.ContinueAction = (() => {
         case 7:
         case 8:
         case 12:
+        case 13:
             break;
         }
         switch (message.forTeam) {
@@ -27779,6 +27780,10 @@ export const ContinueAction = $root.ContinueAction = (() => {
         case "ACCEPT_GOAL":
         case 12:
             message.type = 12;
+            break;
+        case "NORMAL_START":
+        case 13:
+            message.type = 13;
             break;
         }
         switch (object.forTeam) {
@@ -27912,6 +27917,7 @@ export const ContinueAction = $root.ContinueAction = (() => {
      * @property {number} BOT_SUBSTITUTION=7 BOT_SUBSTITUTION value
      * @property {number} NEXT_STAGE=8 NEXT_STAGE value
      * @property {number} ACCEPT_GOAL=12 ACCEPT_GOAL value
+     * @property {number} NORMAL_START=13 NORMAL_START value
      */
     ContinueAction.Type = (function() {
         const valuesById = {}, values = Object.create(valuesById);
@@ -27928,6 +27934,7 @@ export const ContinueAction = $root.ContinueAction = (() => {
         values[valuesById[7] = "BOT_SUBSTITUTION"] = 7;
         values[valuesById[8] = "NEXT_STAGE"] = 8;
         values[valuesById[12] = "ACCEPT_GOAL"] = 12;
+        values[valuesById[13] = "NORMAL_START"] = 13;
         return values;
     })();
 

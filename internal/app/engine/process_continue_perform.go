@@ -52,7 +52,10 @@ func (e *Engine) performContinueAction(action *ContinueAction) {
 		} else {
 			log.Println("No possible goal event present to accept")
 		}
-
+	case ContinueAction_NORMAL_START:
+		e.Enqueue(createCommandChange(state.NewCommandNeutral(state.Command_NORMAL_START)))
+	default:
+		log.Println("Unknown continue action: ", *action.Type)
 	}
 }
 

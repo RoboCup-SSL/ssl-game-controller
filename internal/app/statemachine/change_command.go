@@ -34,9 +34,6 @@ func (s *StateMachine) processChangeNewCommand(newState *state.State, newCommand
 		newState.ReadyContinueTime = nil
 	}
 
-	// determine next command
-	newState.NextCommand = s.nextCommandForCommand(newState)
-
 	if newState.Command.IsRunning() {
 		if newState.Stage.IsPreStage() {
 			log.Print("Pre-Stage is over, because game is running now")
@@ -59,15 +56,6 @@ func (s *StateMachine) processChangeNewCommand(newState *state.State, newCommand
 	}
 
 	return
-}
-
-// nextCommandForCommand determines the next command for the given command or returns the currently set one
-func (s *StateMachine) nextCommandForCommand(newState *state.State) (command *state.Command) {
-	if *newState.Command.Type == state.Command_PENALTY || *newState.Command.Type == state.Command_KICKOFF {
-		return state.NewCommand(state.Command_NORMAL_START, state.Team_UNKNOWN)
-	}
-
-	return newState.NextCommand
 }
 
 func (s *StateMachine) newGameState(newState *state.State, newCommand *Change_NewCommand) *state.GameState {

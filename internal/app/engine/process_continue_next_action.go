@@ -44,9 +44,11 @@ func (e *Engine) nextActions() (actions []*ContinueAction) {
 	}
 
 	if e.currentState.Command.IsPrepare() {
-		if e.currentState.NextCommand != nil {
-			actions = append(actions, e.createNextCommandContinueAction(ContinueAction_NEXT_COMMAND))
-		}
+		actions = append(actions, createContinueAction(
+			ContinueAction_NORMAL_START,
+			state.Team_UNKNOWN,
+			ContinueAction_READY_AUTO,
+		))
 		actions = append(actions, createContinueAction(
 			ContinueAction_STOP_GAME,
 			state.Team_UNKNOWN,
