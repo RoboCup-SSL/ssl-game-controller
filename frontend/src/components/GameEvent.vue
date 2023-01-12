@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import {computed} from "vue";
 import type {GameEvent} from "@/proto/ssl_gc_game_event";
+import TeamBadge from "@/components/common/TeamBadge.vue";
+import {Team} from "@/proto/ssl_gc_common";
 
 const props = defineProps<{
   gameEvent: GameEvent,
@@ -13,8 +15,18 @@ const label = computed(() => {
 
 const body = computed(() => {
   const event = props.gameEvent?.event!
-  const eventBody = (event as { [key: string]: any })[event.$case]
-  return JSON.stringify(eventBody)
+  return (event as { [key: string]: any })[event.$case]
+})
+
+const team = computed(() => {
+  if (body.value.hasOwnProperty("byTeam")) {
+    return body.value["byTeam"] as Team
+  }
+  return Team.UNKNOWN
+})
+
+const details = computed(() => {
+  return JSON.stringify(body.value)
 })
 
 const originIcon = (origin: string) => {
@@ -41,7 +53,10 @@ const origins = computed(() => {
   <q-expansion-item expand-separator>
     <template v-slot:header>
       <q-item-section>
-        <q-item-label>{{ label }}</q-item-label>
+        <q-item-label>
+          {{ label }}
+          <TeamBadge :team="team"/>
+        </q-item-label>
         <q-item-label caption v-if="caption">{{ caption }}</q-item-label>
       </q-item-section>
       <q-item-section side>
