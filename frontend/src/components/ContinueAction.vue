@@ -3,7 +3,7 @@ import {computed, inject} from "vue";
 import {ContinueAction, ContinueAction_State, ContinueAction_Type} from "@/proto/ssl_gc_engine";
 import TeamBadge from "@/components/common/TeamBadge.vue";
 import {useMatchStateStore} from "@/store/matchState";
-import {commandNames} from "@/helpers";
+import {commandNames} from "@/helpers/texts";
 import {ControlApi} from "@/providers/controlApi/ControlApi";
 
 const props = defineProps<{

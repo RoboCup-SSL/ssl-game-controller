@@ -3,6 +3,7 @@ import {computed} from "vue";
 import type {GameEvent} from "@/proto/ssl_gc_game_event";
 import TeamBadge from "@/components/common/TeamBadge.vue";
 import {Team} from "@/proto/ssl_gc_common";
+import {gameEventNames} from "@/helpers/texts";
 
 const props = defineProps<{
   gameEvent: GameEvent,
@@ -10,7 +11,7 @@ const props = defineProps<{
 }>()
 
 const label = computed(() => {
-  return props.gameEvent?.type
+  return gameEventNames.get(props.gameEvent?.type!)
 })
 
 const body = computed(() => {

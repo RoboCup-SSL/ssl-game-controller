@@ -2,7 +2,7 @@
 import {useMatchStateStore} from "@/store/matchState";
 import {computed, ref} from "vue";
 import formatDuration from "format-duration";
-import {stageNames} from "@/helpers";
+import {stageNames} from "@/helpers/texts";
 import TeamBadge from "@/components/common/TeamBadge.vue";
 
 const store = useMatchStateStore()

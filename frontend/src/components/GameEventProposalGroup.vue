@@ -3,6 +3,8 @@ import {computed, inject} from "vue";
 import {ProposalGroup} from "@/proto/ssl_gc_state";
 import GameEventProposal from "@/components/GameEventProposal.vue";
 import {ControlApi} from "@/providers/controlApi/ControlApi";
+import {GameEvent} from "@/proto/ssl_gc_game_event";
+import {gameEventNames} from "@/helpers/texts";
 
 const props = defineProps<{
   proposalGroup: ProposalGroup,
@@ -15,8 +17,12 @@ const proposals = computed(() => {
   return props.proposalGroup.proposals
 })
 
+const gameEventLabel = (gameEvent: GameEvent) => {
+  return gameEventNames.get(gameEvent?.type!)
+}
+
 const label = computed(() => {
-  return Array.from(new Set(proposals.value?.map(p => p.gameEvent?.type)).values()).join(" / ")
+  return Array.from(new Set(proposals.value?.map(p => gameEventLabel(p.gameEvent!))).values()).join(" / ")
 })
 
 const pending = computed(() => {
