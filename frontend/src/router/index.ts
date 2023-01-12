@@ -20,11 +20,6 @@ const router = createRouter({
       component: () => import('../views/ProtocolView.vue')
     },
     {
-      path: '/team-overview',
-      name: 'team-overview',
-      component: () => import('../views/TeamOverviewView.vue')
-    },
-    {
       path: '/manual-control',
       name: 'manual-control',
       component: () => import('../views/ManualControlView.vue')
@@ -35,9 +30,14 @@ const router = createRouter({
       component: () => import('../views/PlaceBallView.vue')
     },
     {
-      path: '/settings',
-      name: 'settings',
-      component: () => import('../views/SettingsView.vue')
+      path: '/team-settings',
+      name: 'team-settings',
+      component: () => import('../views/TeamSettingsView.vue')
+    },
+    {
+      path: '/match-settings',
+      name: 'match-settings',
+      component: () => import('../views/MatchSettingsView.vue')
     },
   ]
 })

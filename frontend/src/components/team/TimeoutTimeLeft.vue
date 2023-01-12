@@ -22,9 +22,8 @@ const onUpdate = (value: number) => {
     timeoutTimeLeft: value.toString(),
   })
 }
-
 </script>
 
 <template>
-  <NumberInput :model="model" suffix="s" @onUpdate="onUpdate"/>
+  <NumberInput :model="model" @onUpdate="onUpdate"/>
 </template>

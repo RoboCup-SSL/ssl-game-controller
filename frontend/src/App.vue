@@ -30,10 +30,10 @@ const toggleLeftDrawer = () => {
         <q-route-tab to="/" label="Home"/>
         <q-route-tab to="/match" label="Match"/>
         <q-route-tab to="/protocol" label="Protocol"/>
-        <q-route-tab to="/team-overview" label="Team Overview"/>
         <q-route-tab to="/manual-control" label="Manual Control"/>
         <q-route-tab to="/place-ball" label="Place Ball"/>
-        <q-route-tab to="/settings" label="Settings"/>
+        <q-route-tab to="/team-settings" label="Team Settings"/>
+        <q-route-tab to="/match-settings" label="Match Settings"/>
       </q-tabs>
     </q-header>
 

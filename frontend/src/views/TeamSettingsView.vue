@@ -23,12 +23,12 @@ const teamNameBlue = computed(() => {
   <div class="q-mx-xl">
     <div class="column">
       <div class="row">
-        <div class="col cell">
+        <div class="col label">
           {{ teamNameYellow }}
           <TeamBadge :team="Team.YELLOW"/>
         </div>
         <div class="col"></div>
-        <div class="col cell">
+        <div class="col label">
           {{ teamNameBlue }}
           <TeamBadge :team="Team.BLUE"/>
         </div>
@@ -37,7 +37,7 @@ const teamNameBlue = computed(() => {
         <div class="col">
           <GoalKeeperId :team="Team.YELLOW"/>
         </div>
-        <div class="col cell">
+        <div class="col label">
           goal keeper
         </div>
         <div class="col">
@@ -48,7 +48,7 @@ const teamNameBlue = computed(() => {
         <div class="col">
           <TimeoutsLeft :team="Team.YELLOW"/>
         </div>
-        <div class="col cell">
+        <div class="col label">
           timeouts left
         </div>
         <div class="col">
@@ -59,8 +59,8 @@ const teamNameBlue = computed(() => {
         <div class="col">
           <TimeoutTimeLeft :team="Team.YELLOW"/>
         </div>
-        <div class="col cell">
-          timeout time left
+        <div class="col label">
+          timeout seconds left
         </div>
         <div class="col">
           <TimeoutTimeLeft :team="Team.BLUE"/>
@@ -70,7 +70,7 @@ const teamNameBlue = computed(() => {
         <div class="col">
           <PlacementFailures :team="Team.YELLOW"/>
         </div>
-        <div class="col cell">
+        <div class="col label">
           placement failures
         </div>
         <div class="col">
@@ -81,7 +81,7 @@ const teamNameBlue = computed(() => {
         <div class="col">
           <ChallengeFlags :team="Team.YELLOW"/>
         </div>
-        <div class="col cell">
+        <div class="col label">
           challenge flags left
         </div>
         <div class="col">
@@ -98,9 +98,10 @@ const teamNameBlue = computed(() => {
 </template>
 
 <style scoped>
-.cell {
+.label {
   text-align: center;
   margin: auto;
   font-size: large;
+  text-transform: uppercase;
 }
 </style>
