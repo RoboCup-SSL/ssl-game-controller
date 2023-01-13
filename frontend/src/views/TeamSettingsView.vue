@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import {computed} from "vue";
 import TeamBadge from "@/components/common/TeamBadge.vue";
 import {Team} from "@/proto/ssl_gc_common";
 import GoalKeeperId from "@/components/team/GoalKeeperId.vue";
@@ -11,92 +10,66 @@ import ChallengeFlags from "@/components/team/ChallengeFlags.vue";
 
 const store = useMatchStateStore()
 
-const teamNameYellow = computed(() => {
-  return store.matchState.teamState?.[Team.YELLOW].name!
-})
-const teamNameBlue = computed(() => {
-  return store.matchState.teamState?.[Team.BLUE].name!
-})
+const teamName = (team: Team) => {
+  return store.matchState.teamState?.[team].name!
+}
+const teams = [Team.YELLOW, Team.BLUE]
 </script>
 
 <template>
-  <div class="q-mx-xl">
-    <div class="column">
-      <div class="row">
-        <div class="col label">
-          {{ teamNameYellow }}
-          <TeamBadge :team="Team.YELLOW"/>
-        </div>
-        <div class="col"></div>
-        <div class="col label">
-          {{ teamNameBlue }}
-          <TeamBadge :team="Team.BLUE"/>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <GoalKeeperId :team="Team.YELLOW"/>
-        </div>
-        <div class="col label">
-          goal keeper
-        </div>
-        <div class="col">
-          <GoalKeeperId :team="Team.BLUE"/>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <TimeoutsLeft :team="Team.YELLOW"/>
-        </div>
-        <div class="col label">
-          timeouts left
-        </div>
-        <div class="col">
-          <TimeoutsLeft :team="Team.BLUE"/>
-        </div>
-      </div>
-      <div class="row full-width">
-        <div class="col">
-          <TimeoutTimeLeft :team="Team.YELLOW"/>
-        </div>
-        <div class="col label">
-          timeout seconds left
-        </div>
-        <div class="col">
-          <TimeoutTimeLeft :team="Team.BLUE"/>
-        </div>
-      </div>
-      <div class="row full-width">
-        <div class="col">
-          <PlacementFailures :team="Team.YELLOW"/>
-        </div>
-        <div class="col label">
-          placement failures
-        </div>
-        <div class="col">
-          <PlacementFailures :team="Team.BLUE"/>
-        </div>
-      </div>
-      <div class="row full-width">
-        <div class="col">
-          <ChallengeFlags :team="Team.YELLOW"/>
-        </div>
-        <div class="col label">
-          challenge flags left
-        </div>
-        <div class="col">
-          <ChallengeFlags :team="Team.BLUE"/>
-        </div>
-      </div>
-    </div>
+  <div class="q-ma-xl">
+    <q-markup-table>
+      <thead>
+      <tr>
+        <th class="text-left" scope="col"></th>
+        <th class="text-center" scope="col" v-for="team in teams" :key="team">
+          {{ teamName(team) }}
+          <TeamBadge :team="team"/>
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td class="text-left">
+          Goal keeper id
+        </td>
+        <td class="text-center" v-for="team in teams" :key="team">
+          <GoalKeeperId :team="team"/>
+        </td>
+      </tr>
+      <tr>
+        <td class="text-left">
+          Timeouts left
+        </td>
+        <td class="text-center" v-for="team in teams" :key="team">
+          <TimeoutsLeft :team="team"/>
+        </td>
+      </tr>
+      <tr>
+        <td class="text-left">
+          Timeout time (seconds) left
+        </td>
+        <td class="text-center" v-for="team in teams" :key="team">
+          <TimeoutTimeLeft :team="team"/>
+        </td>
+      </tr>
+      <tr>
+        <td class="text-left">
+          Ball placement failures
+        </td>
+        <td class="text-center" v-for="team in teams" :key="team">
+          <PlacementFailures :team="team"/>
+        </td>
+      </tr>
+      <tr>
+        <td class="text-left">
+          Challenge flags
+        </td>
+        <td class="text-center" v-for="team in teams" :key="team">
+          <ChallengeFlags :team="team"/>
+        </td>
+      </tr>
+      </tbody>
+    </q-markup-table>
   </div>
 </template>
-
-<style scoped>
-.label {
-  text-align: center;
-  margin: auto;
-  font-size: large;
-  text-transform: uppercase;
-}
-</style>
