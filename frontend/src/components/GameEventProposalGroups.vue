@@ -20,6 +20,7 @@ const hasGroups = computed(() => {
       :proposal-group="group"
       :group-id="groupId"
       v-for="(group, groupId) in proposalGroups"
+      :key="groupId"
     />
   </q-list>
 </template>

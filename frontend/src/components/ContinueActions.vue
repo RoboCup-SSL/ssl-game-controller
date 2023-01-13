@@ -13,6 +13,6 @@ const actions = computed(() => {
 
 <template>
   <div class="column">
-    <ContinueAction class="col" :action="action" v-for="action in actions"/>
+    <ContinueAction class="col" :action="action" v-for="(action, key) in actions" :key="key"/>
   </div>
 </template>

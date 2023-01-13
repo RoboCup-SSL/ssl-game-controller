@@ -55,8 +55,11 @@ const disable = computed(() => {
   <div class="row">
     <ControlButton class="col-grow" label="Place ball"
                    v-for="team in [Team.YELLOW, Team.BLUE]"
+                   :key="team"
                    :disable="disable"
-                   :action="() => placeBall(team)" :team="team"/>
+                   :action="() => placeBall(team)"
+                   :team="team"
+    />
   </div>
 
   <div class="q-px-md">
@@ -87,7 +90,7 @@ const disable = computed(() => {
                     disable
           />
         </q-item-section>
-        <q-item-section avatar />
+        <q-item-section avatar/>
       </q-item>
     </div>
     <q-separator/>
@@ -118,7 +121,7 @@ const disable = computed(() => {
             switch-label-side
           />
         </q-item-section>
-        <q-item-section avatar />
+        <q-item-section avatar/>
       </q-item>
     </div>
 

@@ -84,7 +84,7 @@ const submitAction = () => {
          @click="submitAction"
          :label="label">
     <q-list dense>
-      <q-item v-for="issue in issues">
+      <q-item v-for="(issue, key) in issues" :key="key">
         <q-icon name="warning" color="warning"></q-icon>
         {{ issue }}
       </q-item>

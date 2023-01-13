@@ -13,7 +13,7 @@ watch(value, (newValue) => {
   model.value = newValue
 })
 
-const onBlur = () => {
+const onUpdate = () => {
   if (model.value !== value.value) {
     emit('onUpdate', model.value)
     model.value = structuredClone(value.value)
@@ -22,5 +22,5 @@ const onBlur = () => {
 </script>
 
 <template>
-  <q-select v-model="model" :options="options" />
+  <q-select v-model="model" :options="options" @click="onUpdate"/>
 </template>

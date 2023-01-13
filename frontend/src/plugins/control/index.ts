@@ -2,7 +2,7 @@ import {ControlApi} from "@/providers/controlApi/ControlApi";
 import {useMatchStateStore} from "@/store/matchState";
 import type {Output} from "@/proto/ssl_gc_api";
 import {useGcStateStore} from "@/store/gcState";
-import type {App} from "@vue/runtime-core";
+import type {App} from "vue";
 
 export const control = {
   install(app: App) {

@@ -30,7 +30,7 @@ const teams = [Team.YELLOW, Team.BLUE]
   <q-separator spaced/>
 
   <div class="row">
-    <div class="col-grow column" v-for="team in teams">
+    <div class="col-grow column" v-for="team in teams" :key="team">
       <FreeKickButton :team="team"/>
       <KickoffButton :team="team"/>
       <PenaltyButton :team="team"/>

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {inject} from "vue";
 import ControlButton from "@/components/control/buttons/ControlButton.vue";
-import {useMatchStateStore} from "@/store/matchState";
 import {GameEvent_Goal, GameEvent_Type} from "@/proto/ssl_gc_game_event";
 import type {ControlApi} from "@/providers/controlApi/ControlApi";
 import type {Team} from "@/proto/ssl_gc_common";
@@ -10,7 +9,6 @@ const props = defineProps<{
   team: Team,
 }>()
 
-const store = useMatchStateStore()
 const control = inject<ControlApi>('control-api')
 
 const submit = () => {

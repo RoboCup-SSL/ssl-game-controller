@@ -12,6 +12,6 @@ const gameEvents = computed(() => {
 
 <template>
   <q-list bordered class="rounded-borders">
-    <GameEvent :game-event="gameEvent" v-for="gameEvent in gameEvents"/>
+    <GameEvent :game-event="gameEvent" v-for="(gameEvent, key) in gameEvents" :key="key"/>
   </q-list>
 </template>

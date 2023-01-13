@@ -14,20 +14,16 @@ const label = computed(() => {
   return gameEventNames.get(props.gameEvent?.type!)
 })
 
-const body = computed(() => {
+const details = computed(() => {
   const event = props.gameEvent?.event!
   return (event as { [key: string]: any })[event.$case]
 })
 
 const team = computed(() => {
-  if (body.value.hasOwnProperty("byTeam")) {
-    return body.value["byTeam"] as Team
+  if (Object.prototype.hasOwnProperty.call(details.value, "byTeam")) {
+    return details.value["byTeam"] as Team
   }
   return Team.UNKNOWN
-})
-
-const details = computed(() => {
-  return JSON.stringify(body.value)
 })
 
 const originIcon = (origin: string) => {
@@ -62,7 +58,8 @@ const origins = computed(() => {
       </q-item-section>
       <q-item-section side>
         <div class="row">
-          <q-icon class="q-mx-xs" :name="originIcon(origin)" color="primary" :alt="origin" v-for="origin in origins">
+          <q-icon class="q-mx-xs" :name="originIcon(origin)" color="primary" :alt="origin"
+                  v-for="(origin, key) in origins" :key="key">
             <q-tooltip>
               {{ origin }}
             </q-tooltip>
@@ -72,7 +69,7 @@ const origins = computed(() => {
     </template>
     <q-card>
       <q-card-section>
-        {{ body }}
+        {{ details }}
       </q-card-section>
     </q-card>
   </q-expansion-item>

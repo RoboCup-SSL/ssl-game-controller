@@ -59,7 +59,7 @@ const acceptGroup = () => {
       </q-item-section>
     </template>
     <q-list>
-      <GameEventProposal :proposal="proposal" v-for="proposal in proposals"/>
+      <GameEventProposal :proposal="proposal" v-for="(proposal, key) in proposals" :key="key"/>
     </q-list>
   </q-expansion-item>
 </template>

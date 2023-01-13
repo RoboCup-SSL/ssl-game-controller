@@ -39,7 +39,7 @@ const nextYellowCardDue = (team: Team) => {
       <thead>
       <tr>
         <th class="text-left" scope="col"></th>
-        <th class="text-center" scope="col" v-for="team in teams">
+        <th class="text-center" scope="col" v-for="team in teams" :key="team">
           {{ teamName(team) }}
           <TeamBadge :team="team"/>
         </th>
@@ -50,7 +50,7 @@ const nextYellowCardDue = (team: Team) => {
         <td class="text-left">
           Request timeout
         </td>
-        <td class="text-center" v-for="team in teams">
+        <td class="text-center" v-for="team in teams" :key="team">
           <TimeoutRequest :team="team"/>
         </td>
       </tr>
@@ -58,7 +58,7 @@ const nextYellowCardDue = (team: Team) => {
         <td class="text-left">
           Request bot substitution
         </td>
-        <td class="text-center" v-for="team in teams">
+        <td class="text-center" v-for="team in teams" :key="team">
           <SubstitutionRequest :team="team"/>
         </td>
       </tr>
@@ -66,7 +66,7 @@ const nextYellowCardDue = (team: Team) => {
         <td class="text-left">
           Request emergency
         </td>
-        <td class="text-center" v-for="team in teams">
+        <td class="text-center" v-for="team in teams" :key="team">
           <EmergencyRequest :team="team"/>
         </td>
       </tr>
@@ -74,7 +74,7 @@ const nextYellowCardDue = (team: Team) => {
         <td class="text-left">
           Active cards / max bots
         </td>
-        <td class="text-center" v-for="team in teams">
+        <td class="text-center" v-for="team in teams" :key="team">
           {{ activeCards(team) }} &rArr; {{ maxBots(team) }}
         </td>
       </tr>
@@ -82,7 +82,7 @@ const nextYellowCardDue = (team: Team) => {
         <td class="text-left">
           Next yellow card due
         </td>
-        <td class="text-center" v-for="team in teams">
+        <td class="text-center" v-for="team in teams" :key="team">
           {{ formatDuration(nextYellowCardDue(team) * 1000) }}
         </td>
       </tr>
