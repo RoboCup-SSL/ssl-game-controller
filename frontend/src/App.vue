@@ -1,12 +1,17 @@
 <script setup lang="ts">
-import {ref} from 'vue'
+import {computed, ref} from 'vue'
 import MatchStateToolbar from "@/components/MatchStateToolbar.vue";
 import ActiveTrackerSource from "@/components/ActiveTrackerSource.vue";
+import StoreUpdateCounts from "@/components/StoreUpdateCounts.vue";
 
 const leftDrawerOpen = ref(false)
 const toggleLeftDrawer = () => {
   leftDrawerOpen.value = !leftDrawerOpen.value
 }
+
+const dev = computed(() => {
+  return import.meta.env.DEV
+})
 </script>
 
 <template>
@@ -24,6 +29,7 @@ const toggleLeftDrawer = () => {
         </q-toolbar-title>
 
         <ActiveTrackerSource/>
+        <StoreUpdateCounts class="q-ml-md" v-if="dev"/>
       </q-toolbar>
 
       <q-tabs align="left">

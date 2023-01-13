@@ -6,7 +6,8 @@ import {emptyState, defaultStates} from "@/store/matchState/defaultStates";
 export const useMatchStateStore = defineStore('matchState', {
   state: () => {
     return {
-      matchState: import.meta.env.DEV ? defaultStates : emptyState
+      matchState: import.meta.env.DEV ? defaultStates : emptyState,
+      matchStateUpdateCount: 0,
     }
   },
   getters: {
@@ -26,6 +27,7 @@ export const useMatchStateStore = defineStore('matchState', {
   actions: {
     updateGcState(newState: State) {
       this.matchState = newState
+      this.matchStateUpdateCount++
     },
   },
 })
