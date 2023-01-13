@@ -6,7 +6,7 @@ import {useGcStateStore} from "@/store/gcState";
 const store = useGcStateStore()
 
 const actions = computed(() => {
-  return store.gcState.continueActions
+  return store.gcState.continueActions!
 })
 
 </script>

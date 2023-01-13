@@ -18,14 +18,14 @@ export class ControlApi {
 
 
   public NewCommandNeutral(type: Command_Type) {
-    this.NewCommand({type, forTeam: Team.UNKNOWN})
+    this.newCommand({type, forTeam: Team.UNKNOWN})
   }
 
   public NewCommandForTeam(type: Command_Type, forTeam: Team) {
-    this.NewCommand({type, forTeam})
+    this.newCommand({type, forTeam})
   }
 
-  public NewCommand(command: Command) {
+  private newCommand(command: Command) {
     this.SubmitChange({
       change: {
         $case: 'newCommandChange',

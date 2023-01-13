@@ -3,7 +3,47 @@ import ContinueActions from "@/components/ContinueActions.vue";
 import AutoContinue from "@/components/AutoContinue.vue";
 import GameEventProposalGroups from "@/components/GameEventProposalGroups.vue";
 import GameEvents from "@/components/GameEvents.vue";
-import MatchTeamTable from "@/components/MatchTeamTable.vue";</script>
+import MatchTeamTable from "@/components/MatchTeamTable.vue";
+import {inject, onMounted, onUnmounted} from "vue";
+import {useGcStateStore} from "@/store/gcState";
+import {ControlApi} from "@/providers/controlApi/ControlApi";
+
+const store = useGcStateStore()
+const control = inject<ControlApi>('control-api')
+
+const continueWithAction = (id: number) => {
+  if (store.gcState.continueActions!.length > id) {
+    control?.Continue(store.gcState.continueActions![id])
+  }
+}
+
+const toggleAutoContinue = () => {
+  control?.ChangeConfig({autoContinue: !store.config.autoContinue})
+}
+
+const keyListenerContinue = function (e: KeyboardEvent) {
+  if (!e.ctrlKey) {
+    return
+  }
+  if (e.key === " ") {
+    toggleAutoContinue()
+  } else {
+    const id = Number(e.key)
+    if (!isNaN(id)) {
+      continueWithAction(id - 1)
+    }
+  }
+};
+
+onMounted(() => {
+  document.addEventListener('keydown', keyListenerContinue)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('keydown', keyListenerContinue)
+})
+
+</script>
 
 <template>
   <div class="q-my-md">

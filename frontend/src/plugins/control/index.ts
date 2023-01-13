@@ -3,6 +3,7 @@ import {useMatchStateStore} from "@/store/matchState";
 import type {Output} from "@/proto/ssl_gc_api";
 import {useGcStateStore} from "@/store/gcState";
 import type {App} from "vue";
+import {Command_Type, GameState_Type} from "@/proto/ssl_gc_state";
 
 export const control = {
   install(app: App) {
@@ -25,5 +26,14 @@ export const control = {
         gcStateStore.updateConfig(output.config)
       }
     })
+
+    const keyListenerHalt = function(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        if (matchStateStore.matchState.gameState?.type !== GameState_Type.HALT) {
+          controlApi.NewCommandNeutral(Command_Type.HALT)
+        }
+      }
+    };
+    document.addEventListener('keydown', keyListenerHalt)
   }
 }
