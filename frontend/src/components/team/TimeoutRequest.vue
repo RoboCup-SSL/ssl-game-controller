@@ -16,6 +16,10 @@ const model = computed(() => {
   return store.matchState.teamState![props.team].requestsTimeoutSince !== undefined
 })
 
+const disable = computed(() => {
+  return store.matchState.teamState![props.team].timeoutsLeft! <= 0
+})
+
 const onChange = (newValue: boolean) => {
   control?.UpdateTeamState({
     forTeam: props.team,
@@ -25,5 +29,5 @@ const onChange = (newValue: boolean) => {
 </script>
 
 <template>
-  <ToggleInput :model="model" @onUpdate="onChange"/>
+  <ToggleInput :model="model" :disable="disable" @onUpdate="onChange"/>
 </template>

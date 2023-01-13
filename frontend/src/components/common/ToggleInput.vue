@@ -4,6 +4,7 @@ import {computed, ref, watch} from "vue";
 const props = defineProps<{
   model: boolean,
   label?: string,
+  disable?: boolean,
 }>()
 const emit = defineEmits(['onUpdate'])
 
@@ -25,6 +26,7 @@ const click = () => {
   <q-toggle
     v-model="model"
     :label="label"
+    :disable="disable"
     @click="click"
   />
 </template>
