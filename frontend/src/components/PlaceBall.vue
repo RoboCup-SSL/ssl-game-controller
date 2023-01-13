@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, inject, ref} from "vue";
+import {computed, inject, ref, toRaw} from "vue";
 import ControlButton from "@/components/control/buttons/ControlButton.vue";
 import {useMatchStateStore} from "@/store/matchState";
 import {isPausedStage} from "@/helpers";
@@ -24,7 +24,7 @@ const curBallPos = computed(() => {
 })
 
 const resetBallPos = function () {
-  newBallPos.value = structuredClone(curBallPos.value)
+  newBallPos.value = structuredClone(toRaw(curBallPos.value))
 }
 
 const placeBall = (team: Team) => {

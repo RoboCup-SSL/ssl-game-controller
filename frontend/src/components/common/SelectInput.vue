@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, ref, watch} from "vue";
+import {computed, ref, toRaw, watch} from "vue";
 
 const props = defineProps<{
   model: string,
@@ -16,7 +16,7 @@ watch(value, (newValue) => {
 const onUpdate = () => {
   if (model.value !== value.value) {
     emit('onUpdate', model.value)
-    model.value = structuredClone(value.value)
+    model.value = structuredClone(toRaw(value.value))
   }
 }
 </script>
