@@ -1,12 +1,12 @@
 <script setup lang="ts">
+import {inject, onMounted, onUnmounted} from "vue";
 import ContinueActions from "@/components/ContinueActions.vue";
 import AutoContinue from "@/components/AutoContinue.vue";
 import GameEventProposalGroups from "@/components/GameEventProposalGroups.vue";
 import GameEvents from "@/components/GameEvents.vue";
 import MatchTeamTable from "@/components/MatchTeamTable.vue";
-import {inject, onMounted, onUnmounted} from "vue";
 import {useGcStateStore} from "@/store/gcState";
-import {ControlApi} from "@/providers/controlApi/ControlApi";
+import type {ControlApi} from "@/providers/controlApi/ControlApi";
 
 const store = useGcStateStore()
 const control = inject<ControlApi>('control-api')

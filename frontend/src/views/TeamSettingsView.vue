@@ -7,13 +7,25 @@ import TimeoutsLeft from "@/components/team/TimeoutsLeft.vue";
 import TimeoutTimeLeft from "@/components/team/TimeoutTimeLeft.vue";
 import PlacementFailures from "@/components/team/PlacementFailures.vue";
 import ChallengeFlags from "@/components/team/ChallengeFlags.vue";
+import {useGcStateStore} from "@/store/gcState";
 
 const store = useMatchStateStore()
+const gcStore = useGcStateStore()
 
 const teamName = (team: Team) => {
   return store.matchState.teamState?.[team].name!
 }
 const teams = [Team.YELLOW, Team.BLUE]
+
+const remoteConnected = (team: Team) => {
+  return gcStore.gcState.teamState![team].remoteControlConnected!
+}
+const teamConnected = (team: Team) => {
+  return gcStore.gcState.teamState![team].connected!
+}
+const advantageChoice = (team: Team) => {
+  return gcStore.gcState.teamState![team].advantageChoice?.choice!
+}
 </script>
 
 <template>
@@ -67,6 +79,30 @@ const teams = [Team.YELLOW, Team.BLUE]
         </td>
         <td class="text-center" v-for="team in teams" :key="team">
           <ChallengeFlags :team="team"/>
+        </td>
+      </tr>
+      <tr>
+        <td class="text-left">
+          Remote control connected
+        </td>
+        <td class="text-center" v-for="team in teams" :key="team">
+          <q-checkbox disable :model-value="remoteConnected(team)"/>
+        </td>
+      </tr>
+      <tr>
+        <td class="text-left">
+          Team control connected
+        </td>
+        <td class="text-center" v-for="team in teams" :key="team">
+          <q-checkbox disable :model-value="teamConnected(team)"/>
+        </td>
+      </tr>
+      <tr>
+        <td class="text-left">
+          Advantage choice of team
+        </td>
+        <td class="text-center" v-for="team in teams" :key="team">
+          {{ advantageChoice(team) }}
         </td>
       </tr>
       </tbody>
