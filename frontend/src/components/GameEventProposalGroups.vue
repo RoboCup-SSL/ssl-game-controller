@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import {useMatchStateStore} from "@/store/matchState";
 import {computed} from "vue";
 import GameEventProposalGroup from "@/components/GameEventProposalGroup.vue";
+import {useMatchStateStore} from "@/store/matchState";
 
 const store = useMatchStateStore()
 

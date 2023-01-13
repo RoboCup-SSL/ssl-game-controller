@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import {Team} from "@/proto/ssl_gc_common";
 import {computed} from "vue";
+import {Team} from "@/proto/ssl_gc_common";
 
 const props = defineProps<{
   team?: Team,

@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import {computed, inject} from "vue";
-import {ContinueAction, ContinueAction_State, ContinueAction_Type} from "@/proto/ssl_gc_engine";
 import TeamBadge from "@/components/common/TeamBadge.vue";
+import {ContinueAction_State, ContinueAction_Type} from "@/proto/ssl_gc_engine";
 import {useMatchStateStore} from "@/store/matchState";
 import {commandNames} from "@/helpers/texts";
-import {ControlApi} from "@/providers/controlApi/ControlApi";
+import type {ContinueAction} from "@/proto/ssl_gc_engine";
+import type {ControlApi} from "@/providers/controlApi/ControlApi";
 
 const props = defineProps<{
   action: ContinueAction,

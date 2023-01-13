@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type {Team} from "@/proto/ssl_gc_common";
 import TeamBadge from "@/components/common/TeamBadge.vue";
+import type {Team} from "@/proto/ssl_gc_common";
 
 defineProps<{
   label: string,

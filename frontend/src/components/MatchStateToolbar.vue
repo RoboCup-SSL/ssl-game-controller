@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import {useMatchStateStore} from "@/store/matchState";
 import {computed, ref} from "vue";
+import TeamBadge from "@/components/common/TeamBadge.vue";
+import {useMatchStateStore} from "@/store/matchState";
 import formatDuration from "format-duration";
 import {stageNames} from "@/helpers/texts";
-import TeamBadge from "@/components/common/TeamBadge.vue";
 
 const store = useMatchStateStore()
 const now = ref(Date.now())

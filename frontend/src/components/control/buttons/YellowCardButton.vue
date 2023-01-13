@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import {inject} from "vue";
-import type {ControlApi} from "@/providers/controlApi/ControlApi";
 import ControlButton from "@/components/control/buttons/ControlButton.vue";
 import {useMatchStateStore} from "@/store/matchState";
+import type {ControlApi} from "@/providers/controlApi/ControlApi";
 import type {Team} from "@/proto/ssl_gc_common";
 
 const props = defineProps<{

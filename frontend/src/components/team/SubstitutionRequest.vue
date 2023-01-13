@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import {computed, inject} from "vue";
-import {ControlApi} from "@/providers/controlApi/ControlApi";
 import ToggleInput from "@/components/common/ToggleInput.vue";
-import {Team} from "@/proto/ssl_gc_common";
 import {useMatchStateStore} from "@/store/matchState";
+import type {Team} from "@/proto/ssl_gc_common";
+import type {ControlApi} from "@/providers/controlApi/ControlApi";
 
 const props = defineProps<{
   team: Team,

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import {useMatchStateStore} from "@/store/matchState";
 import {computed, inject, ref} from "vue";
 import ControlButton from "@/components/control/buttons/ControlButton.vue";
-import type {ControlApi} from "@/providers/controlApi/ControlApi";
-import {Command_Type} from "@/proto/ssl_gc_state";
+import {useMatchStateStore} from "@/store/matchState";
 import {isPausedStage} from "@/helpers";
+import {Command_Type} from "@/proto/ssl_gc_state";
 import {Team} from "@/proto/ssl_gc_common";
+import type {ControlApi} from "@/providers/controlApi/ControlApi";
 import type {Vector2} from "@/proto/ssl_gc_geometry";
 
 const store = useMatchStateStore()
@@ -129,10 +129,3 @@ const disable = computed(() => {
     </div>
   </div>
 </template>
-
-<style scoped>
-.q-item {
-  padding-bottom: 0;
-  padding-top: 0;
-}
-</style>

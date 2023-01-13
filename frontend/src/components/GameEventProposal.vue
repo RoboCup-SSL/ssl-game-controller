@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import {computed} from "vue";
-import type {Proposal} from "@/proto/ssl_gc_state";
-import dayjs from 'dayjs'
 import GameEvent from "@/components/GameEvent.vue";
+import dayjs from 'dayjs'
+import type {Proposal} from "@/proto/ssl_gc_state";
 
 const props = defineProps<{
   proposal: Proposal,
@@ -13,7 +13,7 @@ const time = computed(() => {
 })
 
 const gameEvent = computed(() => {
-  return props.proposal.gameEvent
+  return props.proposal.gameEvent!
 })
 </script>
 

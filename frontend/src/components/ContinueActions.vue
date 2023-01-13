@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {computed} from "vue";
-import {useGcStateStore} from "@/store/gcState";
 import ContinueAction from "@/components/ContinueAction.vue";
+import {useGcStateStore} from "@/store/gcState";
 
 const store = useGcStateStore()
 

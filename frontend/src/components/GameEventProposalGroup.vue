@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import {computed, inject} from "vue";
-import {ProposalGroup} from "@/proto/ssl_gc_state";
 import GameEventProposal from "@/components/GameEventProposal.vue";
-import {ControlApi} from "@/providers/controlApi/ControlApi";
-import {GameEvent} from "@/proto/ssl_gc_game_event";
 import {gameEventNames} from "@/helpers/texts";
+import type {ControlApi} from "@/providers/controlApi/ControlApi";
+import type {ProposalGroup} from "@/proto/ssl_gc_state";
+import type {GameEvent} from "@/proto/ssl_gc_game_event";
 
 const props = defineProps<{
   proposalGroup: ProposalGroup,

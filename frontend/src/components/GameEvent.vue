@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import {computed} from "vue";
-import type {GameEvent} from "@/proto/ssl_gc_game_event";
 import TeamBadge from "@/components/common/TeamBadge.vue";
-import {Team} from "@/proto/ssl_gc_common";
 import {gameEventNames} from "@/helpers/texts";
+import {Team} from "@/proto/ssl_gc_common";
+import type {GameEvent} from "@/proto/ssl_gc_game_event";
 
 const props = defineProps<{
   gameEvent: GameEvent,

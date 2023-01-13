@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import {useMatchStateStore} from "@/store/matchState";
 import TimeoutRequest from "@/components/team/TimeoutRequest.vue";
 import TeamBadge from "@/components/common/TeamBadge.vue";
-import {Team} from "@/proto/ssl_gc_common";
 import SubstitutionRequest from "@/components/team/SubstitutionRequest.vue";
 import EmergencyRequest from "@/components/team/EmergencyRequest.vue";
+import {useMatchStateStore} from "@/store/matchState";
 import formatDuration from "format-duration";
+import {Team} from "@/proto/ssl_gc_common";
 
 const store = useMatchStateStore()
 

@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import {computed, inject} from "vue";
-import {ControlApi} from "@/providers/controlApi/ControlApi";
-import {useGcStateStore} from "@/store/gcState";
 import ToggleInput from "@/components/common/ToggleInput.vue";
+import {useGcStateStore} from "@/store/gcState";
+import type {ControlApi} from "@/providers/controlApi/ControlApi";
 
 const store = useGcStateStore()
 const control = inject<ControlApi>('control-api')
 
 const model = computed(() => {
-  return store.config.autoContinue
+  return store.config.autoContinue || false
 })
 
 const onChange = () => {
