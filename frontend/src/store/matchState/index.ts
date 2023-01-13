@@ -1,11 +1,12 @@
 import {defineStore} from "pinia";
-import {GameState_Type, State} from "@/proto/ssl_gc_state";
-import {mockedState} from "@/store/matchState/mockedState";
+import type {State} from "@/proto/ssl_gc_state";
+import {GameState_Type} from "@/proto/ssl_gc_state";
+import {emptyState, defaultStates} from "@/store/matchState/defaultStates";
 
 export const useMatchStateStore = defineStore('matchState', {
   state: () => {
     return {
-      matchState: mockedState
+      matchState: import.meta.env.DEV ? defaultStates : emptyState
     }
   },
   getters: {

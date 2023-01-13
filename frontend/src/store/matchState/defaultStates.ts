@@ -4,7 +4,73 @@ import {MatchType, Referee_Stage} from "@/proto/ssl_gc_referee_message";
 import {Division, Team} from "@/proto/ssl_gc_common";
 import {GameEvent_Type} from "@/proto/ssl_gc_game_event";
 
-export const mockedState: State = {
+export const emptyState: State = {
+  stage: Referee_Stage.POST_GAME,
+  command: {
+    type: Command_Type.HALT,
+    forTeam: Team.UNKNOWN,
+  },
+  gameState: {
+    type: GameState_Type.HALT,
+    forTeam: Team.UNKNOWN,
+  },
+  stageTimeElapsed: {
+    seconds: 0,
+  },
+  stageTimeLeft: {
+    seconds: 0,
+  },
+  matchTimeStart: new Date(),
+  currentActionTimeRemaining: {
+    seconds: 0,
+  },
+  gameEvents: [],
+  proposalGroups: [],
+  division: Division.DIV_A,
+  firstKickoffTeam: Team.YELLOW,
+  matchType: MatchType.UNKNOWN_MATCH,
+  readyContinueTime: new Date(),
+  teamState: {
+    [Team.YELLOW]: {
+      name: "Unknown",
+      goals: 0,
+      goalkeeper: 0,
+      yellowCards: [],
+      redCards: [],
+      timeoutsLeft: 0,
+      timeoutTimeLeft: {
+        seconds: 0,
+      },
+      onPositiveHalf: true,
+      fouls: [],
+      ballPlacementFailures: 0,
+      ballPlacementFailuresReached: false,
+      canPlaceBall: false,
+      maxAllowedBots: 0,
+      challengeFlags: 0,
+    },
+    [Team.BLUE]: {
+      name: "Unknown",
+      goals: 0,
+      goalkeeper: 0,
+      yellowCards: [],
+      redCards: [],
+      timeoutsLeft: 0,
+      timeoutTimeLeft: {
+        seconds: 0,
+      },
+      onPositiveHalf: false,
+      fouls: [],
+      ballPlacementFailures: 0,
+      ballPlacementFailuresReached: false,
+      canPlaceBall: false,
+      maxAllowedBots: 0,
+      challengeFlags: 0,
+    }
+  }
+}
+
+export const defaultStates: State = {
   stage: Referee_Stage.POST_GAME,
   command: {
     type: Command_Type.HALT,
