@@ -13,7 +13,7 @@ setInterval(() => {
 }, 1000)
 
 const matchDuration = computed(() => {
-  if (store.matchState.matchTimeStart) {
+  if (store.matchState.matchTimeStart && store.matchState.matchTimeStart.getTime() > 0) {
     return formatDuration(now.value - store.matchState.matchTimeStart.getTime())
   }
   return "-"
