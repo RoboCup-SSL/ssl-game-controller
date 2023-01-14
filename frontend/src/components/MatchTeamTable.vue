@@ -5,15 +5,14 @@ import SubstitutionRequestInput from "@/components/team/SubstitutionRequestInput
 import EmergencyRequestInput from "@/components/team/EmergencyRequestInput.vue";
 import {useMatchStateStore} from "@/store/matchState";
 import formatDuration from "format-duration";
-import {Team} from "@/proto/ssl_gc_common";
+import {teams} from "@/helpers";
+import type {Team} from "@/proto/ssl_gc_common";
 
 const store = useMatchStateStore()
 
 const teamName = (team: Team) => {
   return store.matchState.teamState?.[team].name!
 }
-const teams = [Team.YELLOW, Team.BLUE]
-
 const activeCards = (team: Team) => {
   const numYellow = store.matchState.teamState?.[team].yellowCards?.filter(c => c.timeRemaining && c.timeRemaining.seconds > 0).length || 0
   const numRed = store.matchState.teamState?.[team].redCards?.length || 0

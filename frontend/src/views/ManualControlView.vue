@@ -10,9 +10,7 @@ import YellowCardButton from "@/components/control/buttons/YellowCardButton.vue"
 import RedCardButton from "@/components/control/buttons/RedCardButton.vue";
 import GoalButton from "@/components/control/buttons/GoalButton.vue";
 import TimeoutButton from "@/components/control/buttons/TimeoutButton.vue";
-import {Team} from "@/proto/ssl_gc_common";
-
-const teams = [Team.YELLOW, Team.BLUE]
+import {teams} from "@/helpers";
 </script>
 
 <template>
