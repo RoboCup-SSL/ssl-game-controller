@@ -8,6 +8,7 @@ import TimeoutTimeLeft from "@/components/team/TimeoutTimeLeft.vue";
 import PlacementFailures from "@/components/team/PlacementFailures.vue";
 import ChallengeFlags from "@/components/team/ChallengeFlags.vue";
 import {useGcStateStore} from "@/store/gcState";
+import GoalCount from "@/components/team/GoalCount.vue";
 
 const store = useMatchStateStore()
 const gcStore = useGcStateStore()
@@ -50,6 +51,14 @@ const redCards = (team: Team) => {
       </tr>
       </thead>
       <tbody>
+      <tr>
+        <td class="text-left">
+          Goals
+        </td>
+        <td class="text-center" v-for="team in teams" :key="team">
+          <GoalCount :team="team"/>
+        </td>
+      </tr>
       <tr>
         <td class="text-left">
           Goal keeper id

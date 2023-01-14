@@ -4,6 +4,7 @@ import TeamBadge from "@/components/common/TeamBadge.vue";
 import {useMatchStateStore} from "@/store/matchState";
 import formatDuration from "format-duration";
 import {stageNames} from "@/helpers/texts";
+import {Team} from "@/proto/ssl_gc_common";
 
 const store = useMatchStateStore()
 const now = ref(Date.now())
@@ -39,6 +40,9 @@ const currentActionTime = computed(() => {
   }
   return undefined
 })
+const goals = (team: Team) => {
+  return store.matchState.teamState![team].goals!
+}
 </script>
 
 <template>
@@ -54,6 +58,9 @@ const currentActionTime = computed(() => {
 
       <div class="col-grow">
         Stage: <strong>{{ stageName }}</strong> ({{ stageTimeLeft }} left)
+      </div>
+      <div class="col-grow">
+        Score: <TeamBadge :team="Team.YELLOW"/> {{ goals(Team.YELLOW) }} : {{ goals(Team.BLUE) }} <TeamBadge :team="Team.BLUE"/>
       </div>
       <div class="col-grow">
         Matching duration: <strong>{{ matchDuration }}</strong>
