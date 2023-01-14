@@ -38,121 +38,112 @@ const redCards = (team: Team) => {
 </script>
 
 <template>
-  <div class="q-ma-xl">
-    <q-markup-table>
-      <thead>
-      <tr>
-        <th class="text-left" scope="col"></th>
-        <th class="text-center" scope="col" v-for="team in teams" :key="team">
-          {{ teamName(team) }}
-          <TeamBadge :team="team"/>
-        </th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr>
-        <td class="text-left">
-          Goals
-        </td>
-        <td class="text-center" v-for="team in teams" :key="team">
+  <div class="q-ma-md row justify-center q-gutter-md">
+    <q-list bordered padding v-for="team in teams" :key="team">
+      <q-item-label header>
+        {{ teamName(team) }}
+        <TeamBadge :team="team"/>
+      </q-item-label>
+
+      <q-item v-ripple>
+        <q-item-section>
           <GoalCountInput :team="team"/>
-        </td>
-      </tr>
-      <tr>
-        <td class="text-left">
-          Goal keeper id
-        </td>
-        <td class="text-center" v-for="team in teams" :key="team">
+        </q-item-section>
+      </q-item>
+
+      <q-item v-ripple>
+        <q-item-section>
           <GoalKeeperIdInput :team="team"/>
-        </td>
-      </tr>
-      <tr>
-        <td class="text-left">
-          Timeouts left
-        </td>
-        <td class="text-center" v-for="team in teams" :key="team">
+        </q-item-section>
+      </q-item>
+
+      <q-item v-ripple>
+        <q-item-section>
           <TimeoutsLeftInput :team="team"/>
-        </td>
-      </tr>
-      <tr>
-        <td class="text-left">
-          Timeout time (seconds) left
-        </td>
-        <td class="text-center" v-for="team in teams" :key="team">
+        </q-item-section>
+      </q-item>
+
+      <q-item v-ripple>
+        <q-item-section>
           <TimeoutTimeLeftInput :team="team"/>
-        </td>
-      </tr>
-      <tr>
-        <td class="text-left">
-          Ball placement failures
-        </td>
-        <td class="text-center" v-for="team in teams" :key="team">
+        </q-item-section>
+      </q-item>
+
+      <q-item v-ripple>
+        <q-item-section>
           <PlacementFailuresInput :team="team"/>
-        </td>
-      </tr>
-      <tr>
-        <td class="text-left">
-          Challenge flags
-        </td>
-        <td class="text-center" v-for="team in teams" :key="team">
+        </q-item-section>
+      </q-item>
+
+      <q-item v-ripple>
+        <q-item-section>
           <ChallengeFlagsInput :team="team"/>
-        </td>
-      </tr>
-      <tr>
-        <td class="text-left">
-          Fouls
-        </td>
-        <td class="text-center" v-for="team in teams" :key="team">
-          <router-link :to="'/team-settings/' + team + '/details'">
-            {{ fouls(team) }}
-          </router-link>
-        </td>
-      </tr>
-      <tr>
-        <td class="text-left">
-          Yellow cards
-        </td>
-        <td class="text-center" v-for="team in teams" :key="team">
-          <router-link :to="'/team-settings/' + team + '/details'">
-            {{ yellowCards(team) }}
-          </router-link>
-        </td>
-      </tr>
-      <tr>
-        <td class="text-left">
-          Red cards
-        </td>
-        <td class="text-center" v-for="team in teams" :key="team">
-          <router-link :to="'/team-settings/' + team + '/details'">
-            {{ redCards(team) }}
-          </router-link>
-        </td>
-      </tr>
-      <tr>
-        <td class="text-left">
-          Remote control connected
-        </td>
-        <td class="text-center" v-for="team in teams" :key="team">
-          <q-checkbox disable :model-value="remoteConnected(team)"/>
-        </td>
-      </tr>
-      <tr>
-        <td class="text-left">
-          Team control connected
-        </td>
-        <td class="text-center" v-for="team in teams" :key="team">
-          <q-checkbox disable :model-value="teamConnected(team)"/>
-        </td>
-      </tr>
-      <tr>
-        <td class="text-left">
-          Advantage choice of team
-        </td>
-        <td class="text-center" v-for="team in teams" :key="team">
-          {{ advantageChoice(team) }}
-        </td>
-      </tr>
-      </tbody>
-    </q-markup-table>
+        </q-item-section>
+      </q-item>
+
+      <q-item v-ripple clickable @click="() => $router.push(`/team-settings/${team}/details`)">
+        <q-item-section class="text-center">
+          <q-item-label>{{ fouls(team) }}</q-item-label>
+          <q-item-label caption>
+            Fouls
+          </q-item-label>
+        </q-item-section>
+      </q-item>
+
+      <q-item v-ripple clickable @click="() => $router.push(`/team-settings/${team}/details`)">
+        <q-item-section class="text-center">
+          <q-item-label>{{ yellowCards(team) }}</q-item-label>
+          <q-item-label caption>
+            Yellow cards
+          </q-item-label>
+        </q-item-section>
+      </q-item>
+
+      <q-item v-ripple clickable @click="() => $router.push(`/team-settings/${team}/details`)">
+        <q-item-section class="text-center">
+          <q-item-label>{{ redCards(team) }}</q-item-label>
+          <q-item-label caption>
+            Red cards
+          </q-item-label>
+        </q-item-section>
+      </q-item>
+
+      <q-item v-ripple>
+        <q-item-section class="text-center">
+          <q-item-label>
+            <q-checkbox
+              disable
+              :model-value="remoteConnected(team)"
+            />
+          </q-item-label>
+          <q-item-label caption>
+            Remote connected
+          </q-item-label>
+        </q-item-section>
+      </q-item>
+
+      <q-item v-ripple>
+        <q-item-section class="text-center">
+          <q-item-label>
+            <q-checkbox
+              disable
+              :model-value="teamConnected(team)"
+            />
+          </q-item-label>
+          <q-item-label caption>
+            Team connected
+          </q-item-label>
+        </q-item-section>
+      </q-item>
+
+      <q-item v-ripple>
+        <q-item-section class="text-center">
+          <q-item-label>{{ advantageChoice(team) }}</q-item-label>
+          <q-item-label caption>
+            Advantage choice
+          </q-item-label>
+        </q-item-section>
+      </q-item>
+    </q-list>
   </div>
 </template>

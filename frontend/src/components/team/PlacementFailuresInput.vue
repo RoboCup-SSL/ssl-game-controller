@@ -26,5 +26,9 @@ const onUpdate = (value: number) => {
 </script>
 
 <template>
-  <NumberInput :model="model" @onUpdate="onUpdate"/>
+  <NumberInput
+    :model="model"
+    label="Ball placement failures"
+    @onUpdate="onUpdate"
+  />
 </template>
