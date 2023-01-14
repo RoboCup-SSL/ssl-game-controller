@@ -40,61 +40,47 @@ import {teams} from "@/helpers";
       <MatchTypeInput/>
     </div>
 
-    <h2>Teams</h2>
-    <q-markup-table>
-      <thead>
-      <tr>
-        <th class="text-left" scope="col"></th>
-        <th class="text-center" scope="col" v-for="team in teams" :key="team">
-          <TeamBadge :team="team"/>
-        </th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr>
-        <td class="text-left">
-          Team Name
-        </td>
-        <td class="text-center" v-for="team in teams" :key="team">
-          <TeamNameInput :team="team"/>
-        </td>
-      </tr>
-      <tr>
-        <td class="text-left">
-          Ball placement enabled
-        </td>
-        <td class="text-center" v-for="team in teams" :key="team">
-          <BallPlacementEnabledInput :team="team"/>
-        </td>
-      </tr>
-      <tr>
-        <td class="text-left">
-          Goal keeper id
-        </td>
-        <td class="text-center" v-for="team in teams" :key="team">
-          <GoalKeeperIdInput :team="team"/>
-        </td>
-      </tr>
-      <tr>
-        <td class="text-left">
-          First kick-off
-        </td>
-        <td class="text-center" v-for="team in teams" :key="team">
-          <FirstKickOffInput :team="team"/>
-        </td>
-      </tr>
-      <tr>
-        <td class="text-left">
-          Field half
-        </td>
-        <td class="text-center" v-for="team in teams" :key="team">
-          <FieldHalfInput :team="team"/>
-        </td>
-      </tr>
-      </tbody>
-    </q-markup-table>
-
     <div class="q-ma-lg row justify-evenly">
+      <q-list bordered padding v-for="team in teams" :key="team">
+        <q-item-label header>
+          <TeamBadge :team="team"/>
+        </q-item-label>
+
+        <q-item v-ripple>
+          <q-item-section>
+            <TeamNameInput :team="team"/>
+          </q-item-section>
+        </q-item>
+
+        <q-item v-ripple>
+          <q-item-section>
+            <GoalKeeperIdInput :team="team"/>
+          </q-item-section>
+        </q-item>
+
+        <q-separator spaced/>
+
+        <q-item v-ripple>
+          <q-item-section>
+            <BallPlacementEnabledInput :team="team"/>
+          </q-item-section>
+        </q-item>
+
+        <q-item v-ripple>
+          <q-item-section>
+            <FirstKickOffInput :team="team"/>
+          </q-item-section>
+        </q-item>
+
+        <q-item v-ripple>
+          <q-item-section>
+            <FieldHalfInput :team="team"/>
+          </q-item-section>
+        </q-item>
+      </q-list>
+    </div>
+
+    <div class="row justify-evenly q-gutter-md">
       <SwitchColorButton/>
       <SwitchColorRandomButton/>
       <SwitchSidesButton/>

@@ -4,6 +4,7 @@ import {computed, ref, toRaw, watch} from "vue";
 const props = defineProps<{
   model: number,
   suffix?: string,
+  label?: string,
 }>()
 const emit = defineEmits(['onUpdate'])
 
@@ -27,6 +28,7 @@ const onBlur = () => {
     rounded outlined
     dense
     :suffix="suffix"
+    :label="label"
     type="number"
     v-model="model"
     @blur="onBlur"

@@ -27,7 +27,7 @@ const onUpdate = (value: boolean) => {
 <template>
   <ToggleInput
     :model="model"
-    label="Goal on positive half"
+    label="Goal on positive field half"
     @onUpdate="onUpdate"
   />
 </template>

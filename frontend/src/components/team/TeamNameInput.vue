@@ -30,5 +30,10 @@ const onUpdate = (value: string) => {
 </script>
 
 <template>
-  <SelectInput :options="options" :model="model" @onUpdate="onUpdate"/>
+  <SelectInput
+    :options="options"
+    :model="model"
+    label="Team name"
+    @onUpdate="onUpdate"
+  />
 </template>

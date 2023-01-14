@@ -26,5 +26,9 @@ const onUpdate = (value: number) => {
 </script>
 
 <template>
-  <NumberInput :model="currentKeeperId" @onUpdate="onUpdate"/>
+  <NumberInput
+    :model="currentKeeperId"
+    @onUpdate="onUpdate"
+    label="Goal keeper id"
+  />
 </template>
