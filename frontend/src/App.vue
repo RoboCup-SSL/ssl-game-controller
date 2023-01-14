@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import {computed, ref} from 'vue'
 import MatchStateToolbar from "@/components/MatchStateToolbar.vue";
-import ActiveTrackerSource from "@/components/ActiveTrackerSource.vue";
+import ExternalConnectionStatus from "@/components/ExternalConnectionStatus.vue";
 import StoreUpdateCounts from "@/components/StoreUpdateCounts.vue";
+import ManualControl from "@/components/control/ManualControl.vue";
 
 const leftDrawerOpen = ref(false)
 const toggleLeftDrawer = () => {
@@ -28,7 +29,7 @@ const dev = computed(() => {
           SSL-Game-Controller
         </q-toolbar-title>
 
-        <ActiveTrackerSource/>
+        <ExternalConnectionStatus/>
         <StoreUpdateCounts class="q-ml-md" v-if="dev"/>
       </q-toolbar>
 
@@ -44,7 +45,7 @@ const dev = computed(() => {
     </q-header>
 
     <q-drawer v-model="leftDrawerOpen" side="left" bordered>
-      Foo?
+      <ManualControl/>
     </q-drawer>
 
     <q-page-container>
