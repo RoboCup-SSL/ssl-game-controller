@@ -35,6 +35,11 @@ const router = createRouter({
       component: () => import('../views/TeamSettingsView.vue')
     },
     {
+      path: '/team-settings/:team/details',
+      name: 'team-settings-details',
+      component: () => import('../views/TeamDetailsView.vue')
+    },
+    {
       path: '/match-settings',
       name: 'match-settings',
       component: () => import('../views/MatchSettingsView.vue')

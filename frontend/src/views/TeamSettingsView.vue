@@ -26,6 +26,15 @@ const teamConnected = (team: Team) => {
 const advantageChoice = (team: Team) => {
   return gcStore.gcState.teamState![team].advantageChoice?.choice!
 }
+const fouls = (team: Team) => {
+  return store.matchState.teamState![team].fouls?.length
+}
+const yellowCards = (team: Team) => {
+  return store.matchState.teamState![team].yellowCards?.length
+}
+const redCards = (team: Team) => {
+  return store.matchState.teamState![team].redCards?.length
+}
 </script>
 
 <template>
@@ -79,6 +88,36 @@ const advantageChoice = (team: Team) => {
         </td>
         <td class="text-center" v-for="team in teams" :key="team">
           <ChallengeFlags :team="team"/>
+        </td>
+      </tr>
+      <tr>
+        <td class="text-left">
+          Fouls
+        </td>
+        <td class="text-center" v-for="team in teams" :key="team">
+          <router-link :to="'/team-settings/' + team + '/details'">
+            {{ fouls(team) }}
+          </router-link>
+        </td>
+      </tr>
+      <tr>
+        <td class="text-left">
+          Yellow cards
+        </td>
+        <td class="text-center" v-for="team in teams" :key="team">
+          <router-link :to="'/team-settings/' + team + '/details'">
+            {{ yellowCards(team) }}
+          </router-link>
+        </td>
+      </tr>
+      <tr>
+        <td class="text-left">
+          Red cards
+        </td>
+        <td class="text-center" v-for="team in teams" :key="team">
+          <router-link :to="'/team-settings/' + team + '/details'">
+            {{ redCards(team) }}
+          </router-link>
         </td>
       </tr>
       <tr>
