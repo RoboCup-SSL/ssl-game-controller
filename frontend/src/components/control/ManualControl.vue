@@ -16,6 +16,8 @@ const teams = [Team.YELLOW, Team.BLUE]
 </script>
 
 <template>
+  <q-separator spaced/>
+
   <div class="row">
     <div class="col-grow column">
       <HaltButton/>
@@ -39,6 +41,8 @@ const teams = [Team.YELLOW, Team.BLUE]
       <RedCardButton :team="team"/>
       <GoalButton :team="team"/>
       <TimeoutButton :team="team"/>
+
+      <q-separator spaced/>
     </div>
   </div>
 </template>
