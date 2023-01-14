@@ -1,4 +1,4 @@
-import {Referee_Stage} from "@/proto/ssl_gc_referee_message";
+import {MatchType, Referee_Stage} from "@/proto/ssl_gc_referee_message";
 import {Command_Type} from "@/proto/ssl_gc_state";
 import {GameEvent_Type} from "@/proto/ssl_gc_game_event";
 
@@ -66,4 +66,12 @@ export const gameEventNames = new Map<GameEvent_Type, string>([
   [GameEvent_Type.EMERGENCY_STOP, "emergency stop"],
   [GameEvent_Type.UNSPORTING_BEHAVIOR_MINOR, "unsporting behavior (minor)"],
   [GameEvent_Type.UNSPORTING_BEHAVIOR_MAJOR, "unsporting behavior (major)"],
+])
+
+export const matchTypeNames = new Map<MatchType, string>([
+  [MatchType.UNKNOWN_MATCH, "Unknown"],
+  [MatchType.UNRECOGNIZED, "Unknown"],
+  [MatchType.GROUP_PHASE, "Group Phase"],
+  [MatchType.ELIMINATION_PHASE, "Elimination Phase"],
+  [MatchType.FRIENDLY, "Friendly"],
 ])

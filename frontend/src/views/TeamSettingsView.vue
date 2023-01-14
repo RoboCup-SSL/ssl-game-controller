@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import TeamBadge from "@/components/common/TeamBadge.vue";
-import {Team} from "@/proto/ssl_gc_common";
 import GoalKeeperId from "@/components/team/GoalKeeperId.vue";
-import {useMatchStateStore} from "@/store/matchState";
+import GoalCount from "@/components/team/GoalCount.vue";
 import TimeoutsLeft from "@/components/team/TimeoutsLeft.vue";
 import TimeoutTimeLeft from "@/components/team/TimeoutTimeLeft.vue";
 import PlacementFailures from "@/components/team/PlacementFailures.vue";
 import ChallengeFlags from "@/components/team/ChallengeFlags.vue";
+import {useMatchStateStore} from "@/store/matchState";
 import {useGcStateStore} from "@/store/gcState";
-import GoalCount from "@/components/team/GoalCount.vue";
+import {teams} from "@/helpers";
+import type {Team} from "@/proto/ssl_gc_common";
 
 const store = useMatchStateStore()
 const gcStore = useGcStateStore()
@@ -16,8 +17,6 @@ const gcStore = useGcStateStore()
 const teamName = (team: Team) => {
   return store.matchState.teamState?.[team].name!
 }
-const teams = [Team.YELLOW, Team.BLUE]
-
 const remoteConnected = (team: Team) => {
   return gcStore.gcState.teamState![team].remoteControlConnected!
 }

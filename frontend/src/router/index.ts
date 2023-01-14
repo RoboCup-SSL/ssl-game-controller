@@ -1,13 +1,14 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import {createRouter, createWebHistory} from 'vue-router'
+import StartView from '../views/StartView.vue'
+import FullStateView from "@/views/FullStateView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomeView
+      name: 'start',
+      component: StartView
     },
     {
       path: '/match',
@@ -43,6 +44,11 @@ const router = createRouter({
       path: '/match-settings',
       name: 'match-settings',
       component: () => import('../views/MatchSettingsView.vue')
+    },
+    {
+      path: '/full-state',
+      name: 'full-state',
+      component: FullStateView
     },
   ]
 })

@@ -34,7 +34,7 @@ const dev = computed(() => {
       </q-toolbar>
 
       <q-tabs align="left">
-        <q-route-tab to="/" label="Home"/>
+        <q-route-tab to="/" label="Start"/>
         <q-route-tab to="/match" label="Match"/>
         <q-route-tab to="/protocol" label="Protocol"/>
         <q-route-tab to="/manual-control" label="Manual Control"/>

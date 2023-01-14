@@ -3,9 +3,10 @@ import {computed, ref, toRaw, watch} from "vue";
 
 const props = defineProps<{
   model: any,
-  options: string[],
-  optionLabel?: (v: any) => string,
-  label?: string,
+  options: {
+    label?: string;
+    value: any;
+  }[]
 }>()
 const emit = defineEmits(['onUpdate'])
 
@@ -24,11 +25,14 @@ const onUpdate = () => {
 </script>
 
 <template>
-  <q-select
+  <q-btn-toggle
     v-model="model"
+    push
+    glossy
+    toggle-color="primary"
+    color="white"
+    text-color="primary"
     :options="options"
-    :option-label="optionLabel"
-    :label="label"
     @update:modelValue="onUpdate"
   />
 </template>

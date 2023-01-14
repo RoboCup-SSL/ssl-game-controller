@@ -1,4 +1,18 @@
 import {Referee_Stage} from "@/proto/ssl_gc_referee_message";
+import {Team} from "@/proto/ssl_gc_common";
+
+export const teams = [Team.YELLOW, Team.BLUE]
+
+export const opponent = (team: Team) => {
+  switch (team) {
+    case Team.BLUE:
+      return Team.YELLOW
+    case Team.YELLOW:
+      return Team.BLUE
+    default:
+      return team
+  }
+}
 
 export const getNextStage = function (stage: Referee_Stage): Referee_Stage {
   switch (stage) {
