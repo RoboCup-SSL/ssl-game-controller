@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import TimeoutRequest from "@/components/team/TimeoutRequest.vue";
 import TeamBadge from "@/components/common/TeamBadge.vue";
-import SubstitutionRequest from "@/components/team/SubstitutionRequest.vue";
-import EmergencyRequest from "@/components/team/EmergencyRequest.vue";
+import TimeoutRequestInput from "@/components/team/TimeoutRequestInput.vue";
+import SubstitutionRequestInput from "@/components/team/SubstitutionRequestInput.vue";
+import EmergencyRequestInput from "@/components/team/EmergencyRequestInput.vue";
 import {useMatchStateStore} from "@/store/matchState";
 import formatDuration from "format-duration";
 import {Team} from "@/proto/ssl_gc_common";
@@ -50,7 +50,7 @@ const nextYellowCardDue = (team: Team) => {
         Request timeout
       </td>
       <td class="text-center" v-for="team in teams" :key="team">
-        <TimeoutRequest :team="team"/>
+        <TimeoutRequestInput :team="team"/>
       </td>
     </tr>
     <tr>
@@ -58,7 +58,7 @@ const nextYellowCardDue = (team: Team) => {
         Request bot substitution
       </td>
       <td class="text-center" v-for="team in teams" :key="team">
-        <SubstitutionRequest :team="team"/>
+        <SubstitutionRequestInput :team="team"/>
       </td>
     </tr>
     <tr>
@@ -66,7 +66,7 @@ const nextYellowCardDue = (team: Team) => {
         Request emergency
       </td>
       <td class="text-center" v-for="team in teams" :key="team">
-        <EmergencyRequest :team="team"/>
+        <EmergencyRequestInput :team="team"/>
       </td>
     </tr>
     <tr>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed} from "vue";
-import GameEvent from "@/components/GameEvent.vue";
+import GameEventItem from "@/components/GameEventItem.vue";
 import {useMatchStateStore} from "@/store/matchState";
 
 const store = useMatchStateStore()
@@ -12,6 +12,6 @@ const gameEvents = computed(() => {
 
 <template>
   <q-list bordered class="rounded-borders">
-    <GameEvent :game-event="gameEvent" v-for="(gameEvent, key) in gameEvents" :key="key"/>
+    <GameEventItem :game-event="gameEvent" v-for="(gameEvent, key) in gameEvents" :key="key"/>
   </q-list>
 </template>

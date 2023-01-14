@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed, inject} from "vue";
-import YellowCardTimeLeft from "@/components/team/YellowCardTimeLeft.vue";
+import YellowCardTimeLeftInput from "@/components/team/YellowCardTimeLeftInput.vue";
 import {useMatchStateStore} from "@/store/matchState";
 import {gameEventNames} from "@/helpers/texts";
 import type {Team} from "@/proto/ssl_gc_common";
@@ -49,7 +49,7 @@ const removeCard = (cardId?: number) => {
     <tr v-for="card in cards" :key="card.id">
       <td class="text-left">{{ causeText(card.causedByGameEvent) }}</td>
       <td class="text-left">
-        <YellowCardTimeLeft :team="team" :card="card"/>
+        <YellowCardTimeLeftInput :team="team" :card="card"/>
       </td>
       <td class="text-right">
         <q-btn round @click="() => removeCard(card.id)" icon="delete"></q-btn>

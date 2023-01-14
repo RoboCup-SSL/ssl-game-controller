@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed, inject} from "vue";
-import GameEventProposal from "@/components/GameEventProposal.vue";
+import GameEventProposalItem from "@/components/GameEventProposalItem.vue";
 import {gameEventNames} from "@/helpers/texts";
 import type {ControlApi} from "@/providers/controlApi/ControlApi";
 import type {ProposalGroup} from "@/proto/ssl_gc_state";
@@ -59,7 +59,7 @@ const acceptGroup = () => {
       </q-item-section>
     </template>
     <q-list>
-      <GameEventProposal :proposal="proposal" v-for="(proposal, key) in proposals" :key="key"/>
+      <GameEventProposalItem :proposal="proposal" v-for="(proposal, key) in proposals" :key="key"/>
     </q-list>
   </q-expansion-item>
 </template>

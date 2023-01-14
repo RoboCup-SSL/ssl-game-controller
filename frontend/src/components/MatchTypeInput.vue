@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import {computed, inject} from "vue";
-import {useMatchStateStore} from "@/store/matchState";
-import type {ControlApi} from "@/providers/controlApi/ControlApi";
-import {MatchType} from "@/proto/ssl_gc_referee_message";
 import SelectInput from "@/components/common/SelectInput.vue";
+import {useMatchStateStore} from "@/store/matchState";
 import {matchTypeNames} from "@/helpers/texts";
+import {MatchType} from "@/proto/ssl_gc_referee_message";
+import type {ControlApi} from "@/providers/controlApi/ControlApi";
 
 const store = useMatchStateStore()
 const control = inject<ControlApi>('control-api')

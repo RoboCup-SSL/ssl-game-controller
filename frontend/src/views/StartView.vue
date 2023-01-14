@@ -1,18 +1,19 @@
 <script setup lang="ts">
 import TeamBadge from "@/components/common/TeamBadge.vue";
-import {teams} from "@/helpers";
 import TeamNameInput from "@/components/team/TeamNameInput.vue";
-import GoalKeeperId from "@/components/team/GoalKeeperId.vue";
+import GoalKeeperIdInput from "@/components/team/GoalKeeperIdInput.vue";
 import BallPlacementEnabledInput from "@/components/team/BallPlacementEnabledInput.vue";
 import DivisionInput from "@/components/DivisionInput.vue";
 import MatchTypeInput from "@/components/MatchTypeInput.vue";
-import ResetMatch from "@/components/ResetMatch.vue";
+import ResetMatchButton from "@/components/ResetMatchButton.vue";
 import FirstKickOffInput from "@/components/team/FirstKickOffInput.vue";
 import SwitchColorButton from "@/components/SwitchColorButton.vue";
 import SwitchSidesButton from "@/components/SwitchSidesButton.vue";
-import GoalHalfInput from "@/components/team/GoalHalfInput.vue";
+import FieldHalfInput from "@/components/team/FieldHalfInput.vue";
 import SwitchSidesRandomButton from "@/components/SwitchSidesRandomButton.vue";
-import SwitchColorRandomButton from "@/components/SwitchColorRandomButton.vue";</script>
+import SwitchColorRandomButton from "@/components/SwitchColorRandomButton.vue";
+import {teams} from "@/helpers";
+</script>
 
 <template>
   <div class="q-ma-xl">
@@ -31,7 +32,7 @@ import SwitchColorRandomButton from "@/components/SwitchColorRandomButton.vue";<
     </p>
     <div class="row justify-evenly">
       <div class="q-pa-md">
-        <ResetMatch/>
+        <ResetMatchButton/>
       </div>
       <div class="q-pa-md">
         <DivisionInput/>
@@ -71,7 +72,7 @@ import SwitchColorRandomButton from "@/components/SwitchColorRandomButton.vue";<
           Goal keeper id
         </td>
         <td class="text-center" v-for="team in teams" :key="team">
-          <GoalKeeperId :team="team"/>
+          <GoalKeeperIdInput :team="team"/>
         </td>
       </tr>
       <tr>
@@ -87,7 +88,7 @@ import SwitchColorRandomButton from "@/components/SwitchColorRandomButton.vue";<
           Field half
         </td>
         <td class="text-center" v-for="team in teams" :key="team">
-          <GoalHalfInput :team="team"/>
+          <FieldHalfInput :team="team"/>
         </td>
       </tr>
       </tbody>

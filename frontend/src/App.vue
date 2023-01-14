@@ -2,8 +2,8 @@
 import {computed, ref} from 'vue'
 import MatchStateToolbar from "@/components/MatchStateToolbar.vue";
 import ExternalConnectionStatus from "@/components/ExternalConnectionStatus.vue";
-import StoreUpdateCounts from "@/components/StoreUpdateCounts.vue";
-import ManualControl from "@/components/control/ManualControl.vue";
+import StoreUpdateCountStatus from "@/components/StoreUpdateCountStatus.vue";
+import ManualControlView from "@/views/ManualControlView.vue";
 
 const leftDrawerOpen = ref(false)
 const toggleLeftDrawer = () => {
@@ -30,7 +30,7 @@ const dev = computed(() => {
         </q-toolbar-title>
 
         <ExternalConnectionStatus/>
-        <StoreUpdateCounts class="q-ml-md" v-if="dev"/>
+        <StoreUpdateCountStatus class="q-ml-md" v-if="dev"/>
       </q-toolbar>
 
       <q-tabs align="left">
@@ -45,7 +45,7 @@ const dev = computed(() => {
     </q-header>
 
     <q-drawer v-model="leftDrawerOpen" side="left" bordered>
-      <ManualControl/>
+      <ManualControlView/>
     </q-drawer>
 
     <q-page-container>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed} from "vue";
-import GameEventProposalGroup from "@/components/GameEventProposalGroup.vue";
+import GameEventProposalGroupItem from "@/components/GameEventProposalGroupItem.vue";
 import {useMatchStateStore} from "@/store/matchState";
 
 const store = useMatchStateStore()
@@ -16,7 +16,7 @@ const hasGroups = computed(() => {
 
 <template>
   <q-list bordered class="rounded-borders" v-if="hasGroups">
-    <GameEventProposalGroup
+    <GameEventProposalGroupItem
       :proposal-group="group"
       :group-id="groupId"
       v-for="(group, groupId) in proposalGroups"

@@ -2,8 +2,8 @@
 import {computed, inject} from "vue";
 import ButtonToggleInput from "@/components/common/ButtonToggleInput.vue";
 import {useMatchStateStore} from "@/store/matchState";
-import type {ControlApi} from "@/providers/controlApi/ControlApi";
 import {Division} from "@/proto/ssl_gc_common";
+import type {ControlApi} from "@/providers/controlApi/ControlApi";
 
 const store = useMatchStateStore()
 const control = inject<ControlApi>('control-api')

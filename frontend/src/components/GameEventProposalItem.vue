@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed} from "vue";
-import GameEvent from "@/components/GameEvent.vue";
+import GameEventItem from "@/components/GameEventItem.vue";
 import dayjs from 'dayjs'
 import type {Proposal} from "@/proto/ssl_gc_state";
 
@@ -18,5 +18,5 @@ const gameEvent = computed(() => {
 </script>
 
 <template>
-  <GameEvent :game-event="gameEvent" :caption="time"/>
+  <GameEventItem :game-event="gameEvent" :caption="time"/>
 </template>

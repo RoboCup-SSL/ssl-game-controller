@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import {inject, onMounted, onUnmounted} from "vue";
-import ContinueActions from "@/components/ContinueActions.vue";
-import AutoContinue from "@/components/AutoContinue.vue";
-import GameEventProposalGroups from "@/components/GameEventProposalGroups.vue";
-import GameEvents from "@/components/GameEvents.vue";
+import ContinueActionButtonList from "@/components/ContinueActionButtonList.vue";
+import AutoContinueInput from "@/components/AutoContinueInput.vue";
+import GameEventProposalGroupItemList from "@/components/GameEventProposalGroupItemList.vue";
+import GameEventList from "@/components/GameEventList.vue";
 import MatchTeamTable from "@/components/MatchTeamTable.vue";
 import {useGcStateStore} from "@/store/gcState";
 import type {ControlApi} from "@/providers/controlApi/ControlApi";
@@ -63,15 +63,15 @@ onUnmounted(() => {
           </q-card>
         </q-expansion-item>
         <q-separator spaced/>
-        <AutoContinue/>
+        <AutoContinueInput/>
         <q-separator spaced/>
-        <ContinueActions/>
+        <ContinueActionButtonList/>
         <q-separator spaced/>
       </div>
       <div class="col q-mx-md" style="min-width: 300px">
-        <GameEventProposalGroups/>
+        <GameEventProposalGroupItemList/>
         <q-separator spaced/>
-        <GameEvents/>
+        <GameEventList/>
       </div>
     </div>
   </div>

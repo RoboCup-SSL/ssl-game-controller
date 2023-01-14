@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import TeamBadge from "@/components/common/TeamBadge.vue";
-import GoalKeeperId from "@/components/team/GoalKeeperId.vue";
-import GoalCount from "@/components/team/GoalCount.vue";
-import TimeoutsLeft from "@/components/team/TimeoutsLeft.vue";
-import TimeoutTimeLeft from "@/components/team/TimeoutTimeLeft.vue";
-import PlacementFailures from "@/components/team/PlacementFailures.vue";
-import ChallengeFlags from "@/components/team/ChallengeFlags.vue";
+import GoalKeeperIdInput from "@/components/team/GoalKeeperIdInput.vue";
+import GoalCountInput from "@/components/team/GoalCountInput.vue";
+import TimeoutsLeftInput from "@/components/team/TimeoutsLeftInput.vue";
+import TimeoutTimeLeftInput from "@/components/team/TimeoutTimeLeftInput.vue";
+import PlacementFailuresInput from "@/components/team/PlacementFailuresInput.vue";
+import ChallengeFlagsInput from "@/components/team/ChallengeFlagsInput.vue";
 import {useMatchStateStore} from "@/store/matchState";
 import {useGcStateStore} from "@/store/gcState";
 import {teams} from "@/helpers";
@@ -55,7 +55,7 @@ const redCards = (team: Team) => {
           Goals
         </td>
         <td class="text-center" v-for="team in teams" :key="team">
-          <GoalCount :team="team"/>
+          <GoalCountInput :team="team"/>
         </td>
       </tr>
       <tr>
@@ -63,7 +63,7 @@ const redCards = (team: Team) => {
           Goal keeper id
         </td>
         <td class="text-center" v-for="team in teams" :key="team">
-          <GoalKeeperId :team="team"/>
+          <GoalKeeperIdInput :team="team"/>
         </td>
       </tr>
       <tr>
@@ -71,7 +71,7 @@ const redCards = (team: Team) => {
           Timeouts left
         </td>
         <td class="text-center" v-for="team in teams" :key="team">
-          <TimeoutsLeft :team="team"/>
+          <TimeoutsLeftInput :team="team"/>
         </td>
       </tr>
       <tr>
@@ -79,7 +79,7 @@ const redCards = (team: Team) => {
           Timeout time (seconds) left
         </td>
         <td class="text-center" v-for="team in teams" :key="team">
-          <TimeoutTimeLeft :team="team"/>
+          <TimeoutTimeLeftInput :team="team"/>
         </td>
       </tr>
       <tr>
@@ -87,7 +87,7 @@ const redCards = (team: Team) => {
           Ball placement failures
         </td>
         <td class="text-center" v-for="team in teams" :key="team">
-          <PlacementFailures :team="team"/>
+          <PlacementFailuresInput :team="team"/>
         </td>
       </tr>
       <tr>
@@ -95,7 +95,7 @@ const redCards = (team: Team) => {
           Challenge flags
         </td>
         <td class="text-center" v-for="team in teams" :key="team">
-          <ChallengeFlags :team="team"/>
+          <ChallengeFlagsInput :team="team"/>
         </td>
       </tr>
       <tr>

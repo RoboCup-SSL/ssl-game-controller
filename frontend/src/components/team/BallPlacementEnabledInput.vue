@@ -30,5 +30,10 @@ const onChange = (newValue: boolean) => {
 </script>
 
 <template>
-  <ToggleInput :model="model" :disable="disable" @onUpdate="onChange"/>
+  <ToggleInput
+    :model="model"
+    label="Perform ball placement"
+    :disable="disable"
+    @onUpdate="onChange"
+  />
 </template>
