@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {inject} from "vue";
-import ControlButton from "@/components/control/buttons/ControlButton.vue";
+import ControlButton from "@/components/control/ControlButton.vue";
 import type {ControlApi} from "@/providers/controlApi/ControlApi";
 import type {Team} from "@/proto/ssl_gc_common";
 
@@ -15,8 +15,8 @@ const submit = () => {
     origin: "UI",
     revertible: true,
     change: {
-      $case: "addRedCardChange",
-      addRedCardChange: {
+      $case: "addYellowCardChange",
+      addYellowCardChange: {
         forTeam: props.team,
         causedByGameEvent: undefined,
       }
@@ -27,5 +27,5 @@ const submit = () => {
 </script>
 
 <template>
-  <ControlButton label="Red Card" :disable="false" :action="submit" :team="team"/>
+  <ControlButton label="Yellow Card" :disable="false" :action="submit" :team="team"/>
 </template>

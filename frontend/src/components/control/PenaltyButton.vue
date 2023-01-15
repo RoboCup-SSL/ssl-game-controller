@@ -1,26 +1,28 @@
 <script setup lang="ts">
 import {computed, inject} from "vue";
-import ControlButton from "@/components/control/buttons/ControlButton.vue";
+import ControlButton from "@/components/control/ControlButton.vue";
 import {useMatchStateStore} from "@/store/matchState";
-import {isPausedStage} from "@/helpers";
 import {Command_Type} from "@/proto/ssl_gc_state";
 import type {ControlApi} from "@/providers/controlApi/ControlApi";
+import type {Team} from "@/proto/ssl_gc_common";
+
+const props = defineProps<{
+  team: Team,
+}>()
 
 const store = useMatchStateStore()
 const control = inject<ControlApi>('control-api')
 
 const sendCommand = () => {
-  control?.NewCommandNeutral(Command_Type.STOP)
+  control?.NewCommandForTeam(Command_Type.PENALTY, props.team)
 }
 
 const disable = computed(() => {
-  return store.matchState.command?.type === Command_Type.STOP
-    || !store.matchState.stage
-    || isPausedStage(store.matchState.stage)
+  return !store.isStop
 })
 
 </script>
 
 <template>
-  <ControlButton label="Stop" :disable="disable" :action="sendCommand"/>
+  <ControlButton label="Penalty" :disable="disable" :action="sendCommand" :team="team"/>
 </template>

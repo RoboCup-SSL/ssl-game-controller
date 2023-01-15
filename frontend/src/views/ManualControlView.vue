@@ -1,17 +1,16 @@
 <script setup lang="ts">
-import HaltButton from "@/components/control/buttons/HaltButton.vue";
-import StopButton from "@/components/control/buttons/StopButton.vue";
-import ForceStartButton from "@/components/control/buttons/ForceStartButton.vue";
-import NormalStartButton from "@/components/control/buttons/NormalStartButton.vue";
-import FreeKickButton from "@/components/control/buttons/FreeKickButton.vue";
-import KickoffButton from "@/components/control/buttons/KickoffButton.vue";
-import PenaltyButton from "@/components/control/buttons/PenaltyButton.vue";
-import YellowCardButton from "@/components/control/buttons/YellowCardButton.vue";
-import RedCardButton from "@/components/control/buttons/RedCardButton.vue";
-import GoalButton from "@/components/control/buttons/GoalButton.vue";
-import TimeoutButton from "@/components/control/buttons/TimeoutButton.vue";
-import {teams} from "@/helpers";
-</script>
+import HaltButton from "@/components/control/HaltButton.vue";
+import StopButton from "@/components/control/StopButton.vue";
+import ForceStartButton from "@/components/control/ForceStartButton.vue";
+import NormalStartButton from "@/components/control/NormalStartButton.vue";
+import FreeKickButton from "@/components/control/FreeKickButton.vue";
+import KickoffButton from "@/components/control/KickoffButton.vue";
+import PenaltyButton from "@/components/control/PenaltyButton.vue";
+import YellowCardButton from "@/components/control/YellowCardButton.vue";
+import RedCardButton from "@/components/control/RedCardButton.vue";
+import GoalButton from "@/components/control/GoalButton.vue";
+import TimeoutButton from "@/components/control/TimeoutButton.vue";
+import {teams} from "@/helpers";</script>
 
 <template>
   <q-separator spaced/>

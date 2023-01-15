@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed, inject} from "vue";
-import ControlButton from "@/components/control/buttons/ControlButton.vue";
+import ControlButton from "@/components/control/ControlButton.vue";
 import {useMatchStateStore} from "@/store/matchState";
 import {isPausedStage} from "@/helpers";
 import {Command_Type} from "@/proto/ssl_gc_state";
