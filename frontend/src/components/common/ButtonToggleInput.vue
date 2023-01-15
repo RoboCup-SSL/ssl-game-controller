@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 defineProps<{
-  model: any,
+  value: any,
   options: {
     label?: string;
     value: any;
@@ -22,7 +22,7 @@ const updateValue = (value: string) => {
     color="white"
     text-color="primary"
     :options="options"
-    :model-value="model"
+    :model-value="value"
     @update:modelValue="updateValue"
   />
 </template>

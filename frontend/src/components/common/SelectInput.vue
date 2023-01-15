@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import {computed, ref, toRaw, watch} from "vue";
 
-const props = defineProps<{
+defineProps<{
   model: any,
   options: string[],
   optionLabel?: (v: any) => string,
@@ -9,26 +8,17 @@ const props = defineProps<{
 }>()
 const emit = defineEmits(['onUpdate'])
 
-const model = ref(structuredClone(props.model))
-const value = computed(() => props.model)
-watch(value, (newValue) => {
-  model.value = newValue
-})
-
-const onUpdate = () => {
-  if (model.value !== value.value) {
-    emit('onUpdate', model.value)
-    model.value = structuredClone(toRaw(value.value))
-  }
+const updateValue = (value: any) => {
+  emit('onUpdate', value)
 }
 </script>
 
 <template>
   <q-select
-    v-model="model"
     :options="options"
     :option-label="optionLabel"
     :label="label"
-    @update:modelValue="onUpdate"
+    :model-value="model"
+    @update:modelValue="updateValue"
   />
 </template>
