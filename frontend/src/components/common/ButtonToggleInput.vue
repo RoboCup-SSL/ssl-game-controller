@@ -16,10 +16,7 @@ const updateValue = (value: string) => {
 
 <template>
   <q-btn-toggle
-    push glossy
-    toggle-color="primary"
-    color="white"
-    text-color="primary"
+    glossy
     :options="options"
     :model-value="modelValue"
     @update:modelValue="updateValue"

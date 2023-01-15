@@ -4,7 +4,6 @@ import type {Team} from "@/proto/ssl_gc_common";
 
 defineProps<{
   modelValue?: Team,
-  label?: string,
 }>()
 
 const emit = defineEmits<{
@@ -20,7 +19,6 @@ const updateValue = (v: Team) => {
 <template>
   <q-btn-toggle
     glossy spread no-caps no-wrap
-    :label="label"
     :options="teamOptions"
     :model-value="modelValue"
     @update:model-value="updateValue"

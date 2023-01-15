@@ -24,11 +24,14 @@ const updateValue = (value: string | number | null) => {
 <template>
   <q-input
     input-class="text-center"
-    rounded outlined
     dense
     :label="label"
     type="number"
     :model-value="modelValue"
     @update:model-value="updateValue"
-  />
+  >
+    <template v-slot:prepend>
+      <q-icon name="close" @click="updateValue(null)"/>
+    </template>
+  </q-input>
 </template>

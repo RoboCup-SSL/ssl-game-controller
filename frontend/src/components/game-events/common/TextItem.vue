@@ -30,7 +30,11 @@ const updateValue = (v: string | number | null) => {
         :label="label"
         :model-value="modelValue"
         @update:model-value="updateValue"
-      />
+      >
+        <template v-slot:prepend>
+          <q-icon name="close" @click="updateValue(null)"/>
+        </template>
+      </q-input>
     </q-item-section>
   </q-item>
 </template>

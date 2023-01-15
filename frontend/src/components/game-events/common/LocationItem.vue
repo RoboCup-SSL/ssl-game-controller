@@ -51,7 +51,11 @@ const updateY = (y: string | number | null) => {
         :label="(label || 'location') + ' x (m)'"
         :model-value="modelValue?.x"
         @update:model-value="updateX"
-      />
+      >
+        <template v-slot:prepend>
+          <q-icon name="close" @click="updateX(null)"/>
+        </template>
+      </q-input>
     </q-item-section>
     <q-item-section>
       <q-input
@@ -61,7 +65,11 @@ const updateY = (y: string | number | null) => {
         :label="(label || 'location') + ' y (m)'"
         :model-value="modelValue?.y"
         @update:model-value="updateY"
-      />
+      >
+        <template v-slot:prepend>
+          <q-icon name="close" @click="updateY(null)"/>
+        </template>
+      </q-input>
     </q-item-section>
   </q-item>
 </template>
