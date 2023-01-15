@@ -7,8 +7,10 @@ import GameEventList from "@/components/GameEventList.vue";
 import MatchTeamTable from "@/components/MatchTeamTable.vue";
 import {useGcStateStore} from "@/store/gcState";
 import type {ControlApi} from "@/providers/controlApi/ControlApi";
+import {useUiStateStore} from "@/store/uiState";
 
 const store = useGcStateStore()
+const uiStore = useUiStateStore()
 const control = inject<ControlApi>('control-api')
 
 const continueWithAction = (id: number) => {
@@ -52,7 +54,7 @@ onUnmounted(() => {
         <q-expansion-item
           dense
           switch-toggle-side
-          expand-separator
+          v-model="uiStore.matchTeamSettingsExpanded"
           icon="perm_identity"
           label="Team Settings"
         >
@@ -62,7 +64,6 @@ onUnmounted(() => {
             </q-card-section>
           </q-card>
         </q-expansion-item>
-        <q-separator spaced/>
         <AutoContinueInput/>
         <q-separator spaced/>
         <ContinueActionButtonList/>
