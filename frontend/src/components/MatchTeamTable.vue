@@ -33,57 +33,52 @@ const nextYellowCardDue = (team: Team) => {
 </script>
 
 <template>
-  <q-markup-table dense>
-    <thead>
-    <tr>
-      <th class="text-left" scope="col"></th>
-      <th class="text-center" scope="col" v-for="team in teams" :key="team">
+  <div class="row justify-center q-gutter-sm">
+    <q-list bordered dense v-for="team in teams" :key="team">
+      <q-item-label header>
         {{ teamName(team) }}
         <TeamBadge :team="team"/>
-      </th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-      <td class="text-left">
-        Request timeout
-      </td>
-      <td class="text-center" v-for="team in teams" :key="team">
-        <TimeoutRequestInput :team="team"/>
-      </td>
-    </tr>
-    <tr>
-      <td class="text-left">
-        Request bot substitution
-      </td>
-      <td class="text-center" v-for="team in teams" :key="team">
-        <SubstitutionRequestInput :team="team"/>
-      </td>
-    </tr>
-    <tr>
-      <td class="text-left">
-        Request emergency
-      </td>
-      <td class="text-center" v-for="team in teams" :key="team">
-        <EmergencyRequestInput :team="team"/>
-      </td>
-    </tr>
-    <tr>
-      <td class="text-left">
-        Active cards / max bots
-      </td>
-      <td class="text-center" v-for="team in teams" :key="team">
-        {{ activeCards(team) }} &rArr; {{ maxBots(team) }}
-      </td>
-    </tr>
-    <tr>
-      <td class="text-left">
-        Next yellow card due
-      </td>
-      <td class="text-center" v-for="team in teams" :key="team">
-        {{ formatDuration(nextYellowCardDue(team) * 1000) }}
-      </td>
-    </tr>
-    </tbody>
-  </q-markup-table>
+      </q-item-label>
+
+      <q-item v-ripple>
+        <q-item-section>
+          <TimeoutRequestInput :team="team"/>
+        </q-item-section>
+      </q-item>
+
+      <q-item v-ripple>
+        <q-item-section>
+          <SubstitutionRequestInput :team="team"/>
+        </q-item-section>
+      </q-item>
+
+      <q-item v-ripple>
+        <q-item-section>
+          <EmergencyRequestInput :team="team"/>
+        </q-item-section>
+      </q-item>
+
+      <q-item v-ripple clickable @click="() => $router.push(`/team-settings/${team}/details`)">
+        <q-item-section class="text-center">
+          <q-item-label>
+            {{ activeCards(team) }} &rArr; {{ maxBots(team) }}
+          </q-item-label>
+          <q-item-label caption>
+            Active cards &rArr; max bots
+          </q-item-label>
+        </q-item-section>
+      </q-item>
+
+      <q-item v-ripple clickable @click="() => $router.push(`/team-settings/${team}/details`)">
+        <q-item-section class="text-center">
+          <q-item-label>
+            {{ formatDuration(nextYellowCardDue(team) * 1000) }}
+          </q-item-label>
+          <q-item-label caption>
+            Next yellow card due
+          </q-item-label>
+        </q-item-section>
+      </q-item>
+    </q-list>
+  </div>
 </template>

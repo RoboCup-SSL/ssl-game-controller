@@ -29,5 +29,10 @@ const onChange = (newValue: boolean) => {
 </script>
 
 <template>
-  <ToggleInput :model="model" :disable="disable" @onUpdate="onChange"/>
+  <ToggleInput
+    :model="model"
+    :disable="disable"
+    label="Timeout request"
+    @onUpdate="onChange"
+  />
 </template>
