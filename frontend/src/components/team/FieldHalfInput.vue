@@ -16,7 +16,7 @@ const model = computed(() => {
   return store.matchState.teamState![props.team].onPositiveHalf!
 })
 
-const onUpdate = (value: boolean) => {
+const updateValue = (value: boolean) => {
   control?.UpdateTeamState({
     forTeam: props.team,
     onPositiveHalf: value,
@@ -26,8 +26,8 @@ const onUpdate = (value: boolean) => {
 
 <template>
   <ToggleInput
-    :model="model"
+    :modelValue="model"
     label="Goal on positive field half"
-    @onUpdate="onUpdate"
+    @update:model-value="updateValue"
   />
 </template>

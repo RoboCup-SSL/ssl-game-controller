@@ -16,19 +16,21 @@ const model = computed(() => {
   return store.matchState.teamState![props.team].challengeFlags!
 })
 
-const onUpdate = (value: number) => {
-  control?.UpdateTeamState({
-    forTeam: props.team,
-    challengeFlagsLeft: value,
-  })
+const updateValue = (value: number | undefined) => {
+  if (value) {
+    control?.UpdateTeamState({
+      forTeam: props.team,
+      challengeFlagsLeft: value,
+    })
+  }
 }
 
 </script>
 
 <template>
   <NumberInput
-    :value="model"
+    :modelValue="model"
     label="Challenge flags available"
-    @onUpdate="onUpdate"
+    @update:model-value="updateValue"
   />
 </template>

@@ -1,13 +1,23 @@
 <script setup lang="ts">
 
 defineProps<{
-  value: number,
+  modelValue?: number,
   label?: string,
 }>()
-const emit = defineEmits(['onUpdate'])
+const emit = defineEmits<{
+  (event: 'update:modelValue', payload: number | undefined): void;
+}>();
 
 const updateValue = (value: string | number | null) => {
-  emit('onUpdate', value)
+  if (value) {
+    if (typeof value === 'string') {
+      emit('update:modelValue', parseInt(value))
+    } else {
+      emit('update:modelValue', value)
+    }
+  } else {
+    emit('update:modelValue', undefined)
+  }
 }
 </script>
 
@@ -18,7 +28,7 @@ const updateValue = (value: string | number | null) => {
     dense
     :label="label"
     type="number"
-    :model-value="value"
+    :model-value="modelValue"
     @update:model-value="updateValue"
   />
 </template>

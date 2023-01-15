@@ -22,5 +22,9 @@ const onChange = (newValue: Division) => {
 </script>
 
 <template>
-  <ButtonToggleInput :value="model" :options="options" @onUpdate="onChange"/>
+  <ButtonToggleInput
+    :modelValue="model"
+    :options="options"
+    @update:model-value="onChange"
+  />
 </template>

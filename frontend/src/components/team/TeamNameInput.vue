@@ -21,7 +21,7 @@ const options = computed(() => {
   return gcStore.config.teams || []
 })
 
-const onUpdate = (value: string) => {
+const updateValue = (value: string) => {
   control?.UpdateTeamState({
     forTeam: props.team,
     teamName: value,
@@ -32,8 +32,8 @@ const onUpdate = (value: string) => {
 <template>
   <SelectInput
     :options="options"
-    :model="model"
+    :modelValue="model"
     label="Team name"
-    @onUpdate="onUpdate"
+    @update:model-value="updateValue"
   />
 </template>

@@ -16,19 +16,21 @@ const model = computed(() => {
   return props.card.timeRemaining!.seconds
 })
 
-const onUpdate = (value: number) => {
-  control?.UpdateTeamState({
-    forTeam: props.team,
-    yellowCard: {
-      id: props.card.id,
-      timeRemaining: {
-        seconds: value,
-      }
-    },
-  })
+const updateValue = (value: number | undefined) => {
+  if (value) {
+    control?.UpdateTeamState({
+      forTeam: props.team,
+      yellowCard: {
+        id: props.card.id,
+        timeRemaining: {
+          seconds: value,
+        }
+      },
+    })
+  }
 }
 </script>
 
 <template>
-  <NumberInput :value="model" @onUpdate="onUpdate"/>
+  <NumberInput :modelValue="model" @update:model-value="updateValue"/>
 </template>

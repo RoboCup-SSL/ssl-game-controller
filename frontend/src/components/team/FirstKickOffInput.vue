@@ -17,7 +17,7 @@ const model = computed(() => {
   return store.matchState.firstKickoffTeam === props.team
 })
 
-const onUpdate = (value: boolean) => {
+const updateValue = (value: boolean) => {
   control?.UpdateMatchConfig({
     firstKickoffTeam: value ? props.team : opponent(props.team)
   })
@@ -26,8 +26,8 @@ const onUpdate = (value: boolean) => {
 
 <template>
   <ToggleInput
-    :model="model"
+    :modelValue="model"
     label="First kick-off"
-    @onUpdate="onUpdate"
+    @update:model-value="updateValue"
   />
 </template>

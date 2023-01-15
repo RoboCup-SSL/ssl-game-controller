@@ -1,28 +1,27 @@
 <script setup lang="ts">
 
 defineProps<{
-  value: any,
+  modelValue?: any,
   options: {
     label?: string;
     value: any;
   }[]
 }>()
-const emit = defineEmits(['onUpdate'])
+const emit = defineEmits(['update:model-value'])
 
 const updateValue = (value: string) => {
-  emit('onUpdate', value)
+  emit('update:model-value', value)
 }
 </script>
 
 <template>
   <q-btn-toggle
-    push
-    glossy
+    push glossy
     toggle-color="primary"
     color="white"
     text-color="primary"
     :options="options"
-    :model-value="value"
+    :model-value="modelValue"
     @update:modelValue="updateValue"
   />
 </template>

@@ -16,19 +16,21 @@ const model = computed(() => {
   return store.matchState.teamState![props.team].timeoutsLeft!
 })
 
-const onUpdate = (value: number) => {
-  control?.UpdateTeamState({
-    forTeam: props.team,
-    timeoutsLeft: value,
-  })
+const updateValue = (value: number | undefined) => {
+  if (value) {
+    control?.UpdateTeamState({
+      forTeam: props.team,
+      timeoutsLeft: value,
+    })
+  }
 }
 
 </script>
 
 <template>
   <NumberInput
-    :value="model"
+    :modelValue="model"
     label="Timeouts left"
-    @onUpdate="onUpdate"
+    @update:model-value="updateValue"
   />
 </template>

@@ -25,9 +25,9 @@ const onChange = (newValue: MatchType) => {
   <SelectInput
     label="Match type"
     style="min-width: 130px"
-    :model="model"
+    :modelValue="model"
     :options="options"
     :option-label="optionsLabel"
-    @onUpdate="onChange"
+    @update:model-value="onChange"
   />
 </template>

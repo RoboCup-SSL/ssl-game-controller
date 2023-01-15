@@ -16,19 +16,20 @@ const model = computed(() => {
   return store.matchState.teamState![props.team].ballPlacementFailures!
 })
 
-const onUpdate = (value: number) => {
-  control?.UpdateTeamState({
-    forTeam: props.team,
-    ballPlacementFailures: value,
-  })
+const updateValue = (value: number | undefined) => {
+  if (value) {
+    control?.UpdateTeamState({
+      forTeam: props.team,
+      ballPlacementFailures: value,
+    })
+  }
 }
-
 </script>
 
 <template>
   <NumberInput
-    :value="model"
+    :modelValue="model"
     label="Ball placement failures"
-    @onUpdate="onUpdate"
+    @update:model-value="updateValue"
   />
 </template>

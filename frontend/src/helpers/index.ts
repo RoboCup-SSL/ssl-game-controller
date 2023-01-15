@@ -14,6 +14,11 @@ export const opponent = (team: Team) => {
   }
 }
 
+export const teamOptions = [
+  {label: 'Yellow', value: Team.YELLOW},
+  {label: 'Blue', value: Team.BLUE}
+]
+
 export const getNextStage = function (stage: Referee_Stage): Referee_Stage {
   switch (stage) {
     case Referee_Stage.NORMAL_FIRST_HALF_PRE:

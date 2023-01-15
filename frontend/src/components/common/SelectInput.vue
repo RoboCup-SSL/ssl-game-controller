@@ -1,15 +1,15 @@
 <script setup lang="ts">
 
 defineProps<{
-  model: any,
+  modelValue: any,
   options: string[],
   optionLabel?: (v: any) => string,
   label?: string,
 }>()
-const emit = defineEmits(['onUpdate'])
+const emit = defineEmits(['update:model-value'])
 
 const updateValue = (value: any) => {
-  emit('onUpdate', value)
+  emit('update:model-value', value)
 }
 </script>
 
@@ -18,7 +18,7 @@ const updateValue = (value: any) => {
     :options="options"
     :option-label="optionLabel"
     :label="label"
-    :model-value="model"
+    :model-value="modelValue"
     @update:modelValue="updateValue"
   />
 </template>

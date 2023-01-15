@@ -17,5 +17,9 @@ const onChange = () => {
 </script>
 
 <template>
-  <ToggleInput :model="model" label="Continue automatically" @onUpdate="onChange"/>
+  <ToggleInput
+    :modelValue="model"
+    label="Continue automatically"
+    @update:model-value="onChange"
+  />
 </template>

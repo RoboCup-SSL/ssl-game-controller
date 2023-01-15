@@ -1,14 +1,14 @@
 <script setup lang="ts">
 
 defineProps<{
-  model: boolean,
+  modelValue?: boolean,
   label?: string,
   disable?: boolean,
 }>()
-const emit = defineEmits(['onUpdate'])
+const emit = defineEmits(['update:modelValue'])
 
 const updateValue = (value: boolean) => {
-  emit('onUpdate', value)
+  emit('update:modelValue', value)
 }
 </script>
 
@@ -16,7 +16,7 @@ const updateValue = (value: boolean) => {
   <q-toggle
     :label="label"
     :disable="disable"
-    :model-value="model"
+    :model-value="modelValue"
     @update:model-value="updateValue"
   />
 </template>

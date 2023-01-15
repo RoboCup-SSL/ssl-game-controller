@@ -16,19 +16,21 @@ const model = computed(() => {
   return store.matchState.teamState?.[props.team].goals!
 })
 
-const onUpdate = (value: number) => {
-  control?.UpdateTeamState({
-    forTeam: props.team,
-    goals: value,
-  })
+const updateValue = (value: number | undefined) => {
+  if (value) {
+    control?.UpdateTeamState({
+      forTeam: props.team,
+      goals: value,
+    })
+  }
 }
 
 </script>
 
 <template>
   <NumberInput
-    :value="model"
+    :modelValue="model"
     label="Goals"
-    @onUpdate="onUpdate"
+    @update:model-value="updateValue"
   />
 </template>

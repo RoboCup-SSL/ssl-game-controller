@@ -1,0 +1,85 @@
+<script setup lang="ts">
+import {ref} from "vue";
+import {GameEvent, GameEvent_Goal, GameEvent_Type} from "@/proto/ssl_gc_game_event";
+import TeamItem from "@/components/game-events/common/TeamItem.vue";
+import LocationItem from "@/components/game-events/common/LocationItem.vue";
+import NumberItem from "@/components/game-events/common/NumberItem.vue";
+import ToggleItem from "@/components/game-events/common/ToggleItem.vue";
+import {Team} from "@/proto/ssl_gc_common";
+import TextItem from "@/components/game-events/common/TextItem.vue";
+
+const emit = defineEmits(['create-game-event', 'propose-game-event'])
+
+const possibleGoal = ref(true)
+const goal = ref<GameEvent_Goal>({
+  byTeam: Team.YELLOW,
+})
+
+const createGameEvent = (): GameEvent => {
+  const gameEventType = possibleGoal.value ? GameEvent_Type.POSSIBLE_GOAL : GameEvent_Type.GOAL
+  if (possibleGoal.value) {
+    return {
+      type: gameEventType,
+      event: {
+        $case: 'possibleGoal',
+        possibleGoal: goal.value
+      }
+    }
+  } else {
+    return {
+      type: gameEventType,
+      event: {
+        $case: 'goal',
+        goal: goal.value
+      }
+    }
+  }
+}
+
+const updateGameEvent = () => {
+  const gameEvent = createGameEvent()
+  if (gameEvent) {
+    emit('create-game-event', gameEvent)
+  }
+}
+defineExpose({createGameEvent})
+
+</script>
+
+<template>
+  <div class="row">
+    <q-list bordered>
+      <q-item-label header>Goal</q-item-label>
+
+      <ToggleItem label="possible goal" v-model="possibleGoal"/>
+
+      <q-separator/>
+      <q-item-label header>By team</q-item-label>
+      <TeamItem v-model="goal.byTeam"/>
+
+      <q-separator/>
+      <q-item-label header>Kicking team</q-item-label>
+      <TeamItem v-model="goal.kickingTeam"/>
+      <NumberItem v-model="goal.kickingBot" label="kicking bot"/>
+
+      <q-separator/>
+      <LocationItem v-model="goal.location"/>
+      <LocationItem v-model="goal.kickLocation" label="kick location"/>
+      <NumberItem v-model="goal.maxBallHeight" label="max ball height (m)"/>
+      <NumberItem v-model="goal.numRobotsByTeam" label="num robots by team"/>
+      <NumberItem v-model="goal.lastTouchByTeam" label="last touch by team (μs)"/>
+      <TextItem v-model="goal.message" label="message"/>
+
+      <q-item>
+        <q-item-section>
+          <q-btn
+            dense
+            label="Create"
+            color="primary"
+            @click="updateGameEvent"
+          />
+        </q-item-section>
+      </q-item>
+    </q-list>
+  </div>
+</template>

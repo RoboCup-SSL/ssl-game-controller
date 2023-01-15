@@ -16,19 +16,21 @@ const currentKeeperId = computed(() => {
   return store.matchState.teamState?.[props.team].goalkeeper!
 })
 
-const onUpdate = (value: number) => {
-  control?.UpdateTeamState({
-    forTeam: props.team,
-    goalkeeper: value,
-  })
+const updateValue = (value: number | undefined) => {
+  if (value) {
+    control?.UpdateTeamState({
+      forTeam: props.team,
+      goalkeeper: value,
+    })
+  }
 }
 
 </script>
 
 <template>
   <NumberInput
-    :value="currentKeeperId"
-    @onUpdate="onUpdate"
+    :modelValue="currentKeeperId"
+    @update:model-value="updateValue"
     label="Keeper id"
   />
 </template>
