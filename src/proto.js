@@ -27664,26 +27664,28 @@ export const ContinueAction = $root.ContinueAction = (() => {
         if (typeof message !== "object" || message === null)
             return "object expected";
         switch (message.type) {
-        default:
-            return "type: enum value expected";
-        case 0:
-        case 1:
-        case 10:
-        case 2:
-        case 11:
-        case 3:
-        case 4:
-        case 9:
-        case 5:
-        case 6:
-        case 7:
-        case 8:
-        case 12:
-        case 13:
-            break;
+            default:
+                return "type: enum value expected";
+            case 0:
+            case 1:
+            case 10:
+            case 2:
+            case 11:
+            case 3:
+            case 4:
+            case 9:
+            case 14:
+            case 15:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 12:
+            case 13:
+                break;
         }
         switch (message.forTeam) {
-        default:
+            default:
             return "forTeam: enum value expected";
         case 0:
         case 1:
@@ -27753,24 +27755,32 @@ export const ContinueAction = $root.ContinueAction = (() => {
         case 3:
             message.type = 3;
             break;
-        case "BALL_PLACEMENT_START":
-        case 4:
-            message.type = 4;
-            break;
-        case "BALL_PLACEMENT_CANCEL":
-        case 9:
-            message.type = 9;
-            break;
-        case "TIMEOUT_START":
-        case 5:
-            message.type = 5;
-            break;
-        case "TIMEOUT_STOP":
-        case 6:
-            message.type = 6;
-            break;
-        case "BOT_SUBSTITUTION":
-        case 7:
+            case "BALL_PLACEMENT_START":
+            case 4:
+                message.type = 4;
+                break;
+            case "BALL_PLACEMENT_CANCEL":
+            case 9:
+                message.type = 9;
+                break;
+            case "BALL_PLACEMENT_COMPLETE":
+            case 14:
+                message.type = 14;
+                break;
+            case "BALL_PLACEMENT_FAIL":
+            case 15:
+                message.type = 15;
+                break;
+            case "TIMEOUT_START":
+            case 5:
+                message.type = 5;
+                break;
+            case "TIMEOUT_STOP":
+            case 6:
+                message.type = 6;
+                break;
+            case "BOT_SUBSTITUTION":
+            case 7:
             message.type = 7;
             break;
         case "NEXT_STAGE":
@@ -27912,6 +27922,8 @@ export const ContinueAction = $root.ContinueAction = (() => {
      * @property {number} NEXT_COMMAND=3 NEXT_COMMAND value
      * @property {number} BALL_PLACEMENT_START=4 BALL_PLACEMENT_START value
      * @property {number} BALL_PLACEMENT_CANCEL=9 BALL_PLACEMENT_CANCEL value
+     * @property {number} BALL_PLACEMENT_COMPLETE=14 BALL_PLACEMENT_COMPLETE value
+     * @property {number} BALL_PLACEMENT_FAIL=15 BALL_PLACEMENT_FAIL value
      * @property {number} TIMEOUT_START=5 TIMEOUT_START value
      * @property {number} TIMEOUT_STOP=6 TIMEOUT_STOP value
      * @property {number} BOT_SUBSTITUTION=7 BOT_SUBSTITUTION value
@@ -27929,6 +27941,8 @@ export const ContinueAction = $root.ContinueAction = (() => {
         values[valuesById[3] = "NEXT_COMMAND"] = 3;
         values[valuesById[4] = "BALL_PLACEMENT_START"] = 4;
         values[valuesById[9] = "BALL_PLACEMENT_CANCEL"] = 9;
+        values[valuesById[14] = "BALL_PLACEMENT_COMPLETE"] = 14;
+        values[valuesById[15] = "BALL_PLACEMENT_FAIL"] = 15;
         values[valuesById[5] = "TIMEOUT_START"] = 5;
         values[valuesById[6] = "TIMEOUT_STOP"] = 6;
         values[valuesById[7] = "BOT_SUBSTITUTION"] = 7;

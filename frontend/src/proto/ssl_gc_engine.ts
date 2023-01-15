@@ -142,6 +142,8 @@ export enum ContinueAction_Type {
   NEXT_COMMAND = "NEXT_COMMAND",
   BALL_PLACEMENT_START = "BALL_PLACEMENT_START",
   BALL_PLACEMENT_CANCEL = "BALL_PLACEMENT_CANCEL",
+  BALL_PLACEMENT_COMPLETE = "BALL_PLACEMENT_COMPLETE",
+  BALL_PLACEMENT_FAIL = "BALL_PLACEMENT_FAIL",
   TIMEOUT_START = "TIMEOUT_START",
   TIMEOUT_STOP = "TIMEOUT_STOP",
   BOT_SUBSTITUTION = "BOT_SUBSTITUTION",
@@ -177,6 +179,12 @@ export function continueAction_TypeFromJSON(object: any): ContinueAction_Type {
     case 9:
     case "BALL_PLACEMENT_CANCEL":
       return ContinueAction_Type.BALL_PLACEMENT_CANCEL;
+    case 14:
+    case "BALL_PLACEMENT_COMPLETE":
+      return ContinueAction_Type.BALL_PLACEMENT_COMPLETE;
+    case 15:
+    case "BALL_PLACEMENT_FAIL":
+      return ContinueAction_Type.BALL_PLACEMENT_FAIL;
     case 5:
     case "TIMEOUT_START":
       return ContinueAction_Type.TIMEOUT_START;
@@ -220,6 +228,10 @@ export function continueAction_TypeToJSON(object: ContinueAction_Type): string {
       return "BALL_PLACEMENT_START";
     case ContinueAction_Type.BALL_PLACEMENT_CANCEL:
       return "BALL_PLACEMENT_CANCEL";
+    case ContinueAction_Type.BALL_PLACEMENT_COMPLETE:
+      return "BALL_PLACEMENT_COMPLETE";
+    case ContinueAction_Type.BALL_PLACEMENT_FAIL:
+      return "BALL_PLACEMENT_FAIL";
     case ContinueAction_Type.TIMEOUT_START:
       return "TIMEOUT_START";
     case ContinueAction_Type.TIMEOUT_STOP:

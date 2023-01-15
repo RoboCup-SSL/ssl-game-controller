@@ -49,6 +49,28 @@ func createBotSubstitutionEventChange(byTeam state.Team) *statemachine.Change {
 	})
 }
 
+// createBallPlacementSucceededEventChange creates a new change for ball placement success
+func createBallPlacementSucceededEventChange(byTeam state.Team) *statemachine.Change {
+	return createGameEventChange(state.GameEvent_PLACEMENT_SUCCEEDED, &state.GameEvent{
+		Event: &state.GameEvent_PlacementSucceeded_{
+			PlacementSucceeded: &state.GameEvent_PlacementSucceeded{
+				ByTeam: &byTeam,
+			},
+		},
+	})
+}
+
+// createBallPlacementFailedEventChange creates a new change for ball placement success
+func createBallPlacementFailedEventChange(byTeam state.Team) *statemachine.Change {
+	return createGameEventChange(state.GameEvent_PLACEMENT_FAILED, &state.GameEvent{
+		Event: &state.GameEvent_PlacementFailed_{
+			PlacementFailed: &state.GameEvent_PlacementFailed{
+				ByTeam: &byTeam,
+			},
+		},
+	})
+}
+
 // createStageChange creates a change with a new stage
 func createStageChange(stage *state.Referee_Stage) *statemachine.Change {
 	return &statemachine.Change{

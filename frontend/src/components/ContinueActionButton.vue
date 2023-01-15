@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import {computed, inject} from "vue";
 import TeamBadge from "@/components/common/TeamBadge.vue";
+import type {ContinueAction} from "@/proto/ssl_gc_engine";
 import {ContinueAction_State, ContinueAction_Type} from "@/proto/ssl_gc_engine";
 import {useMatchStateStore} from "@/store/matchState";
 import {commandNames} from "@/helpers/texts";
-import type {ContinueAction} from "@/proto/ssl_gc_engine";
 import type {ControlApi} from "@/providers/controlApi/ControlApi";
 
 const props = defineProps<{
@@ -49,6 +49,10 @@ const label = computed(() => {
       return 'Start Ball Placement'
     case ContinueAction_Type.BALL_PLACEMENT_CANCEL:
       return 'Cancel Ball Placement'
+    case ContinueAction_Type.BALL_PLACEMENT_COMPLETE:
+      return 'Complete Ball Placement'
+    case ContinueAction_Type.BALL_PLACEMENT_FAIL:
+      return 'Fail Ball Placement'
     case ContinueAction_Type.TIMEOUT_START:
       return 'Start Timeout'
     case ContinueAction_Type.TIMEOUT_STOP:

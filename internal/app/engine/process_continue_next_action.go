@@ -32,6 +32,14 @@ func (e *Engine) nextActions() (actions []*ContinueAction) {
 			ContinueAction_BALL_PLACEMENT_CANCEL,
 			state.Team_UNKNOWN,
 			ContinueAction_READY_MANUAL,
+		), createContinueAction(
+			ContinueAction_BALL_PLACEMENT_COMPLETE,
+			state.Team_UNKNOWN,
+			ContinueAction_READY_MANUAL,
+		), createContinueAction(
+			ContinueAction_BALL_PLACEMENT_FAIL,
+			state.Team_UNKNOWN,
+			ContinueAction_READY_MANUAL,
 		))
 	}
 

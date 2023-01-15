@@ -25,6 +25,16 @@ func (e *Engine) performContinueAction(action *ContinueAction) {
 		} else {
 			logWillNotContinue("No team for ball placement specified")
 		}
+	case ContinueAction_BALL_PLACEMENT_COMPLETE:
+		forTeam := e.currentState.GameState.ForTeam
+		if forTeam != nil {
+			e.Enqueue(createBallPlacementSucceededEventChange(*forTeam))
+		}
+	case ContinueAction_BALL_PLACEMENT_FAIL:
+		forTeam := e.currentState.GameState.ForTeam
+		if forTeam != nil {
+			e.Enqueue(createBallPlacementFailedEventChange(*forTeam))
+		}
 	case ContinueAction_TIMEOUT_START:
 		if action.ForTeam.Known() {
 			e.Enqueue(createCommandChange(state.NewCommand(state.Command_TIMEOUT, *action.ForTeam)))
