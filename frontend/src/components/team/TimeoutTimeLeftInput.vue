@@ -26,7 +26,7 @@ const onUpdate = (value: number) => {
 
 <template>
   <NumberInput
-    :model="model"
+    :value="model"
     label="Timeout time left (seconds)"
     @onUpdate="onUpdate"
   />

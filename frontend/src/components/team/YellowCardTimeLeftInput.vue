@@ -30,5 +30,5 @@ const onUpdate = (value: number) => {
 </script>
 
 <template>
-  <NumberInput :model="model" @onUpdate="onUpdate"/>
+  <NumberInput :value="model" @onUpdate="onUpdate"/>
 </template>

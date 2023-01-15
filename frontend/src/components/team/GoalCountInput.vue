@@ -27,7 +27,7 @@ const onUpdate = (value: number) => {
 
 <template>
   <NumberInput
-    :model="model"
+    :value="model"
     label="Goals"
     @onUpdate="onUpdate"
   />

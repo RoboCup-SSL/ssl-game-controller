@@ -27,7 +27,7 @@ const onUpdate = (value: number) => {
 
 <template>
   <NumberInput
-    :model="model"
+    :value="model"
     label="Challenge flags available"
     @onUpdate="onUpdate"
   />
