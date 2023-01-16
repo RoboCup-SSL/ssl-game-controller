@@ -240,6 +240,11 @@ func (a *Server) handleNewEventMessage(b []byte) {
 		if in.Change.Origin == nil || len(*in.Change.Origin) == 0 {
 			in.Change.Origin = proto.String("UI")
 		}
+		if in.Change.GetAddGameEventChange() != nil &&
+			(in.Change.GetAddGameEventChange().GameEvent.Origin == nil ||
+				len(in.Change.GetAddGameEventChange().GameEvent.Origin) == 0) {
+			in.Change.GetAddGameEventChange().GameEvent.Origin = []string{"UI"}
+		}
 		a.gcEngine.Enqueue(in.Change)
 	}
 	if in.ResetMatch != nil && *in.ResetMatch {

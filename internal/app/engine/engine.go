@@ -144,6 +144,7 @@ func (e *Engine) filterGameEvent(change *statemachine.Change) *statemachine.Chan
 	case Config_BEHAVIOR_ACCEPT, Config_BEHAVIOR_UNKNOWN:
 		return change
 	case Config_BEHAVIOR_ACCEPT_MAJORITY, Config_BEHAVIOR_PROPOSE_ONLY:
+		log.Println("Convert game event to proposal: ", gameEvent.String())
 		timestamp := timestamppb.New(e.timeProvider())
 		return &statemachine.Change{
 			Origin: &changeOriginEngine,
@@ -157,6 +158,7 @@ func (e *Engine) filterGameEvent(change *statemachine.Change) *statemachine.Chan
 			},
 		}
 	case Config_BEHAVIOR_LOG:
+		log.Println("Convert game event to passive game event: ", gameEvent.String())
 		return &statemachine.Change{
 			Origin: &changeOriginEngine,
 			Change: &statemachine.Change_AddPassiveGameEventChange{
