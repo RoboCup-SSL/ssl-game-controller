@@ -41,3 +41,15 @@ func (x Referee_Stage) IsPausedStage() bool {
 	}
 	return false
 }
+
+// SuggestEndMatch returns true if end match should be suggested to user
+func (x Referee_Stage) SuggestEndMatch() bool {
+	switch x {
+	case Referee_NORMAL_SECOND_HALF,
+		Referee_EXTRA_TIME_BREAK,
+		Referee_EXTRA_SECOND_HALF,
+		Referee_PENALTY_SHOOTOUT_BREAK:
+		return true
+	}
+	return false
+}

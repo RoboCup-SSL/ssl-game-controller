@@ -124,6 +124,7 @@ message ContinueAction {
         TIMEOUT_STOP = 6;
         BOT_SUBSTITUTION = 7;
         NEXT_STAGE = 8;
+        END_GAME = 16;
         ACCEPT_GOAL = 12;
         NORMAL_START = 13;
     }

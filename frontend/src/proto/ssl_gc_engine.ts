@@ -148,6 +148,7 @@ export enum ContinueAction_Type {
   TIMEOUT_STOP = "TIMEOUT_STOP",
   BOT_SUBSTITUTION = "BOT_SUBSTITUTION",
   NEXT_STAGE = "NEXT_STAGE",
+  END_GAME = "END_GAME",
   ACCEPT_GOAL = "ACCEPT_GOAL",
   NORMAL_START = "NORMAL_START",
   UNRECOGNIZED = "UNRECOGNIZED",
@@ -197,6 +198,9 @@ export function continueAction_TypeFromJSON(object: any): ContinueAction_Type {
     case 8:
     case "NEXT_STAGE":
       return ContinueAction_Type.NEXT_STAGE;
+    case 16:
+    case "END_GAME":
+      return ContinueAction_Type.END_GAME;
     case 12:
     case "ACCEPT_GOAL":
       return ContinueAction_Type.ACCEPT_GOAL;
@@ -240,6 +244,8 @@ export function continueAction_TypeToJSON(object: ContinueAction_Type): string {
       return "BOT_SUBSTITUTION";
     case ContinueAction_Type.NEXT_STAGE:
       return "NEXT_STAGE";
+    case ContinueAction_Type.END_GAME:
+      return "END_GAME";
     case ContinueAction_Type.ACCEPT_GOAL:
       return "ACCEPT_GOAL";
     case ContinueAction_Type.NORMAL_START:

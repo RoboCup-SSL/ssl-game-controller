@@ -13,6 +13,7 @@ import FieldHalfInput from "@/components/team/FieldHalfInput.vue";
 import SwitchSidesRandomButton from "@/components/SwitchSidesRandomButton.vue";
 import SwitchColorRandomButton from "@/components/SwitchColorRandomButton.vue";
 import {teams} from "@/helpers";
+import EndMatchButton from "@/components/EndMatchButton.vue";
 </script>
 
 <template>
@@ -33,6 +34,9 @@ import {teams} from "@/helpers";
     <div class="row justify-evenly">
       <div class="q-pa-md">
         <ResetMatchButton/>
+      </div>
+      <div class="q-pa-md">
+        <EndMatchButton/>
       </div>
       <div class="q-pa-md">
         <DivisionInput/>

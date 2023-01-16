@@ -45,6 +45,9 @@ func (e *Engine) performContinueAction(action *ContinueAction) {
 		e.Enqueue(createBotSubstitutionEventChange(*action.ForTeam))
 	case ContinueAction_NEXT_STAGE:
 		e.Enqueue(createStageChange(e.currentState.Stage.Next()))
+	case ContinueAction_END_GAME:
+		postGameStage := state.Referee_POST_GAME
+		e.Enqueue(createStageChange(&postGameStage))
 	case ContinueAction_ACCEPT_GOAL:
 		possibleGoals := e.currentState.FindGameEventsByTeam(state.GameEvent_POSSIBLE_GOAL, *action.ForTeam)
 		if len(possibleGoals) == 1 {

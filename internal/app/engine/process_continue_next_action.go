@@ -4,6 +4,7 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/geom"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"log"
+	"math"
 )
 
 func (e *Engine) nextActions() (actions []*ContinueAction) {
@@ -82,6 +83,13 @@ func (e *Engine) nextActions() (actions []*ContinueAction) {
 		if e.currentState.StageTimeLeft.AsDuration() < 0 {
 			actions = append(actions, createContinueAction(
 				ContinueAction_NEXT_STAGE,
+				state.Team_UNKNOWN,
+				ContinueAction_READY_MANUAL,
+			))
+		}
+		if suggestEndOfMatch(e.currentState) {
+			actions = append(actions, createContinueAction(
+				ContinueAction_END_GAME,
 				state.Team_UNKNOWN,
 				ContinueAction_READY_MANUAL,
 			))
@@ -262,4 +270,18 @@ func (e *Engine) randomTeam() state.Team {
 		return state.Team_YELLOW
 	}
 	return state.Team_BLUE
+}
+
+func suggestEndOfMatch(currentState *state.State) bool {
+	if *currentState.Stage == state.Referee_NORMAL_SECOND_HALF ||
+		*currentState.Stage == state.Referee_EXTRA_SECOND_HALF {
+		return currentState.StageTimeLeft.AsDuration() < 0
+	} else if *currentState.Stage == state.Referee_EXTRA_TIME_BREAK ||
+		*currentState.Stage == state.Referee_PENALTY_SHOOTOUT_BREAK ||
+		*currentState.Stage == state.Referee_PENALTY_SHOOTOUT {
+		return true
+	}
+	goalsY := int(*currentState.TeamInfo(state.Team_YELLOW).Goals)
+	goalsB := int(*currentState.TeamInfo(state.Team_BLUE).Goals)
+	return (goalsY >= 10 || goalsB >= 10) && math.Abs(float64(goalsY-goalsB)) > 1
 }

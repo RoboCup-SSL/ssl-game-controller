@@ -61,6 +61,8 @@ const label = computed(() => {
       return 'Start Bot Substitution'
     case ContinueAction_Type.NEXT_STAGE:
       return 'Next Stage'
+    case ContinueAction_Type.END_GAME:
+      return 'End match'
     case ContinueAction_Type.ACCEPT_GOAL:
       return 'Accept Goal'
     case ContinueAction_Type.NORMAL_START:

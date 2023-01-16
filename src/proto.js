@@ -27680,17 +27680,18 @@ export const ContinueAction = $root.ContinueAction = (() => {
             case 6:
             case 7:
             case 8:
+            case 16:
             case 12:
             case 13:
                 break;
         }
         switch (message.forTeam) {
             default:
-            return "forTeam: enum value expected";
-        case 0:
-        case 1:
-        case 2:
-            break;
+                return "forTeam: enum value expected";
+            case 0:
+            case 1:
+            case 2:
+                break;
         }
         if (message.continuationIssues != null && message.hasOwnProperty("continuationIssues")) {
             if (!Array.isArray(message.continuationIssues))
@@ -27747,14 +27748,14 @@ export const ContinueAction = $root.ContinueAction = (() => {
         case 2:
             message.type = 2;
             break;
-        case "RESUME_FROM_STOP":
-        case 11:
-            message.type = 11;
-            break;
-        case "NEXT_COMMAND":
-        case 3:
-            message.type = 3;
-            break;
+            case "RESUME_FROM_STOP":
+            case 11:
+                message.type = 11;
+                break;
+            case "NEXT_COMMAND":
+            case 3:
+                message.type = 3;
+                break;
             case "BALL_PLACEMENT_START":
             case 4:
                 message.type = 4;
@@ -27781,20 +27782,24 @@ export const ContinueAction = $root.ContinueAction = (() => {
                 break;
             case "BOT_SUBSTITUTION":
             case 7:
-            message.type = 7;
-            break;
-        case "NEXT_STAGE":
-        case 8:
-            message.type = 8;
-            break;
-        case "ACCEPT_GOAL":
-        case 12:
-            message.type = 12;
-            break;
-        case "NORMAL_START":
-        case 13:
-            message.type = 13;
-            break;
+                message.type = 7;
+                break;
+            case "NEXT_STAGE":
+            case 8:
+                message.type = 8;
+                break;
+            case "END_GAME":
+            case 16:
+                message.type = 16;
+                break;
+            case "ACCEPT_GOAL":
+            case 12:
+                message.type = 12;
+                break;
+            case "NORMAL_START":
+            case 13:
+                message.type = 13;
+                break;
         }
         switch (object.forTeam) {
         case "UNKNOWN":
@@ -27928,6 +27933,7 @@ export const ContinueAction = $root.ContinueAction = (() => {
      * @property {number} TIMEOUT_STOP=6 TIMEOUT_STOP value
      * @property {number} BOT_SUBSTITUTION=7 BOT_SUBSTITUTION value
      * @property {number} NEXT_STAGE=8 NEXT_STAGE value
+     * @property {number} END_GAME=16 END_GAME value
      * @property {number} ACCEPT_GOAL=12 ACCEPT_GOAL value
      * @property {number} NORMAL_START=13 NORMAL_START value
      */
@@ -27947,6 +27953,7 @@ export const ContinueAction = $root.ContinueAction = (() => {
         values[valuesById[6] = "TIMEOUT_STOP"] = 6;
         values[valuesById[7] = "BOT_SUBSTITUTION"] = 7;
         values[valuesById[8] = "NEXT_STAGE"] = 8;
+        values[valuesById[16] = "END_GAME"] = 16;
         values[valuesById[12] = "ACCEPT_GOAL"] = 12;
         values[valuesById[13] = "NORMAL_START"] = 13;
         return values;
