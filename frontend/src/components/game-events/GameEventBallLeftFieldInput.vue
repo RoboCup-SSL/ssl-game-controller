@@ -72,42 +72,40 @@ defineExpose({createGameEvent})
 </script>
 
 <template>
-  <div class="row">
-    <q-list bordered>
-      <q-item-label header>
-        Ball left field
-      </q-item-label>
+  <q-list bordered>
+    <q-item-label header>
+      Ball left field
+    </q-item-label>
 
-      <q-item>
-        <q-item-section>
-          <q-btn-toggle
-            glossy spread no-caps no-wrap
-            :options="gameEventTypeOptions"
-            v-model="gameEventType"
-          />
-        </q-item-section>
-      </q-item>
+    <q-item>
+      <q-item-section>
+        <q-btn-toggle
+          glossy spread no-caps no-wrap
+          :options="gameEventTypeOptions"
+          v-model="gameEventType"
+        />
+      </q-item-section>
+    </q-item>
 
-      <q-separator/>
-      <q-item-label header>By team</q-item-label>
+    <q-separator/>
+    <q-item-label header>By team</q-item-label>
 
-      <TeamItem v-model="byTeam"/>
+    <TeamItem v-model="byTeam"/>
 
-      <q-separator/>
+    <q-separator/>
 
-      <NumberItem v-model="byBot" label="by bot"/>
-      <LocationItem v-model="location"/>
+    <NumberItem v-model="byBot" label="by bot"/>
+    <LocationItem v-model="location"/>
 
-      <q-item>
-        <q-item-section>
-          <q-btn
-            dense
-            label="Create"
-            color="primary"
-            @click="updateGameEvent"
-          />
-        </q-item-section>
-      </q-item>
-    </q-list>
-  </div>
+    <q-item>
+      <q-item-section>
+        <q-btn
+          dense
+          label="Create"
+          color="primary"
+          @click="updateGameEvent"
+        />
+      </q-item-section>
+    </q-item>
+  </q-list>
 </template>

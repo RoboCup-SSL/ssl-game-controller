@@ -1,6 +1,6 @@
 import {Input, Output} from "@/proto/ssl_gc_api";
 import type {Change, Change_UpdateConfig, Change_UpdateTeamState} from "@/proto/ssl_gc_change";
-import type {Command, Command_Type} from "@/proto/ssl_gc_state";
+import type {Command, Command_Type, Proposal} from "@/proto/ssl_gc_state";
 import type {GameEvent} from "@/proto/ssl_gc_game_event";
 import type {ContinueAction} from "@/proto/ssl_gc_engine";
 import type {Config} from "@/proto/ssl_gc_engine_config";
@@ -45,6 +45,20 @@ export class ControlApi {
         $case: 'addGameEventChange',
         addGameEventChange: {
           gameEvent
+        }
+      }
+    })
+  }
+
+  public ProposeGameEvent(proposal: Proposal) {
+    if (proposal.gameEvent?.origin?.length === 0) {
+      proposal.gameEvent.origin = ["UI"]
+    }
+    this.SubmitChange({
+      change: {
+        $case: 'addProposalChange',
+        addProposalChange: {
+          proposal
         }
       }
     })

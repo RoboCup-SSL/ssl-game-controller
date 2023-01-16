@@ -39,6 +39,7 @@ const dev = computed(() => {
         <q-route-tab to="/protocol" label="Protocol"/>
         <q-route-tab to="/manual-control" label="Manual Control"/>
         <q-route-tab to="/place-ball" label="Place Ball"/>
+        <q-route-tab to="/game-events" label="Game Events"/>
         <q-route-tab to="/team-settings" label="Team Settings"/>
         <q-route-tab to="/match-settings" label="Match Settings"/>
       </q-tabs>

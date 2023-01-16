@@ -1,5 +1,7 @@
 <script setup lang="ts">
 
+import TextInput from "@/components/common/TextInput.vue";
+
 defineProps<{
   modelValue?: string,
   label?: string,
@@ -9,16 +11,8 @@ const emit = defineEmits<{
   (event: 'update:modelValue', payload: string | undefined): void;
 }>();
 
-const updateValue = (v: string | number | null) => {
-  if (v) {
-    if (typeof v === 'number') {
-      emit('update:modelValue', v.toString())
-    } else {
-      emit('update:modelValue', v)
-    }
-  } else {
-    emit('update:modelValue', undefined)
-  }
+const updateValue = (v: string | undefined) => {
+  emit('update:modelValue', v)
 }
 
 </script>
@@ -26,15 +20,11 @@ const updateValue = (v: string | number | null) => {
 <template>
   <q-item>
     <q-item-section>
-      <q-input
+      <TextInput
         :label="label"
         :model-value="modelValue"
         @update:model-value="updateValue"
-      >
-        <template v-slot:prepend>
-          <q-icon name="close" @click="updateValue(null)"/>
-        </template>
-      </q-input>
+      />
     </q-item-section>
   </q-item>
 </template>

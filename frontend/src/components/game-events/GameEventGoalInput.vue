@@ -47,39 +47,37 @@ defineExpose({createGameEvent})
 </script>
 
 <template>
-  <div class="row">
-    <q-list bordered>
-      <q-item-label header>Goal</q-item-label>
+  <q-list bordered>
+    <q-item-label header>Goal</q-item-label>
 
-      <ToggleItem label="possible goal" v-model="possibleGoal"/>
+    <q-separator/>
+    <q-item-label header>By team</q-item-label>
+    <TeamItem v-model="goal.byTeam"/>
 
-      <q-separator/>
-      <q-item-label header>By team</q-item-label>
-      <TeamItem v-model="goal.byTeam"/>
+    <q-separator/>
+    <q-item-label header>Kicking team</q-item-label>
+    <TeamItem v-model="goal.kickingTeam"/>
+    <NumberItem v-model="goal.kickingBot" label="kicking bot"/>
 
-      <q-separator/>
-      <q-item-label header>Kicking team</q-item-label>
-      <TeamItem v-model="goal.kickingTeam"/>
-      <NumberItem v-model="goal.kickingBot" label="kicking bot"/>
+    <q-separator/>
+    <LocationItem v-model="goal.location"/>
+    <LocationItem v-model="goal.kickLocation" label="kick location"/>
+    <NumberItem v-model="goal.maxBallHeight" label="max ball height (m)"/>
+    <NumberItem v-model="goal.numRobotsByTeam" label="num robots by team"/>
+    <NumberItem v-model="goal.lastTouchByTeam" label="last touch by team (μs)"/>
+    <TextItem v-model="goal.message" label="message"/>
 
-      <q-separator/>
-      <LocationItem v-model="goal.location"/>
-      <LocationItem v-model="goal.kickLocation" label="kick location"/>
-      <NumberItem v-model="goal.maxBallHeight" label="max ball height (m)"/>
-      <NumberItem v-model="goal.numRobotsByTeam" label="num robots by team"/>
-      <NumberItem v-model="goal.lastTouchByTeam" label="last touch by team (μs)"/>
-      <TextItem v-model="goal.message" label="message"/>
+    <ToggleItem label="possible goal" v-model="possibleGoal"/>
 
-      <q-item>
-        <q-item-section>
-          <q-btn
-            dense
-            label="Create"
-            color="primary"
-            @click="updateGameEvent"
-          />
-        </q-item-section>
-      </q-item>
-    </q-list>
-  </div>
+    <q-item>
+      <q-item-section>
+        <q-btn
+          dense
+          label="Create"
+          color="primary"
+          @click="updateGameEvent"
+        />
+      </q-item-section>
+    </q-item>
+  </q-list>
 </template>

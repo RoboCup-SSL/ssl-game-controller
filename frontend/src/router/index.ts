@@ -31,6 +31,11 @@ const router = createRouter({
       component: () => import('../views/PlaceBallView.vue')
     },
     {
+      path: '/game-events',
+      name: 'game-events',
+      component: () => import('../views/NewGameEventView.vue')
+    },
+    {
       path: '/team-settings',
       name: 'team-settings',
       component: () => import('../views/TeamSettingsView.vue')
