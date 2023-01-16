@@ -26,6 +26,7 @@ const endGame = () => {
 <template>
   <q-btn
     label="End match"
+    icon="check_circle"
     color="primary"
     :disable="disable"
     @click="endGame"
