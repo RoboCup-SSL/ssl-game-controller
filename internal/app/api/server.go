@@ -106,15 +106,17 @@ func (s *ServerConnection) publish() {
 
 func (s *ServerConnection) publishState(matchState *state.State) {
 
-	if !stateChanged(s.lastPublishedState, matchState) {
+	adaptedState := roundDurations(matchState)
+
+	if proto.Equal(s.lastPublishedState, adaptedState) {
 		return
 	}
 
-	out := Output{MatchState: matchState}
+	out := Output{MatchState: adaptedState}
 	s.publishOutput(&out)
 
 	s.lastPublishedState = &state.State{}
-	proto.Merge(s.lastPublishedState, matchState)
+	proto.Merge(s.lastPublishedState, adaptedState)
 }
 
 func (s *ServerConnection) publishGcState() {
@@ -258,71 +260,28 @@ func (a *Server) handleNewEventMessage(b []byte) {
 	}
 }
 
-func stateChanged(s1, s2 *state.State) bool {
-	if s1 == nil || s2 == nil {
-		return true
+func roundDuration(d *durationpb.Duration) {
+	if d.Nanos >= 5e8 {
+		d.Seconds++
 	}
-	if s1.StageTimeElapsed.Seconds != s2.StageTimeElapsed.Seconds {
-		return true
-	}
-	if s1.StageTimeLeft.Seconds != s2.StageTimeLeft.Seconds {
-		return true
-	}
-	if s1.CurrentActionTimeRemaining.Seconds != s2.CurrentActionTimeRemaining.Seconds {
-		return true
-	}
-	for _, team := range state.BothTeams() {
-		if teamStateChanged(s1.TeamInfo(team), s2.TeamInfo(team)) {
-			return true
-		}
-	}
-
-	s1c := new(state.State)
-	s2c := new(state.State)
-	proto.Merge(s1c, s1)
-	proto.Merge(s2c, s2)
-	s1c.StageTimeElapsed = nil
-	s2c.StageTimeElapsed = nil
-	s1c.StageTimeLeft = nil
-	s2c.StageTimeLeft = nil
-	s1c.CurrentActionTimeRemaining = nil
-	s2c.CurrentActionTimeRemaining = nil
-	s1c.TeamState = nil
-	s2c.TeamState = nil
-
-	return !proto.Equal(s1c, s2c)
+	d.Nanos = 0
 }
 
-func teamStateChanged(s1, s2 *state.TeamInfo) bool {
-	if s1 == nil || s2 == nil {
-		return true
-	}
-	if len(s1.YellowCards) != len(s2.YellowCards) {
-		return true
-	}
-	for i := range s1.YellowCards {
-		if *s1.YellowCards[i].Id != *s2.YellowCards[i].Id {
-			return true
+func roundDurations(matchState *state.State) *state.State {
+	newState := new(state.State)
+	proto.Merge(newState, matchState)
+
+	roundDuration(newState.StageTimeElapsed)
+	roundDuration(newState.StageTimeLeft)
+	roundDuration(newState.CurrentActionTimeRemaining)
+
+	for _, team := range state.BothTeams() {
+		teamInfo := newState.TeamInfo(team)
+		roundDuration(teamInfo.TimeoutTimeLeft)
+		for _, yc := range teamInfo.YellowCards {
+			roundDuration(yc.TimeRemaining)
 		}
-		if !reflect.DeepEqual(s1.YellowCards[i].CausedByGameEvent, s2.YellowCards[i].CausedByGameEvent) {
-			return true
-		}
-		if s1.YellowCards[i].TimeRemaining.Seconds != s2.YellowCards[i].TimeRemaining.Seconds {
-			return true
-		}
-	}
-	if s1.TimeoutTimeLeft.Seconds != s2.TimeoutTimeLeft.Seconds {
-		return true
 	}
 
-	s1c := new(state.TeamInfo)
-	s2c := new(state.TeamInfo)
-	proto.Merge(s1c, s1)
-	proto.Merge(s2c, s2)
-	s1c.YellowCards = []*state.YellowCard{}
-	s2c.YellowCards = []*state.YellowCard{}
-	s1c.TimeoutTimeLeft = nil
-	s2c.TimeoutTimeLeft = nil
-
-	return !proto.Equal(s1c, s2c)
+	return newState
 }
