@@ -4,6 +4,7 @@ import type {Output} from "@/proto/ssl_gc_api";
 import {useGcStateStore} from "@/store/gcState";
 import type {App} from "vue";
 import {Command_Type, GameState_Type} from "@/proto/ssl_gc_state";
+import {useProtocolStore} from "@/store/protocolState";
 
 export const control = {
   install(app: App) {
@@ -27,7 +28,14 @@ export const control = {
       }
     })
 
-    const keyListenerHalt = function(e: KeyboardEvent) {
+    const protocolStore = useProtocolStore()
+    controlApi.RegisterConsumer((output: Output) => {
+      if (output.protocol) {
+        protocolStore.updateProtocol(output.protocol)
+      }
+    })
+
+    const keyListenerHalt = function (e: KeyboardEvent) {
       if (e.key === "Escape") {
         if (matchStateStore.matchState.gameState?.type !== GameState_Type.HALT) {
           controlApi.NewCommandNeutral(Command_Type.HALT)

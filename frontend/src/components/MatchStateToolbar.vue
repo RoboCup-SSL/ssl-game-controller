@@ -3,7 +3,7 @@ import {computed, ref} from "vue";
 import TeamBadge from "@/components/common/TeamBadge.vue";
 import {useMatchStateStore} from "@/store/matchState";
 import formatDuration from "format-duration";
-import {stageNames} from "@/helpers/texts";
+import {stageName} from "@/helpers/texts";
 import {Team} from "@/proto/ssl_gc_common";
 
 const store = useMatchStateStore()
@@ -24,11 +24,8 @@ const stageTimeLeft = computed(() => {
   }
   return "-"
 })
-const stageName = computed(() => {
-  if (store.matchState.stage) {
-    return stageNames.get(store.matchState.stage)
-  }
-  return "unknown"
+const stage = computed(() => {
+  return stageName(store.matchState.stage!)
 })
 const gameState = computed(() => {
   return store.matchState.gameState
@@ -57,10 +54,13 @@ const goals = (team: Team) => {
       </div>
 
       <div class="col-grow">
-        Stage: <strong>{{ stageName }}</strong> ({{ stageTimeLeft }} left)
+        Stage: <strong>{{ stage }}</strong> ({{ stageTimeLeft }} left)
       </div>
       <div class="col-grow">
-        Score: <TeamBadge :team="Team.YELLOW"/> {{ goals(Team.YELLOW) }} : {{ goals(Team.BLUE) }} <TeamBadge :team="Team.BLUE"/>
+        Score:
+        <TeamBadge :team="Team.YELLOW"/>
+        {{ goals(Team.YELLOW) }} : {{ goals(Team.BLUE) }}
+        <TeamBadge :team="Team.BLUE"/>
       </div>
       <div class="col-grow">
         Matching duration: <strong>{{ matchDuration }}</strong>

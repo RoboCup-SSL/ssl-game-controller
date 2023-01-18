@@ -4,7 +4,7 @@ import TeamBadge from "@/components/common/TeamBadge.vue";
 import type {ContinueAction} from "@/proto/ssl_gc_engine";
 import {ContinueAction_State, ContinueAction_Type} from "@/proto/ssl_gc_engine";
 import {useMatchStateStore} from "@/store/matchState";
-import {commandNames} from "@/helpers/texts";
+import {commandName} from "@/helpers/texts";
 import type {ControlApi} from "@/providers/controlApi/ControlApi";
 
 const props = defineProps<{
@@ -44,7 +44,7 @@ const label = computed(() => {
     case ContinueAction_Type.RESUME_FROM_STOP:
       return 'Force Start (no next command)'
     case ContinueAction_Type.NEXT_COMMAND:
-      return commandNames.get(store.matchState.nextCommand?.type!)
+      return commandName(store.matchState.nextCommand?.type!)
     case ContinueAction_Type.BALL_PLACEMENT_START:
       return 'Start Ball Placement'
     case ContinueAction_Type.BALL_PLACEMENT_CANCEL:

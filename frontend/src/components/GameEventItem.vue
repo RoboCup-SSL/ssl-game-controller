@@ -4,6 +4,7 @@ import TeamBadge from "@/components/common/TeamBadge.vue";
 import {gameEventNames} from "@/helpers/texts";
 import {Team} from "@/proto/ssl_gc_common";
 import type {GameEvent} from "@/proto/ssl_gc_game_event";
+import {originIcon} from "@/helpers";
 
 const props = defineProps<{
   gameEvent: GameEvent,
@@ -25,21 +26,6 @@ const team = computed(() => {
   }
   return Team.UNKNOWN
 })
-
-const originIcon = (origin: string) => {
-  switch (origin) {
-    case "TIGERs AutoRef":
-      return "img:/icons/tigers-autoref.png"
-    case "ER-Force":
-      return "img:/icons/erforce-autoref.svg"
-    case "GC":
-      return "developer_board"
-    case "UI":
-      return "person_outline"
-    default:
-      return "help_outline"
-  }
-}
 
 const origins = computed(() => {
   return props.gameEvent?.origin
