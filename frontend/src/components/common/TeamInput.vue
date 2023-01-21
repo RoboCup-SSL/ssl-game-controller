@@ -18,7 +18,7 @@ const updateValue = (v: Team) => {
 
 <template>
   <q-btn-toggle
-    glossy spread no-caps no-wrap
+    spread no-wrap
     :options="teamOptions"
     :model-value="modelValue"
     @update:model-value="updateValue"

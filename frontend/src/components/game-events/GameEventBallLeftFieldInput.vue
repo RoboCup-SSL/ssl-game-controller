@@ -80,7 +80,7 @@ defineExpose({createGameEvent})
     <q-item>
       <q-item-section>
         <q-btn-toggle
-          glossy spread no-caps no-wrap
+          spread no-wrap
           :options="gameEventTypeOptions"
           v-model="gameEventType"
         />
