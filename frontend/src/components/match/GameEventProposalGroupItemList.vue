@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed} from "vue";
-import GameEventProposalGroupItem from "@/components/GameEventProposalGroupItem.vue";
+import GameEventProposalGroupItem from "@/components/match/GameEventProposalGroupItem.vue";
 import {useMatchStateStore} from "@/store/matchState";
 
 const store = useMatchStateStore()

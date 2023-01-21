@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed} from "vue";
-import ContinueActionButton from "@/components/ContinueActionButton.vue";
+import ContinueActionButton from "@/components/match/ContinueActionButton.vue";
 import {useGcStateStore} from "@/store/gcState";
 
 const store = useGcStateStore()

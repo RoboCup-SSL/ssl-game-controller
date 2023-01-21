@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed, inject} from "vue";
-import GameEventProposalItem from "@/components/GameEventProposalItem.vue";
+import GameEventProposalItem from "@/components/match/GameEventProposalItem.vue";
 import {gameEventNames} from "@/helpers/texts";
 import type {ControlApi} from "@/providers/controlApi/ControlApi";
 import type {ProposalGroup} from "@/proto/ssl_gc_state";

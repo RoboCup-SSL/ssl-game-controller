@@ -1,18 +1,19 @@
 <script setup lang="ts">
 import TeamBadge from "@/components/common/TeamBadge.vue";
+import DivisionInput from "@/components/start/DivisionInput.vue";
+import MatchTypeInput from "@/components/start/MatchTypeInput.vue";
+import ResetMatchButton from "@/components/start/ResetMatchButton.vue";
+import SwitchColorButton from "@/components/start/SwitchColorButton.vue";
+import SwitchSidesRandomButton from "@/components/start/SwitchSidesRandomButton.vue";
+import SwitchColorRandomButton from "@/components/start/SwitchColorRandomButton.vue";
+import EndMatchButton from "@/components/start/EndMatchButton.vue";
 import TeamNameInput from "@/components/team/TeamNameInput.vue";
 import GoalKeeperIdInput from "@/components/team/GoalKeeperIdInput.vue";
 import BallPlacementEnabledInput from "@/components/team/BallPlacementEnabledInput.vue";
-import DivisionInput from "@/components/DivisionInput.vue";
-import MatchTypeInput from "@/components/MatchTypeInput.vue";
-import ResetMatchButton from "@/components/ResetMatchButton.vue";
 import FirstKickOffInput from "@/components/team/FirstKickOffInput.vue";
-import SwitchColorButton from "@/components/SwitchColorButton.vue";
 import FieldHalfInput from "@/components/team/FieldHalfInput.vue";
-import SwitchSidesRandomButton from "@/components/SwitchSidesRandomButton.vue";
-import SwitchColorRandomButton from "@/components/SwitchColorRandomButton.vue";
 import {teams} from "@/helpers";
-import EndMatchButton from "@/components/EndMatchButton.vue";</script>
+</script>
 
 <template>
   <div class="q-ma-md">

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed} from "vue";
-import GameEventItem from "@/components/GameEventItem.vue";
+import GameEventItem from "@/components/match/GameEventItem.vue";
 import dayjs from 'dayjs'
 import type {Proposal} from "@/proto/ssl_gc_state";
 

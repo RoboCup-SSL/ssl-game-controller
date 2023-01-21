@@ -29,8 +29,8 @@ const dev = computed(() => {
           SSL-Game-Controller
         </q-toolbar-title>
 
-        <ExternalConnectionStatus/>
         <StoreUpdateCountStatus class="q-ml-md" v-if="dev"/>
+        <ExternalConnectionStatus/>
       </q-toolbar>
 
       <q-tabs align="left">
