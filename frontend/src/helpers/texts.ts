@@ -107,7 +107,7 @@ export const gameEventNames = new Map<GameEvent_Type, string>([
   [GameEvent_Type.BOT_TOO_FAST_IN_STOP, "Bot too fast in stop"],
   [GameEvent_Type.BOT_INTERFERED_PLACEMENT, "Bot interfered ball placement"],
   [GameEvent_Type.POSSIBLE_GOAL, "Goal might been scored"],
-  [GameEvent_Type.GOAL, "gOal scored"],
+  [GameEvent_Type.GOAL, "Goal scored"],
   [GameEvent_Type.INVALID_GOAL, "Goal invalid"],
   [GameEvent_Type.ATTACKER_DOUBLE_TOUCHED_BALL, "Ball touched twice by attacker"],
   [GameEvent_Type.PLACEMENT_SUCCEEDED, "Ball placement succeeded"],

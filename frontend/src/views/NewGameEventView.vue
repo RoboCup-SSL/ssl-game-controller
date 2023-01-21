@@ -32,25 +32,22 @@ const updateGameEvent = (gameEvent: GameEvent) => {
 
 
 <template>
-  <div class="row q-gutter-md">
-    <ToggleInput v-model="propose" label="Propose only"/>
-    <TextInput v-model="origin" label="Origin"/>
-  </div>
   <q-tabs
     v-model="tab"
-    dense
-    class="text-grey"
     active-color="primary"
     indicator-color="primary"
     align="justify"
-    narrow-indicator
   >
     <q-tab name="ballLeftField" label="Ball left field"/>
     <q-tab name="goal" label="Goal"/>
     <q-tab name="fouls" label="Fouls"/>
   </q-tabs>
-
   <q-separator/>
+
+  <div class="row q-gutter-md justify-evenly">
+    <ToggleInput v-model="propose" label="Propose only"/>
+    <TextInput v-model="origin" label="Origin"/>
+  </div>
 
   <q-tab-panels v-model="tab" animated swipeable>
     <q-tab-panel name="ballLeftField">
