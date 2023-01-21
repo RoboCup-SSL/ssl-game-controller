@@ -11,7 +11,7 @@ import type {ControlApi} from "@/providers/controlApi/ControlApi";
 const props = defineProps<{
   protocolEntry: ProtocolEntry,
 }>()
-const item = ref<QExpansionItem>()
+const showDetails = ref(false)
 
 const control = inject<ControlApi>('control-api')
 
@@ -52,7 +52,7 @@ const hasGameEventOrigins = computed(() => {
 })
 
 function toggleExpandItem() {
-  item.value?.toggle()
+  showDetails.value = !showDetails.value
 }
 
 function revert() {
@@ -64,7 +64,6 @@ function revert() {
   <q-expansion-item
     hide-expand-icon
     expand-icon-toggle
-    ref="item"
   >
     <template v-slot:header>
       <q-item-section avatar top>
@@ -95,6 +94,11 @@ function revert() {
         <q-item-label caption lines="1">
           <span>{{ matchTime }}</span>
         </q-item-label>
+        <template v-if="showDetails">
+          <q-item-label v-for="key in detailsKeys" :key="key">
+            {{ key }}: {{ details[key] }}
+          </q-item-label>
+        </template>
       </q-item-section>
 
       <q-item-section side>
@@ -111,17 +115,6 @@ function revert() {
         <q-badge color="orange" text-color="black" :label="props.protocolEntry.id" floating/>
       </q-item-section>
     </template>
-    <q-list v-if="details">
-      <q-item
-        dense
-        v-for="key in detailsKeys"
-        :key="key"
-      >
-        <q-item-section>
-          {{ key }}: {{ details[key] }}
-        </q-item-section>
-      </q-item>
-    </q-list>
   </q-expansion-item>
 </template>
 
