@@ -2,6 +2,10 @@
 import ProtocolItem from "@/components/protocol/ProtocolItem.vue";
 import {useProtocolStore} from "@/store/protocolState";
 
+defineProps<{
+  dense?: boolean,
+}>()
+
 const store = useProtocolStore()
 
 </script>
@@ -19,6 +23,7 @@ const store = useProtocolStore()
     >
       <ProtocolItem
         class="q-pr-xs q-pt-xs"
+        :dense="dense"
         :key="index"
         :protocol-entry="item"
       />

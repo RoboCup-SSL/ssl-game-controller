@@ -129,7 +129,7 @@ export function changeDetails(change: Change): ChangeDetails {
     const details = changeDetails.acceptProposalGroupChange;
     return {
       typeName: "Proposals accepted",
-      title: details.groupId! + " by " + details.acceptedBy,
+      title: `Proposal ${details.groupId!} accepted by ${details.acceptedBy}`,
       icon: "check_circle_outline",
     }
   }

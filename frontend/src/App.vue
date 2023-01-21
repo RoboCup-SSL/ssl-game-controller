@@ -4,10 +4,15 @@ import MatchStateToolbar from "@/components/MatchStateToolbar.vue";
 import ExternalConnectionStatus from "@/components/ExternalConnectionStatus.vue";
 import StoreUpdateCountStatus from "@/components/StoreUpdateCountStatus.vue";
 import ManualControlView from "@/views/ManualControlView.vue";
+import ProtocolList from "@/components/protocol/ProtocolList.vue";
 
 const leftDrawerOpen = ref(false)
 const toggleLeftDrawer = () => {
   leftDrawerOpen.value = !leftDrawerOpen.value
+}
+const rightDrawerOpen = ref(false)
+const toggleRightDrawer = () => {
+  rightDrawerOpen.value = !rightDrawerOpen.value
 }
 
 const dev = computed(() => {
@@ -31,6 +36,7 @@ const dev = computed(() => {
 
         <StoreUpdateCountStatus class="q-ml-md" v-if="dev"/>
         <ExternalConnectionStatus/>
+        <q-btn dense flat round icon="menu" @click="toggleRightDrawer"/>
       </q-toolbar>
 
       <q-tabs align="left">
@@ -47,6 +53,10 @@ const dev = computed(() => {
 
     <q-drawer v-model="leftDrawerOpen" side="left" bordered>
       <ManualControlView/>
+    </q-drawer>
+
+    <q-drawer v-model="rightDrawerOpen" side="right" bordered :width="400">
+      <ProtocolList dense/>
     </q-drawer>
 
     <q-page-container>

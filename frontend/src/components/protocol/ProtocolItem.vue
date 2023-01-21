@@ -5,11 +5,11 @@ import type {ProtocolEntry} from "@/proto/ssl_gc_api";
 import formatDuration from "format-duration";
 import {gameEventDetails, gameEventDetailsKeys, originIcon} from "@/helpers";
 import {changeDetails} from "@/helpers/ChangeDetails";
-import type {QExpansionItem} from "quasar";
 import type {ControlApi} from "@/providers/controlApi/ControlApi";
 
 const props = defineProps<{
   protocolEntry: ProtocolEntry,
+  dense?: boolean,
 }>()
 const showDetails = ref(false)
 
@@ -61,16 +61,14 @@ function revert() {
 </script>
 
 <template>
-  <q-expansion-item
-    hide-expand-icon
-    expand-icon-toggle
-  >
-    <template v-slot:header>
-      <q-item-section avatar top>
+  <div>
+    <q-item
+    >
+      <q-item-section avatar top v-if="!dense">
         <q-icon :name="change.icon" color="black" size="34px"/>
       </q-item-section>
 
-      <q-item-section top class="col-2 gt-sm">
+      <q-item-section top class="col-2" v-if="!dense">
         <q-item-label class="q-mt-sm">{{ change.typeName }}</q-item-label>
       </q-item-section>
 
@@ -93,6 +91,18 @@ function revert() {
         </q-item-label>
         <q-item-label caption lines="1">
           <span>{{ matchTime }}</span>
+          <q-btn flat round icon="loupe" dense
+                 v-if="dense"
+                 :size="dense ? '8px' : '12px'"
+                 :class="{ invisible: details === undefined, 'revert': true }"
+                 @click="toggleExpandItem"
+          />
+          <q-btn flat round icon="history" dense
+                 v-if="dense"
+                 :size="dense ? '8px' : '12px'"
+                 :class="{ invisible: !revertible, 'revert': true }"
+                 @click="revert"
+          />
         </q-item-label>
         <template v-if="showDetails">
           <q-item-label v-for="key in detailsKeys" :key="key">
@@ -100,26 +110,30 @@ function revert() {
           </q-item-label>
         </template>
       </q-item-section>
-
-      <q-item-section side>
-        <div class="text-grey-8">
-          <q-btn size="12px" flat round icon="loupe"
-                 :class="{ invisible: details === undefined }"
-                 @click="toggleExpandItem"
-          />
-          <q-btn size="12px" flat round icon="history"
-                 :class="{ invisible: !revertible }"
-                 @click="revert"
-          />
-        </div>
-        <q-badge color="orange" text-color="black" :label="props.protocolEntry.id" floating/>
-      </q-item-section>
-    </template>
-  </q-expansion-item>
+      <q-btn flat round icon="loupe"
+             v-if="!dense"
+             :size="dense ? '8px' : '12px'"
+             :class="{ invisible: details === undefined, 'revert': true }"
+             @click="toggleExpandItem"
+      />
+      <q-btn flat round icon="history"
+             v-if="!dense"
+             :size="dense ? '8px' : '12px'"
+             :class="{ invisible: !revertible, 'revert': true }"
+             @click="revert"
+      />
+      <q-badge color="orange" text-color="black" :label="props.protocolEntry.id" floating/>
+    </q-item>
+  </div>
 </template>
 
 <style>
 .invisible {
   visibility: hidden;
+}
+
+.revert {
+  bottom: 0;
+  right: 0;
 }
 </style>
