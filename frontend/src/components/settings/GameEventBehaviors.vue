@@ -76,7 +76,7 @@ function changeAll(behavior: Config_Behavior) {
 
     <q-item
       bordered dense
-      v-for="behaviorKey in gameEventTypes"
+      v-for="behaviorKey of gameEventTypes"
       :key="behaviorKey"
     >
       <q-item-section>

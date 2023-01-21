@@ -2,6 +2,7 @@
 import {ref} from "vue";
 import GameEventBehaviors from "@/components/settings/GameEventBehaviors.vue";
 import AutoRefereeConfigs from "@/components/settings/AutoRefereeConfigs.vue";
+import TrackerSources from "@/components/settings/TrackerSources.vue";
 
 const tab = ref("gameEventBehavior")
 
@@ -30,6 +31,7 @@ const tab = ref("gameEventBehavior")
       <AutoRefereeConfigs/>
     </q-tab-panel>
     <q-tab-panel name="trackerSources">
+      <TrackerSources/>
     </q-tab-panel>
   </q-tab-panels>
 </template>
