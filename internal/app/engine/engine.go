@@ -428,7 +428,11 @@ func (e *Engine) UpdateConfig(delta *Config) {
 	defer e.mutex.Unlock()
 	log.Printf("Process config delta change %v", delta.StringJson())
 	for k, v := range delta.GameEventBehavior {
-		e.config.GameEventBehavior[k] = v
+		if _, ok := state.GameEvent_Type_value[k]; ok {
+			e.config.GameEventBehavior[k] = v
+		} else {
+			log.Println("Ignoring unknown game event type: ", k)
+		}
 	}
 	for autoRef, cfg := range delta.AutoRefConfigs {
 		if _, ok := e.config.AutoRefConfigs[autoRef]; !ok {
