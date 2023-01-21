@@ -17,6 +17,6 @@ const warn = computed(() => {
 
 <template>
   <span :class="{'text-warning': warn}">
-  {{ numAutoRefs }} auto-referees and {{ numTrackerSource }} tracker sources connected
+  Auto-Referees: {{ numAutoRefs }} | Tracker Sources: {{ numTrackerSource }}
   </span>
 </template>
