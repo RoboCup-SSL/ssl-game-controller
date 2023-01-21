@@ -33,6 +33,12 @@ export function gameEventDetails(gameEvent: GameEvent) {
   return (event as { [key: string]: any })[event.$case]
 }
 
+export function gameEventDetailsKeys(details: any) {
+  return Object.keys(details)
+    .filter(k => details[k] !== undefined)
+    .filter(k => k !== "byTeam")
+}
+
 export const originIcon = (origin: string) => {
   switch (origin) {
     case "TIGERs AutoRef":
@@ -47,6 +53,8 @@ export const originIcon = (origin: string) => {
       return "two_wheeler"
     case "StateMachine":
       return "fork_right"
+    case "Majority":
+      return "group_add"
     default:
       return "help_outline"
   }

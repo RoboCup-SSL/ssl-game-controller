@@ -11,18 +11,12 @@ export const useProtocolStore = defineStore('protocol', {
     updateProtocol(protocol: Protocol) {
       const entries = protocol.entry!
       if (protocol.delta) {
-        this.replace(entries)
-      } else {
         for (const entry of entries) {
-          this.protocolEntries.push(entry)
+          this.protocolEntries.unshift(entry)
         }
+      } else {
+        this.protocolEntries = Array.from<ProtocolEntry>(entries)
       }
     },
-    add(entry: ProtocolEntry) {
-      this.protocolEntries.push(entry)
-    },
-    replace(entries: ProtocolEntry[]) {
-      this.protocolEntries = Array.from<ProtocolEntry>(entries).reverse()
-    }
   },
 })

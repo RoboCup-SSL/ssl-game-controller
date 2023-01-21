@@ -106,6 +106,17 @@ export class ControlApi {
     })
   }
 
+  public Revert(id: number) {
+    this.SubmitChange({
+      change: {
+        $case: "revertChange",
+        revertChange: {
+          changeId: id,
+        }
+      }
+    })
+  }
+
   public Continue(continueAction: ContinueAction) {
     this.Send({
       continueAction

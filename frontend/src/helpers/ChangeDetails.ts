@@ -39,7 +39,7 @@ export function changeDetails(change: Change): ChangeDetails {
     const cause = details.causedByGameEvent
     return {
       typeName: "Yellow Card",
-      title: cause ? "Cause: " + gameEventNames.get(cause.type!)! : "Without cause",
+      title: cause ? "Yellow card for " + gameEventNames.get(cause.type!)! : "Yellow card",
       forTeam: details.forTeam,
       icon: "sim_card",
     }
@@ -48,7 +48,7 @@ export function changeDetails(change: Change): ChangeDetails {
     const gameEvent = details.causedByGameEvent
     return {
       typeName: "Red Card",
-      title: gameEvent ? "Yellow card for " + gameEventNames.get(gameEvent.type!)! : "Yellow card",
+      title: gameEvent ? "Red card for " + gameEventNames.get(gameEvent.type!)! : "Red card",
       forTeam: details.forTeam,
       gameEvent,
       icon: "sim_card",

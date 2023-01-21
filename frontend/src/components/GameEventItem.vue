@@ -2,9 +2,8 @@
 import {computed} from "vue";
 import TeamBadge from "@/components/common/TeamBadge.vue";
 import {gameEventNames} from "@/helpers/texts";
-import {Team} from "@/proto/ssl_gc_common";
 import type {GameEvent} from "@/proto/ssl_gc_game_event";
-import {originIcon} from "@/helpers";
+import {gameEventDetails, gameEventForTeam, originIcon} from "@/helpers";
 
 const props = defineProps<{
   gameEvent: GameEvent,
@@ -12,23 +11,19 @@ const props = defineProps<{
 }>()
 
 const label = computed(() => {
-  return gameEventNames.get(props.gameEvent?.type!)
+  return gameEventNames.get(props.gameEvent.type!)
 })
 
 const details = computed(() => {
-  const event = props.gameEvent?.event!
-  return (event as { [key: string]: any })[event.$case]
+  return gameEventDetails(props.gameEvent)
 })
 
 const team = computed(() => {
-  if (Object.prototype.hasOwnProperty.call(details.value, "byTeam")) {
-    return details.value["byTeam"] as Team
-  }
-  return Team.UNKNOWN
+  return gameEventForTeam(props.gameEvent)
 })
 
 const origins = computed(() => {
-  return props.gameEvent?.origin
+  return props.gameEvent.origin
 })
 </script>
 
