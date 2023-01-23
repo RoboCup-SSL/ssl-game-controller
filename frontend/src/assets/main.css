@@ -33,3 +33,7 @@ h4 {
 h5 {
     margin: 0.3em;
 }
+
+.max-content-width {
+    max-width: 900px;
+}

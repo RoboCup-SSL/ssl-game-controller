@@ -5,6 +5,7 @@ import ExternalConnectionStatus from "@/components/ExternalConnectionStatus.vue"
 import StoreUpdateCountStatus from "@/components/StoreUpdateCountStatus.vue";
 import ManualControlView from "@/views/ManualControlView.vue";
 import ProtocolList from "@/components/protocol/ProtocolList.vue";
+import {useQuasar} from "quasar";
 
 const leftDrawerOpen = ref(false)
 const toggleLeftDrawer = () => {
@@ -13,6 +14,11 @@ const toggleLeftDrawer = () => {
 const rightDrawerOpen = ref(false)
 const toggleRightDrawer = () => {
   rightDrawerOpen.value = !rightDrawerOpen.value
+}
+const $q = useQuasar()
+const darkMode = computed(() => $q.dark.isActive)
+const toggleDarkMode = () => {
+  $q.dark.toggle()
 }
 
 const dev = computed(() => {
@@ -34,8 +40,11 @@ const dev = computed(() => {
           SSL-Game-Controller
         </q-toolbar-title>
 
-        <StoreUpdateCountStatus class="q-ml-md" v-if="dev"/>
-        <ExternalConnectionStatus/>
+        <StoreUpdateCountStatus class="q-mx-auto" v-if="dev"/>
+        <div class="q-mx-md">
+          <ExternalConnectionStatus/>
+        </div>
+        <q-toggle dense flat round @click="toggleDarkMode" :model-value="darkMode" color="black">Dark</q-toggle>
         <q-btn dense flat round icon="menu" @click="toggleRightDrawer"/>
       </q-toolbar>
 
@@ -60,7 +69,7 @@ const dev = computed(() => {
     </q-drawer>
 
     <q-page-container>
-      <div class="q-mt-sm">
+      <div class="max-content-width q-mx-auto q-mt-sm">
         <router-view/>
       </div>
     </q-page-container>

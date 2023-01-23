@@ -65,7 +65,7 @@ function revert() {
     <q-item
     >
       <q-item-section avatar top v-if="!dense">
-        <q-icon :name="change.icon" color="black" size="34px"/>
+        <q-icon :name="change.icon" color="primary" size="34px"/>
       </q-item-section>
 
       <q-item-section top class="col-2" v-if="!dense">
@@ -92,12 +92,14 @@ function revert() {
         <q-item-label caption lines="1">
           <span>{{ matchTime }}</span>
           <q-btn flat round icon="loupe" dense
+                 color="primary"
                  v-if="dense"
                  :size="dense ? '8px' : '12px'"
                  :class="{ invisible: details === undefined, 'revert': true }"
                  @click="toggleExpandItem"
           />
           <q-btn flat round icon="history" dense
+                 color="primary"
                  v-if="dense"
                  :size="dense ? '8px' : '12px'"
                  :class="{ invisible: !revertible, 'revert': true }"
@@ -111,12 +113,14 @@ function revert() {
         </template>
       </q-item-section>
       <q-btn flat round icon="loupe"
+             color="primary"
              v-if="!dense"
              :size="dense ? '8px' : '12px'"
              :class="{ invisible: details === undefined, 'revert': true }"
              @click="toggleExpandItem"
       />
       <q-btn flat round icon="history"
+             color="primary"
              v-if="!dense"
              :size="dense ? '8px' : '12px'"
              :class="{ invisible: !revertible, 'revert': true }"

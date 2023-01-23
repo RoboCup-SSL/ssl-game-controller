@@ -11,28 +11,26 @@ const store = useProtocolStore()
 </script>
 
 <template>
-  <q-list bordered class="rounded-borders" separator>
-    <q-virtual-scroll
-      class="protocol-scroll"
-      virtual-scroll-item-size="50"
-      virtual-scroll-slice-ratio-before="0.5"
-      virtual-scroll-slice-ratio-after="0.5"
-      :items="store.protocolEntries"
-      separator
-      v-slot="{ item, index }"
-    >
-      <ProtocolItem
-        class="q-pr-xs q-pt-xs"
-        :dense="dense"
-        :key="index"
-        :protocol-entry="item"
-      />
-    </q-virtual-scroll>
-  </q-list>
+  <q-virtual-scroll
+    bordered separator
+    class="rounded-borders protocol-scroll"
+    virtual-scroll-item-size="50"
+    virtual-scroll-slice-ratio-before="0.5"
+    virtual-scroll-slice-ratio-after="0.5"
+    :items="store.protocolEntries"
+    v-slot="{ item, index }"
+  >
+    <ProtocolItem
+      class="q-pr-sm q-pt-sm"
+      :dense="dense"
+      :key="index"
+      :protocol-entry="item"
+    />
+  </q-virtual-scroll>
 </template>
 
 <style>
 .protocol-scroll {
-  max-height: calc(100vh - 200px)
+  max-height: calc(100vh - 160px)
 }
 </style>
