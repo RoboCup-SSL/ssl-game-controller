@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {inject, onMounted, onUnmounted} from "vue";
+import {computed, inject, onMounted, onUnmounted} from "vue";
 import ContinueActionButtonList from "@/components/match/ContinueActionButtonList.vue";
 import AutoContinueInput from "@/components/match/AutoContinueInput.vue";
 import GameEventProposalGroupItemList from "@/components/match/GameEventProposalGroupItemList.vue";
@@ -8,20 +8,30 @@ import MatchTeamTable from "@/components/match/MatchTeamTable.vue";
 import type {ControlApi} from "@/providers/controlApi/ControlApi";
 import {useGcStateStore} from "@/store/gcState";
 import {useUiStateStore} from "@/store/uiState";
+import SwitchColorButton from "@/components/start/SwitchColorButton.vue";
+import {useMatchStateStore} from "@/store/matchState";
+import {Referee_Stage} from "@/proto/ssl_gc_referee_message";
+import SwitchSidesButton from "@/components/start/SwitchSidesButton.vue";
 
-const store = useGcStateStore()
+const store = useMatchStateStore()
+const gcStore = useGcStateStore()
 const uiStore = useUiStateStore()
 const control = inject<ControlApi>('control-api')
 
 const continueWithAction = (id: number) => {
-  if (store.gcState.continueActions!.length > id) {
-    control?.Continue(store.gcState.continueActions![id])
+  if (gcStore.gcState.continueActions!.length > id) {
+    control?.Continue(gcStore.gcState.continueActions![id])
   }
 }
 
 const toggleAutoContinue = () => {
-  control?.ChangeConfig({autoContinue: !store.config.autoContinue})
+  control?.ChangeConfig({autoContinue: !gcStore.config.autoContinue})
 }
+
+const halftime = computed(() => {
+  return store.matchState.stage === Referee_Stage.NORMAL_HALF_TIME ||
+    store.matchState.stage === Referee_Stage.EXTRA_HALF_TIME
+})
 
 const keyListenerContinue = function (e: KeyboardEvent) {
   if (!e.ctrlKey) {
@@ -65,6 +75,13 @@ onUnmounted(() => {
           </q-card>
         </q-expansion-item>
         <AutoContinueInput/>
+        <template v-if="halftime">
+          <q-separator spaced/>
+          <div v-if="!halftime" class="row justify-evenly">
+            <SwitchColorButton/>
+            <SwitchSidesButton/>
+          </div>
+        </template>
         <q-separator spaced/>
         <ContinueActionButtonList/>
         <q-separator spaced/>
