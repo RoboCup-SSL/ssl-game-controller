@@ -92,7 +92,7 @@ export interface RobotId {
 }
 
 function createBaseRobotId(): RobotId {
-  return { id: 0, team: Team.UNKNOWN };
+  return {};
 }
 
 export const RobotId = {

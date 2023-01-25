@@ -62,6 +62,7 @@ protoc -I"./proto" \
   --ts_proto_opt=exportCommonSymbols=false \
   --ts_proto_opt=emitImportedFiles=false \
   --ts_proto_opt=useOptionals=all \
+  --ts_proto_opt=initializeFieldsAsUndefined=false \
   proto/ssl_gc_api.proto \
   proto/ssl_gc_state.proto \
   proto/ssl_gc_common.proto \

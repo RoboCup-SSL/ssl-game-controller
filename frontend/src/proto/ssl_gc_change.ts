@@ -188,7 +188,7 @@ export interface Change_NewGameState {
 }
 
 function createBaseStateChange(): StateChange {
-  return { id: 0, statePre: undefined, state: undefined, change: undefined, timestamp: undefined };
+  return {};
 }
 
 export const StateChange = {
@@ -214,7 +214,7 @@ export const StateChange = {
 };
 
 function createBaseChange(): Change {
-  return { origin: "", revertible: false, change: undefined };
+  return { change: undefined };
 }
 
 export const Change = {
@@ -333,7 +333,7 @@ export const Change = {
 };
 
 function createBaseChange_NewCommand(): Change_NewCommand {
-  return { command: undefined };
+  return {};
 }
 
 export const Change_NewCommand = {
@@ -349,7 +349,7 @@ export const Change_NewCommand = {
 };
 
 function createBaseChange_ChangeStage(): Change_ChangeStage {
-  return { newStage: Referee_Stage.NORMAL_FIRST_HALF_PRE };
+  return {};
 }
 
 export const Change_ChangeStage = {
@@ -367,7 +367,7 @@ export const Change_ChangeStage = {
 };
 
 function createBaseChange_SetBallPlacementPos(): Change_SetBallPlacementPos {
-  return { pos: undefined };
+  return {};
 }
 
 export const Change_SetBallPlacementPos = {
@@ -383,7 +383,7 @@ export const Change_SetBallPlacementPos = {
 };
 
 function createBaseChange_AddYellowCard(): Change_AddYellowCard {
-  return { forTeam: Team.UNKNOWN, causedByGameEvent: undefined };
+  return {};
 }
 
 export const Change_AddYellowCard = {
@@ -404,7 +404,7 @@ export const Change_AddYellowCard = {
 };
 
 function createBaseChange_AddRedCard(): Change_AddRedCard {
-  return { forTeam: Team.UNKNOWN, causedByGameEvent: undefined };
+  return {};
 }
 
 export const Change_AddRedCard = {
@@ -425,7 +425,7 @@ export const Change_AddRedCard = {
 };
 
 function createBaseChange_YellowCardOver(): Change_YellowCardOver {
-  return { forTeam: Team.UNKNOWN };
+  return {};
 }
 
 export const Change_YellowCardOver = {
@@ -441,7 +441,7 @@ export const Change_YellowCardOver = {
 };
 
 function createBaseChange_AddGameEvent(): Change_AddGameEvent {
-  return { gameEvent: undefined };
+  return {};
 }
 
 export const Change_AddGameEvent = {
@@ -458,7 +458,7 @@ export const Change_AddGameEvent = {
 };
 
 function createBaseChange_AddPassiveGameEvent(): Change_AddPassiveGameEvent {
-  return { gameEvent: undefined };
+  return {};
 }
 
 export const Change_AddPassiveGameEvent = {
@@ -475,7 +475,7 @@ export const Change_AddPassiveGameEvent = {
 };
 
 function createBaseChange_AddProposal(): Change_AddProposal {
-  return { proposal: undefined };
+  return {};
 }
 
 export const Change_AddProposal = {
@@ -491,7 +491,7 @@ export const Change_AddProposal = {
 };
 
 function createBaseChange_AcceptProposalGroup(): Change_AcceptProposalGroup {
-  return { groupId: 0, acceptedBy: "" };
+  return {};
 }
 
 export const Change_AcceptProposalGroup = {
@@ -511,7 +511,7 @@ export const Change_AcceptProposalGroup = {
 };
 
 function createBaseChange_UpdateConfig(): Change_UpdateConfig {
-  return { division: Division.DIV_UNKNOWN, firstKickoffTeam: Team.UNKNOWN, matchType: MatchType.UNKNOWN_MATCH };
+  return {};
 }
 
 export const Change_UpdateConfig = {
@@ -533,53 +533,34 @@ export const Change_UpdateConfig = {
 };
 
 function createBaseChange_UpdateTeamState(): Change_UpdateTeamState {
-  return {
-    forTeam: Team.UNKNOWN,
-    teamName: "",
-    goals: 0,
-    goalkeeper: 0,
-    timeoutsLeft: 0,
-    timeoutTimeLeft: "",
-    onPositiveHalf: false,
-    ballPlacementFailures: 0,
-    canPlaceBall: false,
-    challengeFlagsLeft: 0,
-    requestsBotSubstitution: false,
-    requestsTimeout: false,
-    requestsChallenge: false,
-    requestsEmergencyStop: false,
-    yellowCard: undefined,
-    redCard: undefined,
-    foul: undefined,
-    removeYellowCard: 0,
-    removeRedCard: 0,
-    removeFoul: 0,
-  };
+  return {};
 }
 
 export const Change_UpdateTeamState = {
   fromJSON(object: any): Change_UpdateTeamState {
     return {
       forTeam: isSet(object.forTeam) ? teamFromJSON(object.forTeam) : Team.UNKNOWN,
-      teamName: isSet(object.teamName) ? String(object.teamName) : "",
-      goals: isSet(object.goals) ? Number(object.goals) : 0,
-      goalkeeper: isSet(object.goalkeeper) ? Number(object.goalkeeper) : 0,
-      timeoutsLeft: isSet(object.timeoutsLeft) ? Number(object.timeoutsLeft) : 0,
-      timeoutTimeLeft: isSet(object.timeoutTimeLeft) ? String(object.timeoutTimeLeft) : "",
-      onPositiveHalf: isSet(object.onPositiveHalf) ? Boolean(object.onPositiveHalf) : false,
-      ballPlacementFailures: isSet(object.ballPlacementFailures) ? Number(object.ballPlacementFailures) : 0,
-      canPlaceBall: isSet(object.canPlaceBall) ? Boolean(object.canPlaceBall) : false,
-      challengeFlagsLeft: isSet(object.challengeFlagsLeft) ? Number(object.challengeFlagsLeft) : 0,
-      requestsBotSubstitution: isSet(object.requestsBotSubstitution) ? Boolean(object.requestsBotSubstitution) : false,
-      requestsTimeout: isSet(object.requestsTimeout) ? Boolean(object.requestsTimeout) : false,
-      requestsChallenge: isSet(object.requestsChallenge) ? Boolean(object.requestsChallenge) : false,
-      requestsEmergencyStop: isSet(object.requestsEmergencyStop) ? Boolean(object.requestsEmergencyStop) : false,
+      teamName: isSet(object.teamName) ? String(object.teamName) : undefined,
+      goals: isSet(object.goals) ? Number(object.goals) : undefined,
+      goalkeeper: isSet(object.goalkeeper) ? Number(object.goalkeeper) : undefined,
+      timeoutsLeft: isSet(object.timeoutsLeft) ? Number(object.timeoutsLeft) : undefined,
+      timeoutTimeLeft: isSet(object.timeoutTimeLeft) ? String(object.timeoutTimeLeft) : undefined,
+      onPositiveHalf: isSet(object.onPositiveHalf) ? Boolean(object.onPositiveHalf) : undefined,
+      ballPlacementFailures: isSet(object.ballPlacementFailures) ? Number(object.ballPlacementFailures) : undefined,
+      canPlaceBall: isSet(object.canPlaceBall) ? Boolean(object.canPlaceBall) : undefined,
+      challengeFlagsLeft: isSet(object.challengeFlagsLeft) ? Number(object.challengeFlagsLeft) : undefined,
+      requestsBotSubstitution: isSet(object.requestsBotSubstitution)
+        ? Boolean(object.requestsBotSubstitution)
+        : undefined,
+      requestsTimeout: isSet(object.requestsTimeout) ? Boolean(object.requestsTimeout) : undefined,
+      requestsChallenge: isSet(object.requestsChallenge) ? Boolean(object.requestsChallenge) : undefined,
+      requestsEmergencyStop: isSet(object.requestsEmergencyStop) ? Boolean(object.requestsEmergencyStop) : undefined,
       yellowCard: isSet(object.yellowCard) ? YellowCard.fromJSON(object.yellowCard) : undefined,
       redCard: isSet(object.redCard) ? RedCard.fromJSON(object.redCard) : undefined,
       foul: isSet(object.foul) ? Foul.fromJSON(object.foul) : undefined,
-      removeYellowCard: isSet(object.removeYellowCard) ? Number(object.removeYellowCard) : 0,
-      removeRedCard: isSet(object.removeRedCard) ? Number(object.removeRedCard) : 0,
-      removeFoul: isSet(object.removeFoul) ? Number(object.removeFoul) : 0,
+      removeYellowCard: isSet(object.removeYellowCard) ? Number(object.removeYellowCard) : undefined,
+      removeRedCard: isSet(object.removeRedCard) ? Number(object.removeRedCard) : undefined,
+      removeFoul: isSet(object.removeFoul) ? Number(object.removeFoul) : undefined,
     };
   },
 
@@ -587,15 +568,14 @@ export const Change_UpdateTeamState = {
     const obj: any = {};
     message.forTeam !== undefined && (obj.forTeam = teamToJSON(message.forTeam));
     message.teamName !== undefined && (obj.teamName = message.teamName);
-    message.goals !== undefined && (obj.goals = Math.round(message.goals));
-    message.goalkeeper !== undefined && (obj.goalkeeper = Math.round(message.goalkeeper));
-    message.timeoutsLeft !== undefined && (obj.timeoutsLeft = Math.round(message.timeoutsLeft));
+    message.goals !== undefined && (obj.goals = message.goals);
+    message.goalkeeper !== undefined && (obj.goalkeeper = message.goalkeeper);
+    message.timeoutsLeft !== undefined && (obj.timeoutsLeft = message.timeoutsLeft);
     message.timeoutTimeLeft !== undefined && (obj.timeoutTimeLeft = message.timeoutTimeLeft);
     message.onPositiveHalf !== undefined && (obj.onPositiveHalf = message.onPositiveHalf);
-    message.ballPlacementFailures !== undefined &&
-      (obj.ballPlacementFailures = Math.round(message.ballPlacementFailures));
+    message.ballPlacementFailures !== undefined && (obj.ballPlacementFailures = message.ballPlacementFailures);
     message.canPlaceBall !== undefined && (obj.canPlaceBall = message.canPlaceBall);
-    message.challengeFlagsLeft !== undefined && (obj.challengeFlagsLeft = Math.round(message.challengeFlagsLeft));
+    message.challengeFlagsLeft !== undefined && (obj.challengeFlagsLeft = message.challengeFlagsLeft);
     message.requestsBotSubstitution !== undefined && (obj.requestsBotSubstitution = message.requestsBotSubstitution);
     message.requestsTimeout !== undefined && (obj.requestsTimeout = message.requestsTimeout);
     message.requestsChallenge !== undefined && (obj.requestsChallenge = message.requestsChallenge);
@@ -604,9 +584,9 @@ export const Change_UpdateTeamState = {
       (obj.yellowCard = message.yellowCard ? YellowCard.toJSON(message.yellowCard) : undefined);
     message.redCard !== undefined && (obj.redCard = message.redCard ? RedCard.toJSON(message.redCard) : undefined);
     message.foul !== undefined && (obj.foul = message.foul ? Foul.toJSON(message.foul) : undefined);
-    message.removeYellowCard !== undefined && (obj.removeYellowCard = Math.round(message.removeYellowCard));
-    message.removeRedCard !== undefined && (obj.removeRedCard = Math.round(message.removeRedCard));
-    message.removeFoul !== undefined && (obj.removeFoul = Math.round(message.removeFoul));
+    message.removeYellowCard !== undefined && (obj.removeYellowCard = message.removeYellowCard);
+    message.removeRedCard !== undefined && (obj.removeRedCard = message.removeRedCard);
+    message.removeFoul !== undefined && (obj.removeFoul = message.removeFoul);
     return obj;
   },
 };
@@ -627,7 +607,7 @@ export const Change_SwitchColors = {
 };
 
 function createBaseChange_Revert(): Change_Revert {
-  return { changeId: 0 };
+  return {};
 }
 
 export const Change_Revert = {
@@ -643,7 +623,7 @@ export const Change_Revert = {
 };
 
 function createBaseChange_NewGameState(): Change_NewGameState {
-  return { gameState: undefined };
+  return {};
 }
 
 export const Change_NewGameState = {

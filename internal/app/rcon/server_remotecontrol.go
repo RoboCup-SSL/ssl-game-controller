@@ -8,6 +8,7 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 	"io"
 	"log"
 	"net"
@@ -306,7 +307,7 @@ func (c *RemoteControlClient) processRequest(request *RemoteControlToController)
 			return errors.Wrap(err, "Can not change keeper id")
 		}
 		c.updateTeamConfig(&statemachine.Change_UpdateTeamState{
-			Goalkeeper: &x.DesiredKeeper,
+			Goalkeeper: wrapperspb.Int32(x.DesiredKeeper),
 		})
 	}
 
@@ -317,7 +318,7 @@ func (c *RemoteControlClient) processRequest(request *RemoteControlToController)
 				return errors.Wrap(err, "Can not request robot substitution")
 			}
 			c.updateTeamConfig(&statemachine.Change_UpdateTeamState{
-				RequestsBotSubstitution: &x.RequestRobotSubstitution,
+				RequestsBotSubstitution: wrapperspb.Bool(x.RequestRobotSubstitution),
 			})
 		}
 		return nil
@@ -330,7 +331,7 @@ func (c *RemoteControlClient) processRequest(request *RemoteControlToController)
 				return errors.Wrap(err, "Can not request timeout")
 			}
 			c.updateTeamConfig(&statemachine.Change_UpdateTeamState{
-				RequestsTimeout: &x.RequestTimeout,
+				RequestsTimeout: wrapperspb.Bool(x.RequestTimeout),
 			})
 		}
 		return nil
@@ -375,7 +376,7 @@ func (c *RemoteControlClient) processRequest(request *RemoteControlToController)
 				return errors.Wrap(err, "Can not request emergency stop")
 			}
 			c.updateTeamConfig(&statemachine.Change_UpdateTeamState{
-				RequestsEmergencyStop: &x.RequestEmergencyStop,
+				RequestsEmergencyStop: wrapperspb.Bool(x.RequestEmergencyStop),
 			})
 		}
 		return nil

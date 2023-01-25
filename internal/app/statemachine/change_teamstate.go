@@ -18,40 +18,40 @@ func (s *StateMachine) processChangeUpdateTeamState(newState *state.State, chang
 	}
 	teamState := newState.TeamInfo(*change.ForTeam)
 	if change.TeamName != nil {
-		*teamState.Name = *change.TeamName
+		*teamState.Name = change.TeamName.Value
 	}
 	if change.Goals != nil {
-		*teamState.Goals = *change.Goals
+		*teamState.Goals = change.Goals.Value
 	}
 	if change.Goalkeeper != nil {
-		*teamState.Goalkeeper = *change.Goalkeeper
+		*teamState.Goalkeeper = change.Goalkeeper.Value
 	}
 	if change.TimeoutsLeft != nil {
-		*teamState.TimeoutsLeft = *change.TimeoutsLeft
+		*teamState.TimeoutsLeft = change.TimeoutsLeft.Value
 	}
 	if change.TimeoutTimeLeft != nil {
-		if duration, err := strToDuration(*change.TimeoutTimeLeft); err == nil {
+		if duration, err := strToDuration(change.TimeoutTimeLeft.Value); err == nil {
 			teamState.TimeoutTimeLeft = durationpb.New(duration)
 		}
 	}
 	if change.OnPositiveHalf != nil {
-		*teamState.OnPositiveHalf = *change.OnPositiveHalf
-		*newState.TeamInfo(change.ForTeam.Opposite()).OnPositiveHalf = !*change.OnPositiveHalf
+		*teamState.OnPositiveHalf = change.OnPositiveHalf.Value
+		*newState.TeamInfo(change.ForTeam.Opposite()).OnPositiveHalf = !change.OnPositiveHalf.Value
 	}
 	if change.BallPlacementFailures != nil {
-		*teamState.BallPlacementFailures = *change.BallPlacementFailures
+		*teamState.BallPlacementFailures = change.BallPlacementFailures.Value
 		*teamState.BallPlacementFailuresReached = *teamState.BallPlacementFailures >= s.gameConfig.MultiplePlacementFailures
 	}
 	if change.CanPlaceBall != nil &&
 		// in division A, ball placement must not be switched off
-		(*change.CanPlaceBall || *newState.Division != state.Division_DIV_A) {
-		*teamState.CanPlaceBall = *change.CanPlaceBall
+		(change.CanPlaceBall.Value || *newState.Division != state.Division_DIV_A) {
+		*teamState.CanPlaceBall = change.CanPlaceBall.Value
 	}
 	if change.ChallengeFlagsLeft != nil {
-		*teamState.ChallengeFlags = *change.ChallengeFlagsLeft
+		*teamState.ChallengeFlags = change.ChallengeFlagsLeft.Value
 	}
 	if change.RequestsBotSubstitution != nil {
-		if *change.RequestsBotSubstitution {
+		if change.RequestsBotSubstitution.Value {
 			teamState.RequestsBotSubstitutionSince = timestamppb.New(s.timeProvider())
 		} else {
 			teamState.RequestsBotSubstitutionSince = nil
@@ -59,7 +59,7 @@ func (s *StateMachine) processChangeUpdateTeamState(newState *state.State, chang
 	}
 	if change.RequestsEmergencyStop != nil {
 		if *newState.GameState.Type == state.GameState_RUNNING {
-			if *change.RequestsEmergencyStop {
+			if change.RequestsEmergencyStop.Value {
 				teamState.RequestsEmergencyStopSince = timestamppb.New(s.timeProvider())
 			} else {
 				teamState.RequestsEmergencyStopSince = nil
@@ -69,7 +69,7 @@ func (s *StateMachine) processChangeUpdateTeamState(newState *state.State, chang
 		}
 	}
 	if change.RequestsTimeout != nil {
-		if *change.RequestsTimeout && *teamState.TimeoutsLeft > 0 {
+		if change.RequestsTimeout.Value && *teamState.TimeoutsLeft > 0 {
 			teamState.RequestsTimeoutSince = timestamppb.New(s.timeProvider())
 		} else {
 			teamState.RequestsTimeoutSince = nil
@@ -110,7 +110,7 @@ func (s *StateMachine) processChangeUpdateTeamState(newState *state.State, chang
 	}
 	if change.RemoveYellowCard != nil {
 		for i, card := range teamState.YellowCards {
-			if *card.Id == *change.RemoveYellowCard {
+			if *card.Id == change.RemoveYellowCard.Value {
 				teamState.YellowCards = append(teamState.YellowCards[:i], teamState.YellowCards[i+1:]...)
 				break
 			}
@@ -118,7 +118,7 @@ func (s *StateMachine) processChangeUpdateTeamState(newState *state.State, chang
 	}
 	if change.RemoveRedCard != nil {
 		for i, card := range teamState.RedCards {
-			if *card.Id == *change.RemoveRedCard {
+			if *card.Id == change.RemoveRedCard.Value {
 				teamState.RedCards = append(teamState.RedCards[:i], teamState.RedCards[i+1:]...)
 				break
 			}
@@ -126,7 +126,7 @@ func (s *StateMachine) processChangeUpdateTeamState(newState *state.State, chang
 	}
 	if change.RemoveFoul != nil {
 		for i, foul := range teamState.Fouls {
-			if *foul.Id == *change.RemoveFoul {
+			if *foul.Id == change.RemoveFoul.Value {
 				teamState.Fouls = append(teamState.Fouls[:i], teamState.Fouls[i+1:]...)
 				break
 			}

@@ -484,24 +484,7 @@ export interface GameEventProposalGroup {
 }
 
 function createBaseReferee(): Referee {
-  return {
-    sourceIdentifier: "",
-    matchType: MatchType.UNKNOWN_MATCH,
-    packetTimestamp: 0,
-    stage: Referee_Stage.NORMAL_FIRST_HALF_PRE,
-    stageTimeLeft: 0,
-    command: Referee_Command.HALT,
-    commandCounter: 0,
-    commandTimestamp: 0,
-    yellow: undefined,
-    blue: undefined,
-    designatedPosition: undefined,
-    blueTeamOnPositiveHalf: false,
-    nextCommand: Referee_Command.HALT,
-    gameEvents: [],
-    gameEventProposals: [],
-    currentActionTimeRemaining: 0,
-  };
+  return {};
 }
 
 export const Referee = {
@@ -566,22 +549,7 @@ export const Referee = {
 };
 
 function createBaseReferee_TeamInfo(): Referee_TeamInfo {
-  return {
-    name: "",
-    score: 0,
-    redCards: 0,
-    yellowCardTimes: [],
-    yellowCards: 0,
-    timeouts: 0,
-    timeoutTime: 0,
-    goalkeeper: 0,
-    foulCounter: 0,
-    ballPlacementFailures: 0,
-    canPlaceBall: false,
-    maxAllowedBots: 0,
-    botSubstitutionIntent: false,
-    ballPlacementFailuresReached: false,
-  };
+  return {};
 }
 
 export const Referee_TeamInfo = {
@@ -635,7 +603,7 @@ export const Referee_TeamInfo = {
 };
 
 function createBaseReferee_Point(): Referee_Point {
-  return { x: 0, y: 0 };
+  return {};
 }
 
 export const Referee_Point = {
@@ -652,7 +620,7 @@ export const Referee_Point = {
 };
 
 function createBaseGameEventProposalGroup(): GameEventProposalGroup {
-  return { gameEvent: [], accepted: false };
+  return {};
 }
 
 export const GameEventProposalGroup = {

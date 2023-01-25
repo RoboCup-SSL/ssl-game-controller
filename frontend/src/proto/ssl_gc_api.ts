@@ -54,7 +54,7 @@ export interface Input {
 }
 
 function createBaseOutput(): Output {
-  return { matchState: undefined, gcState: undefined, protocol: undefined, config: undefined };
+  return {};
 }
 
 export const Output = {
@@ -79,7 +79,7 @@ export const Output = {
 };
 
 function createBaseProtocol(): Protocol {
-  return { delta: false, entry: [] };
+  return {};
 }
 
 export const Protocol = {
@@ -103,7 +103,7 @@ export const Protocol = {
 };
 
 function createBaseProtocolEntry(): ProtocolEntry {
-  return { id: 0, change: undefined, matchTimeElapsed: undefined, stageTimeElapsed: undefined };
+  return {};
 }
 
 export const ProtocolEntry = {
@@ -129,7 +129,7 @@ export const ProtocolEntry = {
 };
 
 function createBaseInput(): Input {
-  return { change: undefined, resetMatch: false, configDelta: undefined, continueAction: undefined };
+  return {};
 }
 
 export const Input = {

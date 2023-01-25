@@ -98,7 +98,7 @@ export function changeDetails(change: Change): ChangeDetails {
       icon: "edit",
     }
   } else if (changeDetails.$case === "updateTeamStateChange") {
-    const details = changeDetails.updateTeamStateChange;
+    const details = changeDetails.updateTeamStateChange
     return {
       typeName: "Team State",
       title: teamStateChangeTitle(details),
@@ -152,26 +152,26 @@ function configChangeTitle(config: Change_UpdateConfig): string {
 }
 
 function teamStateChangeTitle(change: Change_UpdateTeamState): string {
-  if (change.teamName) {
+  if (change.teamName !== undefined) {
     return `Team name: ${change.teamName}`
-  } else if (change.goals) {
+  } else if (change.goals !== undefined) {
     return `Goals: ${change.goals}`
-  } else if (change.goalkeeper) {
+  } else if (change.goalkeeper !== undefined) {
     return `Keeper: ${change.goalkeeper}`
-  } else if (change.timeoutsLeft) {
+  } else if (change.timeoutsLeft !== undefined) {
     return `Timeouts left: ${change.timeoutsLeft}`
-  } else if (change.timeoutTimeLeft) {
+  } else if (change.timeoutTimeLeft !== undefined) {
     return `Timeout time left: ${change.timeoutTimeLeft}`
   } else if (change.onPositiveHalf !== undefined) {
     if (change.onPositiveHalf) {
       return "Goal is on positive half"
     }
     return "Goal is on negative half"
-  } else if (change.ballPlacementFailures) {
+  } else if (change.ballPlacementFailures !== undefined) {
     return `Ball placement failures: ${change.ballPlacementFailures}`
   } else if (change.canPlaceBall !== undefined) {
     return `Can place ball: ${change.canPlaceBall}`
-  } else if (change.challengeFlagsLeft) {
+  } else if (change.challengeFlagsLeft !== undefined) {
     return `Challenge flags left: ${change.challengeFlagsLeft}`
   } else if (change.requestsBotSubstitution !== undefined) {
     if (change.requestsBotSubstitution) {
@@ -193,19 +193,19 @@ function teamStateChangeTitle(change: Change_UpdateTeamState): string {
       return "Request emergency stop"
     }
     return "Revoke emergency stop request"
-  } else if (change.yellowCard) {
+  } else if (change.yellowCard !== undefined) {
     const timeRemaining = formatDuration(change.yellowCard.timeRemaining?.seconds! * 1000)
     return `Change yellow card ${change.yellowCard.id} (${timeRemaining} s left)`
-  } else if (change.redCard) {
+  } else if (change.redCard !== undefined) {
     return `Change red card ${change.redCard.id}`
-  } else if (change.foul) {
+  } else if (change.foul !== undefined) {
     return `Change foul ${change.foul.id}`
-  } else if (change.removeYellowCard) {
+  } else if (change.removeYellowCard !== undefined) {
     return `Remove yellow card ${change.removeYellowCard}`
-  } else if (change.removeRedCard) {
+  } else if (change.removeRedCard !== undefined) {
     return `Remove red card ${change.removeRedCard}`
-  } else if (change.removeFoul) {
+  } else if (change.removeFoul !== undefined) {
     return `Remove foul ${change.removeFoul}`
   }
-  return "Unknown team state change"
+  return "Unknown team state change: " + JSON.stringify(change)
 }

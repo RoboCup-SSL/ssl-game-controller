@@ -8,6 +8,7 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 	"io"
 	"log"
 	"net"
@@ -211,7 +212,7 @@ func (s *TeamServer) processRequest(teamClient TeamClient, request *TeamToContro
 				Change: &statemachine.Change_UpdateTeamStateChange{
 					UpdateTeamStateChange: &statemachine.Change_UpdateTeamState{
 						ForTeam:                 &teamClient.team,
-						RequestsBotSubstitution: &x.SubstituteBot,
+						RequestsBotSubstitution: wrapperspb.Bool(x.SubstituteBot),
 					}},
 			})
 		}
@@ -232,7 +233,7 @@ func (s *TeamServer) processRequest(teamClient TeamClient, request *TeamToContro
 			Change: &statemachine.Change_UpdateTeamStateChange{
 				UpdateTeamStateChange: &statemachine.Change_UpdateTeamState{
 					ForTeam:    &teamClient.team,
-					Goalkeeper: &x.DesiredKeeper,
+					Goalkeeper: wrapperspb.Int32(x.DesiredKeeper),
 				}},
 		})
 	}

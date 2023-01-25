@@ -255,7 +255,7 @@ export interface State_TeamStateEntry {
 }
 
 function createBaseYellowCard(): YellowCard {
-  return { id: 0, causedByGameEvent: undefined, timeRemaining: undefined };
+  return {};
 }
 
 export const YellowCard = {
@@ -279,7 +279,7 @@ export const YellowCard = {
 };
 
 function createBaseRedCard(): RedCard {
-  return { id: 0, causedByGameEvent: undefined };
+  return {};
 }
 
 export const RedCard = {
@@ -300,7 +300,7 @@ export const RedCard = {
 };
 
 function createBaseFoul(): Foul {
-  return { id: 0, causedByGameEvent: undefined, timestamp: undefined };
+  return {};
 }
 
 export const Foul = {
@@ -323,7 +323,7 @@ export const Foul = {
 };
 
 function createBaseCommand(): Command {
-  return { type: Command_Type.UNKNOWN, forTeam: Team.UNKNOWN };
+  return {};
 }
 
 export const Command = {
@@ -343,7 +343,7 @@ export const Command = {
 };
 
 function createBaseGameState(): GameState {
-  return { type: GameState_Type.UNKNOWN, forTeam: Team.UNKNOWN };
+  return {};
 }
 
 export const GameState = {
@@ -363,7 +363,7 @@ export const GameState = {
 };
 
 function createBaseProposal(): Proposal {
-  return { timestamp: undefined, gameEvent: undefined };
+  return {};
 }
 
 export const Proposal = {
@@ -384,7 +384,7 @@ export const Proposal = {
 };
 
 function createBaseProposalGroup(): ProposalGroup {
-  return { proposals: [], accepted: false };
+  return {};
 }
 
 export const ProposalGroup = {
@@ -408,25 +408,7 @@ export const ProposalGroup = {
 };
 
 function createBaseTeamInfo(): TeamInfo {
-  return {
-    name: "",
-    goals: 0,
-    goalkeeper: 0,
-    yellowCards: [],
-    redCards: [],
-    timeoutsLeft: 0,
-    timeoutTimeLeft: undefined,
-    onPositiveHalf: false,
-    fouls: [],
-    ballPlacementFailures: 0,
-    ballPlacementFailuresReached: false,
-    canPlaceBall: false,
-    maxAllowedBots: 0,
-    requestsBotSubstitutionSince: undefined,
-    requestsTimeoutSince: undefined,
-    requestsEmergencyStopSince: undefined,
-    challengeFlags: 0,
-  };
+  return {};
 }
 
 export const TeamInfo = {
@@ -504,24 +486,7 @@ export const TeamInfo = {
 };
 
 function createBaseState(): State {
-  return {
-    stage: Referee_Stage.NORMAL_FIRST_HALF_PRE,
-    command: undefined,
-    gameState: undefined,
-    stageTimeElapsed: undefined,
-    stageTimeLeft: undefined,
-    matchTimeStart: undefined,
-    teamState: {},
-    placementPos: undefined,
-    nextCommand: undefined,
-    currentActionTimeRemaining: undefined,
-    gameEvents: [],
-    proposalGroups: [],
-    division: Division.DIV_UNKNOWN,
-    firstKickoffTeam: Team.UNKNOWN,
-    matchType: MatchType.UNKNOWN_MATCH,
-    readyContinueTime: undefined,
-  };
+  return {};
 }
 
 export const State = {
@@ -601,7 +566,7 @@ export const State = {
 };
 
 function createBaseState_TeamStateEntry(): State_TeamStateEntry {
-  return { key: "", value: undefined };
+  return { key: "" };
 }
 
 export const State_TeamStateEntry = {

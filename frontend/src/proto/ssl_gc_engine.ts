@@ -308,7 +308,7 @@ export function continueAction_StateToJSON(object: ContinueAction_State): string
 }
 
 function createBaseGcState(): GcState {
-  return { teamState: {}, autoRefState: {}, trackers: {}, continueActions: [] };
+  return {};
 }
 
 export const GcState = {
@@ -368,7 +368,7 @@ export const GcState = {
 };
 
 function createBaseGcState_TeamStateEntry(): GcState_TeamStateEntry {
-  return { key: "", value: undefined };
+  return { key: "" };
 }
 
 export const GcState_TeamStateEntry = {
@@ -388,7 +388,7 @@ export const GcState_TeamStateEntry = {
 };
 
 function createBaseGcState_AutoRefStateEntry(): GcState_AutoRefStateEntry {
-  return { key: "", value: undefined };
+  return { key: "" };
 }
 
 export const GcState_AutoRefStateEntry = {
@@ -425,13 +425,7 @@ export const GcState_TrackersEntry = {
 };
 
 function createBaseGcStateTeam(): GcStateTeam {
-  return {
-    connected: false,
-    connectionVerified: false,
-    remoteControlConnected: false,
-    remoteControlConnectionVerified: false,
-    advantageChoice: undefined,
-  };
+  return {};
 }
 
 export const GcStateTeam = {
@@ -461,7 +455,7 @@ export const GcStateTeam = {
 };
 
 function createBaseTeamAdvantageChoice(): TeamAdvantageChoice {
-  return { choice: TeamAdvantageChoice_AdvantageChoice.STOP };
+  return {};
 }
 
 export const TeamAdvantageChoice = {
@@ -481,7 +475,7 @@ export const TeamAdvantageChoice = {
 };
 
 function createBaseGcStateAutoRef(): GcStateAutoRef {
-  return { connectionVerified: false };
+  return {};
 }
 
 export const GcStateAutoRef = {
@@ -497,7 +491,7 @@ export const GcStateAutoRef = {
 };
 
 function createBaseGcStateTracker(): GcStateTracker {
-  return { sourceName: "", uuid: "", ball: undefined, robots: [] };
+  return {};
 }
 
 export const GcStateTracker = {
@@ -525,7 +519,7 @@ export const GcStateTracker = {
 };
 
 function createBaseBall(): Ball {
-  return { pos: undefined, vel: undefined };
+  return {};
 }
 
 export const Ball = {
@@ -545,7 +539,7 @@ export const Ball = {
 };
 
 function createBaseRobot(): Robot {
-  return { id: undefined, pos: undefined };
+  return {};
 }
 
 export const Robot = {
@@ -565,13 +559,7 @@ export const Robot = {
 };
 
 function createBaseContinueAction(): ContinueAction {
-  return {
-    type: ContinueAction_Type.TYPE_UNKNOWN,
-    forTeam: Team.UNKNOWN,
-    continuationIssues: [],
-    readyAt: undefined,
-    state: ContinueAction_State.STATE_UNKNOWN,
-  };
+  return {};
 }
 
 export const ContinueAction = {

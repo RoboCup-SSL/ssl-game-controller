@@ -150,7 +150,7 @@ export interface AutoRefConfig_GameEventBehaviorEntry {
 }
 
 function createBaseConfig(): Config {
-  return { gameEventBehavior: {}, autoRefConfigs: {}, activeTrackerSource: "", teams: [], autoContinue: false };
+  return {};
 }
 
 export const Config = {
@@ -222,7 +222,7 @@ export const Config_GameEventBehaviorEntry = {
 };
 
 function createBaseConfig_AutoRefConfigsEntry(): Config_AutoRefConfigsEntry {
-  return { key: "", value: undefined };
+  return { key: "" };
 }
 
 export const Config_AutoRefConfigsEntry = {
@@ -242,7 +242,7 @@ export const Config_AutoRefConfigsEntry = {
 };
 
 function createBaseAutoRefConfig(): AutoRefConfig {
-  return { gameEventBehavior: {} };
+  return {};
 }
 
 export const AutoRefConfig = {

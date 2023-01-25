@@ -836,7 +836,7 @@ export interface GameEvent_PenaltyKickFailed {
 }
 
 function createBaseGameEvent(): GameEvent {
-  return { type: GameEvent_Type.UNKNOWN_GAME_EVENT_TYPE, origin: [], event: undefined };
+  return { event: undefined };
 }
 
 export const GameEvent = {
@@ -1171,7 +1171,7 @@ export const GameEvent = {
 };
 
 function createBaseGameEvent_BallLeftField(): GameEvent_BallLeftField {
-  return { byTeam: Team.UNKNOWN, byBot: 0, location: undefined };
+  return {};
 }
 
 export const GameEvent_BallLeftField = {
@@ -1193,7 +1193,7 @@ export const GameEvent_BallLeftField = {
 };
 
 function createBaseGameEvent_AimlessKick(): GameEvent_AimlessKick {
-  return { byTeam: Team.UNKNOWN, byBot: 0, location: undefined, kickLocation: undefined };
+  return {};
 }
 
 export const GameEvent_AimlessKick = {
@@ -1218,17 +1218,7 @@ export const GameEvent_AimlessKick = {
 };
 
 function createBaseGameEvent_Goal(): GameEvent_Goal {
-  return {
-    byTeam: Team.UNKNOWN,
-    kickingTeam: Team.UNKNOWN,
-    kickingBot: 0,
-    location: undefined,
-    kickLocation: undefined,
-    maxBallHeight: 0,
-    numRobotsByTeam: 0,
-    lastTouchByTeam: 0,
-    message: "",
-  };
+  return {};
 }
 
 export const GameEvent_Goal = {
@@ -1263,7 +1253,7 @@ export const GameEvent_Goal = {
 };
 
 function createBaseGameEvent_IndirectGoal(): GameEvent_IndirectGoal {
-  return { byTeam: Team.UNKNOWN, byBot: 0, location: undefined, kickLocation: undefined };
+  return {};
 }
 
 export const GameEvent_IndirectGoal = {
@@ -1288,7 +1278,7 @@ export const GameEvent_IndirectGoal = {
 };
 
 function createBaseGameEvent_ChippedGoal(): GameEvent_ChippedGoal {
-  return { byTeam: Team.UNKNOWN, byBot: 0, location: undefined, kickLocation: undefined, maxBallHeight: 0 };
+  return {};
 }
 
 export const GameEvent_ChippedGoal = {
@@ -1315,7 +1305,7 @@ export const GameEvent_ChippedGoal = {
 };
 
 function createBaseGameEvent_BotTooFastInStop(): GameEvent_BotTooFastInStop {
-  return { byTeam: Team.UNKNOWN, byBot: 0, location: undefined, speed: 0 };
+  return {};
 }
 
 export const GameEvent_BotTooFastInStop = {
@@ -1339,7 +1329,7 @@ export const GameEvent_BotTooFastInStop = {
 };
 
 function createBaseGameEvent_DefenderTooCloseToKickPoint(): GameEvent_DefenderTooCloseToKickPoint {
-  return { byTeam: Team.UNKNOWN, byBot: 0, location: undefined, distance: 0 };
+  return {};
 }
 
 export const GameEvent_DefenderTooCloseToKickPoint = {
@@ -1363,7 +1353,7 @@ export const GameEvent_DefenderTooCloseToKickPoint = {
 };
 
 function createBaseGameEvent_BotCrashDrawn(): GameEvent_BotCrashDrawn {
-  return { botYellow: 0, botBlue: 0, location: undefined, crashSpeed: 0, speedDiff: 0, crashAngle: 0 };
+  return {};
 }
 
 export const GameEvent_BotCrashDrawn = {
@@ -1391,15 +1381,7 @@ export const GameEvent_BotCrashDrawn = {
 };
 
 function createBaseGameEvent_BotCrashUnique(): GameEvent_BotCrashUnique {
-  return {
-    byTeam: Team.UNKNOWN,
-    violator: 0,
-    victim: 0,
-    location: undefined,
-    crashSpeed: 0,
-    speedDiff: 0,
-    crashAngle: 0,
-  };
+  return {};
 }
 
 export const GameEvent_BotCrashUnique = {
@@ -1429,7 +1411,7 @@ export const GameEvent_BotCrashUnique = {
 };
 
 function createBaseGameEvent_BotPushedBot(): GameEvent_BotPushedBot {
-  return { byTeam: Team.UNKNOWN, violator: 0, victim: 0, location: undefined, pushedDistance: 0 };
+  return {};
 }
 
 export const GameEvent_BotPushedBot = {
@@ -1455,7 +1437,7 @@ export const GameEvent_BotPushedBot = {
 };
 
 function createBaseGameEvent_BotTippedOver(): GameEvent_BotTippedOver {
-  return { byTeam: Team.UNKNOWN, byBot: 0, location: undefined, ballLocation: undefined };
+  return {};
 }
 
 export const GameEvent_BotTippedOver = {
@@ -1480,7 +1462,7 @@ export const GameEvent_BotTippedOver = {
 };
 
 function createBaseGameEvent_DefenderInDefenseArea(): GameEvent_DefenderInDefenseArea {
-  return { byTeam: Team.UNKNOWN, byBot: 0, location: undefined, distance: 0 };
+  return {};
 }
 
 export const GameEvent_DefenderInDefenseArea = {
@@ -1504,7 +1486,7 @@ export const GameEvent_DefenderInDefenseArea = {
 };
 
 function createBaseGameEvent_DefenderInDefenseAreaPartially(): GameEvent_DefenderInDefenseAreaPartially {
-  return { byTeam: Team.UNKNOWN, byBot: 0, location: undefined, distance: 0, ballLocation: undefined };
+  return {};
 }
 
 export const GameEvent_DefenderInDefenseAreaPartially = {
@@ -1531,7 +1513,7 @@ export const GameEvent_DefenderInDefenseAreaPartially = {
 };
 
 function createBaseGameEvent_AttackerTouchedBallInDefenseArea(): GameEvent_AttackerTouchedBallInDefenseArea {
-  return { byTeam: Team.UNKNOWN, byBot: 0, location: undefined, distance: 0 };
+  return {};
 }
 
 export const GameEvent_AttackerTouchedBallInDefenseArea = {
@@ -1555,7 +1537,7 @@ export const GameEvent_AttackerTouchedBallInDefenseArea = {
 };
 
 function createBaseGameEvent_BotKickedBallTooFast(): GameEvent_BotKickedBallTooFast {
-  return { byTeam: Team.UNKNOWN, byBot: 0, location: undefined, initialBallSpeed: 0, chipped: false };
+  return {};
 }
 
 export const GameEvent_BotKickedBallTooFast = {
@@ -1581,7 +1563,7 @@ export const GameEvent_BotKickedBallTooFast = {
 };
 
 function createBaseGameEvent_BotDribbledBallTooFar(): GameEvent_BotDribbledBallTooFar {
-  return { byTeam: Team.UNKNOWN, byBot: 0, start: undefined, end: undefined };
+  return {};
 }
 
 export const GameEvent_BotDribbledBallTooFar = {
@@ -1605,7 +1587,7 @@ export const GameEvent_BotDribbledBallTooFar = {
 };
 
 function createBaseGameEvent_AttackerTouchedOpponentInDefenseArea(): GameEvent_AttackerTouchedOpponentInDefenseArea {
-  return { byTeam: Team.UNKNOWN, byBot: 0, victim: 0, location: undefined };
+  return {};
 }
 
 export const GameEvent_AttackerTouchedOpponentInDefenseArea = {
@@ -1629,7 +1611,7 @@ export const GameEvent_AttackerTouchedOpponentInDefenseArea = {
 };
 
 function createBaseGameEvent_AttackerDoubleTouchedBall(): GameEvent_AttackerDoubleTouchedBall {
-  return { byTeam: Team.UNKNOWN, byBot: 0, location: undefined };
+  return {};
 }
 
 export const GameEvent_AttackerDoubleTouchedBall = {
@@ -1651,7 +1633,7 @@ export const GameEvent_AttackerDoubleTouchedBall = {
 };
 
 function createBaseGameEvent_AttackerTooCloseToDefenseArea(): GameEvent_AttackerTooCloseToDefenseArea {
-  return { byTeam: Team.UNKNOWN, byBot: 0, location: undefined, distance: 0, ballLocation: undefined };
+  return {};
 }
 
 export const GameEvent_AttackerTooCloseToDefenseArea = {
@@ -1678,7 +1660,7 @@ export const GameEvent_AttackerTooCloseToDefenseArea = {
 };
 
 function createBaseGameEvent_BotHeldBallDeliberately(): GameEvent_BotHeldBallDeliberately {
-  return { byTeam: Team.UNKNOWN, byBot: 0, location: undefined, duration: 0 };
+  return {};
 }
 
 export const GameEvent_BotHeldBallDeliberately = {
@@ -1702,7 +1684,7 @@ export const GameEvent_BotHeldBallDeliberately = {
 };
 
 function createBaseGameEvent_BotInterferedPlacement(): GameEvent_BotInterferedPlacement {
-  return { byTeam: Team.UNKNOWN, byBot: 0, location: undefined };
+  return {};
 }
 
 export const GameEvent_BotInterferedPlacement = {
@@ -1724,7 +1706,7 @@ export const GameEvent_BotInterferedPlacement = {
 };
 
 function createBaseGameEvent_MultipleCards(): GameEvent_MultipleCards {
-  return { byTeam: Team.UNKNOWN };
+  return {};
 }
 
 export const GameEvent_MultipleCards = {
@@ -1740,7 +1722,7 @@ export const GameEvent_MultipleCards = {
 };
 
 function createBaseGameEvent_MultipleFouls(): GameEvent_MultipleFouls {
-  return { byTeam: Team.UNKNOWN, causedGameEvents: [] };
+  return {};
 }
 
 export const GameEvent_MultipleFouls = {
@@ -1766,7 +1748,7 @@ export const GameEvent_MultipleFouls = {
 };
 
 function createBaseGameEvent_MultiplePlacementFailures(): GameEvent_MultiplePlacementFailures {
-  return { byTeam: Team.UNKNOWN };
+  return {};
 }
 
 export const GameEvent_MultiplePlacementFailures = {
@@ -1782,7 +1764,7 @@ export const GameEvent_MultiplePlacementFailures = {
 };
 
 function createBaseGameEvent_KickTimeout(): GameEvent_KickTimeout {
-  return { byTeam: Team.UNKNOWN, location: undefined, time: 0 };
+  return {};
 }
 
 export const GameEvent_KickTimeout = {
@@ -1804,7 +1786,7 @@ export const GameEvent_KickTimeout = {
 };
 
 function createBaseGameEvent_NoProgressInGame(): GameEvent_NoProgressInGame {
-  return { location: undefined, time: 0 };
+  return {};
 }
 
 export const GameEvent_NoProgressInGame = {
@@ -1824,7 +1806,7 @@ export const GameEvent_NoProgressInGame = {
 };
 
 function createBaseGameEvent_PlacementFailed(): GameEvent_PlacementFailed {
-  return { byTeam: Team.UNKNOWN, remainingDistance: 0 };
+  return {};
 }
 
 export const GameEvent_PlacementFailed = {
@@ -1844,7 +1826,7 @@ export const GameEvent_PlacementFailed = {
 };
 
 function createBaseGameEvent_UnsportingBehaviorMinor(): GameEvent_UnsportingBehaviorMinor {
-  return { byTeam: Team.UNKNOWN, reason: "" };
+  return {};
 }
 
 export const GameEvent_UnsportingBehaviorMinor = {
@@ -1864,7 +1846,7 @@ export const GameEvent_UnsportingBehaviorMinor = {
 };
 
 function createBaseGameEvent_UnsportingBehaviorMajor(): GameEvent_UnsportingBehaviorMajor {
-  return { byTeam: Team.UNKNOWN, reason: "" };
+  return {};
 }
 
 export const GameEvent_UnsportingBehaviorMajor = {
@@ -1884,7 +1866,7 @@ export const GameEvent_UnsportingBehaviorMajor = {
 };
 
 function createBaseGameEvent_KeeperHeldBall(): GameEvent_KeeperHeldBall {
-  return { byTeam: Team.UNKNOWN, location: undefined, duration: 0 };
+  return {};
 }
 
 export const GameEvent_KeeperHeldBall = {
@@ -1906,7 +1888,7 @@ export const GameEvent_KeeperHeldBall = {
 };
 
 function createBaseGameEvent_PlacementSucceeded(): GameEvent_PlacementSucceeded {
-  return { byTeam: Team.UNKNOWN, timeTaken: 0, precision: 0, distance: 0 };
+  return {};
 }
 
 export const GameEvent_PlacementSucceeded = {
@@ -1930,7 +1912,7 @@ export const GameEvent_PlacementSucceeded = {
 };
 
 function createBaseGameEvent_Prepared(): GameEvent_Prepared {
-  return { timeTaken: 0 };
+  return {};
 }
 
 export const GameEvent_Prepared = {
@@ -1946,7 +1928,7 @@ export const GameEvent_Prepared = {
 };
 
 function createBaseGameEvent_BotSubstitution(): GameEvent_BotSubstitution {
-  return { byTeam: Team.UNKNOWN };
+  return {};
 }
 
 export const GameEvent_BotSubstitution = {
@@ -1962,7 +1944,7 @@ export const GameEvent_BotSubstitution = {
 };
 
 function createBaseGameEvent_ChallengeFlag(): GameEvent_ChallengeFlag {
-  return { byTeam: Team.UNKNOWN };
+  return {};
 }
 
 export const GameEvent_ChallengeFlag = {
@@ -1978,7 +1960,7 @@ export const GameEvent_ChallengeFlag = {
 };
 
 function createBaseGameEvent_EmergencyStop(): GameEvent_EmergencyStop {
-  return { byTeam: Team.UNKNOWN };
+  return {};
 }
 
 export const GameEvent_EmergencyStop = {
@@ -1994,7 +1976,7 @@ export const GameEvent_EmergencyStop = {
 };
 
 function createBaseGameEvent_TooManyRobots(): GameEvent_TooManyRobots {
-  return { byTeam: Team.UNKNOWN, numRobotsAllowed: 0, numRobotsOnField: 0, ballLocation: undefined };
+  return {};
 }
 
 export const GameEvent_TooManyRobots = {
@@ -2019,7 +2001,7 @@ export const GameEvent_TooManyRobots = {
 };
 
 function createBaseGameEvent_BoundaryCrossing(): GameEvent_BoundaryCrossing {
-  return { byTeam: Team.UNKNOWN, location: undefined };
+  return {};
 }
 
 export const GameEvent_BoundaryCrossing = {
@@ -2039,7 +2021,7 @@ export const GameEvent_BoundaryCrossing = {
 };
 
 function createBaseGameEvent_PenaltyKickFailed(): GameEvent_PenaltyKickFailed {
-  return { byTeam: Team.UNKNOWN, location: undefined, reason: "" };
+  return {};
 }
 
 export const GameEvent_PenaltyKickFailed = {

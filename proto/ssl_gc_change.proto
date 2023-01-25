@@ -9,6 +9,7 @@ import "ssl_gc_game_event.proto";
 import "ssl_gc_referee_message.proto";
 
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
 
 // A state change
 message StateChange {
@@ -132,31 +133,31 @@ message Change {
         optional Team for_team = 1;
 
         // Change the name of the team
-        optional string team_name = 2;
+        optional google.protobuf.StringValue team_name = 2;
         // Change the number of goals that the teams has at the moment
-        optional int32 goals = 3;
+        optional google.protobuf.Int32Value goals = 3;
         // The id of the goal keeper
-        optional int32 goalkeeper = 4;
+        optional google.protobuf.Int32Value goalkeeper = 4;
         // The number of timeouts that the team has left
-        optional int32 timeouts_left = 5;
+        optional google.protobuf.Int32Value timeouts_left = 5;
         // The timeout time that the team has left
-        optional string timeout_time_left = 6;
+        optional google.protobuf.StringValue timeout_time_left = 6;
         // Does the team play on the positive or the negative half (in ssl-vision coordinates)?
-        optional bool on_positive_half = 7;
+        optional google.protobuf.BoolValue on_positive_half = 7;
         // The number of ball placement failures
-        optional int32 ball_placement_failures = 8;
+        optional google.protobuf.Int32Value ball_placement_failures = 8;
         // Can the team place the ball, or is ball placement for this team disabled and should be skipped?
-        optional bool can_place_ball = 9;
+        optional google.protobuf.BoolValue can_place_ball = 9;
         // The number of challenge flags that the team has left
-        optional int32 challenge_flags_left = 21;
+        optional google.protobuf.Int32Value challenge_flags_left = 21;
         // Does the team want to substitute a robot in the next possible situation?
-        optional bool requests_bot_substitution = 10;
+        optional google.protobuf.BoolValue requests_bot_substitution = 10;
         // Does the team want to take a timeout in the next possible situation?
-        optional bool requests_timeout = 17;
+        optional google.protobuf.BoolValue requests_timeout = 17;
         // Does the team want to challenge a recent decision of the referee?
-        optional bool requests_challenge = 18;
+        optional google.protobuf.BoolValue requests_challenge = 18;
         // Does the team want to request an emergency stop?
-        optional bool requests_emergency_stop = 19;
+        optional google.protobuf.BoolValue requests_emergency_stop = 19;
         // Update a certain yellow card of the team
         optional YellowCard yellow_card = 20;
         // Update a certain red card of the team
@@ -164,11 +165,11 @@ message Change {
         // Update a certain foul of the team
         optional Foul foul = 13;
         // Remove the yellow card with this id
-        optional uint32 remove_yellow_card = 14;
+        optional google.protobuf.UInt32Value remove_yellow_card = 14;
         // Remove the red card with this id
-        optional uint32 remove_red_card = 15;
+        optional google.protobuf.UInt32Value remove_red_card = 15;
         // Remove the foul with this id
-        optional uint32 remove_foul = 16;
+        optional google.protobuf.UInt32Value remove_foul = 16;
     }
 
     // Switch the team colors

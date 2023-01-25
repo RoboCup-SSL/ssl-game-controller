@@ -14,7 +14,7 @@ export interface Vector3 {
 }
 
 function createBaseVector2(): Vector2 {
-  return { x: 0, y: 0 };
+  return {};
 }
 
 export const Vector2 = {
@@ -31,7 +31,7 @@ export const Vector2 = {
 };
 
 function createBaseVector3(): Vector3 {
-  return { x: 0, y: 0, z: 0 };
+  return {};
 }
 
 export const Vector3 = {
