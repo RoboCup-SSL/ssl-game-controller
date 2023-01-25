@@ -4,6 +4,7 @@ import GameEventBallLeftFieldInput from "@/components/game-events/GameEventBallL
 import GameEventGoalInput from "@/components/game-events/GameEventGoalInput.vue";
 import TextInput from "@/components/common/TextInput.vue";
 import ToggleInput from "@/components/common/ToggleInput.vue";
+import FoulsPanel from "@/components/game-events/FoulsPanel.vue";
 import type {GameEvent} from "@/proto/ssl_gc_game_event";
 import type {ControlApi} from "@/providers/controlApi/ControlApi";
 import type {Proposal} from "@/proto/ssl_gc_state";
@@ -40,7 +41,9 @@ const updateGameEvent = (gameEvent: GameEvent) => {
   >
     <q-tab name="ballLeftField" label="Ball left field"/>
     <q-tab name="goal" label="Goal"/>
-    <q-tab name="fouls" label="Fouls"/>
+    <q-tab name="foul" label="Foul"/>
+    <q-tab name="matchProceeding" label="Match Proceeding"/>
+    <q-tab name="unsportingBehavior" label="Unsporting Behavior"/>
   </q-tabs>
   <q-separator/>
 
@@ -58,7 +61,17 @@ const updateGameEvent = (gameEvent: GameEvent) => {
       <GameEventGoalInput @create-game-event="updateGameEvent"/>
     </q-tab-panel>
 
-    <q-tab-panel name="fouls">
+    <q-tab-panel name="foul">
+      <FoulsPanel/>
+    </q-tab-panel>
+
+    <q-tab-panel name="matchProceeding">
+      <p>No progress</p>
+      <p>Double touch</p>
+    </q-tab-panel>
+
+    <q-tab-panel name="unsportingBehavior">
+      <p>Minor / Major</p>
     </q-tab-panel>
   </q-tab-panels>
 </template>
