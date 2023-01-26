@@ -62,7 +62,7 @@ const updateGameEvent = (gameEvent: GameEvent) => {
     </q-tab-panel>
 
     <q-tab-panel name="foul">
-      <FoulsPanel/>
+      <FoulsPanel @create-game-event="updateGameEvent"/>
     </q-tab-panel>
 
     <q-tab-panel name="matchProceeding">

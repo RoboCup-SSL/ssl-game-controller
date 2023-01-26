@@ -5,22 +5,23 @@ import TeamItem from "@/components/game-events/common/TeamItem.vue";
 import LocationItem from "@/components/game-events/common/LocationItem.vue";
 import NumberItem from "@/components/game-events/common/NumberItem.vue";
 import {gameEventNames} from "@/helpers/texts";
+import {Team} from "@/proto/ssl_gc_common";
 
 const gameEvent = ref({
   type: GameEvent_Type.BOT_PUSHED_BOT,
   event: {
     $case: 'botPushedBot',
-    botPushedBot: {}
+    botPushedBot: {
+      byTeam: Team.YELLOW,
+    }
   }
 })
 const botPushedBot = ref<GameEvent_BotPushedBot>(gameEvent.value.event.botPushedBot)
 
 const emit = defineEmits(['create-game-event'])
 const updateGameEvent = () => {
-  console.log(JSON.stringify(gameEvent.value))
   emit('create-game-event', gameEvent.value)
 }
-
 </script>
 
 <template>
@@ -31,11 +32,12 @@ const updateGameEvent = () => {
 
     <q-separator/>
     <q-item-label header>By team</q-item-label>
-    <TeamItem v-model="botPushedBot.by_team"/>
+    <TeamItem v-model="botPushedBot.byTeam"/>
 
     <q-separator/>
     <NumberItem v-model="botPushedBot.victim" label="victim"/>
     <NumberItem v-model="botPushedBot.violator" label="violator"/>
+    <NumberItem v-model="botPushedBot.pushedDistance" label="pushed distance (m)"/>
     <LocationItem v-model="botPushedBot.location"/>
 
     <q-item>

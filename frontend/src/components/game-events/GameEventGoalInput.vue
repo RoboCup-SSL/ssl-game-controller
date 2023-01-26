@@ -8,8 +8,6 @@ import ToggleItem from "@/components/game-events/common/ToggleItem.vue";
 import {Team} from "@/proto/ssl_gc_common";
 import TextItem from "@/components/game-events/common/TextItem.vue";
 
-const emit = defineEmits(['create-game-event', 'propose-game-event'])
-
 const possibleGoal = ref(true)
 const goal = ref<GameEvent_Goal>({
   byTeam: Team.YELLOW,
@@ -36,14 +34,13 @@ const createGameEvent = (): GameEvent => {
   }
 }
 
+const emit = defineEmits(['create-game-event'])
 const updateGameEvent = () => {
   const gameEvent = createGameEvent()
   if (gameEvent) {
     emit('create-game-event', gameEvent)
   }
 }
-defineExpose({createGameEvent})
-
 </script>
 
 <template>

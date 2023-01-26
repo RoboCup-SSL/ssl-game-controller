@@ -7,8 +7,6 @@ import TeamItem from "@/components/game-events/common/TeamItem.vue";
 import LocationItem from "@/components/game-events/common/LocationItem.vue";
 import NumberItem from "@/components/game-events/common/NumberItem.vue";
 
-const emit = defineEmits(['create-game-event', 'propose-game-event'])
-
 const gameEventType = ref<GameEvent_Type>(GameEvent_Type.BALL_LEFT_FIELD_TOUCH_LINE)
 const byTeam = ref<Team>(Team.YELLOW)
 const byBot = ref<number | undefined>()
@@ -61,14 +59,13 @@ const createGameEvent = (): GameEvent | undefined => {
   return undefined
 }
 
+const emit = defineEmits(['create-game-event'])
 const updateGameEvent = () => {
   const gameEvent = createGameEvent()
   if (gameEvent) {
     emit('create-game-event', gameEvent)
   }
 }
-defineExpose({createGameEvent})
-
 </script>
 
 <template>
