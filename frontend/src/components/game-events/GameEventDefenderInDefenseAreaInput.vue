@@ -4,20 +4,20 @@ import TeamItem from "@/components/game-events/common/TeamItem.vue";
 import LocationItem from "@/components/game-events/common/LocationItem.vue";
 import NumberItem from "@/components/game-events/common/NumberItem.vue";
 import ButtonItem from "@/components/game-events/common/ButtonItem.vue";
-import {GameEvent_BotPushedBot, GameEvent_Type} from "@/proto/ssl_gc_game_event";
+import {GameEvent_DefenderInDefenseArea, GameEvent_Type} from "@/proto/ssl_gc_game_event";
 import {gameEventNames} from "@/helpers/texts";
 import {Team} from "@/proto/ssl_gc_common";
 
 const gameEvent = ref({
-  type: GameEvent_Type.BOT_PUSHED_BOT,
+  type: GameEvent_Type.DEFENDER_IN_DEFENSE_AREA,
   event: {
-    $case: 'botPushedBot',
-    botPushedBot: {
+    $case: 'defenderInDefenseArea',
+    defenderInDefenseArea: {
       byTeam: Team.YELLOW,
     }
   }
 })
-const details = ref<GameEvent_BotPushedBot>(gameEvent.value.event.botPushedBot)
+const details = ref<GameEvent_DefenderInDefenseArea>(gameEvent.value.event.defenderInDefenseArea)
 
 const emit = defineEmits(['create-game-event'])
 const createGameEvent = () => {
@@ -32,9 +32,8 @@ const createGameEvent = () => {
     </q-item-label>
 
     <TeamItem v-model="details.byTeam" label="by team"/>
-    <NumberItem v-model="details.victim" label="victim"/>
-    <NumberItem v-model="details.violator" label="violator"/>
-    <NumberItem v-model="details.pushedDistance" label="pushed distance (m)"/>
+    <NumberItem v-model="details.byBot" label="by bot"/>
+    <NumberItem v-model="details.distance" label="distance"/>
     <LocationItem v-model="details.location"/>
 
     <ButtonItem label="Create" @click="createGameEvent"/>

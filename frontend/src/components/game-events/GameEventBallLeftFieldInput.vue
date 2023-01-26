@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import {ref} from "vue";
-import {GameEvent, GameEvent_Type} from "@/proto/ssl_gc_game_event";
-import {Team} from "@/proto/ssl_gc_common";
-import type {Vector2} from "@/proto/ssl_gc_geometry";
 import TeamItem from "@/components/game-events/common/TeamItem.vue";
 import LocationItem from "@/components/game-events/common/LocationItem.vue";
 import NumberItem from "@/components/game-events/common/NumberItem.vue";
 import ButtonItem from "@/components/game-events/common/ButtonItem.vue";
+import {GameEvent, GameEvent_Type} from "@/proto/ssl_gc_game_event";
+import {Team} from "@/proto/ssl_gc_common";
+import type {Vector2} from "@/proto/ssl_gc_geometry";
 
 const gameEventType = ref<GameEvent_Type>(GameEvent_Type.BALL_LEFT_FIELD_TOUCH_LINE)
 const byTeam = ref<Team>(Team.YELLOW)
@@ -85,7 +85,7 @@ const createGameEvent = () => {
       </q-item-section>
     </q-item>
 
-    <TeamItem v-model="byTeam" label="By team"/>
+    <TeamItem v-model="byTeam" label="by team"/>
     <NumberItem v-model="byBot" label="by bot"/>
     <LocationItem v-model="location"/>
 

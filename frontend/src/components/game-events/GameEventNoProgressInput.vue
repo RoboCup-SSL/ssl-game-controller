@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import {ref} from "vue";
-import {GameEvent_NoProgressInGame, GameEvent_Type} from "@/proto/ssl_gc_game_event";
 import LocationItem from "@/components/game-events/common/LocationItem.vue";
 import NumberItem from "@/components/game-events/common/NumberItem.vue";
-import {gameEventNames} from "@/helpers/texts";
 import ButtonItem from "@/components/game-events/common/ButtonItem.vue";
+import {GameEvent_NoProgressInGame, GameEvent_Type} from "@/proto/ssl_gc_game_event";
+import {gameEventNames} from "@/helpers/texts";
 
 const gameEvent = ref({
   type: GameEvent_Type.NO_PROGRESS_IN_GAME,

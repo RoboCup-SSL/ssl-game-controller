@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import {ref} from "vue";
-import {GameEvent, GameEvent_Goal, GameEvent_Type} from "@/proto/ssl_gc_game_event";
 import TeamItem from "@/components/game-events/common/TeamItem.vue";
 import LocationItem from "@/components/game-events/common/LocationItem.vue";
 import NumberItem from "@/components/game-events/common/NumberItem.vue";
 import ToggleItem from "@/components/game-events/common/ToggleItem.vue";
-import {Team} from "@/proto/ssl_gc_common";
 import TextItem from "@/components/game-events/common/TextItem.vue";
 import ButtonItem from "@/components/game-events/common/ButtonItem.vue";
+import {GameEvent, GameEvent_Goal, GameEvent_Type} from "@/proto/ssl_gc_game_event";
+import {Team} from "@/proto/ssl_gc_common";
 
 const possibleGoal = ref(true)
 const goal = ref<GameEvent_Goal>({
@@ -48,8 +48,8 @@ const createGameEvent = () => {
   <q-list bordered>
     <q-item-label header>Goal</q-item-label>
 
-    <TeamItem v-model="goal.byTeam" label="By team"/>
-    <TeamItem v-model="goal.kickingTeam" label="Kicking team"/>
+    <TeamItem v-model="goal.byTeam" label="by team"/>
+    <TeamItem v-model="goal.kickingTeam" label="kicking team"/>
     <NumberItem v-model="goal.kickingBot" label="kicking bot"/>
     <LocationItem v-model="goal.location"/>
     <LocationItem v-model="goal.kickLocation" label="kick location"/>

@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import {ref} from "vue";
-import {GameEvent, GameEvent_Type} from "@/proto/ssl_gc_game_event";
-import {Team} from "@/proto/ssl_gc_common";
 import TeamItem from "@/components/game-events/common/TeamItem.vue";
 import ButtonItem from "@/components/game-events/common/ButtonItem.vue";
 import TextItem from "@/components/game-events/common/TextItem.vue";
+import {GameEvent, GameEvent_Type} from "@/proto/ssl_gc_game_event";
+import {Team} from "@/proto/ssl_gc_common";
 
 const gameEventType = ref<GameEvent_Type>(GameEvent_Type.UNSPORTING_BEHAVIOR_MINOR)
 const byTeam = ref<Team>(Team.YELLOW)
@@ -67,8 +67,8 @@ const createGameEvent = () => {
       </q-item-section>
     </q-item>
 
-    <TeamItem v-model="byTeam" label="By team"/>
-    <TextItem v-model="reason" label="Reason"/>
+    <TeamItem v-model="byTeam" label="by team"/>
+    <TextItem v-model="reason" label="reason"/>
 
     <ButtonItem label="Create" @click="createGameEvent"/>
   </q-list>

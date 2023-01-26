@@ -2,25 +2,41 @@
 import {ref} from "vue";
 import {GameEvent, GameEvent_Type, gameEvent_TypeFromJSON} from "@/proto/ssl_gc_game_event";
 import {gameEventNames} from "@/helpers/texts";
-import GameEventBallLeftFieldInput from "@/components/game-events/GameEventBallLeftFieldInput.vue";
 import GameEventBotPushedBotInput from "@/components/game-events/GameEventBotPushedBotInput.vue";
+import GameEventBotTippedOverInput from "@/components/game-events/GameEventBotTippedOverInput.vue";
+import GameEventBotHeldBallDeliberatelyInput from "@/components/game-events/GameEventBotHeldBallDeliberatelyInput.vue";
+import GameEventKeeperHeldBallInput from "@/components/game-events/GameEventKeeperHeldBallInput.vue";
+import GameEventBotCrashUniqueInput from "@/components/game-events/GameEventBotCrashUniqueInput.vue";
+import GameEventBotCrashDrawnInput from "@/components/game-events/GameEventBotCrashDrawnInput.vue";
+import GameEventBoundaryCrossingInput from "@/components/game-events/GameEventBoundaryCrossingInput.vue";
+import GameEventBotDribbledBallTooFarInput from "@/components/game-events/GameEventBotDribbledBallTooFarInput.vue";
+import GameEventBotKickedBallTooFastInput from "@/components/game-events/GameEventBotKickedBallTooFastInput.vue";
+import GameEventAttackerTouchedBallInDefenseAreaInput
+  from "@/components/game-events/GameEventAttackerTouchedBallInDefenseAreaInput.vue";
+import GameEventAttackerTooCloseToDefenseAreaInput
+  from "@/components/game-events/GameEventAttackerTooCloseToDefenseAreaInput.vue";
+import GameEventDefenderInDefenseAreaInput from "@/components/game-events/GameEventDefenderInDefenseAreaInput.vue";
+import GameEventBotTooFastInStopInput from "@/components/game-events/GameEventBotTooFastInStopInput.vue";
+import GameEventDefenderTooCloseToKickPointInput
+  from "@/components/game-events/GameEventDefenderTooCloseToKickPointInput.vue";
+import GameEventBotInterferedPlacementInput from "@/components/game-events/GameEventBotInterferedPlacementInput.vue";
 
 const components = new Map<GameEvent_Type, any>([
   [GameEvent_Type.BOT_PUSHED_BOT, GameEventBotPushedBotInput],
-  [GameEvent_Type.BOT_TIPPED_OVER, GameEventBallLeftFieldInput],
-  [GameEvent_Type.BOT_HELD_BALL_DELIBERATELY, GameEventBallLeftFieldInput],
-  [GameEvent_Type.KEEPER_HELD_BALL, GameEventBallLeftFieldInput],
-  [GameEvent_Type.BOT_CRASH_UNIQUE, GameEventBallLeftFieldInput],
-  [GameEvent_Type.BOT_CRASH_DRAWN, GameEventBallLeftFieldInput],
-  [GameEvent_Type.BOUNDARY_CROSSING, GameEventBallLeftFieldInput],
-  [GameEvent_Type.BOT_DRIBBLED_BALL_TOO_FAR, GameEventBallLeftFieldInput],
-  [GameEvent_Type.BOT_KICKED_BALL_TOO_FAST, GameEventBallLeftFieldInput],
-  [GameEvent_Type.ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA, GameEventBallLeftFieldInput],
-  [GameEvent_Type.ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA, GameEventBallLeftFieldInput],
-  [GameEvent_Type.DEFENDER_IN_DEFENSE_AREA, GameEventBallLeftFieldInput],
-  [GameEvent_Type.BOT_TOO_FAST_IN_STOP, GameEventBallLeftFieldInput],
-  [GameEvent_Type.DEFENDER_TOO_CLOSE_TO_KICK_POINT, GameEventBallLeftFieldInput],
-  [GameEvent_Type.BOT_INTERFERED_PLACEMENT, GameEventBallLeftFieldInput],
+  [GameEvent_Type.BOT_TIPPED_OVER, GameEventBotTippedOverInput],
+  [GameEvent_Type.BOT_HELD_BALL_DELIBERATELY, GameEventBotHeldBallDeliberatelyInput],
+  [GameEvent_Type.KEEPER_HELD_BALL, GameEventKeeperHeldBallInput],
+  [GameEvent_Type.BOT_CRASH_UNIQUE, GameEventBotCrashUniqueInput],
+  [GameEvent_Type.BOT_CRASH_DRAWN, GameEventBotCrashDrawnInput],
+  [GameEvent_Type.BOUNDARY_CROSSING, GameEventBoundaryCrossingInput],
+  [GameEvent_Type.BOT_DRIBBLED_BALL_TOO_FAR, GameEventBotDribbledBallTooFarInput],
+  [GameEvent_Type.BOT_KICKED_BALL_TOO_FAST, GameEventBotKickedBallTooFastInput],
+  [GameEvent_Type.ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA, GameEventAttackerTouchedBallInDefenseAreaInput],
+  [GameEvent_Type.ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA, GameEventAttackerTooCloseToDefenseAreaInput],
+  [GameEvent_Type.DEFENDER_IN_DEFENSE_AREA, GameEventDefenderInDefenseAreaInput],
+  [GameEvent_Type.BOT_TOO_FAST_IN_STOP, GameEventBotTooFastInStopInput],
+  [GameEvent_Type.DEFENDER_TOO_CLOSE_TO_KICK_POINT, GameEventDefenderTooCloseToKickPointInput],
+  [GameEvent_Type.BOT_INTERFERED_PLACEMENT, GameEventBotInterferedPlacementInput],
 ])
 const fouls = Array.from(components.keys()).map(k => gameEvent_TypeFromJSON(k))
 const tab = ref(fouls[0])
