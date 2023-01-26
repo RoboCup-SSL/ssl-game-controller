@@ -4,6 +4,7 @@ import type {Team} from "@/proto/ssl_gc_common";
 
 defineProps<{
   modelValue?: Team,
+  label?: string,
 }>()
 
 const emit = defineEmits<{
@@ -19,6 +20,7 @@ const updateValue = (v: Team) => {
 <template>
   <q-item>
     <q-item-section>
+      <q-item-label v-if="label" caption>{{ label }}</q-item-label>
       <TeamInput
         :model-value="modelValue"
         @update:model-value="updateValue"

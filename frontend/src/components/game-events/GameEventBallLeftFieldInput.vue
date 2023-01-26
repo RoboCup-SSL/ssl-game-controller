@@ -6,6 +6,7 @@ import type {Vector2} from "@/proto/ssl_gc_geometry";
 import TeamItem from "@/components/game-events/common/TeamItem.vue";
 import LocationItem from "@/components/game-events/common/LocationItem.vue";
 import NumberItem from "@/components/game-events/common/NumberItem.vue";
+import ButtonItem from "@/components/game-events/common/ButtonItem.vue";
 
 const gameEventType = ref<GameEvent_Type>(GameEvent_Type.BALL_LEFT_FIELD_TOUCH_LINE)
 const byTeam = ref<Team>(Team.YELLOW)
@@ -18,7 +19,7 @@ const gameEventTypeOptions = [
   {label: 'aimless kick', value: GameEvent_Type.AIMLESS_KICK},
 ]
 
-const createGameEvent = (): GameEvent | undefined => {
+const constructGameEvent = (): GameEvent | undefined => {
   if (gameEventType.value === GameEvent_Type.BALL_LEFT_FIELD_TOUCH_LINE) {
     return {
       type: gameEventType.value,
@@ -60,8 +61,8 @@ const createGameEvent = (): GameEvent | undefined => {
 }
 
 const emit = defineEmits(['create-game-event'])
-const updateGameEvent = () => {
-  const gameEvent = createGameEvent()
+const createGameEvent = () => {
+  const gameEvent = constructGameEvent()
   if (gameEvent) {
     emit('create-game-event', gameEvent)
   }
@@ -84,25 +85,10 @@ const updateGameEvent = () => {
       </q-item-section>
     </q-item>
 
-    <q-separator/>
-    <q-item-label header>By team</q-item-label>
-
-    <TeamItem v-model="byTeam"/>
-
-    <q-separator/>
-
+    <TeamItem v-model="byTeam" label="By team"/>
     <NumberItem v-model="byBot" label="by bot"/>
     <LocationItem v-model="location"/>
 
-    <q-item>
-      <q-item-section>
-        <q-btn
-          dense
-          label="Create"
-          color="primary"
-          @click="updateGameEvent"
-        />
-      </q-item-section>
-    </q-item>
+    <ButtonItem label="Create" @click="createGameEvent"/>
   </q-list>
 </template>

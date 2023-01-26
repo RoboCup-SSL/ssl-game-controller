@@ -8,6 +8,9 @@ import FoulsPanel from "@/components/game-events/FoulsPanel.vue";
 import type {GameEvent} from "@/proto/ssl_gc_game_event";
 import type {ControlApi} from "@/providers/controlApi/ControlApi";
 import type {Proposal} from "@/proto/ssl_gc_state";
+import GameEventUnsportingBehaviorInput from "@/components/game-events/GameEventUnsportingBehaviorInput.vue";
+import GameEventNoProgressInput from "@/components/game-events/GameEventNoProgressInput.vue";
+import GameEventDoubleTouchInput from "@/components/game-events/GameEventDoubleTouchInput.vue";
 
 const tab = ref("ballLeftField")
 const propose = ref(false)
@@ -15,7 +18,7 @@ const origin = ref<string | undefined>(undefined)
 
 const control = inject<ControlApi>('control-api')
 
-const updateGameEvent = (gameEvent: GameEvent) => {
+const createGameEvent = (gameEvent: GameEvent) => {
   if (origin.value) {
     gameEvent.origin = [origin.value]
   }
@@ -54,24 +57,26 @@ const updateGameEvent = (gameEvent: GameEvent) => {
 
   <q-tab-panels v-model="tab" animated swipeable>
     <q-tab-panel name="ballLeftField">
-      <GameEventBallLeftFieldInput @create-game-event="updateGameEvent"/>
+      <GameEventBallLeftFieldInput @create-game-event="createGameEvent"/>
     </q-tab-panel>
 
     <q-tab-panel name="goal">
-      <GameEventGoalInput @create-game-event="updateGameEvent"/>
+      <GameEventGoalInput @create-game-event="createGameEvent"/>
     </q-tab-panel>
 
     <q-tab-panel name="foul">
-      <FoulsPanel @create-game-event="updateGameEvent"/>
+      <FoulsPanel @create-game-event="createGameEvent"/>
     </q-tab-panel>
 
     <q-tab-panel name="matchProceeding">
-      <p>No progress</p>
-      <p>Double touch</p>
+      <div class="row q-gutter-md justify-evenly">
+        <GameEventNoProgressInput @create-game-event="createGameEvent"/>
+        <GameEventDoubleTouchInput @create-game-event="createGameEvent"/>
+      </div>
     </q-tab-panel>
 
     <q-tab-panel name="unsportingBehavior">
-      <p>Minor / Major</p>
+      <GameEventUnsportingBehaviorInput @create-game-event="createGameEvent"/>
     </q-tab-panel>
   </q-tab-panels>
 </template>

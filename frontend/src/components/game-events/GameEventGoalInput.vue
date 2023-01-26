@@ -7,13 +7,14 @@ import NumberItem from "@/components/game-events/common/NumberItem.vue";
 import ToggleItem from "@/components/game-events/common/ToggleItem.vue";
 import {Team} from "@/proto/ssl_gc_common";
 import TextItem from "@/components/game-events/common/TextItem.vue";
+import ButtonItem from "@/components/game-events/common/ButtonItem.vue";
 
 const possibleGoal = ref(true)
 const goal = ref<GameEvent_Goal>({
   byTeam: Team.YELLOW,
 })
 
-const createGameEvent = (): GameEvent => {
+const constructGameEvent = (): GameEvent => {
   const gameEventType = possibleGoal.value ? GameEvent_Type.POSSIBLE_GOAL : GameEvent_Type.GOAL
   if (possibleGoal.value) {
     return {
@@ -35,8 +36,8 @@ const createGameEvent = (): GameEvent => {
 }
 
 const emit = defineEmits(['create-game-event'])
-const updateGameEvent = () => {
-  const gameEvent = createGameEvent()
+const createGameEvent = () => {
+  const gameEvent = constructGameEvent()
   if (gameEvent) {
     emit('create-game-event', gameEvent)
   }
@@ -47,16 +48,9 @@ const updateGameEvent = () => {
   <q-list bordered>
     <q-item-label header>Goal</q-item-label>
 
-    <q-separator/>
-    <q-item-label header>By team</q-item-label>
-    <TeamItem v-model="goal.byTeam"/>
-
-    <q-separator/>
-    <q-item-label header>Kicking team</q-item-label>
-    <TeamItem v-model="goal.kickingTeam"/>
+    <TeamItem v-model="goal.byTeam" label="By team"/>
+    <TeamItem v-model="goal.kickingTeam" label="Kicking team"/>
     <NumberItem v-model="goal.kickingBot" label="kicking bot"/>
-
-    <q-separator/>
     <LocationItem v-model="goal.location"/>
     <LocationItem v-model="goal.kickLocation" label="kick location"/>
     <NumberItem v-model="goal.maxBallHeight" label="max ball height (m)"/>
@@ -66,15 +60,6 @@ const updateGameEvent = () => {
 
     <ToggleItem label="possible goal" v-model="possibleGoal"/>
 
-    <q-item>
-      <q-item-section>
-        <q-btn
-          dense
-          label="Create"
-          color="primary"
-          @click="updateGameEvent"
-        />
-      </q-item-section>
-    </q-item>
+    <ButtonItem label="Create" @click="createGameEvent"/>
   </q-list>
 </template>
