@@ -36,6 +36,7 @@ const shown = computed(() => {
   <q-badge :class="{'q-mx-xs': !floating}"
            v-if="shown"
            :color="color"
+           :text-color="color"
            :floating="floating"
            :label="label"/>
 </template>
