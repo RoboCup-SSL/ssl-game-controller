@@ -36,8 +36,8 @@ const nextYellowCardDue = (team: Team) => {
   <div class="row justify-center q-gutter-sm">
     <q-list bordered dense v-for="team in teams" :key="team">
       <q-item-label header>
-        {{ teamName(team) }}
         <TeamBadge :team="team"/>
+        {{ teamName(team) }}
       </q-item-label>
 
       <q-item v-ripple>

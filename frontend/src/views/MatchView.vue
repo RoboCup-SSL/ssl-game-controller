@@ -58,39 +58,39 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="q-my-md">
-    <div class="row">
-      <div class="col q-mx-md" style="min-width: 500px">
-        <q-expansion-item
-          dense
-          switch-toggle-side
-          v-model="uiStore.matchTeamSettingsExpanded"
-          icon="perm_identity"
-          label="Team Settings"
-        >
-          <q-card>
-            <q-card-section>
-              <MatchTeamTable/>
-            </q-card-section>
-          </q-card>
-        </q-expansion-item>
+  <div class="row q-gutter-md">
+    <div class="col q-gutter-md q-mr-md" style="min-width: 500px">
+      <q-expansion-item
+        dense
+        switch-toggle-side
+        v-model="uiStore.matchTeamSettingsExpanded"
+        icon="perm_identity"
+        label="Team Settings"
+      >
+        <q-card>
+          <q-card-section>
+            <MatchTeamTable/>
+          </q-card-section>
+        </q-card>
+      </q-expansion-item>
+      <div class="row justify-evenly">
         <AutoContinueInput/>
-        <template v-if="halftime">
-          <q-separator spaced/>
-          <div v-if="!halftime" class="row justify-evenly">
-            <SwitchColorButton/>
-            <SwitchSidesButton/>
-          </div>
-        </template>
-        <q-separator spaced/>
-        <ContinueActionButtonList/>
-        <q-separator spaced/>
+        <div class="q-my-auto">
+          Press Ctrl + id to continue
+        </div>
       </div>
-      <div class="col q-mx-md" style="min-width: 300px">
-        <GameEventProposalGroupItemList/>
+      <template v-if="halftime">
         <q-separator spaced/>
-        <GameEventList/>
-      </div>
+        <div v-if="!halftime" class="row justify-evenly">
+          <SwitchColorButton/>
+          <SwitchSidesButton/>
+        </div>
+      </template>
+      <ContinueActionButtonList/>
+    </div>
+    <div class="col q-gutter-md q-mr-md" style="min-width: 300px">
+      <GameEventProposalGroupItemList/>
+      <GameEventList/>
     </div>
   </div>
 </template>

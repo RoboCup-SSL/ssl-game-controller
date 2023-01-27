@@ -9,6 +9,7 @@ import type {ControlApi} from "@/providers/controlApi/ControlApi";
 
 const props = defineProps<{
   action: ContinueAction,
+  id: number,
 }>()
 
 const store = useMatchStateStore()
@@ -87,14 +88,15 @@ const submitAction = () => {
 <template>
   <q-btn class="q-mx-md q-my-xs"
          :color="color"
-         @click="submitAction"
-         :label="label">
+         @click="submitAction">
     <q-list dense>
       <q-item v-for="(issue, key) in issues" :key="key">
         <q-icon name="warning"></q-icon>
         {{ issue }}
       </q-item>
     </q-list>
-    <TeamBadge :team="team" floating/>
+    <TeamBadge :team="team"/>
+    {{ label }}
+    <q-badge color="orange" :label="props.id+1" floating/>
   </q-btn>
 </template>

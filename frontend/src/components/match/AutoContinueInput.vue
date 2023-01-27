@@ -19,7 +19,7 @@ const onChange = () => {
 <template>
   <ToggleInput
     :modelValue="model"
-    label="Continue automatically"
+    label="Continue automatically (Ctrl+Space)"
     @update:model-value="onChange"
   />
 </template>

@@ -32,8 +32,8 @@ const origins = computed(() => {
     <template v-slot:header>
       <q-item-section>
         <q-item-label>
-          {{ label }}
           <TeamBadge :team="team"/>
+          {{ label }}
         </q-item-label>
         <q-item-label caption v-if="caption">{{ caption }}</q-item-label>
       </q-item-section>

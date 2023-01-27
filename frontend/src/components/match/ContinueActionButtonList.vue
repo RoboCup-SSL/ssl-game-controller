@@ -13,9 +13,10 @@ const actions = computed(() => {
 <template>
   <div class="column">
     <ContinueActionButton
-      v-for="(action, key) in actions"
-      :key="key"
+      v-for="(action, index) in actions"
+      :key="index"
       :action="action"
+      :id="index"
       class="col"
     />
   </div>
