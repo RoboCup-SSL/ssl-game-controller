@@ -11,6 +11,7 @@ export const useProtocolStore = defineStore('protocol', {
     updateProtocol(protocol: Protocol) {
       const entries = protocol.entry!
       if (protocol.delta) {
+        entries.reverse()
         for (const entry of entries) {
           this.protocolEntries.unshift(entry)
         }
