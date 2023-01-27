@@ -76,7 +76,7 @@ export function changeDetails(change: Change): ChangeDetails {
     const gameEvent = details.gameEvent!;
     return {
       typeName: "Game Event (passive)",
-      title: gameEventNames.get(gameEvent.type!)!,
+      title: "Passive: " + gameEventNames.get(gameEvent.type!)!,
       forTeam: gameEventForTeam(gameEvent),
       icon: "recycling",
       gameEvent,
@@ -86,7 +86,7 @@ export function changeDetails(change: Change): ChangeDetails {
     const gameEvent = details.proposal!.gameEvent!;
     return {
       typeName: "Game Event Proposal",
-      title: gameEventNames.get(gameEvent.type!)!,
+      title: "Propose: " + gameEventNames.get(gameEvent.type!)!,
       forTeam: gameEventForTeam(gameEvent),
       icon: "front_hand",
       gameEvent,
