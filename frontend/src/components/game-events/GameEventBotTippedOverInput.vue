@@ -33,8 +33,8 @@ const createGameEvent = () => {
 
     <TeamItem v-model="details.byTeam" label="by team"/>
     <NumberItem v-model="details.byBot" label="by bot"/>
-    <LocationItem v-model="details.ballLocation" label="ball location"/>
     <LocationItem v-model="details.location"/>
+    <LocationItem v-model="details.ballLocation" label="ball location"/>
 
     <ButtonItem label="Create" @click="createGameEvent"/>
   </q-list>
