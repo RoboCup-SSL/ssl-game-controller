@@ -366,7 +366,6 @@ func (e *Engine) processChange(change *statemachine.Change) (newChanges []*state
 	stateCopy := e.currentState.Clone()
 	hookOut := HookOut{Change: entry.Change, State: stateCopy}
 	for name, hook := range e.hooks {
-		log.Println("Notify hook:", name)
 		select {
 		case hook <- hookOut:
 		default:
