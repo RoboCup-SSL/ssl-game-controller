@@ -6,6 +6,9 @@ import StoreUpdateCountStatus from "@/components/StoreUpdateCountStatus.vue";
 import ManualControlView from "@/views/ManualControlView.vue";
 import ProtocolList from "@/components/protocol/ProtocolList.vue";
 import {useQuasar} from "quasar";
+import {useUiStateStore} from "@/store/uiState";
+
+const uiState = useUiStateStore()
 
 const leftDrawerOpen = ref(false)
 const toggleLeftDrawer = () => {
@@ -19,6 +22,11 @@ const $q = useQuasar()
 const darkMode = computed(() => $q.dark.isActive)
 const toggleDarkMode = () => {
   $q.dark.toggle()
+  uiState.darkMode = $q.dark.isActive
+}
+
+if (uiState.darkMode !== undefined) {
+  $q.dark.set(uiState.darkMode)
 }
 
 const dev = computed(() => {

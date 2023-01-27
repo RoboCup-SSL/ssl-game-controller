@@ -7,6 +7,7 @@ interface UiState {
   teamDetailsFoulsExpanded: boolean,
   teamDetailsYellowCardsExpanded: boolean,
   teamDetailsRedCardsExpanded: boolean,
+  darkMode?: boolean,
 }
 
 export const useUiStateStore = defineStore('uiState', {
@@ -16,6 +17,7 @@ export const useUiStateStore = defineStore('uiState', {
       teamDetailsFoulsExpanded: true,
       teamDetailsYellowCardsExpanded: true,
       teamDetailsRedCardsExpanded: true,
+      darkMode: undefined,
     }
     const storedData = localStorage.getItem('ui-state')
     if (storedData) {
@@ -25,6 +27,8 @@ export const useUiStateStore = defineStore('uiState', {
   },
 })
 
-useUiStateStore().$subscribe((mutation: SubscriptionCallbackMutation<UiState>, state: UnwrapRef<UiState>) => {
-  localStorage.setItem('ui-state', JSON.stringify(state))
-})
+export function subscribeToLocalStorage() {
+  useUiStateStore().$subscribe((mutation: SubscriptionCallbackMutation<UiState>, state: UnwrapRef<UiState>) => {
+    localStorage.setItem('ui-state', JSON.stringify(state))
+  })
+}
