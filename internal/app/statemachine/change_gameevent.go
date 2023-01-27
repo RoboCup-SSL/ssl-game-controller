@@ -244,6 +244,7 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 
 	// stop the game if needed
 	if *newState.Command.Type != state.Command_STOP &&
+		*newState.Command.Type != state.Command_HALT &&
 		stopsTheGame(*gameEvent.Type) {
 		log.Printf("Stopping the game for event %v", *gameEvent.Type)
 		changes = append(changes, createCommandChange(state.NewCommandNeutral(state.Command_STOP)))
