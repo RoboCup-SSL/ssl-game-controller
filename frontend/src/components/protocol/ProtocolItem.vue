@@ -1,17 +1,17 @@
-<script setup lang="ts">
-import {computed, inject, ref} from "vue";
+<script setup lang="ts" xmlns:slot="http://www.w3.org/1999/html">
+import {computed, inject} from "vue";
 import TeamBadge from "@/components/common/TeamBadge.vue";
 import type {ProtocolEntry} from "@/proto/ssl_gc_api";
 import formatDuration from "format-duration";
-import {gameEventDetails, gameEventDetailsKeys, originIcon} from "@/helpers";
+import {gameEventDetails, gameEventDetailsKeys} from "@/helpers";
 import {changeDetails} from "@/helpers/ChangeDetails";
 import type {ControlApi} from "@/providers/controlApi/ControlApi";
+import OriginIcon from "@/components/common/OriginIcon.vue";
 
 const props = defineProps<{
   protocolEntry: ProtocolEntry,
   dense?: boolean,
 }>()
-const showDetails = ref(false)
 
 const control = inject<ControlApi>('control-api')
 
@@ -51,93 +51,72 @@ const hasGameEventOrigins = computed(() => {
   return gameEventOrigins.value?.length > 0
 })
 
-function toggleExpandItem() {
-  showDetails.value = !showDetails.value
-}
-
 function revert() {
   control?.Revert(props.protocolEntry.id!)
 }
 </script>
 
 <template>
-  <div>
-    <q-item
-    >
-      <q-item-section avatar top v-if="!dense">
-        <q-icon :name="change.icon" color="primary" size="34px"/>
-      </q-item-section>
+  <q-item dense class="q-mr-xs">
+    <q-item-section avatar top v-if="!dense">
+      <q-icon :name="change.icon" color="primary" size="34px"/>
+    </q-item-section>
 
-      <q-item-section top class="col-2" v-if="!dense">
-        <q-item-label class="q-mt-sm">{{ change.typeName }}</q-item-label>
-      </q-item-section>
+    <q-item-section top class="col-2" v-if="!dense">
+      <q-item-label class="q-mt-sm">{{ change.typeName }}</q-item-label>
+    </q-item-section>
 
-      <q-item-section top>
-        <q-item-label lines="1">
-          <TeamBadge :team="change.forTeam"/>
-          <span class="text-weight-medium">{{ change.title }}</span>
-          <span class="text-grey-8"> - {{ origin }}</span>
-          <q-icon class="q-mx-xs" :name="originIcon(origin)" color="primary" :alt="origin"/>
-          <span v-if="hasGameEventOrigins">
-            (
-          <q-icon class="q-mx-xs" :name="originIcon(origin)" color="primary" :alt="origin"
-                  v-for="(origin, key) in gameEventOrigins" :key="key">
-            <q-tooltip>
-              {{ origin }}
-            </q-tooltip>
-          </q-icon>
-            )
-          </span>
-        </q-item-label>
-        <q-item-label caption lines="1">
-          <span>{{ matchTime }}</span>
-          <q-btn flat round icon="loupe" dense
-                 color="primary"
-                 v-if="dense"
-                 :size="dense ? '8px' : '12px'"
-                 :class="{ invisible: details === undefined, 'revert': true }"
-                 @click="toggleExpandItem"
-          />
-          <q-btn flat round icon="history" dense
-                 color="primary"
-                 v-if="dense"
-                 :size="dense ? '8px' : '12px'"
-                 :class="{ invisible: !revertible, 'revert': true }"
-                 @click="revert"
-          />
-        </q-item-label>
-        <template v-if="showDetails">
-          <q-item-label v-for="key in detailsKeys" :key="key">
-            {{ key }}: {{ details[key] }}
-          </q-item-label>
+    <q-item-section>
+      <q-expansion-item hide-expand-icon header-class="q-pl-none">
+        <template v-slot:header>
+          <q-item-section>
+            <q-item-label lines="1">
+              <q-icon :name="change.icon" color="primary" size="15px" v-if="dense" class="q-mr-xs"/>
+              <TeamBadge :team="change.forTeam"/>
+              <span class="text-weight-medium">{{ change.title }}</span>
+              <span class="text-grey-8"> - {{ origin }}</span>
+              <OriginIcon :origin="origin"/>
+              <span v-if="hasGameEventOrigins">(</span>
+              <OriginIcon
+                v-for="(gameEventOrigin, key) in gameEventOrigins"
+                :key="key"
+                :origin="gameEventOrigin"
+              />
+              <span v-if="hasGameEventOrigins">)</span>
+            </q-item-label>
+            <q-item-label caption lines="1">
+              {{ matchTime }}
+            </q-item-label>
+          </q-item-section>
         </template>
-      </q-item-section>
-      <q-btn flat round icon="loupe"
+
+        <q-card v-if="detailsKeys.length > 0">
+          <q-card-section>
+            <q-item-label v-for="key in detailsKeys" :key="key">
+              {{ key }}: {{ details[key] }}
+            </q-item-label>
+          </q-card-section>
+        </q-card>
+      </q-expansion-item>
+    </q-item-section>
+
+    <div class="tool-button" v-if="revertible">
+      <q-btn dense round
+             icon="history"
+             size="10px"
              color="primary"
-             v-if="!dense"
-             :size="dense ? '8px' : '12px'"
-             :class="{ invisible: details === undefined, 'revert': true }"
-             @click="toggleExpandItem"
-      />
-      <q-btn flat round icon="history"
-             color="primary"
-             v-if="!dense"
-             :size="dense ? '8px' : '12px'"
-             :class="{ invisible: !revertible, 'revert': true }"
              @click="revert"
       />
-      <q-badge color="orange" text-color="black" :label="props.protocolEntry.id" floating/>
-    </q-item>
-  </div>
+    </div>
+
+    <q-badge color="orange" text-color="black" :label="props.protocolEntry.id" floating/>
+  </q-item>
 </template>
 
 <style>
-.invisible {
-  visibility: hidden;
-}
-
-.revert {
-  bottom: 0;
+.tool-button {
+  position: absolute;
+  top: 18px;
   right: 0;
 }
 </style>

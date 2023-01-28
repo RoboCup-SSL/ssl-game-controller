@@ -18,14 +18,15 @@ const store = useProtocolStore()
     virtual-scroll-slice-ratio-before="0.5"
     virtual-scroll-slice-ratio-after="0.5"
     :items="store.protocolEntries"
-    v-slot="{ item }"
   >
-    <ProtocolItem
-      class="q-pr-sm q-pt-sm"
-      :dense="dense"
-      :key="item.id"
-      :protocol-entry="item"
-    />
+    <template v-slot="{ item, index }">
+      <ProtocolItem
+        :class="{'q-mt-xs': index===0}"
+        :dense="dense"
+        :key="item.id"
+        :protocol-entry="item"
+      />
+    </template>
   </q-virtual-scroll>
 </template>
 
