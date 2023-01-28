@@ -29,14 +29,8 @@ export function gameEventForTeam(gameEvent: GameEvent): Team {
 }
 
 export function gameEventDetails(gameEvent: GameEvent) {
-  const event = gameEvent.event!
-  return (event as { [key: string]: any })[event.$case]
-}
-
-export function gameEventDetailsKeys(details: any) {
-  return Object.keys(details)
-    .filter(k => details[k] !== undefined)
-    .filter(k => k !== "byTeam")
+  const event = gameEvent.event! as { [key: string]: any }
+  return event[event.$case] as { [key: string]: any }
 }
 
 export const originIcon = (origin: string) => {

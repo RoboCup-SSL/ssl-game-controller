@@ -3,7 +3,8 @@ import {computed} from "vue";
 import TeamBadge from "@/components/common/TeamBadge.vue";
 import {gameEventNames} from "@/helpers/texts";
 import type {GameEvent} from "@/proto/ssl_gc_game_event";
-import {gameEventDetails, gameEventForTeam, originIcon} from "@/helpers";
+import {gameEventForTeam, originIcon} from "@/helpers";
+import GameEventDetailsTree from "@/components/match/GameEventDetailsTree.vue";
 
 const props = defineProps<{
   gameEvent: GameEvent,
@@ -12,10 +13,6 @@ const props = defineProps<{
 
 const label = computed(() => {
   return gameEventNames.get(props.gameEvent.type!)
-})
-
-const details = computed(() => {
-  return gameEventDetails(props.gameEvent)
 })
 
 const team = computed(() => {
@@ -48,10 +45,6 @@ const origins = computed(() => {
         </div>
       </q-item-section>
     </template>
-    <q-card>
-      <q-card-section>
-        {{ details }}
-      </q-card-section>
-    </q-card>
+    <GameEventDetailsTree :game-event="props.gameEvent"/>
   </q-expansion-item>
 </template>

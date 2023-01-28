@@ -3,10 +3,10 @@ import {computed, inject} from "vue";
 import TeamBadge from "@/components/common/TeamBadge.vue";
 import type {ProtocolEntry} from "@/proto/ssl_gc_api";
 import formatDuration from "format-duration";
-import {gameEventDetails, gameEventDetailsKeys} from "@/helpers";
 import {changeDetails} from "@/helpers/ChangeDetails";
 import type {ControlApi} from "@/providers/controlApi/ControlApi";
 import OriginIcon from "@/components/common/OriginIcon.vue";
+import GameEventDetailsTree from "@/components/match/GameEventDetailsTree.vue";
 
 const props = defineProps<{
   protocolEntry: ProtocolEntry,
@@ -28,18 +28,6 @@ const revertible = computed(() => {
 })
 const change = computed(() => {
   return changeDetails(props.protocolEntry.change!)
-})
-const details = computed(() => {
-  if (change.value.gameEvent) {
-    return gameEventDetails(change.value.gameEvent)
-  }
-  return undefined
-})
-const detailsKeys = computed(() => {
-  if (details.value) {
-    return gameEventDetailsKeys(details.value)
-  }
-  return []
 })
 const gameEventOrigins = computed(() => {
   if (change.value.gameEvent) {
@@ -90,13 +78,7 @@ function revert() {
           </q-item-section>
         </template>
 
-        <q-card v-if="detailsKeys.length > 0">
-          <q-card-section>
-            <q-item-label v-for="key in detailsKeys" :key="key">
-              {{ key }}: {{ details[key] }}
-            </q-item-label>
-          </q-card-section>
-        </q-card>
+        <GameEventDetailsTree :game-event="change.gameEvent" v-if="change.gameEvent"/>
       </q-expansion-item>
     </q-item-section>
 
