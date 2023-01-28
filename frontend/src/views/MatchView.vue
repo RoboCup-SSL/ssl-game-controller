@@ -76,7 +76,9 @@ onUnmounted(() => {
       <div class="row justify-evenly">
         <AutoContinueInput/>
         <div class="q-my-auto">
-          Press Ctrl + id to continue
+          Press Ctrl +
+          <q-badge label="id" color="orange"/>
+          to continue
         </div>
       </div>
       <template v-if="halftime">
