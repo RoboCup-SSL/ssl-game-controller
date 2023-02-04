@@ -2,7 +2,7 @@ version: 2
 jobs:
   frontend:
     docker:
-      - image: cimg/node:16.19
+      - image: cimg/node:lts
     steps:
       - checkout
       - run:
@@ -59,7 +59,7 @@ jobs:
       - run:
           name: "Publish Release on GitHub"
           command: |
-            go install github.com/tcnksm/ghr@v0.14.0
+            go install github.com/tcnksm/ghr@v0.16.0
             ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_TAG} ./release/gh/
 
   docker:
@@ -68,7 +68,7 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker:
-          version: 20.10.11
+          version: 20.10.18
       - run: |
           TAG=${CIRCLE_TAG:1}
           TAG=${TAG:-latest}
