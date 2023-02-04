@@ -73,12 +73,19 @@ onUnmounted(() => {
           </q-card-section>
         </q-card>
       </q-expansion-item>
-      <div class="row justify-evenly">
+      <div class="row">
         <AutoContinueInput/>
+      </div>
+      <div class="row justify-evenly">
         <div class="q-my-auto">
-          Press Ctrl +
+          Press <em>
+          Ctrl +
           <q-badge label="id" color="orange"/>
+        </em>
           to continue
+        </div>
+        <div class="q-my-auto">
+          Press <em>Esc</em> to Halt
         </div>
       </div>
       <template v-if="halftime">
