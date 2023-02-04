@@ -128,6 +128,8 @@ message ContinueAction {
         END_GAME = 16;
         ACCEPT_GOAL = 12;
         NORMAL_START = 13;
+        CHALLENGE_ACCEPT = 18;
+        CHALLENGE_REJECT = 19;
     }
 
     enum State {

@@ -54,6 +54,7 @@ export interface GameEvent {
     | { $case: "botSubstitution"; botSubstitution: GameEvent_BotSubstitution }
     | { $case: "tooManyRobots"; tooManyRobots: GameEvent_TooManyRobots }
     | { $case: "challengeFlag"; challengeFlag: GameEvent_ChallengeFlag }
+    | { $case: "challengeFlagHandled"; challengeFlagHandled: GameEvent_ChallengeFlagHandled }
     | { $case: "emergencyStop"; emergencyStop: GameEvent_EmergencyStop }
     | { $case: "unsportingBehaviorMinor"; unsportingBehaviorMinor: GameEvent_UnsportingBehaviorMinor }
     | { $case: "unsportingBehaviorMajor"; unsportingBehaviorMajor: GameEvent_UnsportingBehaviorMajor }
@@ -142,6 +143,8 @@ export enum GameEvent_Type {
   TOO_MANY_ROBOTS = "TOO_MANY_ROBOTS",
   /** CHALLENGE_FLAG - triggered by GC */
   CHALLENGE_FLAG = "CHALLENGE_FLAG",
+  /** CHALLENGE_FLAG_HANDLED - triggered by GC */
+  CHALLENGE_FLAG_HANDLED = "CHALLENGE_FLAG_HANDLED",
   /** EMERGENCY_STOP - triggered by GC */
   EMERGENCY_STOP = "EMERGENCY_STOP",
   /** UNSPORTING_BEHAVIOR_MINOR - triggered by human ref */
@@ -269,6 +272,9 @@ export function gameEvent_TypeFromJSON(object: any): GameEvent_Type {
     case 44:
     case "CHALLENGE_FLAG":
       return GameEvent_Type.CHALLENGE_FLAG;
+    case 46:
+    case "CHALLENGE_FLAG_HANDLED":
+      return GameEvent_Type.CHALLENGE_FLAG_HANDLED;
     case 45:
     case "EMERGENCY_STOP":
       return GameEvent_Type.EMERGENCY_STOP;
@@ -381,6 +387,8 @@ export function gameEvent_TypeToJSON(object: GameEvent_Type): string {
       return "TOO_MANY_ROBOTS";
     case GameEvent_Type.CHALLENGE_FLAG:
       return "CHALLENGE_FLAG";
+    case GameEvent_Type.CHALLENGE_FLAG_HANDLED:
+      return "CHALLENGE_FLAG_HANDLED";
     case GameEvent_Type.EMERGENCY_STOP:
       return "EMERGENCY_STOP";
     case GameEvent_Type.UNSPORTING_BEHAVIOR_MINOR:
@@ -799,6 +807,14 @@ export interface GameEvent_ChallengeFlag {
   byTeam?: Team;
 }
 
+/** A challenge, flagged recently, has been handled by the referee */
+export interface GameEvent_ChallengeFlagHandled {
+  /** the team that requested the challenge flag */
+  byTeam?: Team;
+  /** the challenge was accepted by the referee */
+  accepted?: boolean;
+}
+
 /** An emergency stop, requested by team previously, occurred */
 export interface GameEvent_EmergencyStop {
   /** the team that substitutes robots */
@@ -951,6 +967,11 @@ export const GameEvent = {
         ? { $case: "tooManyRobots", tooManyRobots: GameEvent_TooManyRobots.fromJSON(object.tooManyRobots) }
         : isSet(object.challengeFlag)
         ? { $case: "challengeFlag", challengeFlag: GameEvent_ChallengeFlag.fromJSON(object.challengeFlag) }
+        : isSet(object.challengeFlagHandled)
+        ? {
+          $case: "challengeFlagHandled",
+          challengeFlagHandled: GameEvent_ChallengeFlagHandled.fromJSON(object.challengeFlagHandled),
+        }
         : isSet(object.emergencyStop)
         ? { $case: "emergencyStop", emergencyStop: GameEvent_EmergencyStop.fromJSON(object.emergencyStop) }
         : isSet(object.unsportingBehaviorMinor)
@@ -1118,6 +1139,9 @@ export const GameEvent = {
       : undefined);
     message.event?.$case === "challengeFlag" && (obj.challengeFlag = message.event?.challengeFlag
       ? GameEvent_ChallengeFlag.toJSON(message.event?.challengeFlag)
+      : undefined);
+    message.event?.$case === "challengeFlagHandled" && (obj.challengeFlagHandled = message.event?.challengeFlagHandled
+      ? GameEvent_ChallengeFlagHandled.toJSON(message.event?.challengeFlagHandled)
       : undefined);
     message.event?.$case === "emergencyStop" && (obj.emergencyStop = message.event?.emergencyStop
       ? GameEvent_EmergencyStop.toJSON(message.event?.emergencyStop)
@@ -1955,6 +1979,26 @@ export const GameEvent_ChallengeFlag = {
   toJSON(message: GameEvent_ChallengeFlag): unknown {
     const obj: any = {};
     message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
+    return obj;
+  },
+};
+
+function createBaseGameEvent_ChallengeFlagHandled(): GameEvent_ChallengeFlagHandled {
+  return {};
+}
+
+export const GameEvent_ChallengeFlagHandled = {
+  fromJSON(object: any): GameEvent_ChallengeFlagHandled {
+    return {
+      byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : Team.UNKNOWN,
+      accepted: isSet(object.accepted) ? Boolean(object.accepted) : false,
+    };
+  },
+
+  toJSON(message: GameEvent_ChallengeFlagHandled): unknown {
+    const obj: any = {};
+    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
+    message.accepted !== undefined && (obj.accepted = message.accepted);
     return obj;
   },
 };

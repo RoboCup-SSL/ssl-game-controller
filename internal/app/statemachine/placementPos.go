@@ -105,6 +105,7 @@ func (s *BallPlacementPosDeterminer) Location() *geom.Vector2 {
 		state.GameEvent_MULTIPLE_FOULS,
 		state.GameEvent_BOT_SUBSTITUTION,
 		state.GameEvent_CHALLENGE_FLAG,
+		state.GameEvent_CHALLENGE_FLAG_HANDLED,
 		state.GameEvent_EMERGENCY_STOP,
 		state.GameEvent_UNSPORTING_BEHAVIOR_MINOR,
 		state.GameEvent_UNSPORTING_BEHAVIOR_MAJOR:

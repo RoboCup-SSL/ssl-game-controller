@@ -71,6 +71,18 @@ func createBallPlacementFailedEventChange(byTeam state.Team) *statemachine.Chang
 	})
 }
 
+// createChallengeFlagHandledEventChange creates a new change for handled challenge flags
+func createChallengeFlagHandledEventChange(byTeam state.Team, accepted bool) *statemachine.Change {
+	return createGameEventChange(state.GameEvent_CHALLENGE_FLAG_HANDLED, &state.GameEvent{
+		Event: &state.GameEvent_ChallengeFlagHandled_{
+			ChallengeFlagHandled: &state.GameEvent_ChallengeFlagHandled{
+				ByTeam:   &byTeam,
+				Accepted: &accepted,
+			},
+		},
+	})
+}
+
 // createStageChange creates a change with a new stage
 func createStageChange(stage *state.Referee_Stage) *statemachine.Change {
 	return &statemachine.Change{

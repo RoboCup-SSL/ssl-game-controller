@@ -142,9 +142,13 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 
 	// challenge flag
 	if *gameEvent.Type == state.GameEvent_CHALLENGE_FLAG {
-		log.Printf("Reduce number of timeouts for %v by one for challenge flag", byTeam)
-		*newState.TeamInfo(byTeam).TimeoutsLeft--
 		*newState.TeamInfo(byTeam).ChallengeFlags--
+	}
+
+	// challenge flag handled
+	if *gameEvent.Type == state.GameEvent_CHALLENGE_FLAG_HANDLED &&
+		!*gameEvent.GetChallengeFlagHandled().Accepted {
+		*newState.TeamInfo(byTeam).TimeoutsLeft--
 	}
 
 	// emergency stop

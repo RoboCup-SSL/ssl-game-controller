@@ -76,6 +76,22 @@ func (e *Engine) nextActions() (actions []*ContinueAction) {
 					ContinueAction_READY_MANUAL,
 				))
 			}
+
+			challengeFlagsRaised := len(e.currentState.FindGameEventsByTeam(state.GameEvent_CHALLENGE_FLAG, team))
+			challengeFlagsHandled := len(e.currentState.FindGameEventsByTeam(state.GameEvent_CHALLENGE_FLAG_HANDLED, team))
+
+			if challengeFlagsRaised > challengeFlagsHandled {
+				actions = append(actions, createContinueAction(
+					ContinueAction_CHALLENGE_ACCEPT,
+					team,
+					ContinueAction_READY_MANUAL,
+				))
+				actions = append(actions, createContinueAction(
+					ContinueAction_CHALLENGE_REJECT,
+					team,
+					ContinueAction_READY_MANUAL,
+				))
+			}
 		}
 	}
 

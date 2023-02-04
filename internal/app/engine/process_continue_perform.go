@@ -69,6 +69,10 @@ func (e *Engine) performContinueAction(action *ContinueAction) {
 		}
 	case ContinueAction_NORMAL_START:
 		e.Enqueue(createCommandChange(state.NewCommandNeutral(state.Command_NORMAL_START)))
+	case ContinueAction_CHALLENGE_ACCEPT:
+		e.Enqueue(createChallengeFlagHandledEventChange(*action.ForTeam, true))
+	case ContinueAction_CHALLENGE_REJECT:
+		e.Enqueue(createChallengeFlagHandledEventChange(*action.ForTeam, false))
 	default:
 		log.Println("Unknown continue action: ", *action.Type)
 	}

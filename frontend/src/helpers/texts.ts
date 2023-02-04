@@ -119,6 +119,7 @@ export const gameEventNames = new Map<GameEvent_Type, string>([
   [GameEvent_Type.BOT_SUBSTITUTION, "Bot substitution"],
   [GameEvent_Type.TOO_MANY_ROBOTS, "Too many bots on field"],
   [GameEvent_Type.CHALLENGE_FLAG, "Challenge flag"],
+  [GameEvent_Type.CHALLENGE_FLAG_HANDLED, "Challenge flag handled"],
   [GameEvent_Type.EMERGENCY_STOP, "Emergency stop"],
   [GameEvent_Type.UNSPORTING_BEHAVIOR_MINOR, "Unsporting behavior (minor)"],
   [GameEvent_Type.UNSPORTING_BEHAVIOR_MAJOR, "Unsporting behavior (major)"],

@@ -70,6 +70,10 @@ const label = computed(() => {
       return 'Accept Goal'
     case ContinueAction_Type.NORMAL_START:
       return 'Normal Start'
+    case ContinueAction_Type.CHALLENGE_ACCEPT:
+      return 'Accept Challenge'
+    case ContinueAction_Type.CHALLENGE_REJECT:
+      return 'Reject Challenge'
     case ContinueAction_Type.TYPE_UNKNOWN:
     case ContinueAction_Type.UNRECOGNIZED:
     default:

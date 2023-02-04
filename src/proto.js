@@ -800,6 +800,7 @@ export const GameEvent = $root.GameEvent = (() => {
      * @property {GameEvent.IBotSubstitution|null} [botSubstitution] GameEvent botSubstitution
      * @property {GameEvent.ITooManyRobots|null} [tooManyRobots] GameEvent tooManyRobots
      * @property {GameEvent.IChallengeFlag|null} [challengeFlag] GameEvent challengeFlag
+     * @property {GameEvent.IChallengeFlagHandled|null} [challengeFlagHandled] GameEvent challengeFlagHandled
      * @property {GameEvent.IEmergencyStop|null} [emergencyStop] GameEvent emergencyStop
      * @property {GameEvent.IUnsportingBehaviorMinor|null} [unsportingBehaviorMinor] GameEvent unsportingBehaviorMinor
      * @property {GameEvent.IUnsportingBehaviorMajor|null} [unsportingBehaviorMajor] GameEvent unsportingBehaviorMajor
@@ -1096,6 +1097,14 @@ export const GameEvent = $root.GameEvent = (() => {
     GameEvent.prototype.challengeFlag = null;
 
     /**
+     * GameEvent challengeFlagHandled.
+     * @member {GameEvent.IChallengeFlagHandled|null|undefined} challengeFlagHandled
+     * @memberof GameEvent
+     * @instance
+     */
+    GameEvent.prototype.challengeFlagHandled = null;
+
+    /**
      * GameEvent emergencyStop.
      * @member {GameEvent.IEmergencyStop|null|undefined} emergencyStop
      * @memberof GameEvent
@@ -1204,12 +1213,12 @@ export const GameEvent = $root.GameEvent = (() => {
 
     /**
      * GameEvent event.
-     * @member {"ballLeftFieldTouchLine"|"ballLeftFieldGoalLine"|"aimlessKick"|"attackerTooCloseToDefenseArea"|"defenderInDefenseArea"|"boundaryCrossing"|"keeperHeldBall"|"botDribbledBallTooFar"|"botPushedBot"|"botHeldBallDeliberately"|"botTippedOver"|"attackerTouchedBallInDefenseArea"|"botKickedBallTooFast"|"botCrashUnique"|"botCrashDrawn"|"defenderTooCloseToKickPoint"|"botTooFastInStop"|"botInterferedPlacement"|"possibleGoal"|"goal"|"invalidGoal"|"attackerDoubleTouchedBall"|"placementSucceeded"|"penaltyKickFailed"|"noProgressInGame"|"placementFailed"|"multipleCards"|"multipleFouls"|"botSubstitution"|"tooManyRobots"|"challengeFlag"|"emergencyStop"|"unsportingBehaviorMinor"|"unsportingBehaviorMajor"|"prepared"|"indirectGoal"|"chippedGoal"|"kickTimeout"|"attackerTouchedOpponentInDefenseArea"|"attackerTouchedOpponentInDefenseAreaSkipped"|"botCrashUniqueSkipped"|"botPushedBotSkipped"|"defenderInDefenseAreaPartially"|"multiplePlacementFailures"|undefined} event
+     * @member {"ballLeftFieldTouchLine"|"ballLeftFieldGoalLine"|"aimlessKick"|"attackerTooCloseToDefenseArea"|"defenderInDefenseArea"|"boundaryCrossing"|"keeperHeldBall"|"botDribbledBallTooFar"|"botPushedBot"|"botHeldBallDeliberately"|"botTippedOver"|"attackerTouchedBallInDefenseArea"|"botKickedBallTooFast"|"botCrashUnique"|"botCrashDrawn"|"defenderTooCloseToKickPoint"|"botTooFastInStop"|"botInterferedPlacement"|"possibleGoal"|"goal"|"invalidGoal"|"attackerDoubleTouchedBall"|"placementSucceeded"|"penaltyKickFailed"|"noProgressInGame"|"placementFailed"|"multipleCards"|"multipleFouls"|"botSubstitution"|"tooManyRobots"|"challengeFlag"|"challengeFlagHandled"|"emergencyStop"|"unsportingBehaviorMinor"|"unsportingBehaviorMajor"|"prepared"|"indirectGoal"|"chippedGoal"|"kickTimeout"|"attackerTouchedOpponentInDefenseArea"|"attackerTouchedOpponentInDefenseAreaSkipped"|"botCrashUniqueSkipped"|"botPushedBotSkipped"|"defenderInDefenseAreaPartially"|"multiplePlacementFailures"|undefined} event
      * @memberof GameEvent
      * @instance
      */
     Object.defineProperty(GameEvent.prototype, "event", {
-        get: $util.oneOfGetter($oneOfFields = ["ballLeftFieldTouchLine", "ballLeftFieldGoalLine", "aimlessKick", "attackerTooCloseToDefenseArea", "defenderInDefenseArea", "boundaryCrossing", "keeperHeldBall", "botDribbledBallTooFar", "botPushedBot", "botHeldBallDeliberately", "botTippedOver", "attackerTouchedBallInDefenseArea", "botKickedBallTooFast", "botCrashUnique", "botCrashDrawn", "defenderTooCloseToKickPoint", "botTooFastInStop", "botInterferedPlacement", "possibleGoal", "goal", "invalidGoal", "attackerDoubleTouchedBall", "placementSucceeded", "penaltyKickFailed", "noProgressInGame", "placementFailed", "multipleCards", "multipleFouls", "botSubstitution", "tooManyRobots", "challengeFlag", "emergencyStop", "unsportingBehaviorMinor", "unsportingBehaviorMajor", "prepared", "indirectGoal", "chippedGoal", "kickTimeout", "attackerTouchedOpponentInDefenseArea", "attackerTouchedOpponentInDefenseAreaSkipped", "botCrashUniqueSkipped", "botPushedBotSkipped", "defenderInDefenseAreaPartially", "multiplePlacementFailures"]),
+        get: $util.oneOfGetter($oneOfFields = ["ballLeftFieldTouchLine", "ballLeftFieldGoalLine", "aimlessKick", "attackerTooCloseToDefenseArea", "defenderInDefenseArea", "boundaryCrossing", "keeperHeldBall", "botDribbledBallTooFar", "botPushedBot", "botHeldBallDeliberately", "botTippedOver", "attackerTouchedBallInDefenseArea", "botKickedBallTooFast", "botCrashUnique", "botCrashDrawn", "defenderTooCloseToKickPoint", "botTooFastInStop", "botInterferedPlacement", "possibleGoal", "goal", "invalidGoal", "attackerDoubleTouchedBall", "placementSucceeded", "penaltyKickFailed", "noProgressInGame", "placementFailed", "multipleCards", "multipleFouls", "botSubstitution", "tooManyRobots", "challengeFlag", "challengeFlagHandled", "emergencyStop", "unsportingBehaviorMinor", "unsportingBehaviorMajor", "prepared", "indirectGoal", "chippedGoal", "kickTimeout", "attackerTouchedOpponentInDefenseArea", "attackerTouchedOpponentInDefenseAreaSkipped", "botCrashUniqueSkipped", "botPushedBotSkipped", "defenderInDefenseAreaPartially", "multiplePlacementFailures"]),
         set: $util.oneOfSetter($oneOfFields)
     });
 
@@ -1330,6 +1339,8 @@ export const GameEvent = $root.GameEvent = (() => {
             $root.GameEvent.ChallengeFlag.encode(message.challengeFlag, writer.uint32(/* id 46, wireType 2 =*/370).fork()).ldelim();
         if (message.emergencyStop != null && Object.hasOwnProperty.call(message, "emergencyStop"))
             $root.GameEvent.EmergencyStop.encode(message.emergencyStop, writer.uint32(/* id 47, wireType 2 =*/378).fork()).ldelim();
+        if (message.challengeFlagHandled != null && Object.hasOwnProperty.call(message, "challengeFlagHandled"))
+            $root.GameEvent.ChallengeFlagHandled.encode(message.challengeFlagHandled, writer.uint32(/* id 48, wireType 2 =*/386).fork()).ldelim();
         return writer;
     };
 
@@ -1488,25 +1499,29 @@ export const GameEvent = $root.GameEvent = (() => {
                 }
             case 37: {
                     message.botSubstitution = $root.GameEvent.BotSubstitution.decode(reader, reader.uint32());
-                    break;
-                }
-            case 38: {
+                break;
+            }
+                case 38: {
                     message.tooManyRobots = $root.GameEvent.TooManyRobots.decode(reader, reader.uint32());
                     break;
                 }
-            case 46: {
+                case 46: {
                     message.challengeFlag = $root.GameEvent.ChallengeFlag.decode(reader, reader.uint32());
                     break;
                 }
-            case 47: {
+                case 48: {
+                    message.challengeFlagHandled = $root.GameEvent.ChallengeFlagHandled.decode(reader, reader.uint32());
+                    break;
+                }
+                case 47: {
                     message.emergencyStop = $root.GameEvent.EmergencyStop.decode(reader, reader.uint32());
                     break;
                 }
-            case 35: {
+                case 35: {
                     message.unsportingBehaviorMinor = $root.GameEvent.UnsportingBehaviorMinor.decode(reader, reader.uint32());
                     break;
                 }
-            case 36: {
+                case 36: {
                     message.unsportingBehaviorMajor = $root.GameEvent.UnsportingBehaviorMajor.decode(reader, reader.uint32());
                     break;
                 }
@@ -1621,8 +1636,9 @@ export const GameEvent = $root.GameEvent = (() => {
             case 34:
             case 37:
             case 38:
-            case 44:
-            case 45:
+                case 44:
+                case 46:
+                case 45:
             case 35:
             case 36:
             case 1:
@@ -1952,6 +1968,16 @@ export const GameEvent = $root.GameEvent = (() => {
                     return "challengeFlag." + error;
             }
         }
+        if (message.challengeFlagHandled != null && message.hasOwnProperty("challengeFlagHandled")) {
+            if (properties.event === 1)
+                return "event: multiple values";
+            properties.event = 1;
+            {
+                let error = $root.GameEvent.ChallengeFlagHandled.verify(message.challengeFlagHandled);
+                if (error)
+                    return "challengeFlagHandled." + error;
+            }
+        }
         if (message.emergencyStop != null && message.hasOwnProperty("emergencyStop")) {
             if (properties.event === 1)
                 return "event: multiple values";
@@ -2215,26 +2241,30 @@ export const GameEvent = $root.GameEvent = (() => {
             message.type = 34;
             break;
         case "BOT_SUBSTITUTION":
-        case 37:
-            message.type = 37;
-            break;
-        case "TOO_MANY_ROBOTS":
-        case 38:
-            message.type = 38;
-            break;
-        case "CHALLENGE_FLAG":
-        case 44:
-            message.type = 44;
-            break;
-        case "EMERGENCY_STOP":
-        case 45:
-            message.type = 45;
-            break;
-        case "UNSPORTING_BEHAVIOR_MINOR":
-        case 35:
-            message.type = 35;
-            break;
-        case "UNSPORTING_BEHAVIOR_MAJOR":
+            case 37:
+                message.type = 37;
+                break;
+            case "TOO_MANY_ROBOTS":
+            case 38:
+                message.type = 38;
+                break;
+            case "CHALLENGE_FLAG":
+            case 44:
+                message.type = 44;
+                break;
+            case "CHALLENGE_FLAG_HANDLED":
+            case 46:
+                message.type = 46;
+                break;
+            case "EMERGENCY_STOP":
+            case 45:
+                message.type = 45;
+                break;
+            case "UNSPORTING_BEHAVIOR_MINOR":
+            case 35:
+                message.type = 35;
+                break;
+            case "UNSPORTING_BEHAVIOR_MAJOR":
         case 36:
             message.type = 36;
             break;
@@ -2440,6 +2470,11 @@ export const GameEvent = $root.GameEvent = (() => {
             if (typeof object.challengeFlag !== "object")
                 throw TypeError(".GameEvent.challengeFlag: object expected");
             message.challengeFlag = $root.GameEvent.ChallengeFlag.fromObject(object.challengeFlag);
+        }
+        if (object.challengeFlagHandled != null) {
+            if (typeof object.challengeFlagHandled !== "object")
+                throw TypeError(".GameEvent.challengeFlagHandled: object expected");
+            message.challengeFlagHandled = $root.GameEvent.ChallengeFlagHandled.fromObject(object.challengeFlagHandled);
         }
         if (object.emergencyStop != null) {
             if (typeof object.emergencyStop !== "object")
@@ -2752,6 +2787,11 @@ export const GameEvent = $root.GameEvent = (() => {
             object.emergencyStop = $root.GameEvent.EmergencyStop.toObject(message.emergencyStop, options);
             if (options.oneofs)
                 object.event = "emergencyStop";
+        }
+        if (message.challengeFlagHandled != null && message.hasOwnProperty("challengeFlagHandled")) {
+            object.challengeFlagHandled = $root.GameEvent.ChallengeFlagHandled.toObject(message.challengeFlagHandled, options);
+            if (options.oneofs)
+                object.event = "challengeFlagHandled";
         }
         return object;
     };
@@ -12485,7 +12525,253 @@ export const GameEvent = $root.GameEvent = (() => {
         return ChallengeFlag;
     })();
 
-    GameEvent.EmergencyStop = (function() {
+    GameEvent.ChallengeFlagHandled = (function () {
+
+        /**
+         * Properties of a ChallengeFlagHandled.
+         * @memberof GameEvent
+         * @interface IChallengeFlagHandled
+         * @property {Team} byTeam ChallengeFlagHandled byTeam
+         * @property {boolean} accepted ChallengeFlagHandled accepted
+         */
+
+        /**
+         * Constructs a new ChallengeFlagHandled.
+         * @memberof GameEvent
+         * @classdesc Represents a ChallengeFlagHandled.
+         * @implements IChallengeFlagHandled
+         * @constructor
+         * @param {GameEvent.IChallengeFlagHandled=} [properties] Properties to set
+         */
+        function ChallengeFlagHandled(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * ChallengeFlagHandled byTeam.
+         * @member {Team} byTeam
+         * @memberof GameEvent.ChallengeFlagHandled
+         * @instance
+         */
+        ChallengeFlagHandled.prototype.byTeam = 0;
+
+        /**
+         * ChallengeFlagHandled accepted.
+         * @member {boolean} accepted
+         * @memberof GameEvent.ChallengeFlagHandled
+         * @instance
+         */
+        ChallengeFlagHandled.prototype.accepted = false;
+
+        /**
+         * Creates a new ChallengeFlagHandled instance using the specified properties.
+         * @function create
+         * @memberof GameEvent.ChallengeFlagHandled
+         * @static
+         * @param {GameEvent.IChallengeFlagHandled=} [properties] Properties to set
+         * @returns {GameEvent.ChallengeFlagHandled} ChallengeFlagHandled instance
+         */
+        ChallengeFlagHandled.create = function create(properties) {
+            return new ChallengeFlagHandled(properties);
+        };
+
+        /**
+         * Encodes the specified ChallengeFlagHandled message. Does not implicitly {@link GameEvent.ChallengeFlagHandled.verify|verify} messages.
+         * @function encode
+         * @memberof GameEvent.ChallengeFlagHandled
+         * @static
+         * @param {GameEvent.IChallengeFlagHandled} message ChallengeFlagHandled message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ChallengeFlagHandled.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            writer.uint32(/* id 1, wireType 0 =*/8).int32(message.byTeam);
+            writer.uint32(/* id 2, wireType 0 =*/16).bool(message.accepted);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified ChallengeFlagHandled message, length delimited. Does not implicitly {@link GameEvent.ChallengeFlagHandled.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof GameEvent.ChallengeFlagHandled
+         * @static
+         * @param {GameEvent.IChallengeFlagHandled} message ChallengeFlagHandled message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ChallengeFlagHandled.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a ChallengeFlagHandled message from the specified reader or buffer.
+         * @function decode
+         * @memberof GameEvent.ChallengeFlagHandled
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {GameEvent.ChallengeFlagHandled} ChallengeFlagHandled
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ChallengeFlagHandled.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length,
+                message = new $root.GameEvent.ChallengeFlagHandled();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                    case 1: {
+                        message.byTeam = reader.int32();
+                        break;
+                    }
+                    case 2: {
+                        message.accepted = reader.bool();
+                        break;
+                    }
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                }
+            }
+            if (!message.hasOwnProperty("byTeam"))
+                throw $util.ProtocolError("missing required 'byTeam'", {instance: message});
+            if (!message.hasOwnProperty("accepted"))
+                throw $util.ProtocolError("missing required 'accepted'", {instance: message});
+            return message;
+        };
+
+        /**
+         * Decodes a ChallengeFlagHandled message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof GameEvent.ChallengeFlagHandled
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {GameEvent.ChallengeFlagHandled} ChallengeFlagHandled
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ChallengeFlagHandled.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a ChallengeFlagHandled message.
+         * @function verify
+         * @memberof GameEvent.ChallengeFlagHandled
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        ChallengeFlagHandled.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            switch (message.byTeam) {
+                default:
+                    return "byTeam: enum value expected";
+                case 0:
+                case 1:
+                case 2:
+                    break;
+            }
+            if (typeof message.accepted !== "boolean")
+                return "accepted: boolean expected";
+            return null;
+        };
+
+        /**
+         * Creates a ChallengeFlagHandled message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof GameEvent.ChallengeFlagHandled
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {GameEvent.ChallengeFlagHandled} ChallengeFlagHandled
+         */
+        ChallengeFlagHandled.fromObject = function fromObject(object) {
+            if (object instanceof $root.GameEvent.ChallengeFlagHandled)
+                return object;
+            let message = new $root.GameEvent.ChallengeFlagHandled();
+            switch (object.byTeam) {
+                case "UNKNOWN":
+                case 0:
+                    message.byTeam = 0;
+                    break;
+                case "YELLOW":
+                case 1:
+                    message.byTeam = 1;
+                    break;
+                case "BLUE":
+                case 2:
+                    message.byTeam = 2;
+                    break;
+            }
+            if (object.accepted != null)
+                message.accepted = Boolean(object.accepted);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a ChallengeFlagHandled message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof GameEvent.ChallengeFlagHandled
+         * @static
+         * @param {GameEvent.ChallengeFlagHandled} message ChallengeFlagHandled
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        ChallengeFlagHandled.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.byTeam = options.enums === String ? "UNKNOWN" : 0;
+                object.accepted = false;
+            }
+            if (message.byTeam != null && message.hasOwnProperty("byTeam"))
+                object.byTeam = options.enums === String ? $root.Team[message.byTeam] : message.byTeam;
+            if (message.accepted != null && message.hasOwnProperty("accepted"))
+                object.accepted = message.accepted;
+            return object;
+        };
+
+        /**
+         * Converts this ChallengeFlagHandled to JSON.
+         * @function toJSON
+         * @memberof GameEvent.ChallengeFlagHandled
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        ChallengeFlagHandled.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the default type url for ChallengeFlagHandled
+         * @function getTypeUrl
+         * @memberof GameEvent.ChallengeFlagHandled
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        ChallengeFlagHandled.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/GameEvent.ChallengeFlagHandled";
+        };
+
+        return ChallengeFlagHandled;
+    })();
+
+    GameEvent.EmergencyStop = (function () {
 
         /**
          * Properties of an EmergencyStop.
@@ -13561,6 +13847,7 @@ export const GameEvent = $root.GameEvent = (() => {
      * @property {number} BOT_SUBSTITUTION=37 BOT_SUBSTITUTION value
      * @property {number} TOO_MANY_ROBOTS=38 TOO_MANY_ROBOTS value
      * @property {number} CHALLENGE_FLAG=44 CHALLENGE_FLAG value
+     * @property {number} CHALLENGE_FLAG_HANDLED=46 CHALLENGE_FLAG_HANDLED value
      * @property {number} EMERGENCY_STOP=45 EMERGENCY_STOP value
      * @property {number} UNSPORTING_BEHAVIOR_MINOR=35 UNSPORTING_BEHAVIOR_MINOR value
      * @property {number} UNSPORTING_BEHAVIOR_MAJOR=36 UNSPORTING_BEHAVIOR_MAJOR value
@@ -13609,6 +13896,7 @@ export const GameEvent = $root.GameEvent = (() => {
         values[valuesById[37] = "BOT_SUBSTITUTION"] = 37;
         values[valuesById[38] = "TOO_MANY_ROBOTS"] = 38;
         values[valuesById[44] = "CHALLENGE_FLAG"] = 44;
+        values[valuesById[46] = "CHALLENGE_FLAG_HANDLED"] = 46;
         values[valuesById[45] = "EMERGENCY_STOP"] = 45;
         values[valuesById[35] = "UNSPORTING_BEHAVIOR_MINOR"] = 35;
         values[valuesById[36] = "UNSPORTING_BEHAVIOR_MAJOR"] = 36;
@@ -29637,6 +29925,8 @@ export const ContinueAction = $root.ContinueAction = (() => {
             case 16:
             case 12:
             case 13:
+            case 18:
+            case 19:
                 break;
         }
         switch (message.forTeam) {
@@ -29757,6 +30047,14 @@ export const ContinueAction = $root.ContinueAction = (() => {
             case "NORMAL_START":
             case 13:
                 message.type = 13;
+                break;
+            case "CHALLENGE_ACCEPT":
+            case 18:
+                message.type = 18;
+                break;
+            case "CHALLENGE_REJECT":
+            case 19:
+                message.type = 19;
                 break;
         }
         switch (object.forTeam) {
@@ -29895,6 +30193,8 @@ export const ContinueAction = $root.ContinueAction = (() => {
      * @property {number} END_GAME=16 END_GAME value
      * @property {number} ACCEPT_GOAL=12 ACCEPT_GOAL value
      * @property {number} NORMAL_START=13 NORMAL_START value
+     * @property {number} CHALLENGE_ACCEPT=18 CHALLENGE_ACCEPT value
+     * @property {number} CHALLENGE_REJECT=19 CHALLENGE_REJECT value
      */
     ContinueAction.Type = (function() {
         const valuesById = {}, values = Object.create(valuesById);
@@ -29916,6 +30216,8 @@ export const ContinueAction = $root.ContinueAction = (() => {
         values[valuesById[16] = "END_GAME"] = 16;
         values[valuesById[12] = "ACCEPT_GOAL"] = 12;
         values[valuesById[13] = "NORMAL_START"] = 13;
+        values[valuesById[18] = "CHALLENGE_ACCEPT"] = 18;
+        values[valuesById[19] = "CHALLENGE_REJECT"] = 19;
         return values;
     })();
 

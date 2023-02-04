@@ -280,7 +280,10 @@ func (c *RemoteControlClient) checkRequestRobotSubstitution() error {
 func (c *RemoteControlClient) checkRequestChallengeFlag() error {
 	currentState := c.gcEngine.CurrentState()
 	teamState := currentState.TeamState[c.team.String()]
-	if currentState.HasGameEventByTeam(state.GameEvent_CHALLENGE_FLAG, *c.team) {
+	challengeFlagsRaised := len(currentState.FindGameEventsByTeam(state.GameEvent_CHALLENGE_FLAG, *c.team))
+	challengeFlagsHandled := len(currentState.FindGameEventsByTeam(state.GameEvent_CHALLENGE_FLAG_HANDLED, *c.team))
+
+	if challengeFlagsRaised > challengeFlagsHandled {
 		return errors.New("Challenge flag already requested")
 	}
 	if *teamState.ChallengeFlags <= 0 {

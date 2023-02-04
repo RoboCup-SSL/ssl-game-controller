@@ -74,6 +74,7 @@ message GameEvent {
         BotSubstitution bot_substitution = 37;
         TooManyRobots too_many_robots = 38;
         ChallengeFlag challenge_flag = 46;
+        ChallengeFlagHandled challenge_flag_handled = 48;
         EmergencyStop emergency_stop = 47;
 
         UnsportingBehaviorMinor unsporting_behavior_minor = 35;
@@ -451,6 +452,13 @@ message GameEvent {
         // the team that requested the challenge flag
         required Team by_team = 1;
     }
+    // A challenge, flagged recently, has been handled by the referee
+    message ChallengeFlagHandled {
+        // the team that requested the challenge flag
+        required Team by_team = 1;
+        // the challenge was accepted by the referee
+        required bool accepted = 2;
+    }
     // An emergency stop, requested by team previously, occurred
     message EmergencyStop {
         // the team that substitutes robots
@@ -537,6 +545,7 @@ message GameEvent {
         BOT_SUBSTITUTION = 37; // triggered by GC
         TOO_MANY_ROBOTS = 38; // triggered by GC
         CHALLENGE_FLAG = 44; // triggered by GC
+        CHALLENGE_FLAG_HANDLED = 46; // triggered by GC
         EMERGENCY_STOP = 45; // triggered by GC
 
         UNSPORTING_BEHAVIOR_MINOR = 35; // triggered by human ref
