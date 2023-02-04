@@ -24,13 +24,13 @@ const color = computed(() => {
     case ContinueAction_State.READY_AUTO:
       return 'positive'
     case ContinueAction_State.READY_MANUAL:
-      return 'secondary'
+      return 'primary'
     case ContinueAction_State.BLOCKED:
       return 'negative'
     case ContinueAction_State.WAITING:
       return 'warning'
     default:
-      return 'primary'
+      return 'secondary'
   }
 })
 

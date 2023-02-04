@@ -23,8 +23,17 @@ createApp(App)
   .use(Quasar, {
     config: {
       brand: {
-        primary: '#1ca3a3',
-        secondary: '#8511bb',
+        primary: '#a11a30',
+        secondary: '#984447',
+        accent: '#9C27B0',
+
+        dark: '#07171a',
+        'dark-page': '#374040',
+
+        positive: '#21BA45',
+        negative: '#C10015',
+        info: '#1ad3ed',
+        warning: '#ddb660'
       }
     }
   })
