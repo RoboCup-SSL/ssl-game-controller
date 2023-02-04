@@ -19610,7 +19610,7 @@ export const Change = $root.Change = (() => {
                         break;
                     }
                 case 2: {
-                    message.teamName = $root.google.protobuf.StringValue.decode(reader, reader.uint32());
+                        message.teamName = $root.google.protobuf.StringValue.decode(reader, reader.uint32());
                         break;
                     }
                 case 3: {
@@ -19840,10 +19840,10 @@ export const Change = $root.Change = (() => {
                 return object;
             let message = new $root.Change.UpdateTeamState();
             switch (object.forTeam) {
-            case "UNKNOWN":
-            case 0:
-                message.forTeam = 0;
-                break;
+                case "UNKNOWN":
+                case 0:
+                    message.forTeam = 0;
+                    break;
                 case "YELLOW":
                 case 1:
                     message.forTeam = 1;
@@ -29624,6 +29624,7 @@ export const ContinueAction = $root.ContinueAction = (() => {
             case 10:
             case 2:
             case 11:
+            case 17:
             case 3:
             case 4:
             case 9:
@@ -29685,14 +29686,14 @@ export const ContinueAction = $root.ContinueAction = (() => {
             return object;
         let message = new $root.ContinueAction();
         switch (object.type) {
-        case "TYPE_UNKNOWN":
-        case 0:
-            message.type = 0;
-            break;
-        case "HALT":
-        case 1:
-            message.type = 1;
-            break;
+            case "TYPE_UNKNOWN":
+            case 0:
+                message.type = 0;
+                break;
+            case "HALT":
+            case 1:
+                message.type = 1;
+                break;
             case "RESUME_FROM_HALT":
             case 10:
                 message.type = 10;
@@ -29701,9 +29702,13 @@ export const ContinueAction = $root.ContinueAction = (() => {
             case 2:
                 message.type = 2;
                 break;
-            case "RESUME_FROM_STOP":
+            case "FORCE_START":
             case 11:
                 message.type = 11;
+                break;
+            case "FREE_KICK":
+            case 17:
+                message.type = 17;
                 break;
             case "NEXT_COMMAND":
             case 3:
@@ -29763,10 +29768,10 @@ export const ContinueAction = $root.ContinueAction = (() => {
             case 1:
                 message.forTeam = 1;
                 break;
-        case "BLUE":
-        case 2:
-            message.forTeam = 2;
-            break;
+            case "BLUE":
+            case 2:
+                message.forTeam = 2;
+                break;
         }
         if (object.continuationIssues) {
             if (!Array.isArray(object.continuationIssues))
@@ -29876,7 +29881,8 @@ export const ContinueAction = $root.ContinueAction = (() => {
      * @property {number} HALT=1 HALT value
      * @property {number} RESUME_FROM_HALT=10 RESUME_FROM_HALT value
      * @property {number} STOP_GAME=2 STOP_GAME value
-     * @property {number} RESUME_FROM_STOP=11 RESUME_FROM_STOP value
+     * @property {number} FORCE_START=11 FORCE_START value
+     * @property {number} FREE_KICK=17 FREE_KICK value
      * @property {number} NEXT_COMMAND=3 NEXT_COMMAND value
      * @property {number} BALL_PLACEMENT_START=4 BALL_PLACEMENT_START value
      * @property {number} BALL_PLACEMENT_CANCEL=9 BALL_PLACEMENT_CANCEL value
@@ -29896,7 +29902,8 @@ export const ContinueAction = $root.ContinueAction = (() => {
         values[valuesById[1] = "HALT"] = 1;
         values[valuesById[10] = "RESUME_FROM_HALT"] = 10;
         values[valuesById[2] = "STOP_GAME"] = 2;
-        values[valuesById[11] = "RESUME_FROM_STOP"] = 11;
+        values[valuesById[11] = "FORCE_START"] = 11;
+        values[valuesById[17] = "FREE_KICK"] = 17;
         values[valuesById[3] = "NEXT_COMMAND"] = 3;
         values[valuesById[4] = "BALL_PLACEMENT_START"] = 4;
         values[valuesById[9] = "BALL_PLACEMENT_CANCEL"] = 9;

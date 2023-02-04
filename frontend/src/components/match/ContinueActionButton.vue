@@ -42,8 +42,10 @@ const label = computed(() => {
       return 'Resume'
     case ContinueAction_Type.STOP_GAME:
       return 'Stop'
-    case ContinueAction_Type.RESUME_FROM_STOP:
+    case ContinueAction_Type.FORCE_START:
       return 'Force Start (no next command)'
+    case ContinueAction_Type.FREE_KICK:
+      return 'Free Kick (no next command)'
     case ContinueAction_Type.NEXT_COMMAND:
       return commandName(store.matchState.nextCommand?.type!)
     case ContinueAction_Type.BALL_PLACEMENT_START:

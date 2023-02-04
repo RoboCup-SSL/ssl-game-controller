@@ -9,9 +9,12 @@ import (
 
 const distanceToBallDuringPenalty = 1.0
 
-func (e *Engine) createNextCommandContinueAction(actionType ContinueAction_Type) *ContinueAction {
+func (e *Engine) createNextCommandContinueAction(
+	actionType ContinueAction_Type,
+	forTeam state.Team,
+) *ContinueAction {
 	var actionState ContinueAction_State
-	var continuationIssues = e.findIssuesForContinuation(*e.currentState.Command.Type)
+	var continuationIssues = e.findIssuesForContinuation()
 
 	var lastReadyAt *timestamppb.Timestamp
 	var lastContinueAction = e.LastContinueAction(actionType)
@@ -41,16 +44,9 @@ func (e *Engine) createNextCommandContinueAction(actionType ContinueAction_Type)
 		}
 	}
 
-	var forTeam *state.Team
-	if e.currentState.NextCommand != nil {
-		forTeam = e.currentState.NextCommand.ForTeam
-	} else {
-		forTeam = state.NewTeam(state.Team_UNKNOWN)
-	}
-
 	return &ContinueAction{
 		Type:               &actionType,
-		ForTeam:            forTeam,
+		ForTeam:            &forTeam,
 		State:              &actionState,
 		ContinuationIssues: continuationIssues,
 		ReadyAt:            readyAt,
@@ -73,13 +69,14 @@ func maxTime(t1, t2 *timestamppb.Timestamp) *timestamppb.Timestamp {
 	return t2
 }
 
-func (e *Engine) findIssuesForContinuation(command state.Command_Type) []string {
+func (e *Engine) findIssuesForContinuation() []string {
 
 	if e.trackerStateGc.Ball == nil {
 		// No tracking data, can not check for issues
 		return []string{}
 	}
 
+	command := *e.currentState.Command.Type
 	switch command {
 	case state.Command_KICKOFF:
 		return e.readyToContinueKickoff()

@@ -119,9 +119,17 @@ func (e *Engine) nextActions() (actions []*ContinueAction) {
 				))
 			}
 		} else if e.currentState.NextCommand != nil {
-			actions = append(actions, e.createNextCommandContinueAction(ContinueAction_NEXT_COMMAND))
+			var forTeam state.Team
+			if e.currentState.NextCommand != nil && e.currentState.NextCommand.ForTeam != nil {
+				forTeam = *e.currentState.NextCommand.ForTeam
+			} else {
+				forTeam = state.Team_UNKNOWN
+			}
+			actions = append(actions, e.createNextCommandContinueAction(ContinueAction_NEXT_COMMAND, forTeam))
 		} else {
-			actions = append(actions, e.createNextCommandContinueAction(ContinueAction_RESUME_FROM_STOP))
+			actions = append(actions, e.createNextCommandContinueAction(ContinueAction_FORCE_START, state.Team_UNKNOWN))
+			actions = append(actions, e.createNextCommandContinueAction(ContinueAction_FREE_KICK, state.Team_YELLOW))
+			actions = append(actions, e.createNextCommandContinueAction(ContinueAction_FREE_KICK, state.Team_BLUE))
 		}
 	}
 

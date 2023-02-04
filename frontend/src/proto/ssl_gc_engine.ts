@@ -138,7 +138,8 @@ export enum ContinueAction_Type {
   HALT = "HALT",
   RESUME_FROM_HALT = "RESUME_FROM_HALT",
   STOP_GAME = "STOP_GAME",
-  RESUME_FROM_STOP = "RESUME_FROM_STOP",
+  FORCE_START = "FORCE_START",
+  FREE_KICK = "FREE_KICK",
   NEXT_COMMAND = "NEXT_COMMAND",
   BALL_PLACEMENT_START = "BALL_PLACEMENT_START",
   BALL_PLACEMENT_CANCEL = "BALL_PLACEMENT_CANCEL",
@@ -169,8 +170,11 @@ export function continueAction_TypeFromJSON(object: any): ContinueAction_Type {
     case "STOP_GAME":
       return ContinueAction_Type.STOP_GAME;
     case 11:
-    case "RESUME_FROM_STOP":
-      return ContinueAction_Type.RESUME_FROM_STOP;
+    case "FORCE_START":
+      return ContinueAction_Type.FORCE_START;
+    case 17:
+    case "FREE_KICK":
+      return ContinueAction_Type.FREE_KICK;
     case 3:
     case "NEXT_COMMAND":
       return ContinueAction_Type.NEXT_COMMAND;
@@ -224,8 +228,10 @@ export function continueAction_TypeToJSON(object: ContinueAction_Type): string {
       return "RESUME_FROM_HALT";
     case ContinueAction_Type.STOP_GAME:
       return "STOP_GAME";
-    case ContinueAction_Type.RESUME_FROM_STOP:
-      return "RESUME_FROM_STOP";
+    case ContinueAction_Type.FORCE_START:
+      return "FORCE_START";
+    case ContinueAction_Type.FREE_KICK:
+      return "FREE_KICK";
     case ContinueAction_Type.NEXT_COMMAND:
       return "NEXT_COMMAND";
     case ContinueAction_Type.BALL_PLACEMENT_START:

@@ -114,7 +114,8 @@ message ContinueAction {
         HALT = 1;
         RESUME_FROM_HALT = 10;
         STOP_GAME = 2;
-        RESUME_FROM_STOP = 11;
+        FORCE_START = 11;
+        FREE_KICK = 17;
         NEXT_COMMAND = 3;
         BALL_PLACEMENT_START = 4;
         BALL_PLACEMENT_CANCEL = 9;
