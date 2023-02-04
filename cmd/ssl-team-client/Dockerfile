@@ -1,4 +1,4 @@
-FROM golang:1.18-alpine3.15 AS build_go
+FROM golang:1.19-alpine3.15 AS build_go
 WORKDIR /go/src/github.com/RoboCup-SSL/ssl-game-controller
 COPY cmd cmd
 COPY internal internal
