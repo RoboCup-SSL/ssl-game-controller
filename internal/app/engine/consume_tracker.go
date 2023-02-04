@@ -55,6 +55,7 @@ func (e *Engine) processTrackerSources() {
 	for sourceId, state := range e.trackerState {
 		if now.Sub(e.trackerLastUpdate[*state.Uuid]) > time.Second {
 			delete(e.trackerState, sourceId)
+			delete(e.gcState.Trackers, sourceId)
 		}
 	}
 }
