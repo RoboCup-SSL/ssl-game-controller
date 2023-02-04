@@ -91,8 +91,7 @@ onUnmounted(() => {
         </div>
       </div>
       <template v-if="halftime">
-        <q-separator spaced/>
-        <div v-if="!halftime" class="row justify-evenly">
+        <div class="row justify-evenly">
           <SwitchColorButton/>
           <SwitchSidesButton/>
         </div>
