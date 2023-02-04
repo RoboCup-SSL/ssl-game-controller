@@ -91,14 +91,15 @@ const submitAction = () => {
   <q-btn class="q-mx-md q-my-xs"
          :color="color"
          @click="submitAction">
+    <TeamBadge :team="team"/>
+    {{ label }}
     <q-list dense>
       <q-item v-for="(issue, key) in issues" :key="key">
         <q-icon name="warning"></q-icon>
         {{ issue }}
       </q-item>
     </q-list>
-    <TeamBadge :team="team"/>
-    {{ label }}
+
     <q-badge color="orange" :label="props.id+1" floating/>
   </q-btn>
 </template>
