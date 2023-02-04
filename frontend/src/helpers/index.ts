@@ -49,6 +49,9 @@ export const originIcon = (origin: string) => {
       return "fork_right"
     case "Majority":
       return "group_add"
+    case "Remote Control YELLOW":
+    case "Remote Control BLUE":
+      return "settings_remote"
     default:
       return "help_outline"
   }
