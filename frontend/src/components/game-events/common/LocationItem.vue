@@ -14,10 +14,10 @@ const updateValue = (v: Vector2 | undefined) => {
   emit('update:modelValue', v)
 }
 const updateX = (x: string | number | null) => {
-  if (x) {
+  if (x !== null) {
     const y = props.modelValue?.y || 0
     if (typeof x === 'string') {
-      updateValue({x: parseInt(x), y})
+      updateValue({x: parseFloat(x), y})
     } else {
       updateValue({x, y})
     }
@@ -26,11 +26,10 @@ const updateX = (x: string | number | null) => {
   }
 }
 const updateY = (y: string | number | null) => {
-  if (y) {
+  if (y !== null) {
     const x = props.modelValue?.x || 0
     if (typeof y === 'string') {
-      updateValue({x, y: parseInt(y)})
-
+      updateValue({x, y: parseFloat(y)})
     } else {
       updateValue({x, y})
     }
