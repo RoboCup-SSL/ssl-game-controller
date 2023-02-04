@@ -1,0 +1,60 @@
+.body--dark {
+  --q-primary: #487A91;
+  --q-secondary: #26A69A;
+  --q-accent: #9C27B0;
+  --q-positive: #21BA45;
+  --q-negative: #C10015;
+  --q-info: #31CCEC;
+  --q-warning: #F2C037;
+  --q-dark-page: #545454;
+}
+
+.body--light {
+  --q-primary: #0794B9;
+  --q-secondary: #17DFD5;
+  --q-accent: #9C27B0;
+  --q-positive: #21BA45;
+  --q-negative: #C10015;
+  --q-info: #31CCEC;
+  --q-warning: #F2C037;
+}
+
+.text-team-yellow {
+  color: #000000 !important;
+}
+
+.bg-team-yellow {
+  background: #ced509 !important;
+}
+
+.text-team-blue {
+  color: #ffffff !important;
+}
+
+.bg-team-blue {
+  background: #134cc4 !important;
+}
+
+h1 {
+  margin: 0.3em;
+}
+
+h2 {
+  margin: 0.3em;
+}
+
+h3 {
+  margin: 0.3em;
+}
+
+h4 {
+  margin: 0.3em;
+}
+
+h5 {
+  margin: 0.3em;
+}
+
+.max-content-width {
+  max-width: 900px;
+}

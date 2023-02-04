@@ -17,15 +17,6 @@ import {teams} from "@/helpers";
 
 <template>
   <div class="q-ma-md">
-    <p>
-      To set up a new match, go through this page from top to bottom.
-      The full procedure can be found in the
-      <q-btn dense color="primary" target="_blank"
-             href="https://robocup-ssl.github.io/ssl-rules/sslrules.html#_match_preparation">
-        rule book
-      </q-btn>
-      .
-    </p>
     <div class="row justify-evenly">
       <div class="q-pa-md">
         <ResetMatchButton/>
@@ -81,6 +72,17 @@ import {teams} from "@/helpers";
       <SwitchColorRandomButton/>
       <SwitchSidesRandomButton/>
       <EndMatchButton/>
+    </div>
+
+    <div class="q-ma-md">
+      <p>
+        To set up a new match, go through this page from top to bottom.
+        The full procedure can be found in the
+        <q-btn color="primary" target="_blank"
+               href="https://robocup-ssl.github.io/ssl-rules/sslrules.html#_match_preparation">
+          rule book
+        </q-btn>
+      </p>
     </div>
   </div>
 </template>

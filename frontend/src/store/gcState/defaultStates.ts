@@ -79,4 +79,6 @@ export const mockedConfig = {
     "Team1", "Team2"
   ],
   activeTrackerSource: "Foo",
+  gameEventBehavior: {},
+  autoRefConfigs: {},
 } as Config
