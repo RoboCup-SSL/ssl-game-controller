@@ -2,9 +2,9 @@ package main
 
 import (
 	"flag"
+	"github.com/RoboCup-SSL/ssl-game-controller/frontend"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/gc"
-	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/ui"
 	"log"
 	"net/http"
 	"os"
@@ -35,7 +35,7 @@ func main() {
 		return
 	}
 
-	ui.HandleUi()
+	frontend.HandleUi()
 
 	err := http.ListenAndServe(*address, nil)
 	if err != nil {

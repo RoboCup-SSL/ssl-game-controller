@@ -7,17 +7,16 @@ jobs:
       - checkout
       - run:
           name: "Install dependencies"
-          command: yarn install
-      - run:
-          name: "Run lint"
-          command: yarn lint
+          working_directory: frontend
+          command: npm install
       - run:
           name: "Build"
-          command: yarn build
+          working_directory: frontend
+          command: npm run build
       - persist_to_workspace:
           root: .
           paths:
-            - internal/app/ui/dist/*
+            - frontend/dist/*
 
   backend:
     docker:

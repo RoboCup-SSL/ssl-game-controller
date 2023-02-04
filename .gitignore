@@ -1,6 +1,5 @@
 .DS_Store
 node_modules
-/internal/app/ui/dist
 /config/
 
 # Editor directories and files
