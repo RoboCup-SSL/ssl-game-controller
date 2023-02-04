@@ -39,10 +39,12 @@ const keyListenerContinue = function (e: KeyboardEvent) {
   }
   if (e.key === " ") {
     toggleAutoContinue()
+    e.preventDefault()
   } else {
     const id = Number(e.key)
     if (!isNaN(id)) {
       continueWithAction(id - 1)
+      e.preventDefault()
     }
   }
 };
