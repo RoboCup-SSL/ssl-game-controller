@@ -38,18 +38,7 @@ set -x
 
 protoc -I"./proto" -I"$GOPATH/src" --go_out="$GOPATH/src" proto/*.proto
 
-# generate javascript code
-pbjs -t static-module -w es6 -o src/proto.js \
-  proto/ssl_gc_common.proto \
-  proto/ssl_gc_geometry.proto \
-  proto/ssl_gc_game_event.proto \
-  proto/ssl_gc_referee_message.proto \
-  proto/ssl_gc_change.proto \
-  proto/ssl_gc_state.proto \
-  proto/ssl_gc_api.proto \
-  proto/ssl_gc_engine.proto
-
-# generate typescript code for frontend v2
+# generate typescript code for frontend
 target_dir="./frontend/src/proto"
 mkdir -p "${target_dir}"
 protoc -I"./proto" \

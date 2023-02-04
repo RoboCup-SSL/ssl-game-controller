@@ -6,7 +6,8 @@
 
 # ssl-game-controller
 
-The [ssl-refbox](https://github.com/RoboCup-SSL/ssl-refbox) replacement that was introduced at RoboCup 2019.
+The game controller for matches in the RoboCup Small Size league, introduced at RoboCup 2019 as a replacement of
+the [ssl-refbox](https://github.com/RoboCup-SSL/ssl-refbox).
 
 ![Screenshot of Interface](./doc/screenshot_interface.png)
 
@@ -27,23 +28,27 @@ docker run -p 8081:8081 \
   robocupssl/ssl-game-controller
 ```
 
-The controller will generate a default configs to [config/](./config/) on the first start. Afterwards, you can change all settings there.
+The controller will generate a default config to [config/](./config/) on the first start. Afterwards, you can change all
+settings there.
 
-For example, if you want to add a new team name temporarily, you can add it to [config/engine.yaml](./config/engine.yaml). If you want to add your team persistently, add it to `defaultTeams` in [internal/app/engine/config.go](internal/app/engine/config.go) and create a Pull Request on GitHub.
+For example, if you want to add a new team name temporarily, you can add it
+to [config/engine.yaml](./config/engine.yaml). If you want to add your team persistently, add it to `defaultTeams`
+in [internal/app/engine/config.go](internal/app/engine/config.go) and create a pull request on GitHub.
 
 ### Runtime Requirements
- * No software dependencies (except for development, see below)
- * 64bit Linux, Windows, OSX (build your 32bit binaries yourself...)
- * Display Resolution of 1920x1080 is recommended
- * A reasonable Web-Browser (mostly tested on Chrome)
- * (optional) To view the field, you need the [ssl-vision-client](https://github.com/RoboCup-SSL/ssl-vision-client)
+
+* No software dependencies (except for development, see below)
+* pre-build binaries: 64bit Linux, Windows, OSX
+* A reasonable Web-Browser (mostly tested on Chrome)
 
 ### External Runtime Dependencies
-[ssl-vision](https://github.com/RoboCup-SSL/ssl-vision) - Receive Geometry packages for correct field dimensions   
-If not available, make sure to configure to correct dimensions in [config/ssl-game-controller.yaml](config/ssl-game-controller.yaml).
+
+[ssl-vision](https://github.com/RoboCup-SSL/ssl-vision) - Receive Geometry packages for correct field dimensions.   
+If not available, make sure to configure the correct dimensions
+in [config/ssl-game-controller.yaml](config/ssl-game-controller.yaml).
 
 tracker-source implementation that produces
-[TrackerWrapperPacket](https://github.com/RoboCup-SSL/ssl-vision/blob/master/src/shared/proto/messages_robocup_ssl_wrapper_tracked.proto) - 
+[TrackerWrapperPacket](https://github.com/RoboCup-SSL/ssl-vision/blob/master/src/shared/proto/messages_robocup_ssl_wrapper_tracked.proto) -
 Get ball and robot positions.      
 Required for:
  * Check ball placement progress
@@ -52,7 +57,8 @@ Required for:
  * Check for "no progress"
  * Check if keeper may be changed via team protocol
 
-The [TIGERs AutoRef](https://github.com/TIGERs-Mannheim/AutoReferee) is a tracker-source implementation.
+The [TIGERs AutoRef](https://github.com/TIGERs-Mannheim/AutoReferee) and
+the [ER-Force AutoRef](https://github.com/robotics-erlangen/autoref) are tracker-source implementations.
 If no tracker-source is available, the above features will not work.
 
 ### Reference Clients
@@ -120,31 +126,28 @@ under the same port as the UI.
 ## Development
 
 ### Requirements
-You need to install following dependencies first: 
- * Go
- * Node
- * Yarn
- 
-See [.circleci/config.yml](.circleci/config.yml) for required versions. 
 
-### Install dependencies
-```bash
-yarn install
-```
+You need to install following dependencies first:
+
+* Go
+* Node
+
+See [.circleci/config.yml](.circleci/config.yml) for required versions.
+
+### Frontend
+
+See [frontend/README.md](frontend/README.md)
 
 ### Run
+
 Run the backend:
+
 ```bash
 go run cmd/ssl-game-controller/main.go
 ```
 
-Run the UI:
-```bash
-# compile and hot-reload
-yarn serve
-```
-
 ### Build self-contained release binary
+
 ```bash
 ./install.sh
 ```
@@ -152,7 +155,7 @@ yarn serve
 ### Test with autoRefs
 To quickly run the GC together with autoRefs and other popular components, run:
 ```shell
-docker-compose up
+docker compose up
 ```
 
 ### Update generated protobuf code
