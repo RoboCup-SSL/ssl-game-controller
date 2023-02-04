@@ -6,43 +6,51 @@ import {
 } from "@/proto/ssl_gc_engine";
 import type {Config} from "@/proto/ssl_gc_engine_config";
 
-export const emptyGcState = {
+export const emptyGcState: GcState = {
   teamState: {
     YELLOW: {
       connected: false,
       connectionVerified: false,
       remoteControlConnected: false,
       remoteControlConnectionVerified: false,
-      advantageChoice: TeamAdvantageChoice_AdvantageChoice.UNRECOGNIZED,
+      advantageChoice: {
+        choice: TeamAdvantageChoice_AdvantageChoice.UNRECOGNIZED,
+      },
     },
     BLUE: {
       connected: false,
       connectionVerified: false,
       remoteControlConnected: false,
       remoteControlConnectionVerified: false,
-      advantageChoice: TeamAdvantageChoice_AdvantageChoice.UNRECOGNIZED,
+      advantageChoice: {
+        choice: TeamAdvantageChoice_AdvantageChoice.UNRECOGNIZED,
+      },
     },
   },
   autoRefState: {},
   trackers: {},
   continueActions: [],
-} as GcState
+}
 
-export const mockedGcState = {
+export const mockedGcState: GcState = {
   teamState: {
     YELLOW: {
       connected: false,
       connectionVerified: false,
       remoteControlConnected: false,
       remoteControlConnectionVerified: false,
-      advantageChoice: TeamAdvantageChoice_AdvantageChoice.UNRECOGNIZED,
+      advantageChoice: {
+        choice: TeamAdvantageChoice_AdvantageChoice.UNRECOGNIZED,
+      },
     },
     BLUE: {
       connected: false,
       connectionVerified: false,
       remoteControlConnected: false,
       remoteControlConnectionVerified: false,
-      advantageChoice: TeamAdvantageChoice_AdvantageChoice.UNRECOGNIZED,
+      advantageChoice: {
+        choice: TeamAdvantageChoice_AdvantageChoice.UNRECOGNIZED,
+      },
     },
   },
   autoRefState: {},
@@ -65,7 +73,7 @@ export const mockedGcState = {
       state: ContinueAction_State.READY_MANUAL,
     }
   ],
-} as GcState
+}
 
 export const emptyConfig = {
   autoContinue: false,
