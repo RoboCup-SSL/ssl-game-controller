@@ -106,7 +106,7 @@ services:
     network_mode: "${NETWORK_MODE}"
 
   autoref-erforce:
-    image: "roboticserlangen/autoref:commit-5ca75e7c7883"
+    image: "roboticserlangen/autoref:commit-8561e9c4f912"
     command:
       - "--vision-port"
       - "10020"
