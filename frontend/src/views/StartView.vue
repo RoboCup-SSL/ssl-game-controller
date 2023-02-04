@@ -20,14 +20,11 @@ import {teams} from "@/helpers";
     <p>
       To set up a new match, go through this page from top to bottom.
       The full procedure can be found in the
-      <a target="_blank" href="https://robocup-ssl.github.io/ssl-rules/sslrules.html#_match_preparation">
+      <q-btn dense color="primary" target="_blank"
+             href="https://robocup-ssl.github.io/ssl-rules/sslrules.html#_match_preparation">
         rule book
-      </a>.
-    </p>
-    <p>
-      After you have started a new match, select the division and match type.
-      The division is important to apply the respective rule set.
-      The match type is broadcast in the referee messages. It may for example be used for automatic log file processing.
+      </q-btn>
+      .
     </p>
     <div class="row justify-evenly">
       <div class="q-pa-md">
