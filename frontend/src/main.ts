@@ -20,7 +20,7 @@ createApp(App)
   .use(router)
   .use(createPinia())
   .use(control)
-  .use(Quasar)
+  .use(Quasar, {})
   .mount('#app')
 
 subscribeToLocalStorage()
