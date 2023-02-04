@@ -9,7 +9,7 @@ const emit = defineEmits<{
 }>();
 
 const updateValue = (value: string | number | null) => {
-  if (value) {
+  if (value !== null) {
     if (typeof value === 'string') {
       emit('update:modelValue', parseInt(value))
     } else {

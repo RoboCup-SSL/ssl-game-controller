@@ -17,7 +17,7 @@ const currentKeeperId = computed(() => {
 })
 
 const updateValue = (value: number | undefined) => {
-  if (value) {
+  if (value !== undefined) {
     control?.UpdateTeamState({
       forTeam: props.team,
       goalkeeper: value,
