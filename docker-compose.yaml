@@ -101,7 +101,7 @@ services:
       - team-client
 
   autoref-tigers:
-    image: "tigersmannheim/auto-referee:0.16.0"
+    image: "tigersmannheim/auto-referee:0.16.3"
     command:
       - "-a" # active mode (connect to GC)
       - "-hl" # headless
