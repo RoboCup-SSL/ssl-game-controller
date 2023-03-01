@@ -1,4 +1,4 @@
-FROM node:18-alpine AS build_node
+FROM node:19-alpine AS build_node
 COPY frontend /tmp/ssl-game-controller/frontend
 WORKDIR /tmp/ssl-game-controller/frontend
 RUN npm install
