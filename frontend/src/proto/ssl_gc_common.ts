@@ -91,10 +91,6 @@ export interface RobotId {
   team?: Team;
 }
 
-function createBaseRobotId(): RobotId {
-  return {};
-}
-
 export const RobotId = {
   fromJSON(object: any): RobotId {
     return {

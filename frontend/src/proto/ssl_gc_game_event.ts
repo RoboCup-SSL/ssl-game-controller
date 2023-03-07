@@ -851,10 +851,6 @@ export interface GameEvent_PenaltyKickFailed {
   reason?: string;
 }
 
-function createBaseGameEvent(): GameEvent {
-  return { event: undefined };
-}
-
 export const GameEvent = {
   fromJSON(object: any): GameEvent {
     return {
@@ -1194,10 +1190,6 @@ export const GameEvent = {
   },
 };
 
-function createBaseGameEvent_BallLeftField(): GameEvent_BallLeftField {
-  return {};
-}
-
 export const GameEvent_BallLeftField = {
   fromJSON(object: any): GameEvent_BallLeftField {
     return {
@@ -1215,10 +1207,6 @@ export const GameEvent_BallLeftField = {
     return obj;
   },
 };
-
-function createBaseGameEvent_AimlessKick(): GameEvent_AimlessKick {
-  return {};
-}
 
 export const GameEvent_AimlessKick = {
   fromJSON(object: any): GameEvent_AimlessKick {
@@ -1240,10 +1228,6 @@ export const GameEvent_AimlessKick = {
     return obj;
   },
 };
-
-function createBaseGameEvent_Goal(): GameEvent_Goal {
-  return {};
-}
 
 export const GameEvent_Goal = {
   fromJSON(object: any): GameEvent_Goal {
@@ -1276,10 +1260,6 @@ export const GameEvent_Goal = {
   },
 };
 
-function createBaseGameEvent_IndirectGoal(): GameEvent_IndirectGoal {
-  return {};
-}
-
 export const GameEvent_IndirectGoal = {
   fromJSON(object: any): GameEvent_IndirectGoal {
     return {
@@ -1300,10 +1280,6 @@ export const GameEvent_IndirectGoal = {
     return obj;
   },
 };
-
-function createBaseGameEvent_ChippedGoal(): GameEvent_ChippedGoal {
-  return {};
-}
 
 export const GameEvent_ChippedGoal = {
   fromJSON(object: any): GameEvent_ChippedGoal {
@@ -1328,10 +1304,6 @@ export const GameEvent_ChippedGoal = {
   },
 };
 
-function createBaseGameEvent_BotTooFastInStop(): GameEvent_BotTooFastInStop {
-  return {};
-}
-
 export const GameEvent_BotTooFastInStop = {
   fromJSON(object: any): GameEvent_BotTooFastInStop {
     return {
@@ -1352,10 +1324,6 @@ export const GameEvent_BotTooFastInStop = {
   },
 };
 
-function createBaseGameEvent_DefenderTooCloseToKickPoint(): GameEvent_DefenderTooCloseToKickPoint {
-  return {};
-}
-
 export const GameEvent_DefenderTooCloseToKickPoint = {
   fromJSON(object: any): GameEvent_DefenderTooCloseToKickPoint {
     return {
@@ -1375,10 +1343,6 @@ export const GameEvent_DefenderTooCloseToKickPoint = {
     return obj;
   },
 };
-
-function createBaseGameEvent_BotCrashDrawn(): GameEvent_BotCrashDrawn {
-  return {};
-}
 
 export const GameEvent_BotCrashDrawn = {
   fromJSON(object: any): GameEvent_BotCrashDrawn {
@@ -1403,10 +1367,6 @@ export const GameEvent_BotCrashDrawn = {
     return obj;
   },
 };
-
-function createBaseGameEvent_BotCrashUnique(): GameEvent_BotCrashUnique {
-  return {};
-}
 
 export const GameEvent_BotCrashUnique = {
   fromJSON(object: any): GameEvent_BotCrashUnique {
@@ -1434,10 +1394,6 @@ export const GameEvent_BotCrashUnique = {
   },
 };
 
-function createBaseGameEvent_BotPushedBot(): GameEvent_BotPushedBot {
-  return {};
-}
-
 export const GameEvent_BotPushedBot = {
   fromJSON(object: any): GameEvent_BotPushedBot {
     return {
@@ -1460,10 +1416,6 @@ export const GameEvent_BotPushedBot = {
   },
 };
 
-function createBaseGameEvent_BotTippedOver(): GameEvent_BotTippedOver {
-  return {};
-}
-
 export const GameEvent_BotTippedOver = {
   fromJSON(object: any): GameEvent_BotTippedOver {
     return {
@@ -1485,10 +1437,6 @@ export const GameEvent_BotTippedOver = {
   },
 };
 
-function createBaseGameEvent_DefenderInDefenseArea(): GameEvent_DefenderInDefenseArea {
-  return {};
-}
-
 export const GameEvent_DefenderInDefenseArea = {
   fromJSON(object: any): GameEvent_DefenderInDefenseArea {
     return {
@@ -1508,10 +1456,6 @@ export const GameEvent_DefenderInDefenseArea = {
     return obj;
   },
 };
-
-function createBaseGameEvent_DefenderInDefenseAreaPartially(): GameEvent_DefenderInDefenseAreaPartially {
-  return {};
-}
 
 export const GameEvent_DefenderInDefenseAreaPartially = {
   fromJSON(object: any): GameEvent_DefenderInDefenseAreaPartially {
@@ -1536,10 +1480,6 @@ export const GameEvent_DefenderInDefenseAreaPartially = {
   },
 };
 
-function createBaseGameEvent_AttackerTouchedBallInDefenseArea(): GameEvent_AttackerTouchedBallInDefenseArea {
-  return {};
-}
-
 export const GameEvent_AttackerTouchedBallInDefenseArea = {
   fromJSON(object: any): GameEvent_AttackerTouchedBallInDefenseArea {
     return {
@@ -1559,10 +1499,6 @@ export const GameEvent_AttackerTouchedBallInDefenseArea = {
     return obj;
   },
 };
-
-function createBaseGameEvent_BotKickedBallTooFast(): GameEvent_BotKickedBallTooFast {
-  return {};
-}
 
 export const GameEvent_BotKickedBallTooFast = {
   fromJSON(object: any): GameEvent_BotKickedBallTooFast {
@@ -1586,10 +1522,6 @@ export const GameEvent_BotKickedBallTooFast = {
   },
 };
 
-function createBaseGameEvent_BotDribbledBallTooFar(): GameEvent_BotDribbledBallTooFar {
-  return {};
-}
-
 export const GameEvent_BotDribbledBallTooFar = {
   fromJSON(object: any): GameEvent_BotDribbledBallTooFar {
     return {
@@ -1609,10 +1541,6 @@ export const GameEvent_BotDribbledBallTooFar = {
     return obj;
   },
 };
-
-function createBaseGameEvent_AttackerTouchedOpponentInDefenseArea(): GameEvent_AttackerTouchedOpponentInDefenseArea {
-  return {};
-}
 
 export const GameEvent_AttackerTouchedOpponentInDefenseArea = {
   fromJSON(object: any): GameEvent_AttackerTouchedOpponentInDefenseArea {
@@ -1634,10 +1562,6 @@ export const GameEvent_AttackerTouchedOpponentInDefenseArea = {
   },
 };
 
-function createBaseGameEvent_AttackerDoubleTouchedBall(): GameEvent_AttackerDoubleTouchedBall {
-  return {};
-}
-
 export const GameEvent_AttackerDoubleTouchedBall = {
   fromJSON(object: any): GameEvent_AttackerDoubleTouchedBall {
     return {
@@ -1655,10 +1579,6 @@ export const GameEvent_AttackerDoubleTouchedBall = {
     return obj;
   },
 };
-
-function createBaseGameEvent_AttackerTooCloseToDefenseArea(): GameEvent_AttackerTooCloseToDefenseArea {
-  return {};
-}
 
 export const GameEvent_AttackerTooCloseToDefenseArea = {
   fromJSON(object: any): GameEvent_AttackerTooCloseToDefenseArea {
@@ -1683,10 +1603,6 @@ export const GameEvent_AttackerTooCloseToDefenseArea = {
   },
 };
 
-function createBaseGameEvent_BotHeldBallDeliberately(): GameEvent_BotHeldBallDeliberately {
-  return {};
-}
-
 export const GameEvent_BotHeldBallDeliberately = {
   fromJSON(object: any): GameEvent_BotHeldBallDeliberately {
     return {
@@ -1707,10 +1623,6 @@ export const GameEvent_BotHeldBallDeliberately = {
   },
 };
 
-function createBaseGameEvent_BotInterferedPlacement(): GameEvent_BotInterferedPlacement {
-  return {};
-}
-
 export const GameEvent_BotInterferedPlacement = {
   fromJSON(object: any): GameEvent_BotInterferedPlacement {
     return {
@@ -1729,10 +1641,6 @@ export const GameEvent_BotInterferedPlacement = {
   },
 };
 
-function createBaseGameEvent_MultipleCards(): GameEvent_MultipleCards {
-  return {};
-}
-
 export const GameEvent_MultipleCards = {
   fromJSON(object: any): GameEvent_MultipleCards {
     return { byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : Team.UNKNOWN };
@@ -1744,10 +1652,6 @@ export const GameEvent_MultipleCards = {
     return obj;
   },
 };
-
-function createBaseGameEvent_MultipleFouls(): GameEvent_MultipleFouls {
-  return {};
-}
 
 export const GameEvent_MultipleFouls = {
   fromJSON(object: any): GameEvent_MultipleFouls {
@@ -1771,10 +1675,6 @@ export const GameEvent_MultipleFouls = {
   },
 };
 
-function createBaseGameEvent_MultiplePlacementFailures(): GameEvent_MultiplePlacementFailures {
-  return {};
-}
-
 export const GameEvent_MultiplePlacementFailures = {
   fromJSON(object: any): GameEvent_MultiplePlacementFailures {
     return { byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : Team.UNKNOWN };
@@ -1786,10 +1686,6 @@ export const GameEvent_MultiplePlacementFailures = {
     return obj;
   },
 };
-
-function createBaseGameEvent_KickTimeout(): GameEvent_KickTimeout {
-  return {};
-}
 
 export const GameEvent_KickTimeout = {
   fromJSON(object: any): GameEvent_KickTimeout {
@@ -1809,10 +1705,6 @@ export const GameEvent_KickTimeout = {
   },
 };
 
-function createBaseGameEvent_NoProgressInGame(): GameEvent_NoProgressInGame {
-  return {};
-}
-
 export const GameEvent_NoProgressInGame = {
   fromJSON(object: any): GameEvent_NoProgressInGame {
     return {
@@ -1828,10 +1720,6 @@ export const GameEvent_NoProgressInGame = {
     return obj;
   },
 };
-
-function createBaseGameEvent_PlacementFailed(): GameEvent_PlacementFailed {
-  return {};
-}
 
 export const GameEvent_PlacementFailed = {
   fromJSON(object: any): GameEvent_PlacementFailed {
@@ -1849,10 +1737,6 @@ export const GameEvent_PlacementFailed = {
   },
 };
 
-function createBaseGameEvent_UnsportingBehaviorMinor(): GameEvent_UnsportingBehaviorMinor {
-  return {};
-}
-
 export const GameEvent_UnsportingBehaviorMinor = {
   fromJSON(object: any): GameEvent_UnsportingBehaviorMinor {
     return {
@@ -1869,10 +1753,6 @@ export const GameEvent_UnsportingBehaviorMinor = {
   },
 };
 
-function createBaseGameEvent_UnsportingBehaviorMajor(): GameEvent_UnsportingBehaviorMajor {
-  return {};
-}
-
 export const GameEvent_UnsportingBehaviorMajor = {
   fromJSON(object: any): GameEvent_UnsportingBehaviorMajor {
     return {
@@ -1888,10 +1768,6 @@ export const GameEvent_UnsportingBehaviorMajor = {
     return obj;
   },
 };
-
-function createBaseGameEvent_KeeperHeldBall(): GameEvent_KeeperHeldBall {
-  return {};
-}
 
 export const GameEvent_KeeperHeldBall = {
   fromJSON(object: any): GameEvent_KeeperHeldBall {
@@ -1910,10 +1786,6 @@ export const GameEvent_KeeperHeldBall = {
     return obj;
   },
 };
-
-function createBaseGameEvent_PlacementSucceeded(): GameEvent_PlacementSucceeded {
-  return {};
-}
 
 export const GameEvent_PlacementSucceeded = {
   fromJSON(object: any): GameEvent_PlacementSucceeded {
@@ -1935,10 +1807,6 @@ export const GameEvent_PlacementSucceeded = {
   },
 };
 
-function createBaseGameEvent_Prepared(): GameEvent_Prepared {
-  return {};
-}
-
 export const GameEvent_Prepared = {
   fromJSON(object: any): GameEvent_Prepared {
     return { timeTaken: isSet(object.timeTaken) ? Number(object.timeTaken) : 0 };
@@ -1950,10 +1818,6 @@ export const GameEvent_Prepared = {
     return obj;
   },
 };
-
-function createBaseGameEvent_BotSubstitution(): GameEvent_BotSubstitution {
-  return {};
-}
 
 export const GameEvent_BotSubstitution = {
   fromJSON(object: any): GameEvent_BotSubstitution {
@@ -1967,10 +1831,6 @@ export const GameEvent_BotSubstitution = {
   },
 };
 
-function createBaseGameEvent_ChallengeFlag(): GameEvent_ChallengeFlag {
-  return {};
-}
-
 export const GameEvent_ChallengeFlag = {
   fromJSON(object: any): GameEvent_ChallengeFlag {
     return { byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : Team.UNKNOWN };
@@ -1982,10 +1842,6 @@ export const GameEvent_ChallengeFlag = {
     return obj;
   },
 };
-
-function createBaseGameEvent_ChallengeFlagHandled(): GameEvent_ChallengeFlagHandled {
-  return {};
-}
 
 export const GameEvent_ChallengeFlagHandled = {
   fromJSON(object: any): GameEvent_ChallengeFlagHandled {
@@ -2003,10 +1859,6 @@ export const GameEvent_ChallengeFlagHandled = {
   },
 };
 
-function createBaseGameEvent_EmergencyStop(): GameEvent_EmergencyStop {
-  return {};
-}
-
 export const GameEvent_EmergencyStop = {
   fromJSON(object: any): GameEvent_EmergencyStop {
     return { byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : Team.UNKNOWN };
@@ -2018,10 +1870,6 @@ export const GameEvent_EmergencyStop = {
     return obj;
   },
 };
-
-function createBaseGameEvent_TooManyRobots(): GameEvent_TooManyRobots {
-  return {};
-}
 
 export const GameEvent_TooManyRobots = {
   fromJSON(object: any): GameEvent_TooManyRobots {
@@ -2044,10 +1892,6 @@ export const GameEvent_TooManyRobots = {
   },
 };
 
-function createBaseGameEvent_BoundaryCrossing(): GameEvent_BoundaryCrossing {
-  return {};
-}
-
 export const GameEvent_BoundaryCrossing = {
   fromJSON(object: any): GameEvent_BoundaryCrossing {
     return {
@@ -2063,10 +1907,6 @@ export const GameEvent_BoundaryCrossing = {
     return obj;
   },
 };
-
-function createBaseGameEvent_PenaltyKickFailed(): GameEvent_PenaltyKickFailed {
-  return {};
-}
 
 export const GameEvent_PenaltyKickFailed = {
   fromJSON(object: any): GameEvent_PenaltyKickFailed {

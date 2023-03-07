@@ -325,10 +325,6 @@ export function continueAction_StateToJSON(object: ContinueAction_State): string
   }
 }
 
-function createBaseGcState(): GcState {
-  return {};
-}
-
 export const GcState = {
   fromJSON(object: any): GcState {
     return {
@@ -385,10 +381,6 @@ export const GcState = {
   },
 };
 
-function createBaseGcState_TeamStateEntry(): GcState_TeamStateEntry {
-  return { key: "" };
-}
-
 export const GcState_TeamStateEntry = {
   fromJSON(object: any): GcState_TeamStateEntry {
     return {
@@ -404,10 +396,6 @@ export const GcState_TeamStateEntry = {
     return obj;
   },
 };
-
-function createBaseGcState_AutoRefStateEntry(): GcState_AutoRefStateEntry {
-  return { key: "" };
-}
 
 export const GcState_AutoRefStateEntry = {
   fromJSON(object: any): GcState_AutoRefStateEntry {
@@ -425,10 +413,6 @@ export const GcState_AutoRefStateEntry = {
   },
 };
 
-function createBaseGcState_TrackersEntry(): GcState_TrackersEntry {
-  return { key: "", value: "" };
-}
-
 export const GcState_TrackersEntry = {
   fromJSON(object: any): GcState_TrackersEntry {
     return { key: isSet(object.key) ? String(object.key) : "", value: isSet(object.value) ? String(object.value) : "" };
@@ -441,10 +425,6 @@ export const GcState_TrackersEntry = {
     return obj;
   },
 };
-
-function createBaseGcStateTeam(): GcStateTeam {
-  return {};
-}
 
 export const GcStateTeam = {
   fromJSON(object: any): GcStateTeam {
@@ -472,10 +452,6 @@ export const GcStateTeam = {
   },
 };
 
-function createBaseTeamAdvantageChoice(): TeamAdvantageChoice {
-  return {};
-}
-
 export const TeamAdvantageChoice = {
   fromJSON(object: any): TeamAdvantageChoice {
     return {
@@ -492,10 +468,6 @@ export const TeamAdvantageChoice = {
   },
 };
 
-function createBaseGcStateAutoRef(): GcStateAutoRef {
-  return {};
-}
-
 export const GcStateAutoRef = {
   fromJSON(object: any): GcStateAutoRef {
     return { connectionVerified: isSet(object.connectionVerified) ? Boolean(object.connectionVerified) : false };
@@ -507,10 +479,6 @@ export const GcStateAutoRef = {
     return obj;
   },
 };
-
-function createBaseGcStateTracker(): GcStateTracker {
-  return {};
-}
 
 export const GcStateTracker = {
   fromJSON(object: any): GcStateTracker {
@@ -536,10 +504,6 @@ export const GcStateTracker = {
   },
 };
 
-function createBaseBall(): Ball {
-  return {};
-}
-
 export const Ball = {
   fromJSON(object: any): Ball {
     return {
@@ -556,10 +520,6 @@ export const Ball = {
   },
 };
 
-function createBaseRobot(): Robot {
-  return {};
-}
-
 export const Robot = {
   fromJSON(object: any): Robot {
     return {
@@ -575,10 +535,6 @@ export const Robot = {
     return obj;
   },
 };
-
-function createBaseContinueAction(): ContinueAction {
-  return {};
-}
 
 export const ContinueAction = {
   fromJSON(object: any): ContinueAction {

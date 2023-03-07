@@ -53,10 +53,6 @@ export interface Input {
   continueAction?: ContinueAction;
 }
 
-function createBaseOutput(): Output {
-  return {};
-}
-
 export const Output = {
   fromJSON(object: any): Output {
     return {
@@ -78,10 +74,6 @@ export const Output = {
   },
 };
 
-function createBaseProtocol(): Protocol {
-  return {};
-}
-
 export const Protocol = {
   fromJSON(object: any): Protocol {
     return {
@@ -101,10 +93,6 @@ export const Protocol = {
     return obj;
   },
 };
-
-function createBaseProtocolEntry(): ProtocolEntry {
-  return {};
-}
 
 export const ProtocolEntry = {
   fromJSON(object: any): ProtocolEntry {
@@ -127,10 +115,6 @@ export const ProtocolEntry = {
     return obj;
   },
 };
-
-function createBaseInput(): Input {
-  return {};
-}
 
 export const Input = {
   fromJSON(object: any): Input {

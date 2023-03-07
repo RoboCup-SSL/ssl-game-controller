@@ -187,10 +187,6 @@ export interface Change_NewGameState {
   gameState?: GameState;
 }
 
-function createBaseStateChange(): StateChange {
-  return {};
-}
-
 export const StateChange = {
   fromJSON(object: any): StateChange {
     return {
@@ -212,10 +208,6 @@ export const StateChange = {
     return obj;
   },
 };
-
-function createBaseChange(): Change {
-  return { change: undefined };
-}
 
 export const Change = {
   fromJSON(object: any): Change {
@@ -332,10 +324,6 @@ export const Change = {
   },
 };
 
-function createBaseChange_NewCommand(): Change_NewCommand {
-  return {};
-}
-
 export const Change_NewCommand = {
   fromJSON(object: any): Change_NewCommand {
     return { command: isSet(object.command) ? Command.fromJSON(object.command) : undefined };
@@ -347,10 +335,6 @@ export const Change_NewCommand = {
     return obj;
   },
 };
-
-function createBaseChange_ChangeStage(): Change_ChangeStage {
-  return {};
-}
 
 export const Change_ChangeStage = {
   fromJSON(object: any): Change_ChangeStage {
@@ -366,10 +350,6 @@ export const Change_ChangeStage = {
   },
 };
 
-function createBaseChange_SetBallPlacementPos(): Change_SetBallPlacementPos {
-  return {};
-}
-
 export const Change_SetBallPlacementPos = {
   fromJSON(object: any): Change_SetBallPlacementPos {
     return { pos: isSet(object.pos) ? Vector2.fromJSON(object.pos) : undefined };
@@ -381,10 +361,6 @@ export const Change_SetBallPlacementPos = {
     return obj;
   },
 };
-
-function createBaseChange_AddYellowCard(): Change_AddYellowCard {
-  return {};
-}
 
 export const Change_AddYellowCard = {
   fromJSON(object: any): Change_AddYellowCard {
@@ -403,10 +379,6 @@ export const Change_AddYellowCard = {
   },
 };
 
-function createBaseChange_AddRedCard(): Change_AddRedCard {
-  return {};
-}
-
 export const Change_AddRedCard = {
   fromJSON(object: any): Change_AddRedCard {
     return {
@@ -424,10 +396,6 @@ export const Change_AddRedCard = {
   },
 };
 
-function createBaseChange_YellowCardOver(): Change_YellowCardOver {
-  return {};
-}
-
 export const Change_YellowCardOver = {
   fromJSON(object: any): Change_YellowCardOver {
     return { forTeam: isSet(object.forTeam) ? teamFromJSON(object.forTeam) : Team.UNKNOWN };
@@ -439,10 +407,6 @@ export const Change_YellowCardOver = {
     return obj;
   },
 };
-
-function createBaseChange_AddGameEvent(): Change_AddGameEvent {
-  return {};
-}
 
 export const Change_AddGameEvent = {
   fromJSON(object: any): Change_AddGameEvent {
@@ -457,10 +421,6 @@ export const Change_AddGameEvent = {
   },
 };
 
-function createBaseChange_AddPassiveGameEvent(): Change_AddPassiveGameEvent {
-  return {};
-}
-
 export const Change_AddPassiveGameEvent = {
   fromJSON(object: any): Change_AddPassiveGameEvent {
     return { gameEvent: isSet(object.gameEvent) ? GameEvent.fromJSON(object.gameEvent) : undefined };
@@ -474,10 +434,6 @@ export const Change_AddPassiveGameEvent = {
   },
 };
 
-function createBaseChange_AddProposal(): Change_AddProposal {
-  return {};
-}
-
 export const Change_AddProposal = {
   fromJSON(object: any): Change_AddProposal {
     return { proposal: isSet(object.proposal) ? Proposal.fromJSON(object.proposal) : undefined };
@@ -489,10 +445,6 @@ export const Change_AddProposal = {
     return obj;
   },
 };
-
-function createBaseChange_AcceptProposalGroup(): Change_AcceptProposalGroup {
-  return {};
-}
 
 export const Change_AcceptProposalGroup = {
   fromJSON(object: any): Change_AcceptProposalGroup {
@@ -509,10 +461,6 @@ export const Change_AcceptProposalGroup = {
     return obj;
   },
 };
-
-function createBaseChange_UpdateConfig(): Change_UpdateConfig {
-  return {};
-}
 
 export const Change_UpdateConfig = {
   fromJSON(object: any): Change_UpdateConfig {
@@ -531,10 +479,6 @@ export const Change_UpdateConfig = {
     return obj;
   },
 };
-
-function createBaseChange_UpdateTeamState(): Change_UpdateTeamState {
-  return {};
-}
 
 export const Change_UpdateTeamState = {
   fromJSON(object: any): Change_UpdateTeamState {
@@ -591,10 +535,6 @@ export const Change_UpdateTeamState = {
   },
 };
 
-function createBaseChange_SwitchColors(): Change_SwitchColors {
-  return {};
-}
-
 export const Change_SwitchColors = {
   fromJSON(_: any): Change_SwitchColors {
     return {};
@@ -605,10 +545,6 @@ export const Change_SwitchColors = {
     return obj;
   },
 };
-
-function createBaseChange_Revert(): Change_Revert {
-  return {};
-}
 
 export const Change_Revert = {
   fromJSON(object: any): Change_Revert {
@@ -621,10 +557,6 @@ export const Change_Revert = {
     return obj;
   },
 };
-
-function createBaseChange_NewGameState(): Change_NewGameState {
-  return {};
-}
 
 export const Change_NewGameState = {
   fromJSON(object: any): Change_NewGameState {

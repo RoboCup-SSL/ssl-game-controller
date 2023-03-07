@@ -483,10 +483,6 @@ export interface GameEventProposalGroup {
   accepted?: boolean;
 }
 
-function createBaseReferee(): Referee {
-  return {};
-}
-
 export const Referee = {
   fromJSON(object: any): Referee {
     return {
@@ -548,10 +544,6 @@ export const Referee = {
   },
 };
 
-function createBaseReferee_TeamInfo(): Referee_TeamInfo {
-  return {};
-}
-
 export const Referee_TeamInfo = {
   fromJSON(object: any): Referee_TeamInfo {
     return {
@@ -602,10 +594,6 @@ export const Referee_TeamInfo = {
   },
 };
 
-function createBaseReferee_Point(): Referee_Point {
-  return {};
-}
-
 export const Referee_Point = {
   fromJSON(object: any): Referee_Point {
     return { x: isSet(object.x) ? Number(object.x) : 0, y: isSet(object.y) ? Number(object.y) : 0 };
@@ -618,10 +606,6 @@ export const Referee_Point = {
     return obj;
   },
 };
-
-function createBaseGameEventProposalGroup(): GameEventProposalGroup {
-  return {};
-}
 
 export const GameEventProposalGroup = {
   fromJSON(object: any): GameEventProposalGroup {

@@ -13,10 +13,6 @@ export interface Vector3 {
   z?: number;
 }
 
-function createBaseVector2(): Vector2 {
-  return {};
-}
-
 export const Vector2 = {
   fromJSON(object: any): Vector2 {
     return { x: isSet(object.x) ? Number(object.x) : 0, y: isSet(object.y) ? Number(object.y) : 0 };
@@ -29,10 +25,6 @@ export const Vector2 = {
     return obj;
   },
 };
-
-function createBaseVector3(): Vector3 {
-  return {};
-}
 
 export const Vector3 = {
   fromJSON(object: any): Vector3 {

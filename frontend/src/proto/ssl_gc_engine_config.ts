@@ -149,10 +149,6 @@ export interface AutoRefConfig_GameEventBehaviorEntry {
   value: AutoRefConfig_Behavior;
 }
 
-function createBaseConfig(): Config {
-  return {};
-}
-
 export const Config = {
   fromJSON(object: any): Config {
     return {
@@ -201,10 +197,6 @@ export const Config = {
   },
 };
 
-function createBaseConfig_GameEventBehaviorEntry(): Config_GameEventBehaviorEntry {
-  return { key: "", value: Config_Behavior.BEHAVIOR_UNKNOWN };
-}
-
 export const Config_GameEventBehaviorEntry = {
   fromJSON(object: any): Config_GameEventBehaviorEntry {
     return {
@@ -221,10 +213,6 @@ export const Config_GameEventBehaviorEntry = {
   },
 };
 
-function createBaseConfig_AutoRefConfigsEntry(): Config_AutoRefConfigsEntry {
-  return { key: "" };
-}
-
 export const Config_AutoRefConfigsEntry = {
   fromJSON(object: any): Config_AutoRefConfigsEntry {
     return {
@@ -240,10 +228,6 @@ export const Config_AutoRefConfigsEntry = {
     return obj;
   },
 };
-
-function createBaseAutoRefConfig(): AutoRefConfig {
-  return {};
-}
 
 export const AutoRefConfig = {
   fromJSON(object: any): AutoRefConfig {
@@ -271,10 +255,6 @@ export const AutoRefConfig = {
     return obj;
   },
 };
-
-function createBaseAutoRefConfig_GameEventBehaviorEntry(): AutoRefConfig_GameEventBehaviorEntry {
-  return { key: "", value: AutoRefConfig_Behavior.BEHAVIOR_UNKNOWN };
-}
 
 export const AutoRefConfig_GameEventBehaviorEntry = {
   fromJSON(object: any): AutoRefConfig_GameEventBehaviorEntry {

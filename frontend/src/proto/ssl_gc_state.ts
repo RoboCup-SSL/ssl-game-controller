@@ -254,10 +254,6 @@ export interface State_TeamStateEntry {
   value?: TeamInfo;
 }
 
-function createBaseYellowCard(): YellowCard {
-  return {};
-}
-
 export const YellowCard = {
   fromJSON(object: any): YellowCard {
     return {
@@ -278,10 +274,6 @@ export const YellowCard = {
   },
 };
 
-function createBaseRedCard(): RedCard {
-  return {};
-}
-
 export const RedCard = {
   fromJSON(object: any): RedCard {
     return {
@@ -298,10 +290,6 @@ export const RedCard = {
     return obj;
   },
 };
-
-function createBaseFoul(): Foul {
-  return {};
-}
 
 export const Foul = {
   fromJSON(object: any): Foul {
@@ -322,10 +310,6 @@ export const Foul = {
   },
 };
 
-function createBaseCommand(): Command {
-  return {};
-}
-
 export const Command = {
   fromJSON(object: any): Command {
     return {
@@ -341,10 +325,6 @@ export const Command = {
     return obj;
   },
 };
-
-function createBaseGameState(): GameState {
-  return {};
-}
 
 export const GameState = {
   fromJSON(object: any): GameState {
@@ -362,10 +342,6 @@ export const GameState = {
   },
 };
 
-function createBaseProposal(): Proposal {
-  return {};
-}
-
 export const Proposal = {
   fromJSON(object: any): Proposal {
     return {
@@ -382,10 +358,6 @@ export const Proposal = {
     return obj;
   },
 };
-
-function createBaseProposalGroup(): ProposalGroup {
-  return {};
-}
 
 export const ProposalGroup = {
   fromJSON(object: any): ProposalGroup {
@@ -406,10 +378,6 @@ export const ProposalGroup = {
     return obj;
   },
 };
-
-function createBaseTeamInfo(): TeamInfo {
-  return {};
-}
 
 export const TeamInfo = {
   fromJSON(object: any): TeamInfo {
@@ -484,10 +452,6 @@ export const TeamInfo = {
     return obj;
   },
 };
-
-function createBaseState(): State {
-  return {};
-}
 
 export const State = {
   fromJSON(object: any): State {
@@ -564,10 +528,6 @@ export const State = {
     return obj;
   },
 };
-
-function createBaseState_TeamStateEntry(): State_TeamStateEntry {
-  return { key: "" };
-}
 
 export const State_TeamStateEntry = {
   fromJSON(object: any): State_TeamStateEntry {
