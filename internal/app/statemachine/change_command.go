@@ -27,6 +27,10 @@ func (s *StateMachine) processChangeNewCommand(newState *state.State, newCommand
 	if *newState.GameState.Type == state.GameState_STOP {
 		if prevGameState.IsHalted() {
 			newState.ReadyContinueTime = timestamppb.New(s.timeProvider().Add(s.gameConfig.PreparationTimeAfterHalt))
+			// reset robot substitution flags
+			for _, team := range state.BothTeams() {
+				newState.TeamInfo(team).RequestsBotSubstitutionSince = nil
+			}
 		} else if newState.ReadyContinueTime == nil {
 			newState.ReadyContinueTime = timestamppb.New(s.timeProvider().Add(s.gameConfig.PreparationTimeBeforeResume))
 		}

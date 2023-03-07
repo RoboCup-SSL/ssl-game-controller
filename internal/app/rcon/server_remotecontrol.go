@@ -271,7 +271,8 @@ func (c *RemoteControlClient) checkStopTimeout() error {
 
 func (c *RemoteControlClient) checkRequestRobotSubstitution() error {
 	gameStateType := *c.gcEngine.CurrentState().GameState.Type
-	if gameStateType == state.GameState_HALT {
+	teamState := c.gcEngine.CurrentState().TeamState[c.team.String()]
+	if gameStateType == state.GameState_HALT && teamState.RequestsBotSubstitutionSince == nil {
 		return errors.New("Game is halted")
 	}
 	return nil

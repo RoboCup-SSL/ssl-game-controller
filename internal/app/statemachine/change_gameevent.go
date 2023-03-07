@@ -118,10 +118,6 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 
 	// bot substitution
 	if *gameEvent.Type == state.GameEvent_BOT_SUBSTITUTION {
-		// reset robot substitution flags
-		for _, team := range state.BothTeams() {
-			newState.TeamInfo(team).RequestsBotSubstitutionSince = nil
-		}
 		// halt the game to allow teams to substitute robots
 		changes = append(changes, createCommandChange(state.NewCommandNeutral(state.Command_HALT)))
 	}
