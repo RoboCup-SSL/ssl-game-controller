@@ -153,6 +153,7 @@ func (c *RemoteControlClient) replyWithState(reply *ControllerReply) {
 	activeRequests := c.findActiveRequestTypes()
 	robotsOnField := c.gcEngine.TrackerState().NumTeamRobots(*c.team)
 	timeoutTimeLeft := float32(teamState.TimeoutTimeLeft.AsDuration().Seconds())
+	canSubstituteRobot := c.canSubstituteRobot()
 
 	response := &ControllerToRemoteControl{
 		State: &RemoteControlTeamState{
@@ -166,6 +167,7 @@ func (c *RemoteControlClient) replyWithState(reply *ControllerReply) {
 			MaxRobots:          teamState.MaxAllowedBots,
 			RobotsOnField:      &robotsOnField,
 			YellowCardsDue:     yellowCardsDue,
+			CanSubstituteRobot: &canSubstituteRobot,
 		},
 		ControllerReply: reply,
 	}
@@ -193,6 +195,14 @@ func (c *RemoteControlClient) findYellowCardDueTimes() []float32 {
 		}
 	}
 	return yellowCardsDue
+}
+
+func (c *RemoteControlClient) canSubstituteRobot() bool {
+	teamState := c.gcEngine.CurrentState().TeamState[c.team.String()]
+	substitutionEvents := c.gcEngine.CurrentState().FindGameEventsByTeam(state.GameEvent_BOT_SUBSTITUTION, *c.team)
+	return len(substitutionEvents) > 0 &&
+		teamState.RequestsBotSubstitutionSince != nil &&
+		c.gcEngine.CurrentState().GameState.IsHalted()
 }
 
 func (c *RemoteControlClient) findActiveRequestTypes() []RemoteControlRequestType {

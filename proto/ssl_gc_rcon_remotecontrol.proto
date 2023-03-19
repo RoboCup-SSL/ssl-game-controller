@@ -91,6 +91,9 @@ message RemoteControlTeamState {
 
     // list of due times for each active yellow card (in seconds)
     repeated float yellow_cards_due = 8;
+
+    // if true, team is allowed to substitute robots
+    optional bool can_substitute_robot = 11;
 }
 
 // All possible request types that the remote control can make
