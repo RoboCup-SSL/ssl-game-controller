@@ -19,6 +19,9 @@ if ! protoc --version | grep "${PB_VERSION}" >/dev/null; then
   export PATH="${LOCAL_DIR}/bin:$PATH"
 fi
 
+# install a specific version of protoc-gen-go
+go install "google.golang.org/protobuf/...@${PB_GO_VERSION}"
+
 ###
 
 if ! protoc --version | grep "${PB_VERSION}"; then
