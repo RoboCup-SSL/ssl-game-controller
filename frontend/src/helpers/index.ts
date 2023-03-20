@@ -57,40 +57,22 @@ export const originIcon = (origin: string) => {
   }
 }
 
-export const getNextStage = function (stage: Referee_Stage): Referee_Stage {
-  switch (stage) {
-    case Referee_Stage.NORMAL_FIRST_HALF_PRE:
-      return Referee_Stage.NORMAL_FIRST_HALF
-    case Referee_Stage.NORMAL_FIRST_HALF:
-      return Referee_Stage.NORMAL_HALF_TIME
-    case Referee_Stage.NORMAL_HALF_TIME:
-      return Referee_Stage.NORMAL_SECOND_HALF_PRE
-    case Referee_Stage.NORMAL_SECOND_HALF_PRE:
-      return Referee_Stage.NORMAL_SECOND_HALF
-    case Referee_Stage.NORMAL_SECOND_HALF:
-      return Referee_Stage.EXTRA_TIME_BREAK
-    case Referee_Stage.EXTRA_TIME_BREAK:
-      return Referee_Stage.EXTRA_FIRST_HALF_PRE
-    case Referee_Stage.EXTRA_FIRST_HALF_PRE:
-      return Referee_Stage.EXTRA_FIRST_HALF
-    case Referee_Stage.EXTRA_FIRST_HALF:
-      return Referee_Stage.EXTRA_HALF_TIME
-    case Referee_Stage.EXTRA_HALF_TIME:
-      return Referee_Stage.EXTRA_SECOND_HALF_PRE
-    case Referee_Stage.EXTRA_SECOND_HALF_PRE:
-      return Referee_Stage.EXTRA_SECOND_HALF
-    case Referee_Stage.EXTRA_SECOND_HALF:
-      return Referee_Stage.PENALTY_SHOOTOUT_BREAK
-    case Referee_Stage.PENALTY_SHOOTOUT_BREAK:
-      return Referee_Stage.PENALTY_SHOOTOUT
-    case Referee_Stage.PENALTY_SHOOTOUT:
-      return Referee_Stage.POST_GAME
-    case Referee_Stage.POST_GAME:
-    case Referee_Stage.UNRECOGNIZED:
-    default:
-      return Referee_Stage.POST_GAME
-  }
-}
+const stages: Referee_Stage[] = [
+  Referee_Stage.NORMAL_FIRST_HALF_PRE,
+  Referee_Stage.NORMAL_FIRST_HALF,
+  Referee_Stage.NORMAL_HALF_TIME,
+  Referee_Stage.NORMAL_SECOND_HALF_PRE,
+  Referee_Stage.NORMAL_SECOND_HALF,
+  Referee_Stage.EXTRA_TIME_BREAK,
+  Referee_Stage.EXTRA_FIRST_HALF_PRE,
+  Referee_Stage.EXTRA_FIRST_HALF,
+  Referee_Stage.EXTRA_HALF_TIME,
+  Referee_Stage.EXTRA_SECOND_HALF_PRE,
+  Referee_Stage.EXTRA_SECOND_HALF,
+  Referee_Stage.PENALTY_SHOOTOUT_BREAK,
+  Referee_Stage.PENALTY_SHOOTOUT,
+  Referee_Stage.POST_GAME,
+]
 
 export const isPausedStage = function (stage: Referee_Stage): boolean {
   return stage.toString() === Referee_Stage[Referee_Stage.NORMAL_HALF_TIME]
@@ -114,3 +96,8 @@ export const isPreStage = function (stage: Referee_Stage): boolean {
     || stage.toString() === Referee_Stage[Referee_Stage.EXTRA_FIRST_HALF_PRE]
     || stage.toString() === Referee_Stage[Referee_Stage.EXTRA_SECOND_HALF_PRE]
 };
+
+export const getRemainingStages = function (fromStage: Referee_Stage): Referee_Stage[] {
+  const idx = stages.indexOf(fromStage)
+  return stages.slice(idx)
+}

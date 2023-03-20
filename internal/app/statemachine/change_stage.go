@@ -9,8 +9,18 @@ import (
 
 func (s *StateMachine) processChangeChangeStage(newState *state.State, change *Change_ChangeStage) (changes []*Change) {
 
+	currentStage := *newState.Stage
+	for stage := currentStage + 1; stage <= *change.NewStage; stage++ {
+		changes = append(changes, s.proceedStage(newState, stage)...)
+	}
+
+	return
+}
+
+func (s *StateMachine) proceedStage(newState *state.State, newStage state.Referee_Stage) (changes []*Change) {
+
 	// update stage time
-	newState.StageTimeLeft = durationpb.New(s.stageTimes[*change.NewStage])
+	newState.StageTimeLeft = durationpb.New(s.stageTimes[newStage])
 	newState.StageTimeElapsed = durationpb.New(time.Duration(0))
 
 	// if not transiting from a pre stage
@@ -32,7 +42,7 @@ func (s *StateMachine) processChangeChangeStage(newState *state.State, change *C
 	}
 
 	// update timeout times when transiting to overtime
-	if *change.NewStage == state.Referee_EXTRA_FIRST_HALF_PRE {
+	if newStage == state.Referee_EXTRA_FIRST_HALF_PRE {
 		*newState.TeamInfo(state.Team_YELLOW).TimeoutsLeft = s.gameConfig.Overtime.Timeouts
 		newState.TeamInfo(state.Team_YELLOW).TimeoutTimeLeft = durationpb.New(s.gameConfig.Overtime.TimeoutDuration)
 		*newState.TeamInfo(state.Team_BLUE).TimeoutsLeft = s.gameConfig.Overtime.Timeouts
@@ -40,7 +50,7 @@ func (s *StateMachine) processChangeChangeStage(newState *state.State, change *C
 	}
 
 	// update next command based on new stage
-	newState.NextCommand = s.getNextCommandForStage(newState, *change.NewStage)
+	newState.NextCommand = s.getNextCommandForStage(newState, newStage)
 
 	// update placement pos (assuming it is either kickoff or nothing)
 	if newState.NextCommand == nil {
@@ -54,7 +64,7 @@ func (s *StateMachine) processChangeChangeStage(newState *state.State, change *C
 	newState.GameEvents = nil
 
 	// update new stage
-	newState.Stage = change.NewStage
+	*newState.Stage = newStage
 
 	return
 }

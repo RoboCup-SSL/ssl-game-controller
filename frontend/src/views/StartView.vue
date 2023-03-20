@@ -12,6 +12,7 @@ import GoalKeeperIdInput from "@/components/team/GoalKeeperIdInput.vue";
 import BallPlacementEnabledInput from "@/components/team/BallPlacementEnabledInput.vue";
 import FirstKickOffInput from "@/components/team/FirstKickOffInput.vue";
 import FieldHalfInput from "@/components/team/FieldHalfInput.vue";
+import StageInput from "@/components/start/StageInput.vue";
 import {teams} from "@/helpers";
 </script>
 
@@ -67,11 +68,19 @@ import {teams} from "@/helpers";
       </q-list>
     </div>
 
-    <div class="row justify-evenly q-gutter-md">
+    <div class="row justify-evenly">
       <SwitchColorButton/>
       <SwitchColorRandomButton/>
       <SwitchSidesRandomButton/>
-      <EndMatchButton/>
+    </div>
+
+    <q-separator spaced/>
+
+    <div class="row justify-evenly">
+      <StageInput/>
+      <div class="q-pa-md">
+        <EndMatchButton/>
+      </div>
     </div>
 
     <div class="q-ma-md">
