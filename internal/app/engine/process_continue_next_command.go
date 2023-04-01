@@ -37,7 +37,7 @@ func (e *Engine) createNextCommandContinueAction(
 		if preparationTimeLeft > 0 {
 			actionState = ContinueAction_WAITING
 			continuationIssues = append(continuationIssues, fmt.Sprintf("%.0f s left for preparation", preparationTimeLeft.Seconds()))
-		} else if actionType == ContinueAction_NEXT_COMMAND {
+		} else if actionType == ContinueAction_NEXT_COMMAND || actionType == ContinueAction_NORMAL_START {
 			actionState = ContinueAction_READY_AUTO
 		} else {
 			actionState = ContinueAction_READY_MANUAL
