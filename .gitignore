@@ -26,3 +26,6 @@ yarn-error.log*
 
 # Local installations
 /.local
+
+# Make cache
+/.frontend

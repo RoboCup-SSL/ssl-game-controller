@@ -2,7 +2,9 @@ version: "3.1"
 
 services:
   ssl-game-controller:
-    build: "."
+    build:
+      context: .
+      dockerfile: ./cmd/ssl-game-controller/Dockerfile
     command:
       - "-visionAddress"
       - "224.5.23.2:10020"
