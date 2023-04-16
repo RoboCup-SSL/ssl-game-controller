@@ -1,6 +1,7 @@
-version: 2
+version: 2.1
 jobs:
-  frontend:
+  build_node:
+    resource_class: medium
     docker:
       - image: cimg/node:lts
     steps:
@@ -18,7 +19,8 @@ jobs:
           paths:
             - frontend/dist/*
 
-  backend:
+  test_go:
+    resource_class: medium
     docker:
       - image: cimg/go:1.20.2
     steps:
@@ -28,41 +30,49 @@ jobs:
       - run: go get -v -t -d ./...
       - run: go test -v -covermode=count -coverprofile=count.out ./...
       - run: go tool cover -html=count.out -o coverage.html
-      - run:
-          working_directory: cmd/ssl-game-controller
-          command: |
-            GOOS=linux GOARCH=amd64 go build -o ../../release/ssl-game-controller_linux_amd64
-            GOOS=darwin GOARCH=amd64 go build -o ../../release/ssl-game-controller_darwin_amd64
-            GOOS=windows GOARCH=amd64 go build -o ../../release/ssl-game-controller_windows_amd64.exe
-      - persist_to_workspace:
-          root: .
-          paths:
-            - release/*
       - store_artifacts:
           path: coverage.html
           destination: coverage
 
-  publish-github-release:
+  build_go:
+    resource_class: large
+    docker:
+      - image: cimg/go:1.20.2
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run: go get -v -t -d ./...
+      - run: |
+          set -u
+          version=${CIRCLE_TAG:-}
+          for cmd in ssl-game-controller ssl-ref-client; do
+            GOOS=linux GOARCH=amd64 go build -o ./release/${cmd}_${version}_linux_amd64 ./cmd/${cmd}
+            GOOS=linux GOARCH=arm64 go build -o ./release/${cmd}_${version}_linux_arm64 ./cmd/${cmd}
+            GOOS=linux GOARCH=arm go build -o ./release/${cmd}_${version}_linux_arm ./cmd/${cmd}
+            GOOS=darwin GOARCH=amd64 go build -o ./release/${cmd}_${version}_darwin_amd64 ./cmd/${cmd}
+            GOOS=darwin GOARCH=arm64 go build -o ./release/${cmd}_${version}_darwin_arm64 ./cmd/${cmd}
+            GOOS=windows GOARCH=amd64 go build -o ./release/${cmd}_${version}_windows_amd64.exe ./cmd/${cmd}
+          done
+      - persist_to_workspace:
+          root: .
+          paths:
+            - release/*
+
+  publish_gh:
+    resource_class: small
     docker:
       - image: cimg/go:1.20.2
     steps:
       - attach_workspace:
           at: .
-      - run:
-          name: "Prepare artifacts"
-          working_directory: release
-          command: |
-            mkdir gh
-            cp ssl-game-controller_linux_amd64 gh/ssl-game-controller_${CIRCLE_TAG}_linux_amd64
-            cp ssl-game-controller_darwin_amd64 gh/ssl-game-controller_${CIRCLE_TAG}_darwin_amd64
-            cp ssl-game-controller_windows_amd64.exe gh/ssl-game-controller_${CIRCLE_TAG}_windows_amd64.exe
-      - run:
-          name: "Publish Release on GitHub"
-          command: |
-            go install github.com/tcnksm/ghr@v0.16.0
-            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_TAG} ./release/gh/
+      - run: |
+          set -u
+          go install github.com/tcnksm/ghr@v0.16.0
+          ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_TAG} ./release
 
   docker:
+    resource_class: small
     docker:
       - image: cimg/base:2023.04
     steps:
@@ -70,7 +80,7 @@ jobs:
       - setup_remote_docker:
           version: 20.10.18
       - run: |
-          TAG=${CIRCLE_TAG:1}
+          TAG=${CIRCLE_TAG:-1}
           TAG=${TAG:-latest}
           docker build -t robocupssl/ssl-game-controller:$TAG .
           docker login -u "${DOCKER_HUB_USERNAME}" -p "${DOCKER_HUB_PASSWORD}"
@@ -78,31 +88,25 @@ jobs:
 
 workflows:
   version: 2
-  main:
+  build:
     jobs:
-      - frontend:
-          filters:
-            tags:
-              only: /.*/
-      - backend:
-          requires:
-            - frontend
-          filters:
-            tags:
-              only: /.*/
-      - publish-github-release:
-          context: github
-          requires:
-            - backend
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^v.*/
+      - build_node
+      - test_go:
+          requires: [ build_node ]
+  release:
+    when:
+      matches: { pattern: /^v.*/ , value: << pipeline.git.tag >> }
+    jobs:
+      - build_node
+      - build_go:
+          requires: [ build_node ]
+      - publish_gh:
+          requires: [ build_go ]
+  docker:
+    when:
+      or:
+        - matches: { pattern: /^v.*/ , value: << pipeline.git.tag >> }
+        - matches: { pattern: 'master' , value: << pipeline.git.branch >> }
+    jobs:
       - docker:
           context: docker hub
-          filters:
-            branches:
-              only: master
-            tags:
-              only: /^v.*/
