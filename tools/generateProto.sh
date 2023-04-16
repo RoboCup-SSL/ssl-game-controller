@@ -1,6 +1,11 @@
 #!/bin/bash
 set -euo pipefail
 
+# determine current script directory
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+PROJECT_DIR="${SCRIPT_DIR}/.."
+cd "${PROJECT_DIR}"
+
 PB_VERSION=3.15.8
 PB_GO_VERSION=$(go list -m all | grep google.golang.org/protobuf | awk '{print $2}')
 

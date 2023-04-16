@@ -149,7 +149,7 @@ go run cmd/ssl-game-controller/main.go
 ### Build self-contained release binary
 
 ```bash
-./install.sh
+make install
 ```
 
 ### Test with autoRefs

@@ -76,7 +76,20 @@ jobs:
           go install github.com/tcnksm/ghr@v0.16.0
           ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete -generatenotes ${CIRCLE_TAG} ./release
 
-  docker:
+  build_docker:
+    resource_class: small
+    docker:
+      - image: cimg/base:2023.04
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 20.10.18
+      - run: |
+          for cmd in ${cmds}; do
+            docker build -f ./cmd/${cmd}/Dockerfile -t robocupssl/${cmd}:latest .
+          done
+
+  publish_docker:
     resource_class: small
     docker:
       - image: cimg/base:2023.04
@@ -89,7 +102,7 @@ jobs:
           TAG=${CIRCLE_TAG:1}
           TAG=${TAG:-latest}
           for cmd in ${cmds}; do
-            docker build -t robocupssl/${cmd}:${TAG} .
+            docker build -f ./cmd/${cmd}/Dockerfile -t robocupssl/${cmd}:${TAG} .
             docker login -u "${DOCKER_HUB_USERNAME}" -p "${DOCKER_HUB_PASSWORD}"
             docker push robocupssl/${cmd}:${TAG}
           done
@@ -114,6 +127,7 @@ workflows:
           filters: { branches: { ignore: /.*/ }, tags: { only: /^v.*/ } }
   docker:
     jobs:
-      - docker:
+      - build_docker
+      - publish_docker:
           context: docker hub
           filters: { branches: { only: master }, tags: { only: /^v.*/ } }
