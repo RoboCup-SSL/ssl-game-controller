@@ -1,4 +1,9 @@
 version: 2.1
+parameters:
+  cmds:
+    type: string
+    default: "ssl-game-controller ssl-ref-client"
+
 jobs:
   build_node:
     resource_class: medium
@@ -46,7 +51,7 @@ jobs:
       - run: |
           set -u
           version=${CIRCLE_TAG:-}
-          for cmd in ssl-game-controller ssl-ref-client; do
+          for cmd in ${cmds}; do
             GOOS=linux GOARCH=amd64 go build -o ./release/${cmd}_${version}_linux_amd64 ./cmd/${cmd}
             GOOS=linux GOARCH=arm64 go build -o ./release/${cmd}_${version}_linux_arm64 ./cmd/${cmd}
             GOOS=linux GOARCH=arm go build -o ./release/${cmd}_${version}_linux_arm ./cmd/${cmd}
@@ -80,11 +85,14 @@ jobs:
       - setup_remote_docker:
           version: 20.10.18
       - run: |
-          TAG=${CIRCLE_TAG:-1}
+          # Parse version from tag (removing 'v' prefix)
+          TAG=${CIRCLE_TAG:1}
           TAG=${TAG:-latest}
-          docker build -t robocupssl/ssl-game-controller:$TAG .
-          docker login -u "${DOCKER_HUB_USERNAME}" -p "${DOCKER_HUB_PASSWORD}"
-          docker push robocupssl/ssl-game-controller:$TAG
+          for cmd in ${cmds}; do
+            docker build -t robocupssl/${cmd}:${TAG} .
+            docker login -u "${DOCKER_HUB_USERNAME}" -p "${DOCKER_HUB_PASSWORD}"
+            docker push robocupssl/${cmd}:${TAG}
+          done
 
 workflows:
   version: 2
