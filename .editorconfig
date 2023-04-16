@@ -3,20 +3,14 @@
 # top-most EditorConfig file
 root = true
 
-# Unix-style newlines with a newline ending every file
 [*]
 end_of_line = lf
 insert_final_newline = true
-
-# 4 space indentation
-[*.{vue,js,proto}]
-indent_style = space
-indent_size = 4
-
-# 2 space indentation
-[*.{yaml,json}]
 indent_style = space
 indent_size = 2
+
+[*.proto]
+indent_size = 4
 
 [Makefile]
 indent_style = tab

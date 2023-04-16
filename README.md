@@ -132,33 +132,38 @@ You need to install following dependencies first:
 * Go
 * Node
 
-See [.circleci/config.yml](.circleci/config.yml) for required versions.
+See [.circleci/config.yml](.circleci/config.yml) for compatible versions.
 
 ### Frontend
 
 See [frontend/README.md](frontend/README.md)
 
-### Run
+### Build
 
-Run the backend:
-
-```bash
-go run cmd/ssl-game-controller/main.go
-```
-
-### Build self-contained release binary
+Build and install all binaries:
 
 ```bash
 make install
 ```
 
+### Run
+
+```bash
+go run cmd/ssl-game-controller/main.go
+```
+
 ### Test with autoRefs
+
 To quickly run the GC together with autoRefs and other popular components, run:
+
 ```shell
 docker compose up
 ```
 
 ### Update generated protobuf code
-Generate the code for the `.proto` files with [./generateProto.sh](./generateProto.sh), 
-after you've changed anything in a `.proto` file.
-  
+
+Generate the code for the `.proto` files after you've changed anything in a `.proto` file with:
+
+```shell
+make proto
+```

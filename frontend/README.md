@@ -1,4 +1,4 @@
-# ssl-game-controller frontend
+# frontend
 
 ## Project Setup
 
