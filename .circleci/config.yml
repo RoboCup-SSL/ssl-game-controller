@@ -51,7 +51,7 @@ jobs:
       - run: |
           set -u
           version=${CIRCLE_TAG:-}
-          for cmd in ${cmds}; do
+          for cmd in << pipeline.parameters.cmds >>; do
             GOOS=linux GOARCH=amd64 go build -o ./release/${cmd}_${version}_linux_amd64 ./cmd/${cmd}
             GOOS=linux GOARCH=arm64 go build -o ./release/${cmd}_${version}_linux_arm64 ./cmd/${cmd}
             GOOS=linux GOARCH=arm go build -o ./release/${cmd}_${version}_linux_arm ./cmd/${cmd}
@@ -85,7 +85,7 @@ jobs:
       - setup_remote_docker:
           version: 20.10.18
       - run: |
-          for cmd in ${cmds}; do
+          for cmd in << pipeline.parameters.cmds >>; do
             docker build -f ./cmd/${cmd}/Dockerfile -t robocupssl/${cmd}:latest .
           done
 
@@ -101,7 +101,7 @@ jobs:
           # Parse version from tag (removing 'v' prefix)
           TAG=${CIRCLE_TAG:1}
           TAG=${TAG:-latest}
-          for cmd in ${cmds}; do
+          for cmd in << pipeline.parameters.cmds >>; do
             docker build -f ./cmd/${cmd}/Dockerfile -t robocupssl/${cmd}:${TAG} .
             docker login -u "${DOCKER_HUB_USERNAME}" -p "${DOCKER_HUB_PASSWORD}"
             docker push robocupssl/${cmd}:${TAG}
