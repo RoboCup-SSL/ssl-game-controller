@@ -1,16 +1,15 @@
-.PHONY: all ssl-game-controller-docker ssl-ref-client-docker docker frontend test install proto
+CMDS = ssl-game-controller ssl-ref-client
+DOCKER_TARGETS = $(addprefix docker-, $(CMDS))
+.PHONY: all docker frontend install test run proto $(DOCKER_TARGETS)
 
 all: install docker
 
-docker-ssl-game-controller:
-	docker build -f ./cmd/ssl-game-controller/Dockerfile -t ssl-game-controller:latest .
+docker: $(DOCKER_TARGETS)
 
-docker-ssl-ref-client:
-	docker build -f ./cmd/ssl-ref-client/Dockerfile -t ssl-ref-client:latest .
+$(DOCKER_TARGETS): docker-%:
+	docker build -f ./cmd/$*/Dockerfile -t $*:latest .
 
-docker: docker-ssl-game-controller docker-ssl-ref-client
-
-.frontend: $(shell find frontend/ -type f)
+.frontend: $(shell find frontend/ -type f -not -path "frontend/node_modules/*")
 	cd frontend && \
 	npm install && \
 	npm run build && \
@@ -18,11 +17,14 @@ docker: docker-ssl-game-controller docker-ssl-ref-client
 
 frontend: .frontend
 
+install: frontend
+	go install -v ./...
+
 test: frontend
 	go test ./...
 
-install: frontend
-	go install -v ./...
+run: frontend
+	go run ./cmd/$(word 1,$(CMDS))
 
 proto:
 	tools/generateProto.sh
