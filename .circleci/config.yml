@@ -101,6 +101,7 @@ workflows:
           requires: [ build_node ]
           filters: { branches: { ignore: /.*/ }, tags: { only: /^v.*/ } }
       - publish_gh:
+          context: github
           requires: [ build_go ]
           filters: { branches: { ignore: /.*/ }, tags: { only: /^v.*/ } }
   docker:
