@@ -94,19 +94,17 @@ workflows:
       - test_go:
           requires: [ build_node ]
   release:
-    when:
-      matches: { pattern: /^v.*/ , value: << pipeline.git.tag >> }
     jobs:
-      - build_node
+      - build_node:
+          filters: { branches: { ignore: /.*/ }, tags: { only: /^v.*/ } }
       - build_go:
           requires: [ build_node ]
+          filters: { branches: { ignore: /.*/ }, tags: { only: /^v.*/ } }
       - publish_gh:
           requires: [ build_go ]
+          filters: { branches: { ignore: /.*/ }, tags: { only: /^v.*/ } }
   docker:
-    when:
-      or:
-        - matches: { pattern: /^v.*/ , value: << pipeline.git.tag >> }
-        - matches: { pattern: 'master' , value: << pipeline.git.branch >> }
     jobs:
       - docker:
           context: docker hub
+          filters: { branches: { only: master }, tags: { only: /^v.*/ } }
