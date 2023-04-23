@@ -293,7 +293,6 @@ export enum Referee_Command {
   /**
    * GOAL_YELLOW - The yellow team just scored a goal.
    * For information only.
-   * For rules compliance, teams must treat as STOP.
    * Deprecated: Use the score field from the team infos instead. That way, you can also detect revoked goals.
    *
    * @deprecated
