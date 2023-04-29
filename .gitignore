@@ -10,7 +10,6 @@ node_modules
 *.njsproj
 *.sln
 *.sw*
-!.idea/runConfigurations
 
 # local env files
 .env.local
