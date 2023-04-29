@@ -19,6 +19,8 @@ export interface GameEvent {
    * Ignored if sent by autoRef to game controller.
    */
   origin?: string[];
+  /** Unix timestamp in microseconds when the event was created. */
+  createdTimestamp?: number;
   event?:
     | { $case: "ballLeftFieldTouchLine"; ballLeftFieldTouchLine: GameEvent_BallLeftField }
     | { $case: "ballLeftFieldGoalLine"; ballLeftFieldGoalLine: GameEvent_BallLeftField }
@@ -856,6 +858,7 @@ export const GameEvent = {
     return {
       type: isSet(object.type) ? gameEvent_TypeFromJSON(object.type) : GameEvent_Type.UNKNOWN_GAME_EVENT_TYPE,
       origin: Array.isArray(object?.origin) ? object.origin.map((e: any) => String(e)) : [],
+      createdTimestamp: isSet(object.createdTimestamp) ? Number(object.createdTimestamp) : 0,
       event: isSet(object.ballLeftFieldTouchLine)
         ? {
           $case: "ballLeftFieldTouchLine",
@@ -1036,6 +1039,7 @@ export const GameEvent = {
     } else {
       obj.origin = [];
     }
+    message.createdTimestamp !== undefined && (obj.createdTimestamp = Math.round(message.createdTimestamp));
     message.event?.$case === "ballLeftFieldTouchLine" &&
       (obj.ballLeftFieldTouchLine = message.event?.ballLeftFieldTouchLine
         ? GameEvent_BallLeftField.toJSON(message.event?.ballLeftFieldTouchLine)

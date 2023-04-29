@@ -21,6 +21,9 @@ message GameEvent {
     // Ignored if sent by autoRef to game controller.
     repeated string origin = 41;
 
+    // Unix timestamp in microseconds when the event was created.
+    optional uint64 created_timestamp = 49;
+
     // the event that occurred
     oneof event {
 

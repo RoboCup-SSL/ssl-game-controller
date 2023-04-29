@@ -80,6 +80,14 @@ func NewEngine(gameConfig config.Game, engineConfig config.Engine) (e *Engine) {
 // Enqueue adds the change to the change queue
 func (e *Engine) Enqueue(change *statemachine.Change) {
 	if change.GetAddGameEventChange() != nil {
+		// Set creation timestamp
+		gameEvent := change.GetAddGameEventChange().GameEvent
+		if gameEvent.CreatedTimestamp != nil {
+			log.Printf("Ignore existing created_timestamp in enqueued game event: %v", gameEvent)
+		}
+		gameEvent.CreatedTimestamp = new(uint64)
+		*gameEvent.CreatedTimestamp = uint64(e.timeProvider().UnixMicro())
+
 		change = e.filterGameEvent(change)
 		if change == nil {
 			return
