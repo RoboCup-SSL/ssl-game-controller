@@ -67,6 +67,11 @@ function changeAll(behavior: AutoRefConfig_Behavior) {
     <li>Log: Add passive event to the protocol, but do not process it at all.</li>
     <li>Ignore: Drop event silently.</li>
   </ul>
+  <p>
+    Note: If majority handling is enabled for a game event, only auto referees are considered that
+    have the respective game event configured as 'Accept'.
+    If an auto referee is known to not support certain events, the behavior should be set to 'Ignore'.
+  </p>
   <q-list bordered class="rounded-borders">
     <q-item>
       <q-item-section>
