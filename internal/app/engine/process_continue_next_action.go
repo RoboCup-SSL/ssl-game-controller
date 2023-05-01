@@ -135,7 +135,8 @@ func (e *Engine) nextActions() (actions []*ContinueAction) {
 					ContinueAction_READY_AUTO,
 				))
 			}
-		} else if e.currentState.NextCommand != nil {
+		}
+		if e.currentState.NextCommand != nil {
 			var forTeam state.Team
 			if e.currentState.NextCommand != nil && e.currentState.NextCommand.ForTeam != nil {
 				forTeam = *e.currentState.NextCommand.ForTeam
