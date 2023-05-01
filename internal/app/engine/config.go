@@ -8,7 +8,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"sort"
 )
 
 var defaultTeams = []string{
@@ -113,7 +112,6 @@ func (x *Config) ReadFrom(fileName string) (err error) {
 	for t := range uniqueTeams {
 		x.Teams = append(x.Teams, t)
 	}
-	sort.Strings(x.Teams)
 
 	if x.AutoContinue == nil {
 		x.AutoContinue = defConfig.AutoContinue

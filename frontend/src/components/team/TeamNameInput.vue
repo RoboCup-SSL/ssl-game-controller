@@ -18,7 +18,11 @@ const model = computed(() => {
   return store.matchState.teamState![props.team].name
 })
 const options = computed(() => {
-  return gcStore.config.teams || []
+  const teams = [...gcStore.config.teams!]
+  teams.sort(function (a, b) {
+    return a.toLowerCase().localeCompare(b.toLowerCase());
+  })
+  return teams
 })
 
 const updateValue = (value: string) => {
