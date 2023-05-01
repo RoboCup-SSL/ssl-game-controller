@@ -24,6 +24,10 @@ const continueWithAction = (id: number) => {
   }
 }
 
+const continueHints = computed(() => {
+  return gcStore.gcState.continueHints || []
+})
+
 const toggleAutoContinue = () => {
   control?.ChangeConfig({autoContinue: !gcStore.config.autoContinue})
 }
@@ -94,6 +98,12 @@ onUnmounted(() => {
         <div class="row justify-evenly">
           <SwitchColorButton/>
           <SwitchSidesButton/>
+        </div>
+      </template>
+      <template v-for="(hint, index) in continueHints" :key="index">
+        <div class="row justify-center items-center">
+          <q-icon name="warning" class="q-mx-sm"></q-icon>
+          {{ hint.message }}
         </div>
       </template>
       <ContinueActionButtonList/>

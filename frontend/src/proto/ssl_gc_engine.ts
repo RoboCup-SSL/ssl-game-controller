@@ -13,6 +13,8 @@ export interface GcState {
   trackers?: { [key: string]: string };
   /** the next actions that can be executed when continuing */
   continueActions?: ContinueAction[];
+  /** the next actions that can be executed when continuing */
+  continueHints?: ContinueHint[];
 }
 
 export interface GcState_TeamStateEntry {
@@ -325,6 +327,10 @@ export function continueAction_StateToJSON(object: ContinueAction_State): string
   }
 }
 
+export interface ContinueHint {
+  message?: string;
+}
+
 export const GcState = {
   fromJSON(object: any): GcState {
     return {
@@ -348,6 +354,9 @@ export const GcState = {
         : {},
       continueActions: Array.isArray(object?.continueActions)
         ? object.continueActions.map((e: any) => ContinueAction.fromJSON(e))
+        : [],
+      continueHints: Array.isArray(object?.continueHints)
+        ? object.continueHints.map((e: any) => ContinueHint.fromJSON(e))
         : [],
     };
   },
@@ -376,6 +385,11 @@ export const GcState = {
       obj.continueActions = message.continueActions.map((e) => e ? ContinueAction.toJSON(e) : undefined);
     } else {
       obj.continueActions = [];
+    }
+    if (message.continueHints) {
+      obj.continueHints = message.continueHints.map((e) => e ? ContinueHint.toJSON(e) : undefined);
+    } else {
+      obj.continueHints = [];
     }
     return obj;
   },
@@ -560,6 +574,18 @@ export const ContinueAction = {
     }
     message.readyAt !== undefined && (obj.readyAt = message.readyAt.toISOString());
     message.state !== undefined && (obj.state = continueAction_StateToJSON(message.state));
+    return obj;
+  },
+};
+
+export const ContinueHint = {
+  fromJSON(object: any): ContinueHint {
+    return { message: isSet(object.message) ? String(object.message) : "" };
+  },
+
+  toJSON(message: ContinueHint): unknown {
+    const obj: any = {};
+    message.message !== undefined && (obj.message = message.message);
     return obj;
   },
 };

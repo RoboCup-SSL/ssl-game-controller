@@ -20,6 +20,9 @@ message GcState {
 
     // the next actions that can be executed when continuing
     repeated ContinueAction continue_actions = 4;
+
+    // the next actions that can be executed when continuing
+    repeated ContinueHint continue_hints = 5;
 }
 
 // The GC state for a single team
@@ -139,4 +142,8 @@ message ContinueAction {
         READY_AUTO = 3;
         READY_MANUAL = 4;
     }
+}
+
+message ContinueHint {
+    required string message = 1;
 }

@@ -1,13 +1,14 @@
 package engine
 
 import (
+	"fmt"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/geom"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"log"
 	"math"
 )
 
-func (e *Engine) nextActions() (actions []*ContinueAction) {
+func (e *Engine) nextActions() (actions []*ContinueAction, hints []*ContinueHint) {
 	if e.currentState.Stage.IsPausedStage() {
 		if *e.currentState.Stage.Next() != *e.currentState.Stage {
 			actions = append(actions, createContinueAction(
@@ -134,6 +135,12 @@ func (e *Engine) nextActions() (actions []*ContinueAction) {
 					placingTeam,
 					ContinueAction_READY_AUTO,
 				))
+			} else {
+				hint := fmt.Sprintf("Manually place the ball at x: %.2fm, y: %.2fm",
+					*e.currentState.PlacementPos.X, *e.currentState.PlacementPos.Y)
+				hints = append(hints, &ContinueHint{
+					Message: &hint,
+				})
 			}
 		}
 		if e.currentState.NextCommand != nil {

@@ -6,7 +6,7 @@ import (
 
 func (e *Engine) processContinue() {
 
-	e.gcState.ContinueActions = e.nextActions()
+	e.gcState.ContinueActions, e.gcState.ContinueHints = e.nextActions()
 
 	var defaultAction = e.defaultAction()
 	if *e.config.AutoContinue &&
