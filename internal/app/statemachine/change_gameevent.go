@@ -119,6 +119,13 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 	// bot substitution
 	if *gameEvent.Type == state.GameEvent_BOT_SUBSTITUTION {
 		// halt the game to allow teams to substitute robots
+		event := gameEvent.GetBotSubstitution()
+		if event.ByTeam.Known() {
+			*newState.TeamInfo(*event.ByTeam).BotSubstitutionAllowed = true
+		} else {
+			*newState.TeamInfo(state.Team_BLUE).BotSubstitutionAllowed = true
+			*newState.TeamInfo(state.Team_YELLOW).BotSubstitutionAllowed = true
+		}
 		changes = append(changes, createCommandChange(state.NewCommandNeutral(state.Command_HALT)))
 	}
 

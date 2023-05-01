@@ -91,7 +91,8 @@ func (e *Engine) nextActions() (actions []*ContinueAction) {
 		}
 	}
 
-	if *e.currentState.Command.Type == state.Command_STOP {
+	if *e.currentState.Command.Type == state.Command_STOP ||
+		*e.currentState.Command.Type == state.Command_HALT {
 		if e.currentState.StageTimeLeft.AsDuration() < 0 {
 			actions = append(actions, createContinueAction(
 				ContinueAction_NEXT_STAGE,
@@ -121,7 +122,11 @@ func (e *Engine) nextActions() (actions []*ContinueAction) {
 				*teamRequestingTimeout,
 				ContinueAction_READY_MANUAL,
 			))
-		} else if e.ballPlacementRequired() {
+		}
+	}
+
+	if *e.currentState.Command.Type == state.Command_STOP {
+		if e.ballPlacementRequired() {
 			placingTeam := e.ballPlacementTeam()
 			if placingTeam.Known() {
 				actions = append(actions, createContinueAction(
@@ -146,11 +151,16 @@ func (e *Engine) nextActions() (actions []*ContinueAction) {
 	}
 
 	if *e.currentState.Command.Type == state.Command_HALT {
-		actions = append(actions, createContinueAction(
+		continueFromHalt := createContinueAction(
 			ContinueAction_RESUME_FROM_HALT,
 			state.Team_UNKNOWN,
 			ContinueAction_READY_MANUAL,
-		))
+		)
+		if e.teamDoingBotSubstitution() {
+			continueFromHalt.ContinuationIssues = append(continueFromHalt.ContinuationIssues,
+				"Robot substitution in progress")
+		}
+		actions = append(actions, continueFromHalt)
 	}
 
 	if *e.currentState.Command.Type != state.Command_HALT &&
@@ -168,7 +178,8 @@ func (e *Engine) nextActions() (actions []*ContinueAction) {
 func (e *Engine) teamRequestingBotSubstitution() *state.Team {
 	var teams []state.Team
 	for _, team := range state.BothTeams() {
-		if e.currentState.TeamInfo(team).RequestsBotSubstitutionSince != nil {
+		if e.currentState.TeamInfo(team).RequestsBotSubstitutionSince != nil &&
+			!*e.currentState.TeamInfo(team).BotSubstitutionAllowed {
 			teams = append(teams, team)
 		}
 	}
@@ -179,6 +190,15 @@ func (e *Engine) teamRequestingBotSubstitution() *state.Team {
 		return &teams[0]
 	}
 	return nil
+}
+
+func (e *Engine) teamDoingBotSubstitution() bool {
+	for _, team := range state.BothTeams() {
+		if *e.currentState.TeamInfo(team).BotSubstitutionAllowed {
+			return true
+		}
+	}
+	return false
 }
 
 func (e *Engine) teamRequestingTimeout() *state.Team {

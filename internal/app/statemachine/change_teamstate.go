@@ -56,6 +56,7 @@ func (s *StateMachine) processChangeUpdateTeamState(newState *state.State, chang
 		} else {
 			teamState.RequestsBotSubstitutionSince = nil
 		}
+		*teamState.BotSubstitutionAllowed = false
 	}
 	if change.RequestsEmergencyStop != nil {
 		if *newState.GameState.Type == state.GameState_RUNNING {

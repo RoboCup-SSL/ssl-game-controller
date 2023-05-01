@@ -461,6 +461,8 @@ export interface Referee_TeamInfo {
   botSubstitutionIntent?: boolean;
   /** Indicate if the team reached the maximum allowed ball placement failures and is thus not allowed to place the ball anymore */
   ballPlacementFailuresReached?: boolean;
+  /** The team is allowed to substitute one or more robots currently */
+  botSubstitutionAllowed?: boolean;
 }
 
 /**
@@ -564,6 +566,7 @@ export const Referee_TeamInfo = {
       ballPlacementFailuresReached: isSet(object.ballPlacementFailuresReached)
         ? Boolean(object.ballPlacementFailuresReached)
         : false,
+      botSubstitutionAllowed: isSet(object.botSubstitutionAllowed) ? Boolean(object.botSubstitutionAllowed) : false,
     };
   },
 
@@ -589,6 +592,7 @@ export const Referee_TeamInfo = {
     message.botSubstitutionIntent !== undefined && (obj.botSubstitutionIntent = message.botSubstitutionIntent);
     message.ballPlacementFailuresReached !== undefined &&
       (obj.ballPlacementFailuresReached = message.ballPlacementFailuresReached);
+    message.botSubstitutionAllowed !== undefined && (obj.botSubstitutionAllowed = message.botSubstitutionAllowed);
     return obj;
   },
 };

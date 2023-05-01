@@ -213,10 +213,20 @@ func (e *Engine) Start() error {
 		return errors.Wrap(err, "Could not load state store")
 	}
 	e.currentState = e.initialStateFromStore()
+
+	initializeAddedTeamInfoFields(e.currentState.TeamInfo(state.Team_BLUE))
+	initializeAddedTeamInfoFields(e.currentState.TeamInfo(state.Team_YELLOW))
+
 	e.stateMachine.Geometry = e.gameConfig.DefaultGeometry[e.currentState.Division.Div()]
 	log.Printf("Loaded default geometry for DivA: %+v", e.stateMachine.Geometry)
 	go e.processChanges()
 	return nil
+}
+
+func initializeAddedTeamInfoFields(teamInfo *state.TeamInfo) {
+	if teamInfo.BotSubstitutionAllowed == nil {
+		teamInfo.BotSubstitutionAllowed = new(bool)
+	}
 }
 
 // Stop stops the go routine that processes the change queue

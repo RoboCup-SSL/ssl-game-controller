@@ -30,6 +30,7 @@ func (s *StateMachine) processChangeNewCommand(newState *state.State, newCommand
 			// reset robot substitution flags
 			for _, team := range state.BothTeams() {
 				newState.TeamInfo(team).RequestsBotSubstitutionSince = nil
+				*newState.TeamInfo(team).BotSubstitutionAllowed = false
 			}
 		} else if newState.ReadyContinueTime == nil {
 			newState.ReadyContinueTime = timestamppb.New(s.timeProvider().Add(s.gameConfig.PreparationTimeBeforeResume))

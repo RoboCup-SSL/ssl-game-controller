@@ -86,7 +86,7 @@ func (x *State) FindGameEvents(eventType GameEvent_Type) (events []*GameEvent) {
 func (x *State) FindGameEventsByTeam(eventType GameEvent_Type, team Team) (events []*GameEvent) {
 	events = []*GameEvent{}
 	for _, event := range x.GameEvents {
-		if *event.Type == eventType && event.ByTeam() == team {
+		if *event.Type == eventType && (team.Unknown() || event.ByTeam() == team) {
 			events = append(events, event)
 		}
 	}

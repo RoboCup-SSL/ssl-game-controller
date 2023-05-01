@@ -95,6 +95,7 @@ message TeamInfo {
     optional google.protobuf.Timestamp requests_timeout_since = 15;
     optional google.protobuf.Timestamp requests_emergency_stop_since = 16;
     optional int32 challenge_flags = 17;
+    optional bool bot_substitution_allowed = 18;
 }
 
 message State {

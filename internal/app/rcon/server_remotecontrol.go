@@ -199,10 +199,7 @@ func (c *RemoteControlClient) findYellowCardDueTimes() []float32 {
 
 func (c *RemoteControlClient) canSubstituteRobot() bool {
 	teamState := c.gcEngine.CurrentState().TeamState[c.team.String()]
-	substitutionEvents := c.gcEngine.CurrentState().FindGameEventsByTeam(state.GameEvent_BOT_SUBSTITUTION, *c.team)
-	return len(substitutionEvents) > 0 &&
-		teamState.RequestsBotSubstitutionSince != nil &&
-		c.gcEngine.CurrentState().GameState.IsHalted()
+	return *teamState.BotSubstitutionAllowed
 }
 
 func (c *RemoteControlClient) findActiveRequestTypes() []RemoteControlRequestType {
@@ -280,11 +277,6 @@ func (c *RemoteControlClient) checkStopTimeout() error {
 }
 
 func (c *RemoteControlClient) checkRequestRobotSubstitution() error {
-	gameStateType := *c.gcEngine.CurrentState().GameState.Type
-	teamState := c.gcEngine.CurrentState().TeamState[c.team.String()]
-	if gameStateType == state.GameState_HALT && teamState.RequestsBotSubstitutionSince == nil {
-		return errors.New("Game is halted")
-	}
 	return nil
 }
 

@@ -158,6 +158,8 @@ message Referee {
         optional bool bot_substitution_intent = 14;
         // Indicate if the team reached the maximum allowed ball placement failures and is thus not allowed to place the ball anymore
         optional bool ball_placement_failures_reached = 15;
+        // The team is allowed to substitute one or more robots currently
+        optional bool bot_substitution_allowed = 16;
     }
 
     // Information about the two teams.

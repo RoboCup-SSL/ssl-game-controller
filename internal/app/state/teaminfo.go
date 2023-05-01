@@ -19,6 +19,7 @@ func newTeamInfo() (t *TeamInfo) {
 	t.CanPlaceBall = new(bool)
 	t.MaxAllowedBots = new(int32)
 	t.ChallengeFlags = new(int32)
+	t.BotSubstitutionAllowed = new(bool)
 
 	*t.CanPlaceBall = true
 	*t.Name = "Unknown"
