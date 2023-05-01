@@ -304,7 +304,10 @@ func (e *Engine) ballPlacementTeam() state.Team {
 	}
 
 	// no team failed at ball placement yet, team of next command is preferred
-	teamInFavor := *e.currentState.NextCommand.ForTeam
+	teamInFavor := state.Team_UNKNOWN
+	if e.currentState.NextCommand != nil {
+		teamInFavor = *e.currentState.NextCommand.ForTeam
+	}
 	if teamInFavor.Unknown() {
 		// select a team by 50% chance (for example for force start)
 		teamInFavor = e.randomTeam()
