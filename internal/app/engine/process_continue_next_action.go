@@ -10,14 +10,17 @@ import (
 )
 
 func (e *Engine) nextActions() (actions []*ContinueAction, hints []*ContinueHint) {
+	if *e.currentState.Stage == state.Referee_POST_GAME {
+		// match is over
+		return
+	}
+
 	if e.currentState.Stage.IsPausedStage() {
-		if *e.currentState.Stage.Next() != *e.currentState.Stage {
-			actions = append(actions, createContinueAction(
-				ContinueAction_NEXT_STAGE,
-				state.Team_UNKNOWN,
-				ContinueAction_READY_MANUAL,
-			))
-		}
+		actions = append(actions, createContinueAction(
+			ContinueAction_NEXT_STAGE,
+			state.Team_UNKNOWN,
+			ContinueAction_READY_MANUAL,
+		))
 		// only possible action is to proceed to non-paused stage
 		return
 	}
@@ -326,15 +329,23 @@ func (e *Engine) randomTeam() state.Team {
 }
 
 func suggestEndOfMatch(currentState *state.State) bool {
+	goalsY := int(*currentState.TeamInfo(state.Team_YELLOW).Goals)
+	goalsB := int(*currentState.TeamInfo(state.Team_BLUE).Goals)
+	if *currentState.Stage != state.Referee_POST_GAME &&
+		(goalsY >= 10 || goalsB >= 10) && math.Abs(float64(goalsY-goalsB)) > 1 {
+		return true
+	}
+
 	if *currentState.Stage == state.Referee_NORMAL_SECOND_HALF ||
 		*currentState.Stage == state.Referee_EXTRA_SECOND_HALF {
 		return currentState.StageTimeLeft.AsDuration() < 0
-	} else if *currentState.Stage == state.Referee_EXTRA_TIME_BREAK ||
+	}
+
+	if *currentState.Stage == state.Referee_EXTRA_TIME_BREAK ||
 		*currentState.Stage == state.Referee_PENALTY_SHOOTOUT_BREAK ||
 		*currentState.Stage == state.Referee_PENALTY_SHOOTOUT {
 		return true
 	}
-	goalsY := int(*currentState.TeamInfo(state.Team_YELLOW).Goals)
-	goalsB := int(*currentState.TeamInfo(state.Team_BLUE).Goals)
-	return (goalsY >= 10 || goalsB >= 10) && math.Abs(float64(goalsY-goalsB)) > 1
+
+	return false
 }
