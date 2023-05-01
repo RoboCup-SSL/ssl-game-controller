@@ -6,6 +6,7 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"log"
 	"math"
+	"time"
 )
 
 func (e *Engine) nextActions() (actions []*ContinueAction, hints []*ContinueHint) {
@@ -46,6 +47,10 @@ func (e *Engine) nextActions() (actions []*ContinueAction, hints []*ContinueHint
 	}
 
 	if *e.currentState.Command.Type == state.Command_TIMEOUT {
+		timeLeft := e.currentState.TeamInfo(*e.currentState.Command.ForTeam).TimeoutTimeLeft.AsDuration().Truncate(time.Second)
+		message := fmt.Sprintf("Timeout time left: %s", timeLeft)
+		hints = append(hints, &ContinueHint{Message: &message})
+
 		actions = append(actions, createContinueAction(
 			ContinueAction_TIMEOUT_STOP,
 			*e.currentState.Command.ForTeam,
