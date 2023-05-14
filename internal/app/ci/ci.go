@@ -102,6 +102,9 @@ func (s *Server) serve(conn net.Conn) {
 			if in.ConfigDelta != nil {
 				s.gcEngine.UpdateConfig(in.ConfigDelta)
 			}
+			if in.ContinueAction != nil {
+				s.gcEngine.Continue(in.ContinueAction)
+			}
 		}
 
 		if input.Geometry != nil {
