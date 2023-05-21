@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, ref} from 'vue'
+import {computed} from 'vue'
 import MatchStateToolbar from "@/components/MatchStateToolbar.vue";
 import ExternalConnectionStatus from "@/components/ExternalConnectionStatus.vue";
 import StoreUpdateCountStatus from "@/components/StoreUpdateCountStatus.vue";
@@ -10,13 +10,11 @@ import {useUiStateStore} from "@/store/uiState";
 
 const uiStore = useUiStateStore()
 
-const leftDrawerOpen = ref(false)
 const toggleLeftDrawer = () => {
-  leftDrawerOpen.value = !leftDrawerOpen.value
+  uiStore.leftDrawerOpen = !uiStore.leftDrawerOpen
 }
-const rightDrawerOpen = ref(false)
 const toggleRightDrawer = () => {
-  rightDrawerOpen.value = !rightDrawerOpen.value
+  uiStore.rightDrawerOpen = !uiStore.rightDrawerOpen
 }
 const $q = useQuasar()
 const darkMode = computed(() => $q.dark.isActive)
@@ -76,11 +74,11 @@ const dev = computed(() => {
       </q-tabs>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" side="left" bordered>
+    <q-drawer v-model="uiStore.leftDrawerOpen" side="left" bordered>
       <ManualControlView/>
     </q-drawer>
 
-    <q-drawer v-model="rightDrawerOpen" side="right" bordered :width="uiStore.rightDrawerWidth">
+    <q-drawer v-model="uiStore.rightDrawerOpen" side="right" bordered :width="uiStore.rightDrawerWidth">
       <div v-touch-pan.preserveCursor.prevent.mouse.horizontal="resizeDrawer" class="q-drawer__resizer"></div>
       <ProtocolList dense/>
     </q-drawer>
