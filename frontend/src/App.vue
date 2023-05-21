@@ -8,7 +8,7 @@ import ProtocolList from "@/components/protocol/ProtocolList.vue";
 import {useQuasar} from "quasar";
 import {useUiStateStore} from "@/store/uiState";
 
-const uiState = useUiStateStore()
+const uiStore = useUiStateStore()
 
 const leftDrawerOpen = ref(false)
 const toggleLeftDrawer = () => {
@@ -22,11 +22,19 @@ const $q = useQuasar()
 const darkMode = computed(() => $q.dark.isActive)
 const toggleDarkMode = () => {
   $q.dark.toggle()
-  uiState.darkMode = $q.dark.isActive
+  uiStore.darkMode = $q.dark.isActive
 }
 
-if (uiState.darkMode !== undefined) {
-  $q.dark.set(uiState.darkMode)
+if (uiStore.darkMode !== undefined) {
+  $q.dark.set(uiStore.darkMode)
+}
+
+let initialDrawerWidth = 0
+const resizeDrawer = (ev: any) => {
+  if (ev.isFirst === true) {
+    initialDrawerWidth = uiStore.rightDrawerWidth
+  }
+  uiStore.rightDrawerWidth = initialDrawerWidth - ev.offset.x
 }
 
 const dev = computed(() => {
@@ -72,7 +80,8 @@ const dev = computed(() => {
       <ManualControlView/>
     </q-drawer>
 
-    <q-drawer v-model="rightDrawerOpen" side="right" bordered :width="400">
+    <q-drawer v-model="rightDrawerOpen" side="right" bordered :width="uiStore.rightDrawerWidth">
+      <div v-touch-pan.preserveCursor.prevent.mouse.horizontal="resizeDrawer" class="q-drawer__resizer"></div>
       <ProtocolList dense/>
     </q-drawer>
 
@@ -88,3 +97,14 @@ const dev = computed(() => {
 
   </q-layout>
 </template>
+
+<style>
+.q-drawer__resizer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -2px;
+  width: 4px;
+  cursor: ew-resize;
+}
+</style>
