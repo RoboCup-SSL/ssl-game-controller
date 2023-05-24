@@ -28,11 +28,17 @@ if (uiStore.darkMode !== undefined) {
 }
 
 let initialDrawerWidth = 0
-const resizeDrawer = (ev: any) => {
+const resizeRightDrawer = (ev: any) => {
   if (ev.isFirst === true) {
     initialDrawerWidth = uiStore.rightDrawerWidth
   }
   uiStore.rightDrawerWidth = initialDrawerWidth - ev.offset.x
+}
+const resizeLeftDrawer = (ev: any) => {
+  if (ev.isFirst === true) {
+    initialDrawerWidth = uiStore.leftDrawerWidth
+  }
+  uiStore.leftDrawerWidth = initialDrawerWidth + ev.offset.x
 }
 
 const dev = computed(() => {
@@ -74,12 +80,14 @@ const dev = computed(() => {
       </q-tabs>
     </q-header>
 
-    <q-drawer v-model="uiStore.leftDrawerOpen" side="left" bordered>
+    <q-drawer v-model="uiStore.leftDrawerOpen" side="left" bordered :width="uiStore.leftDrawerWidth">
+      <div v-touch-pan.preserveCursor.prevent.mouse.horizontal="resizeLeftDrawer" class="q-left-drawer__resizer"></div>
       <ManualControlView/>
     </q-drawer>
 
     <q-drawer v-model="uiStore.rightDrawerOpen" side="right" bordered :width="uiStore.rightDrawerWidth">
-      <div v-touch-pan.preserveCursor.prevent.mouse.horizontal="resizeDrawer" class="q-drawer__resizer"></div>
+      <div v-touch-pan.preserveCursor.prevent.mouse.horizontal="resizeRightDrawer"
+           class="q-right-drawer__resizer"></div>
       <ProtocolList dense/>
     </q-drawer>
 
@@ -97,11 +105,20 @@ const dev = computed(() => {
 </template>
 
 <style>
-.q-drawer__resizer {
+.q-right-drawer__resizer {
   position: absolute;
   top: 0;
   bottom: 0;
   left: -2px;
+  width: 4px;
+  cursor: ew-resize;
+}
+
+.q-left-drawer__resizer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: -2px;
   width: 4px;
   cursor: ew-resize;
 }
