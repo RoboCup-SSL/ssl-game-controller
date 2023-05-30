@@ -15,3 +15,9 @@ func TimestampToTime(timestamp float64) time.Time {
 	nSec := int64((timestamp - float64(sec)) * 1e9)
 	return time.Unix(sec, nSec)
 }
+
+func TimestampMicroToTime(timestamp uint64) time.Time {
+	sec := int64(timestamp / 1000)
+	nSec := int64((timestamp - uint64(sec)) * 1000)
+	return time.Unix(sec, nSec)
+}

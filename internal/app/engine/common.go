@@ -95,15 +95,15 @@ func createStageChange(stage *state.Referee_Stage) *statemachine.Change {
 	}
 }
 
-func (e *Engine) findRobotInsideRadius(robots []*Robot, pos *geom.Vector2, radius float64) *Robot {
+func (e *Engine) findRobotInsideRadius(robots []*Robot, pos *geom.Vector2, radius float64) (matchingRobots []*Robot) {
 	for _, robot := range robots {
 		distance := robot.Pos.DistanceTo(pos)
 		if distance < radius {
-			return robot
+			matchingRobots = append(matchingRobots, robot)
 		}
 	}
 
-	return nil
+	return
 }
 
 func goDur(duration *durationpb.Duration) time.Duration {

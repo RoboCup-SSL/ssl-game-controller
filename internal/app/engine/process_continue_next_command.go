@@ -4,7 +4,10 @@ import (
 	"fmt"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/geom"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
+	"github.com/RoboCup-SSL/ssl-game-controller/pkg/timer"
 	"google.golang.org/protobuf/types/known/timestamppb"
+	"strings"
+	"time"
 )
 
 const distanceToBallDuringPenalty = 1.0
@@ -28,7 +31,11 @@ func (e *Engine) createNextCommandContinueAction(
 		readyAt = nil
 	} else {
 		if lastReadyAt == nil {
-			readyAt = timestamppb.New(e.timeProvider().Add(e.gameConfig.PreparationTimeBeforeResume))
+			if e.placementSucceededRecently() {
+				readyAt = timestamppb.New(e.timeProvider())
+			} else {
+				readyAt = timestamppb.New(e.timeProvider().Add(e.gameConfig.PreparationTimeBeforeResume))
+			}
 		} else {
 			readyAt = lastReadyAt
 		}
@@ -51,6 +58,20 @@ func (e *Engine) createNextCommandContinueAction(
 		ContinuationIssues: continuationIssues,
 		ReadyAt:            readyAt,
 	}
+}
+
+func (e *Engine) placementSucceededRecently() bool {
+	events := e.currentState.FindGameEvents(state.GameEvent_PLACEMENT_SUCCEEDED)
+	for _, event := range events {
+		if event.CreatedTimestamp == nil {
+			continue
+		}
+		placementSucceededTime := timer.TimestampMicroToTime(event.GetCreatedTimestamp())
+		if e.timeProvider().Sub(placementSucceededTime) < time.Second {
+			return true
+		}
+	}
+	return false
 }
 
 func (e *Engine) LastContinueAction(actionType ContinueAction_Type) *ContinueAction {
@@ -175,9 +196,23 @@ func (e *Engine) readyToContinueFromStop() (issues []string) {
 		issues = append(issues, "Blue team has too many robots")
 	}
 	radius := e.gameConfig.DistanceToBallInStop + robotRadius - distanceThreshold
-	robotNearBall := e.findRobotInsideRadius(e.trackerStateGc.Robots, e.trackerStateGc.Ball.Pos.ToVector2(), radius)
-	if robotNearBall != nil {
-		issues = append(issues, fmt.Sprintf("Robot %s is too close to ball", robotNearBall.Id.PrettyString()))
+
+	var robots []*Robot
+	if e.currentState.NextCommand != nil && *e.currentState.NextCommand.Type == state.Command_DIRECT {
+		// Only check for opponent teams robots
+		// This is not strictly correct, but necessary to continue directly after a ball placement, without
+		// waiting for robots to move out of the stop radius.
+		robots = robotsOfTeam(e.trackerStateGc.Robots, e.currentState.NextCommand.ForTeam.Opposite())
+	} else {
+		robots = e.trackerStateGc.Robots
+	}
+	robotsNearBall := e.findRobotInsideRadius(robots, e.trackerStateGc.Ball.Pos.ToVector2(), radius)
+	if len(robotsNearBall) > 0 {
+		var robotsStr []string
+		for _, robot := range robotsNearBall {
+			robotsStr = append(robotsStr, robot.Id.PrettyString())
+		}
+		issues = append(issues, fmt.Sprintf("Robots too close to ball: %s", strings.Join(robotsStr, ", ")))
 	}
 	if e.currentState.PlacementPos != nil {
 		ballToPlacementPosDist := e.currentState.PlacementPos.DistanceTo(e.trackerStateGc.Ball.Pos.ToVector2())
@@ -188,6 +223,15 @@ func (e *Engine) readyToContinueFromStop() (issues []string) {
 	}
 	if !e.trackerStateGc.Ball.IsSteady() {
 		issues = append(issues, "Ball position is not steady")
+	}
+	return
+}
+
+func robotsOfTeam(robots []*Robot, team state.Team) (teamRobots []*Robot) {
+	for _, robot := range robots {
+		if *robot.Id.Team == team {
+			teamRobots = append(teamRobots, robot)
+		}
 	}
 	return
 }
