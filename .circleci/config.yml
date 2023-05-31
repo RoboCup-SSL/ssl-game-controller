@@ -86,7 +86,7 @@ jobs:
           version: 20.10.18
       - run: |
           for cmd in << pipeline.parameters.cmds >>; do
-            docker build -f ./cmd/${cmd}/Dockerfile -t robocupssl/${cmd}:latest .
+            docker build --build-arg cmd=${cmd} -f ./cmd/${cmd}/Dockerfile -t robocupssl/${cmd}:latest .
           done
 
   publish_docker:
@@ -102,7 +102,7 @@ jobs:
           TAG=${CIRCLE_TAG:1}
           TAG=${TAG:-latest}
           for cmd in << pipeline.parameters.cmds >>; do
-            docker build -f ./cmd/${cmd}/Dockerfile -t robocupssl/${cmd}:${TAG} .
+            docker build --build-arg cmd=${cmd} -f ./cmd/${cmd}/Dockerfile -t robocupssl/${cmd}:${TAG} .
             docker login -u "${DOCKER_HUB_USERNAME}" -p "${DOCKER_HUB_PASSWORD}"
             docker push robocupssl/${cmd}:${TAG}
           done
@@ -127,7 +127,8 @@ workflows:
           filters: { branches: { ignore: /.*/ }, tags: { only: /^v.*/ } }
   docker:
     jobs:
-      - build_docker
+      - build_docker:
+          filters: { branches: { ignore: master } }
       - publish_docker:
           context: docker hub
           filters: { branches: { only: master }, tags: { only: /^v.*/ } }
