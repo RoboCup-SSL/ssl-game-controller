@@ -14,9 +14,8 @@ RUN go install ./cmd/${cmd}
 # Start fresh from a smaller image
 FROM alpine:3
 ARG cmd=ssl-game-controller
-COPY --from=build_go /go/bin/${cmd} /app/${cmd}
-RUN mkdir -p config && chown -R 1000: config
+COPY --from=build_go /go/bin/${cmd} /app
+RUN mkdir -p /config && chown -R 1000: /config
 USER 1000
-ENV COMMAND="/app/${cmd}"
-ENTRYPOINT "${COMMAND}"
+ENTRYPOINT ["/app"]
 CMD []

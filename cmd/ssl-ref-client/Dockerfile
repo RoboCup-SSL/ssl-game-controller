@@ -7,8 +7,7 @@ RUN go install -v ./cmd/${cmd}
 # Start fresh from a smaller image
 FROM alpine:3
 ARG cmd=ssl-ref-client
-COPY --from=build_go /go/bin/${cmd} /app/${cmd}
+COPY --from=build_go /go/bin/${cmd} /app
 USER 1000
-ENV COMMAND="/app/${cmd}"
-ENTRYPOINT "${COMMAND}"
+ENTRYPOINT ["/app"]
 CMD []
