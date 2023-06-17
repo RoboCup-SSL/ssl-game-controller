@@ -14,6 +14,7 @@ var defaultTeams = []string{
 	"Unknown",
 	"AIS",
 	"AMC",
+	"A-Team",
 	"CMμs",
 	"ER-Force",
 	"Immortals",
