@@ -11,10 +11,18 @@ the [ssl-refbox](https://github.com/RoboCup-SSL/ssl-refbox).
 
 ![Screenshot of Interface](./doc/screenshot_interface.png)
 
+## Add your team name
+
+If you are a new team, please add your team name to [internal/app/engine/config.go](internal/app/engine/config.go).
+
 ## Usage
-If you just want to use this app, simply download the latest [release binary](https://github.com/RoboCup-SSL/ssl-game-controller/releases/latest). The binary is self-contained. No dependencies are required.
+
+If you just want to use this app, simply download the
+latest [release binary](https://github.com/RoboCup-SSL/ssl-game-controller/releases/latest). The binary is
+self-contained. No dependencies are required.
 
 You can also use pre-build docker images:
+
 ```shell script
 docker pull robocupssl/ssl-game-controller
 # Run GC with default configuration
