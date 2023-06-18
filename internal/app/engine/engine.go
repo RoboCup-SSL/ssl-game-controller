@@ -43,6 +43,7 @@ type Engine struct {
 	botNumberProcessor       BotNumberProcessor
 	tickChanProvider         func() <-chan time.Time
 	rand                     *rand.Rand
+	randomPlacingTeam        state.Team
 }
 
 // NewEngine creates a new engine
@@ -74,6 +75,7 @@ func NewEngine(gameConfig config.Game, engineConfig config.Engine) (e *Engine) {
 		return time.After(25 * time.Millisecond)
 	}
 	e.rand = rand.New(rand.NewSource(time.Now().Unix()))
+	e.randomPlacingTeam = state.Team_UNKNOWN
 	return
 }
 

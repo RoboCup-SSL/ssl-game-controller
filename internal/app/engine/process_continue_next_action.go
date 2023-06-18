@@ -164,6 +164,9 @@ func (e *Engine) nextActions() (actions []*ContinueAction, hints []*ContinueHint
 			actions = append(actions, e.createNextCommandContinueAction(ContinueAction_FREE_KICK, state.Team_YELLOW))
 			actions = append(actions, e.createNextCommandContinueAction(ContinueAction_FREE_KICK, state.Team_BLUE))
 		}
+	} else {
+		// reset random placing team
+		e.randomPlacingTeam = state.Team_UNKNOWN
 	}
 
 	if *e.currentState.Command.Type == state.Command_HALT {
@@ -309,9 +312,12 @@ func (e *Engine) ballPlacementTeam() state.Team {
 		teamInFavor = *e.currentState.NextCommand.ForTeam
 	}
 	if teamInFavor.Unknown() {
-		// select a team by 50% chance (for example for force start)
-		teamInFavor = e.randomTeam()
-		log.Printf("No team in favor. Chose one randomly.")
+		if e.randomPlacingTeam.Unknown() {
+			// select a team by 50% chance (for example for force start)
+			e.randomPlacingTeam = e.randomTeam()
+			log.Printf("No team in favor. Chose one randomly: %v", e.randomPlacingTeam)
+		}
+		teamInFavor = e.randomPlacingTeam
 	}
 
 	if e.currentState.TeamInfo(teamInFavor).BallPlacementAllowed() {
