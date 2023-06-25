@@ -320,6 +320,7 @@ func (e *Engine) processChanges() {
 func (e *Engine) ResetMatch() {
 	e.mutex.Lock()
 	defer e.mutex.Unlock()
+	log.Printf("Resetting match")
 	if err := e.stateStore.Reset(); err != nil {
 		log.Printf("Could not reset store: %v", err)
 	} else {
