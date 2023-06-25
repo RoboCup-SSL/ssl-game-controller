@@ -9,7 +9,7 @@ services:
       - "-visionAddress"
       - "224.5.23.2:10020"
       - "-trackerAddress"
-      - "224.5.23.2:10010" # not yet overridable by autoRefs
+      - "224.5.23.2:11010"
       - "-publishAddress"
       - "224.5.23.1:11003"
       - "-address"
@@ -103,7 +103,7 @@ services:
       - team-client
 
   autoref-tigers:
-    image: "tigersmannheim/auto-referee:1.0.0"
+    image: "tigersmannheim/auto-referee:1.1.3"
     command:
       - "-a" # active mode (connect to GC)
       - "-hl" # headless
@@ -111,15 +111,19 @@ services:
       - "224.5.23.2:10020"
       - "--refereeAddress"
       - "224.5.23.1:11003"
+      - "--trackerAddress"
+      - "224.5.23.1:11010"
     network_mode: "${NETWORK_MODE}"
     depends_on:
       - simulator
 
   autoref-erforce:
-    image: "roboticserlangen/autoref:commit-8561e9c4f912"
+    image: "roboticserlangen/autoref:commit-6f15f574ea80"
     command:
       - "--vision-port"
       - "10020"
+      - "--tracker-port"
+      - "11010"
       - "--gc-port"
       - "11003"
     network_mode: "${NETWORK_MODE}"
@@ -145,7 +149,7 @@ services:
       - "-visionAddress"
       - "224.5.23.2:10020"
       - "-trackerAddress"
-      - "224.5.23.2:10010"
+      - "224.5.23.2:11010"
       - "-simControlPort"
       - "10300"
     network_mode: "${NETWORK_MODE}"
