@@ -30,6 +30,7 @@ var defaultTeams = []string{
 	"NEUIslanders",
 	"OMID",
 	"OP-AmP",
+	"OrcaBOT",
 	"Parsian",
 	"Ri-One",
 	"RFC Cambridge",
