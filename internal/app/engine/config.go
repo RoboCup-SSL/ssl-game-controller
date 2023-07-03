@@ -25,7 +25,7 @@ var defaultTeams = []string{
 	"MCT Susano Logics",
 	"MIT Roboteam",
 	"MRL",
-	"nAMeC",
+	"NAMeC",
 	"NAELIC",
 	"NEUIslanders",
 	"OMID",
