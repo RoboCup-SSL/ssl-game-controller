@@ -12,6 +12,7 @@ import SwitchColorButton from "@/components/start/SwitchColorButton.vue";
 import {useMatchStateStore} from "@/store/matchState";
 import {Referee_Stage} from "@/proto/ssl_gc_referee_message";
 import SwitchSidesButton from "@/components/start/SwitchSidesButton.vue";
+import HaltButton from "@/components/control/HaltButton.vue";
 
 const store = useMatchStateStore()
 const gcStore = useGcStateStore()
@@ -106,6 +107,9 @@ onUnmounted(() => {
           {{ hint.message }}
         </div>
       </template>
+      <div class="column">
+        <HaltButton class="col"/>
+      </div>
       <ContinueActionButtonList/>
     </div>
     <div class="col q-gutter-md q-mr-md" style="min-width: 300px">

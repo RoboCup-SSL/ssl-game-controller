@@ -13,7 +13,7 @@ const sendCommand = () => {
 }
 
 const disable = computed(() => {
-  return store.matchState.command?.type === Command_Type.HALT
+  return store.matchState.command?.type === Command_Type.HALT || store.matchState.command?.type === Command_Type.TIMEOUT
 })
 
 </script>

@@ -182,15 +182,6 @@ func (e *Engine) nextActions() (actions []*ContinueAction, hints []*ContinueHint
 		actions = append(actions, continueFromHalt)
 	}
 
-	if *e.currentState.Command.Type != state.Command_HALT &&
-		*e.currentState.Command.Type != state.Command_TIMEOUT {
-		actions = append(actions, createContinueAction(
-			ContinueAction_HALT,
-			state.Team_UNKNOWN,
-			ContinueAction_READY_MANUAL,
-		))
-	}
-
 	return
 }
 
