@@ -62,6 +62,10 @@ func (s *StateMachine) proceedStage(newState *state.State, newStage state.Refere
 	if newStage == state.Referee_PENALTY_SHOOTOUT {
 		newState.ShootoutState = &state.ShootoutState{
 			NextTeam: newState.FirstKickoffTeam,
+			NumberOfAttempts: map[string]int32{
+				state.Team_BLUE.String():   0,
+				state.Team_YELLOW.String(): 0,
+			},
 		}
 	}
 

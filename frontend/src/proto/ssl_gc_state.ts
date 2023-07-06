@@ -258,6 +258,12 @@ export interface State_TeamStateEntry {
 
 export interface ShootoutState {
   nextTeam?: Team;
+  numberOfAttempts?: { [key: string]: number };
+}
+
+export interface ShootoutState_NumberOfAttemptsEntry {
+  key: string;
+  value: number;
 }
 
 export const YellowCard = {
@@ -558,12 +564,39 @@ export const State_TeamStateEntry = {
 
 export const ShootoutState = {
   fromJSON(object: any): ShootoutState {
-    return { nextTeam: isSet(object.nextTeam) ? teamFromJSON(object.nextTeam) : Team.UNKNOWN };
+    return {
+      nextTeam: isSet(object.nextTeam) ? teamFromJSON(object.nextTeam) : Team.UNKNOWN,
+      numberOfAttempts: isObject(object.numberOfAttempts)
+        ? Object.entries(object.numberOfAttempts).reduce<{ [key: string]: number }>((acc, [key, value]) => {
+          acc[key] = Number(value);
+          return acc;
+        }, {})
+        : {},
+    };
   },
 
   toJSON(message: ShootoutState): unknown {
     const obj: any = {};
     message.nextTeam !== undefined && (obj.nextTeam = teamToJSON(message.nextTeam));
+    obj.numberOfAttempts = {};
+    if (message.numberOfAttempts) {
+      Object.entries(message.numberOfAttempts).forEach(([k, v]) => {
+        obj.numberOfAttempts[k] = Math.round(v);
+      });
+    }
+    return obj;
+  },
+};
+
+export const ShootoutState_NumberOfAttemptsEntry = {
+  fromJSON(object: any): ShootoutState_NumberOfAttemptsEntry {
+    return { key: isSet(object.key) ? String(object.key) : "", value: isSet(object.value) ? Number(object.value) : 0 };
+  },
+
+  toJSON(message: ShootoutState_NumberOfAttemptsEntry): unknown {
+    const obj: any = {};
+    message.key !== undefined && (obj.key = message.key);
+    message.value !== undefined && (obj.value = Math.round(message.value));
     return obj;
   },
 };

@@ -121,4 +121,5 @@ message State {
 
 message ShootoutState {
     optional Team next_team = 1;
+    map<string, int32> number_of_attempts = 2;
 }

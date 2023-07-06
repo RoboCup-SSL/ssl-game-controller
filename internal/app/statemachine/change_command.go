@@ -63,6 +63,7 @@ func (s *StateMachine) processChangeNewCommand(newState *state.State, newCommand
 	if *newState.Stage == state.Referee_PENALTY_SHOOTOUT &&
 		newState.ShootoutState != nil {
 		if *newCommand.Command.Type == state.Command_NORMAL_START {
+			newState.ShootoutState.NumberOfAttempts[newState.ShootoutState.NextTeam.String()]++
 			*newState.ShootoutState.NextTeam = newState.ShootoutState.NextTeam.Opposite()
 		} else if *newState.GameState.Type == state.GameState_STOP {
 			forTeam := *newState.ShootoutState.NextTeam

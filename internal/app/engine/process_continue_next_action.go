@@ -331,6 +331,17 @@ func (e *Engine) randomTeam() state.Team {
 func suggestEndOfMatch(currentState *state.State) bool {
 	goalsY := int(*currentState.TeamInfo(state.Team_YELLOW).Goals)
 	goalsB := int(*currentState.TeamInfo(state.Team_BLUE).Goals)
+
+	if *currentState.Stage == state.Referee_PENALTY_SHOOTOUT {
+		attempts := currentState.ShootoutState.NumberOfAttempts[state.Team_BLUE.String()] +
+			currentState.ShootoutState.NumberOfAttempts[state.Team_YELLOW.String()]
+
+		if attempts < 10 || attempts%2 == 1 {
+			return false
+		}
+		return goalsY != goalsB
+	}
+
 	if *currentState.Stage != state.Referee_POST_GAME &&
 		(goalsY >= 10 || goalsB >= 10) && math.Abs(float64(goalsY-goalsB)) > 1 {
 		return true

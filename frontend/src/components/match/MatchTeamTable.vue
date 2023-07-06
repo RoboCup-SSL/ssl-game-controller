@@ -7,6 +7,8 @@ import {useMatchStateStore} from "@/store/matchState";
 import formatDuration from "format-duration";
 import {teams} from "@/helpers";
 import type {Team} from "@/proto/ssl_gc_common";
+import {Referee_Stage} from "@/proto/ssl_gc_referee_message";
+import {computed} from "vue";
 
 const store = useMatchStateStore()
 
@@ -29,6 +31,12 @@ const nextYellowCardDue = (team: Team) => {
     return activeYellowCards![0].timeRemaining?.seconds!
   }
   return 0
+}
+const isShootout = computed(() => {
+  return store.matchState.stage === Referee_Stage.PENALTY_SHOOTOUT
+})
+const penaltyAttempts = (team: Team) => {
+  return store.matchState.shootoutState?.numberOfAttempts?.[team] || 0
 }
 </script>
 
@@ -76,6 +84,17 @@ const nextYellowCardDue = (team: Team) => {
           </q-item-label>
           <q-item-label caption>
             Next yellow card due
+          </q-item-label>
+        </q-item-section>
+      </q-item>
+
+      <q-item v-ripple v-if="isShootout">
+        <q-item-section class="text-center">
+          <q-item-label>
+            {{ penaltyAttempts(team) }}
+          </q-item-label>
+          <q-item-label caption>
+            Number of penalty attempts
           </q-item-label>
         </q-item-section>
       </q-item>
