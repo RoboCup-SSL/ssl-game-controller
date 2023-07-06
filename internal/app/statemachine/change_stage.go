@@ -59,6 +59,12 @@ func (s *StateMachine) proceedStage(newState *state.State, newStage state.Refere
 		newState.PlacementPos = geom.NewVector2(0.0, 0.0)
 	}
 
+	if newStage == state.Referee_PENALTY_SHOOTOUT {
+		newState.ShootoutState = &state.ShootoutState{
+			NextTeam: newState.FirstKickoffTeam,
+		}
+	}
+
 	// Reset game events and proposals
 	newState.ProposalGroups = nil
 	newState.GameEvents = nil
@@ -75,8 +81,6 @@ func (s *StateMachine) getNextCommandForStage(newState *state.State, stage state
 		return state.NewCommand(state.Command_KICKOFF, *newState.FirstKickoffTeam)
 	case state.Referee_NORMAL_SECOND_HALF_PRE, state.Referee_EXTRA_SECOND_HALF_PRE:
 		return state.NewCommand(state.Command_KICKOFF, newState.FirstKickoffTeam.Opposite())
-	case state.Referee_PENALTY_SHOOTOUT:
-		return state.NewCommand(state.Command_PENALTY, *newState.FirstKickoffTeam)
 	default:
 		return nil
 	}

@@ -789,6 +789,7 @@ type State struct {
 	FirstKickoffTeam           *Team                  `protobuf:"varint,17,opt,name=first_kickoff_team,json=firstKickoffTeam,enum=Team" json:"first_kickoff_team,omitempty"`
 	MatchType                  *MatchType             `protobuf:"varint,18,opt,name=match_type,json=matchType,enum=MatchType" json:"match_type,omitempty"`
 	ReadyContinueTime          *timestamppb.Timestamp `protobuf:"bytes,20,opt,name=ready_continue_time,json=readyContinueTime" json:"ready_continue_time,omitempty"`
+	ShootoutState              *ShootoutState         `protobuf:"bytes,21,opt,name=shootout_state,json=shootoutState" json:"shootout_state,omitempty"`
 }
 
 func (x *State) Reset() {
@@ -935,6 +936,60 @@ func (x *State) GetReadyContinueTime() *timestamppb.Timestamp {
 	return nil
 }
 
+func (x *State) GetShootoutState() *ShootoutState {
+	if x != nil {
+		return x.ShootoutState
+	}
+	return nil
+}
+
+type ShootoutState struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	NextTeam *Team `protobuf:"varint,1,opt,name=next_team,json=nextTeam,enum=Team" json:"next_team,omitempty"`
+}
+
+func (x *ShootoutState) Reset() {
+	*x = ShootoutState{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_ssl_gc_state_proto_msgTypes[9]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ShootoutState) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ShootoutState) ProtoMessage() {}
+
+func (x *ShootoutState) ProtoReflect() protoreflect.Message {
+	mi := &file_ssl_gc_state_proto_msgTypes[9]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ShootoutState.ProtoReflect.Descriptor instead.
+func (*ShootoutState) Descriptor() ([]byte, []int) {
+	return file_ssl_gc_state_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *ShootoutState) GetNextTeam() Team {
+	if x != nil && x.NextTeam != nil {
+		return *x.NextTeam
+	}
+	return Team_UNKNOWN
+}
+
 var File_ssl_gc_state_proto protoreflect.FileDescriptor
 
 var file_ssl_gc_state_proto_rawDesc = []byte{
@@ -1072,7 +1127,7 @@ var file_ssl_gc_state_proto_rawDesc = []byte{
 	0x67, 0x73, 0x12, 0x38, 0x0a, 0x18, 0x62, 0x6f, 0x74, 0x5f, 0x73, 0x75, 0x62, 0x73, 0x74, 0x69,
 	0x74, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x61, 0x6c, 0x6c, 0x6f, 0x77, 0x65, 0x64, 0x18, 0x12,
 	0x20, 0x01, 0x28, 0x08, 0x52, 0x16, 0x62, 0x6f, 0x74, 0x53, 0x75, 0x62, 0x73, 0x74, 0x69, 0x74,
-	0x75, 0x74, 0x69, 0x6f, 0x6e, 0x41, 0x6c, 0x6c, 0x6f, 0x77, 0x65, 0x64, 0x22, 0xc6, 0x07, 0x0a,
+	0x75, 0x74, 0x69, 0x6f, 0x6e, 0x41, 0x6c, 0x6c, 0x6f, 0x77, 0x65, 0x64, 0x22, 0xfd, 0x07, 0x0a,
 	0x05, 0x53, 0x74, 0x61, 0x74, 0x65, 0x12, 0x24, 0x0a, 0x05, 0x73, 0x74, 0x61, 0x67, 0x65, 0x18,
 	0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x0e, 0x2e, 0x52, 0x65, 0x66, 0x65, 0x72, 0x65, 0x65, 0x2e,
 	0x53, 0x74, 0x61, 0x67, 0x65, 0x52, 0x05, 0x73, 0x74, 0x61, 0x67, 0x65, 0x12, 0x22, 0x0a, 0x07,
@@ -1128,16 +1183,23 @@ var file_ssl_gc_state_proto_rawDesc = []byte{
 	0x65, 0x18, 0x14, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65,
 	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74,
 	0x61, 0x6d, 0x70, 0x52, 0x11, 0x72, 0x65, 0x61, 0x64, 0x79, 0x43, 0x6f, 0x6e, 0x74, 0x69, 0x6e,
-	0x75, 0x65, 0x54, 0x69, 0x6d, 0x65, 0x1a, 0x47, 0x0a, 0x0e, 0x54, 0x65, 0x61, 0x6d, 0x53, 0x74,
-	0x61, 0x74, 0x65, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x1f, 0x0a, 0x05, 0x76, 0x61,
-	0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x09, 0x2e, 0x54, 0x65, 0x61, 0x6d,
-	0x49, 0x6e, 0x66, 0x6f, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x4a,
-	0x04, 0x08, 0x10, 0x10, 0x11, 0x42, 0x3f, 0x5a, 0x3d, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e,
-	0x63, 0x6f, 0x6d, 0x2f, 0x52, 0x6f, 0x62, 0x6f, 0x43, 0x75, 0x70, 0x2d, 0x53, 0x53, 0x4c, 0x2f,
-	0x73, 0x73, 0x6c, 0x2d, 0x67, 0x61, 0x6d, 0x65, 0x2d, 0x63, 0x6f, 0x6e, 0x74, 0x72, 0x6f, 0x6c,
-	0x6c, 0x65, 0x72, 0x2f, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x6e, 0x61, 0x6c, 0x2f, 0x61, 0x70, 0x70,
-	0x2f, 0x73, 0x74, 0x61, 0x74, 0x65,
+	0x75, 0x65, 0x54, 0x69, 0x6d, 0x65, 0x12, 0x35, 0x0a, 0x0e, 0x73, 0x68, 0x6f, 0x6f, 0x74, 0x6f,
+	0x75, 0x74, 0x5f, 0x73, 0x74, 0x61, 0x74, 0x65, 0x18, 0x15, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0e,
+	0x2e, 0x53, 0x68, 0x6f, 0x6f, 0x74, 0x6f, 0x75, 0x74, 0x53, 0x74, 0x61, 0x74, 0x65, 0x52, 0x0d,
+	0x73, 0x68, 0x6f, 0x6f, 0x74, 0x6f, 0x75, 0x74, 0x53, 0x74, 0x61, 0x74, 0x65, 0x1a, 0x47, 0x0a,
+	0x0e, 0x54, 0x65, 0x61, 0x6d, 0x53, 0x74, 0x61, 0x74, 0x65, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12,
+	0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65,
+	0x79, 0x12, 0x1f, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b,
+	0x32, 0x09, 0x2e, 0x54, 0x65, 0x61, 0x6d, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x05, 0x76, 0x61, 0x6c,
+	0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x4a, 0x04, 0x08, 0x10, 0x10, 0x11, 0x22, 0x33, 0x0a, 0x0d,
+	0x53, 0x68, 0x6f, 0x6f, 0x74, 0x6f, 0x75, 0x74, 0x53, 0x74, 0x61, 0x74, 0x65, 0x12, 0x22, 0x0a,
+	0x09, 0x6e, 0x65, 0x78, 0x74, 0x5f, 0x74, 0x65, 0x61, 0x6d, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e,
+	0x32, 0x05, 0x2e, 0x54, 0x65, 0x61, 0x6d, 0x52, 0x08, 0x6e, 0x65, 0x78, 0x74, 0x54, 0x65, 0x61,
+	0x6d, 0x42, 0x3f, 0x5a, 0x3d, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f,
+	0x52, 0x6f, 0x62, 0x6f, 0x43, 0x75, 0x70, 0x2d, 0x53, 0x53, 0x4c, 0x2f, 0x73, 0x73, 0x6c, 0x2d,
+	0x67, 0x61, 0x6d, 0x65, 0x2d, 0x63, 0x6f, 0x6e, 0x74, 0x72, 0x6f, 0x6c, 0x6c, 0x65, 0x72, 0x2f,
+	0x69, 0x6e, 0x74, 0x65, 0x72, 0x6e, 0x61, 0x6c, 0x2f, 0x61, 0x70, 0x70, 0x2f, 0x73, 0x74, 0x61,
+	0x74, 0x65,
 }
 
 var (
@@ -1153,7 +1215,7 @@ func file_ssl_gc_state_proto_rawDescGZIP() []byte {
 }
 
 var file_ssl_gc_state_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_ssl_gc_state_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
+var file_ssl_gc_state_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_ssl_gc_state_proto_goTypes = []interface{}{
 	(Command_Type)(0),             // 0: Command.Type
 	(GameState_Type)(0),           // 1: GameState.Type
@@ -1166,58 +1228,61 @@ var file_ssl_gc_state_proto_goTypes = []interface{}{
 	(*ProposalGroup)(nil),         // 8: ProposalGroup
 	(*TeamInfo)(nil),              // 9: TeamInfo
 	(*State)(nil),                 // 10: State
-	nil,                           // 11: State.TeamStateEntry
-	(*GameEvent)(nil),             // 12: GameEvent
-	(*durationpb.Duration)(nil),   // 13: google.protobuf.Duration
-	(*timestamppb.Timestamp)(nil), // 14: google.protobuf.Timestamp
-	(Team)(0),                     // 15: Team
-	(Referee_Stage)(0),            // 16: Referee.Stage
-	(*geom.Vector2)(nil),          // 17: Vector2
-	(Division)(0),                 // 18: Division
-	(MatchType)(0),                // 19: MatchType
+	(*ShootoutState)(nil),         // 11: ShootoutState
+	nil,                           // 12: State.TeamStateEntry
+	(*GameEvent)(nil),             // 13: GameEvent
+	(*durationpb.Duration)(nil),   // 14: google.protobuf.Duration
+	(*timestamppb.Timestamp)(nil), // 15: google.protobuf.Timestamp
+	(Team)(0),                     // 16: Team
+	(Referee_Stage)(0),            // 17: Referee.Stage
+	(*geom.Vector2)(nil),          // 18: Vector2
+	(Division)(0),                 // 19: Division
+	(MatchType)(0),                // 20: MatchType
 }
 var file_ssl_gc_state_proto_depIdxs = []int32{
-	12, // 0: YellowCard.caused_by_game_event:type_name -> GameEvent
-	13, // 1: YellowCard.time_remaining:type_name -> google.protobuf.Duration
-	12, // 2: RedCard.caused_by_game_event:type_name -> GameEvent
-	12, // 3: Foul.caused_by_game_event:type_name -> GameEvent
-	14, // 4: Foul.timestamp:type_name -> google.protobuf.Timestamp
+	13, // 0: YellowCard.caused_by_game_event:type_name -> GameEvent
+	14, // 1: YellowCard.time_remaining:type_name -> google.protobuf.Duration
+	13, // 2: RedCard.caused_by_game_event:type_name -> GameEvent
+	13, // 3: Foul.caused_by_game_event:type_name -> GameEvent
+	15, // 4: Foul.timestamp:type_name -> google.protobuf.Timestamp
 	0,  // 5: Command.type:type_name -> Command.Type
-	15, // 6: Command.for_team:type_name -> Team
+	16, // 6: Command.for_team:type_name -> Team
 	1,  // 7: GameState.type:type_name -> GameState.Type
-	15, // 8: GameState.for_team:type_name -> Team
-	14, // 9: Proposal.timestamp:type_name -> google.protobuf.Timestamp
-	12, // 10: Proposal.game_event:type_name -> GameEvent
+	16, // 8: GameState.for_team:type_name -> Team
+	15, // 9: Proposal.timestamp:type_name -> google.protobuf.Timestamp
+	13, // 10: Proposal.game_event:type_name -> GameEvent
 	7,  // 11: ProposalGroup.proposals:type_name -> Proposal
 	2,  // 12: TeamInfo.yellow_cards:type_name -> YellowCard
 	3,  // 13: TeamInfo.red_cards:type_name -> RedCard
-	13, // 14: TeamInfo.timeout_time_left:type_name -> google.protobuf.Duration
+	14, // 14: TeamInfo.timeout_time_left:type_name -> google.protobuf.Duration
 	4,  // 15: TeamInfo.fouls:type_name -> Foul
-	14, // 16: TeamInfo.requests_bot_substitution_since:type_name -> google.protobuf.Timestamp
-	14, // 17: TeamInfo.requests_timeout_since:type_name -> google.protobuf.Timestamp
-	14, // 18: TeamInfo.requests_emergency_stop_since:type_name -> google.protobuf.Timestamp
-	16, // 19: State.stage:type_name -> Referee.Stage
+	15, // 16: TeamInfo.requests_bot_substitution_since:type_name -> google.protobuf.Timestamp
+	15, // 17: TeamInfo.requests_timeout_since:type_name -> google.protobuf.Timestamp
+	15, // 18: TeamInfo.requests_emergency_stop_since:type_name -> google.protobuf.Timestamp
+	17, // 19: State.stage:type_name -> Referee.Stage
 	5,  // 20: State.command:type_name -> Command
 	6,  // 21: State.game_state:type_name -> GameState
-	13, // 22: State.stage_time_elapsed:type_name -> google.protobuf.Duration
-	13, // 23: State.stage_time_left:type_name -> google.protobuf.Duration
-	14, // 24: State.match_time_start:type_name -> google.protobuf.Timestamp
-	11, // 25: State.team_state:type_name -> State.TeamStateEntry
-	17, // 26: State.placement_pos:type_name -> Vector2
+	14, // 22: State.stage_time_elapsed:type_name -> google.protobuf.Duration
+	14, // 23: State.stage_time_left:type_name -> google.protobuf.Duration
+	15, // 24: State.match_time_start:type_name -> google.protobuf.Timestamp
+	12, // 25: State.team_state:type_name -> State.TeamStateEntry
+	18, // 26: State.placement_pos:type_name -> Vector2
 	5,  // 27: State.next_command:type_name -> Command
-	13, // 28: State.current_action_time_remaining:type_name -> google.protobuf.Duration
-	12, // 29: State.game_events:type_name -> GameEvent
+	14, // 28: State.current_action_time_remaining:type_name -> google.protobuf.Duration
+	13, // 29: State.game_events:type_name -> GameEvent
 	8,  // 30: State.proposal_groups:type_name -> ProposalGroup
-	18, // 31: State.division:type_name -> Division
-	15, // 32: State.first_kickoff_team:type_name -> Team
-	19, // 33: State.match_type:type_name -> MatchType
-	14, // 34: State.ready_continue_time:type_name -> google.protobuf.Timestamp
-	9,  // 35: State.TeamStateEntry.value:type_name -> TeamInfo
-	36, // [36:36] is the sub-list for method output_type
-	36, // [36:36] is the sub-list for method input_type
-	36, // [36:36] is the sub-list for extension type_name
-	36, // [36:36] is the sub-list for extension extendee
-	0,  // [0:36] is the sub-list for field type_name
+	19, // 31: State.division:type_name -> Division
+	16, // 32: State.first_kickoff_team:type_name -> Team
+	20, // 33: State.match_type:type_name -> MatchType
+	15, // 34: State.ready_continue_time:type_name -> google.protobuf.Timestamp
+	11, // 35: State.shootout_state:type_name -> ShootoutState
+	16, // 36: ShootoutState.next_team:type_name -> Team
+	9,  // 37: State.TeamStateEntry.value:type_name -> TeamInfo
+	38, // [38:38] is the sub-list for method output_type
+	38, // [38:38] is the sub-list for method input_type
+	38, // [38:38] is the sub-list for extension type_name
+	38, // [38:38] is the sub-list for extension extendee
+	0,  // [0:38] is the sub-list for field type_name
 }
 
 func init() { file_ssl_gc_state_proto_init() }
@@ -1337,6 +1402,18 @@ func file_ssl_gc_state_proto_init() {
 				return nil
 			}
 		}
+		file_ssl_gc_state_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ShootoutState); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -1344,7 +1421,7 @@ func file_ssl_gc_state_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_ssl_gc_state_proto_rawDesc,
 			NumEnums:      2,
-			NumMessages:   10,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

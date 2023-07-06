@@ -116,4 +116,9 @@ message State {
     optional Team first_kickoff_team = 17;
     optional MatchType match_type = 18;
     optional google.protobuf.Timestamp ready_continue_time = 20;
+    optional ShootoutState shootout_state = 21;
+}
+
+message ShootoutState {
+    optional Team next_team = 1;
 }

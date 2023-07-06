@@ -354,16 +354,10 @@ func (s *StateMachine) nextCommandForEvent(newState *state.State, gameEvent *sta
 		state.GameEvent_PENALTY_KICK_FAILED,
 		state.GameEvent_POSSIBLE_GOAL,
 		state.GameEvent_INVALID_GOAL:
-		if *newState.Stage == state.Referee_PENALTY_SHOOTOUT {
-			return state.NewCommand(state.Command_PENALTY, gameEvent.ByTeam().Opposite())
-		}
 		return state.NewCommand(state.Command_DIRECT, gameEvent.ByTeam().Opposite())
 	case state.GameEvent_DEFENDER_IN_DEFENSE_AREA:
 		return state.NewCommand(state.Command_PENALTY, gameEvent.ByTeam().Opposite())
 	case state.GameEvent_GOAL:
-		if *newState.Stage == state.Referee_PENALTY_SHOOTOUT {
-			return state.NewCommand(state.Command_PENALTY, gameEvent.ByTeam().Opposite())
-		}
 		return state.NewCommand(state.Command_KICKOFF, gameEvent.ByTeam().Opposite())
 	case state.GameEvent_NO_PROGRESS_IN_GAME,
 		state.GameEvent_TOO_MANY_ROBOTS:

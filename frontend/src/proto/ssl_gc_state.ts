@@ -248,11 +248,16 @@ export interface State {
   firstKickoffTeam?: Team;
   matchType?: MatchType;
   readyContinueTime?: Date;
+  shootoutState?: ShootoutState;
 }
 
 export interface State_TeamStateEntry {
   key: string;
   value?: TeamInfo;
+}
+
+export interface ShootoutState {
+  nextTeam?: Team;
 }
 
 export const YellowCard = {
@@ -486,6 +491,7 @@ export const State = {
       firstKickoffTeam: isSet(object.firstKickoffTeam) ? teamFromJSON(object.firstKickoffTeam) : Team.UNKNOWN,
       matchType: isSet(object.matchType) ? matchTypeFromJSON(object.matchType) : MatchType.UNKNOWN_MATCH,
       readyContinueTime: isSet(object.readyContinueTime) ? fromJsonTimestamp(object.readyContinueTime) : undefined,
+      shootoutState: isSet(object.shootoutState) ? ShootoutState.fromJSON(object.shootoutState) : undefined,
     };
   },
 
@@ -528,6 +534,8 @@ export const State = {
     message.firstKickoffTeam !== undefined && (obj.firstKickoffTeam = teamToJSON(message.firstKickoffTeam));
     message.matchType !== undefined && (obj.matchType = matchTypeToJSON(message.matchType));
     message.readyContinueTime !== undefined && (obj.readyContinueTime = message.readyContinueTime.toISOString());
+    message.shootoutState !== undefined &&
+      (obj.shootoutState = message.shootoutState ? ShootoutState.toJSON(message.shootoutState) : undefined);
     return obj;
   },
 };
@@ -544,6 +552,18 @@ export const State_TeamStateEntry = {
     const obj: any = {};
     message.key !== undefined && (obj.key = message.key);
     message.value !== undefined && (obj.value = message.value ? TeamInfo.toJSON(message.value) : undefined);
+    return obj;
+  },
+};
+
+export const ShootoutState = {
+  fromJSON(object: any): ShootoutState {
+    return { nextTeam: isSet(object.nextTeam) ? teamFromJSON(object.nextTeam) : Team.UNKNOWN };
+  },
+
+  toJSON(message: ShootoutState): unknown {
+    const obj: any = {};
+    message.nextTeam !== undefined && (obj.nextTeam = teamToJSON(message.nextTeam));
     return obj;
   },
 };
