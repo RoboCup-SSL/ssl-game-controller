@@ -376,7 +376,6 @@ func (s *StateMachine) nextCommandForEvent(newState *state.State, gameEvent *sta
 func incrementsFoulCounter(currentState *state.State, gameEvent *state.GameEvent) bool {
 	switch *gameEvent.Type {
 	case
-		state.GameEvent_AIMLESS_KICK,
 		state.GameEvent_KEEPER_HELD_BALL,
 		state.GameEvent_ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA,
 		state.GameEvent_BOT_DRIBBLED_BALL_TOO_FAR,
