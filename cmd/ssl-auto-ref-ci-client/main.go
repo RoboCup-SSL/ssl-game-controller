@@ -19,7 +19,8 @@ var addressGcCi = flag.String("addressGc", "localhost:10009", "The address of th
 
 var detectionFrame = createSSlDetectionFrame()
 var refereeMsg *state.Referee
-var robotSpeed = float32(1)
+var ballSpeed = float32(0)
+var ballAcc = float32(-0.26)
 
 func main() {
 	flag.Parse()
@@ -41,10 +42,13 @@ func main() {
 }
 
 func simulate() {
-	robotX := detectionFrame.RobotsBlue[0].X
-	*robotX += robotSpeed / 100 * 1000
-	if *robotX > 2000 || *robotX < -2000 {
-		robotSpeed *= -1
+	*detectionFrame.RobotsBlue[0].X = 1000
+	ballY := detectionFrame.Balls[0].Y
+	*ballY += ballSpeed / 100 * 1000
+	ballSpeed += ballAcc * 0.01
+	if *ballY > 4700 || ballSpeed <= 0 {
+		*ballY = 0
+		ballSpeed = 3
 	}
 }
 
