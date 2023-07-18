@@ -31,6 +31,9 @@ func main() {
 		simulate()
 		sendAutoRefCi(autoRefConn, detectionFrame)
 		trackerFrame := receiveAutoRefCi(autoRefConn)
+		if trackerFrame == nil {
+			return
+		}
 		sendCi(gcConn, trackerFrame)
 		refereeMsg = receiveCi(gcConn)
 		time.Sleep(10 * time.Millisecond)
@@ -111,8 +114,8 @@ func receiveCi(conn net.Conn) *state.Referee {
 func sendAutoRefCi(conn net.Conn, detectionFrame *vision.SSL_DetectionFrame) {
 	timestamp := time.Now().UnixNano()
 
-	*detectionFrame.TSent = float64(timestamp / 1e9)
-	*detectionFrame.TCapture = float64(timestamp / 1e9)
+	*detectionFrame.TSent = float64(timestamp) / 1e9
+	*detectionFrame.TCapture = float64(timestamp) / 1e9
 	*detectionFrame.FrameNumber++
 	input := autoref.AutoRefCiInput{
 		Detection:      []*vision.SSL_DetectionFrame{detectionFrame},
