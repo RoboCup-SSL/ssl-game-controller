@@ -5,20 +5,15 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"log"
 	"math"
-	"time"
 )
 
 const maxProposals = 5
 
 func (e *Engine) processProposals() {
-
-	now := e.timeProvider()
-	proposalTimeout := e.gameConfig.AutoRefProposalTimeout
-	minTime := now.Add(-proposalTimeout)
-
 	for i, group := range e.currentState.ProposalGroups {
 		latestGameEvent := group.Proposals[len(group.Proposals)-1].GameEvent
-		if *group.Accepted || groupHasRecentProposal(group, minTime) ||
+		if *group.Accepted ||
+			e.groupIsStillAcceptingProposals(group) ||
 			e.config.GameEventBehavior[latestGameEvent.Type.String()] == Config_BEHAVIOR_PROPOSE_ONLY {
 			continue
 		}
@@ -58,9 +53,13 @@ func uniqueOrigins(group *state.ProposalGroup) int {
 	return len(origins)
 }
 
-func groupHasRecentProposal(group *state.ProposalGroup, minTime time.Time) bool {
-	latestProposal := group.Proposals[len(group.Proposals)-1]
-	return goTime(latestProposal.Timestamp).Before(minTime)
+func (e *Engine) groupIsStillAcceptingProposals(group *state.ProposalGroup) bool {
+	firstProposal := group.Proposals[0]
+
+	now := e.timeProvider()
+	proposalTimeout := e.gameConfig.AutoRefProposalTimeout
+
+	return now.Sub(firstProposal.Timestamp.AsTime()) < proposalTimeout
 }
 
 func (e *Engine) numAutoRefs(gameEvent *state.GameEvent) (n int) {
