@@ -8,13 +8,12 @@ import (
 
 func (s *StateMachine) processChangeAcceptProposals(newState *state.State, change *Change_AcceptProposalGroup) (changes []*Change) {
 
-	numGroups := len(newState.ProposalGroups)
-	if int(*change.GroupId) >= numGroups {
-		log.Printf("Proposal group id %v invalid, there are only  %v groups", *change.GroupId, numGroups)
+	group := findGroupById(newState.ProposalGroups, *change.GroupId)
+	if group == nil {
+		log.Printf("Proposal group with id %v can not be accepted, as it was not found", *change.GroupId)
 		return
 	}
 
-	group := newState.ProposalGroups[*change.GroupId]
 	majorityEvent := s.createMergedGameEvent(group.Proposals, change.AcceptedBy)
 	changes = append(changes, &Change{
 		Change: &Change_AddGameEventChange{
@@ -27,6 +26,15 @@ func (s *StateMachine) processChangeAcceptProposals(newState *state.State, chang
 	*group.Accepted = true
 
 	return
+}
+
+func findGroupById(groups []*state.ProposalGroup, id uint32) *state.ProposalGroup {
+	for _, group := range groups {
+		if *group.Id == id {
+			return group
+		}
+	}
+	return nil
 }
 
 func (s *StateMachine) createMergedGameEvent(proposals []*state.Proposal, acceptedBy *string) *state.GameEvent {

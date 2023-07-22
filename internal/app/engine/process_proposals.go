@@ -10,7 +10,7 @@ import (
 const maxProposals = 5
 
 func (e *Engine) processProposals() {
-	for i, group := range e.currentState.ProposalGroups {
+	for _, group := range e.currentState.ProposalGroups {
 		latestGameEvent := group.Proposals[len(group.Proposals)-1].GameEvent
 		if *group.Accepted ||
 			e.groupIsStillAcceptingProposals(group) ||
@@ -23,13 +23,12 @@ func (e *Engine) processProposals() {
 
 		if numProposals > majority {
 			log.Printf("Majority of %v reached with %v out of %v for %v.", majority, numProposals, numAutoRefs, latestGameEvent.Type)
-			groupId := uint32(i)
 			acceptedBy := "Majority"
 			e.Enqueue(&statemachine.Change{
 				Origin: &changeOriginEngine,
 				Change: &statemachine.Change_AcceptProposalGroupChange{
 					AcceptProposalGroupChange: &statemachine.Change_AcceptProposalGroup{
-						GroupId:    &groupId,
+						GroupId:    group.Id,
 						AcceptedBy: &acceptedBy,
 					},
 				},

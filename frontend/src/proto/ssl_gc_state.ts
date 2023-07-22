@@ -208,6 +208,8 @@ export interface ProposalGroup {
   proposals?: Proposal[];
   /** Whether the proposal group was accepted */
   accepted?: boolean;
+  /** unique id of the proposal group */
+  id?: number;
 }
 
 export interface TeamInfo {
@@ -376,6 +378,7 @@ export const ProposalGroup = {
     return {
       proposals: Array.isArray(object?.proposals) ? object.proposals.map((e: any) => Proposal.fromJSON(e)) : [],
       accepted: isSet(object.accepted) ? Boolean(object.accepted) : false,
+      id: isSet(object.id) ? Number(object.id) : 0,
     };
   },
 
@@ -387,6 +390,7 @@ export const ProposalGroup = {
       obj.proposals = [];
     }
     message.accepted !== undefined && (obj.accepted = message.accepted);
+    message.id !== undefined && (obj.id = Math.round(message.id));
     return obj;
   },
 };

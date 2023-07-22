@@ -75,6 +75,8 @@ message ProposalGroup {
     repeated Proposal proposals = 1;
     // Whether the proposal group was accepted
     optional bool accepted = 2;
+    // unique id of the proposal group
+    optional uint32 id = 3;
 }
 
 message TeamInfo {

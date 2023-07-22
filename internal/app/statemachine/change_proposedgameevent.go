@@ -13,9 +13,12 @@ func (s *StateMachine) processChangeAddProposal(newState *state.State, change *C
 	if ok, pid := findGroup(change.Proposal, newState.ProposalGroups, s.gameConfig.AutoRefProposalTimeout); ok {
 		newState.ProposalGroups[pid].Proposals = append(newState.ProposalGroups[pid].Proposals, change.Proposal)
 	} else {
+		groupId := s.nextProposalGroupId
+		s.nextProposalGroupId++
 		newState.ProposalGroups = append(newState.ProposalGroups, &state.ProposalGroup{
 			Proposals: []*state.Proposal{change.Proposal},
 			Accepted:  new(bool),
+			Id:        &groupId,
 		})
 	}
 
