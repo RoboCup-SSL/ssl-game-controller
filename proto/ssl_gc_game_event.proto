@@ -366,7 +366,7 @@ message GameEvent {
         // the location of the bot [m]
         optional Vector2 location = 3;
     }
-    // a team collected multiple cards (yellow and red), which results in a penalty kick
+    // a team collected multiple yellow cards
     message MultipleCards {
         // the team that received multiple yellow cards
         required Team by_team = 1;
