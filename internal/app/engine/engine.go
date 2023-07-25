@@ -82,19 +82,18 @@ func NewEngine(gameConfig config.Game, engineConfig config.Engine) (e *Engine) {
 // Enqueue adds the change to the change queue
 func (e *Engine) Enqueue(change *statemachine.Change) {
 	if change.GetAddGameEventChange() != nil {
-		// Set creation timestamp
-		gameEvent := change.GetAddGameEventChange().GameEvent
-		if gameEvent.CreatedTimestamp != nil {
-			log.Printf("Ignore existing created_timestamp in enqueued game event: %v", gameEvent)
-		}
-		gameEvent.CreatedTimestamp = new(uint64)
-		*gameEvent.CreatedTimestamp = uint64(e.timeProvider().UnixMicro())
-
-		change = e.filterGameEvent(change)
+		change.GetAddGameEventChange().GameEvent = e.processGameEvent(change.GetAddGameEventChange().GameEvent)
+		change = e.handleGameEventBehavior(change)
 		if change == nil {
 			return
 		}
+	} else if change.GetAddPassiveGameEventChange() != nil {
+		change.GetAddPassiveGameEventChange().GameEvent = e.processGameEvent(change.GetAddPassiveGameEventChange().GameEvent)
+	} else if change.GetAddProposalChange() != nil {
+		log.Println("Ignoring unexpected proposal change: ", change.GetAddProposalChange())
+		return
 	}
+
 	if change.Revertible == nil {
 		change.Revertible = new(bool)
 		// Assume that changes from outside are by default revertible, except if the flag is already set
@@ -144,7 +143,40 @@ func isNonMajorityOrigin(origins []string) bool {
 	return false
 }
 
-func (e *Engine) filterGameEvent(change *statemachine.Change) *statemachine.Change {
+func (e *Engine) processGameEvent(gameEvent *state.GameEvent) *state.GameEvent {
+	// Set creation timestamp
+	if gameEvent.CreatedTimestamp != nil {
+		log.Printf("Ignore existing created_timestamp in enqueued game event: %v", gameEvent)
+	}
+	gameEvent.CreatedTimestamp = new(uint64)
+	*gameEvent.CreatedTimestamp = uint64(e.timeProvider().UnixMicro())
+
+	// convert aimless kick if necessary
+	if e.currentState.Division.Div() == config.DivA && *gameEvent.Type == state.GameEvent_AIMLESS_KICK {
+		return convertAimlessKick(gameEvent)
+	}
+	return gameEvent
+}
+
+// convertAimlessKick converts the aimless kick event into a ball left field via goal line event
+// because aimless kick only applies to DivB
+func convertAimlessKick(gameEvent *state.GameEvent) *state.GameEvent {
+	log.Println("Convert aimless kick to ball left field event, because we are in DivA")
+	aimlessKick := &state.GameEvent{}
+	proto.Merge(aimlessKick, gameEvent)
+	eventType := state.GameEvent_BALL_LEFT_FIELD_GOAL_LINE
+	aimlessKick.Type = &eventType
+	aimlessKick.Event = &state.GameEvent_BallLeftFieldGoalLine{
+		BallLeftFieldGoalLine: &state.GameEvent_BallLeftField{
+			ByTeam:   gameEvent.GetAimlessKick().ByTeam,
+			ByBot:    gameEvent.GetAimlessKick().ByBot,
+			Location: gameEvent.GetAimlessKick().Location,
+		},
+	}
+	return aimlessKick
+}
+
+func (e *Engine) handleGameEventBehavior(change *statemachine.Change) *statemachine.Change {
 	gameEvent := change.GetAddGameEventChange().GameEvent
 	behavior := e.config.GameEventBehavior[gameEvent.Type.String()]
 	if isNonMajorityOrigin(gameEvent.Origin) && behavior == Config_BEHAVIOR_ACCEPT_MAJORITY {

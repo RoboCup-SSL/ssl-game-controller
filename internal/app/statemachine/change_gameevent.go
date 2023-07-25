@@ -2,7 +2,6 @@ package statemachine
 
 import (
 	"fmt"
-	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/geom"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"google.golang.org/protobuf/proto"
@@ -20,12 +19,6 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 	if gameEvent.Type == nil {
 		log.Printf("Can not process a game event without a type: %v", gameEvent)
 		return
-	}
-
-	// convert aimless kick if necessary
-	if newState.Division.Div() == config.DivA && *gameEvent.Type == state.GameEvent_AIMLESS_KICK {
-		log.Println("Convert aimless kick to ball left field event, because we are in DivA")
-		gameEvent = s.convertAimlessKick(change.GameEvent)
 	}
 
 	// remember game event
@@ -318,23 +311,6 @@ func (s *StateMachine) multipleFoulsChange(byTeam state.Team, events []*state.Ga
 		},
 	},
 	)
-}
-
-// convertAimlessKick converts the aimless kick event into a ball left field via goal line event
-// because aimless kick only applies to DivB
-func (s *StateMachine) convertAimlessKick(gameEvent *state.GameEvent) *state.GameEvent {
-	eventType := state.GameEvent_BALL_LEFT_FIELD_GOAL_LINE
-	return &state.GameEvent{
-		Type:   &eventType,
-		Origin: gameEvent.Origin,
-		Event: &state.GameEvent_BallLeftFieldGoalLine{
-			BallLeftFieldGoalLine: &state.GameEvent_BallLeftField{
-				ByTeam:   gameEvent.GetAimlessKick().ByTeam,
-				ByBot:    gameEvent.GetAimlessKick().ByBot,
-				Location: gameEvent.GetAimlessKick().Location,
-			},
-		},
-	}
 }
 
 // nextCommandForEvent determines the next command for the given event or returns the currently set one
