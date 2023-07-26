@@ -32,6 +32,8 @@ services:
       - ":8082"
       - "-visionAddress"
       - "224.5.23.2:10020"
+      - "-trackedAddress"
+      - "224.5.23.2:11010"
     network_mode: "${NETWORK_MODE}"
     ports:
       - "8082:8082/tcp"
@@ -115,7 +117,7 @@ services:
       - "--refereeAddress"
       - "224.5.23.1:11003"
       - "--trackerAddress"
-      - "224.5.23.1:11010"
+      - "224.5.23.2:11010"
     network_mode: "${NETWORK_MODE}"
     depends_on:
       - simulator
