@@ -23,7 +23,7 @@ services:
       - full
 
   ssl-vision-client:
-    image: "robocupssl/ssl-vision-client:1.6.0"
+    image: "robocupssl/ssl-vision-client:1.7.2"
     command:
       - "-address"
       - ":8082"
