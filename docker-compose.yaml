@@ -103,7 +103,7 @@ services:
       - team-client
 
   autoref-tigers:
-    image: "tigersmannheim/auto-referee:1.1.3"
+    image: "tigersmannheim/auto-referee:1.2.0"
     command:
       - "-a" # active mode (connect to GC)
       - "-hl" # headless
