@@ -1,5 +1,8 @@
 version: "3.1"
 
+volumes:
+  ssl-game-controller:
+
 services:
   ssl-game-controller:
     build:
@@ -15,7 +18,7 @@ services:
       - "-address"
       - ":8081"
     volumes:
-      - "./config:/config:rw"
+      - "ssl-game-controller:/config:rw"
     network_mode: "${NETWORK_MODE}"
     ports:
       - "8081:8081/tcp"
