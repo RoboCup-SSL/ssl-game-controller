@@ -24,6 +24,11 @@ func (e *Engine) EnqueueGameEvent(gameEvent *state.GameEvent) {
 		autoRefBehavior = AutoRefConfig_BEHAVIOR_ACCEPT
 	}
 
+	if e.currentState.Stage.IsPreStage() || e.currentState.Stage.IsPausedStage() {
+		log.Printf("Ignoring game event in paused or pre stage")
+		autoRefBehavior = AutoRefConfig_BEHAVIOR_IGNORE
+	}
+
 	switch autoRefBehavior {
 	case AutoRefConfig_BEHAVIOR_IGNORE:
 		log.Printf("Ignoring game event from autoRef: %v", gameEvent)
