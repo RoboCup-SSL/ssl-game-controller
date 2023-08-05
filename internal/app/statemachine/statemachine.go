@@ -44,12 +44,16 @@ func loadStageTimes(gameConfig config.Game) (s map[state.Referee_Stage]time.Dura
 	for stage := range state.Referee_Stage_name {
 		s[state.Referee_Stage(stage)] = 0
 	}
+	s[state.Referee_NORMAL_FIRST_HALF_PRE] = gameConfig.Normal.HalfDuration
 	s[state.Referee_NORMAL_FIRST_HALF] = gameConfig.Normal.HalfDuration
 	s[state.Referee_NORMAL_HALF_TIME] = gameConfig.Normal.HalfTimeDuration
+	s[state.Referee_NORMAL_SECOND_HALF_PRE] = gameConfig.Normal.HalfDuration
 	s[state.Referee_NORMAL_SECOND_HALF] = gameConfig.Normal.HalfDuration
 	s[state.Referee_EXTRA_TIME_BREAK] = gameConfig.Normal.BreakAfter
+	s[state.Referee_EXTRA_FIRST_HALF_PRE] = gameConfig.Overtime.HalfDuration
 	s[state.Referee_EXTRA_FIRST_HALF] = gameConfig.Overtime.HalfDuration
 	s[state.Referee_EXTRA_HALF_TIME] = gameConfig.Overtime.HalfTimeDuration
+	s[state.Referee_EXTRA_SECOND_HALF_PRE] = gameConfig.Overtime.HalfDuration
 	s[state.Referee_EXTRA_SECOND_HALF] = gameConfig.Overtime.HalfDuration
 	s[state.Referee_PENALTY_SHOOTOUT_BREAK] = gameConfig.Overtime.BreakAfter
 	return

@@ -450,6 +450,7 @@ func (e *Engine) createInitialState() (s *state.State) {
 	}
 	s.NextCommand = state.NewCommand(state.Command_KICKOFF, *s.FirstKickoffTeam)
 	s.PlacementPos = geom.NewVector2(0.0, 0.0)
+	s.StageTimeLeft = durationpb.New(e.gameConfig.Normal.HalfTimeDuration)
 	return
 }
 
