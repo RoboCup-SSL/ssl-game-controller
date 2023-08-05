@@ -28,3 +28,6 @@ run: frontend
 
 proto:
 	tools/generateProto.sh
+
+autoref-tests:
+	git clone "https://gitlab.com/robocup-small-size/autoref-tests.git" autoref-tests

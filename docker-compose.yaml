@@ -119,8 +119,6 @@ services:
       - "--trackerAddress"
       - "224.5.23.2:11010"
     network_mode: "${NETWORK_MODE}"
-    depends_on:
-      - simulator
 
   autoref-erforce:
     image: "roboticserlangen/autoref:commit-6f15f574ea80"
@@ -132,8 +130,23 @@ services:
       - "--gc-port"
       - "11003"
     network_mode: "${NETWORK_MODE}"
-    depends_on:
-      - simulator
+
+  ssl-log-player:
+    image: "robocupssl/ssl-log-player:1.5.1"
+    command:
+      - "-file"
+      - "/data/BOT_KICKED_BALL_TOO_FAST/linear-kick.log"
+      - "-vision-address"
+      - "224.5.23.2:10020"
+      - "-referee-enabled"
+      - "false"
+      - "-vision-tracker-enabled"
+      - "false"
+    network_mode: "${NETWORK_MODE}"
+    volumes:
+      - "./autoref-tests/:/data"
+    profiles:
+      - autoref-tests
 
   simulator:
     image: "roboticserlangen/simulatorcli:commit-6a4e1c06533b"
@@ -145,6 +158,8 @@ services:
       - "10300/udp"
       - "10301/udp"
       - "10302/udp"
+    profiles:
+      - sim
 
   ssl-simulation-controller:
     image: "robocupssl/ssl-simulation-controller:0.12.0"
@@ -158,3 +173,5 @@ services:
       - "-simControlPort"
       - "10300"
     network_mode: "${NETWORK_MODE}"
+    profiles:
+      - sim
