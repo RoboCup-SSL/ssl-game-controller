@@ -282,6 +282,7 @@ export enum ContinueAction_State {
   WAITING = "WAITING",
   READY_AUTO = "READY_AUTO",
   READY_MANUAL = "READY_MANUAL",
+  DISABLED = "DISABLED",
   UNRECOGNIZED = "UNRECOGNIZED",
 }
 
@@ -302,6 +303,9 @@ export function continueAction_StateFromJSON(object: any): ContinueAction_State 
     case 4:
     case "READY_MANUAL":
       return ContinueAction_State.READY_MANUAL;
+    case 5:
+    case "DISABLED":
+      return ContinueAction_State.DISABLED;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -321,6 +325,8 @@ export function continueAction_StateToJSON(object: ContinueAction_State): string
       return "READY_AUTO";
     case ContinueAction_State.READY_MANUAL:
       return "READY_MANUAL";
+    case ContinueAction_State.DISABLED:
+      return "DISABLED";
     case ContinueAction_State.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";

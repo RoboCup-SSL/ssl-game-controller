@@ -29,6 +29,8 @@ const color = computed(() => {
       return 'negative'
     case ContinueAction_State.WAITING:
       return 'warning'
+    case ContinueAction_State.DISABLED:
+      return 'negative'
     default:
       return 'secondary'
   }
@@ -94,6 +96,7 @@ const submitAction = () => {
 <template>
   <q-btn class="q-mx-md q-my-xs"
          :color="color"
+         :disable="props.action.state === ContinueAction_State.DISABLED"
          @click="submitAction">
     <TeamBadge :team="team"/>
     {{ label }}

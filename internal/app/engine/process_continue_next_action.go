@@ -71,107 +71,27 @@ func (e *Engine) nextActions() (actions []*ContinueAction, hints []*ContinueHint
 	}
 
 	if *e.currentState.Command.Type == state.Command_STOP || *e.currentState.Command.Type == state.Command_HALT {
-		for _, team := range state.BothTeams() {
-			if e.currentState.HasGameEventByTeam(state.GameEvent_POSSIBLE_GOAL, team) &&
-				!e.currentState.HasGameEventByTeam(state.GameEvent_GOAL, team) &&
-				!e.currentState.HasGameEventByTeam(state.GameEvent_INVALID_GOAL, team) {
-				actions = append(actions, createContinueAction(
-					ContinueAction_ACCEPT_GOAL,
-					team,
-					ContinueAction_READY_MANUAL,
-				))
-			}
-
-			challengeFlagsRaised := len(e.currentState.FindGameEventsByTeam(state.GameEvent_CHALLENGE_FLAG, team))
-			challengeFlagsHandled := len(e.currentState.FindGameEventsByTeam(state.GameEvent_CHALLENGE_FLAG_HANDLED, team))
-
-			if challengeFlagsRaised > challengeFlagsHandled {
-				actions = append(actions, createContinueAction(
-					ContinueAction_CHALLENGE_ACCEPT,
-					team,
-					ContinueAction_READY_MANUAL,
-				))
-				actions = append(actions, createContinueAction(
-					ContinueAction_CHALLENGE_REJECT,
-					team,
-					ContinueAction_READY_MANUAL,
-				))
-			}
-		}
-	}
-
-	if *e.currentState.Command.Type == state.Command_STOP ||
-		*e.currentState.Command.Type == state.Command_HALT {
-		if (e.gameConfig.RecommendHalfTimes || e.currentState.Stage.IsPausedStage()) &&
-			e.currentState.StageTimeLeft.AsDuration() < 0 &&
-			*e.currentState.Stage != state.Referee_PENALTY_SHOOTOUT {
-			actions = append(actions, createContinueAction(
-				ContinueAction_NEXT_STAGE,
-				state.Team_UNKNOWN,
-				ContinueAction_READY_MANUAL,
-			))
-		}
-		if suggestEndOfMatch(e.currentState) {
-			actions = append(actions, createContinueAction(
-				ContinueAction_END_GAME,
-				state.Team_UNKNOWN,
-				ContinueAction_READY_MANUAL,
-			))
-		}
-
-		var teamRequestingBotSubstitution = e.teamRequestingBotSubstitution()
-		var teamRequestingTimeout = e.teamRequestingTimeout()
-		if teamRequestingBotSubstitution != nil {
-			actions = append(actions, createContinueAction(
-				ContinueAction_BOT_SUBSTITUTION,
-				*teamRequestingBotSubstitution,
-				ContinueAction_READY_AUTO,
-			))
-		} else if teamRequestingTimeout != nil {
-			actions = append(actions, createContinueAction(
-				ContinueAction_TIMEOUT_START,
-				*teamRequestingTimeout,
-				ContinueAction_READY_MANUAL,
-			))
-		}
-	}
-
-	if *e.currentState.Command.Type == state.Command_STOP {
-		if e.ballPlacementRequired() {
-			placingTeam := e.ballPlacementTeam()
-			if placingTeam.Known() {
-				actions = append(actions, createContinueAction(
-					ContinueAction_BALL_PLACEMENT_START,
-					placingTeam,
-					ContinueAction_READY_AUTO,
-				))
-			} else {
-				hint := fmt.Sprintf("Manually place the ball at x: %.2fm, y: %.2fm",
-					*e.currentState.PlacementPos.X, *e.currentState.PlacementPos.Y)
-				hints = append(hints, &ContinueHint{
-					Message: &hint,
-				})
-			}
-		}
-		if e.currentState.NextCommand != nil {
-			var forTeam state.Team
-			if e.currentState.NextCommand != nil && e.currentState.NextCommand.ForTeam != nil {
-				forTeam = *e.currentState.NextCommand.ForTeam
-			} else {
-				forTeam = state.Team_UNKNOWN
-			}
-			actions = append(actions, e.createNextCommandContinueAction(ContinueAction_NEXT_COMMAND, forTeam))
-		} else {
-			actions = append(actions, e.createNextCommandContinueAction(ContinueAction_FORCE_START, state.Team_UNKNOWN))
-			actions = append(actions, e.createNextCommandContinueAction(ContinueAction_FREE_KICK, state.Team_YELLOW))
-			actions = append(actions, e.createNextCommandContinueAction(ContinueAction_FREE_KICK, state.Team_BLUE))
-		}
+		newActions, newHints := e.actionsToContinueFromStop()
+		actions = append(actions, newActions...)
+		hints = append(hints, newHints...)
 	} else {
 		// reset random placing team
 		e.randomPlacingTeam = state.Team_UNKNOWN
 	}
 
 	if *e.currentState.Command.Type == state.Command_HALT {
+		// disable continue actions that can't be used after halt
+		for _, action := range actions {
+			switch *action.Type {
+			case
+				ContinueAction_FORCE_START,
+				ContinueAction_FREE_KICK,
+				ContinueAction_NEXT_COMMAND,
+				ContinueAction_BALL_PLACEMENT_START:
+				*action.State = ContinueAction_DISABLED
+			}
+		}
+
 		continueFromHalt := createContinueAction(
 			ContinueAction_RESUME_FROM_HALT,
 			state.Team_UNKNOWN,
@@ -181,10 +101,104 @@ func (e *Engine) nextActions() (actions []*ContinueAction, hints []*ContinueHint
 			continueFromHalt.ContinuationIssues = append(continueFromHalt.ContinuationIssues,
 				"Robot substitution in progress")
 		}
-		actions = append(actions, continueFromHalt)
+		actions = append([]*ContinueAction{continueFromHalt}, actions...)
 	}
 
 	return
+}
+
+func (e *Engine) actionsToContinueFromStop() (actions []*ContinueAction, hints []*ContinueHint) {
+	for _, team := range state.BothTeams() {
+		if e.currentState.HasGameEventByTeam(state.GameEvent_POSSIBLE_GOAL, team) &&
+			!e.currentState.HasGameEventByTeam(state.GameEvent_GOAL, team) &&
+			!e.currentState.HasGameEventByTeam(state.GameEvent_INVALID_GOAL, team) {
+			actions = append(actions, createContinueAction(
+				ContinueAction_ACCEPT_GOAL,
+				team,
+				ContinueAction_READY_MANUAL,
+			))
+		}
+
+		challengeFlagsRaised := len(e.currentState.FindGameEventsByTeam(state.GameEvent_CHALLENGE_FLAG, team))
+		challengeFlagsHandled := len(e.currentState.FindGameEventsByTeam(state.GameEvent_CHALLENGE_FLAG_HANDLED, team))
+
+		if challengeFlagsRaised > challengeFlagsHandled {
+			actions = append(actions, createContinueAction(
+				ContinueAction_CHALLENGE_ACCEPT,
+				team,
+				ContinueAction_READY_MANUAL,
+			))
+			actions = append(actions, createContinueAction(
+				ContinueAction_CHALLENGE_REJECT,
+				team,
+				ContinueAction_READY_MANUAL,
+			))
+		}
+	}
+
+	if (e.gameConfig.RecommendHalfTimes || e.currentState.Stage.IsPausedStage()) &&
+		e.currentState.StageTimeLeft.AsDuration() < 0 &&
+		*e.currentState.Stage != state.Referee_PENALTY_SHOOTOUT {
+		actions = append(actions, createContinueAction(
+			ContinueAction_NEXT_STAGE,
+			state.Team_UNKNOWN,
+			ContinueAction_READY_MANUAL,
+		))
+	}
+	if suggestEndOfMatch(e.currentState) {
+		actions = append(actions, createContinueAction(
+			ContinueAction_END_GAME,
+			state.Team_UNKNOWN,
+			ContinueAction_READY_MANUAL,
+		))
+	}
+
+	var teamRequestingBotSubstitution = e.teamRequestingBotSubstitution()
+	var teamRequestingTimeout = e.teamRequestingTimeout()
+	if teamRequestingBotSubstitution != nil {
+		actions = append(actions, createContinueAction(
+			ContinueAction_BOT_SUBSTITUTION,
+			*teamRequestingBotSubstitution,
+			ContinueAction_READY_AUTO,
+		))
+	} else if teamRequestingTimeout != nil {
+		actions = append(actions, createContinueAction(
+			ContinueAction_TIMEOUT_START,
+			*teamRequestingTimeout,
+			ContinueAction_READY_MANUAL,
+		))
+	}
+
+	if e.ballPlacementRequired() {
+		placingTeam := e.ballPlacementTeam()
+		if placingTeam.Known() {
+			actions = append(actions, createContinueAction(
+				ContinueAction_BALL_PLACEMENT_START,
+				placingTeam,
+				ContinueAction_READY_AUTO,
+			))
+		} else {
+			hint := fmt.Sprintf("Manually place the ball at x: %.2fm, y: %.2fm",
+				*e.currentState.PlacementPos.X, *e.currentState.PlacementPos.Y)
+			hints = append(hints, &ContinueHint{
+				Message: &hint,
+			})
+		}
+	}
+	if e.currentState.NextCommand != nil {
+		var forTeam state.Team
+		if e.currentState.NextCommand != nil && e.currentState.NextCommand.ForTeam != nil {
+			forTeam = *e.currentState.NextCommand.ForTeam
+		} else {
+			forTeam = state.Team_UNKNOWN
+		}
+		actions = append(actions, e.createNextCommandContinueAction(ContinueAction_NEXT_COMMAND, forTeam))
+	} else {
+		actions = append(actions, e.createNextCommandContinueAction(ContinueAction_FORCE_START, state.Team_UNKNOWN))
+		actions = append(actions, e.createNextCommandContinueAction(ContinueAction_FREE_KICK, state.Team_YELLOW))
+		actions = append(actions, e.createNextCommandContinueAction(ContinueAction_FREE_KICK, state.Team_BLUE))
+	}
+	return actions, hints
 }
 
 func (e *Engine) teamRequestingBotSubstitution() *state.Team {

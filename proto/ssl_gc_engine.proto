@@ -141,6 +141,7 @@ message ContinueAction {
         WAITING = 2;
         READY_AUTO = 3;
         READY_MANUAL = 4;
+        DISABLED = 5;
     }
 }
 

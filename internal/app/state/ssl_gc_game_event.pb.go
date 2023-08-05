@@ -2687,7 +2687,7 @@ func (x *GameEvent_BotInterferedPlacement) GetLocation() *geom.Vector2 {
 	return nil
 }
 
-// a team collected multiple cards (yellow and red), which results in a penalty kick
+// a team collected multiple yellow cards
 type GameEvent_MultipleCards struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

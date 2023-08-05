@@ -707,7 +707,7 @@ export interface GameEvent_BotInterferedPlacement {
   location?: Vector2;
 }
 
-/** a team collected multiple cards (yellow and red), which results in a penalty kick */
+/** a team collected multiple yellow cards */
 export interface GameEvent_MultipleCards {
   /** the team that received multiple yellow cards */
   byTeam?: Team;
