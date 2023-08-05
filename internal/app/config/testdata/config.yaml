@@ -44,6 +44,7 @@ game:
   distance-to-ball-in-stop: 0.5
   auto-approve-goals: false
   continue-from-halt: false
+  recommend-half-times: true
   challenge-flags: 3
   emergency-stop-grace-period: 10s
   preparation-time-after-halt: 10s

@@ -102,7 +102,9 @@ func (e *Engine) nextActions() (actions []*ContinueAction, hints []*ContinueHint
 
 	if *e.currentState.Command.Type == state.Command_STOP ||
 		*e.currentState.Command.Type == state.Command_HALT {
-		if e.currentState.StageTimeLeft.AsDuration() < 0 && *e.currentState.Stage != state.Referee_PENALTY_SHOOTOUT {
+		if (e.gameConfig.RecommendHalfTimes || e.currentState.Stage.IsPausedStage()) &&
+			e.currentState.StageTimeLeft.AsDuration() < 0 &&
+			*e.currentState.Stage != state.Referee_PENALTY_SHOOTOUT {
 			actions = append(actions, createContinueAction(
 				ContinueAction_NEXT_STAGE,
 				state.Team_UNKNOWN,
