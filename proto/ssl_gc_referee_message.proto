@@ -71,7 +71,7 @@ message Referee {
     //
     // If the stage runs over its specified time, this value
     // becomes negative.
-    optional sint32 stage_time_left = 3;
+    optional sint64 stage_time_left = 3;
 
     // These are the "fine" states of play on the field.
     enum Command {
@@ -205,7 +205,7 @@ message Referee {
     //  * free kicks
     //  * kickoff, penalty kick, force start
     //  * ball placement
-    optional int32 current_action_time_remaining = 15;
+    optional int64 current_action_time_remaining = 15;
 }
 
 // List of matching proposals

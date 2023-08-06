@@ -145,7 +145,7 @@ func newRefereeMessage() (m *state.Referee) {
 	m.SourceIdentifier = new(string)
 	m.PacketTimestamp = new(uint64)
 	m.Stage = new(state.Referee_Stage)
-	m.StageTimeLeft = new(int32)
+	m.StageTimeLeft = new(int64)
 	m.Command = new(state.Referee_Command)
 	m.CommandCounter = new(uint32)
 	m.CommandTimestamp = new(uint64)
@@ -153,7 +153,7 @@ func newRefereeMessage() (m *state.Referee) {
 	m.Blue = newTeamInfo()
 	m.BlueTeamOnPositiveHalf = new(bool)
 	m.NextCommand = new(state.Referee_Command)
-	m.CurrentActionTimeRemaining = new(int32)
+	m.CurrentActionTimeRemaining = new(int64)
 	return
 }
 
@@ -189,6 +189,6 @@ func unsigned(v int) uint32 {
 	return uint32(v)
 }
 
-func microseconds(dur *durationpb.Duration) int32 {
-	return int32(dur.Seconds)*1_000_000 + dur.Nanos/1000
+func microseconds(dur *durationpb.Duration) int64 {
+	return int64(dur.Seconds)*1_000_000 + int64(dur.Nanos/1000)
 }
