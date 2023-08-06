@@ -157,6 +157,7 @@ func (c *RemoteControlClient) replyWithState(reply *ControllerReply) {
 
 	response := &ControllerToRemoteControl{
 		State: &RemoteControlTeamState{
+			Team:               c.team,
 			KeeperId:           teamState.Goalkeeper,
 			AvailableRequests:  availableRequests,
 			ActiveRequests:     activeRequests,

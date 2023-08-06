@@ -61,6 +61,9 @@ message ControllerToRemoteControl {
 
 // Current team state from Controller for remote control
 message RemoteControlTeamState {
+    // the team that is controlled
+    optional Team team = 12;
+
     // list of all currently available request types that can be made
     repeated RemoteControlRequestType available_requests = 1;
 
