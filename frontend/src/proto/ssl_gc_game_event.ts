@@ -11,6 +11,9 @@ import { Vector2 } from "./ssl_gc_geometry";
  * An autoRef should ideally set all fields, except if there are good reasons to not do so.
  */
 export interface GameEvent {
+  /** A globally unique id of the game event. */
+  id?: string;
+  /** The type of the game event. */
   type?: GameEvent_Type;
   /**
    * The origins of this game event.
@@ -856,6 +859,7 @@ export interface GameEvent_PenaltyKickFailed {
 export const GameEvent = {
   fromJSON(object: any): GameEvent {
     return {
+      id: isSet(object.id) ? String(object.id) : "",
       type: isSet(object.type) ? gameEvent_TypeFromJSON(object.type) : GameEvent_Type.UNKNOWN_GAME_EVENT_TYPE,
       origin: Array.isArray(object?.origin) ? object.origin.map((e: any) => String(e)) : [],
       createdTimestamp: isSet(object.createdTimestamp) ? Number(object.createdTimestamp) : 0,
@@ -1033,6 +1037,7 @@ export const GameEvent = {
 
   toJSON(message: GameEvent): unknown {
     const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
     message.type !== undefined && (obj.type = gameEvent_TypeToJSON(message.type));
     if (message.origin) {
       obj.origin = message.origin.map((e) => e);

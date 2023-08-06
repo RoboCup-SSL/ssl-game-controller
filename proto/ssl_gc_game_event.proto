@@ -13,6 +13,10 @@ import "ssl_gc_geometry.proto";
 // An autoRef should ideally set all fields, except if there are good reasons to not do so.
 message GameEvent {
 
+    // A globally unique id of the game event.
+    optional string id = 50;
+
+    // The type of the game event.
     optional Type type = 40;
 
     // The origins of this game event.

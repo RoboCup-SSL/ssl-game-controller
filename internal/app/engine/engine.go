@@ -7,6 +7,7 @@ import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/store"
 	"github.com/RoboCup-SSL/ssl-game-controller/pkg/timer"
+	"github.com/google/uuid"
 	"github.com/pkg/errors"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/durationpb"
@@ -150,6 +151,13 @@ func (e *Engine) processGameEvent(gameEvent *state.GameEvent) *state.GameEvent {
 	}
 	gameEvent.CreatedTimestamp = new(uint64)
 	*gameEvent.CreatedTimestamp = uint64(e.timeProvider().UnixMicro())
+
+	// Set unique id
+	if gameEvent.Id != nil {
+		log.Printf("Ignore existing id in enqueued game event: %v", gameEvent)
+	}
+	gameEvent.Id = new(string)
+	*gameEvent.Id = uuid.NewString()
 
 	// convert aimless kick if necessary
 	if e.currentState.Division.Div() == config.DivA && *gameEvent.Type == state.GameEvent_AIMLESS_KICK {

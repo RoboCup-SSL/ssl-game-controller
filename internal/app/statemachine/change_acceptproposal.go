@@ -14,7 +14,7 @@ func (s *StateMachine) processChangeAcceptProposals(newState *state.State, chang
 		return
 	}
 
-	majorityEvent := s.createMergedGameEvent(group.Proposals, change.AcceptedBy)
+	majorityEvent := s.createMergedGameEvent(group, change.AcceptedBy)
 	changes = append(changes, &Change{
 		Change: &Change_AddGameEventChange{
 			AddGameEventChange: &Change_AddGameEvent{
@@ -37,10 +37,12 @@ func findGroupById(groups []*state.ProposalGroup, id string) *state.ProposalGrou
 	return nil
 }
 
-func (s *StateMachine) createMergedGameEvent(proposals []*state.Proposal, acceptedBy *string) *state.GameEvent {
+func (s *StateMachine) createMergedGameEvent(group *state.ProposalGroup, acceptedBy *string) *state.GameEvent {
+	proposals := group.Proposals
 	event := new(state.GameEvent)
 	proto.Merge(event, proposals[0].GameEvent)
 	event.Origin = []string{}
+	event.Id = group.Id
 	byTeam := map[state.Team]int{}
 	origins := map[string]struct{}{}
 	for _, e := range proposals {
