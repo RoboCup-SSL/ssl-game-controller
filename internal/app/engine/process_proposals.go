@@ -7,46 +7,48 @@ import (
 	"math"
 )
 
-const maxProposals = 5
-
 func (e *Engine) processProposals() {
 	for _, group := range e.currentState.ProposalGroups {
 		latestGameEvent := group.Proposals[len(group.Proposals)-1].GameEvent
+		behavior := e.config.GameEventBehavior[latestGameEvent.Type.String()]
 		if *group.Accepted ||
 			e.groupIsStillAcceptingProposals(group) ||
-			e.config.GameEventBehavior[latestGameEvent.Type.String()] == Config_BEHAVIOR_PROPOSE_ONLY {
+			behavior == Config_BEHAVIOR_PROPOSE_ONLY {
 			continue
 		}
-		numProposals := uniqueOrigins(group)
+		numProposals := e.uniqueAcceptingOrigins(group)
 		numAutoRefs := e.numAutoRefs(latestGameEvent)
 		majority := int(math.Floor(float64(numAutoRefs) / 2.0))
 
-		if numProposals > majority {
+		var acceptedBy string
+		if behavior == Config_BEHAVIOR_ACCEPT {
+			acceptedBy = "Engine"
+		} else if behavior == Config_BEHAVIOR_ACCEPT_MAJORITY && numProposals > majority {
 			log.Printf("Majority of %v reached with %v out of %v for %v.", majority, numProposals, numAutoRefs, latestGameEvent.Type)
-			acceptedBy := "Majority"
-			e.Enqueue(&statemachine.Change{
-				Origin: &changeOriginEngine,
-				Change: &statemachine.Change_AcceptProposalGroupChange{
-					AcceptProposalGroupChange: &statemachine.Change_AcceptProposalGroup{
-						GroupId:    group.Id,
-						AcceptedBy: &acceptedBy,
-					},
-				},
-			})
+			acceptedBy = "Majority"
+		} else {
+			continue
 		}
-	}
 
-	diff := len(e.currentState.ProposalGroups) - maxProposals
-	if diff > 0 {
-		e.currentState.ProposalGroups = e.currentState.ProposalGroups[diff:]
+		e.Enqueue(&statemachine.Change{
+			Origin: &changeOriginEngine,
+			Change: &statemachine.Change_AcceptProposalGroupChange{
+				AcceptProposalGroupChange: &statemachine.Change_AcceptProposalGroup{
+					GroupId:    group.Id,
+					AcceptedBy: &acceptedBy,
+				},
+			},
+		})
 	}
 }
 
-func uniqueOrigins(group *state.ProposalGroup) int {
+func (e *Engine) uniqueAcceptingOrigins(group *state.ProposalGroup) int {
 	origins := map[string]bool{}
 	for _, p := range group.Proposals {
 		for _, o := range p.GameEvent.Origin {
-			origins[o] = true
+			if e.config.AutoRefConfigs[o].GameEventBehavior[p.GameEvent.Type.String()] == AutoRefConfig_BEHAVIOR_ACCEPT {
+				origins[o] = true
+			}
 		}
 	}
 	return len(origins)

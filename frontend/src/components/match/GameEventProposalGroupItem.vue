@@ -8,7 +8,7 @@ import type {GameEvent} from "@/proto/ssl_gc_game_event";
 
 const props = defineProps<{
   proposalGroup: ProposalGroup,
-  groupId: number,
+  groupId: string,
 }>()
 
 const control = inject<ControlApi>('control-api')

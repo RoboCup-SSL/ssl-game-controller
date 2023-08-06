@@ -14,12 +14,11 @@ var changeOriginStateMachine = "StateMachine"
 
 // StateMachine describes the state machine that translates changes into new states
 type StateMachine struct {
-	gameConfig          config.Game
-	Geometry            config.Geometry
-	stageTimes          map[state.Referee_Stage]time.Duration
-	rand                *rand.Rand
-	timeProvider        timer.TimeProvider
-	nextProposalGroupId uint32
+	gameConfig   config.Game
+	Geometry     config.Geometry
+	stageTimes   map[state.Referee_Stage]time.Duration
+	rand         *rand.Rand
+	timeProvider timer.TimeProvider
 }
 
 // NewStateMachine creates a new state machine

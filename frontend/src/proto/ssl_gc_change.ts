@@ -112,7 +112,7 @@ export interface Change_AddProposal {
 /** Accept a proposal group (that contain one or more proposals of the same type) */
 export interface Change_AcceptProposalGroup {
   /** The id of the group */
-  groupId?: number;
+  groupId?: string;
   /** An identifier of the acceptor */
   acceptedBy?: string;
 }
@@ -449,14 +449,14 @@ export const Change_AddProposal = {
 export const Change_AcceptProposalGroup = {
   fromJSON(object: any): Change_AcceptProposalGroup {
     return {
-      groupId: isSet(object.groupId) ? Number(object.groupId) : 0,
+      groupId: isSet(object.groupId) ? String(object.groupId) : "",
       acceptedBy: isSet(object.acceptedBy) ? String(object.acceptedBy) : "",
     };
   },
 
   toJSON(message: Change_AcceptProposalGroup): unknown {
     const obj: any = {};
-    message.groupId !== undefined && (obj.groupId = Math.round(message.groupId));
+    message.groupId !== undefined && (obj.groupId = message.groupId);
     message.acceptedBy !== undefined && (obj.acceptedBy = message.acceptedBy);
     return obj;
   },

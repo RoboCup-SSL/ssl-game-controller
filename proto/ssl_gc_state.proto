@@ -71,12 +71,13 @@ message Proposal {
 }
 
 message ProposalGroup {
-    // List of proposals in this group
+    // Unique ID of this group
+    optional string id = 4;
+    // The proposals in this group
     repeated Proposal proposals = 1;
     // Whether the proposal group was accepted
     optional bool accepted = 2;
-    // unique id of the proposal group
-    optional uint32 id = 3;
+    reserved 3; // uint32 id
 }
 
 message TeamInfo {

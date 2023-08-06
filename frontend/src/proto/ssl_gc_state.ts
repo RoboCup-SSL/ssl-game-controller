@@ -204,12 +204,12 @@ export interface Proposal {
 }
 
 export interface ProposalGroup {
-  /** List of proposals in this group */
+  /** Unique ID of this group */
+  id?: string;
+  /** The proposals in this group */
   proposals?: Proposal[];
   /** Whether the proposal group was accepted */
   accepted?: boolean;
-  /** unique id of the proposal group */
-  id?: number;
 }
 
 export interface TeamInfo {
@@ -376,21 +376,21 @@ export const Proposal = {
 export const ProposalGroup = {
   fromJSON(object: any): ProposalGroup {
     return {
+      id: isSet(object.id) ? String(object.id) : "",
       proposals: Array.isArray(object?.proposals) ? object.proposals.map((e: any) => Proposal.fromJSON(e)) : [],
       accepted: isSet(object.accepted) ? Boolean(object.accepted) : false,
-      id: isSet(object.id) ? Number(object.id) : 0,
     };
   },
 
   toJSON(message: ProposalGroup): unknown {
     const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
     if (message.proposals) {
       obj.proposals = message.proposals.map((e) => e ? Proposal.toJSON(e) : undefined);
     } else {
       obj.proposals = [];
     }
     message.accepted !== undefined && (obj.accepted = message.accepted);
-    message.id !== undefined && (obj.id = Math.round(message.id));
     return obj;
   },
 };

@@ -194,7 +194,7 @@ message Referee {
     reserved 13;
     repeated GameEvent game_events = 16;
 
-    // All non-finished proposed game events that may be processed next.
+    // All proposed game events that were detected since the last RUNNING state.
     reserved 14;
     repeated GameEventProposalGroup game_event_proposals = 17;
 
@@ -210,8 +210,10 @@ message Referee {
 
 // List of matching proposals
 message GameEventProposalGroup {
-    // The proposed game event.
-    repeated GameEvent game_event = 1;
+    // Unique ID of this group
+    optional string id = 3;
+    // The proposed game events
+    repeated GameEvent game_events = 1;
     // Whether the proposal group was accepted
     optional bool accepted = 2;
 }

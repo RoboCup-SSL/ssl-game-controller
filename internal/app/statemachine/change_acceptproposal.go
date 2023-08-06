@@ -28,7 +28,7 @@ func (s *StateMachine) processChangeAcceptProposals(newState *state.State, chang
 	return
 }
 
-func findGroupById(groups []*state.ProposalGroup, id uint32) *state.ProposalGroup {
+func findGroupById(groups []*state.ProposalGroup, id string) *state.ProposalGroup {
 	for _, group := range groups {
 		if *group.Id == id {
 			return group

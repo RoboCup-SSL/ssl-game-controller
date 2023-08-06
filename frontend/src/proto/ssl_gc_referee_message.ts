@@ -478,8 +478,10 @@ export interface Referee_Point {
 
 /** List of matching proposals */
 export interface GameEventProposalGroup {
-  /** The proposed game event. */
-  gameEvent?: GameEvent[];
+  /** Unique ID of this group */
+  id?: string;
+  /** The proposed game events */
+  gameEvents?: GameEvent[];
   /** Whether the proposal group was accepted */
   accepted?: boolean;
 }
@@ -613,17 +615,19 @@ export const Referee_Point = {
 export const GameEventProposalGroup = {
   fromJSON(object: any): GameEventProposalGroup {
     return {
-      gameEvent: Array.isArray(object?.gameEvent) ? object.gameEvent.map((e: any) => GameEvent.fromJSON(e)) : [],
+      id: isSet(object.id) ? String(object.id) : "",
+      gameEvents: Array.isArray(object?.gameEvents) ? object.gameEvents.map((e: any) => GameEvent.fromJSON(e)) : [],
       accepted: isSet(object.accepted) ? Boolean(object.accepted) : false,
     };
   },
 
   toJSON(message: GameEventProposalGroup): unknown {
     const obj: any = {};
-    if (message.gameEvent) {
-      obj.gameEvent = message.gameEvent.map((e) => e ? GameEvent.toJSON(e) : undefined);
+    message.id !== undefined && (obj.id = message.id);
+    if (message.gameEvents) {
+      obj.gameEvents = message.gameEvents.map((e) => e ? GameEvent.toJSON(e) : undefined);
     } else {
-      obj.gameEvent = [];
+      obj.gameEvents = [];
     }
     message.accepted !== undefined && (obj.accepted = message.accepted);
     return obj;

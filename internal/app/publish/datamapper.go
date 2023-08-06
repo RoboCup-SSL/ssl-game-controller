@@ -11,9 +11,9 @@ func mapProposals(groups []*state.ProposalGroup) []*state.GameEventProposalGroup
 	var mappedGroups []*state.GameEventProposalGroup
 	for _, group := range groups {
 		mappedGroup := state.GameEventProposalGroup{Accepted: group.Accepted}
-		mappedGroup.GameEvent = []*state.GameEvent{}
+		mappedGroup.GameEvents = []*state.GameEvent{}
 		for _, proposal := range group.Proposals {
-			mappedGroup.GameEvent = append(mappedGroup.GameEvent, proposal.GameEvent)
+			mappedGroup.GameEvents = append(mappedGroup.GameEvents, proposal.GameEvent)
 		}
 		mappedGroups = append(mappedGroups, &mappedGroup)
 	}

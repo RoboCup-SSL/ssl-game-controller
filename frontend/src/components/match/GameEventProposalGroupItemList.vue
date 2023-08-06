@@ -14,9 +14,9 @@ const proposalGroups = computed(() => {
   <q-list bordered class="rounded-borders" v-if="proposalGroups.length > 0">
     <GameEventProposalGroupItem
       :proposal-group="group"
-      :group-id="groupId"
-      v-for="(group, groupId) in proposalGroups"
-      :key="groupId"
+      :group-id="group.id || ''"
+      v-for="(group) in proposalGroups"
+      :key="group.id"
     />
   </q-list>
   <div v-else>

@@ -82,7 +82,7 @@ export class ControlApi {
     })
   }
 
-  public AcceptProposalGroup(groupId: number) {
+  public AcceptProposalGroup(groupId: string) {
     this.SubmitChange({
       change: {
         $case: 'acceptProposalGroupChange',

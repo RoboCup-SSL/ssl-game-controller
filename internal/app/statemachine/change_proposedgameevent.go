@@ -3,6 +3,7 @@ package statemachine
 import (
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/geom"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
+	"github.com/google/uuid"
 	"time"
 )
 
@@ -13,8 +14,7 @@ func (s *StateMachine) processChangeAddProposal(newState *state.State, change *C
 	if ok, pid := findGroup(change.Proposal, newState.ProposalGroups, s.gameConfig.AutoRefProposalTimeout); ok {
 		newState.ProposalGroups[pid].Proposals = append(newState.ProposalGroups[pid].Proposals, change.Proposal)
 	} else {
-		groupId := s.nextProposalGroupId
-		s.nextProposalGroupId++
+		groupId := uuid.NewString()
 		newState.ProposalGroups = append(newState.ProposalGroups, &state.ProposalGroup{
 			Proposals: []*state.Proposal{change.Proposal},
 			Accepted:  new(bool),

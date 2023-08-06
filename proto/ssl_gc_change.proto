@@ -111,7 +111,7 @@ message Change {
     // Accept a proposal group (that contain one or more proposals of the same type)
     message AcceptProposalGroup {
         // The id of the group
-        optional uint32 group_id = 1;
+        optional string group_id = 3;
         // An identifier of the acceptor
         optional string accepted_by = 2;
     }

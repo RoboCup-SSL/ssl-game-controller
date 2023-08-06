@@ -179,13 +179,12 @@ func convertAimlessKick(gameEvent *state.GameEvent) *state.GameEvent {
 func (e *Engine) handleGameEventBehavior(change *statemachine.Change) *statemachine.Change {
 	gameEvent := change.GetAddGameEventChange().GameEvent
 	behavior := e.config.GameEventBehavior[gameEvent.Type.String()]
-	if isNonMajorityOrigin(gameEvent.Origin) && behavior == Config_BEHAVIOR_ACCEPT_MAJORITY {
-		behavior = Config_BEHAVIOR_ACCEPT
-	}
+
 	switch behavior {
-	case Config_BEHAVIOR_ACCEPT, Config_BEHAVIOR_UNKNOWN:
-		return change
-	case Config_BEHAVIOR_ACCEPT_MAJORITY, Config_BEHAVIOR_PROPOSE_ONLY:
+	case Config_BEHAVIOR_ACCEPT, Config_BEHAVIOR_ACCEPT_MAJORITY, Config_BEHAVIOR_PROPOSE_ONLY:
+		if isNonMajorityOrigin(gameEvent.Origin) {
+			return change
+		}
 		log.Println("Convert game event to proposal: ", gameEvent.String())
 		timestamp := timestamppb.New(e.timeProvider())
 		return &statemachine.Change{
@@ -209,10 +208,10 @@ func (e *Engine) handleGameEventBehavior(change *statemachine.Change) *statemach
 				},
 			},
 		}
-	case Config_BEHAVIOR_IGNORE:
-		log.Printf("Ignoring game event: %v", gameEvent)
+	default:
+		log.Printf("Ignoring game event: %v (behavior: %v)", gameEvent, behavior)
+		return nil
 	}
-	return nil
 }
 
 // getGeometry returns the current geometry
