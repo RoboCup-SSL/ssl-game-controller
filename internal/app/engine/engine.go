@@ -82,27 +82,6 @@ func NewEngine(gameConfig config.Game, engineConfig config.Engine) (e *Engine) {
 
 // Enqueue adds the change to the change queue
 func (e *Engine) Enqueue(change *statemachine.Change) {
-	if change.GetAddGameEventChange() != nil {
-		change.GetAddGameEventChange().GameEvent = e.processGameEvent(change.GetAddGameEventChange().GameEvent)
-		change = e.handleGameEventBehavior(change)
-		if change == nil {
-			return
-		}
-	} else if change.GetAddPassiveGameEventChange() != nil {
-		change.GetAddPassiveGameEventChange().GameEvent = e.processGameEvent(change.GetAddPassiveGameEventChange().GameEvent)
-	} else if change.GetAddProposalChange() != nil {
-		log.Println("Ignoring unexpected proposal change: ", change.GetAddProposalChange())
-		return
-	}
-
-	if change.Revertible == nil {
-		change.Revertible = new(bool)
-		// Assume that changes from outside are by default revertible, except if the flag is already set
-		*change.Revertible = true
-	}
-	if change.Origin == nil {
-		change.Origin = proto.String("Unknown")
-	}
 	e.changeQueue <- change
 }
 
@@ -146,18 +125,16 @@ func isNonMajorityOrigin(origins []string) bool {
 
 func (e *Engine) processGameEvent(gameEvent *state.GameEvent) *state.GameEvent {
 	// Set creation timestamp
-	if gameEvent.CreatedTimestamp != nil {
-		log.Printf("Ignore existing created_timestamp in enqueued game event: %v", gameEvent)
+	if gameEvent.CreatedTimestamp == nil {
+		gameEvent.CreatedTimestamp = new(uint64)
+		*gameEvent.CreatedTimestamp = uint64(e.timeProvider().UnixMicro())
 	}
-	gameEvent.CreatedTimestamp = new(uint64)
-	*gameEvent.CreatedTimestamp = uint64(e.timeProvider().UnixMicro())
 
 	// Set unique id
-	if gameEvent.Id != nil {
-		log.Printf("Ignore existing id in enqueued game event: %v", gameEvent)
+	if gameEvent.Id == nil {
+		gameEvent.Id = new(string)
+		*gameEvent.Id = uuid.NewString()
 	}
-	gameEvent.Id = new(string)
-	*gameEvent.Id = uuid.NewString()
 
 	// convert aimless kick if necessary
 	if e.currentState.Division.Div() == config.DivA && *gameEvent.Type == state.GameEvent_AIMLESS_KICK {
@@ -381,6 +358,27 @@ func (e *Engine) processChangeList(changes []*statemachine.Change) {
 func (e *Engine) processChange(change *statemachine.Change) (newChanges []*statemachine.Change) {
 	e.mutex.Lock()
 	defer e.mutex.Unlock()
+
+	if change.GetAddGameEventChange() != nil {
+		change.GetAddGameEventChange().GameEvent = e.processGameEvent(change.GetAddGameEventChange().GameEvent)
+		change = e.handleGameEventBehavior(change)
+		if change == nil {
+			return
+		}
+	} else if change.GetAddPassiveGameEventChange() != nil {
+		change.GetAddPassiveGameEventChange().GameEvent = e.processGameEvent(change.GetAddPassiveGameEventChange().GameEvent)
+	} else if change.GetAddProposalChange() != nil {
+		change.GetAddProposalChange().Proposal.GameEvent = e.processGameEvent(change.GetAddProposalChange().Proposal.GameEvent)
+	}
+
+	if change.Revertible == nil {
+		change.Revertible = new(bool)
+		// Assume that changes from outside are by default revertible, except if the flag is already set
+		*change.Revertible = true
+	}
+	if change.Origin == nil {
+		change.Origin = proto.String("Unknown")
+	}
 
 	var entry = e.stateStore.CreateEntry(change, e.timeProvider(), e.currentState)
 	log.Printf("Process change %d: %+v", *entry.Id, change.StringJson())

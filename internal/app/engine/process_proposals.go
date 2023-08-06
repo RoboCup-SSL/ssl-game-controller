@@ -46,6 +46,9 @@ func (e *Engine) uniqueAcceptingOrigins(group *state.ProposalGroup) int {
 	origins := map[string]bool{}
 	for _, p := range group.Proposals {
 		for _, o := range p.GameEvent.Origin {
+			if _, ok := e.config.AutoRefConfigs[o]; !ok {
+				continue
+			}
 			if e.config.AutoRefConfigs[o].GameEventBehavior[p.GameEvent.Type.String()] == AutoRefConfig_BEHAVIOR_ACCEPT {
 				origins[o] = true
 			}

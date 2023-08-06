@@ -2,8 +2,6 @@
 import {computed, inject, onMounted, onUnmounted} from "vue";
 import ContinueActionButtonList from "@/components/match/ContinueActionButtonList.vue";
 import AutoContinueInput from "@/components/match/AutoContinueInput.vue";
-import GameEventProposalGroupItemList from "@/components/match/GameEventProposalGroupItemList.vue";
-import GameEventList from "@/components/match/GameEventList.vue";
 import MatchTeamTable from "@/components/match/MatchTeamTable.vue";
 import type {ControlApi} from "@/providers/controlApi/ControlApi";
 import {useGcStateStore} from "@/store/gcState";
@@ -13,6 +11,7 @@ import {useMatchStateStore} from "@/store/matchState";
 import {Referee_Stage} from "@/proto/ssl_gc_referee_message";
 import SwitchSidesButton from "@/components/start/SwitchSidesButton.vue";
 import HaltButton from "@/components/control/HaltButton.vue";
+import GameEvents from "@/components/match/GameEvents.vue";
 
 const store = useMatchStateStore()
 const gcStore = useGcStateStore()
@@ -113,8 +112,7 @@ onUnmounted(() => {
       <ContinueActionButtonList/>
     </div>
     <div class="col q-gutter-md q-mr-md" style="min-width: 300px">
-      <GameEventProposalGroupItemList/>
-      <GameEventList/>
+      <GameEvents/>
     </div>
   </div>
 </template>

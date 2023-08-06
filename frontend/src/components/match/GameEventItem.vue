@@ -5,10 +5,10 @@ import {gameEventNames} from "@/helpers/texts";
 import type {GameEvent} from "@/proto/ssl_gc_game_event";
 import {gameEventForTeam, originIcon} from "@/helpers";
 import GameEventDetailsTree from "@/components/match/GameEventDetailsTree.vue";
+import dayjs from "dayjs";
 
 const props = defineProps<{
   gameEvent: GameEvent,
-  caption?: string,
 }>()
 
 const label = computed(() => {
@@ -22,6 +22,13 @@ const team = computed(() => {
 const origins = computed(() => {
   return props.gameEvent.origin
 })
+
+const time = computed(() => {
+  if (props.gameEvent.createdTimestamp) {
+    return dayjs(props.gameEvent.createdTimestamp / 1e3).format("MMM, DD YYYY HH:mm:ss,SSS")
+  }
+  return undefined
+})
 </script>
 
 <template>
@@ -32,7 +39,7 @@ const origins = computed(() => {
           <TeamBadge :team="team"/>
           {{ label }}
         </q-item-label>
-        <q-item-label caption v-if="caption">{{ caption }}</q-item-label>
+        <q-item-label caption v-if="time">{{ time }}</q-item-label>
       </q-item-section>
       <q-item-section side>
         <div class="row">
