@@ -30,7 +30,13 @@ export function gameEventForTeam(gameEvent: GameEvent): Team {
 
 export function gameEventDetails(gameEvent: GameEvent) {
   const event = gameEvent.event! as { [key: string]: any }
-  return event[event.$case] as { [key: string]: any }
+  const generalDetails: { [key: string]: any } = {
+    "id": gameEvent.id,
+    "createdTimestamp": gameEvent.createdTimestamp,
+    "origins": gameEvent.origin,
+  }
+  const details = event[event.$case] as { [key: string]: any }
+  return {...generalDetails, ...details}
 }
 
 export const originIcon = (origin: string) => {
