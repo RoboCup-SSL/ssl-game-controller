@@ -165,11 +165,13 @@ func (e *Engine) handleGameEventBehavior(change *statemachine.Change) *statemach
 	gameEvent := change.GetAddGameEventChange().GameEvent
 	behavior := e.config.GameEventBehavior[gameEvent.Type.String()]
 
+	if isNonMajorityOrigin(gameEvent.Origin) {
+		// events from GC must always be passed through
+		return change
+	}
+
 	switch behavior {
 	case Config_BEHAVIOR_ACCEPT, Config_BEHAVIOR_ACCEPT_MAJORITY, Config_BEHAVIOR_PROPOSE_ONLY:
-		if isNonMajorityOrigin(gameEvent.Origin) {
-			return change
-		}
 		log.Println("Convert game event to proposal: ", gameEvent.String())
 		timestamp := timestamppb.New(e.timeProvider())
 		return &statemachine.Change{
