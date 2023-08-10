@@ -116,7 +116,7 @@ func (e *Engine) EnqueueBlocking(change *statemachine.Change) error {
 
 func isNonMajorityOrigin(origins []string) bool {
 	for _, origin := range origins {
-		if origin == "UI" || origin == "Engine" || origin == "StateMachine" {
+		if origin == "UI" || origin == "Engine" || origin == "StateMachine" || origin == "Majority" {
 			return true
 		}
 	}
