@@ -231,11 +231,12 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 				},
 			}))
 		} else if byTeam == newState.GameState.ForTeam.Opposite() {
-			// rule violation by defender team -> goal
+			// rule violation by defending team -> goal for attacking team
+			scoringTeam := byTeam.Opposite()
 			changes = append(changes, createGameEventChange(state.GameEvent_GOAL, &state.GameEvent{
 				Event: &state.GameEvent_Goal_{
 					Goal: &state.GameEvent_Goal{
-						ByTeam: &byTeam,
+						ByTeam: &scoringTeam,
 					},
 				},
 			}))
