@@ -7,7 +7,49 @@
     <title>ssl-game-controller</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+     
+    </div>
+     
     <script type="module" src="/src/main.ts"></script>
+
+  <!-- <script>
+  try{ translate.listener.start();
+  translate.language.setLocal('chinese_simplified');
+  translate.setAutoDiscriminateLocalLanguage();
+  translate.language.setUrlParamControl(); }catch(e){ console.log(e); }translate.setUseVersion2();translate.execute();
+  </script> -->
+  <script src="https://res.zvo.cn/translate/translate.js"></script>
+  <div class="translate">
+    select选择框切换语言:
+    <script >
+    translate.ignore.class.push('q-icon');
+    translate.setUseVersion2(); //设置使用v2.x 版本
+    translate.language.setLocal('english'); //设置本地语种（当前网页的语种）。如果不设置，默认就是 'chinese_simplified' 简体中文。 可填写如 'english'、'chinese_simplified' 等，具体参见文档下方关于此的说明
+    translate.language.setUrlParamControl(); //url参数后可以加get方式传递 language 参数的方式控制当前网页以什么语种显示
+    translate.listener.start();	//开启html页面变化的监控，对变化部分会进行自动翻译。注意，这里变化区域，是指使用 translate.setDocuments(...) 设置的区域。如果未设置，那么为监控整个网页的变化
+    translate.execute(); //执行翻译初始化操作，显示出select语言选择
+    </script>
+  </div>
+
+  <style>
+    /* .app{
+      width: 30%;
+      height: 30%;
+      position: relative;
+    } */
+    #translate>.translateSelectLanguage {
+    position: absolute;
+    right: 8rem;
+    top: 8rem;
+    font-size: 1rem;
+    padding: 0.3rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    border: 1px solid #C9C9C9;
+    background-color: #fff;
+    color: #555;
+}
+  </style>
   </body>
 </html>
