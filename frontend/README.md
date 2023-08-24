@@ -18,6 +18,11 @@ npm run dev
 npm run build
 ```
 
+```add custom plugin
+chmod +x auto_linux.sh
+./auto_linux.sh     ```you need execute this command after every 'npm run build' command
+```
+
 ### Lint with [ESLint](https://eslint.org/)
 
 ```sh

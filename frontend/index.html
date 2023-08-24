@@ -7,30 +7,258 @@
     <title>ssl-game-controller</title>
   </head>
   <body>
-    <div id="app">
-     
-    </div>
-     
+    <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
 
-  <!-- <script>
-  try{ translate.listener.start();
-  translate.language.setLocal('chinese_simplified');
-  translate.setAutoDiscriminateLocalLanguage();
-  translate.language.setUrlParamControl(); }catch(e){ console.log(e); }translate.setUseVersion2();translate.execute();
-  </script> -->
-  <script src="https://res.zvo.cn/translate/translate.js"></script>
-  <div class="translate">
-    select选择框切换语言:
-    <script >
-    translate.ignore.class.push('q-icon');
-    translate.setUseVersion2(); //设置使用v2.x 版本
-    translate.language.setLocal('english'); //设置本地语种（当前网页的语种）。如果不设置，默认就是 'chinese_simplified' 简体中文。 可填写如 'english'、'chinese_simplified' 等，具体参见文档下方关于此的说明
-    translate.language.setUrlParamControl(); //url参数后可以加get方式传递 language 参数的方式控制当前网页以什么语种显示
-    translate.listener.start();	//开启html页面变化的监控，对变化部分会进行自动翻译。注意，这里变化区域，是指使用 translate.setDocuments(...) 设置的区域。如果未设置，那么为监控整个网页的变化
-    translate.execute(); //执行翻译初始化操作，显示出select语言选择
-    </script>
-  </div>
+  <script src="./utils/translate.js"></script>
+  <script src="https://res.zvo.cn/msg/msg.js"></script>
+<div class="translate">
+  <script >
+  translate.ignore.class.push('q-icon');
+  // translate.ignore.class.push('q-field__native');
+  // var str = 'q-portal--menu';
+  // for(var i = 1; i < 500; i++){
+  //   translate.ignore.id.push(str + '--' + i);
+  // }
+
+  translate.setUseVersion2(); //设置使用v2.x 版本
+  translate.language.setLocal('english'); //设置本地语种（当前网页的语种）。如果不设置，默认就是 'chinese_simplified' 简体中文。 可填写如 'english'、'chinese_simplified' 等，具体参见文档下方关于此的说明
+  translate.language.setUrlParamControl(); //url参数后可以加get方式传递 language 参数的方式控制当前网页以什么语种显示
+  translate.listener.start();	//开启html页面变化的监控，对变化部分会进行自动翻译。注意，这里变化区域，是指使用 translate.setDocuments(...) 设置的区域。如果未设置，那么为监控整个网页的变化
+  translate.office.append('chinese_simplified',`
+    Yellow=黄方
+    YELLOW=黄方
+    Blue=蓝方
+    Dark=暗色调
+    HALT=急停
+    Halt=急停
+    Goal=进球
+    Stop=停止
+    STOP=停止
+    ISSUE=问题
+    left=左边
+    Auto-Referees: 0 =自动裁判盒 : 0
+    Auto-Referees: 1 =自动裁判盒 : 1
+    Auto-Referees: 2 =自动裁判盒 : 2
+    Auto-Referees: 3 =自动裁判盒 : 3
+    Match=比赛
+    origins=来自
+    byTeam: BLUE=队伍：蓝色方
+    byTeam: YELLOW=队伍：黄色方
+    byBot: 0=机器人车号 : 0
+    byBot: 1=机器人车号 : 1
+    byBot: 2=机器人车号 : 2
+    byBot: 3=机器人车号 : 3
+    byBot: 4=机器人车号 : 4
+    byBot: 5=机器人车号 : 5
+    byBot: 6=机器人车号 : 6
+    byBot: 7=机器人车号 : 7
+    byBot: 8=机器人车号 : 8
+    byBot: 9=机器人车号 : 9
+    byBot: 10=机器人车号 : 10
+    byBot: 11=机器人车号 : 11
+    byBot: 12=机器人车号 : 12
+    byBot: 13=机器人车号 : 13
+    byBot: 14=机器人车号 : 14
+    byBot: 15=机器人车号 : 15
+    location=坐标
+    ssl-game-controller=ssl 游戏控制器
+    Continue automatically =自动继续
+    Team Settings=队伍设置
+    to continue =以继续
+    touch line=触线
+    Origin=来源
+    Ball left field=球出界
+    Propose only=仅提议
+    Foul=犯规
+    Match Proceeding=比赛进行时
+    Unsporting Behavior=违反体育精神
+    Unsporting Behavior =违反体育精神的行为
+    Stage=阶段
+    Start=开始
+    Teams=团队
+    team=队伍
+    Keeper id=守门员 ID
+    Game Events=游戏事件
+    Division A=A组
+    Division B=B组
+    Goal on positive field half=主动方球门
+    Are sure to start a new match and reset the whole state? A backup file of the current state will be created. =确定要开始一场新的比赛并重置整个状态吗？ 将创建当前状态的备份文件。
+    To set up a new match, go through this page from top to bottom. The full procedure can be found in the =要新的比赛，请从上到下浏览此页面。 完整的流程请移步
+    Kickoff=开球
+    Penalty=点球
+    Yellow Card=黄牌
+    Start Timeout=暂停
+    byTeam=团队
+    SSL Logo=SSL标志
+    Settings=设置
+    Free Kick=任意球
+    Perform ball placement=可以执行放球动作
+    Place Ball=放球
+    Team name=队名
+    rule book =比赛规则
+    End match=结束比赛
+    SSL-Game-Controller =SSL 游戏控制器
+    Protocol=协议
+    Commands=命令
+    Force Start=强制开始
+    Normal Start=正常开始
+    Red Card=红牌
+    Start new match=开始新的比赛
+    Match type=比赛类型
+    First kick-off=优先开球
+    Switch color=切换颜色
+    Random color=随机颜色
+    Determine side and kickoff=确定选边和开球方
+    State: =状态：
+    Stage: =阶段：
+    End of Game=游戏结束
+    Score: =进球数：
+    Matching duration: =比赛时长：
+    no next command=没有下一个命令
+    Timeout request=暂停请求
+    Resume =恢复
+    Next Stage =下个阶段
+    Press =按
+    No recent game event proposals =没有最近的游戏活动提案
+    Substitution request=替换请求
+    Emergency request=紧急请求
+    Next yellow card due =下一张黄牌到期
+    Active cards =活动卡
+    max bots =最大机器人数量
+    Elimination Phase=淘汰赛
+    Friendly=友谊赛
+    Group Phase=小组赛
+    Reset placement position=重置放球点
+    Place ball=放球
+    Command=命令
+    Stage=阶段
+    StateMachine=状态机
+    Config=配置
+    UI=用户界面
+    Pre-First Half=上半场前
+    Half Time=中场休息
+    Pre-Overtime First Half=加时赛上半场前
+    Overtime First Half=加时赛上半场
+    First Half=上半场
+    Second Half=下半场
+    Overtime Second Half=加时赛下半场
+    Pre-Second Half=下半场前
+    Overtime Break=加时赛休息
+    Overtime Half Time=加时赛半场
+    Pre-Overtime Second Half=加时赛下半场前
+    Shootout Break=点球大战休息
+    Shootout=点球大战
+    The other team will have first kick off=另一队先开球
+    Randomize=随机化
+    Accept=接受
+    Determine team to choose side=确定队伍选边
+    Let this team choose=让这个队伍选择
+    by team=触发该事件的队伍
+    message=信息
+    num robots by team=队伍机器人的数量
+    Create=创建
+    kicking team=踢球的队伍
+    kicking bot=踢球的机器人
+    max ball height =球射门最大高度
+    last touch by team =队伍最后一次触球
+    possible goal=可能的进门
+    m=米
+    Bot interfered ball placement=干扰放球
+    Bot pushed opponent bot=机器人推挤对方机器人
+    Defender too close to kick point=后卫距离开球点过近
+    Bots crashed into each other=机器人互相碰撞
+    Ball held deliberately by keeper=守门员故意护球
+    violator=犯规机器人
+    Bot tipped over=机器人翻倒了
+    Ball held deliberately by bot=机器人故意持球
+    Bot crashed into opponent bot=机器人碰撞了对方机器人
+    Ball chipped over field boundaries=挑球出界
+    Ball dribbled too far=带球过长
+    Ball kicked too fast=踢球过快
+    Attacker touched ball inside opponent defense area=进攻方在对方禁区内触球
+    Attacker too close to defense area=进攻方距离对方禁区过近
+    Defender inside own defense area=后卫进入自家禁区
+    Bot too fast in stop=机器人在Stop状态下运动过快
+    victim=被犯规机器人
+    by bot=机器人
+    pushed distance =被推挤的距离
+    duration=区间
+    speed diff=差速
+    crash speed=碰撞速度
+    crash angle=碰撞角
+    yellow bot=黄色机器人
+    blue bot=蓝色机器人
+    start x =起始x坐标
+    start y =起始y坐标
+    end x =结束x坐标
+    end y =结束y坐标
+    chipped=是否挑球
+    initial ball speed=初始球速
+    distance=距离
+    speed=速度
+    location x = x坐标
+    location y = y坐标
+    kick location x =踢球位置 x坐标
+    kick location y =踢球位置 y坐标
+    ball location x =球 x坐标
+    ball location y =球 y坐标
+    time=时间
+    Ball touched twice by attacker=二次触球
+    No progress in game=游戏没有进展
+    major=主要的
+    minor=次要的
+    reason=原因
+    Goals=总进球数
+    Ball placement failures=放球失败
+    seconds=秒
+    Fouls =犯规
+    Unknown =未知
+    Timeouts left=暂停时间
+    Timeout time left =剩余暂停时间
+    Challenge flags available=可用挑战标志
+    Yellow cards =黄牌
+    Red cards =红牌
+    Remote connected =远程连接
+    Team connected =团队互联
+    Advantage choice =优势选择
+    All=全部
+    Log=日志
+    Majority=多数
+    Too many bots on field=场上机器人过多
+    Ball placement succeeded=放球成功
+    Goal invalid=进球无效
+    Log: Add passive event to the protocol, but do not process it at all.=日志：将被动事件添加到协议中，但根本不处理它。
+    Propose=提出
+    Game events can be handled in the following ways: =游戏事件可以通过以下方式处理：
+    Penalty kick failed=点球失败
+    Ignore: Drop event silently.=忽略：静默删除事件。
+    Game Event Behavior=游戏事件行为
+    Tracker Sources: 0=追踪来源 : 0
+    Tracker Sources: 1=追踪来源 : 1
+    Tracker Sources: 2=追踪来源 : 2
+    Accept: Apply event immediately.=接受：立即应用事件。
+    Majority: Add event to proposals and accept it when majority reported same event.=多数：将事件添加到提案中，并在多数报告相同事件时接受它。
+    Propose only: Add event to proposals, but only accept it manually through UI.=仅提议：将事件添加到提议中，但仅通过 UI 手动接受。
+    Ignore=忽略
+    Ball kicked aimlessly=无意义射门 
+    aimless kick=无意义射门
+    goal line=球门线
+    Ball left field via touch line =球压线出界
+    Ball left field via goal line=球压球门线出界
+    Goal scored=进球数
+    Goal might been scored=可能产生了一颗进球
+    createdTimestamp=创建时间戳
+    UNRECOGNIZED=无法识别
+`);
+  translate.execute(); //执行翻译初始化操作，显示出select语言选择
+  translate.office.showPanel();
+  </script>
+    <div class="translate_off_line">
+      <a class="ignore" href="javascript:translate.changeLanguage('english');">English</a> | 
+      <a class="ignore" href="javascript:translate.changeLanguage('chinese_simplified');">简体中文</a>  
+    </div>
+</div>
 
   <style>
     /* .app{
@@ -42,6 +270,18 @@
     position: absolute;
     right: 8rem;
     top: 8rem;
+    font-size: 1rem;
+    padding: 0.3rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    border: 1px solid #C9C9C9;
+    background-color: #fff;
+    color: #555;
+}
+.translate_off_line {
+    position: absolute;
+    right: 9rem;
+    top: 12rem;
     font-size: 1rem;
     padding: 0.3rem;
     padding-left: 0.5rem;
