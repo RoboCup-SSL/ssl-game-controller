@@ -1,7 +1,7 @@
 {
   "extends": [
     "config:base",
-    "schedule:monthly"
+    "schedule:yearly"
   ],
   "labels": [
     "dependencies"
