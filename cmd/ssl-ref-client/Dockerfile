@@ -1,4 +1,4 @@
-FROM golang:1.20-alpine AS build_go
+FROM golang:1.21-alpine AS build_go
 ARG cmd=ssl-ref-client
 WORKDIR work
 COPY . .
