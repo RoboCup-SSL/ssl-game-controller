@@ -1,6 +1,6 @@
 module github.com/RoboCup-SSL/ssl-game-controller
 
-go 1.18
+go 1.21
 
 require (
 	github.com/go-test/deep v1.1.0
