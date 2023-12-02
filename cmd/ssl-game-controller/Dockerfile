@@ -1,4 +1,4 @@
-FROM node:20-alpine AS build_node
+FROM node:21-alpine AS build_node
 COPY frontend frontend
 WORKDIR frontend
 RUN npm install
