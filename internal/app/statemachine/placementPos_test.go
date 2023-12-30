@@ -205,5 +205,5 @@ func createBotDribbledTooFarEvent(eventLocation *geom.Vector2) *state.GameEvent 
 }
 
 func similar(l1 *geom.Vector2, l2 *geom.Vector2) bool {
-	return math.Abs(float64(*l1.X-*l2.X)) < 1e-4 && math.Abs(float64(*l1.Y-*l2.Y)) < 1e-4
+	return math.Abs(l1.GetX64()-l2.GetX64()) < 1e-4 && math.Abs(l1.GetY64()-l2.GetY64()) < 1e-4
 }

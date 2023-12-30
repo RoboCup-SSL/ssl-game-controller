@@ -23,11 +23,11 @@ func (s *BallPlacementPosDeterminer) Location() *geom.Vector2 {
 		if s.Event.GetBallLeftFieldTouchLine().Location != nil {
 			location := s.Event.GetBallLeftFieldTouchLine().Location
 			x := s.Geometry.FieldLength/2 - s.Geometry.PlacementOffsetGoalLine
-			if math.Abs(float64(*location.X)) > x {
-				*location.X = float32(math.Copysign(x, float64(*location.X)))
+			if math.Abs(location.GetX64()) > x {
+				*location.X = float32(math.Copysign(x, location.GetX64()))
 			}
 			y := s.Geometry.FieldWidth/2 - s.Geometry.PlacementOffsetTouchLine
-			*location.Y = float32(math.Copysign(y, float64(*location.Y)))
+			*location.Y = float32(math.Copysign(y, location.GetY64()))
 			return s.validateLocation(location)
 		}
 		return s.keepCurrentPlacementPos()
@@ -145,8 +145,8 @@ func (s *BallPlacementPosDeterminer) ballPlacementLocationGoalLine(lastBallLocat
 
 	y := s.Geometry.FieldWidth/2 - s.Geometry.PlacementOffsetTouchLine
 	placementLocation := geom.NewVector2(
-		math.Copysign(x, float64(*lastBallLocation.X)),
-		math.Copysign(y, float64(*lastBallLocation.Y)),
+		math.Copysign(x, float64(lastBallLocation.GetX())),
+		math.Copysign(y, float64(lastBallLocation.GetY())),
 	)
 	return s.validateLocation(placementLocation)
 }
@@ -159,10 +159,10 @@ func (s *BallPlacementPosDeterminer) isGoalKick() bool {
 	}
 	teamInFavor := s.Event.ByTeam().Opposite()
 	location := s.Event.GetBallLeftFieldGoalLine().Location
-	if s.OnPositiveHalf[teamInFavor] && *location.X > 0 {
+	if s.OnPositiveHalf[teamInFavor] && location.GetX() > 0 {
 		return true
 	}
-	if !s.OnPositiveHalf[teamInFavor] && *location.X < 0 {
+	if !s.OnPositiveHalf[teamInFavor] && location.GetX() < 0 {
 		return true
 	}
 	return false
@@ -185,13 +185,13 @@ func (s *BallPlacementPosDeterminer) validateLocation(location *geom.Vector2) *g
 func (s *BallPlacementPosDeterminer) movePositionOutOfDefenseArea(location *geom.Vector2) {
 	maxX := s.Geometry.FieldLength/2 - s.Geometry.DefenseAreaDepth - s.Geometry.PlacementOffsetDefenseArea
 	minY := s.Geometry.DefenseAreaWidth/2 + s.Geometry.PlacementOffsetDefenseArea
-	if math.Abs(float64(*location.X)) > maxX && math.Abs(float64(*location.Y)) < minY {
-		diffX := math.Abs(maxX - math.Abs(float64(*location.X)))
-		diffY := math.Abs(minY - math.Abs(float64(*location.Y)))
+	if math.Abs(location.GetX64()) > maxX && math.Abs(location.GetY64()) < minY {
+		diffX := math.Abs(maxX - math.Abs(location.GetX64()))
+		diffY := math.Abs(minY - math.Abs(location.GetY64()))
 		if diffX < diffY {
-			*location.X = float32(math.Copysign(maxX, float64(*location.X)))
+			*location.X = float32(math.Copysign(maxX, location.GetX64()))
 		} else {
-			*location.Y = float32(math.Copysign(minY, float64(*location.Y)))
+			*location.Y = float32(math.Copysign(minY, location.GetY64()))
 		}
 	}
 }
@@ -199,11 +199,11 @@ func (s *BallPlacementPosDeterminer) movePositionOutOfDefenseArea(location *geom
 // movePositionInsideField will move the given location into the field if required
 func (s *BallPlacementPosDeterminer) movePositionInsideField(location *geom.Vector2) {
 	maxX := s.Geometry.FieldLength/2 - s.Geometry.PlacementOffsetGoalLine
-	if math.Abs(float64(*location.X)) > maxX {
-		*location.X = float32(math.Copysign(maxX, float64(*location.X)))
+	if math.Abs(location.GetX64()) > maxX {
+		*location.X = float32(math.Copysign(maxX, location.GetX64()))
 	}
 	maxY := s.Geometry.FieldWidth/2 - s.Geometry.PlacementOffsetTouchLine
-	if math.Abs(float64(*location.Y)) > maxY {
-		*location.Y = float32(math.Copysign(maxY, float64(*location.Y)))
+	if math.Abs(location.GetY64()) > maxY {
+		*location.Y = float32(math.Copysign(maxY, location.GetY64()))
 	}
 }

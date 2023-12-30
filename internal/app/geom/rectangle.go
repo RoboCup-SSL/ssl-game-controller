@@ -20,11 +20,11 @@ func NewRectangleFromCenter(center *Vector2, xExtent, yExtent float64) (r *Recta
 // NewRectangleFromPoints creates a new rectangle from two points
 func NewRectangleFromPoints(p1, p2 *Vector2) (r *Rectangle) {
 	r = new(Rectangle)
-	r.xExtent = math.Abs(p1.X64() - p2.X64())
-	r.yExtent = math.Abs(p1.Y64() - p2.Y64())
+	r.xExtent = math.Abs(p1.GetX64() - p2.GetX64())
+	r.yExtent = math.Abs(p1.GetY64() - p2.GetY64())
 	r.center = NewVector2(
-		math.Min(p1.X64(), p2.X64())+r.xExtent/2.0,
-		math.Min(p1.Y64(), p2.Y64())+r.yExtent/2.0,
+		math.Min(p1.GetX64(), p2.GetX64())+r.xExtent/2.0,
+		math.Min(p1.GetY64(), p2.GetY64())+r.yExtent/2.0,
 	)
 	return
 }
@@ -40,28 +40,28 @@ func (r *Rectangle) WithMargin(margin float64) *Rectangle {
 
 // MaxX returns the largest x value
 func (r *Rectangle) MaxX() float64 {
-	return r.center.X64() + r.xExtent/2.0
+	return r.center.GetX64() + r.xExtent/2.0
 }
 
 // MinX returns the smallest x value
 func (r *Rectangle) MinX() float64 {
-	return r.center.X64() - r.xExtent/2.0
+	return r.center.GetX64() - r.xExtent/2.0
 }
 
 // MaxY returns the largest y value
 func (r *Rectangle) MaxY() float64 {
-	return r.center.Y64() + r.yExtent/2.0
+	return r.center.GetY64() + r.yExtent/2.0
 }
 
 // MinY returns the smallest y value
 func (r *Rectangle) MinY() float64 {
-	return r.center.Y64() - r.yExtent/2.0
+	return r.center.GetY64() - r.yExtent/2.0
 }
 
 // IsPointInside returns true if the given point is inside the rectangle
 func (r *Rectangle) IsPointInside(p *Vector2) bool {
-	return isBetween(p.X64(), r.MinX(), r.MaxX()) &&
-		isBetween(p.Y64(), r.MinY(), r.MaxY())
+	return isBetween(p.GetX64(), r.MinX(), r.MaxX()) &&
+		isBetween(p.GetY64(), r.MinY(), r.MaxY())
 }
 
 // isBetween returns true, if x is between min and max.

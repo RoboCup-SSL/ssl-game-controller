@@ -80,7 +80,7 @@ func mapLocation(location *geom.Vector2) *state.Referee_Point {
 	if location == nil {
 		return nil
 	}
-	x := *location.X * 1000.0
-	y := *location.Y * 1000.0
+	x := location.GetX() * 1000.0
+	y := location.GetY() * 1000.0
 	return &state.Referee_Point{X: &x, Y: &y}
 }

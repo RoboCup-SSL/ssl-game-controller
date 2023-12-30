@@ -182,10 +182,10 @@ func (e *Engine) readyToContinuePenalty() (issues []string) {
 			continue
 		}
 		if *keeperTeamInfo.OnPositiveHalf &&
-			*robot.Pos.X < *ballPos.X-distanceToBallDuringPenalty {
+			*robot.Pos.X < ballPos.GetX()-distanceToBallDuringPenalty {
 			continue
 		} else if !*keeperTeamInfo.OnPositiveHalf &&
-			*robot.Pos.X > *ballPos.X+distanceToBallDuringPenalty {
+			*robot.Pos.X > ballPos.GetX()+distanceToBallDuringPenalty {
 			continue
 		}
 		if *robot.Id.Team == *keeperId.Team {
@@ -243,8 +243,8 @@ func (e *Engine) readyToContinueFromStop() (issues []string) {
 	}
 
 	ballPos := e.trackerStateGc.Ball.Pos.ToVector2()
-	if math.Abs(float64(*ballPos.X)) > e.getGeometry().FieldLength/2 ||
-		math.Abs(float64(*ballPos.Y)) > e.getGeometry().FieldWidth/2 {
+	if math.Abs(ballPos.GetX64()) > e.getGeometry().FieldLength/2 ||
+		math.Abs(ballPos.GetY64()) > e.getGeometry().FieldWidth/2 {
 		issues = append(issues, fmt.Sprintf("Ball is outside of field: %v", ballPos))
 	}
 
