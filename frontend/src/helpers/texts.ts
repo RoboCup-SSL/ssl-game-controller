@@ -99,6 +99,7 @@ export const gameEventNames = new Map<GameEvent_Type, string>([
   [GameEvent_Type.BOT_PUSHED_BOT, "Bot pushed opponent bot"],
   [GameEvent_Type.BOT_HELD_BALL_DELIBERATELY, "Ball held deliberately by bot"],
   [GameEvent_Type.BOT_TIPPED_OVER, "Bot tipped over"],
+  [GameEvent_Type.BOT_DROPPED_PARTS, "Bot dropped parts"],
   [GameEvent_Type.ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA, "Attacker touched ball inside opponent defense area"],
   [GameEvent_Type.BOT_KICKED_BALL_TOO_FAST, "Ball kicked too fast"],
   [GameEvent_Type.BOT_CRASH_UNIQUE, "Bot crashed into opponent bot"],

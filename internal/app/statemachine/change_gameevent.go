@@ -324,6 +324,7 @@ func (s *StateMachine) nextCommandForEvent(newState *state.State, gameEvent *sta
 		state.GameEvent_BOT_PUSHED_BOT,
 		state.GameEvent_BOT_HELD_BALL_DELIBERATELY,
 		state.GameEvent_BOT_TIPPED_OVER,
+		state.GameEvent_BOT_DROPPED_PARTS,
 		state.GameEvent_KEEPER_HELD_BALL,
 		state.GameEvent_BOUNDARY_CROSSING,
 		state.GameEvent_BOT_DRIBBLED_BALL_TOO_FAR,
@@ -363,6 +364,7 @@ func incrementsFoulCounter(currentState *state.State, gameEvent *state.GameEvent
 		state.GameEvent_BOT_PUSHED_BOT,
 		state.GameEvent_BOT_HELD_BALL_DELIBERATELY,
 		state.GameEvent_BOT_TIPPED_OVER,
+		state.GameEvent_BOT_DROPPED_PARTS,
 		state.GameEvent_BOT_TOO_FAST_IN_STOP,
 		state.GameEvent_DEFENDER_TOO_CLOSE_TO_KICK_POINT,
 		state.GameEvent_BOUNDARY_CROSSING:
@@ -415,6 +417,7 @@ func stopsTheGame(gameEvent state.GameEvent_Type) bool {
 		state.GameEvent_BOT_PUSHED_BOT,
 		state.GameEvent_BOT_HELD_BALL_DELIBERATELY,
 		state.GameEvent_BOT_TIPPED_OVER,
+		state.GameEvent_BOT_DROPPED_PARTS,
 		// others
 		state.GameEvent_ATTACKER_DOUBLE_TOUCHED_BALL,
 		state.GameEvent_TOO_MANY_ROBOTS,
@@ -438,7 +441,8 @@ func isRuleViolationDuringPenalty(gameEvent state.GameEvent_Type) bool {
 		state.GameEvent_BOT_CRASH_UNIQUE,
 		state.GameEvent_BOT_CRASH_DRAWN,
 		state.GameEvent_BOT_PUSHED_BOT,
-		state.GameEvent_BOT_TIPPED_OVER:
+		state.GameEvent_BOT_TIPPED_OVER,
+		state.GameEvent_BOT_DROPPED_PARTS:
 		return true
 	}
 	return false
@@ -472,6 +476,8 @@ func locationForRuleViolation(gameEvent *state.GameEvent) *geom.Vector2 {
 		return gameEvent.GetBotPushedBot().Location
 	} else if gameEvent.GetBotTippedOver() != nil {
 		return gameEvent.GetBotTippedOver().Location
+	} else if gameEvent.GetBotDroppedParts() != nil {
+		return gameEvent.GetBotDroppedParts().Location
 	}
 	return nil
 }

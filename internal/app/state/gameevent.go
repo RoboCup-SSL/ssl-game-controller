@@ -61,6 +61,7 @@ func GameEventsForBehaviorConfig() (a []GameEvent_Type) {
 			GameEvent_BOT_PUSHED_BOT,
 			GameEvent_BOT_HELD_BALL_DELIBERATELY,
 			GameEvent_BOT_TIPPED_OVER,
+			GameEvent_BOT_DROPPED_PARTS,
 			GameEvent_ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA,
 			GameEvent_BOT_KICKED_BALL_TOO_FAST,
 			GameEvent_BOT_CRASH_UNIQUE,

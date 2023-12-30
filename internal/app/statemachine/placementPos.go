@@ -59,6 +59,8 @@ func (s *BallPlacementPosDeterminer) Location() *geom.Vector2 {
 		return s.validateLocation(s.Event.GetBotHeldBallDeliberately().Location)
 	case state.GameEvent_BOT_TIPPED_OVER:
 		return s.validateLocation(s.Event.GetBotTippedOver().BallLocation)
+	case state.GameEvent_BOT_DROPPED_PARTS:
+		return s.validateLocation(s.Event.GetBotDroppedParts().BallLocation)
 
 	// Non-Stopping Fouls
 	case state.GameEvent_BOT_KICKED_BALL_TOO_FAST,

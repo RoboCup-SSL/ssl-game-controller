@@ -42,6 +42,7 @@ export interface GameEvent {
     | { $case: "botPushedBot"; botPushedBot: GameEvent_BotPushedBot }
     | { $case: "botHeldBallDeliberately"; botHeldBallDeliberately: GameEvent_BotHeldBallDeliberately }
     | { $case: "botTippedOver"; botTippedOver: GameEvent_BotTippedOver }
+    | { $case: "botDroppedParts"; botDroppedParts: GameEvent_BotDroppedParts }
     | {
       $case: "attackerTouchedBallInDefenseArea";
       attackerTouchedBallInDefenseArea: GameEvent_AttackerTouchedBallInDefenseArea;
@@ -115,6 +116,8 @@ export enum GameEvent_Type {
   BOT_HELD_BALL_DELIBERATELY = "BOT_HELD_BALL_DELIBERATELY",
   /** BOT_TIPPED_OVER - triggered by human ref */
   BOT_TIPPED_OVER = "BOT_TIPPED_OVER",
+  /** BOT_DROPPED_PARTS - triggered by human ref */
+  BOT_DROPPED_PARTS = "BOT_DROPPED_PARTS",
   /** ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA - triggered by autoRef */
   ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA = "ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA",
   /** BOT_KICKED_BALL_TOO_FAST - triggered by autoRef */
@@ -224,6 +227,9 @@ export function gameEvent_TypeFromJSON(object: any): GameEvent_Type {
     case 27:
     case "BOT_TIPPED_OVER":
       return GameEvent_Type.BOT_TIPPED_OVER;
+    case 47:
+    case "BOT_DROPPED_PARTS":
+      return GameEvent_Type.BOT_DROPPED_PARTS;
     case 15:
     case "ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA":
       return GameEvent_Type.ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA;
@@ -359,6 +365,8 @@ export function gameEvent_TypeToJSON(object: GameEvent_Type): string {
       return "BOT_HELD_BALL_DELIBERATELY";
     case GameEvent_Type.BOT_TIPPED_OVER:
       return "BOT_TIPPED_OVER";
+    case GameEvent_Type.BOT_DROPPED_PARTS:
+      return "BOT_DROPPED_PARTS";
     case GameEvent_Type.ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA:
       return "ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA";
     case GameEvent_Type.BOT_KICKED_BALL_TOO_FAST:
@@ -676,6 +684,24 @@ export interface GameEvent_BotTippedOver {
     | number
     | undefined;
   /** the location of the bot [m] */
+  location?:
+    | Vector2
+    | undefined;
+  /** the location of the ball at the moment when this foul occurred [m] */
+  ballLocation?: Vector2 | undefined;
+}
+
+/** a bot dropped parts */
+export interface GameEvent_BotDroppedParts {
+  /** the team that found guilty */
+  byTeam?:
+    | Team
+    | undefined;
+  /** the bot that dropped the parts */
+  byBot?:
+    | number
+    | undefined;
+  /** the location where the parts were dropped [m] */
   location?:
     | Vector2
     | undefined;
@@ -1102,6 +1128,8 @@ export const GameEvent = {
         }
         : isSet(object.botTippedOver)
         ? { $case: "botTippedOver", botTippedOver: GameEvent_BotTippedOver.fromJSON(object.botTippedOver) }
+        : isSet(object.botDroppedParts)
+        ? { $case: "botDroppedParts", botDroppedParts: GameEvent_BotDroppedParts.fromJSON(object.botDroppedParts) }
         : isSet(object.attackerTouchedBallInDefenseArea)
         ? {
           $case: "attackerTouchedBallInDefenseArea",
@@ -1280,6 +1308,9 @@ export const GameEvent = {
     }
     if (message.event?.$case === "botTippedOver") {
       obj.botTippedOver = GameEvent_BotTippedOver.toJSON(message.event.botTippedOver);
+    }
+    if (message.event?.$case === "botDroppedParts") {
+      obj.botDroppedParts = GameEvent_BotDroppedParts.toJSON(message.event.botDroppedParts);
     }
     if (message.event?.$case === "attackerTouchedBallInDefenseArea") {
       obj.attackerTouchedBallInDefenseArea = GameEvent_AttackerTouchedBallInDefenseArea.toJSON(
@@ -1736,6 +1767,34 @@ export const GameEvent_BotTippedOver = {
   },
 
   toJSON(message: GameEvent_BotTippedOver): unknown {
+    const obj: any = {};
+    if (message.byTeam !== undefined && message.byTeam !== Team.UNKNOWN) {
+      obj.byTeam = teamToJSON(message.byTeam);
+    }
+    if (message.byBot !== undefined && message.byBot !== 0) {
+      obj.byBot = Math.round(message.byBot);
+    }
+    if (message.location !== undefined) {
+      obj.location = Vector2.toJSON(message.location);
+    }
+    if (message.ballLocation !== undefined) {
+      obj.ballLocation = Vector2.toJSON(message.ballLocation);
+    }
+    return obj;
+  },
+};
+
+export const GameEvent_BotDroppedParts = {
+  fromJSON(object: any): GameEvent_BotDroppedParts {
+    return {
+      byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : undefined,
+      byBot: isSet(object.byBot) ? globalThis.Number(object.byBot) : undefined,
+      location: isSet(object.location) ? Vector2.fromJSON(object.location) : undefined,
+      ballLocation: isSet(object.ballLocation) ? Vector2.fromJSON(object.ballLocation) : undefined,
+    };
+  },
+
+  toJSON(message: GameEvent_BotDroppedParts): unknown {
     const obj: any = {};
     if (message.byTeam !== undefined && message.byTeam !== Team.UNKNOWN) {
       obj.byTeam = teamToJSON(message.byTeam);

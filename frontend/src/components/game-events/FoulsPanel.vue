@@ -20,10 +20,12 @@ import GameEventBotTooFastInStopInput from "@/components/game-events/GameEventBo
 import GameEventDefenderTooCloseToKickPointInput
   from "@/components/game-events/GameEventDefenderTooCloseToKickPointInput.vue";
 import GameEventBotInterferedPlacementInput from "@/components/game-events/GameEventBotInterferedPlacementInput.vue";
+import GameEventBotDroppedPartsInput from "@/components/game-events/GameEventBotDroppedPartsInput.vue";
 
 const components = new Map<GameEvent_Type, any>([
   [GameEvent_Type.BOT_PUSHED_BOT, GameEventBotPushedBotInput],
   [GameEvent_Type.BOT_TIPPED_OVER, GameEventBotTippedOverInput],
+  [GameEvent_Type.BOT_DROPPED_PARTS, GameEventBotDroppedPartsInput],
   [GameEvent_Type.BOT_HELD_BALL_DELIBERATELY, GameEventBotHeldBallDeliberatelyInput],
   [GameEvent_Type.KEEPER_HELD_BALL, GameEventKeeperHeldBallInput],
   [GameEvent_Type.BOT_CRASH_UNIQUE, GameEventBotCrashUniqueInput],

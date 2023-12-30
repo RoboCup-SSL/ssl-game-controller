@@ -48,6 +48,7 @@ message GameEvent {
         BotPushedBot bot_pushed_bot = 24;
         BotHeldBallDeliberately bot_held_ball_deliberately = 26;
         BotTippedOver bot_tipped_over = 27;
+        BotDroppedParts bot_dropped_parts = 51;
 
         // Non-Stopping Fouls
 
@@ -254,6 +255,17 @@ message GameEvent {
         // the bot that tipped over
         optional uint32 by_bot = 2;
         // the location of the bot [m]
+        optional Vector2 location = 3;
+        // the location of the ball at the moment when this foul occurred [m]
+        optional Vector2 ball_location = 4;
+    }
+    // a bot dropped parts
+    message BotDroppedParts {
+        // the team that found guilty
+        required Team by_team = 1;
+        // the bot that dropped the parts
+        optional uint32 by_bot = 2;
+        // the location where the parts were dropped [m]
         optional Vector2 location = 3;
         // the location of the ball at the moment when this foul occurred [m]
         optional Vector2 ball_location = 4;
@@ -519,6 +531,7 @@ message GameEvent {
         BOT_PUSHED_BOT = 24; // triggered by human ref
         BOT_HELD_BALL_DELIBERATELY = 26; // triggered by human ref
         BOT_TIPPED_OVER = 27; // triggered by human ref
+        BOT_DROPPED_PARTS = 47; // triggered by human ref
 
         // Non-Stopping Fouls
 
