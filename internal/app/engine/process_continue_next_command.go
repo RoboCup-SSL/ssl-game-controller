@@ -140,6 +140,25 @@ func (e *Engine) readyToContinueKickoff() (issues []string) {
 }
 
 func (e *Engine) readyToContinuePenalty() (issues []string) {
+	goalTeam := e.currentState.Command.ForTeam.Opposite()
+	teamInfo := e.currentState.TeamState[goalTeam.String()]
+	var penaltyPoint *geom.Vector2
+	if *teamInfo.OnPositiveHalf {
+		penaltyPoint = geom.NewVector2(
+			float64(e.getGeometry().FieldLength)/2-e.stateMachine.Geometry.PenaltyKickDistToGoal,
+			0,
+		)
+	} else {
+		penaltyPoint = geom.NewVector2(
+			float64(-e.getGeometry().FieldLength)/2+e.stateMachine.Geometry.PenaltyKickDistToGoal,
+			0,
+		)
+	}
+	ballToPenaltyPointDist := e.trackerStateGc.Ball.Pos.ToVector2().DistanceTo(penaltyPoint)
+	if ballToPenaltyPointDist > e.gameConfig.BallPlacementTolerance {
+		issues = append(issues, fmt.Sprintf("Ball is %.1f m away from penalty point", ballToPenaltyPointDist))
+	}
+
 	keeperId := e.penaltyKeeperId()
 	if keeperId == nil {
 		issues = append(issues, "There is no keeper")
