@@ -247,15 +247,11 @@ func (c *RemoteControlClient) findAvailableRequestTypes() []RemoteControlRequest
 }
 
 func (c *RemoteControlClient) checkRequestEmergencyStop() error {
-	gameStateType := *c.gcEngine.CurrentState().GameState.Type
-	switch gameStateType {
-	case state.GameState_RUNNING,
-		state.GameState_KICKOFF,
-		state.GameState_PENALTY,
-		state.GameState_FREE_KICK:
+	gameState := c.gcEngine.CurrentState().GameState
+	if gameState.IsRunning() {
 		return nil
 	}
-	return errors.Errorf("Game state is invalid: %s", gameStateType)
+	return errors.Errorf("Game state is invalid: %s", gameState)
 }
 
 func (c *RemoteControlClient) checkRequestTimeout() error {

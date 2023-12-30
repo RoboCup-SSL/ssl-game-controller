@@ -242,7 +242,7 @@ func (s *TeamServer) processRequest(teamClient TeamClient, request *TeamToContro
 }
 
 func mayChangeKeeper(trackerState *engine.GcStateTracker, currentState *state.State, teamState *state.TeamInfo) error {
-	if currentState.Stage.IsPreStage() || currentState.Stage.IsPausedStage() {
+	if !currentState.GameState.IsRunning() {
 		return nil
 	}
 	ball := trackerState.Ball

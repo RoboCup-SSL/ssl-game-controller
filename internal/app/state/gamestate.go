@@ -21,3 +21,11 @@ func (x *GameState) IsHalted() bool {
 	}
 	return false
 }
+
+func (x *GameState) IsRunning() bool {
+	switch *x.Type {
+	case GameState_RUNNING, GameState_KICKOFF, GameState_FREE_KICK, GameState_PENALTY:
+		return true
+	}
+	return false
+}
