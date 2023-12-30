@@ -3,15 +3,23 @@
 /** The engine config */
 export interface Config {
   /** The behavior for each game event */
-  gameEventBehavior?: { [key: string]: Config_Behavior };
+  gameEventBehavior?:
+    | { [key: string]: Config_Behavior }
+    | undefined;
   /** The config for each auto referee */
-  autoRefConfigs?: { [key: string]: AutoRefConfig };
+  autoRefConfigs?:
+    | { [key: string]: AutoRefConfig }
+    | undefined;
   /** The selected tracker source */
-  activeTrackerSource?: string;
+  activeTrackerSource?:
+    | string
+    | undefined;
   /** The list of available teams */
-  teams?: string[];
+  teams?:
+    | string[]
+    | undefined;
   /** Enable or disable auto continuation */
-  autoContinue?: boolean;
+  autoContinue?: boolean | undefined;
 }
 
 /** Behaviors for each game event */
@@ -85,13 +93,13 @@ export interface Config_GameEventBehaviorEntry {
 
 export interface Config_AutoRefConfigsEntry {
   key: string;
-  value?: AutoRefConfig;
+  value?: AutoRefConfig | undefined;
 }
 
 /** The config for an auto referee */
 export interface AutoRefConfig {
   /** The game event behaviors for this auto referee */
-  gameEventBehavior?: { [key: string]: AutoRefConfig_Behavior };
+  gameEventBehavior?: { [key: string]: AutoRefConfig_Behavior } | undefined;
 }
 
 /** Behaviors for the game events reported by this auto referee */
@@ -157,42 +165,50 @@ export const Config = {
           acc[key] = config_BehaviorFromJSON(value);
           return acc;
         }, {})
-        : {},
+        : undefined,
       autoRefConfigs: isObject(object.autoRefConfigs)
         ? Object.entries(object.autoRefConfigs).reduce<{ [key: string]: AutoRefConfig }>((acc, [key, value]) => {
           acc[key] = AutoRefConfig.fromJSON(value);
           return acc;
         }, {})
-        : {},
-      activeTrackerSource: isSet(object.activeTrackerSource) ? String(object.activeTrackerSource) : "",
-      teams: Array.isArray(object?.teams)
-        ? object.teams.map((e: any) => String(e))
-        : [],
-      autoContinue: isSet(object.autoContinue) ? Boolean(object.autoContinue) : false,
+        : undefined,
+      activeTrackerSource: isSet(object.activeTrackerSource)
+        ? globalThis.String(object.activeTrackerSource)
+        : undefined,
+      teams: globalThis.Array.isArray(object?.teams) ? object.teams.map((e: any) => globalThis.String(e)) : undefined,
+      autoContinue: isSet(object.autoContinue) ? globalThis.Boolean(object.autoContinue) : undefined,
     };
   },
 
   toJSON(message: Config): unknown {
     const obj: any = {};
-    obj.gameEventBehavior = {};
     if (message.gameEventBehavior) {
-      Object.entries(message.gameEventBehavior).forEach(([k, v]) => {
-        obj.gameEventBehavior[k] = config_BehaviorToJSON(v);
-      });
+      const entries = Object.entries(message.gameEventBehavior);
+      if (entries.length > 0) {
+        obj.gameEventBehavior = {};
+        entries.forEach(([k, v]) => {
+          obj.gameEventBehavior[k] = config_BehaviorToJSON(v);
+        });
+      }
     }
-    obj.autoRefConfigs = {};
     if (message.autoRefConfigs) {
-      Object.entries(message.autoRefConfigs).forEach(([k, v]) => {
-        obj.autoRefConfigs[k] = AutoRefConfig.toJSON(v);
-      });
+      const entries = Object.entries(message.autoRefConfigs);
+      if (entries.length > 0) {
+        obj.autoRefConfigs = {};
+        entries.forEach(([k, v]) => {
+          obj.autoRefConfigs[k] = AutoRefConfig.toJSON(v);
+        });
+      }
     }
-    message.activeTrackerSource !== undefined && (obj.activeTrackerSource = message.activeTrackerSource);
-    if (message.teams) {
-      obj.teams = message.teams.map((e) => e);
-    } else {
-      obj.teams = [];
+    if (message.activeTrackerSource !== undefined && message.activeTrackerSource !== "") {
+      obj.activeTrackerSource = message.activeTrackerSource;
     }
-    message.autoContinue !== undefined && (obj.autoContinue = message.autoContinue);
+    if (message.teams?.length) {
+      obj.teams = message.teams;
+    }
+    if (message.autoContinue === true) {
+      obj.autoContinue = message.autoContinue;
+    }
     return obj;
   },
 };
@@ -200,15 +216,19 @@ export const Config = {
 export const Config_GameEventBehaviorEntry = {
   fromJSON(object: any): Config_GameEventBehaviorEntry {
     return {
-      key: isSet(object.key) ? String(object.key) : "",
+      key: isSet(object.key) ? globalThis.String(object.key) : "",
       value: isSet(object.value) ? config_BehaviorFromJSON(object.value) : Config_Behavior.BEHAVIOR_UNKNOWN,
     };
   },
 
   toJSON(message: Config_GameEventBehaviorEntry): unknown {
     const obj: any = {};
-    message.key !== undefined && (obj.key = message.key);
-    message.value !== undefined && (obj.value = config_BehaviorToJSON(message.value));
+    if (message.key !== "") {
+      obj.key = message.key;
+    }
+    if (message.value !== Config_Behavior.BEHAVIOR_UNKNOWN) {
+      obj.value = config_BehaviorToJSON(message.value);
+    }
     return obj;
   },
 };
@@ -216,15 +236,19 @@ export const Config_GameEventBehaviorEntry = {
 export const Config_AutoRefConfigsEntry = {
   fromJSON(object: any): Config_AutoRefConfigsEntry {
     return {
-      key: isSet(object.key) ? String(object.key) : "",
+      key: isSet(object.key) ? globalThis.String(object.key) : "",
       value: isSet(object.value) ? AutoRefConfig.fromJSON(object.value) : undefined,
     };
   },
 
   toJSON(message: Config_AutoRefConfigsEntry): unknown {
     const obj: any = {};
-    message.key !== undefined && (obj.key = message.key);
-    message.value !== undefined && (obj.value = message.value ? AutoRefConfig.toJSON(message.value) : undefined);
+    if (message.key !== "") {
+      obj.key = message.key;
+    }
+    if (message.value !== undefined) {
+      obj.value = AutoRefConfig.toJSON(message.value);
+    }
     return obj;
   },
 };
@@ -240,17 +264,20 @@ export const AutoRefConfig = {
           },
           {},
         )
-        : {},
+        : undefined,
     };
   },
 
   toJSON(message: AutoRefConfig): unknown {
     const obj: any = {};
-    obj.gameEventBehavior = {};
     if (message.gameEventBehavior) {
-      Object.entries(message.gameEventBehavior).forEach(([k, v]) => {
-        obj.gameEventBehavior[k] = autoRefConfig_BehaviorToJSON(v);
-      });
+      const entries = Object.entries(message.gameEventBehavior);
+      if (entries.length > 0) {
+        obj.gameEventBehavior = {};
+        entries.forEach(([k, v]) => {
+          obj.gameEventBehavior[k] = autoRefConfig_BehaviorToJSON(v);
+        });
+      }
     }
     return obj;
   },
@@ -259,7 +286,7 @@ export const AutoRefConfig = {
 export const AutoRefConfig_GameEventBehaviorEntry = {
   fromJSON(object: any): AutoRefConfig_GameEventBehaviorEntry {
     return {
-      key: isSet(object.key) ? String(object.key) : "",
+      key: isSet(object.key) ? globalThis.String(object.key) : "",
       value: isSet(object.value)
         ? autoRefConfig_BehaviorFromJSON(object.value)
         : AutoRefConfig_Behavior.BEHAVIOR_UNKNOWN,
@@ -268,8 +295,12 @@ export const AutoRefConfig_GameEventBehaviorEntry = {
 
   toJSON(message: AutoRefConfig_GameEventBehaviorEntry): unknown {
     const obj: any = {};
-    message.key !== undefined && (obj.key = message.key);
-    message.value !== undefined && (obj.value = autoRefConfig_BehaviorToJSON(message.value));
+    if (message.key !== "") {
+      obj.key = message.key;
+    }
+    if (message.value !== AutoRefConfig_Behavior.BEHAVIOR_UNKNOWN) {
+      obj.value = autoRefConfig_BehaviorToJSON(message.value);
+    }
     return obj;
   },
 };

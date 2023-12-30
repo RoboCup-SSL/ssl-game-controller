@@ -8,13 +8,19 @@ import { State } from "./ssl_gc_state";
 /** Message format that is pushed from the GC to the client */
 export interface Output {
   /** The current match state */
-  matchState?: State;
+  matchState?:
+    | State
+    | undefined;
   /** The current GC state */
-  gcState?: GcState;
+  gcState?:
+    | GcState
+    | undefined;
   /** The protocol */
-  protocol?: Protocol;
+  protocol?:
+    | Protocol
+    | undefined;
   /** The engine config */
-  config?: Config;
+  config?: Config | undefined;
 }
 
 /** The game protocol */
@@ -24,33 +30,47 @@ export interface Protocol {
    * Entries that were already sent are not sent again, because the protocol is immutable anyway.
    * But if the game is reset, the whole protocol must be replaced. That's what this flag is for.
    */
-  delta?: boolean;
+  delta?:
+    | boolean
+    | undefined;
   /** The (delta) list of entries */
-  entry?: ProtocolEntry[];
+  entry?: ProtocolEntry[] | undefined;
 }
 
 /** A protocol entry of a change */
 export interface ProtocolEntry {
   /** Id of the entry */
-  id?: number;
+  id?:
+    | number
+    | undefined;
   /** The change that was made */
-  change?: Change;
+  change?:
+    | Change
+    | undefined;
   /** The match time elapsed when this change was made */
-  matchTimeElapsed?: Duration;
+  matchTimeElapsed?:
+    | Duration
+    | undefined;
   /** The stage time elapsed when this change was made */
-  stageTimeElapsed?: Duration;
+  stageTimeElapsed?: Duration | undefined;
 }
 
 /** Message format that can be send from the client to the GC */
 export interface Input {
   /** A change to be enqueued into the GC engine */
-  change?: Change;
+  change?:
+    | Change
+    | undefined;
   /** Reset the match */
-  resetMatch?: boolean;
+  resetMatch?:
+    | boolean
+    | undefined;
   /** An updated config delta */
-  configDelta?: Config;
+  configDelta?:
+    | Config
+    | undefined;
   /** Continue with action */
-  continueAction?: ContinueAction;
+  continueAction?: ContinueAction | undefined;
 }
 
 export const Output = {
@@ -65,11 +85,18 @@ export const Output = {
 
   toJSON(message: Output): unknown {
     const obj: any = {};
-    message.matchState !== undefined &&
-      (obj.matchState = message.matchState ? State.toJSON(message.matchState) : undefined);
-    message.gcState !== undefined && (obj.gcState = message.gcState ? GcState.toJSON(message.gcState) : undefined);
-    message.protocol !== undefined && (obj.protocol = message.protocol ? Protocol.toJSON(message.protocol) : undefined);
-    message.config !== undefined && (obj.config = message.config ? Config.toJSON(message.config) : undefined);
+    if (message.matchState !== undefined) {
+      obj.matchState = State.toJSON(message.matchState);
+    }
+    if (message.gcState !== undefined) {
+      obj.gcState = GcState.toJSON(message.gcState);
+    }
+    if (message.protocol !== undefined) {
+      obj.protocol = Protocol.toJSON(message.protocol);
+    }
+    if (message.config !== undefined) {
+      obj.config = Config.toJSON(message.config);
+    }
     return obj;
   },
 };
@@ -77,18 +104,20 @@ export const Output = {
 export const Protocol = {
   fromJSON(object: any): Protocol {
     return {
-      delta: isSet(object.delta) ? Boolean(object.delta) : false,
-      entry: Array.isArray(object?.entry) ? object.entry.map((e: any) => ProtocolEntry.fromJSON(e)) : [],
+      delta: isSet(object.delta) ? globalThis.Boolean(object.delta) : undefined,
+      entry: globalThis.Array.isArray(object?.entry)
+        ? object.entry.map((e: any) => ProtocolEntry.fromJSON(e))
+        : undefined,
     };
   },
 
   toJSON(message: Protocol): unknown {
     const obj: any = {};
-    message.delta !== undefined && (obj.delta = message.delta);
-    if (message.entry) {
-      obj.entry = message.entry.map((e) => e ? ProtocolEntry.toJSON(e) : undefined);
-    } else {
-      obj.entry = [];
+    if (message.delta === true) {
+      obj.delta = message.delta;
+    }
+    if (message.entry?.length) {
+      obj.entry = message.entry.map((e) => ProtocolEntry.toJSON(e));
     }
     return obj;
   },
@@ -97,7 +126,7 @@ export const Protocol = {
 export const ProtocolEntry = {
   fromJSON(object: any): ProtocolEntry {
     return {
-      id: isSet(object.id) ? Number(object.id) : 0,
+      id: isSet(object.id) ? globalThis.Number(object.id) : undefined,
       change: isSet(object.change) ? Change.fromJSON(object.change) : undefined,
       matchTimeElapsed: isSet(object.matchTimeElapsed) ? Duration.fromJSON(object.matchTimeElapsed) : undefined,
       stageTimeElapsed: isSet(object.stageTimeElapsed) ? Duration.fromJSON(object.stageTimeElapsed) : undefined,
@@ -106,12 +135,18 @@ export const ProtocolEntry = {
 
   toJSON(message: ProtocolEntry): unknown {
     const obj: any = {};
-    message.id !== undefined && (obj.id = Math.round(message.id));
-    message.change !== undefined && (obj.change = message.change ? Change.toJSON(message.change) : undefined);
-    message.matchTimeElapsed !== undefined &&
-      (obj.matchTimeElapsed = message.matchTimeElapsed ? Duration.toJSON(message.matchTimeElapsed) : undefined);
-    message.stageTimeElapsed !== undefined &&
-      (obj.stageTimeElapsed = message.stageTimeElapsed ? Duration.toJSON(message.stageTimeElapsed) : undefined);
+    if (message.id !== undefined && message.id !== 0) {
+      obj.id = Math.round(message.id);
+    }
+    if (message.change !== undefined) {
+      obj.change = Change.toJSON(message.change);
+    }
+    if (message.matchTimeElapsed !== undefined) {
+      obj.matchTimeElapsed = Duration.toJSON(message.matchTimeElapsed);
+    }
+    if (message.stageTimeElapsed !== undefined) {
+      obj.stageTimeElapsed = Duration.toJSON(message.stageTimeElapsed);
+    }
     return obj;
   },
 };
@@ -120,7 +155,7 @@ export const Input = {
   fromJSON(object: any): Input {
     return {
       change: isSet(object.change) ? Change.fromJSON(object.change) : undefined,
-      resetMatch: isSet(object.resetMatch) ? Boolean(object.resetMatch) : false,
+      resetMatch: isSet(object.resetMatch) ? globalThis.Boolean(object.resetMatch) : undefined,
       configDelta: isSet(object.configDelta) ? Config.fromJSON(object.configDelta) : undefined,
       continueAction: isSet(object.continueAction) ? ContinueAction.fromJSON(object.continueAction) : undefined,
     };
@@ -128,12 +163,18 @@ export const Input = {
 
   toJSON(message: Input): unknown {
     const obj: any = {};
-    message.change !== undefined && (obj.change = message.change ? Change.toJSON(message.change) : undefined);
-    message.resetMatch !== undefined && (obj.resetMatch = message.resetMatch);
-    message.configDelta !== undefined &&
-      (obj.configDelta = message.configDelta ? Config.toJSON(message.configDelta) : undefined);
-    message.continueAction !== undefined &&
-      (obj.continueAction = message.continueAction ? ContinueAction.toJSON(message.continueAction) : undefined);
+    if (message.change !== undefined) {
+      obj.change = Change.toJSON(message.change);
+    }
+    if (message.resetMatch === true) {
+      obj.resetMatch = message.resetMatch;
+    }
+    if (message.configDelta !== undefined) {
+      obj.configDelta = Config.toJSON(message.configDelta);
+    }
+    if (message.continueAction !== undefined) {
+      obj.continueAction = ContinueAction.toJSON(message.continueAction);
+    }
     return obj;
   },
 };

@@ -14,25 +14,25 @@ import {
 } from "./ssl_gc_referee_message";
 
 export interface YellowCard {
-  id?: number;
-  causedByGameEvent?: GameEvent;
-  timeRemaining?: Duration;
+  id?: number | undefined;
+  causedByGameEvent?: GameEvent | undefined;
+  timeRemaining?: Duration | undefined;
 }
 
 export interface RedCard {
-  id?: number;
-  causedByGameEvent?: GameEvent;
+  id?: number | undefined;
+  causedByGameEvent?: GameEvent | undefined;
 }
 
 export interface Foul {
-  id?: number;
-  causedByGameEvent?: GameEvent;
-  timestamp?: Date;
+  id?: number | undefined;
+  causedByGameEvent?: GameEvent | undefined;
+  timestamp?: Date | undefined;
 }
 
 export interface Command {
-  type?: Command_Type;
-  forTeam?: Team;
+  type?: Command_Type | undefined;
+  forTeam?: Team | undefined;
 }
 
 export enum Command_Type {
@@ -117,8 +117,8 @@ export function command_TypeToJSON(object: Command_Type): string {
 }
 
 export interface GameState {
-  type?: GameState_Type;
-  forTeam?: Team;
+  type?: GameState_Type | undefined;
+  forTeam?: Team | undefined;
 }
 
 export enum GameState_Type {
@@ -198,69 +198,75 @@ export function gameState_TypeToJSON(object: GameState_Type): string {
 
 export interface Proposal {
   /** The timestamp when the game event proposal occurred */
-  timestamp?: Date;
+  timestamp?:
+    | Date
+    | undefined;
   /** The proposed game event. */
-  gameEvent?: GameEvent;
+  gameEvent?: GameEvent | undefined;
 }
 
 export interface ProposalGroup {
   /** Unique ID of this group */
-  id?: string;
+  id?:
+    | string
+    | undefined;
   /** The proposals in this group */
-  proposals?: Proposal[];
+  proposals?:
+    | Proposal[]
+    | undefined;
   /** Whether the proposal group was accepted */
-  accepted?: boolean;
+  accepted?: boolean | undefined;
 }
 
 export interface TeamInfo {
-  name?: string;
-  goals?: number;
-  goalkeeper?: number;
-  yellowCards?: YellowCard[];
-  redCards?: RedCard[];
-  timeoutsLeft?: number;
-  timeoutTimeLeft?: Duration;
-  onPositiveHalf?: boolean;
-  fouls?: Foul[];
-  ballPlacementFailures?: number;
-  ballPlacementFailuresReached?: boolean;
-  canPlaceBall?: boolean;
-  maxAllowedBots?: number;
-  requestsBotSubstitutionSince?: Date;
-  requestsTimeoutSince?: Date;
-  requestsEmergencyStopSince?: Date;
-  challengeFlags?: number;
-  botSubstitutionAllowed?: boolean;
+  name?: string | undefined;
+  goals?: number | undefined;
+  goalkeeper?: number | undefined;
+  yellowCards?: YellowCard[] | undefined;
+  redCards?: RedCard[] | undefined;
+  timeoutsLeft?: number | undefined;
+  timeoutTimeLeft?: Duration | undefined;
+  onPositiveHalf?: boolean | undefined;
+  fouls?: Foul[] | undefined;
+  ballPlacementFailures?: number | undefined;
+  ballPlacementFailuresReached?: boolean | undefined;
+  canPlaceBall?: boolean | undefined;
+  maxAllowedBots?: number | undefined;
+  requestsBotSubstitutionSince?: Date | undefined;
+  requestsTimeoutSince?: Date | undefined;
+  requestsEmergencyStopSince?: Date | undefined;
+  challengeFlags?: number | undefined;
+  botSubstitutionAllowed?: boolean | undefined;
 }
 
 export interface State {
-  stage?: Referee_Stage;
-  command?: Command;
-  gameState?: GameState;
-  stageTimeElapsed?: Duration;
-  stageTimeLeft?: Duration;
-  matchTimeStart?: Date;
-  teamState?: { [key: string]: TeamInfo };
-  placementPos?: Vector2;
-  nextCommand?: Command;
-  currentActionTimeRemaining?: Duration;
-  gameEvents?: GameEvent[];
-  proposalGroups?: ProposalGroup[];
-  division?: Division;
-  firstKickoffTeam?: Team;
-  matchType?: MatchType;
-  readyContinueTime?: Date;
-  shootoutState?: ShootoutState;
+  stage?: Referee_Stage | undefined;
+  command?: Command | undefined;
+  gameState?: GameState | undefined;
+  stageTimeElapsed?: Duration | undefined;
+  stageTimeLeft?: Duration | undefined;
+  matchTimeStart?: Date | undefined;
+  teamState?: { [key: string]: TeamInfo } | undefined;
+  placementPos?: Vector2 | undefined;
+  nextCommand?: Command | undefined;
+  currentActionTimeRemaining?: Duration | undefined;
+  gameEvents?: GameEvent[] | undefined;
+  proposalGroups?: ProposalGroup[] | undefined;
+  division?: Division | undefined;
+  firstKickoffTeam?: Team | undefined;
+  matchType?: MatchType | undefined;
+  readyContinueTime?: Date | undefined;
+  shootoutState?: ShootoutState | undefined;
 }
 
 export interface State_TeamStateEntry {
   key: string;
-  value?: TeamInfo;
+  value?: TeamInfo | undefined;
 }
 
 export interface ShootoutState {
-  nextTeam?: Team;
-  numberOfAttempts?: { [key: string]: number };
+  nextTeam?: Team | undefined;
+  numberOfAttempts?: { [key: string]: number } | undefined;
 }
 
 export interface ShootoutState_NumberOfAttemptsEntry {
@@ -271,7 +277,7 @@ export interface ShootoutState_NumberOfAttemptsEntry {
 export const YellowCard = {
   fromJSON(object: any): YellowCard {
     return {
-      id: isSet(object.id) ? Number(object.id) : 0,
+      id: isSet(object.id) ? globalThis.Number(object.id) : undefined,
       causedByGameEvent: isSet(object.causedByGameEvent) ? GameEvent.fromJSON(object.causedByGameEvent) : undefined,
       timeRemaining: isSet(object.timeRemaining) ? Duration.fromJSON(object.timeRemaining) : undefined,
     };
@@ -279,11 +285,15 @@ export const YellowCard = {
 
   toJSON(message: YellowCard): unknown {
     const obj: any = {};
-    message.id !== undefined && (obj.id = Math.round(message.id));
-    message.causedByGameEvent !== undefined &&
-      (obj.causedByGameEvent = message.causedByGameEvent ? GameEvent.toJSON(message.causedByGameEvent) : undefined);
-    message.timeRemaining !== undefined &&
-      (obj.timeRemaining = message.timeRemaining ? Duration.toJSON(message.timeRemaining) : undefined);
+    if (message.id !== undefined && message.id !== 0) {
+      obj.id = Math.round(message.id);
+    }
+    if (message.causedByGameEvent !== undefined) {
+      obj.causedByGameEvent = GameEvent.toJSON(message.causedByGameEvent);
+    }
+    if (message.timeRemaining !== undefined) {
+      obj.timeRemaining = Duration.toJSON(message.timeRemaining);
+    }
     return obj;
   },
 };
@@ -291,16 +301,19 @@ export const YellowCard = {
 export const RedCard = {
   fromJSON(object: any): RedCard {
     return {
-      id: isSet(object.id) ? Number(object.id) : 0,
+      id: isSet(object.id) ? globalThis.Number(object.id) : undefined,
       causedByGameEvent: isSet(object.causedByGameEvent) ? GameEvent.fromJSON(object.causedByGameEvent) : undefined,
     };
   },
 
   toJSON(message: RedCard): unknown {
     const obj: any = {};
-    message.id !== undefined && (obj.id = Math.round(message.id));
-    message.causedByGameEvent !== undefined &&
-      (obj.causedByGameEvent = message.causedByGameEvent ? GameEvent.toJSON(message.causedByGameEvent) : undefined);
+    if (message.id !== undefined && message.id !== 0) {
+      obj.id = Math.round(message.id);
+    }
+    if (message.causedByGameEvent !== undefined) {
+      obj.causedByGameEvent = GameEvent.toJSON(message.causedByGameEvent);
+    }
     return obj;
   },
 };
@@ -308,7 +321,7 @@ export const RedCard = {
 export const Foul = {
   fromJSON(object: any): Foul {
     return {
-      id: isSet(object.id) ? Number(object.id) : 0,
+      id: isSet(object.id) ? globalThis.Number(object.id) : undefined,
       causedByGameEvent: isSet(object.causedByGameEvent) ? GameEvent.fromJSON(object.causedByGameEvent) : undefined,
       timestamp: isSet(object.timestamp) ? fromJsonTimestamp(object.timestamp) : undefined,
     };
@@ -316,10 +329,15 @@ export const Foul = {
 
   toJSON(message: Foul): unknown {
     const obj: any = {};
-    message.id !== undefined && (obj.id = Math.round(message.id));
-    message.causedByGameEvent !== undefined &&
-      (obj.causedByGameEvent = message.causedByGameEvent ? GameEvent.toJSON(message.causedByGameEvent) : undefined);
-    message.timestamp !== undefined && (obj.timestamp = message.timestamp.toISOString());
+    if (message.id !== undefined && message.id !== 0) {
+      obj.id = Math.round(message.id);
+    }
+    if (message.causedByGameEvent !== undefined) {
+      obj.causedByGameEvent = GameEvent.toJSON(message.causedByGameEvent);
+    }
+    if (message.timestamp !== undefined) {
+      obj.timestamp = message.timestamp.toISOString();
+    }
     return obj;
   },
 };
@@ -327,15 +345,19 @@ export const Foul = {
 export const Command = {
   fromJSON(object: any): Command {
     return {
-      type: isSet(object.type) ? command_TypeFromJSON(object.type) : Command_Type.UNKNOWN,
-      forTeam: isSet(object.forTeam) ? teamFromJSON(object.forTeam) : Team.UNKNOWN,
+      type: isSet(object.type) ? command_TypeFromJSON(object.type) : undefined,
+      forTeam: isSet(object.forTeam) ? teamFromJSON(object.forTeam) : undefined,
     };
   },
 
   toJSON(message: Command): unknown {
     const obj: any = {};
-    message.type !== undefined && (obj.type = command_TypeToJSON(message.type));
-    message.forTeam !== undefined && (obj.forTeam = teamToJSON(message.forTeam));
+    if (message.type !== undefined && message.type !== Command_Type.UNKNOWN) {
+      obj.type = command_TypeToJSON(message.type);
+    }
+    if (message.forTeam !== undefined && message.forTeam !== Team.UNKNOWN) {
+      obj.forTeam = teamToJSON(message.forTeam);
+    }
     return obj;
   },
 };
@@ -343,15 +365,19 @@ export const Command = {
 export const GameState = {
   fromJSON(object: any): GameState {
     return {
-      type: isSet(object.type) ? gameState_TypeFromJSON(object.type) : GameState_Type.UNKNOWN,
-      forTeam: isSet(object.forTeam) ? teamFromJSON(object.forTeam) : Team.UNKNOWN,
+      type: isSet(object.type) ? gameState_TypeFromJSON(object.type) : undefined,
+      forTeam: isSet(object.forTeam) ? teamFromJSON(object.forTeam) : undefined,
     };
   },
 
   toJSON(message: GameState): unknown {
     const obj: any = {};
-    message.type !== undefined && (obj.type = gameState_TypeToJSON(message.type));
-    message.forTeam !== undefined && (obj.forTeam = teamToJSON(message.forTeam));
+    if (message.type !== undefined && message.type !== GameState_Type.UNKNOWN) {
+      obj.type = gameState_TypeToJSON(message.type);
+    }
+    if (message.forTeam !== undefined && message.forTeam !== Team.UNKNOWN) {
+      obj.forTeam = teamToJSON(message.forTeam);
+    }
     return obj;
   },
 };
@@ -366,9 +392,12 @@ export const Proposal = {
 
   toJSON(message: Proposal): unknown {
     const obj: any = {};
-    message.timestamp !== undefined && (obj.timestamp = message.timestamp.toISOString());
-    message.gameEvent !== undefined &&
-      (obj.gameEvent = message.gameEvent ? GameEvent.toJSON(message.gameEvent) : undefined);
+    if (message.timestamp !== undefined) {
+      obj.timestamp = message.timestamp.toISOString();
+    }
+    if (message.gameEvent !== undefined) {
+      obj.gameEvent = GameEvent.toJSON(message.gameEvent);
+    }
     return obj;
   },
 };
@@ -376,21 +405,25 @@ export const Proposal = {
 export const ProposalGroup = {
   fromJSON(object: any): ProposalGroup {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
-      proposals: Array.isArray(object?.proposals) ? object.proposals.map((e: any) => Proposal.fromJSON(e)) : [],
-      accepted: isSet(object.accepted) ? Boolean(object.accepted) : false,
+      id: isSet(object.id) ? globalThis.String(object.id) : undefined,
+      proposals: globalThis.Array.isArray(object?.proposals)
+        ? object.proposals.map((e: any) => Proposal.fromJSON(e))
+        : undefined,
+      accepted: isSet(object.accepted) ? globalThis.Boolean(object.accepted) : undefined,
     };
   },
 
   toJSON(message: ProposalGroup): unknown {
     const obj: any = {};
-    message.id !== undefined && (obj.id = message.id);
-    if (message.proposals) {
-      obj.proposals = message.proposals.map((e) => e ? Proposal.toJSON(e) : undefined);
-    } else {
-      obj.proposals = [];
+    if (message.id !== undefined && message.id !== "") {
+      obj.id = message.id;
     }
-    message.accepted !== undefined && (obj.accepted = message.accepted);
+    if (message.proposals?.length) {
+      obj.proposals = message.proposals.map((e) => Proposal.toJSON(e));
+    }
+    if (message.accepted === true) {
+      obj.accepted = message.accepted;
+    }
     return obj;
   },
 };
@@ -398,23 +431,27 @@ export const ProposalGroup = {
 export const TeamInfo = {
   fromJSON(object: any): TeamInfo {
     return {
-      name: isSet(object.name) ? String(object.name) : "",
-      goals: isSet(object.goals) ? Number(object.goals) : 0,
-      goalkeeper: isSet(object.goalkeeper) ? Number(object.goalkeeper) : 0,
-      yellowCards: Array.isArray(object?.yellowCards)
+      name: isSet(object.name) ? globalThis.String(object.name) : undefined,
+      goals: isSet(object.goals) ? globalThis.Number(object.goals) : undefined,
+      goalkeeper: isSet(object.goalkeeper) ? globalThis.Number(object.goalkeeper) : undefined,
+      yellowCards: globalThis.Array.isArray(object?.yellowCards)
         ? object.yellowCards.map((e: any) => YellowCard.fromJSON(e))
-        : [],
-      redCards: Array.isArray(object?.redCards) ? object.redCards.map((e: any) => RedCard.fromJSON(e)) : [],
-      timeoutsLeft: isSet(object.timeoutsLeft) ? Number(object.timeoutsLeft) : 0,
+        : undefined,
+      redCards: globalThis.Array.isArray(object?.redCards)
+        ? object.redCards.map((e: any) => RedCard.fromJSON(e))
+        : undefined,
+      timeoutsLeft: isSet(object.timeoutsLeft) ? globalThis.Number(object.timeoutsLeft) : undefined,
       timeoutTimeLeft: isSet(object.timeoutTimeLeft) ? Duration.fromJSON(object.timeoutTimeLeft) : undefined,
-      onPositiveHalf: isSet(object.onPositiveHalf) ? Boolean(object.onPositiveHalf) : false,
-      fouls: Array.isArray(object?.fouls) ? object.fouls.map((e: any) => Foul.fromJSON(e)) : [],
-      ballPlacementFailures: isSet(object.ballPlacementFailures) ? Number(object.ballPlacementFailures) : 0,
+      onPositiveHalf: isSet(object.onPositiveHalf) ? globalThis.Boolean(object.onPositiveHalf) : undefined,
+      fouls: globalThis.Array.isArray(object?.fouls) ? object.fouls.map((e: any) => Foul.fromJSON(e)) : undefined,
+      ballPlacementFailures: isSet(object.ballPlacementFailures)
+        ? globalThis.Number(object.ballPlacementFailures)
+        : undefined,
       ballPlacementFailuresReached: isSet(object.ballPlacementFailuresReached)
-        ? Boolean(object.ballPlacementFailuresReached)
-        : false,
-      canPlaceBall: isSet(object.canPlaceBall) ? Boolean(object.canPlaceBall) : false,
-      maxAllowedBots: isSet(object.maxAllowedBots) ? Number(object.maxAllowedBots) : 0,
+        ? globalThis.Boolean(object.ballPlacementFailuresReached)
+        : undefined,
+      canPlaceBall: isSet(object.canPlaceBall) ? globalThis.Boolean(object.canPlaceBall) : undefined,
+      maxAllowedBots: isSet(object.maxAllowedBots) ? globalThis.Number(object.maxAllowedBots) : undefined,
       requestsBotSubstitutionSince: isSet(object.requestsBotSubstitutionSince)
         ? fromJsonTimestamp(object.requestsBotSubstitutionSince)
         : undefined,
@@ -424,49 +461,69 @@ export const TeamInfo = {
       requestsEmergencyStopSince: isSet(object.requestsEmergencyStopSince)
         ? fromJsonTimestamp(object.requestsEmergencyStopSince)
         : undefined,
-      challengeFlags: isSet(object.challengeFlags) ? Number(object.challengeFlags) : 0,
-      botSubstitutionAllowed: isSet(object.botSubstitutionAllowed) ? Boolean(object.botSubstitutionAllowed) : false,
+      challengeFlags: isSet(object.challengeFlags) ? globalThis.Number(object.challengeFlags) : undefined,
+      botSubstitutionAllowed: isSet(object.botSubstitutionAllowed)
+        ? globalThis.Boolean(object.botSubstitutionAllowed)
+        : undefined,
     };
   },
 
   toJSON(message: TeamInfo): unknown {
     const obj: any = {};
-    message.name !== undefined && (obj.name = message.name);
-    message.goals !== undefined && (obj.goals = Math.round(message.goals));
-    message.goalkeeper !== undefined && (obj.goalkeeper = Math.round(message.goalkeeper));
-    if (message.yellowCards) {
-      obj.yellowCards = message.yellowCards.map((e) => e ? YellowCard.toJSON(e) : undefined);
-    } else {
-      obj.yellowCards = [];
+    if (message.name !== undefined && message.name !== "") {
+      obj.name = message.name;
     }
-    if (message.redCards) {
-      obj.redCards = message.redCards.map((e) => e ? RedCard.toJSON(e) : undefined);
-    } else {
-      obj.redCards = [];
+    if (message.goals !== undefined && message.goals !== 0) {
+      obj.goals = Math.round(message.goals);
     }
-    message.timeoutsLeft !== undefined && (obj.timeoutsLeft = Math.round(message.timeoutsLeft));
-    message.timeoutTimeLeft !== undefined &&
-      (obj.timeoutTimeLeft = message.timeoutTimeLeft ? Duration.toJSON(message.timeoutTimeLeft) : undefined);
-    message.onPositiveHalf !== undefined && (obj.onPositiveHalf = message.onPositiveHalf);
-    if (message.fouls) {
-      obj.fouls = message.fouls.map((e) => e ? Foul.toJSON(e) : undefined);
-    } else {
-      obj.fouls = [];
+    if (message.goalkeeper !== undefined && message.goalkeeper !== 0) {
+      obj.goalkeeper = Math.round(message.goalkeeper);
     }
-    message.ballPlacementFailures !== undefined &&
-      (obj.ballPlacementFailures = Math.round(message.ballPlacementFailures));
-    message.ballPlacementFailuresReached !== undefined &&
-      (obj.ballPlacementFailuresReached = message.ballPlacementFailuresReached);
-    message.canPlaceBall !== undefined && (obj.canPlaceBall = message.canPlaceBall);
-    message.maxAllowedBots !== undefined && (obj.maxAllowedBots = Math.round(message.maxAllowedBots));
-    message.requestsBotSubstitutionSince !== undefined &&
-      (obj.requestsBotSubstitutionSince = message.requestsBotSubstitutionSince.toISOString());
-    message.requestsTimeoutSince !== undefined &&
-      (obj.requestsTimeoutSince = message.requestsTimeoutSince.toISOString());
-    message.requestsEmergencyStopSince !== undefined &&
-      (obj.requestsEmergencyStopSince = message.requestsEmergencyStopSince.toISOString());
-    message.challengeFlags !== undefined && (obj.challengeFlags = Math.round(message.challengeFlags));
-    message.botSubstitutionAllowed !== undefined && (obj.botSubstitutionAllowed = message.botSubstitutionAllowed);
+    if (message.yellowCards?.length) {
+      obj.yellowCards = message.yellowCards.map((e) => YellowCard.toJSON(e));
+    }
+    if (message.redCards?.length) {
+      obj.redCards = message.redCards.map((e) => RedCard.toJSON(e));
+    }
+    if (message.timeoutsLeft !== undefined && message.timeoutsLeft !== 0) {
+      obj.timeoutsLeft = Math.round(message.timeoutsLeft);
+    }
+    if (message.timeoutTimeLeft !== undefined) {
+      obj.timeoutTimeLeft = Duration.toJSON(message.timeoutTimeLeft);
+    }
+    if (message.onPositiveHalf === true) {
+      obj.onPositiveHalf = message.onPositiveHalf;
+    }
+    if (message.fouls?.length) {
+      obj.fouls = message.fouls.map((e) => Foul.toJSON(e));
+    }
+    if (message.ballPlacementFailures !== undefined && message.ballPlacementFailures !== 0) {
+      obj.ballPlacementFailures = Math.round(message.ballPlacementFailures);
+    }
+    if (message.ballPlacementFailuresReached === true) {
+      obj.ballPlacementFailuresReached = message.ballPlacementFailuresReached;
+    }
+    if (message.canPlaceBall === true) {
+      obj.canPlaceBall = message.canPlaceBall;
+    }
+    if (message.maxAllowedBots !== undefined && message.maxAllowedBots !== 0) {
+      obj.maxAllowedBots = Math.round(message.maxAllowedBots);
+    }
+    if (message.requestsBotSubstitutionSince !== undefined) {
+      obj.requestsBotSubstitutionSince = message.requestsBotSubstitutionSince.toISOString();
+    }
+    if (message.requestsTimeoutSince !== undefined) {
+      obj.requestsTimeoutSince = message.requestsTimeoutSince.toISOString();
+    }
+    if (message.requestsEmergencyStopSince !== undefined) {
+      obj.requestsEmergencyStopSince = message.requestsEmergencyStopSince.toISOString();
+    }
+    if (message.challengeFlags !== undefined && message.challengeFlags !== 0) {
+      obj.challengeFlags = Math.round(message.challengeFlags);
+    }
+    if (message.botSubstitutionAllowed === true) {
+      obj.botSubstitutionAllowed = message.botSubstitutionAllowed;
+    }
     return obj;
   },
 };
@@ -474,7 +531,7 @@ export const TeamInfo = {
 export const State = {
   fromJSON(object: any): State {
     return {
-      stage: isSet(object.stage) ? referee_StageFromJSON(object.stage) : Referee_Stage.NORMAL_FIRST_HALF_PRE,
+      stage: isSet(object.stage) ? referee_StageFromJSON(object.stage) : undefined,
       command: isSet(object.command) ? Command.fromJSON(object.command) : undefined,
       gameState: isSet(object.gameState) ? GameState.fromJSON(object.gameState) : undefined,
       stageTimeElapsed: isSet(object.stageTimeElapsed) ? Duration.fromJSON(object.stageTimeElapsed) : undefined,
@@ -485,21 +542,21 @@ export const State = {
           acc[key] = TeamInfo.fromJSON(value);
           return acc;
         }, {})
-        : {},
+        : undefined,
       placementPos: isSet(object.placementPos) ? Vector2.fromJSON(object.placementPos) : undefined,
       nextCommand: isSet(object.nextCommand) ? Command.fromJSON(object.nextCommand) : undefined,
       currentActionTimeRemaining: isSet(object.currentActionTimeRemaining)
         ? Duration.fromJSON(object.currentActionTimeRemaining)
         : undefined,
-      gameEvents: Array.isArray(object?.gameEvents)
+      gameEvents: globalThis.Array.isArray(object?.gameEvents)
         ? object.gameEvents.map((e: any) => GameEvent.fromJSON(e))
-        : [],
-      proposalGroups: Array.isArray(object?.proposalGroups)
+        : undefined,
+      proposalGroups: globalThis.Array.isArray(object?.proposalGroups)
         ? object.proposalGroups.map((e: any) => ProposalGroup.fromJSON(e))
-        : [],
-      division: isSet(object.division) ? divisionFromJSON(object.division) : Division.DIV_UNKNOWN,
-      firstKickoffTeam: isSet(object.firstKickoffTeam) ? teamFromJSON(object.firstKickoffTeam) : Team.UNKNOWN,
-      matchType: isSet(object.matchType) ? matchTypeFromJSON(object.matchType) : MatchType.UNKNOWN_MATCH,
+        : undefined,
+      division: isSet(object.division) ? divisionFromJSON(object.division) : undefined,
+      firstKickoffTeam: isSet(object.firstKickoffTeam) ? teamFromJSON(object.firstKickoffTeam) : undefined,
+      matchType: isSet(object.matchType) ? matchTypeFromJSON(object.matchType) : undefined,
       readyContinueTime: isSet(object.readyContinueTime) ? fromJsonTimestamp(object.readyContinueTime) : undefined,
       shootoutState: isSet(object.shootoutState) ? ShootoutState.fromJSON(object.shootoutState) : undefined,
     };
@@ -507,45 +564,63 @@ export const State = {
 
   toJSON(message: State): unknown {
     const obj: any = {};
-    message.stage !== undefined && (obj.stage = referee_StageToJSON(message.stage));
-    message.command !== undefined && (obj.command = message.command ? Command.toJSON(message.command) : undefined);
-    message.gameState !== undefined &&
-      (obj.gameState = message.gameState ? GameState.toJSON(message.gameState) : undefined);
-    message.stageTimeElapsed !== undefined &&
-      (obj.stageTimeElapsed = message.stageTimeElapsed ? Duration.toJSON(message.stageTimeElapsed) : undefined);
-    message.stageTimeLeft !== undefined &&
-      (obj.stageTimeLeft = message.stageTimeLeft ? Duration.toJSON(message.stageTimeLeft) : undefined);
-    message.matchTimeStart !== undefined && (obj.matchTimeStart = message.matchTimeStart.toISOString());
-    obj.teamState = {};
+    if (message.stage !== undefined && message.stage !== Referee_Stage.NORMAL_FIRST_HALF_PRE) {
+      obj.stage = referee_StageToJSON(message.stage);
+    }
+    if (message.command !== undefined) {
+      obj.command = Command.toJSON(message.command);
+    }
+    if (message.gameState !== undefined) {
+      obj.gameState = GameState.toJSON(message.gameState);
+    }
+    if (message.stageTimeElapsed !== undefined) {
+      obj.stageTimeElapsed = Duration.toJSON(message.stageTimeElapsed);
+    }
+    if (message.stageTimeLeft !== undefined) {
+      obj.stageTimeLeft = Duration.toJSON(message.stageTimeLeft);
+    }
+    if (message.matchTimeStart !== undefined) {
+      obj.matchTimeStart = message.matchTimeStart.toISOString();
+    }
     if (message.teamState) {
-      Object.entries(message.teamState).forEach(([k, v]) => {
-        obj.teamState[k] = TeamInfo.toJSON(v);
-      });
+      const entries = Object.entries(message.teamState);
+      if (entries.length > 0) {
+        obj.teamState = {};
+        entries.forEach(([k, v]) => {
+          obj.teamState[k] = TeamInfo.toJSON(v);
+        });
+      }
     }
-    message.placementPos !== undefined &&
-      (obj.placementPos = message.placementPos ? Vector2.toJSON(message.placementPos) : undefined);
-    message.nextCommand !== undefined &&
-      (obj.nextCommand = message.nextCommand ? Command.toJSON(message.nextCommand) : undefined);
-    message.currentActionTimeRemaining !== undefined &&
-      (obj.currentActionTimeRemaining = message.currentActionTimeRemaining
-        ? Duration.toJSON(message.currentActionTimeRemaining)
-        : undefined);
-    if (message.gameEvents) {
-      obj.gameEvents = message.gameEvents.map((e) => e ? GameEvent.toJSON(e) : undefined);
-    } else {
-      obj.gameEvents = [];
+    if (message.placementPos !== undefined) {
+      obj.placementPos = Vector2.toJSON(message.placementPos);
     }
-    if (message.proposalGroups) {
-      obj.proposalGroups = message.proposalGroups.map((e) => e ? ProposalGroup.toJSON(e) : undefined);
-    } else {
-      obj.proposalGroups = [];
+    if (message.nextCommand !== undefined) {
+      obj.nextCommand = Command.toJSON(message.nextCommand);
     }
-    message.division !== undefined && (obj.division = divisionToJSON(message.division));
-    message.firstKickoffTeam !== undefined && (obj.firstKickoffTeam = teamToJSON(message.firstKickoffTeam));
-    message.matchType !== undefined && (obj.matchType = matchTypeToJSON(message.matchType));
-    message.readyContinueTime !== undefined && (obj.readyContinueTime = message.readyContinueTime.toISOString());
-    message.shootoutState !== undefined &&
-      (obj.shootoutState = message.shootoutState ? ShootoutState.toJSON(message.shootoutState) : undefined);
+    if (message.currentActionTimeRemaining !== undefined) {
+      obj.currentActionTimeRemaining = Duration.toJSON(message.currentActionTimeRemaining);
+    }
+    if (message.gameEvents?.length) {
+      obj.gameEvents = message.gameEvents.map((e) => GameEvent.toJSON(e));
+    }
+    if (message.proposalGroups?.length) {
+      obj.proposalGroups = message.proposalGroups.map((e) => ProposalGroup.toJSON(e));
+    }
+    if (message.division !== undefined && message.division !== Division.DIV_UNKNOWN) {
+      obj.division = divisionToJSON(message.division);
+    }
+    if (message.firstKickoffTeam !== undefined && message.firstKickoffTeam !== Team.UNKNOWN) {
+      obj.firstKickoffTeam = teamToJSON(message.firstKickoffTeam);
+    }
+    if (message.matchType !== undefined && message.matchType !== MatchType.UNKNOWN_MATCH) {
+      obj.matchType = matchTypeToJSON(message.matchType);
+    }
+    if (message.readyContinueTime !== undefined) {
+      obj.readyContinueTime = message.readyContinueTime.toISOString();
+    }
+    if (message.shootoutState !== undefined) {
+      obj.shootoutState = ShootoutState.toJSON(message.shootoutState);
+    }
     return obj;
   },
 };
@@ -553,15 +628,19 @@ export const State = {
 export const State_TeamStateEntry = {
   fromJSON(object: any): State_TeamStateEntry {
     return {
-      key: isSet(object.key) ? String(object.key) : "",
+      key: isSet(object.key) ? globalThis.String(object.key) : "",
       value: isSet(object.value) ? TeamInfo.fromJSON(object.value) : undefined,
     };
   },
 
   toJSON(message: State_TeamStateEntry): unknown {
     const obj: any = {};
-    message.key !== undefined && (obj.key = message.key);
-    message.value !== undefined && (obj.value = message.value ? TeamInfo.toJSON(message.value) : undefined);
+    if (message.key !== "") {
+      obj.key = message.key;
+    }
+    if (message.value !== undefined) {
+      obj.value = TeamInfo.toJSON(message.value);
+    }
     return obj;
   },
 };
@@ -569,24 +648,29 @@ export const State_TeamStateEntry = {
 export const ShootoutState = {
   fromJSON(object: any): ShootoutState {
     return {
-      nextTeam: isSet(object.nextTeam) ? teamFromJSON(object.nextTeam) : Team.UNKNOWN,
+      nextTeam: isSet(object.nextTeam) ? teamFromJSON(object.nextTeam) : undefined,
       numberOfAttempts: isObject(object.numberOfAttempts)
         ? Object.entries(object.numberOfAttempts).reduce<{ [key: string]: number }>((acc, [key, value]) => {
           acc[key] = Number(value);
           return acc;
         }, {})
-        : {},
+        : undefined,
     };
   },
 
   toJSON(message: ShootoutState): unknown {
     const obj: any = {};
-    message.nextTeam !== undefined && (obj.nextTeam = teamToJSON(message.nextTeam));
-    obj.numberOfAttempts = {};
+    if (message.nextTeam !== undefined && message.nextTeam !== Team.UNKNOWN) {
+      obj.nextTeam = teamToJSON(message.nextTeam);
+    }
     if (message.numberOfAttempts) {
-      Object.entries(message.numberOfAttempts).forEach(([k, v]) => {
-        obj.numberOfAttempts[k] = Math.round(v);
-      });
+      const entries = Object.entries(message.numberOfAttempts);
+      if (entries.length > 0) {
+        obj.numberOfAttempts = {};
+        entries.forEach(([k, v]) => {
+          obj.numberOfAttempts[k] = Math.round(v);
+        });
+      }
     }
     return obj;
   },
@@ -594,28 +678,35 @@ export const ShootoutState = {
 
 export const ShootoutState_NumberOfAttemptsEntry = {
   fromJSON(object: any): ShootoutState_NumberOfAttemptsEntry {
-    return { key: isSet(object.key) ? String(object.key) : "", value: isSet(object.value) ? Number(object.value) : 0 };
+    return {
+      key: isSet(object.key) ? globalThis.String(object.key) : "",
+      value: isSet(object.value) ? globalThis.Number(object.value) : 0,
+    };
   },
 
   toJSON(message: ShootoutState_NumberOfAttemptsEntry): unknown {
     const obj: any = {};
-    message.key !== undefined && (obj.key = message.key);
-    message.value !== undefined && (obj.value = Math.round(message.value));
+    if (message.key !== "") {
+      obj.key = message.key;
+    }
+    if (message.value !== 0) {
+      obj.value = Math.round(message.value);
+    }
     return obj;
   },
 };
 
 function fromTimestamp(t: Timestamp): Date {
-  let millis = t.seconds * 1_000;
-  millis += t.nanos / 1_000_000;
-  return new Date(millis);
+  let millis = (t.seconds || 0) * 1_000;
+  millis += (t.nanos || 0) / 1_000_000;
+  return new globalThis.Date(millis);
 }
 
 function fromJsonTimestamp(o: any): Date {
-  if (o instanceof Date) {
+  if (o instanceof globalThis.Date) {
     return o;
   } else if (typeof o === "string") {
-    return new Date(o);
+    return new globalThis.Date(o);
   } else {
     return fromTimestamp(Timestamp.fromJSON(o));
   }
