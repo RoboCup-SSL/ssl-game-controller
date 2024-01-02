@@ -6,33 +6,25 @@ import { Vector2, Vector3 } from "./ssl_gc_geometry";
 /** The GC state contains settings and state independent of the match state */
 export interface GcState {
   /** the state of each team */
-  teamState?:
-    | { [key: string]: GcStateTeam }
-    | undefined;
+  teamState?: { [key: string]: GcStateTeam };
   /** the states of the auto referees */
-  autoRefState?:
-    | { [key: string]: GcStateAutoRef }
-    | undefined;
+  autoRefState?: { [key: string]: GcStateAutoRef };
   /** the attached trackers (uuid -> source_name) */
-  trackers?:
-    | { [key: string]: string }
-    | undefined;
+  trackers?: { [key: string]: string };
   /** the next actions that can be executed when continuing */
-  continueActions?:
-    | ContinueAction[]
-    | undefined;
+  continueActions?: ContinueAction[];
   /** the next actions that can be executed when continuing */
-  continueHints?: ContinueHint[] | undefined;
+  continueHints?: ContinueHint[];
 }
 
 export interface GcState_TeamStateEntry {
   key: string;
-  value?: GcStateTeam | undefined;
+  value?: GcStateTeam;
 }
 
 export interface GcState_AutoRefStateEntry {
   key: string;
-  value?: GcStateAutoRef | undefined;
+  value?: GcStateAutoRef;
 }
 
 export interface GcState_TrackersEntry {
@@ -43,29 +35,21 @@ export interface GcState_TrackersEntry {
 /** The GC state for a single team */
 export interface GcStateTeam {
   /** true: The team is connected */
-  connected?:
-    | boolean
-    | undefined;
+  connected?: boolean;
   /** true: The team connected via TLS with a verified certificate */
-  connectionVerified?:
-    | boolean
-    | undefined;
+  connectionVerified?: boolean;
   /** true: The remote control for the team is connected */
-  remoteControlConnected?:
-    | boolean
-    | undefined;
+  remoteControlConnected?: boolean;
   /** true: The remote control for the team connected via TLS with a verified certificate */
-  remoteControlConnectionVerified?:
-    | boolean
-    | undefined;
+  remoteControlConnectionVerified?: boolean;
   /** the advantage choice of the team */
-  advantageChoice?: TeamAdvantageChoice | undefined;
+  advantageChoice?: TeamAdvantageChoice;
 }
 
 /** The choice from a team regarding the advantage rule */
 export interface TeamAdvantageChoice {
   /** the choice of the team */
-  choice?: TeamAdvantageChoice_AdvantageChoice | undefined;
+  choice?: TeamAdvantageChoice_AdvantageChoice;
 }
 
 /** possible advantage choices */
@@ -107,66 +91,48 @@ export function teamAdvantageChoice_AdvantageChoiceToJSON(object: TeamAdvantageC
 /** The GC state of an auto referee */
 export interface GcStateAutoRef {
   /** true: The autoRef connected via TLS with a verified certificate */
-  connectionVerified?: boolean | undefined;
+  connectionVerified?: boolean;
 }
 
 /** GC state of a tracker */
 export interface GcStateTracker {
   /** Name of the source */
-  sourceName?:
-    | string
-    | undefined;
+  sourceName?: string;
   /** UUID of the source */
-  uuid?:
-    | string
-    | undefined;
+  uuid?: string;
   /** Current ball */
-  ball?:
-    | Ball
-    | undefined;
+  ball?: Ball;
   /** Current robots */
-  robots?: Robot[] | undefined;
+  robots?: Robot[];
 }
 
 /** The ball state */
 export interface Ball {
   /** ball position [m] */
-  pos?:
-    | Vector3
-    | undefined;
+  pos?: Vector3;
   /** ball velocity [m/s] */
-  vel?: Vector3 | undefined;
+  vel?: Vector3;
 }
 
 /** The robot state */
 export interface Robot {
   /** robot id and team */
-  id?:
-    | RobotId
-    | undefined;
+  id?: RobotId;
   /** robot position [m] */
-  pos?: Vector2 | undefined;
+  pos?: Vector2;
 }
 
 export interface ContinueAction {
   /** type of action that will be performed next */
-  type?:
-    | ContinueAction_Type
-    | undefined;
+  type?: ContinueAction_Type;
   /** for which team (if team specific) */
-  forTeam?:
-    | Team
-    | undefined;
+  forTeam?: Team;
   /** list of issues that hinders the game from continuing */
-  continuationIssues?:
-    | string[]
-    | undefined;
+  continuationIssues?: string[];
   /** timestamp at which the action will be ready (to give some preparation time) */
-  readyAt?:
-    | Date
-    | undefined;
+  readyAt?: Date;
   /** state of the action */
-  state?: ContinueAction_State | undefined;
+  state?: ContinueAction_State;
 }
 
 export enum ContinueAction_Type {
@@ -368,7 +334,7 @@ export function continueAction_StateToJSON(object: ContinueAction_State): string
 }
 
 export interface ContinueHint {
-  message?: string | undefined;
+  message?: string;
 }
 
 export const GcState = {
@@ -379,62 +345,57 @@ export const GcState = {
           acc[key] = GcStateTeam.fromJSON(value);
           return acc;
         }, {})
-        : undefined,
+        : {},
       autoRefState: isObject(object.autoRefState)
         ? Object.entries(object.autoRefState).reduce<{ [key: string]: GcStateAutoRef }>((acc, [key, value]) => {
           acc[key] = GcStateAutoRef.fromJSON(value);
           return acc;
         }, {})
-        : undefined,
+        : {},
       trackers: isObject(object.trackers)
         ? Object.entries(object.trackers).reduce<{ [key: string]: string }>((acc, [key, value]) => {
           acc[key] = String(value);
           return acc;
         }, {})
-        : undefined,
-      continueActions: globalThis.Array.isArray(object?.continueActions)
+        : {},
+      continueActions: Array.isArray(object?.continueActions)
         ? object.continueActions.map((e: any) => ContinueAction.fromJSON(e))
-        : undefined,
-      continueHints: globalThis.Array.isArray(object?.continueHints)
+        : [],
+      continueHints: Array.isArray(object?.continueHints)
         ? object.continueHints.map((e: any) => ContinueHint.fromJSON(e))
-        : undefined,
+        : [],
     };
   },
 
   toJSON(message: GcState): unknown {
     const obj: any = {};
+    obj.teamState = {};
     if (message.teamState) {
-      const entries = Object.entries(message.teamState);
-      if (entries.length > 0) {
-        obj.teamState = {};
-        entries.forEach(([k, v]) => {
-          obj.teamState[k] = GcStateTeam.toJSON(v);
-        });
-      }
+      Object.entries(message.teamState).forEach(([k, v]) => {
+        obj.teamState[k] = GcStateTeam.toJSON(v);
+      });
     }
+    obj.autoRefState = {};
     if (message.autoRefState) {
-      const entries = Object.entries(message.autoRefState);
-      if (entries.length > 0) {
-        obj.autoRefState = {};
-        entries.forEach(([k, v]) => {
-          obj.autoRefState[k] = GcStateAutoRef.toJSON(v);
-        });
-      }
+      Object.entries(message.autoRefState).forEach(([k, v]) => {
+        obj.autoRefState[k] = GcStateAutoRef.toJSON(v);
+      });
     }
+    obj.trackers = {};
     if (message.trackers) {
-      const entries = Object.entries(message.trackers);
-      if (entries.length > 0) {
-        obj.trackers = {};
-        entries.forEach(([k, v]) => {
-          obj.trackers[k] = v;
-        });
-      }
+      Object.entries(message.trackers).forEach(([k, v]) => {
+        obj.trackers[k] = v;
+      });
     }
-    if (message.continueActions?.length) {
-      obj.continueActions = message.continueActions.map((e) => ContinueAction.toJSON(e));
+    if (message.continueActions) {
+      obj.continueActions = message.continueActions.map((e) => e ? ContinueAction.toJSON(e) : undefined);
+    } else {
+      obj.continueActions = [];
     }
-    if (message.continueHints?.length) {
-      obj.continueHints = message.continueHints.map((e) => ContinueHint.toJSON(e));
+    if (message.continueHints) {
+      obj.continueHints = message.continueHints.map((e) => e ? ContinueHint.toJSON(e) : undefined);
+    } else {
+      obj.continueHints = [];
     }
     return obj;
   },
@@ -443,19 +404,15 @@ export const GcState = {
 export const GcState_TeamStateEntry = {
   fromJSON(object: any): GcState_TeamStateEntry {
     return {
-      key: isSet(object.key) ? globalThis.String(object.key) : "",
+      key: isSet(object.key) ? String(object.key) : "",
       value: isSet(object.value) ? GcStateTeam.fromJSON(object.value) : undefined,
     };
   },
 
   toJSON(message: GcState_TeamStateEntry): unknown {
     const obj: any = {};
-    if (message.key !== "") {
-      obj.key = message.key;
-    }
-    if (message.value !== undefined) {
-      obj.value = GcStateTeam.toJSON(message.value);
-    }
+    message.key !== undefined && (obj.key = message.key);
+    message.value !== undefined && (obj.value = message.value ? GcStateTeam.toJSON(message.value) : undefined);
     return obj;
   },
 };
@@ -463,39 +420,28 @@ export const GcState_TeamStateEntry = {
 export const GcState_AutoRefStateEntry = {
   fromJSON(object: any): GcState_AutoRefStateEntry {
     return {
-      key: isSet(object.key) ? globalThis.String(object.key) : "",
+      key: isSet(object.key) ? String(object.key) : "",
       value: isSet(object.value) ? GcStateAutoRef.fromJSON(object.value) : undefined,
     };
   },
 
   toJSON(message: GcState_AutoRefStateEntry): unknown {
     const obj: any = {};
-    if (message.key !== "") {
-      obj.key = message.key;
-    }
-    if (message.value !== undefined) {
-      obj.value = GcStateAutoRef.toJSON(message.value);
-    }
+    message.key !== undefined && (obj.key = message.key);
+    message.value !== undefined && (obj.value = message.value ? GcStateAutoRef.toJSON(message.value) : undefined);
     return obj;
   },
 };
 
 export const GcState_TrackersEntry = {
   fromJSON(object: any): GcState_TrackersEntry {
-    return {
-      key: isSet(object.key) ? globalThis.String(object.key) : "",
-      value: isSet(object.value) ? globalThis.String(object.value) : "",
-    };
+    return { key: isSet(object.key) ? String(object.key) : "", value: isSet(object.value) ? String(object.value) : "" };
   },
 
   toJSON(message: GcState_TrackersEntry): unknown {
     const obj: any = {};
-    if (message.key !== "") {
-      obj.key = message.key;
-    }
-    if (message.value !== "") {
-      obj.value = message.value;
-    }
+    message.key !== undefined && (obj.key = message.key);
+    message.value !== undefined && (obj.value = message.value);
     return obj;
   },
 };
@@ -503,65 +449,53 @@ export const GcState_TrackersEntry = {
 export const GcStateTeam = {
   fromJSON(object: any): GcStateTeam {
     return {
-      connected: isSet(object.connected) ? globalThis.Boolean(object.connected) : undefined,
-      connectionVerified: isSet(object.connectionVerified) ? globalThis.Boolean(object.connectionVerified) : undefined,
-      remoteControlConnected: isSet(object.remoteControlConnected)
-        ? globalThis.Boolean(object.remoteControlConnected)
-        : undefined,
+      connected: isSet(object.connected) ? Boolean(object.connected) : false,
+      connectionVerified: isSet(object.connectionVerified) ? Boolean(object.connectionVerified) : false,
+      remoteControlConnected: isSet(object.remoteControlConnected) ? Boolean(object.remoteControlConnected) : false,
       remoteControlConnectionVerified: isSet(object.remoteControlConnectionVerified)
-        ? globalThis.Boolean(object.remoteControlConnectionVerified)
-        : undefined,
+        ? Boolean(object.remoteControlConnectionVerified)
+        : false,
       advantageChoice: isSet(object.advantageChoice) ? TeamAdvantageChoice.fromJSON(object.advantageChoice) : undefined,
     };
   },
 
   toJSON(message: GcStateTeam): unknown {
     const obj: any = {};
-    if (message.connected === true) {
-      obj.connected = message.connected;
-    }
-    if (message.connectionVerified === true) {
-      obj.connectionVerified = message.connectionVerified;
-    }
-    if (message.remoteControlConnected === true) {
-      obj.remoteControlConnected = message.remoteControlConnected;
-    }
-    if (message.remoteControlConnectionVerified === true) {
-      obj.remoteControlConnectionVerified = message.remoteControlConnectionVerified;
-    }
-    if (message.advantageChoice !== undefined) {
-      obj.advantageChoice = TeamAdvantageChoice.toJSON(message.advantageChoice);
-    }
+    message.connected !== undefined && (obj.connected = message.connected);
+    message.connectionVerified !== undefined && (obj.connectionVerified = message.connectionVerified);
+    message.remoteControlConnected !== undefined && (obj.remoteControlConnected = message.remoteControlConnected);
+    message.remoteControlConnectionVerified !== undefined &&
+      (obj.remoteControlConnectionVerified = message.remoteControlConnectionVerified);
+    message.advantageChoice !== undefined &&
+      (obj.advantageChoice = message.advantageChoice ? TeamAdvantageChoice.toJSON(message.advantageChoice) : undefined);
     return obj;
   },
 };
 
 export const TeamAdvantageChoice = {
   fromJSON(object: any): TeamAdvantageChoice {
-    return { choice: isSet(object.choice) ? teamAdvantageChoice_AdvantageChoiceFromJSON(object.choice) : undefined };
+    return {
+      choice: isSet(object.choice)
+        ? teamAdvantageChoice_AdvantageChoiceFromJSON(object.choice)
+        : TeamAdvantageChoice_AdvantageChoice.STOP,
+    };
   },
 
   toJSON(message: TeamAdvantageChoice): unknown {
     const obj: any = {};
-    if (message.choice !== undefined && message.choice !== TeamAdvantageChoice_AdvantageChoice.STOP) {
-      obj.choice = teamAdvantageChoice_AdvantageChoiceToJSON(message.choice);
-    }
+    message.choice !== undefined && (obj.choice = teamAdvantageChoice_AdvantageChoiceToJSON(message.choice));
     return obj;
   },
 };
 
 export const GcStateAutoRef = {
   fromJSON(object: any): GcStateAutoRef {
-    return {
-      connectionVerified: isSet(object.connectionVerified) ? globalThis.Boolean(object.connectionVerified) : undefined,
-    };
+    return { connectionVerified: isSet(object.connectionVerified) ? Boolean(object.connectionVerified) : false };
   },
 
   toJSON(message: GcStateAutoRef): unknown {
     const obj: any = {};
-    if (message.connectionVerified === true) {
-      obj.connectionVerified = message.connectionVerified;
-    }
+    message.connectionVerified !== undefined && (obj.connectionVerified = message.connectionVerified);
     return obj;
   },
 };
@@ -569,26 +503,22 @@ export const GcStateAutoRef = {
 export const GcStateTracker = {
   fromJSON(object: any): GcStateTracker {
     return {
-      sourceName: isSet(object.sourceName) ? globalThis.String(object.sourceName) : undefined,
-      uuid: isSet(object.uuid) ? globalThis.String(object.uuid) : undefined,
+      sourceName: isSet(object.sourceName) ? String(object.sourceName) : "",
+      uuid: isSet(object.uuid) ? String(object.uuid) : "",
       ball: isSet(object.ball) ? Ball.fromJSON(object.ball) : undefined,
-      robots: globalThis.Array.isArray(object?.robots) ? object.robots.map((e: any) => Robot.fromJSON(e)) : undefined,
+      robots: Array.isArray(object?.robots) ? object.robots.map((e: any) => Robot.fromJSON(e)) : [],
     };
   },
 
   toJSON(message: GcStateTracker): unknown {
     const obj: any = {};
-    if (message.sourceName !== undefined && message.sourceName !== "") {
-      obj.sourceName = message.sourceName;
-    }
-    if (message.uuid !== undefined && message.uuid !== "") {
-      obj.uuid = message.uuid;
-    }
-    if (message.ball !== undefined) {
-      obj.ball = Ball.toJSON(message.ball);
-    }
-    if (message.robots?.length) {
-      obj.robots = message.robots.map((e) => Robot.toJSON(e));
+    message.sourceName !== undefined && (obj.sourceName = message.sourceName);
+    message.uuid !== undefined && (obj.uuid = message.uuid);
+    message.ball !== undefined && (obj.ball = message.ball ? Ball.toJSON(message.ball) : undefined);
+    if (message.robots) {
+      obj.robots = message.robots.map((e) => e ? Robot.toJSON(e) : undefined);
+    } else {
+      obj.robots = [];
     }
     return obj;
   },
@@ -604,12 +534,8 @@ export const Ball = {
 
   toJSON(message: Ball): unknown {
     const obj: any = {};
-    if (message.pos !== undefined) {
-      obj.pos = Vector3.toJSON(message.pos);
-    }
-    if (message.vel !== undefined) {
-      obj.vel = Vector3.toJSON(message.vel);
-    }
+    message.pos !== undefined && (obj.pos = message.pos ? Vector3.toJSON(message.pos) : undefined);
+    message.vel !== undefined && (obj.vel = message.vel ? Vector3.toJSON(message.vel) : undefined);
     return obj;
   },
 };
@@ -624,12 +550,8 @@ export const Robot = {
 
   toJSON(message: Robot): unknown {
     const obj: any = {};
-    if (message.id !== undefined) {
-      obj.id = RobotId.toJSON(message.id);
-    }
-    if (message.pos !== undefined) {
-      obj.pos = Vector2.toJSON(message.pos);
-    }
+    message.id !== undefined && (obj.id = message.id ? RobotId.toJSON(message.id) : undefined);
+    message.pos !== undefined && (obj.pos = message.pos ? Vector2.toJSON(message.pos) : undefined);
     return obj;
   },
 };
@@ -637,62 +559,54 @@ export const Robot = {
 export const ContinueAction = {
   fromJSON(object: any): ContinueAction {
     return {
-      type: isSet(object.type) ? continueAction_TypeFromJSON(object.type) : undefined,
-      forTeam: isSet(object.forTeam) ? teamFromJSON(object.forTeam) : undefined,
-      continuationIssues: globalThis.Array.isArray(object?.continuationIssues)
-        ? object.continuationIssues.map((e: any) => globalThis.String(e))
-        : undefined,
+      type: isSet(object.type) ? continueAction_TypeFromJSON(object.type) : ContinueAction_Type.TYPE_UNKNOWN,
+      forTeam: isSet(object.forTeam) ? teamFromJSON(object.forTeam) : Team.UNKNOWN,
+      continuationIssues: Array.isArray(object?.continuationIssues)
+        ? object.continuationIssues.map((e: any) => String(e))
+        : [],
       readyAt: isSet(object.readyAt) ? fromJsonTimestamp(object.readyAt) : undefined,
-      state: isSet(object.state) ? continueAction_StateFromJSON(object.state) : undefined,
+      state: isSet(object.state) ? continueAction_StateFromJSON(object.state) : ContinueAction_State.STATE_UNKNOWN,
     };
   },
 
   toJSON(message: ContinueAction): unknown {
     const obj: any = {};
-    if (message.type !== undefined && message.type !== ContinueAction_Type.TYPE_UNKNOWN) {
-      obj.type = continueAction_TypeToJSON(message.type);
+    message.type !== undefined && (obj.type = continueAction_TypeToJSON(message.type));
+    message.forTeam !== undefined && (obj.forTeam = teamToJSON(message.forTeam));
+    if (message.continuationIssues) {
+      obj.continuationIssues = message.continuationIssues.map((e) => e);
+    } else {
+      obj.continuationIssues = [];
     }
-    if (message.forTeam !== undefined && message.forTeam !== Team.UNKNOWN) {
-      obj.forTeam = teamToJSON(message.forTeam);
-    }
-    if (message.continuationIssues?.length) {
-      obj.continuationIssues = message.continuationIssues;
-    }
-    if (message.readyAt !== undefined) {
-      obj.readyAt = message.readyAt.toISOString();
-    }
-    if (message.state !== undefined && message.state !== ContinueAction_State.STATE_UNKNOWN) {
-      obj.state = continueAction_StateToJSON(message.state);
-    }
+    message.readyAt !== undefined && (obj.readyAt = message.readyAt.toISOString());
+    message.state !== undefined && (obj.state = continueAction_StateToJSON(message.state));
     return obj;
   },
 };
 
 export const ContinueHint = {
   fromJSON(object: any): ContinueHint {
-    return { message: isSet(object.message) ? globalThis.String(object.message) : undefined };
+    return { message: isSet(object.message) ? String(object.message) : "" };
   },
 
   toJSON(message: ContinueHint): unknown {
     const obj: any = {};
-    if (message.message !== undefined && message.message !== "") {
-      obj.message = message.message;
-    }
+    message.message !== undefined && (obj.message = message.message);
     return obj;
   },
 };
 
 function fromTimestamp(t: Timestamp): Date {
-  let millis = (t.seconds || 0) * 1_000;
-  millis += (t.nanos || 0) / 1_000_000;
-  return new globalThis.Date(millis);
+  let millis = t.seconds * 1_000;
+  millis += t.nanos / 1_000_000;
+  return new Date(millis);
 }
 
 function fromJsonTimestamp(o: any): Date {
-  if (o instanceof globalThis.Date) {
+  if (o instanceof Date) {
     return o;
   } else if (typeof o === "string") {
-    return new globalThis.Date(o);
+    return new Date(o);
   } else {
     return fromTimestamp(Timestamp.fromJSON(o));
   }

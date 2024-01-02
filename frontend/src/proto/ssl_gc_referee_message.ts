@@ -57,21 +57,15 @@ export interface Referee {
    * A random UUID of the source that is kept constant at the source while running
    * If multiple sources are broadcasting to the same network, this id can be used to identify individual sources
    */
-  sourceIdentifier?:
-    | string
-    | undefined;
+  sourceIdentifier?: string;
   /** The match type is a meta information about the current match that helps to process the logs after a competition */
-  matchType?:
-    | MatchType
-    | undefined;
+  matchType?: MatchType;
   /**
    * The UNIX timestamp when the packet was sent, in microseconds.
    * Divide by 1,000,000 to get a time_t.
    */
-  packetTimestamp?: number | undefined;
-  stage?:
-    | Referee_Stage
-    | undefined;
+  packetTimestamp?: number;
+  stage?: Referee_Stage;
   /**
    * The number of microseconds left in the stage.
    * The following stages have this value; the rest do not:
@@ -87,41 +81,29 @@ export interface Referee {
    * If the stage runs over its specified time, this value
    * becomes negative.
    */
-  stageTimeLeft?: number | undefined;
-  command?:
-    | Referee_Command
-    | undefined;
+  stageTimeLeft?: number;
+  command?: Referee_Command;
   /** The number of commands issued since startup (mod 2^32). */
-  commandCounter?:
-    | number
-    | undefined;
+  commandCounter?: number;
   /**
    * The UNIX timestamp when the command was issued, in microseconds.
    * This value changes only when a new command is issued, not on each packet.
    */
-  commandTimestamp?:
-    | number
-    | undefined;
+  commandTimestamp?: number;
   /** Information about the two teams. */
-  yellow?: Referee_TeamInfo | undefined;
-  blue?: Referee_TeamInfo | undefined;
-  designatedPosition?:
-    | Referee_Point
-    | undefined;
+  yellow?: Referee_TeamInfo;
+  blue?: Referee_TeamInfo;
+  designatedPosition?: Referee_Point;
   /**
    * Information about the direction of play.
    * True, if the blue team will have it's goal on the positive x-axis of the ssl-vision coordinate system.
    * Obviously, the yellow team will play on the opposite half.
    */
-  blueTeamOnPositiveHalf?:
-    | boolean
-    | undefined;
+  blueTeamOnPositiveHalf?: boolean;
   /** The command that will be issued after the current stoppage and ball placement to continue the game. */
-  nextCommand?: Referee_Command | undefined;
-  gameEvents?: GameEvent[] | undefined;
-  gameEventProposals?:
-    | GameEventProposalGroup[]
-    | undefined;
+  nextCommand?: Referee_Command;
+  gameEvents?: GameEvent[];
+  gameEventProposals?: GameEventProposalGroup[];
   /**
    * The time in microseconds that is remaining until the current action times out
    * The time will not be reset. It can get negative.
@@ -131,7 +113,7 @@ export interface Referee {
    *  * kickoff, penalty kick, force start
    *  * ball placement
    */
-  currentActionTimeRemaining?: number | undefined;
+  currentActionTimeRemaining?: number;
 }
 
 /** These are the "coarse" stages of the game. */
@@ -445,70 +427,42 @@ export function referee_CommandToJSON(object: Referee_Command): string {
 /** Information about a single team. */
 export interface Referee_TeamInfo {
   /** The team's name (empty string if operator has not typed anything). */
-  name?:
-    | string
-    | undefined;
+  name?: string;
   /** The number of goals scored by the team during normal play and overtime. */
-  score?:
-    | number
-    | undefined;
+  score?: number;
   /** The number of red cards issued to the team since the beginning of the game. */
-  redCards?:
-    | number
-    | undefined;
+  redCards?: number;
   /**
    * The amount of time (in microseconds) left on each yellow card issued to the team.
    * If no yellow cards are issued, this array has no elements.
    * Otherwise, times are ordered from smallest to largest.
    */
-  yellowCardTimes?:
-    | number[]
-    | undefined;
+  yellowCardTimes?: number[];
   /** The total number of yellow cards ever issued to the team. */
-  yellowCards?:
-    | number
-    | undefined;
+  yellowCards?: number;
   /**
    * The number of timeouts this team can still call.
    * If in a timeout right now, that timeout is excluded.
    */
-  timeouts?:
-    | number
-    | undefined;
+  timeouts?: number;
   /** The number of microseconds of timeout this team can use. */
-  timeoutTime?:
-    | number
-    | undefined;
+  timeoutTime?: number;
   /** The pattern number of this team's goalkeeper. */
-  goalkeeper?:
-    | number
-    | undefined;
+  goalkeeper?: number;
   /** The total number of countable fouls that act towards yellow cards */
-  foulCounter?:
-    | number
-    | undefined;
+  foulCounter?: number;
   /** The number of consecutive ball placement failures of this team */
-  ballPlacementFailures?:
-    | number
-    | undefined;
+  ballPlacementFailures?: number;
   /** Indicate if the team is able and allowed to place the ball */
-  canPlaceBall?:
-    | boolean
-    | undefined;
+  canPlaceBall?: boolean;
   /** The maximum number of bots allowed on the field based on division and cards */
-  maxAllowedBots?:
-    | number
-    | undefined;
+  maxAllowedBots?: number;
   /** The team has submitted an intent to substitute one or more robots at the next chance */
-  botSubstitutionIntent?:
-    | boolean
-    | undefined;
+  botSubstitutionIntent?: boolean;
   /** Indicate if the team reached the maximum allowed ball placement failures and is thus not allowed to place the ball anymore */
-  ballPlacementFailuresReached?:
-    | boolean
-    | undefined;
+  ballPlacementFailuresReached?: boolean;
   /** The team is allowed to substitute one or more robots currently */
-  botSubstitutionAllowed?: boolean | undefined;
+  botSubstitutionAllowed?: boolean;
 }
 
 /**
@@ -518,106 +472,77 @@ export interface Referee_TeamInfo {
  * both absent (in the case of any other command).
  */
 export interface Referee_Point {
-  x?: number | undefined;
-  y?: number | undefined;
+  x?: number;
+  y?: number;
 }
 
 /** List of matching proposals */
 export interface GameEventProposalGroup {
   /** Unique ID of this group */
-  id?:
-    | string
-    | undefined;
+  id?: string;
   /** The proposed game events */
-  gameEvents?:
-    | GameEvent[]
-    | undefined;
+  gameEvents?: GameEvent[];
   /** Whether the proposal group was accepted */
-  accepted?: boolean | undefined;
+  accepted?: boolean;
 }
 
 export const Referee = {
   fromJSON(object: any): Referee {
     return {
-      sourceIdentifier: isSet(object.sourceIdentifier) ? globalThis.String(object.sourceIdentifier) : undefined,
-      matchType: isSet(object.matchType) ? matchTypeFromJSON(object.matchType) : undefined,
-      packetTimestamp: isSet(object.packetTimestamp) ? globalThis.Number(object.packetTimestamp) : undefined,
-      stage: isSet(object.stage) ? referee_StageFromJSON(object.stage) : undefined,
-      stageTimeLeft: isSet(object.stageTimeLeft) ? globalThis.Number(object.stageTimeLeft) : undefined,
-      command: isSet(object.command) ? referee_CommandFromJSON(object.command) : undefined,
-      commandCounter: isSet(object.commandCounter) ? globalThis.Number(object.commandCounter) : undefined,
-      commandTimestamp: isSet(object.commandTimestamp) ? globalThis.Number(object.commandTimestamp) : undefined,
+      sourceIdentifier: isSet(object.sourceIdentifier) ? String(object.sourceIdentifier) : "",
+      matchType: isSet(object.matchType) ? matchTypeFromJSON(object.matchType) : MatchType.UNKNOWN_MATCH,
+      packetTimestamp: isSet(object.packetTimestamp) ? Number(object.packetTimestamp) : 0,
+      stage: isSet(object.stage) ? referee_StageFromJSON(object.stage) : Referee_Stage.NORMAL_FIRST_HALF_PRE,
+      stageTimeLeft: isSet(object.stageTimeLeft) ? Number(object.stageTimeLeft) : 0,
+      command: isSet(object.command) ? referee_CommandFromJSON(object.command) : Referee_Command.HALT,
+      commandCounter: isSet(object.commandCounter) ? Number(object.commandCounter) : 0,
+      commandTimestamp: isSet(object.commandTimestamp) ? Number(object.commandTimestamp) : 0,
       yellow: isSet(object.yellow) ? Referee_TeamInfo.fromJSON(object.yellow) : undefined,
       blue: isSet(object.blue) ? Referee_TeamInfo.fromJSON(object.blue) : undefined,
       designatedPosition: isSet(object.designatedPosition)
         ? Referee_Point.fromJSON(object.designatedPosition)
         : undefined,
-      blueTeamOnPositiveHalf: isSet(object.blueTeamOnPositiveHalf)
-        ? globalThis.Boolean(object.blueTeamOnPositiveHalf)
-        : undefined,
-      nextCommand: isSet(object.nextCommand) ? referee_CommandFromJSON(object.nextCommand) : undefined,
-      gameEvents: globalThis.Array.isArray(object?.gameEvents)
-        ? object.gameEvents.map((e: any) => GameEvent.fromJSON(e))
-        : undefined,
-      gameEventProposals: globalThis.Array.isArray(object?.gameEventProposals)
+      blueTeamOnPositiveHalf: isSet(object.blueTeamOnPositiveHalf) ? Boolean(object.blueTeamOnPositiveHalf) : false,
+      nextCommand: isSet(object.nextCommand) ? referee_CommandFromJSON(object.nextCommand) : Referee_Command.HALT,
+      gameEvents: Array.isArray(object?.gameEvents) ? object.gameEvents.map((e: any) => GameEvent.fromJSON(e)) : [],
+      gameEventProposals: Array.isArray(object?.gameEventProposals)
         ? object.gameEventProposals.map((e: any) => GameEventProposalGroup.fromJSON(e))
-        : undefined,
+        : [],
       currentActionTimeRemaining: isSet(object.currentActionTimeRemaining)
-        ? globalThis.Number(object.currentActionTimeRemaining)
-        : undefined,
+        ? Number(object.currentActionTimeRemaining)
+        : 0,
     };
   },
 
   toJSON(message: Referee): unknown {
     const obj: any = {};
-    if (message.sourceIdentifier !== undefined && message.sourceIdentifier !== "") {
-      obj.sourceIdentifier = message.sourceIdentifier;
+    message.sourceIdentifier !== undefined && (obj.sourceIdentifier = message.sourceIdentifier);
+    message.matchType !== undefined && (obj.matchType = matchTypeToJSON(message.matchType));
+    message.packetTimestamp !== undefined && (obj.packetTimestamp = Math.round(message.packetTimestamp));
+    message.stage !== undefined && (obj.stage = referee_StageToJSON(message.stage));
+    message.stageTimeLeft !== undefined && (obj.stageTimeLeft = Math.round(message.stageTimeLeft));
+    message.command !== undefined && (obj.command = referee_CommandToJSON(message.command));
+    message.commandCounter !== undefined && (obj.commandCounter = Math.round(message.commandCounter));
+    message.commandTimestamp !== undefined && (obj.commandTimestamp = Math.round(message.commandTimestamp));
+    message.yellow !== undefined && (obj.yellow = message.yellow ? Referee_TeamInfo.toJSON(message.yellow) : undefined);
+    message.blue !== undefined && (obj.blue = message.blue ? Referee_TeamInfo.toJSON(message.blue) : undefined);
+    message.designatedPosition !== undefined && (obj.designatedPosition = message.designatedPosition
+      ? Referee_Point.toJSON(message.designatedPosition)
+      : undefined);
+    message.blueTeamOnPositiveHalf !== undefined && (obj.blueTeamOnPositiveHalf = message.blueTeamOnPositiveHalf);
+    message.nextCommand !== undefined && (obj.nextCommand = referee_CommandToJSON(message.nextCommand));
+    if (message.gameEvents) {
+      obj.gameEvents = message.gameEvents.map((e) => e ? GameEvent.toJSON(e) : undefined);
+    } else {
+      obj.gameEvents = [];
     }
-    if (message.matchType !== undefined && message.matchType !== MatchType.UNKNOWN_MATCH) {
-      obj.matchType = matchTypeToJSON(message.matchType);
+    if (message.gameEventProposals) {
+      obj.gameEventProposals = message.gameEventProposals.map((e) => e ? GameEventProposalGroup.toJSON(e) : undefined);
+    } else {
+      obj.gameEventProposals = [];
     }
-    if (message.packetTimestamp !== undefined && message.packetTimestamp !== 0) {
-      obj.packetTimestamp = Math.round(message.packetTimestamp);
-    }
-    if (message.stage !== undefined && message.stage !== Referee_Stage.NORMAL_FIRST_HALF_PRE) {
-      obj.stage = referee_StageToJSON(message.stage);
-    }
-    if (message.stageTimeLeft !== undefined && message.stageTimeLeft !== 0) {
-      obj.stageTimeLeft = Math.round(message.stageTimeLeft);
-    }
-    if (message.command !== undefined && message.command !== Referee_Command.HALT) {
-      obj.command = referee_CommandToJSON(message.command);
-    }
-    if (message.commandCounter !== undefined && message.commandCounter !== 0) {
-      obj.commandCounter = Math.round(message.commandCounter);
-    }
-    if (message.commandTimestamp !== undefined && message.commandTimestamp !== 0) {
-      obj.commandTimestamp = Math.round(message.commandTimestamp);
-    }
-    if (message.yellow !== undefined) {
-      obj.yellow = Referee_TeamInfo.toJSON(message.yellow);
-    }
-    if (message.blue !== undefined) {
-      obj.blue = Referee_TeamInfo.toJSON(message.blue);
-    }
-    if (message.designatedPosition !== undefined) {
-      obj.designatedPosition = Referee_Point.toJSON(message.designatedPosition);
-    }
-    if (message.blueTeamOnPositiveHalf === true) {
-      obj.blueTeamOnPositiveHalf = message.blueTeamOnPositiveHalf;
-    }
-    if (message.nextCommand !== undefined && message.nextCommand !== Referee_Command.HALT) {
-      obj.nextCommand = referee_CommandToJSON(message.nextCommand);
-    }
-    if (message.gameEvents?.length) {
-      obj.gameEvents = message.gameEvents.map((e) => GameEvent.toJSON(e));
-    }
-    if (message.gameEventProposals?.length) {
-      obj.gameEventProposals = message.gameEventProposals.map((e) => GameEventProposalGroup.toJSON(e));
-    }
-    if (message.currentActionTimeRemaining !== undefined && message.currentActionTimeRemaining !== 0) {
-      obj.currentActionTimeRemaining = Math.round(message.currentActionTimeRemaining);
-    }
+    message.currentActionTimeRemaining !== undefined &&
+      (obj.currentActionTimeRemaining = Math.round(message.currentActionTimeRemaining));
     return obj;
   },
 };
@@ -625,101 +550,64 @@ export const Referee = {
 export const Referee_TeamInfo = {
   fromJSON(object: any): Referee_TeamInfo {
     return {
-      name: isSet(object.name) ? globalThis.String(object.name) : undefined,
-      score: isSet(object.score) ? globalThis.Number(object.score) : undefined,
-      redCards: isSet(object.redCards) ? globalThis.Number(object.redCards) : undefined,
-      yellowCardTimes: globalThis.Array.isArray(object?.yellowCardTimes)
-        ? object.yellowCardTimes.map((e: any) => globalThis.Number(e))
-        : undefined,
-      yellowCards: isSet(object.yellowCards) ? globalThis.Number(object.yellowCards) : undefined,
-      timeouts: isSet(object.timeouts) ? globalThis.Number(object.timeouts) : undefined,
-      timeoutTime: isSet(object.timeoutTime) ? globalThis.Number(object.timeoutTime) : undefined,
-      goalkeeper: isSet(object.goalkeeper) ? globalThis.Number(object.goalkeeper) : undefined,
-      foulCounter: isSet(object.foulCounter) ? globalThis.Number(object.foulCounter) : undefined,
-      ballPlacementFailures: isSet(object.ballPlacementFailures)
-        ? globalThis.Number(object.ballPlacementFailures)
-        : undefined,
-      canPlaceBall: isSet(object.canPlaceBall) ? globalThis.Boolean(object.canPlaceBall) : undefined,
-      maxAllowedBots: isSet(object.maxAllowedBots) ? globalThis.Number(object.maxAllowedBots) : undefined,
-      botSubstitutionIntent: isSet(object.botSubstitutionIntent)
-        ? globalThis.Boolean(object.botSubstitutionIntent)
-        : undefined,
+      name: isSet(object.name) ? String(object.name) : "",
+      score: isSet(object.score) ? Number(object.score) : 0,
+      redCards: isSet(object.redCards) ? Number(object.redCards) : 0,
+      yellowCardTimes: Array.isArray(object?.yellowCardTimes)
+        ? object.yellowCardTimes.map((e: any) => Number(e))
+        : [],
+      yellowCards: isSet(object.yellowCards) ? Number(object.yellowCards) : 0,
+      timeouts: isSet(object.timeouts) ? Number(object.timeouts) : 0,
+      timeoutTime: isSet(object.timeoutTime) ? Number(object.timeoutTime) : 0,
+      goalkeeper: isSet(object.goalkeeper) ? Number(object.goalkeeper) : 0,
+      foulCounter: isSet(object.foulCounter) ? Number(object.foulCounter) : 0,
+      ballPlacementFailures: isSet(object.ballPlacementFailures) ? Number(object.ballPlacementFailures) : 0,
+      canPlaceBall: isSet(object.canPlaceBall) ? Boolean(object.canPlaceBall) : false,
+      maxAllowedBots: isSet(object.maxAllowedBots) ? Number(object.maxAllowedBots) : 0,
+      botSubstitutionIntent: isSet(object.botSubstitutionIntent) ? Boolean(object.botSubstitutionIntent) : false,
       ballPlacementFailuresReached: isSet(object.ballPlacementFailuresReached)
-        ? globalThis.Boolean(object.ballPlacementFailuresReached)
-        : undefined,
-      botSubstitutionAllowed: isSet(object.botSubstitutionAllowed)
-        ? globalThis.Boolean(object.botSubstitutionAllowed)
-        : undefined,
+        ? Boolean(object.ballPlacementFailuresReached)
+        : false,
+      botSubstitutionAllowed: isSet(object.botSubstitutionAllowed) ? Boolean(object.botSubstitutionAllowed) : false,
     };
   },
 
   toJSON(message: Referee_TeamInfo): unknown {
     const obj: any = {};
-    if (message.name !== undefined && message.name !== "") {
-      obj.name = message.name;
-    }
-    if (message.score !== undefined && message.score !== 0) {
-      obj.score = Math.round(message.score);
-    }
-    if (message.redCards !== undefined && message.redCards !== 0) {
-      obj.redCards = Math.round(message.redCards);
-    }
-    if (message.yellowCardTimes?.length) {
+    message.name !== undefined && (obj.name = message.name);
+    message.score !== undefined && (obj.score = Math.round(message.score));
+    message.redCards !== undefined && (obj.redCards = Math.round(message.redCards));
+    if (message.yellowCardTimes) {
       obj.yellowCardTimes = message.yellowCardTimes.map((e) => Math.round(e));
+    } else {
+      obj.yellowCardTimes = [];
     }
-    if (message.yellowCards !== undefined && message.yellowCards !== 0) {
-      obj.yellowCards = Math.round(message.yellowCards);
-    }
-    if (message.timeouts !== undefined && message.timeouts !== 0) {
-      obj.timeouts = Math.round(message.timeouts);
-    }
-    if (message.timeoutTime !== undefined && message.timeoutTime !== 0) {
-      obj.timeoutTime = Math.round(message.timeoutTime);
-    }
-    if (message.goalkeeper !== undefined && message.goalkeeper !== 0) {
-      obj.goalkeeper = Math.round(message.goalkeeper);
-    }
-    if (message.foulCounter !== undefined && message.foulCounter !== 0) {
-      obj.foulCounter = Math.round(message.foulCounter);
-    }
-    if (message.ballPlacementFailures !== undefined && message.ballPlacementFailures !== 0) {
-      obj.ballPlacementFailures = Math.round(message.ballPlacementFailures);
-    }
-    if (message.canPlaceBall === true) {
-      obj.canPlaceBall = message.canPlaceBall;
-    }
-    if (message.maxAllowedBots !== undefined && message.maxAllowedBots !== 0) {
-      obj.maxAllowedBots = Math.round(message.maxAllowedBots);
-    }
-    if (message.botSubstitutionIntent === true) {
-      obj.botSubstitutionIntent = message.botSubstitutionIntent;
-    }
-    if (message.ballPlacementFailuresReached === true) {
-      obj.ballPlacementFailuresReached = message.ballPlacementFailuresReached;
-    }
-    if (message.botSubstitutionAllowed === true) {
-      obj.botSubstitutionAllowed = message.botSubstitutionAllowed;
-    }
+    message.yellowCards !== undefined && (obj.yellowCards = Math.round(message.yellowCards));
+    message.timeouts !== undefined && (obj.timeouts = Math.round(message.timeouts));
+    message.timeoutTime !== undefined && (obj.timeoutTime = Math.round(message.timeoutTime));
+    message.goalkeeper !== undefined && (obj.goalkeeper = Math.round(message.goalkeeper));
+    message.foulCounter !== undefined && (obj.foulCounter = Math.round(message.foulCounter));
+    message.ballPlacementFailures !== undefined &&
+      (obj.ballPlacementFailures = Math.round(message.ballPlacementFailures));
+    message.canPlaceBall !== undefined && (obj.canPlaceBall = message.canPlaceBall);
+    message.maxAllowedBots !== undefined && (obj.maxAllowedBots = Math.round(message.maxAllowedBots));
+    message.botSubstitutionIntent !== undefined && (obj.botSubstitutionIntent = message.botSubstitutionIntent);
+    message.ballPlacementFailuresReached !== undefined &&
+      (obj.ballPlacementFailuresReached = message.ballPlacementFailuresReached);
+    message.botSubstitutionAllowed !== undefined && (obj.botSubstitutionAllowed = message.botSubstitutionAllowed);
     return obj;
   },
 };
 
 export const Referee_Point = {
   fromJSON(object: any): Referee_Point {
-    return {
-      x: isSet(object.x) ? globalThis.Number(object.x) : undefined,
-      y: isSet(object.y) ? globalThis.Number(object.y) : undefined,
-    };
+    return { x: isSet(object.x) ? Number(object.x) : 0, y: isSet(object.y) ? Number(object.y) : 0 };
   },
 
   toJSON(message: Referee_Point): unknown {
     const obj: any = {};
-    if (message.x !== undefined && message.x !== 0) {
-      obj.x = message.x;
-    }
-    if (message.y !== undefined && message.y !== 0) {
-      obj.y = message.y;
-    }
+    message.x !== undefined && (obj.x = message.x);
+    message.y !== undefined && (obj.y = message.y);
     return obj;
   },
 };
@@ -727,25 +615,21 @@ export const Referee_Point = {
 export const GameEventProposalGroup = {
   fromJSON(object: any): GameEventProposalGroup {
     return {
-      id: isSet(object.id) ? globalThis.String(object.id) : undefined,
-      gameEvents: globalThis.Array.isArray(object?.gameEvents)
-        ? object.gameEvents.map((e: any) => GameEvent.fromJSON(e))
-        : undefined,
-      accepted: isSet(object.accepted) ? globalThis.Boolean(object.accepted) : undefined,
+      id: isSet(object.id) ? String(object.id) : "",
+      gameEvents: Array.isArray(object?.gameEvents) ? object.gameEvents.map((e: any) => GameEvent.fromJSON(e)) : [],
+      accepted: isSet(object.accepted) ? Boolean(object.accepted) : false,
     };
   },
 
   toJSON(message: GameEventProposalGroup): unknown {
     const obj: any = {};
-    if (message.id !== undefined && message.id !== "") {
-      obj.id = message.id;
+    message.id !== undefined && (obj.id = message.id);
+    if (message.gameEvents) {
+      obj.gameEvents = message.gameEvents.map((e) => e ? GameEvent.toJSON(e) : undefined);
+    } else {
+      obj.gameEvents = [];
     }
-    if (message.gameEvents?.length) {
-      obj.gameEvents = message.gameEvents.map((e) => GameEvent.toJSON(e));
-    }
-    if (message.accepted === true) {
-      obj.accepted = message.accepted;
-    }
+    message.accepted !== undefined && (obj.accepted = message.accepted);
     return obj;
   },
 };

@@ -86,29 +86,23 @@ export function divisionToJSON(object: Division): string {
 /** RobotId is the combination of a team and a robot id */
 export interface RobotId {
   /** the robot number */
-  id?:
-    | number
-    | undefined;
+  id?: number;
   /** the team that the robot belongs to */
-  team?: Team | undefined;
+  team?: Team;
 }
 
 export const RobotId = {
   fromJSON(object: any): RobotId {
     return {
-      id: isSet(object.id) ? globalThis.Number(object.id) : undefined,
-      team: isSet(object.team) ? teamFromJSON(object.team) : undefined,
+      id: isSet(object.id) ? Number(object.id) : 0,
+      team: isSet(object.team) ? teamFromJSON(object.team) : Team.UNKNOWN,
     };
   },
 
   toJSON(message: RobotId): unknown {
     const obj: any = {};
-    if (message.id !== undefined && message.id !== 0) {
-      obj.id = Math.round(message.id);
-    }
-    if (message.team !== undefined && message.team !== Team.UNKNOWN) {
-      obj.team = teamToJSON(message.team);
-    }
+    message.id !== undefined && (obj.id = Math.round(message.id));
+    message.team !== undefined && (obj.team = teamToJSON(message.team));
     return obj;
   },
 };
