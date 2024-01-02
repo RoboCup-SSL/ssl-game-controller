@@ -160,7 +160,7 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 
 	// ball placement interference
 	if *gameEvent.Type == state.GameEvent_BOT_INTERFERED_PLACEMENT {
-		log.Printf("Reset current action time for ball placement interference by %v", byTeam)
+		log.Printf("Increase current action time for ball placement interference by %v", byTeam)
 		curDuration := newState.CurrentActionTimeRemaining.AsDuration()
 		newState.CurrentActionTimeRemaining = durationpb.New(curDuration + s.gameConfig.BallPlacementTimeTopUp)
 	}

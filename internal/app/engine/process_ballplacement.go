@@ -1,15 +1,11 @@
 package engine
 
 import (
-	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/geom"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
-	"time"
 )
 
 type BallPlacementCoordinator struct {
-	gcEngine               *Engine
-	ballPlacementStartPos  *geom.Vector2
-	ballPlacementStartTime *time.Time
+	gcEngine *Engine
 }
 
 func (c *BallPlacementCoordinator) process() {
@@ -20,24 +16,22 @@ func (c *BallPlacementCoordinator) process() {
 		return
 	}
 
-	if c.ballPlacementStartPos == nil || c.ballPlacementStartTime == nil {
-		c.ballPlacementStartPos = e.trackerStateGc.Ball.Pos.ToVector2()
-		c.ballPlacementStartTime = new(time.Time)
-		*c.ballPlacementStartTime = e.timeProvider()
+	// Take the AutoRefProposalTimeout into account, as game events may be delayed by up to this amount of time
+	if e.currentState.CurrentActionTimeRemaining.AsDuration() > -e.gameConfig.AutoRefProposalTimeout {
+		// Still time remaining
+		return
 	}
 
 	remainingDistance := c.remainingPlacementDistance()
 
-	if goDur(e.currentState.CurrentActionTimeRemaining) <= 0 {
-		e.Enqueue(createGameEventChange(state.GameEvent_PLACEMENT_FAILED, &state.GameEvent{
-			Event: &state.GameEvent_PlacementFailed_{
-				PlacementFailed: &state.GameEvent_PlacementFailed{
-					ByTeam:            e.currentState.Command.ForTeam,
-					RemainingDistance: &remainingDistance,
-				},
+	e.Enqueue(createGameEventChange(state.GameEvent_PLACEMENT_FAILED, &state.GameEvent{
+		Event: &state.GameEvent_PlacementFailed_{
+			PlacementFailed: &state.GameEvent_PlacementFailed{
+				ByTeam:            e.currentState.Command.ForTeam,
+				RemainingDistance: &remainingDistance,
 			},
-		}))
-	}
+		},
+	}))
 }
 
 func (c *BallPlacementCoordinator) remainingPlacementDistance() float32 {
