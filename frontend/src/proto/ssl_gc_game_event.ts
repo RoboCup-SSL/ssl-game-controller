@@ -774,6 +774,8 @@ export interface GameEvent_PlacementFailed {
   byTeam?: Team;
   /** the remaining distance [m] from ball to placement position */
   remainingDistance?: number;
+  /** the distance [m] of the nearest own robot to the ball */
+  nearestOwnBotDistance?: number;
 }
 
 /** a team was found guilty for minor unsporting behavior */
@@ -1781,6 +1783,7 @@ export const GameEvent_PlacementFailed = {
     return {
       byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : Team.UNKNOWN,
       remainingDistance: isSet(object.remainingDistance) ? Number(object.remainingDistance) : 0,
+      nearestOwnBotDistance: isSet(object.nearestOwnBotDistance) ? Number(object.nearestOwnBotDistance) : 0,
     };
   },
 
@@ -1788,6 +1791,7 @@ export const GameEvent_PlacementFailed = {
     const obj: any = {};
     message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
     message.remainingDistance !== undefined && (obj.remainingDistance = message.remainingDistance);
+    message.nearestOwnBotDistance !== undefined && (obj.nearestOwnBotDistance = message.nearestOwnBotDistance);
     return obj;
   },
 };
