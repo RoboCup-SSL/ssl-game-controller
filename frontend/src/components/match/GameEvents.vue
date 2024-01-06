@@ -40,7 +40,9 @@ const gameEventItems = computed(() => {
       items.push(item)
     }
   }
-  items.sort((a, b) => a.timestamp - b.timestamp)
+  // Sort descending by timestamp: most recent first
+  // This fits the order of the protocol list and helps when many items are present
+  items.sort((a, b) => b.timestamp - a.timestamp)
   return items
 })
 
