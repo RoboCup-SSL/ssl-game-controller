@@ -41,7 +41,7 @@ const label = computed(() => {
     case ContinueAction_Type.HALT:
       return 'Halt'
     case ContinueAction_Type.RESUME_FROM_HALT:
-      return 'Resume'
+      return 'Resume (Halt -> Stop)'
     case ContinueAction_Type.STOP_GAME:
       return 'Stop'
     case ContinueAction_Type.FORCE_START:
