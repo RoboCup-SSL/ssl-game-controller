@@ -421,6 +421,8 @@ message GameEvent {
         required Team by_team = 1;
         // the remaining distance [m] from ball to placement position
         optional float remaining_distance = 2;
+        // the distance [m] of the nearest own robot to the ball
+        optional float nearest_own_bot_distance = 3;
     }
     // a team was found guilty for minor unsporting behavior
     message UnsportingBehaviorMinor {
