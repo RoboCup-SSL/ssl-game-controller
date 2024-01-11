@@ -3,9 +3,9 @@ import {computed} from "vue";
 import TeamBadge from "@/components/common/TeamBadge.vue";
 import {gameEventNames} from "@/helpers/texts";
 import type {GameEvent} from "@/proto/ssl_gc_game_event";
-import {gameEventForTeam, originIcon} from "@/helpers";
-import GameEventDetailsTree from "@/components/match/GameEventDetailsTree.vue";
+import {gameEventForTeam} from "@/helpers";
 import dayjs from "dayjs";
+import OriginIcon from "@/components/common/OriginIcon.vue";
 
 const props = defineProps<{
   gameEvent: GameEvent,
@@ -32,26 +32,26 @@ const time = computed(() => {
 </script>
 
 <template>
-  <q-expansion-item expand-separator>
-    <template v-slot:header>
-      <q-item-section>
-        <q-item-label>
-          <TeamBadge :team="team"/>
-          {{ label }}
-        </q-item-label>
-        <q-item-label caption v-if="time">{{ time }}</q-item-label>
-      </q-item-section>
-      <q-item-section side>
-        <div class="row">
-          <q-icon class="q-mx-xs" :name="originIcon(origin)" color="primary" :alt="origin"
-                  v-for="(origin, key) in origins" :key="key">
-            <q-tooltip>
-              {{ origin }}
-            </q-tooltip>
-          </q-icon>
-        </div>
-      </q-item-section>
-    </template>
-    <GameEventDetailsTree :game-event="props.gameEvent"/>
-  </q-expansion-item>
+  <q-item dense>
+    <q-item-section side>
+      <q-icon name="warning"/>
+    </q-item-section>
+    <q-item-section>
+      <q-item-label>
+        <TeamBadge :team="team"/>
+        {{ label }}
+      </q-item-label>
+      <q-item-label caption v-if="time">{{ time }}</q-item-label>
+    </q-item-section>
+    <q-item-section side>
+      <div class="row">
+        <OriginIcon
+            v-for="(gameEventOrigin, key) in origins"
+            :key="key"
+            :origin="gameEventOrigin"
+            tooltip
+        />
+      </div>
+    </q-item-section>
+  </q-item>
 </template>
