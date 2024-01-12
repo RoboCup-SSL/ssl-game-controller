@@ -62,6 +62,23 @@ const disable = computed(() => {
     />
   </div>
 
+  <div class="row wrap justify-evenly q-mt-md">
+    <q-input
+        input-class="text-center"
+        dense
+        label="X-Coordinate"
+        type="number"
+        v-model="newBallPos.x"
+    />
+    <q-input
+        input-class="text-center"
+        dense
+        label="Y-Coordinate"
+        type="number"
+        v-model="newBallPos.y"
+    />
+  </div>
+
   <div class="q-px-md">
     <div class="q-pt-xl">
       <q-item>
