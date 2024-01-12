@@ -46,23 +46,19 @@ const placeBall = (team: Team) => {
 
 const disable = computed(() => {
   return store.matchState.command?.type !== Command_Type.STOP
-    || !store.matchState.stage
-    || isPausedStage(store.matchState.stage)
+      || !store.matchState.stage
+      || isPausedStage(store.matchState.stage)
 })
 </script>
 
 <template>
-  <div class="row">
-    <ControlButton class="col-grow" label="Place ball"
-                   v-for="team in [Team.YELLOW, Team.BLUE]"
-                   :key="team"
-                   :disable="disable"
-                   :action="() => placeBall(team)"
-                   :team="team"
-    />
+  <div class="row justify-evenly q-mt-md">
+    <ControlButton label="Reset sliders to current ball position"
+                   :disable="false"
+                   :action="resetBallPos"/>
   </div>
 
-  <div class="row wrap justify-evenly q-mt-md">
+  <div class="row justify-evenly q-mt-md">
     <q-input
         input-class="text-center"
         dense
@@ -87,14 +83,14 @@ const disable = computed(() => {
         </q-item-section>
         <q-item-section>
           <q-slider
-            v-model="newBallPos.x"
-            :min="-minMaxX"
-            :max="minMaxX"
-            :step="0.1"
-            selection-color="transparent"
-            label
-            :label-value="newBallPos.x + ' m'"
-            label-always
+              v-model="newBallPos.x"
+              :min="-minMaxX"
+              :max="minMaxX"
+              :step="0.1"
+              selection-color="transparent"
+              label
+              :label-value="newBallPos.x + ' m'"
+              label-always
           />
           <q-slider class="slider-current"
 
@@ -118,34 +114,38 @@ const disable = computed(() => {
         </q-item-section>
         <q-item-section>
           <q-slider
-            v-model="curBallPos.y"
-            :min="-minMaxY"
-            :max="minMaxY"
-            :step="0.1"
-            selection-color="transparent"
-            color="info"
-            disable
+              v-model="curBallPos.y"
+              :min="-minMaxY"
+              :max="minMaxY"
+              :step="0.1"
+              selection-color="transparent"
+              color="info"
+              disable
           />
           <q-slider
-            v-model="newBallPos.y"
-            :min="-minMaxY"
-            :max="minMaxY"
-            :step="0.1"
-            selection-color="transparent"
-            label
-            :label-value="newBallPos.y + ' m'"
-            label-always
-            switch-label-side
+              v-model="newBallPos.y"
+              :min="-minMaxY"
+              :max="minMaxY"
+              :step="0.1"
+              selection-color="transparent"
+              label
+              :label-value="newBallPos.y + ' m'"
+              label-always
+              switch-label-side
           />
         </q-item-section>
         <q-item-section avatar/>
       </q-item>
     </div>
+  </div>
 
-    <div class="row wrap justify-evenly q-mt-md">
-      <ControlButton label="Reset placement position"
-                     :disable="false"
-                     :action="resetBallPos"/>
-    </div>
+  <div class="row justify-evenly q-mt-md">
+    <ControlButton class="col-grow" label="Place ball"
+                   v-for="team in [Team.YELLOW, Team.BLUE]"
+                   :key="team"
+                   :disable="disable"
+                   :action="() => placeBall(team)"
+                   :team="team"
+    />
   </div>
 </template>
