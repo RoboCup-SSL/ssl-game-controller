@@ -62,8 +62,7 @@ func (s *StateMachine) createMergedGameEvent(group *state.ProposalGroup, accepte
 	} else if byTeam[state.Team_YELLOW] < byTeam[state.Team_BLUE] {
 		event.SetByTeam(state.Team_BLUE)
 	} else {
-		log.Printf("autoRefs undecided on team: %v. Throwing a dice.", byTeam)
-		event.SetByTeam(state.Team(s.rand.Intn(2) + 1))
+		event.SetByTeam(state.Team_UNKNOWN)
 	}
 	var events []*state.GameEvent
 	for _, p := range proposals {

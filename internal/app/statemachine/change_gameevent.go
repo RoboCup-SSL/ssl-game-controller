@@ -338,11 +338,20 @@ func (s *StateMachine) nextCommandForEvent(newState *state.State, gameEvent *sta
 		state.GameEvent_PENALTY_KICK_FAILED,
 		state.GameEvent_POSSIBLE_GOAL,
 		state.GameEvent_INVALID_GOAL:
-		return state.NewCommand(state.Command_DIRECT, gameEvent.ByTeam().Opposite())
+		return lastCommandOnUnknownTeam(
+			newState.NextCommand,
+			state.NewCommand(state.Command_DIRECT, gameEvent.ByTeam().Opposite()),
+		)
 	case state.GameEvent_DEFENDER_IN_DEFENSE_AREA:
-		return state.NewCommand(state.Command_PENALTY, gameEvent.ByTeam().Opposite())
+		return lastCommandOnUnknownTeam(
+			newState.NextCommand,
+			state.NewCommand(state.Command_PENALTY, gameEvent.ByTeam().Opposite()),
+		)
 	case state.GameEvent_GOAL:
-		return state.NewCommand(state.Command_KICKOFF, gameEvent.ByTeam().Opposite())
+		return lastCommandOnUnknownTeam(
+			newState.NextCommand,
+			state.NewCommand(state.Command_KICKOFF, gameEvent.ByTeam().Opposite()),
+		)
 	case state.GameEvent_NO_PROGRESS_IN_GAME,
 		state.GameEvent_TOO_MANY_ROBOTS:
 		return state.NewCommand(state.Command_FORCE_START, state.Team_UNKNOWN)
@@ -350,10 +359,22 @@ func (s *StateMachine) nextCommandForEvent(newState *state.State, gameEvent *sta
 		if newState.NextCommand != nil {
 			return newState.NextCommand
 		}
-		return state.NewCommand(state.Command_DIRECT, gameEvent.ByTeam().Opposite())
+		return lastCommandOnUnknownTeam(
+			newState.NextCommand,
+			state.NewCommand(state.Command_DIRECT, gameEvent.ByTeam().Opposite()),
+		)
 	default:
 		return newState.NextCommand
 	}
+}
+
+func lastCommandOnUnknownTeam(lastCommand, newCommand *state.Command) *state.Command {
+	if newCommand.ForTeam.Unknown() {
+		// no (new) next command, if the team is unknown
+		// this can happen if an autoRef majority matched by type, but not by team
+		return lastCommand
+	}
+	return newCommand
 }
 
 // incrementsFoulCounter checks if the game event increments the foul counter
