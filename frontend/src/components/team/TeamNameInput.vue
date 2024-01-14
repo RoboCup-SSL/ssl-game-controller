@@ -2,7 +2,7 @@
 import {computed, inject} from "vue";
 import {useMatchStateStore} from "@/store/matchState";
 import type {Team} from "@/proto/ssl_gc_common";
-import type {ControlApi} from "@/providers/controlApi/ControlApi";
+import type {ControlApi} from "@/providers/controlApi";
 import SelectInput from "@/components/common/SelectInput.vue";
 import {useGcStateStore} from "@/store/gcState";
 

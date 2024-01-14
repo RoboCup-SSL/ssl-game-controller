@@ -6,7 +6,7 @@ import TextInput from "@/components/common/TextInput.vue";
 import ToggleInput from "@/components/common/ToggleInput.vue";
 import FoulsPanel from "@/components/game-events/FoulsPanel.vue";
 import type {GameEvent} from "@/proto/ssl_gc_game_event";
-import type {ControlApi} from "@/providers/controlApi/ControlApi";
+import type {ControlApi} from "@/providers/controlApi";
 import type {Proposal} from "@/proto/ssl_gc_state";
 import GameEventUnsportingBehaviorInput from "@/components/game-events/GameEventUnsportingBehaviorInput.vue";
 import GameEventNoProgressInput from "@/components/game-events/GameEventNoProgressInput.vue";

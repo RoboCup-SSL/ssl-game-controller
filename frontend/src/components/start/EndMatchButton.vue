@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {computed, inject} from "vue";
 import {Referee_Stage} from "@/proto/ssl_gc_referee_message";
-import type {ControlApi} from "@/providers/controlApi/ControlApi";
+import type {ControlApi} from "@/providers/controlApi";
 import {useMatchStateStore} from "@/store/matchState";
 
 const store = useMatchStateStore()

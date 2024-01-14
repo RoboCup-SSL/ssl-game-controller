@@ -2,10 +2,10 @@
 import {computed, inject} from "vue";
 import TeamBadge from "@/components/common/TeamBadge.vue";
 import type {ContinueAction} from "@/proto/ssl_gc_engine";
-import {ContinueAction_State, ContinueAction_Type} from "@/proto/ssl_gc_engine";
+import {ContinueAction_State} from "@/proto/ssl_gc_engine";
 import {useMatchStateStore} from "@/store/matchState";
-import {commandName} from "@/helpers/texts";
-import type {ControlApi} from "@/providers/controlApi/ControlApi";
+import {continueActionLabel} from "@/helpers/texts";
+import type {ControlApi} from "@/providers/controlApi";
 
 const props = defineProps<{
   action: ContinueAction,
@@ -37,51 +37,7 @@ const color = computed(() => {
 })
 
 const label = computed(() => {
-  switch (props.action.type) {
-    case ContinueAction_Type.HALT:
-      return 'Halt'
-    case ContinueAction_Type.RESUME_FROM_HALT:
-      return 'Resume (Halt -> Stop)'
-    case ContinueAction_Type.STOP_GAME:
-      return 'Stop'
-    case ContinueAction_Type.FORCE_START:
-      return 'Force Start (no next command)'
-    case ContinueAction_Type.FREE_KICK:
-      return 'Free Kick (no next command)'
-    case ContinueAction_Type.NEXT_COMMAND:
-      return commandName(store.matchState.nextCommand?.type!)
-    case ContinueAction_Type.BALL_PLACEMENT_START:
-      return 'Start Ball Placement'
-    case ContinueAction_Type.BALL_PLACEMENT_CANCEL:
-      return 'Cancel Ball Placement'
-    case ContinueAction_Type.BALL_PLACEMENT_COMPLETE:
-      return 'Complete Ball Placement'
-    case ContinueAction_Type.BALL_PLACEMENT_FAIL:
-      return 'Fail Ball Placement'
-    case ContinueAction_Type.TIMEOUT_START:
-      return 'Start Timeout'
-    case ContinueAction_Type.TIMEOUT_STOP:
-      return 'Stop Timeout'
-    case ContinueAction_Type.BOT_SUBSTITUTION:
-      return 'Start Bot Substitution'
-    case ContinueAction_Type.NEXT_STAGE:
-      return 'Next Stage'
-    case ContinueAction_Type.END_GAME:
-      return 'End match'
-    case ContinueAction_Type.ACCEPT_GOAL:
-      return 'Accept Goal'
-    case ContinueAction_Type.NORMAL_START:
-      return 'Normal Start'
-    case ContinueAction_Type.CHALLENGE_ACCEPT:
-      return 'Accept Challenge'
-    case ContinueAction_Type.CHALLENGE_REJECT:
-      return 'Reject Challenge'
-    case ContinueAction_Type.TYPE_UNKNOWN:
-    case ContinueAction_Type.UNRECOGNIZED:
-    default:
-      console.warn("Unhandled action: ", props.action.type)
-      return props.action.type
-  }
+  return continueActionLabel(props.action.type!, store.matchState.nextCommand)
 })
 
 const issues = computed(() => {

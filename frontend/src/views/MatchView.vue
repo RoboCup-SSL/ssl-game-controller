@@ -3,15 +3,16 @@ import {computed, inject, onMounted, onUnmounted} from "vue";
 import ContinueActionButtonList from "@/components/match/ContinueActionButtonList.vue";
 import AutoContinueInput from "@/components/match/AutoContinueInput.vue";
 import MatchTeamTable from "@/components/match/MatchTeamTable.vue";
-import type {ControlApi} from "@/providers/controlApi/ControlApi";
+import type {ControlApi} from "@/providers/controlApi";
 import {useGcStateStore} from "@/store/gcState";
 import {useUiStateStore} from "@/store/uiState";
 import SwitchColorButton from "@/components/start/SwitchColorButton.vue";
 import {useMatchStateStore} from "@/store/matchState";
 import {Referee_Stage} from "@/proto/ssl_gc_referee_message";
 import SwitchSidesButton from "@/components/start/SwitchSidesButton.vue";
-import HaltButton from "@/components/control/HaltButton.vue";
 import GameEvents from "@/components/match/GameEvents.vue";
+import {Command_Type} from "@/proto/ssl_gc_state";
+import CommandButton from "@/components/control/CommandButton.vue";
 
 const store = useMatchStateStore()
 const gcStore = useGcStateStore()
@@ -34,7 +35,7 @@ const toggleAutoContinue = () => {
 
 const halftime = computed(() => {
   return store.matchState.stage === Referee_Stage.NORMAL_HALF_TIME ||
-    store.matchState.stage === Referee_Stage.EXTRA_HALF_TIME
+      store.matchState.stage === Referee_Stage.EXTRA_HALF_TIME
 })
 
 const keyListenerContinue = function (e: KeyboardEvent) {
@@ -67,11 +68,11 @@ onUnmounted(() => {
   <div class="row q-gutter-md">
     <div class="col q-gutter-md q-mr-md" style="min-width: 500px">
       <q-expansion-item
-        dense
-        switch-toggle-side
-        v-model="uiStore.matchTeamSettingsExpanded"
-        icon="perm_identity"
-        label="Team Settings"
+          dense
+          switch-toggle-side
+          v-model="uiStore.matchTeamSettingsExpanded"
+          icon="perm_identity"
+          label="Team Settings"
       >
         <q-card>
           <q-card-section>
@@ -83,15 +84,18 @@ onUnmounted(() => {
         <AutoContinueInput/>
       </div>
       <div class="row justify-evenly">
+        Press
         <div class="q-my-auto">
-          Press <em>
-          Ctrl +
-          <q-badge label="id" color="orange"/>
-        </em>
+          <em>
+            Ctrl +
+            <q-badge label="id" color="orange"/>
+          </em>
+          |
+          <em>NumpadEnter</em>
           to continue
         </div>
         <div class="q-my-auto">
-          Press <em>Esc</em> to Halt
+          <em>Esc</em> to Halt
         </div>
       </div>
       <template v-if="halftime">
@@ -107,7 +111,7 @@ onUnmounted(() => {
         </div>
       </template>
       <div class="column">
-        <HaltButton class="col"/>
+        <CommandButton class="col" :type="Command_Type.HALT"/>
       </div>
       <ContinueActionButtonList/>
     </div>

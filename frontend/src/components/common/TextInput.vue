@@ -1,5 +1,8 @@
 <script setup lang="ts">
 
+import {inject} from "vue";
+import type {Shortcuts} from "@/providers/shortcuts";
+
 defineProps<{
   modelValue?: string,
   label?: string,
@@ -8,6 +11,10 @@ defineProps<{
 const emit = defineEmits<{
   (event: 'update:modelValue', payload: string | undefined): void;
 }>();
+
+const shortcuts = inject<Shortcuts>('shortcuts')!
+const onFocusin = () => shortcuts.disable()
+const onFocusout = () => shortcuts.enable()
 
 const updateValue = (v: string | number | null) => {
   if (v) {
@@ -28,6 +35,8 @@ const updateValue = (v: string | number | null) => {
     :label="label"
     :model-value="modelValue"
     @update:model-value="updateValue"
+    @focusin="onFocusin"
+    @focusout="onFocusout"
   >
     <template v-slot:prepend>
       <q-icon name="close" @click="updateValue(null)"/>

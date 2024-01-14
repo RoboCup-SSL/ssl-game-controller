@@ -1,12 +1,20 @@
 <script setup lang="ts">
 
+import {inject} from "vue";
+import type {Shortcuts} from "@/providers/shortcuts";
+
 defineProps<{
   modelValue?: number,
   label?: string,
 }>()
+
 const emit = defineEmits<{
   (event: 'update:modelValue', payload: number | undefined): void;
 }>();
+
+const shortcuts = inject<Shortcuts>('shortcuts')!
+const onFocusin = () => shortcuts.disable()
+const onFocusout = () => shortcuts.enable()
 
 const updateValue = (value: string | number | null) => {
   if (value !== null) {
@@ -23,12 +31,14 @@ const updateValue = (value: string | number | null) => {
 
 <template>
   <q-input
-    input-class="text-center"
-    dense
-    :label="label"
-    type="number"
-    :model-value="modelValue"
-    @update:model-value="updateValue"
+      input-class="text-center"
+      dense
+      :label="label"
+      type="number"
+      :model-value="modelValue"
+      @update:model-value="updateValue"
+      @focusin="onFocusin"
+      @focusout="onFocusout"
   >
     <template v-slot:prepend>
       <q-icon name="close" @click="updateValue(null)"/>

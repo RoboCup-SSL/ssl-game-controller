@@ -4,7 +4,7 @@ import TeamBadge from "@/components/common/TeamBadge.vue";
 import type {ProtocolEntry} from "@/proto/ssl_gc_api";
 import formatDuration from "format-duration";
 import {changeDetails} from "@/helpers/ChangeDetails";
-import type {ControlApi} from "@/providers/controlApi/ControlApi";
+import type {ControlApi} from "@/providers/controlApi";
 import OriginIcon from "@/components/common/OriginIcon.vue";
 import GameEventDetailsTree from "@/components/match/GameEventDetailsTree.vue";
 

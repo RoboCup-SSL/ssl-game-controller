@@ -3,7 +3,7 @@ import {computed, inject} from "vue";
 import ToggleInput from "@/components/common/ToggleInput.vue";
 import {useMatchStateStore} from "@/store/matchState";
 import type {Team} from "@/proto/ssl_gc_common";
-import type {ControlApi} from "@/providers/controlApi/ControlApi";
+import type {ControlApi} from "@/providers/controlApi";
 
 const props = defineProps<{
   team: Team,

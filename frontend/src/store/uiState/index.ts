@@ -12,6 +12,7 @@ interface UiState {
   leftDrawerWidth: number,
   leftDrawerOpen: boolean,
   rightDrawerOpen: boolean,
+  showShortcuts: boolean,
 }
 
 export const useUiStateStore = defineStore('uiState', {
@@ -26,6 +27,7 @@ export const useUiStateStore = defineStore('uiState', {
       leftDrawerWidth: 300,
       leftDrawerOpen: false,
       rightDrawerOpen: false,
+      showShortcuts: false,
     }
     const storedData = localStorage.getItem('ui-state')
     if (storedData) {
@@ -36,7 +38,7 @@ export const useUiStateStore = defineStore('uiState', {
 })
 
 export function subscribeToLocalStorage() {
-  useUiStateStore().$subscribe((mutation: SubscriptionCallbackMutation<UiState>, state: UnwrapRef<UiState>) => {
+  useUiStateStore().$subscribe((_: SubscriptionCallbackMutation<UiState>, state: UnwrapRef<UiState>) => {
     localStorage.setItem('ui-state', JSON.stringify(state))
   })
 }

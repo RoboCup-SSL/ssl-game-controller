@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {inject, ref} from "vue";
 import {Team} from "@/proto/ssl_gc_common";
-import type {ControlApi} from "@/providers/controlApi/ControlApi";
+import type {ControlApi} from "@/providers/controlApi";
 import TeamInput from "@/components/common/TeamInput.vue";
 import FieldHalfInput from "@/components/team/FieldHalfInput.vue";
 import {opponent} from "@/helpers";

@@ -4,7 +4,7 @@ import {useMatchStateStore} from "@/store/matchState";
 import {gameEventNames} from "@/helpers/texts";
 import dayjs from "dayjs";
 import type {Team} from "@/proto/ssl_gc_common";
-import type {ControlApi} from "@/providers/controlApi/ControlApi";
+import type {ControlApi} from "@/providers/controlApi";
 import type {GameEvent} from "@/proto/ssl_gc_game_event";
 
 const props = defineProps<{

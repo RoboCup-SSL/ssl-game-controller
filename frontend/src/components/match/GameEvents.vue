@@ -6,7 +6,7 @@ import {useMatchStateStore} from "@/store/matchState";
 import type {ProposalGroup} from "@/proto/ssl_gc_state";
 import type {GameEvent} from "@/proto/ssl_gc_game_event";
 import GameEventDetailsTree from "@/components/match/GameEventDetailsTree.vue";
-import type {ControlApi} from "@/providers/controlApi/ControlApi";
+import type {ControlApi} from "@/providers/controlApi";
 
 const store = useMatchStateStore()
 const control = inject<ControlApi>('control-api')

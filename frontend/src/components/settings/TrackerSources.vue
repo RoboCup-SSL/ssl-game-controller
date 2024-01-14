@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {computed, inject} from "vue";
 import {useGcStateStore} from "@/store/gcState";
-import type {ControlApi} from "@/providers/controlApi/ControlApi";
+import type {ControlApi} from "@/providers/controlApi";
 
 const store = useGcStateStore()
 const control = inject<ControlApi>('control-api')

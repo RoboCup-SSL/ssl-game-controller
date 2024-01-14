@@ -2,7 +2,7 @@ import {Input, Output} from "@/proto/ssl_gc_api";
 import type {Change, Change_UpdateConfig, Change_UpdateTeamState} from "@/proto/ssl_gc_change";
 import type {Command, Command_Type, Proposal} from "@/proto/ssl_gc_state";
 import type {GameEvent} from "@/proto/ssl_gc_game_event";
-import type {ContinueAction} from "@/proto/ssl_gc_engine";
+import {type ContinueAction, ContinueAction_State} from "@/proto/ssl_gc_engine";
 import type {Config} from "@/proto/ssl_gc_engine_config";
 import {Team} from "@/proto/ssl_gc_common";
 
@@ -118,9 +118,13 @@ export class ControlApi {
   }
 
   public Continue(continueAction: ContinueAction) {
-    this.Send({
-      continueAction
-    })
+    if (continueAction.state === ContinueAction_State.READY_AUTO
+      || continueAction.state === ContinueAction_State.READY_MANUAL
+      || continueAction.state === ContinueAction_State.WAITING) {
+      this.Send({
+        continueAction
+      })
+    }
   }
 
   public SubmitChange(change: Change) {

@@ -15,13 +15,16 @@ export const useMatchStateStore = defineStore('matchState', {
       return state.matchState.gameState?.type === GameState_Type.KICKOFF
     },
     isPenalty: (state) => {
-      return state.matchState.gameState?.type?.toString() === GameState_Type.PENALTY
+      return state.matchState.gameState?.type === GameState_Type.PENALTY
     },
     isStop: (state) => {
-      return state.matchState.gameState?.type?.toString() === GameState_Type.STOP
+      return state.matchState.gameState?.type === GameState_Type.STOP
+    },
+    isHalt: (state) => {
+      return state.matchState.gameState?.type === GameState_Type.HALT
     },
     isTimeout: (state) => {
-      return state.matchState.gameState?.type?.toString() === GameState_Type.TIMEOUT
+      return state.matchState.gameState?.type === GameState_Type.TIMEOUT
     },
   },
   actions: {

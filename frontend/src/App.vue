@@ -27,6 +27,11 @@ if (uiStore.darkMode !== undefined) {
   $q.dark.set(uiStore.darkMode)
 }
 
+const showShortcuts = computed(() => uiStore.showShortcuts)
+const toggleShortcuts = () => {
+  uiStore.showShortcuts = !uiStore.showShortcuts
+}
+
 let initialDrawerWidth = 0
 const resizeRightDrawer = (ev: any) => {
   if (ev.isFirst === true) {
@@ -64,7 +69,11 @@ const dev = computed(() => {
         <div class="q-mx-md">
           <ExternalConnectionStatus/>
         </div>
-        <q-toggle dense flat round @click="toggleDarkMode" :model-value="darkMode" color="black">Dark</q-toggle>
+        <q-toggle dense flat round class="q-mx-sm" @click="toggleDarkMode" :model-value="darkMode" color="black">Dark
+        </q-toggle>
+        <q-toggle dense flat round class="q-mx-sm" @click="toggleShortcuts" :model-value="showShortcuts" color="black">
+          Show Shortcuts
+        </q-toggle>
         <q-btn dense flat round icon="menu" @click="toggleRightDrawer"/>
       </q-toolbar>
 

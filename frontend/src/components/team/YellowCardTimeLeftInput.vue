@@ -2,7 +2,7 @@
 import {computed, inject} from "vue";
 import NumberInput from "@/components/common/NumberInput.vue";
 import type {Team} from "@/proto/ssl_gc_common";
-import type {ControlApi} from "@/providers/controlApi/ControlApi";
+import type {ControlApi} from "@/providers/controlApi";
 import type {YellowCard} from "@/proto/ssl_gc_state";
 
 const props = defineProps<{

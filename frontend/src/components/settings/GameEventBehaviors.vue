@@ -5,7 +5,7 @@ import {useGcStateStore} from "@/store/gcState";
 import {Config_Behavior} from "@/proto/ssl_gc_engine_config";
 import {gameEvent_TypeFromJSON} from "@/proto/ssl_gc_game_event";
 import {gameEventNames} from "@/helpers/texts";
-import type {ControlApi} from "@/providers/controlApi/ControlApi";
+import type {ControlApi} from "@/providers/controlApi";
 
 const store = useGcStateStore()
 const control = inject<ControlApi>('control-api')

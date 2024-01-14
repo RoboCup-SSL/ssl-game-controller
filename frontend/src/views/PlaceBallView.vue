@@ -5,7 +5,7 @@ import {useMatchStateStore} from "@/store/matchState";
 import {isPausedStage} from "@/helpers";
 import {Command_Type} from "@/proto/ssl_gc_state";
 import {Team} from "@/proto/ssl_gc_common";
-import type {ControlApi} from "@/providers/controlApi/ControlApi";
+import type {ControlApi} from "@/providers/controlApi";
 import type {Vector2} from "@/proto/ssl_gc_geometry";
 
 const store = useMatchStateStore()

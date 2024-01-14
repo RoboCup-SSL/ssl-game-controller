@@ -2,7 +2,7 @@
 import {computed, inject} from "vue";
 import ToggleInput from "@/components/common/ToggleInput.vue";
 import {useGcStateStore} from "@/store/gcState";
-import type {ControlApi} from "@/providers/controlApi/ControlApi";
+import type {ControlApi} from "@/providers/controlApi";
 
 const store = useGcStateStore()
 const control = inject<ControlApi>('control-api')

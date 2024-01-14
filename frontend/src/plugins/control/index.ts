@@ -1,15 +1,20 @@
-import {ControlApi} from "@/providers/controlApi/ControlApi";
+import {ControlApi} from "@/providers/controlApi";
 import {useMatchStateStore} from "@/store/matchState";
 import type {Output} from "@/proto/ssl_gc_api";
 import {useGcStateStore} from "@/store/gcState";
 import type {App} from "vue";
-import {Command_Type, GameState_Type} from "@/proto/ssl_gc_state";
 import {useProtocolStore} from "@/store/protocolState";
+import {ManualActions} from "@/providers/manualActions";
+import {Shortcuts} from "@/providers/shortcuts";
 
 export const control = {
   install(app: App) {
     const controlApi = new ControlApi()
+    const manualActions = new ManualActions(controlApi)
+    const shortcuts = new Shortcuts(manualActions)
     app.provide('control-api', controlApi)
+    app.provide('command-actions', manualActions)
+    app.provide('shortcuts', shortcuts)
 
     const matchStateStore = useMatchStateStore()
     controlApi.RegisterConsumer((output: Output) => {
@@ -35,13 +40,6 @@ export const control = {
       }
     })
 
-    const keyListenerHalt = function (e: KeyboardEvent) {
-      if (e.key === "Escape") {
-        if (matchStateStore.matchState.gameState?.type !== GameState_Type.HALT) {
-          controlApi.NewCommandNeutral(Command_Type.HALT)
-        }
-      }
-    };
-    document.addEventListener('keydown', keyListenerHalt)
+    window.addEventListener('keydown', (e) => shortcuts.keyListenerCommands(e))
   }
 }

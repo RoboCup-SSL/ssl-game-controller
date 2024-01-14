@@ -2,7 +2,7 @@
 import {inject} from "vue";
 import ControlButton from "@/components/control/ControlButton.vue";
 import {GameEvent_Goal, GameEvent_Type} from "@/proto/ssl_gc_game_event";
-import type {ControlApi} from "@/providers/controlApi/ControlApi";
+import type {ControlApi} from "@/providers/controlApi";
 import type {Team} from "@/proto/ssl_gc_common";
 
 const props = defineProps<{

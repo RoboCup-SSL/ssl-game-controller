@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {inject} from "vue";
-import type {ControlApi} from "@/providers/controlApi/ControlApi";
+import type {ControlApi} from "@/providers/controlApi";
 
 const control = inject<ControlApi>('control-api')
 

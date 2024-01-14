@@ -4,7 +4,7 @@ import SelectInput from "@/components/common/SelectInput.vue";
 import {useMatchStateStore} from "@/store/matchState";
 import {matchTypeName} from "@/helpers/texts";
 import {MatchType} from "@/proto/ssl_gc_referee_message";
-import type {ControlApi} from "@/providers/controlApi/ControlApi";
+import type {ControlApi} from "@/providers/controlApi";
 
 const store = useMatchStateStore()
 const control = inject<ControlApi>('control-api')

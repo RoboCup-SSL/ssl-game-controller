@@ -1,6 +1,7 @@
 import {MatchType, Referee_Stage} from "@/proto/ssl_gc_referee_message";
-import {Command_Type, GameState_Type} from "@/proto/ssl_gc_state";
+import {type Command, Command_Type, GameState_Type} from "@/proto/ssl_gc_state";
 import {GameEvent_Type} from "@/proto/ssl_gc_game_event";
+import {ContinueAction_Type} from "@/proto/ssl_gc_engine";
 
 export function stageName(stage: Referee_Stage): string {
   switch (stage) {
@@ -137,5 +138,53 @@ export function matchTypeName(matchType: MatchType): string {
       return "Elimination Phase"
     case MatchType.FRIENDLY:
       return "Friendly"
+  }
+}
+
+export function continueActionLabel(type: ContinueAction_Type, nextCommand?: Command): string {
+  switch (type) {
+    case ContinueAction_Type.HALT:
+      return 'Halt'
+    case ContinueAction_Type.RESUME_FROM_HALT:
+      return 'Resume (Halt -> Stop)'
+    case ContinueAction_Type.STOP_GAME:
+      return 'Stop'
+    case ContinueAction_Type.FORCE_START:
+      return 'Force Start (no next command)'
+    case ContinueAction_Type.FREE_KICK:
+      return 'Free Kick (no next command)'
+    case ContinueAction_Type.NEXT_COMMAND:
+      return commandName(nextCommand?.type!)
+    case ContinueAction_Type.BALL_PLACEMENT_START:
+      return 'Start Ball Placement'
+    case ContinueAction_Type.BALL_PLACEMENT_CANCEL:
+      return 'Cancel Ball Placement'
+    case ContinueAction_Type.BALL_PLACEMENT_COMPLETE:
+      return 'Complete Ball Placement'
+    case ContinueAction_Type.BALL_PLACEMENT_FAIL:
+      return 'Fail Ball Placement'
+    case ContinueAction_Type.TIMEOUT_START:
+      return 'Start Timeout'
+    case ContinueAction_Type.TIMEOUT_STOP:
+      return 'Stop Timeout'
+    case ContinueAction_Type.BOT_SUBSTITUTION:
+      return 'Start Bot Substitution'
+    case ContinueAction_Type.NEXT_STAGE:
+      return 'Next Stage'
+    case ContinueAction_Type.END_GAME:
+      return 'End match'
+    case ContinueAction_Type.ACCEPT_GOAL:
+      return 'Accept Goal'
+    case ContinueAction_Type.NORMAL_START:
+      return 'Normal Start'
+    case ContinueAction_Type.CHALLENGE_ACCEPT:
+      return 'Accept Challenge'
+    case ContinueAction_Type.CHALLENGE_REJECT:
+      return 'Reject Challenge'
+    case ContinueAction_Type.TYPE_UNKNOWN:
+    case ContinueAction_Type.UNRECOGNIZED:
+    default:
+      console.warn("No text for action: ", type)
+      return type
   }
 }
