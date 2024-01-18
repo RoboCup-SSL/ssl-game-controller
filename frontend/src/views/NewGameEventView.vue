@@ -52,7 +52,7 @@ const createGameEvent = (gameEvent: GameEvent) => {
 
   <div class="row q-gutter-md justify-evenly">
     <ToggleInput v-model="propose" label="Propose only"/>
-    <TextInput v-model="origin" label="Origin"/>
+    <TextInput v-model="origin" label="Origin" :clearable="true"/>
   </div>
 
   <q-tab-panels v-model="tab" animated swipeable>

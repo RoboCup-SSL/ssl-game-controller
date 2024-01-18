@@ -65,6 +65,8 @@ export class Shortcuts {
       case "NumpadEnter":
         this.manualActions.getContinueAction().send()
         break
+      default:
+        return
     }
     e.preventDefault()
   }

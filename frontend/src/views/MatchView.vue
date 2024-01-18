@@ -13,6 +13,7 @@ import SwitchSidesButton from "@/components/start/SwitchSidesButton.vue";
 import GameEvents from "@/components/match/GameEvents.vue";
 import {Command_Type} from "@/proto/ssl_gc_state";
 import CommandButton from "@/components/control/CommandButton.vue";
+import StatusMessageInput from "@/components/match/StatusMessageInput.vue";
 
 const store = useMatchStateStore()
 const gcStore = useGcStateStore()
@@ -81,7 +82,12 @@ onUnmounted(() => {
         </q-card>
       </q-expansion-item>
       <div class="row">
-        <AutoContinueInput/>
+        <div class="col">
+          <AutoContinueInput/>
+        </div>
+        <div class="col">
+          <StatusMessageInput/>
+        </div>
       </div>
       <div class="row justify-evenly">
         Press

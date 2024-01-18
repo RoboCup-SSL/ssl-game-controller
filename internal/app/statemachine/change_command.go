@@ -58,6 +58,9 @@ func (s *StateMachine) processChangeNewCommand(newState *state.State, newCommand
 		// reset ball placement pos and follow ups
 		newState.PlacementPos = nil
 		newState.NextCommand = nil
+
+		// reset status message
+		newState.StatusMessage = nil
 	}
 
 	if *newState.Stage == state.Referee_PENALTY_SHOOTOUT &&

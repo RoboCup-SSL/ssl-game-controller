@@ -48,7 +48,8 @@ export interface Change {
     | { $case: "switchColorsChange"; switchColorsChange: Change_SwitchColors }
     | { $case: "revertChange"; revertChange: Change_Revert }
     | { $case: "newGameStateChange"; newGameStateChange: Change_NewGameState }
-    | { $case: "acceptProposalGroupChange"; acceptProposalGroupChange: Change_AcceptProposalGroup };
+    | { $case: "acceptProposalGroupChange"; acceptProposalGroupChange: Change_AcceptProposalGroup }
+    | { $case: "setStatusMessageChange"; setStatusMessageChange: Change_SetStatusMessage };
 }
 
 /** New referee command */
@@ -187,6 +188,11 @@ export interface Change_NewGameState {
   gameState?: GameState;
 }
 
+export interface Change_SetStatusMessage {
+  /** The new status message */
+  statusMessage?: string;
+}
+
 export const StateChange = {
   fromJSON(object: any): StateChange {
     return {
@@ -262,6 +268,11 @@ export const Change = {
           $case: "acceptProposalGroupChange",
           acceptProposalGroupChange: Change_AcceptProposalGroup.fromJSON(object.acceptProposalGroupChange),
         }
+        : isSet(object.setStatusMessageChange)
+        ? {
+          $case: "setStatusMessageChange",
+          setStatusMessageChange: Change_SetStatusMessage.fromJSON(object.setStatusMessageChange),
+        }
         : undefined,
     };
   },
@@ -319,6 +330,10 @@ export const Change = {
     message.change?.$case === "acceptProposalGroupChange" &&
       (obj.acceptProposalGroupChange = message.change?.acceptProposalGroupChange
         ? Change_AcceptProposalGroup.toJSON(message.change?.acceptProposalGroupChange)
+        : undefined);
+    message.change?.$case === "setStatusMessageChange" &&
+      (obj.setStatusMessageChange = message.change?.setStatusMessageChange
+        ? Change_SetStatusMessage.toJSON(message.change?.setStatusMessageChange)
         : undefined);
     return obj;
   },
@@ -567,6 +582,18 @@ export const Change_NewGameState = {
     const obj: any = {};
     message.gameState !== undefined &&
       (obj.gameState = message.gameState ? GameState.toJSON(message.gameState) : undefined);
+    return obj;
+  },
+};
+
+export const Change_SetStatusMessage = {
+  fromJSON(object: any): Change_SetStatusMessage {
+    return { statusMessage: isSet(object.statusMessage) ? String(object.statusMessage) : "" };
+  },
+
+  toJSON(message: Change_SetStatusMessage): unknown {
+    const obj: any = {};
+    message.statusMessage !== undefined && (obj.statusMessage = message.statusMessage);
     return obj;
   },
 };

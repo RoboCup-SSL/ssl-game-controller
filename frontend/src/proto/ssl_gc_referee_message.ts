@@ -114,6 +114,8 @@ export interface Referee {
    *  * ball placement
    */
   currentActionTimeRemaining?: number;
+  /** A message that can be displayed to the spectators, like a reason for a stoppage. */
+  statusMessage?: string;
 }
 
 /** These are the "coarse" stages of the game. */
@@ -511,6 +513,7 @@ export const Referee = {
       currentActionTimeRemaining: isSet(object.currentActionTimeRemaining)
         ? Number(object.currentActionTimeRemaining)
         : 0,
+      statusMessage: isSet(object.statusMessage) ? String(object.statusMessage) : "",
     };
   },
 
@@ -543,6 +546,7 @@ export const Referee = {
     }
     message.currentActionTimeRemaining !== undefined &&
       (obj.currentActionTimeRemaining = Math.round(message.currentActionTimeRemaining));
+    message.statusMessage !== undefined && (obj.statusMessage = message.statusMessage);
     return obj;
   },
 };
