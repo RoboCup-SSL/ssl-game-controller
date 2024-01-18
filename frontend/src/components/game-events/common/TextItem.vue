@@ -24,6 +24,7 @@ const updateValue = (v: string | undefined) => {
         :label="label"
         :model-value="modelValue"
         @update:model-value="updateValue"
+        :clearable="true"
       />
     </q-item-section>
   </q-item>

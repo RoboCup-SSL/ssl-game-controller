@@ -251,6 +251,7 @@ export interface State {
   matchType?: MatchType;
   readyContinueTime?: Date;
   shootoutState?: ShootoutState;
+  statusMessage?: string;
 }
 
 export interface State_TeamStateEntry {
@@ -502,6 +503,7 @@ export const State = {
       matchType: isSet(object.matchType) ? matchTypeFromJSON(object.matchType) : MatchType.UNKNOWN_MATCH,
       readyContinueTime: isSet(object.readyContinueTime) ? fromJsonTimestamp(object.readyContinueTime) : undefined,
       shootoutState: isSet(object.shootoutState) ? ShootoutState.fromJSON(object.shootoutState) : undefined,
+      statusMessage: isSet(object.statusMessage) ? String(object.statusMessage) : "",
     };
   },
 
@@ -546,6 +548,7 @@ export const State = {
     message.readyContinueTime !== undefined && (obj.readyContinueTime = message.readyContinueTime.toISOString());
     message.shootoutState !== undefined &&
       (obj.shootoutState = message.shootoutState ? ShootoutState.toJSON(message.shootoutState) : undefined);
+    message.statusMessage !== undefined && (obj.statusMessage = message.statusMessage);
     return obj;
   },
 };

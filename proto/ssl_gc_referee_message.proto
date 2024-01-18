@@ -206,6 +206,9 @@ message Referee {
     //  * kickoff, penalty kick, force start
     //  * ball placement
     optional int64 current_action_time_remaining = 15;
+
+    // A message that can be displayed to the spectators, like a reason for a stoppage.
+    optional string status_message = 20;
 }
 
 // List of matching proposals

@@ -6,6 +6,7 @@ import type {Shortcuts} from "@/providers/shortcuts";
 defineProps<{
   modelValue?: string,
   label?: string,
+  clearable?: boolean,
 }>()
 
 const emit = defineEmits<{
@@ -38,8 +39,8 @@ const updateValue = (v: string | number | null) => {
     @focusin="onFocusin"
     @focusout="onFocusout"
   >
-    <template v-slot:prepend>
-      <q-icon name="close" @click="updateValue(null)"/>
+    <template v-slot:prepend v-if="clearable">
+      <q-icon name="clear" @click="updateValue(null)"/>
     </template>
   </q-input>
 </template>

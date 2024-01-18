@@ -120,6 +120,7 @@ message State {
     optional MatchType match_type = 18;
     optional google.protobuf.Timestamp ready_continue_time = 20;
     optional ShootoutState shootout_state = 21;
+    optional string status_message = 22;
 }
 
 message ShootoutState {

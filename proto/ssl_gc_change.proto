@@ -48,6 +48,7 @@ message Change {
         Revert revert_change = 15;
         NewGameState new_game_state_change = 17;
         AcceptProposalGroup accept_proposal_group_change = 18;
+        SetStatusMessage set_status_message_change = 20;
     }
 
     // New referee command
@@ -186,5 +187,10 @@ message Change {
     message NewGameState {
         // The new game state
         optional GameState game_state = 1;
+    }
+
+    message SetStatusMessage {
+        // The new status message
+        optional string status_message = 1;
     }
 }
