@@ -132,6 +132,19 @@ export function changeDetails(change: Change): ChangeDetails {
       title: `Proposal accepted by ${details.acceptedBy}: '${details.groupId!}'`,
       icon: "check_circle_outline",
     }
+  } else if (changeDetails.$case === "setStatusMessageChange") {
+    const details = changeDetails.setStatusMessageChange;
+    let title
+    if (details.statusMessage) {
+      title = `Status Message: ${details.statusMessage}`
+    } else {
+      title = 'Status Message cleared'
+    }
+    return {
+      typeName: "Status Message",
+      title: title,
+      icon: "message",
+    }
   }
   return {
     typeName: "-",
