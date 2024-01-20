@@ -8,7 +8,7 @@ COPY go.sum .
 RUN go install -v ./cmd/ssl-team-client
 
 # Start fresh from a smaller image
-FROM alpine:3.18
+FROM alpine:3.19
 COPY --from=build_go /go/bin/ssl-team-client /app/ssl-team-client
 USER 1000
 ENTRYPOINT ["/app/ssl-team-client"]
