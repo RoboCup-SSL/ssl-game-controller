@@ -40,6 +40,9 @@ const currentActionTime = computed(() => {
 const goals = (team: Team) => {
   return store.matchState.teamState![team].goals!
 }
+const statusMessage = computed(() => {
+  return store.matchState.statusMessage
+})
 </script>
 
 <template>
@@ -50,6 +53,9 @@ const goals = (team: Team) => {
         <TeamBadge :team="gameState?.forTeam"/>
         <template v-if="currentActionTime">
           ({{ currentActionTime }} left)
+        </template>
+        <template v-if="statusMessage">
+          ({{ statusMessage }})
         </template>
       </div>
 
