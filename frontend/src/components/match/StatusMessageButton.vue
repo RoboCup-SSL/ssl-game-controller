@@ -79,11 +79,9 @@ const onCustomStatusMessageSelected = () => {
 </script>
 
 <template>
-  <q-btn
-      label="Status Message"
-      color="primary"
-      @click="dialogOpen = true"
-  />
+  <q-btn flat @click="dialogOpen = true">
+    <q-icon name="message" color="black"/>
+  </q-btn>
   <q-dialog v-model="dialogOpen">
     <q-card class="q-px-sm q-pb-md">
       <q-card-section class="row items-center q-pb-none">

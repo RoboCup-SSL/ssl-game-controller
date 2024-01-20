@@ -3,6 +3,7 @@ import {computed} from 'vue'
 import MatchStateToolbar from "@/components/MatchStateToolbar.vue";
 import ExternalConnectionStatus from "@/components/ExternalConnectionStatus.vue";
 import StoreUpdateCountStatus from "@/components/StoreUpdateCountStatus.vue";
+import StatusMessageButton from "@/components/match/StatusMessageButton.vue";
 import ManualControlView from "@/views/ManualControlView.vue";
 import ProtocolList from "@/components/protocol/ProtocolList.vue";
 import {useQuasar} from "quasar";
@@ -74,6 +75,7 @@ const dev = computed(() => {
         <q-toggle dense flat round class="q-mx-sm" @click="toggleShortcuts" :model-value="showShortcuts" color="black">
           Show Shortcuts
         </q-toggle>
+        <StatusMessageButton/>
         <q-btn dense flat round icon="menu" @click="toggleRightDrawer"/>
       </q-toolbar>
 
