@@ -108,7 +108,7 @@ const dev = computed(() => {
       </div>
     </q-page-container>
 
-    <q-footer elevated class="bg-grey-8 text-white">
+    <q-footer elevated class="bg-primary">
       <MatchStateToolbar/>
     </q-footer>
 

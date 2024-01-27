@@ -62,7 +62,7 @@ function revert() {
               <q-icon :name="change.icon" color="primary" size="15px" v-if="dense" class="q-mr-xs"/>
               <TeamBadge :team="change.forTeam"/>
               <span class="text-weight-medium">{{ change.title }}</span>
-              <span class="text-grey-8"> - {{ origin }}</span>
+              <span class="text-secondary"> - {{ origin }}</span>
               <OriginIcon :origin="origin"/>
               <span v-if="hasGameEventOrigins">(</span>
               <OriginIcon
