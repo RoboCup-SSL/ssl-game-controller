@@ -27,7 +27,7 @@ jobs:
   test_go:
     resource_class: medium
     docker:
-      - image: cimg/go:1.21.5
+      - image: cimg/go:1.21.6
     steps:
       - checkout
       - attach_workspace:
@@ -42,7 +42,7 @@ jobs:
   build_go:
     resource_class: large
     docker:
-      - image: cimg/go:1.21.5
+      - image: cimg/go:1.21.6
     steps:
       - checkout
       - attach_workspace:
@@ -67,7 +67,7 @@ jobs:
   publish_gh:
     resource_class: small
     docker:
-      - image: cimg/go:1.21.5
+      - image: cimg/go:1.21.6
     steps:
       - attach_workspace:
           at: .
@@ -79,7 +79,7 @@ jobs:
   build_docker:
     resource_class: small
     docker:
-      - image: cimg/base:2023.12
+      - image: cimg/base:2024.01
     steps:
       - checkout
       - setup_remote_docker:
@@ -92,7 +92,7 @@ jobs:
   publish_docker:
     resource_class: small
     docker:
-      - image: cimg/base:2023.12
+      - image: cimg/base:2024.01
     steps:
       - checkout
       - setup_remote_docker:
