@@ -1,6 +1,7 @@
 package statemachine
 
 import (
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"google.golang.org/protobuf/types/known/durationpb"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -12,14 +13,12 @@ func (s *StateMachine) processChangeNewCommand(newState *state.State, newCommand
 	newState.GameState = s.newGameState(newState, newCommand)
 	newState.Command = newCommand.Command
 
-	switch *newState.Command.Type {
-	case state.Command_BALL_PLACEMENT:
-		newState.CurrentActionTimeRemaining = durationpb.New(s.gameConfig.BallPlacementTime)
-	case state.Command_DIRECT:
-		newState.CurrentActionTimeRemaining = durationpb.New(s.gameConfig.FreeKickTimeout[newState.Division.Div()])
-	case state.Command_KICKOFF, state.Command_PENALTY:
-		newState.CurrentActionTimeRemaining = durationpb.New(s.gameConfig.PrepareTimeout)
-	case state.Command_TIMEOUT:
+	newState.CurrentActionTimeRemaining = s.currentActionTimeRemainingForCommand(
+		*newState.Command.Type,
+		newState.Division.Div(),
+	)
+
+	if *newState.Command.Type == state.Command_TIMEOUT {
 		*newState.TeamInfo(*newState.Command.ForTeam).TimeoutsLeft--
 		newState.TeamInfo(*newState.Command.ForTeam).RequestsTimeoutSince = nil
 	}
@@ -75,6 +74,19 @@ func (s *StateMachine) processChangeNewCommand(newState *state.State, newCommand
 	}
 
 	return
+}
+
+func (s *StateMachine) currentActionTimeRemainingForCommand(command state.Command_Type, division config.Division) *durationpb.Duration {
+	switch command {
+	case state.Command_BALL_PLACEMENT:
+		return durationpb.New(s.gameConfig.BallPlacementTime)
+	case state.Command_DIRECT:
+		return durationpb.New(s.gameConfig.FreeKickTimeout[division])
+	case state.Command_KICKOFF, state.Command_PENALTY:
+		return durationpb.New(s.gameConfig.PrepareTimeout)
+	default:
+		return durationpb.New(0)
+	}
 }
 
 func (s *StateMachine) newGameState(newState *state.State, newCommand *Change_NewCommand) *state.GameState {
