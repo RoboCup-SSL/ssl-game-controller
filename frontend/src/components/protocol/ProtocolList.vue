@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import ProtocolItem from "@/components/protocol/ProtocolItem.vue";
-import {useProtocolStore} from "@/store/protocolState";
+import type {ProtocolEntry} from "@/proto/ssl_gc_api";
 
 defineProps<{
   dense?: boolean,
+  protocolEntries: ProtocolEntry[],
 }>()
-
-const store = useProtocolStore()
 
 </script>
 
@@ -17,7 +16,7 @@ const store = useProtocolStore()
     virtual-scroll-item-size="50"
     virtual-scroll-slice-ratio-before="0.5"
     virtual-scroll-slice-ratio-after="0.5"
-    :items="store.protocolEntries"
+    :items="protocolEntries"
   >
     <template v-slot="{ item, index }">
       <ProtocolItem

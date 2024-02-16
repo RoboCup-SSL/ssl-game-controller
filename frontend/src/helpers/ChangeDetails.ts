@@ -5,7 +5,7 @@ import type {Change, Change_UpdateConfig, Change_UpdateTeamState} from "@/proto/
 import type {GameEvent} from "@/proto/ssl_gc_game_event";
 import type {Team} from "@/proto/ssl_gc_common";
 
-interface ChangeDetails {
+export interface ChangeDetails {
   typeName: string,
   title: string,
   gameEvent?: GameEvent,

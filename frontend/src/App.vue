@@ -8,8 +8,10 @@ import ManualControlView from "@/views/ManualControlView.vue";
 import ProtocolList from "@/components/protocol/ProtocolList.vue";
 import {useQuasar} from "quasar";
 import {useUiStateStore} from "@/store/uiState";
+import {useProtocolStore} from "@/store/protocolState";
 
 const uiStore = useUiStateStore()
+const protocolStore = useProtocolStore()
 
 const toggleLeftDrawer = () => {
   uiStore.leftDrawerOpen = !uiStore.leftDrawerOpen
@@ -99,7 +101,7 @@ const dev = computed(() => {
     <q-drawer v-model="uiStore.rightDrawerOpen" side="right" bordered :width="uiStore.rightDrawerWidth">
       <div v-touch-pan.preserveCursor.prevent.mouse.horizontal="resizeRightDrawer"
            class="q-right-drawer__resizer"></div>
-      <ProtocolList dense/>
+      <ProtocolList dense :protocol-entries="protocolStore.protocolEntries"/>
     </q-drawer>
 
     <q-page-container>
