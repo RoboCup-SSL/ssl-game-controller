@@ -316,10 +316,12 @@ func (s *StateMachine) multipleFoulsChange(byTeam state.Team, events []*state.Ga
 
 // nextCommandForEvent determines the next command for the given event or returns the currently set one
 func (s *StateMachine) nextCommandForEvent(newState *state.State, gameEvent *state.GameEvent) (command *state.Command) {
-	if newState.NextCommand != nil && *newState.NextCommand.Type == state.Command_PENALTY {
-		// keep current next command, if it is a penalty kick
+	if newState.NextCommand != nil &&
+		(*newState.NextCommand.Type == state.Command_PENALTY ||
+			*newState.NextCommand.Type == state.Command_KICKOFF) {
+		// keep current next command, if it is a penalty kick or kickoff
 		// some game events, like GameEvent_ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA, can also happen during STOP,
-		// and thus after a game event that resulted in a penalty kick.
+		// and thus after a game event that resulted in a penalty kick or kickoff.
 		return newState.NextCommand
 	}
 	switch *gameEvent.Type {
