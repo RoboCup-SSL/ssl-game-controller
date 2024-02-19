@@ -145,7 +145,7 @@ func (e *Engine) actionsToContinueFromStop() (actions []*ContinueAction, hints [
 			ContinueAction_READY_MANUAL,
 		))
 	}
-	if suggestEndOfMatch(e.currentState) {
+	if e.gameConfig.SuggestEndOfMatch && suggestEndOfMatch(e.currentState) {
 		actions = append(actions, createContinueAction(
 			ContinueAction_END_GAME,
 			state.Team_UNKNOWN,

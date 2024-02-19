@@ -60,7 +60,7 @@ type Game struct {
 	BallPlacementMinRobotDistance         float64                    `yaml:"ball-placement-min-robot-distance"`
 	DistanceToBallInStop                  float64                    `yaml:"distance-to-ball-in-stop"`
 	AutoApproveGoals                      bool                       `yaml:"auto-approve-goals"`
-	ContinueFromHalt                      bool                       `yaml:"continue-from-halt"`
+	SuggestEndOfMatch                     bool                       `yaml:"suggest-end-of-match"`
 	RecommendHalfTimes                    bool                       `yaml:"recommend-half-times"`
 	ChallengeFlags                        int32                      `yaml:"challenge-flags"`
 	EmergencyStopGracePeriod              time.Duration              `yaml:"emergency-stop-grace-period"`
@@ -192,7 +192,7 @@ func DefaultControllerConfig() (c Controller) {
 	c.Game.BallPlacementMinRobotDistance = 0.05
 	c.Game.DistanceToBallInStop = 0.5
 	c.Game.AutoApproveGoals = false
-	c.Game.ContinueFromHalt = false
+	c.Game.SuggestEndOfMatch = true
 	c.Game.RecommendHalfTimes = true
 	c.Game.ChallengeFlags = 3
 	c.Game.EmergencyStopGracePeriod = 10 * time.Second
