@@ -82,8 +82,7 @@ jobs:
       - image: cimg/base:2024.01
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 20.10.18
+      - setup_remote_docker
       - run: |
           for cmd in << pipeline.parameters.cmds >>; do
             docker build --build-arg cmd=${cmd} -f ./cmd/${cmd}/Dockerfile -t robocupssl/${cmd}:latest .
@@ -95,8 +94,7 @@ jobs:
       - image: cimg/base:2024.01
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 20.10.18
+      - setup_remote_docker
       - run: |
           # Parse version from tag (removing 'v' prefix)
           TAG=${CIRCLE_TAG:1}
