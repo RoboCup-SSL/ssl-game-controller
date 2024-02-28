@@ -35,6 +35,9 @@ game:
   no-progress-timeout:
     DIV_A: 5s
     DIV_B: 10s
+  keeper-held-ball-timeout:
+    DIV_A: 5s
+    DIV_B: 10s
   ball-placement-time: 30s
   ball-placement-time-top-up: 10s
   ball-placement-required-distance: 1.0

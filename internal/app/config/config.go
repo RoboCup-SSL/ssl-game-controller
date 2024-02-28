@@ -51,6 +51,7 @@ type Game struct {
 	PrepareTimeout                        time.Duration              `yaml:"prepare-timeout"`
 	FreeKickTimeout                       map[Division]time.Duration `yaml:"free-kick-timeout"`
 	NoProgressTimeout                     map[Division]time.Duration `yaml:"no-progress-timeout"`
+	KeeperHeldBallTimeout                 map[Division]time.Duration `yaml:"keeper-held-ball-timeout"`
 	BallPlacementTime                     time.Duration              `yaml:"ball-placement-time"`
 	BallPlacementTimeTopUp                time.Duration              `yaml:"ball-placement-time-top-up"`
 	StateStoreFile                        string                     `yaml:"state-store-file"`
@@ -184,6 +185,7 @@ func DefaultControllerConfig() (c Controller) {
 	c.Game.PrepareTimeout = time.Second * 10
 	c.Game.FreeKickTimeout = map[Division]time.Duration{DivA: time.Second * 5, DivB: time.Second * 10}
 	c.Game.NoProgressTimeout = map[Division]time.Duration{DivA: time.Second * 5, DivB: time.Second * 10}
+	c.Game.KeeperHeldBallTimeout = map[Division]time.Duration{DivA: time.Second * 5, DivB: time.Second * 10}
 	c.Game.BallPlacementTime = time.Second * 30
 	c.Game.BallPlacementTimeTopUp = time.Second * 10
 	c.Game.BallPlacementRequiredDistance = 1.0

@@ -130,3 +130,13 @@ func (x *GcStateTracker) NumTeamRobots(team state.Team) (count int32) {
 	}
 	return
 }
+
+func (e *Engine) isBallInAnyDefenseArea() (bool, state.Team) {
+	for _, team := range state.BothTeams() {
+		defenseArea := geom.NewDefenseArea(e.getGeometry(), *e.currentState.TeamState[team.String()].OnPositiveHalf)
+		if defenseArea.IsPointInside(e.trackerStateGc.Ball.Pos.ToVector2()) {
+			return true, team
+		}
+	}
+	return false, state.Team_UNKNOWN
+}

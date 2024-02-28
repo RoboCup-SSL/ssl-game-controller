@@ -40,6 +40,7 @@ type Engine struct {
 	mutex                    sync.Mutex
 	mutexEnqueueBlocking     sync.Mutex
 	noProgressDetector       NoProgressDetector
+	keeperHeldBallDetector   KeeperHeldBallDetector
 	ballPlacementCoordinator BallPlacementCoordinator
 	botNumberProcessor       BotNumberProcessor
 	tickChanProvider         func() <-chan time.Time
@@ -70,6 +71,7 @@ func NewEngine(gameConfig config.Game, engineConfig config.Engine) (e *Engine) {
 	e.trackerStateGc = &GcStateTracker{}
 	e.trackerLastUpdate = map[string]time.Time{}
 	e.noProgressDetector = NoProgressDetector{gcEngine: e}
+	e.keeperHeldBallDetector = KeeperHeldBallDetector{gcEngine: e}
 	e.ballPlacementCoordinator = BallPlacementCoordinator{gcEngine: e}
 	e.botNumberProcessor = BotNumberProcessor{gcEngine: e}
 	e.tickChanProvider = func() <-chan time.Time {

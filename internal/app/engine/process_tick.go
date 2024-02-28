@@ -57,6 +57,7 @@ func (e *Engine) processTick() {
 		}
 	}
 
+	e.keeperHeldBallDetector.process()
 	e.noProgressDetector.process()
 	e.ballPlacementCoordinator.process()
 	e.processContinue()
