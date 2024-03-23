@@ -31,6 +31,11 @@ func (s *StateMachine) proceedStage(newState *state.State, newStage state.Refere
 			*newState.TeamInfo(team).BallPlacementFailures = 0
 		}
 
+		// reset bot substitutions
+		for _, team := range state.BothTeams() {
+			*newState.TeamInfo(team).BotSubstitutionsLeft = s.gameConfig.BotSubstitutionBudget
+		}
+
 		// halt the game
 		changes = append(changes, &Change{
 			Change: &Change_NewCommandChange{

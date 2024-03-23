@@ -137,6 +137,7 @@ func updateTeam(teamInfo *state.Referee_TeamInfo, teamState *state.TeamInfo) {
 	*teamInfo.MaxAllowedBots = unsigned32(*teamState.MaxAllowedBots)
 	*teamInfo.BotSubstitutionIntent = teamState.RequestsBotSubstitutionSince != nil
 	*teamInfo.BotSubstitutionAllowed = *teamState.BotSubstitutionAllowed
+	*teamInfo.BotSubstitutionsLeft = unsigned32(*teamState.BotSubstitutionsLeft)
 	timeoutTime := teamState.TimeoutTimeLeft.AsDuration()
 	*teamInfo.TimeoutTime = mapTime(timeoutTime)
 }
@@ -174,6 +175,7 @@ func newTeamInfo() (t *state.Referee_TeamInfo) {
 	t.MaxAllowedBots = new(uint32)
 	t.BotSubstitutionIntent = new(bool)
 	t.BotSubstitutionAllowed = new(bool)
+	t.BotSubstitutionsLeft = new(uint32)
 	return
 }
 

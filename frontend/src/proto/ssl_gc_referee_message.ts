@@ -465,6 +465,8 @@ export interface Referee_TeamInfo {
   ballPlacementFailuresReached?: boolean;
   /** The team is allowed to substitute one or more robots currently */
   botSubstitutionAllowed?: boolean;
+  /** The number of bot substitutions left by the team in this halftime */
+  botSubstitutionsLeft?: number;
 }
 
 /**
@@ -573,6 +575,7 @@ export const Referee_TeamInfo = {
         ? Boolean(object.ballPlacementFailuresReached)
         : false,
       botSubstitutionAllowed: isSet(object.botSubstitutionAllowed) ? Boolean(object.botSubstitutionAllowed) : false,
+      botSubstitutionsLeft: isSet(object.botSubstitutionsLeft) ? Number(object.botSubstitutionsLeft) : 0,
     };
   },
 
@@ -599,6 +602,7 @@ export const Referee_TeamInfo = {
     message.ballPlacementFailuresReached !== undefined &&
       (obj.ballPlacementFailuresReached = message.ballPlacementFailuresReached);
     message.botSubstitutionAllowed !== undefined && (obj.botSubstitutionAllowed = message.botSubstitutionAllowed);
+    message.botSubstitutionsLeft !== undefined && (obj.botSubstitutionsLeft = Math.round(message.botSubstitutionsLeft));
     return obj;
   },
 };

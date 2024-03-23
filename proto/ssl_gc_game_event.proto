@@ -80,6 +80,7 @@ message GameEvent {
         MultipleCards multiple_cards = 32;
         MultipleFouls multiple_fouls = 34;
         BotSubstitution bot_substitution = 37;
+        ExcessiveBotSubstitution excessive_bot_substitution = 52;
         TooManyRobots too_many_robots = 38;
         ChallengeFlag challenge_flag = 46;
         ChallengeFlagHandled challenge_flag_handled = 48;
@@ -468,6 +469,11 @@ message GameEvent {
         // the team that substitutes robots
         required Team by_team = 1;
     }
+    // A foul for excessive bot substitutions
+    message ExcessiveBotSubstitution {
+        // the team that substitutes robots
+        required Team by_team = 1;
+    }
     // A challenge flag, requested by a team previously, is flagged
     message ChallengeFlag {
         // the team that requested the challenge flag
@@ -547,6 +553,7 @@ message GameEvent {
         DEFENDER_TOO_CLOSE_TO_KICK_POINT = 29; // triggered by autoRef
         BOT_TOO_FAST_IN_STOP = 28; // triggered by autoRef
         BOT_INTERFERED_PLACEMENT = 20; // triggered by autoRef
+        EXCESSIVE_BOT_SUBSTITUTION = 48; // triggered by GC
 
         // Scoring goals
 

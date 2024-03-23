@@ -58,6 +58,7 @@ export interface GameEvent {
     | { $case: "multipleCards"; multipleCards: GameEvent_MultipleCards }
     | { $case: "multipleFouls"; multipleFouls: GameEvent_MultipleFouls }
     | { $case: "botSubstitution"; botSubstitution: GameEvent_BotSubstitution }
+    | { $case: "excessiveBotSubstitution"; excessiveBotSubstitution: GameEvent_ExcessiveBotSubstitution }
     | { $case: "tooManyRobots"; tooManyRobots: GameEvent_TooManyRobots }
     | { $case: "challengeFlag"; challengeFlag: GameEvent_ChallengeFlag }
     | { $case: "challengeFlagHandled"; challengeFlagHandled: GameEvent_ChallengeFlagHandled }
@@ -125,6 +126,8 @@ export enum GameEvent_Type {
   BOT_TOO_FAST_IN_STOP = "BOT_TOO_FAST_IN_STOP",
   /** BOT_INTERFERED_PLACEMENT - triggered by autoRef */
   BOT_INTERFERED_PLACEMENT = "BOT_INTERFERED_PLACEMENT",
+  /** EXCESSIVE_BOT_SUBSTITUTION - triggered by GC */
+  EXCESSIVE_BOT_SUBSTITUTION = "EXCESSIVE_BOT_SUBSTITUTION",
   /** POSSIBLE_GOAL - triggered by autoRef */
   POSSIBLE_GOAL = "POSSIBLE_GOAL",
   /** GOAL - triggered by GC */
@@ -244,6 +247,9 @@ export function gameEvent_TypeFromJSON(object: any): GameEvent_Type {
     case 20:
     case "BOT_INTERFERED_PLACEMENT":
       return GameEvent_Type.BOT_INTERFERED_PLACEMENT;
+    case 48:
+    case "EXCESSIVE_BOT_SUBSTITUTION":
+      return GameEvent_Type.EXCESSIVE_BOT_SUBSTITUTION;
     case 39:
     case "POSSIBLE_GOAL":
       return GameEvent_Type.POSSIBLE_GOAL;
@@ -374,6 +380,8 @@ export function gameEvent_TypeToJSON(object: GameEvent_Type): string {
       return "BOT_TOO_FAST_IN_STOP";
     case GameEvent_Type.BOT_INTERFERED_PLACEMENT:
       return "BOT_INTERFERED_PLACEMENT";
+    case GameEvent_Type.EXCESSIVE_BOT_SUBSTITUTION:
+      return "EXCESSIVE_BOT_SUBSTITUTION";
     case GameEvent_Type.POSSIBLE_GOAL:
       return "POSSIBLE_GOAL";
     case GameEvent_Type.GOAL:
@@ -828,6 +836,12 @@ export interface GameEvent_BotSubstitution {
   byTeam?: Team;
 }
 
+/** A foul for excessive bot substitutions */
+export interface GameEvent_ExcessiveBotSubstitution {
+  /** the team that substitutes robots */
+  byTeam?: Team;
+}
+
 /** A challenge flag, requested by a team previously, is flagged */
 export interface GameEvent_ChallengeFlag {
   /** the team that requested the challenge flag */
@@ -990,6 +1004,11 @@ export const GameEvent = {
         ? { $case: "multipleFouls", multipleFouls: GameEvent_MultipleFouls.fromJSON(object.multipleFouls) }
         : isSet(object.botSubstitution)
         ? { $case: "botSubstitution", botSubstitution: GameEvent_BotSubstitution.fromJSON(object.botSubstitution) }
+        : isSet(object.excessiveBotSubstitution)
+        ? {
+          $case: "excessiveBotSubstitution",
+          excessiveBotSubstitution: GameEvent_ExcessiveBotSubstitution.fromJSON(object.excessiveBotSubstitution),
+        }
         : isSet(object.tooManyRobots)
         ? { $case: "tooManyRobots", tooManyRobots: GameEvent_TooManyRobots.fromJSON(object.tooManyRobots) }
         : isSet(object.challengeFlag)
@@ -1166,6 +1185,10 @@ export const GameEvent = {
     message.event?.$case === "botSubstitution" && (obj.botSubstitution = message.event?.botSubstitution
       ? GameEvent_BotSubstitution.toJSON(message.event?.botSubstitution)
       : undefined);
+    message.event?.$case === "excessiveBotSubstitution" &&
+      (obj.excessiveBotSubstitution = message.event?.excessiveBotSubstitution
+        ? GameEvent_ExcessiveBotSubstitution.toJSON(message.event?.excessiveBotSubstitution)
+        : undefined);
     message.event?.$case === "tooManyRobots" && (obj.tooManyRobots = message.event?.tooManyRobots
       ? GameEvent_TooManyRobots.toJSON(message.event?.tooManyRobots)
       : undefined);
@@ -1884,6 +1907,18 @@ export const GameEvent_BotSubstitution = {
   },
 
   toJSON(message: GameEvent_BotSubstitution): unknown {
+    const obj: any = {};
+    message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
+    return obj;
+  },
+};
+
+export const GameEvent_ExcessiveBotSubstitution = {
+  fromJSON(object: any): GameEvent_ExcessiveBotSubstitution {
+    return { byTeam: isSet(object.byTeam) ? teamFromJSON(object.byTeam) : Team.UNKNOWN };
+  },
+
+  toJSON(message: GameEvent_ExcessiveBotSubstitution): unknown {
     const obj: any = {};
     message.byTeam !== undefined && (obj.byTeam = teamToJSON(message.byTeam));
     return obj;

@@ -10,6 +10,7 @@ import {useMatchStateStore} from "@/store/matchState";
 import {useGcStateStore} from "@/store/gcState";
 import {teams} from "@/helpers";
 import type {Team} from "@/proto/ssl_gc_common";
+import BotSubstitutionsInput from "@/components/team/BotSubstitutionsInput.vue";
 
 const store = useMatchStateStore()
 const gcStore = useGcStateStore()
@@ -78,6 +79,12 @@ const redCards = (team: Team) => {
       <q-item v-ripple>
         <q-item-section>
           <ChallengeFlagsInput :team="team"/>
+        </q-item-section>
+      </q-item>
+
+      <q-item v-ripple>
+        <q-item-section>
+          <BotSubstitutionsInput :team="team"/>
         </q-item-section>
       </q-item>
 
