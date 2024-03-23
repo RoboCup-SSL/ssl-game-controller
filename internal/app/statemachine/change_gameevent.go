@@ -122,20 +122,6 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 		changes = append(changes, createCommandChange(state.NewCommandNeutral(state.Command_HALT)))
 	}
 
-	// too many robots
-	if *gameEvent.Type == state.GameEvent_TOO_MANY_ROBOTS {
-		byTeam := *gameEvent.GetTooManyRobots().ByTeam
-		if byTeam.Known() {
-			log.Printf("Team %s has too many robots. Requesting robot substition for them", byTeam)
-			newState.TeamInfo(byTeam).RequestsBotSubstitutionSince = timestamppb.New(s.timeProvider())
-		} else {
-			log.Printf("Too many robots, but no information on team. Requesting for both")
-			for _, team := range state.BothTeams() {
-				newState.TeamInfo(team).RequestsBotSubstitutionSince = timestamppb.New(s.timeProvider())
-			}
-		}
-	}
-
 	// challenge flag
 	if *gameEvent.Type == state.GameEvent_CHALLENGE_FLAG {
 		*newState.TeamInfo(byTeam).ChallengeFlags--
