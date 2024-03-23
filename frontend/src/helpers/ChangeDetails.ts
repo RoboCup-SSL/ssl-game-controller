@@ -154,12 +154,12 @@ export function changeDetails(change: Change): ChangeDetails {
 }
 
 function configChangeTitle(config: Change_UpdateConfig): string {
-  if (config.firstKickoffTeam) {
+  if (config.firstKickoffTeam !== undefined && config.firstKickoffTeam !== 'UNKNOWN') {
     return `First kick-off team: ${config.firstKickoffTeam}`
-  } else if (config.matchType) {
-    return `Match type: ${config.matchType}`
-  } else if (config.division) {
+  } else if (config.division !== undefined && config.division !== 'DIV_UNKNOWN') {
     return `Division: ${config.division}`
+  } else if (config.matchType !== undefined) {
+    return `Match type: ${config.matchType}`
   }
   return "Unknown config change"
 }

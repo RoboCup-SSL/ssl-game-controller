@@ -19,7 +19,7 @@ func (s *StateMachine) processChangeUpdateConfig(newState *state.State, change *
 			}
 		}
 	}
-	if change.FirstKickoffTeam != nil {
+	if change.FirstKickoffTeam != nil && *change.FirstKickoffTeam != state.Team_UNKNOWN {
 		log.Printf("Change first kickoff team to %v", *change.FirstKickoffTeam)
 		newState.FirstKickoffTeam = change.FirstKickoffTeam
 		if *newState.Stage == state.Referee_NORMAL_FIRST_HALF_PRE {
