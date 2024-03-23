@@ -160,6 +160,8 @@ message Referee {
         optional bool ball_placement_failures_reached = 15;
         // The team is allowed to substitute one or more robots currently
         optional bool bot_substitution_allowed = 16;
+        // The number of bot substitutions left by the team in this halftime
+        optional uint32 bot_substitutions_left = 17;
     }
 
     // Information about the two teams.

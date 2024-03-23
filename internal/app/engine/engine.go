@@ -249,6 +249,9 @@ func initializeAddedTeamInfoFields(teamInfo *state.TeamInfo) {
 	if teamInfo.BotSubstitutionAllowed == nil {
 		teamInfo.BotSubstitutionAllowed = new(bool)
 	}
+	if teamInfo.BotSubstitutionsLeft == nil {
+		teamInfo.BotSubstitutionsLeft = new(int32)
+	}
 }
 
 // Stop stops the go routine that processes the change queue
@@ -456,6 +459,7 @@ func (e *Engine) createInitialState() (s *state.State) {
 		s.TeamInfo(team).TimeoutTimeLeft = durationpb.New(e.gameConfig.Normal.TimeoutDuration)
 		*s.TeamInfo(team).MaxAllowedBots = e.gameConfig.MaxBots[e.gameConfig.DefaultDivision]
 		*s.TeamInfo(team).ChallengeFlags = e.gameConfig.ChallengeFlags
+		*s.TeamInfo(team).BotSubstitutionsLeft = e.gameConfig.BotSubstitutionBudget
 	}
 	s.NextCommand = state.NewCommand(state.Command_KICKOFF, *s.FirstKickoffTeam)
 	s.PlacementPos = geom.NewVector2(0.0, 0.0)

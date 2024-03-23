@@ -119,6 +119,7 @@ export const gameEventNames = new Map<GameEvent_Type, string>([
   [GameEvent_Type.MULTIPLE_CARDS, "Multiple cards"],
   [GameEvent_Type.MULTIPLE_FOULS, "Multiple fouls"],
   [GameEvent_Type.BOT_SUBSTITUTION, "Bot substitution"],
+  [GameEvent_Type.EXCESSIVE_BOT_SUBSTITUTION, "Excessive bot substitution"],
   [GameEvent_Type.TOO_MANY_ROBOTS, "Too many bots on field"],
   [GameEvent_Type.CHALLENGE_FLAG, "Challenge flag"],
   [GameEvent_Type.CHALLENGE_FLAG_HANDLED, "Challenge flag handled"],
