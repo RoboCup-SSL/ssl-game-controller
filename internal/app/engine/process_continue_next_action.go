@@ -110,13 +110,17 @@ func (e *Engine) nextActions() (actions []*ContinueAction, hints []*ContinueHint
 func (e *Engine) actionsToContinueFromStop() (actions []*ContinueAction, hints []*ContinueHint) {
 	for _, team := range state.BothTeams() {
 		if e.currentState.HasGameEventByTeam(state.GameEvent_POSSIBLE_GOAL, team) &&
-			!e.currentState.HasGameEventByTeam(state.GameEvent_GOAL, team) &&
-			!e.currentState.HasGameEventByTeam(state.GameEvent_INVALID_GOAL, team) {
-			actions = append(actions, createContinueAction(
+			!e.currentState.HasGameEventByTeam(state.GameEvent_GOAL, team) {
+			continueActionAcceptGoal := createContinueAction(
 				ContinueAction_ACCEPT_GOAL,
 				team,
 				ContinueAction_READY_MANUAL,
-			))
+			)
+			if e.currentState.HasGameEventByTeam(state.GameEvent_INVALID_GOAL, team) {
+				continueActionAcceptGoal.ContinuationIssues = append(continueActionAcceptGoal.ContinuationIssues,
+					"The goal was probably invalid")
+			}
+			actions = append(actions, continueActionAcceptGoal)
 		}
 
 		challengeFlagsRaised := len(e.currentState.FindGameEventsByTeam(state.GameEvent_CHALLENGE_FLAG, team))
