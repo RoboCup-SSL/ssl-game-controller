@@ -52,7 +52,9 @@ func (s *StateMachine) processChangeUpdateTeamState(newState *state.State, chang
 	}
 	if change.RequestsBotSubstitution != nil {
 		if change.RequestsBotSubstitution.Value {
-			teamState.RequestsBotSubstitutionSince = timestamppb.New(s.timeProvider())
+			if teamState.RequestsBotSubstitutionSince == nil {
+				teamState.RequestsBotSubstitutionSince = timestamppb.New(s.timeProvider())
+			}
 		} else {
 			teamState.RequestsBotSubstitutionSince = nil
 		}
@@ -132,6 +134,9 @@ func (s *StateMachine) processChangeUpdateTeamState(newState *state.State, chang
 				break
 			}
 		}
+	}
+	if change.BotSubstitutionsLeft != nil {
+		*teamState.BotSubstitutionsLeft = change.BotSubstitutionsLeft.Value
 	}
 
 	s.updateMaxBots(newState)

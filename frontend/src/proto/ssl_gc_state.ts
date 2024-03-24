@@ -231,6 +231,8 @@ export interface TeamInfo {
   requestsEmergencyStopSince?: Date;
   challengeFlags?: number;
   botSubstitutionAllowed?: boolean;
+  botSubstitutionsLeft?: number;
+  botSubstitutionTimeLeft?: Duration;
 }
 
 export interface State {
@@ -427,6 +429,10 @@ export const TeamInfo = {
         : undefined,
       challengeFlags: isSet(object.challengeFlags) ? Number(object.challengeFlags) : 0,
       botSubstitutionAllowed: isSet(object.botSubstitutionAllowed) ? Boolean(object.botSubstitutionAllowed) : false,
+      botSubstitutionsLeft: isSet(object.botSubstitutionsLeft) ? Number(object.botSubstitutionsLeft) : 0,
+      botSubstitutionTimeLeft: isSet(object.botSubstitutionTimeLeft)
+        ? Duration.fromJSON(object.botSubstitutionTimeLeft)
+        : undefined,
     };
   },
 
@@ -468,6 +474,10 @@ export const TeamInfo = {
       (obj.requestsEmergencyStopSince = message.requestsEmergencyStopSince.toISOString());
     message.challengeFlags !== undefined && (obj.challengeFlags = Math.round(message.challengeFlags));
     message.botSubstitutionAllowed !== undefined && (obj.botSubstitutionAllowed = message.botSubstitutionAllowed);
+    message.botSubstitutionsLeft !== undefined && (obj.botSubstitutionsLeft = Math.round(message.botSubstitutionsLeft));
+    message.botSubstitutionTimeLeft !== undefined && (obj.botSubstitutionTimeLeft = message.botSubstitutionTimeLeft
+      ? Duration.toJSON(message.botSubstitutionTimeLeft)
+      : undefined);
     return obj;
   },
 };

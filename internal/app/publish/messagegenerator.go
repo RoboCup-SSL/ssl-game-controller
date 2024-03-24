@@ -129,6 +129,7 @@ func updateTeam(teamInfo *state.Referee_TeamInfo, teamState *state.TeamInfo) {
 	teamInfo.YellowCardTimes = mapYellowCardTimes(teamState.YellowCards)
 	*teamInfo.YellowCards = unsigned(len(teamState.YellowCards))
 	*teamInfo.Timeouts = unsigned32(*teamState.TimeoutsLeft)
+	*teamInfo.TimeoutTime = mapTime(teamState.TimeoutTimeLeft.AsDuration())
 	*teamInfo.Goalkeeper = unsigned32(*teamState.Goalkeeper)
 	*teamInfo.FoulCounter = unsigned(len(teamState.Fouls))
 	*teamInfo.BallPlacementFailures = unsigned32(*teamState.BallPlacementFailures)
@@ -137,8 +138,8 @@ func updateTeam(teamInfo *state.Referee_TeamInfo, teamState *state.TeamInfo) {
 	*teamInfo.MaxAllowedBots = unsigned32(*teamState.MaxAllowedBots)
 	*teamInfo.BotSubstitutionIntent = teamState.RequestsBotSubstitutionSince != nil
 	*teamInfo.BotSubstitutionAllowed = *teamState.BotSubstitutionAllowed
-	timeoutTime := teamState.TimeoutTimeLeft.AsDuration()
-	*teamInfo.TimeoutTime = mapTime(timeoutTime)
+	*teamInfo.BotSubstitutionsLeft = unsigned32(*teamState.BotSubstitutionsLeft)
+	*teamInfo.BotSubstitutionTimeLeft = mapTime(teamState.BotSubstitutionTimeLeft.AsDuration())
 }
 
 func newRefereeMessage() (m *state.Referee) {
@@ -174,6 +175,8 @@ func newTeamInfo() (t *state.Referee_TeamInfo) {
 	t.MaxAllowedBots = new(uint32)
 	t.BotSubstitutionIntent = new(bool)
 	t.BotSubstitutionAllowed = new(bool)
+	t.BotSubstitutionsLeft = new(uint32)
+	t.BotSubstitutionTimeLeft = new(uint32)
 	return
 }
 

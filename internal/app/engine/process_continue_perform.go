@@ -44,7 +44,12 @@ func (e *Engine) performContinueAction(action *ContinueAction) {
 			logWillNotContinue("No team for timeout specified")
 		}
 	case ContinueAction_BOT_SUBSTITUTION:
-		e.Enqueue(createBotSubstitutionEventChange(*action.ForTeam))
+		if action.ForTeam.Known() {
+			e.Enqueue(createBotSubstitutionEventChange(*action.ForTeam))
+		} else {
+			e.Enqueue(createBotSubstitutionEventChange(state.Team_YELLOW))
+			e.Enqueue(createBotSubstitutionEventChange(state.Team_BLUE))
+		}
 	case ContinueAction_NEXT_STAGE:
 		e.Enqueue(createStageChange(e.currentState.Stage.Next()))
 	case ContinueAction_END_GAME:

@@ -112,27 +112,27 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 	// bot substitution
 	if *gameEvent.Type == state.GameEvent_BOT_SUBSTITUTION {
 		// halt the game to allow teams to substitute robots
+		if !newState.GameState.IsHalted() {
+			changes = append(changes, createCommandChange(state.NewCommandNeutral(state.Command_HALT)))
+		}
+
 		event := gameEvent.GetBotSubstitution()
 		if event.ByTeam.Known() {
 			*newState.TeamInfo(*event.ByTeam).BotSubstitutionAllowed = true
-		} else {
-			*newState.TeamInfo(state.Team_BLUE).BotSubstitutionAllowed = true
-			*newState.TeamInfo(state.Team_YELLOW).BotSubstitutionAllowed = true
-		}
-		changes = append(changes, createCommandChange(state.NewCommandNeutral(state.Command_HALT)))
-	}
-
-	// too many robots
-	if *gameEvent.Type == state.GameEvent_TOO_MANY_ROBOTS {
-		byTeam := *gameEvent.GetTooManyRobots().ByTeam
-		if byTeam.Known() {
-			log.Printf("Team %s has too many robots. Requesting robot substition for them", byTeam)
-			newState.TeamInfo(byTeam).RequestsBotSubstitutionSince = timestamppb.New(s.timeProvider())
-		} else {
-			log.Printf("Too many robots, but no information on team. Requesting for both")
-			for _, team := range state.BothTeams() {
-				newState.TeamInfo(team).RequestsBotSubstitutionSince = timestamppb.New(s.timeProvider())
+			newState.TeamInfo(*event.ByTeam).BotSubstitutionTimeLeft = durationpb.New(s.gameConfig.BotSubstitutionTime)
+			if *newState.TeamInfo(*event.ByTeam).BotSubstitutionsLeft > 0 {
+				*newState.TeamInfo(*event.ByTeam).BotSubstitutionsLeft--
+			} else {
+				changes = append(changes, createGameEventChange(state.GameEvent_EXCESSIVE_BOT_SUBSTITUTION, &state.GameEvent{
+					Event: &state.GameEvent_ExcessiveBotSubstitution_{
+						ExcessiveBotSubstitution: &state.GameEvent_ExcessiveBotSubstitution{
+							ByTeam: &*event.ByTeam,
+						},
+					},
+				}))
 			}
+		} else {
+			log.Println("Warn: Bot substitution without team is not supported anymore")
 		}
 	}
 
@@ -168,6 +168,7 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 	// ball placement position
 	placementPosDeterminer := BallPlacementPosDeterminer{
 		Event:               gameEvent,
+		State:               newState,
 		Geometry:            s.Geometry,
 		CurrentPlacementPos: newState.PlacementPos,
 		OnPositiveHalf: map[state.Team]bool{
@@ -365,6 +366,22 @@ func (s *StateMachine) nextCommandForEvent(newState *state.State, gameEvent *sta
 			newState.NextCommand,
 			state.NewCommand(state.Command_DIRECT, gameEvent.ByTeam().Opposite()),
 		)
+	case state.GameEvent_EXCESSIVE_BOT_SUBSTITUTION:
+		if newState.HasGameEventByTeam(state.GameEvent_EXCESSIVE_BOT_SUBSTITUTION, gameEvent.ByTeam().Opposite()) {
+			// both teams have excessive bot substitution. Recover original next command
+			// As we do not know the previous command anymore, we have to go through all game events again
+			newState.NextCommand = nil
+			for _, ge := range newState.GameEvents {
+				if *ge.Type != state.GameEvent_EXCESSIVE_BOT_SUBSTITUTION {
+					newState.NextCommand = s.nextCommandForEvent(newState, ge)
+				}
+			}
+			return newState.NextCommand
+		}
+		return lastCommandOnUnknownTeam(
+			newState.NextCommand,
+			state.NewCommand(state.Command_DIRECT, gameEvent.ByTeam().Opposite()),
+		)
 	default:
 		return newState.NextCommand
 	}
@@ -396,6 +413,7 @@ func incrementsFoulCounter(currentState *state.State, gameEvent *state.GameEvent
 		state.GameEvent_BOT_DROPPED_PARTS,
 		state.GameEvent_BOT_TOO_FAST_IN_STOP,
 		state.GameEvent_DEFENDER_TOO_CLOSE_TO_KICK_POINT,
+		state.GameEvent_EXCESSIVE_BOT_SUBSTITUTION,
 		state.GameEvent_BOUNDARY_CROSSING:
 		return true
 	case state.GameEvent_BOT_INTERFERED_PLACEMENT:

@@ -10,6 +10,7 @@ import (
 
 type BallPlacementPosDeterminer struct {
 	Event               *state.GameEvent
+	State               *state.State
 	Geometry            config.Geometry
 	CurrentPlacementPos *geom.Vector2
 	OnPositiveHalf      map[state.Team]bool
@@ -112,6 +113,22 @@ func (s *BallPlacementPosDeterminer) Location() *geom.Vector2 {
 		state.GameEvent_UNSPORTING_BEHAVIOR_MINOR,
 		state.GameEvent_UNSPORTING_BEHAVIOR_MAJOR:
 		return s.keepCurrentPlacementPos()
+	case state.GameEvent_EXCESSIVE_BOT_SUBSTITUTION:
+		if s.State.HasGameEventByTeam(state.GameEvent_EXCESSIVE_BOT_SUBSTITUTION, s.Event.ByTeam().Opposite()) {
+			// both teams have excessive bot substitution. Recover original placement pos
+			// As we do not know the original placement pos, we have to iterate over all game events
+			s.CurrentPlacementPos = nil
+			previousEvent := s.Event
+			for _, event := range s.State.GameEvents {
+				s.Event = event
+				if *event.Type != state.GameEvent_EXCESSIVE_BOT_SUBSTITUTION {
+					s.CurrentPlacementPos = s.Location()
+				}
+			}
+			s.Event = previousEvent
+			return s.keepCurrentPlacementPos()
+		}
+		return s.ballPlacementLocationCornerKick(s.CurrentPlacementPos, s.Event.ByTeam().Opposite())
 	case state.GameEvent_TOO_MANY_ROBOTS:
 		return s.validateLocation(s.Event.GetTooManyRobots().BallLocation)
 
@@ -166,6 +183,24 @@ func (s *BallPlacementPosDeterminer) isGoalKick() bool {
 		return true
 	}
 	return false
+}
+
+func (s *BallPlacementPosDeterminer) ballPlacementLocationCornerKick(lastBallLocation *geom.Vector2, forTeam state.Team) *geom.Vector2 {
+	x := s.Geometry.FieldLength/2 - s.Geometry.PlacementOffsetGoalLine
+	y := s.Geometry.FieldWidth/2 - s.Geometry.PlacementOffsetTouchLine
+
+	var xSign float64
+	if s.OnPositiveHalf[forTeam] {
+		xSign = -1
+	} else {
+		xSign = 1
+	}
+
+	placementLocation := geom.NewVector2(
+		math.Copysign(x, xSign),
+		math.Copysign(y, float64(lastBallLocation.GetY())),
+	)
+	return s.validateLocation(placementLocation)
 }
 
 // validateLocation will move the location to a valid location or will return the current placement pos

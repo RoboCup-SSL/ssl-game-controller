@@ -67,6 +67,8 @@ type Game struct {
 	EmergencyStopGracePeriod              time.Duration              `yaml:"emergency-stop-grace-period"`
 	PreparationTimeAfterHalt              time.Duration              `yaml:"preparation-time-after-halt"`
 	PreparationTimeBeforeResume           time.Duration              `yaml:"preparation-time-before-resume"`
+	BotSubstitutionBudget                 int32                      `yaml:"bot-substitution-budget"`
+	BotSubstitutionTime                   time.Duration              `yaml:"bot-substitution-time"`
 }
 
 // Network holds configs for network communication
@@ -200,6 +202,8 @@ func DefaultControllerConfig() (c Controller) {
 	c.Game.EmergencyStopGracePeriod = 10 * time.Second
 	c.Game.PreparationTimeAfterHalt = 10 * time.Second
 	c.Game.PreparationTimeBeforeResume = 2 * time.Second
+	c.Game.BotSubstitutionBudget = 5
+	c.Game.BotSubstitutionTime = 10 * time.Second
 
 	c.Game.Normal.HalfDuration = 5 * time.Minute
 	c.Game.Normal.HalfTimeDuration = 5 * time.Minute

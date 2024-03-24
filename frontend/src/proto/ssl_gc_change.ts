@@ -150,6 +150,8 @@ export interface Change_UpdateTeamState {
   canPlaceBall?: boolean;
   /** The number of challenge flags that the team has left */
   challengeFlagsLeft?: number;
+  /** The number of bot substitutions left by the team in this halftime */
+  botSubstitutionsLeft?: number;
   /** Does the team want to substitute a robot in the next possible situation? */
   requestsBotSubstitution?: boolean;
   /** Does the team want to take a timeout in the next possible situation? */
@@ -508,6 +510,7 @@ export const Change_UpdateTeamState = {
       ballPlacementFailures: isSet(object.ballPlacementFailures) ? Number(object.ballPlacementFailures) : undefined,
       canPlaceBall: isSet(object.canPlaceBall) ? Boolean(object.canPlaceBall) : undefined,
       challengeFlagsLeft: isSet(object.challengeFlagsLeft) ? Number(object.challengeFlagsLeft) : undefined,
+      botSubstitutionsLeft: isSet(object.botSubstitutionsLeft) ? Number(object.botSubstitutionsLeft) : undefined,
       requestsBotSubstitution: isSet(object.requestsBotSubstitution)
         ? Boolean(object.requestsBotSubstitution)
         : undefined,
@@ -535,6 +538,7 @@ export const Change_UpdateTeamState = {
     message.ballPlacementFailures !== undefined && (obj.ballPlacementFailures = message.ballPlacementFailures);
     message.canPlaceBall !== undefined && (obj.canPlaceBall = message.canPlaceBall);
     message.challengeFlagsLeft !== undefined && (obj.challengeFlagsLeft = message.challengeFlagsLeft);
+    message.botSubstitutionsLeft !== undefined && (obj.botSubstitutionsLeft = message.botSubstitutionsLeft);
     message.requestsBotSubstitution !== undefined && (obj.requestsBotSubstitution = message.requestsBotSubstitution);
     message.requestsTimeout !== undefined && (obj.requestsTimeout = message.requestsTimeout);
     message.requestsChallenge !== undefined && (obj.requestsChallenge = message.requestsChallenge);
