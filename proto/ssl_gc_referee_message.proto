@@ -162,6 +162,8 @@ message Referee {
         optional bool bot_substitution_allowed = 16;
         // The number of bot substitutions left by the team in this halftime
         optional uint32 bot_substitutions_left = 17;
+        // The number of microseconds left for current bot substitution
+        optional uint32 bot_substitution_time_left = 18;
     }
 
     // Information about the two teams.

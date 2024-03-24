@@ -21,6 +21,7 @@ func newTeamInfo() (t *TeamInfo) {
 	t.ChallengeFlags = new(int32)
 	t.BotSubstitutionAllowed = new(bool)
 	t.BotSubstitutionsLeft = new(int32)
+	t.BotSubstitutionTimeLeft = new(durationpb.Duration)
 
 	*t.CanPlaceBall = true
 	*t.Name = "Unknown"

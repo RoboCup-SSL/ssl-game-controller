@@ -100,6 +100,7 @@ message TeamInfo {
     optional int32 challenge_flags = 17;
     optional bool bot_substitution_allowed = 18;
     optional int32 bot_substitutions_left = 19;
+    optional google.protobuf.Duration bot_substitution_time_left = 20;
 }
 
 message State {

@@ -252,6 +252,9 @@ func initializeAddedTeamInfoFields(teamInfo *state.TeamInfo) {
 	if teamInfo.BotSubstitutionsLeft == nil {
 		teamInfo.BotSubstitutionsLeft = new(int32)
 	}
+	if teamInfo.BotSubstitutionTimeLeft == nil {
+		teamInfo.BotSubstitutionTimeLeft = durationpb.New(0)
+	}
 }
 
 // Stop stops the go routine that processes the change queue

@@ -154,21 +154,25 @@ func (c *RemoteControlClient) replyWithState(reply *ControllerReply) {
 	robotsOnField := c.gcEngine.TrackerState().NumTeamRobots(*c.team)
 	timeoutTimeLeft := float32(teamState.TimeoutTimeLeft.AsDuration().Seconds())
 	canSubstituteRobot := c.canSubstituteRobot()
+	botSubstitutionsLeft := uint32(*teamState.BotSubstitutionsLeft)
+	botSubstitutionTimeLeft := float32(teamState.BotSubstitutionTimeLeft.AsDuration().Seconds())
 
 	response := &ControllerToRemoteControl{
 		State: &RemoteControlTeamState{
-			Team:               c.team,
-			KeeperId:           teamState.Goalkeeper,
-			AvailableRequests:  availableRequests,
-			ActiveRequests:     activeRequests,
-			EmergencyStopIn:    &emergencyStopIn,
-			TimeoutsLeft:       teamState.TimeoutsLeft,
-			TimeoutTimeLeft:    &timeoutTimeLeft,
-			ChallengeFlagsLeft: teamState.ChallengeFlags,
-			MaxRobots:          teamState.MaxAllowedBots,
-			RobotsOnField:      &robotsOnField,
-			YellowCardsDue:     yellowCardsDue,
-			CanSubstituteRobot: &canSubstituteRobot,
+			Team:                    c.team,
+			KeeperId:                teamState.Goalkeeper,
+			AvailableRequests:       availableRequests,
+			ActiveRequests:          activeRequests,
+			EmergencyStopIn:         &emergencyStopIn,
+			TimeoutsLeft:            teamState.TimeoutsLeft,
+			TimeoutTimeLeft:         &timeoutTimeLeft,
+			ChallengeFlagsLeft:      teamState.ChallengeFlags,
+			MaxRobots:               teamState.MaxAllowedBots,
+			RobotsOnField:           &robotsOnField,
+			YellowCardsDue:          yellowCardsDue,
+			CanSubstituteRobot:      &canSubstituteRobot,
+			BotSubstitutionsLeft:    &botSubstitutionsLeft,
+			BotSubstitutionTimeLeft: &botSubstitutionTimeLeft,
 		},
 		ControllerReply: reply,
 	}
