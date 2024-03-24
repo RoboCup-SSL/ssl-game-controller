@@ -58,6 +58,8 @@ export const originIcon = (origin: string) => {
     case "Remote Control YELLOW":
     case "Remote Control BLUE":
       return "settings_remote"
+    case "CI":
+      return "auto_awesome"
     default:
       return "help_outline"
   }
