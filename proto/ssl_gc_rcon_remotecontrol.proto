@@ -97,6 +97,12 @@ message RemoteControlTeamState {
 
     // if true, team is allowed to substitute robots
     optional bool can_substitute_robot = 11;
+
+    // number of bot substitutions left by the team in this halftime
+    optional uint32 bot_substitutions_left = 13;
+
+    // number of seconds left for current bot substitution
+    optional float bot_substitution_time_left = 14;
 }
 
 // All possible request types that the remote control can make

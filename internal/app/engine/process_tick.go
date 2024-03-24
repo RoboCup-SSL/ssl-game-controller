@@ -31,9 +31,15 @@ func (e *Engine) processTick() {
 		}
 	}
 
-	if e.countCardTime() {
-		for _, teamState := range e.currentState.TeamState {
+	for _, teamState := range e.currentState.TeamState {
+		if e.countCardTime() {
 			e.updateYellowCardTimes(teamState, delta)
+		}
+		if *teamState.BotSubstitutionAllowed {
+			addDur(teamState.BotSubstitutionTimeLeft, -delta)
+			if teamState.BotSubstitutionTimeLeft.AsDuration() < 0 {
+				*teamState.BotSubstitutionTimeLeft = *durationpb.New(0)
+			}
 		}
 	}
 
