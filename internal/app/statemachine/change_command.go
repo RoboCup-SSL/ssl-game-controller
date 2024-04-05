@@ -82,7 +82,7 @@ func (s *StateMachine) currentActionTimeRemainingForCommand(command state.Comman
 		return durationpb.New(s.gameConfig.BallPlacementTime)
 	case state.Command_DIRECT:
 		return durationpb.New(s.gameConfig.FreeKickTimeout[division])
-	case state.Command_KICKOFF, state.Command_PENALTY:
+	case state.Command_KICKOFF, state.Command_PENALTY, state.Command_NORMAL_START:
 		return durationpb.New(s.gameConfig.PrepareTimeout)
 	default:
 		return durationpb.New(0)
