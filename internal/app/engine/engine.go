@@ -14,6 +14,7 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"log"
 	"math/rand"
+	"slices"
 	"sync"
 	"time"
 )
@@ -117,8 +118,9 @@ func (e *Engine) EnqueueBlocking(change *statemachine.Change) error {
 }
 
 func isNonMajorityOrigin(origins []string) bool {
+	nonMajorityOrigins := []string{"UI", "Engine", "StateMachine", "Majority", "Remote Control YELLOW", "Remote Control BLUE"}
 	for _, origin := range origins {
-		if origin == "UI" || origin == "Engine" || origin == "StateMachine" || origin == "Majority" {
+		if slices.Contains(nonMajorityOrigins, origin) {
 			return true
 		}
 	}
