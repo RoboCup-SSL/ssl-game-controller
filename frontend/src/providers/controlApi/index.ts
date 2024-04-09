@@ -120,7 +120,8 @@ export class ControlApi {
   public Continue(continueAction: ContinueAction) {
     if (continueAction.state === ContinueAction_State.READY_AUTO
       || continueAction.state === ContinueAction_State.READY_MANUAL
-      || continueAction.state === ContinueAction_State.WAITING) {
+      || continueAction.state === ContinueAction_State.WAITING
+      || continueAction.state === ContinueAction_State.BLOCKED) {
       this.Send({
         continueAction
       })
