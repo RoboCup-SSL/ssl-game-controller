@@ -23,6 +23,7 @@ type Special struct {
 type Geometry struct {
 	FieldLength                     float64 `yaml:"field-length"`
 	FieldWidth                      float64 `yaml:"field-width"`
+	BoundaryWidth                   float64 `yaml:"boundary-width"`
 	DefenseAreaDepth                float64 `yaml:"defense-area-depth"`
 	DefenseAreaWidth                float64 `yaml:"defense-area-width"`
 	PenaltyKickDistToGoal           float64 `yaml:"penalty-kick-dist-to-goal"`
@@ -231,6 +232,7 @@ func DefaultControllerConfig() (c Controller) {
 	c.Game.DefaultGeometry[DivA] = Geometry{
 		FieldLength:                     12,
 		FieldWidth:                      9,
+		BoundaryWidth:                   0.3,
 		DefenseAreaDepth:                1.8,
 		DefenseAreaWidth:                3.6,
 		PenaltyKickDistToGoal:           8.0,
@@ -244,6 +246,7 @@ func DefaultControllerConfig() (c Controller) {
 	c.Game.DefaultGeometry[DivB] = Geometry{
 		FieldLength:                     9,
 		FieldWidth:                      6,
+		BoundaryWidth:                   0.3,
 		DefenseAreaDepth:                1,
 		DefenseAreaWidth:                2,
 		PenaltyKickDistToGoal:           6.0,

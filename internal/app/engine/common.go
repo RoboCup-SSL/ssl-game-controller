@@ -12,6 +12,7 @@ import (
 const ballSteadyThreshold = 0.2
 const robotRadius = 0.09
 const distanceThreshold = 0.05
+const botSubstitutionMaxX = 1.0
 
 func createGameEventChange(eventType state.GameEvent_Type, event *state.GameEvent) *statemachine.Change {
 	event.Type = &eventType
@@ -125,6 +126,30 @@ func (e *Ball) IsSteady() bool {
 func (x *GcStateTracker) NumTeamRobots(team state.Team) (count int32) {
 	for _, robot := range x.Robots {
 		if *robot.Id.Team == team {
+			count++
+		}
+	}
+	return
+}
+
+func (e *Engine) NumTeamRobotsExcludingSubstitutionZone(team state.Team) (count int32) {
+	boundaryWidth := e.getGeometry().BoundaryWidth
+	fieldMaxY := e.getGeometry().FieldWidth / 2
+	rects := []*geom.Rectangle{
+		geom.NewRectangleFromPoints(
+			geom.NewVector2(-(botSubstitutionMaxX+robotRadius), fieldMaxY-robotRadius),
+			geom.NewVector2(botSubstitutionMaxX+robotRadius, fieldMaxY+boundaryWidth),
+		),
+		geom.NewRectangleFromPoints(
+			geom.NewVector2(-(botSubstitutionMaxX+robotRadius), -(fieldMaxY-robotRadius)),
+			geom.NewVector2(botSubstitutionMaxX+robotRadius, -(fieldMaxY+boundaryWidth)),
+		),
+	}
+
+	for _, robot := range e.trackerStateGc.Robots {
+		if !rects[0].IsPointInside(robot.Pos) &&
+			!rects[1].IsPointInside(robot.Pos) &&
+			*robot.Id.Team == team {
 			count++
 		}
 	}

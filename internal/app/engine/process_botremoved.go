@@ -47,7 +47,9 @@ func (e *Engine) processBotNumberPerTeam(team state.Team) {
 		e.gameConfig.YellowCardDuration-removalTime,
 	)
 
-	numBots := e.trackerStateGc.NumTeamRobots(team)
+	// count number of bots, but exclude bots in substitution zone
+	// This allows the robot handler to remove bots from the field without stressing too much
+	numBots := e.NumTeamRobotsExcludingSubstitutionZone(team)
 	numBotsAllowed := *teamInfo.MaxAllowedBots + newCards
 	if numBots > numBotsAllowed {
 

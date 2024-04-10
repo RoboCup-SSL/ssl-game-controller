@@ -15,6 +15,7 @@ func (e *Engine) ProcessGeometry(data *vision.SSL_GeometryData) {
 
 	newGeometry.FieldWidth = float64(*data.Field.FieldWidth) / 1000.0
 	newGeometry.FieldLength = float64(*data.Field.FieldLength) / 1000.0
+	newGeometry.BoundaryWidth = float64(*data.Field.BoundaryWidth) / 1000.0
 	newGeometry.GoalWidth = float64(*data.Field.GoalWidth) / 1000.0
 
 	if data.Field.PenaltyAreaWidth != nil {
