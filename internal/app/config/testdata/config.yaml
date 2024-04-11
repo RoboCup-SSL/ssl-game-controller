@@ -71,6 +71,7 @@ game:
     DIV_A:
       field-length: 12.0
       field-width: 9.0
+      boundary-width: 0.3
       defense-area-depth: 1.8
       defense-area-width: 3.6
       penalty-kick-dist-to-goal: 8.0
@@ -83,6 +84,7 @@ game:
     DIV_B:
       field-length: 9.0
       field-width: 6.0
+      boundary-width: 0.3
       defense-area-depth: 1.0
       defense-area-width: 2.0
       penalty-kick-dist-to-goal: 6.0
