@@ -109,8 +109,11 @@ func (e *Engine) nextActions() (actions []*ContinueAction, hints []*ContinueHint
 
 func (e *Engine) actionsToContinueFromStop() (actions []*ContinueAction, hints []*ContinueHint) {
 	for _, team := range state.BothTeams() {
-		if e.currentState.HasGameEventByTeam(state.GameEvent_POSSIBLE_GOAL, team) &&
+		if e.currentState.GameState.IsHalted() &&
+			e.currentState.HasGameEventByTeam(state.GameEvent_POSSIBLE_GOAL, team) &&
 			!e.currentState.HasGameEventByTeam(state.GameEvent_GOAL, team) {
+			// suggest accepting goal only in halt. This way, if it should be ignored (especially when goal was invalid)
+			// then the continue button is rather annoying in STOP state
 			continueActionAcceptGoal := createContinueAction(
 				ContinueAction_ACCEPT_GOAL,
 				team,
