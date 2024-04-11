@@ -114,6 +114,11 @@ func (s *BallPlacementPosDeterminer) Location() *geom.Vector2 {
 		state.GameEvent_UNSPORTING_BEHAVIOR_MAJOR:
 		return s.keepCurrentPlacementPos()
 	case state.GameEvent_EXCESSIVE_BOT_SUBSTITUTION:
+		if s.State.NextCommand != nil && *s.State.NextCommand.Type != state.Command_DIRECT {
+			// if next command is not a free kick, keep current placement pos.
+			// next command is not changed if it was free kick or penalty kick.
+			return s.keepCurrentPlacementPos()
+		}
 		if s.State.HasGameEventByTeam(state.GameEvent_EXCESSIVE_BOT_SUBSTITUTION, s.Event.ByTeam().Opposite()) {
 			// both teams have excessive bot substitution. Recover original placement pos
 			// As we do not know the original placement pos, we have to iterate over all game events
