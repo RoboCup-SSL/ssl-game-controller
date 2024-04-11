@@ -219,6 +219,8 @@ function teamStateChangeTitle(change: Change_UpdateTeamState): string {
     return `Remove red card ${change.removeRedCard}`
   } else if (change.removeFoul !== undefined) {
     return `Remove foul ${change.removeFoul}`
+  } else if (change.botSubstitutionsLeft !== undefined) {
+    return `Bot substitutions left: ${change.botSubstitutionsLeft}`
   }
   return "Unknown team state change: " + JSON.stringify(change)
 }
