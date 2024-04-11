@@ -237,7 +237,7 @@ func (e *Engine) readyToContinueFromStop() (issues []string) {
 	if e.currentState.PlacementPos != nil {
 		ballToPlacementPosDist := e.currentState.PlacementPos.DistanceTo(e.trackerStateGc.Ball.Pos.ToVector2())
 		if ballToPlacementPosDist > e.gameConfig.BallPlacementRequiredDistance {
-			issues = append(issues, fmt.Sprintf("Ball is %.2fm (>%.2fm) away from placement pos",
+			issues = append(issues, fmt.Sprintf("Ball is %.2f m (>%.2f m) away from placement pos",
 				ballToPlacementPosDist, e.gameConfig.BallPlacementRequiredDistance))
 		}
 	}
@@ -245,7 +245,8 @@ func (e *Engine) readyToContinueFromStop() (issues []string) {
 	ballPos := e.trackerStateGc.Ball.Pos.ToVector2()
 	if math.Abs(ballPos.GetX64()) > e.getGeometry().FieldLength/2 ||
 		math.Abs(ballPos.GetY64()) > e.getGeometry().FieldWidth/2 {
-		issues = append(issues, fmt.Sprintf("Ball is outside of field: %v", ballPos))
+		issues = append(issues, fmt.Sprintf("Ball is outside of field: x: %.2f m, y: %.2f m",
+			ballPos.GetX(), ballPos.GetY()))
 	}
 
 	if !e.trackerStateGc.Ball.IsSteady() {
