@@ -158,6 +158,8 @@ function configChangeTitle(config: Change_UpdateConfig): string {
     return `First kick-off team: ${config.firstKickoffTeam}`
   } else if (config.division !== undefined && config.division !== 'DIV_UNKNOWN') {
     return `Division: ${config.division}`
+  } else if (config.maxRobotsPerTeam !== undefined) {
+    return `Max Robots: ${config.maxRobotsPerTeam}`
   } else if (config.matchType !== undefined) {
     return `Match type: ${config.matchType}`
   }

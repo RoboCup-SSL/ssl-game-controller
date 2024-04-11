@@ -20,6 +20,7 @@ func NewState() (s *State) {
 	s.Division = new(Division)
 	s.FirstKickoffTeam = new(Team)
 	s.MatchType = new(MatchType)
+	s.MaxBotsPerTeam = new(int32)
 
 	*s.MatchType = MatchType_UNKNOWN_MATCH
 	*s.Stage = Referee_NORMAL_FIRST_HALF_PRE

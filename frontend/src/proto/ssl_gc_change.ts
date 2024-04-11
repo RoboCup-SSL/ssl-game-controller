@@ -126,6 +126,8 @@ export interface Change_UpdateConfig {
   firstKickoffTeam?: Team;
   /** The match type */
   matchType?: MatchType;
+  /** The number of robots per team */
+  maxRobotsPerTeam?: number;
 }
 
 /** Update the current state of a team (all fields that should be updated are set) */
@@ -485,6 +487,7 @@ export const Change_UpdateConfig = {
       division: isSet(object.division) ? divisionFromJSON(object.division) : Division.DIV_UNKNOWN,
       firstKickoffTeam: isSet(object.firstKickoffTeam) ? teamFromJSON(object.firstKickoffTeam) : Team.UNKNOWN,
       matchType: isSet(object.matchType) ? matchTypeFromJSON(object.matchType) : MatchType.UNKNOWN_MATCH,
+      maxRobotsPerTeam: isSet(object.maxRobotsPerTeam) ? Number(object.maxRobotsPerTeam) : undefined,
     };
   },
 
@@ -493,6 +496,7 @@ export const Change_UpdateConfig = {
     message.division !== undefined && (obj.division = divisionToJSON(message.division));
     message.firstKickoffTeam !== undefined && (obj.firstKickoffTeam = teamToJSON(message.firstKickoffTeam));
     message.matchType !== undefined && (obj.matchType = matchTypeToJSON(message.matchType));
+    message.maxRobotsPerTeam !== undefined && (obj.maxRobotsPerTeam = message.maxRobotsPerTeam);
     return obj;
   },
 };

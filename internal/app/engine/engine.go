@@ -240,6 +240,9 @@ func (e *Engine) Start() error {
 
 	initializeAddedTeamInfoFields(e.currentState.TeamInfo(state.Team_BLUE))
 	initializeAddedTeamInfoFields(e.currentState.TeamInfo(state.Team_YELLOW))
+	if e.currentState.MaxBotsPerTeam == nil {
+		e.currentState.MaxBotsPerTeam = new(int32)
+	}
 
 	e.stateMachine.Geometry = e.gameConfig.DefaultGeometry[e.currentState.Division.Div()]
 	log.Printf("Loaded default geometry for DivA: %+v", e.stateMachine.Geometry)
@@ -459,10 +462,11 @@ func (e *Engine) initialStateFromStore() *state.State {
 func (e *Engine) createInitialState() (s *state.State) {
 	s = state.NewState()
 	s.Division = state.ToDiv(e.gameConfig.DefaultDivision)
+	*s.MaxBotsPerTeam = e.gameConfig.MaxBots[e.gameConfig.DefaultDivision]
 	for _, team := range state.BothTeams() {
 		*s.TeamInfo(team).TimeoutsLeft = e.gameConfig.Normal.Timeouts
 		s.TeamInfo(team).TimeoutTimeLeft = durationpb.New(e.gameConfig.Normal.TimeoutDuration)
-		*s.TeamInfo(team).MaxAllowedBots = e.gameConfig.MaxBots[e.gameConfig.DefaultDivision]
+		*s.TeamInfo(team).MaxAllowedBots = *s.MaxBotsPerTeam
 		*s.TeamInfo(team).ChallengeFlags = e.gameConfig.ChallengeFlags
 		*s.TeamInfo(team).BotSubstitutionsLeft = e.gameConfig.BotSubstitutionBudget
 	}

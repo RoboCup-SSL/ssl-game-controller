@@ -9,6 +9,7 @@ func (s *StateMachine) processChangeUpdateConfig(newState *state.State, change *
 	if change.Division != nil {
 		log.Printf("Change division to %v", *change.Division)
 		newState.Division = change.Division
+		*newState.MaxBotsPerTeam = s.gameConfig.MaxBots[change.Division.Div()]
 		s.updateMaxBots(newState)
 		s.Geometry = s.gameConfig.DefaultGeometry[change.Division.Div()]
 		log.Printf("Updated geometry to %+v", s.Geometry)
@@ -29,6 +30,16 @@ func (s *StateMachine) processChangeUpdateConfig(newState *state.State, change *
 	if change.MatchType != nil {
 		log.Printf("Change match type to %s", change.MatchType.String())
 		newState.MatchType = change.MatchType
+	}
+	if change.MaxRobotsPerTeam != nil {
+		maxRobots := change.MaxRobotsPerTeam.GetValue()
+		if maxRobots <= 0 {
+			log.Printf("Ignoring invalid max robots per team: %d", maxRobots)
+		} else {
+			log.Printf("Change max robots per team to %d", maxRobots)
+			*newState.MaxBotsPerTeam = maxRobots
+			s.updateMaxBots(newState)
+		}
 	}
 	return
 }

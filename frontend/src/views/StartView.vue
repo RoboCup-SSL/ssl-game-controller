@@ -14,6 +14,7 @@ import FirstKickOffInput from "@/components/team/FirstKickOffInput.vue";
 import FieldHalfInput from "@/components/team/FieldHalfInput.vue";
 import StageInput from "@/components/start/StageInput.vue";
 import {teams} from "@/helpers";
+import MaxRobotsPerTeamInput from "@/components/start/MaxRobotsPerTeamInput.vue";
 </script>
 
 <template>
@@ -77,6 +78,7 @@ import {teams} from "@/helpers";
     <q-separator spaced/>
 
     <div class="row justify-evenly">
+      <MaxRobotsPerTeamInput/>
       <StageInput/>
       <div class="q-pa-md">
         <EndMatchButton/>

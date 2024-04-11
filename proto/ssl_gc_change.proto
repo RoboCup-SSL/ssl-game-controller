@@ -126,6 +126,8 @@ message Change {
         reserved 3; // auto_continue moved to gcState
         // The match type
         optional MatchType match_type = 4;
+        // The number of robots per team
+        optional google.protobuf.Int32Value max_robots_per_team = 5;
     }
 
     // Update the current state of a team (all fields that should be updated are set)

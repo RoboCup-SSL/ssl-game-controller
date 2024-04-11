@@ -254,6 +254,8 @@ export interface State {
   readyContinueTime?: Date;
   shootoutState?: ShootoutState;
   statusMessage?: string;
+  /** The maximum number of bots per team (overwrites the division config) */
+  maxBotsPerTeam?: number;
 }
 
 export interface State_TeamStateEntry {
@@ -514,6 +516,7 @@ export const State = {
       readyContinueTime: isSet(object.readyContinueTime) ? fromJsonTimestamp(object.readyContinueTime) : undefined,
       shootoutState: isSet(object.shootoutState) ? ShootoutState.fromJSON(object.shootoutState) : undefined,
       statusMessage: isSet(object.statusMessage) ? String(object.statusMessage) : "",
+      maxBotsPerTeam: isSet(object.maxBotsPerTeam) ? Number(object.maxBotsPerTeam) : 0,
     };
   },
 
@@ -559,6 +562,7 @@ export const State = {
     message.shootoutState !== undefined &&
       (obj.shootoutState = message.shootoutState ? ShootoutState.toJSON(message.shootoutState) : undefined);
     message.statusMessage !== undefined && (obj.statusMessage = message.statusMessage);
+    message.maxBotsPerTeam !== undefined && (obj.maxBotsPerTeam = Math.round(message.maxBotsPerTeam));
     return obj;
   },
 };
