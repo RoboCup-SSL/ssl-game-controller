@@ -53,7 +53,7 @@ game:
   preparation-time-after-halt: 10s
   preparation-time-before-resume: 2s
   bot-substitution-budget: 5
-  bot-substitution-time: 10s
+  bot-substitution-time: 20s
   normal:
     half-duration: 5m
     half-time-duration: 5m

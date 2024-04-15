@@ -204,7 +204,7 @@ func DefaultControllerConfig() (c Controller) {
 	c.Game.PreparationTimeAfterHalt = 10 * time.Second
 	c.Game.PreparationTimeBeforeResume = 2 * time.Second
 	c.Game.BotSubstitutionBudget = 5
-	c.Game.BotSubstitutionTime = 10 * time.Second
+	c.Game.BotSubstitutionTime = 20 * time.Second
 
 	c.Game.Normal.HalfDuration = 5 * time.Minute
 	c.Game.Normal.HalfTimeDuration = 5 * time.Minute
