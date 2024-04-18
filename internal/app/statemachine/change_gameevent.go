@@ -199,6 +199,16 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 		if *newState.TeamInfo(byTeam).BallPlacementFailures > 0 {
 			*newState.TeamInfo(byTeam).BallPlacementFailures--
 		}
+
+		if *newState.Division == state.Division_DIV_A &&
+			ballLeftField(newState) &&
+			newState.NextCommand != nil &&
+			*newState.NextCommand.Type == state.Command_DIRECT &&
+			*newState.TeamInfo(byTeam.Opposite()).BallPlacementFailuresReached {
+			// In divA, if the ball left the field (no foul) and the other team has too many ball placement failures,
+			// and the team succeeded placement, the direct kick is given to the team that succeeded placement
+			newState.NextCommand = state.NewCommand(state.Command_DIRECT, byTeam)
+		}
 	}
 
 	// defender too close to kick point
