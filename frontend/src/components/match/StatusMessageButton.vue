@@ -152,7 +152,3 @@ const onCustomStatusMessageSelected = () => {
     </q-card>
   </q-dialog>
 </template>
-
-<style scoped>
-
-</style>
