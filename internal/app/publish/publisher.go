@@ -76,16 +76,39 @@ func (p *Publisher) SendMessage(refereeMsg *state.Referee) {
 	if len(p.conns) == 0 && !p.connect() {
 		return
 	}
+
+	bytes, err := marshalRefereeMessage(refereeMsg)
 	for _, conn := range p.conns {
-		bytes, err := proto.Marshal(refereeMsg)
-		if err != nil {
-			log.Printf("Could not marshal referee message: %v\nError: %v", refereeMsg, err)
-			return
-		}
 		_, err = conn.Write(bytes)
 		if err != nil {
 			log.Println("Could not write referee message:", err)
 			p.disconnect()
 		}
 	}
+}
+
+func marshalRefereeMessage(refereeMsg *state.Referee) ([]byte, error) {
+	bytes, err := proto.Marshal(refereeMsg)
+	if err != nil {
+		log.Printf("Could not marshal referee message: %v\nError: %v", refereeMsg, err)
+		return nil, err
+	}
+
+	if len(bytes) > maxDatagramSize {
+		log.Printf("Referee message is too large (%d bytes) to send in one packet. Shortening message.", len(bytes))
+
+		shortenedRefereeMsg := proto.Clone(refereeMsg).(*state.Referee)
+		shortenedRefereeMsg.GameEvents = []*state.GameEvent{}
+		shortenedRefereeMsg.GameEventProposals = []*state.GameEventProposalGroup{}
+
+		bytes, err = proto.Marshal(shortenedRefereeMsg)
+		if err != nil {
+			log.Printf("Could not marshal referee message: %v\nError: %v", shortenedRefereeMsg, err)
+			return nil, err
+		}
+
+		return bytes, nil
+	}
+
+	return bytes, nil
 }
