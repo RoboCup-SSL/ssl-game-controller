@@ -26,7 +26,8 @@ You can also use pre-build docker images:
 ```shell script
 docker pull robocupssl/ssl-game-controller
 # Run GC with default configuration
-docker run -p 8081:8081 robocupssl/ssl-game-controller
+docker run -p 8081:8081 robocupssl/ssl-game-controller -address :8081
+```
 # Mount local directories 
 docker run -p 8081:8081 \
   # Local config dir
