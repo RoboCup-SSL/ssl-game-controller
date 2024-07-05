@@ -17,7 +17,7 @@ const model = computed(() => {
 })
 
 const disable = computed(() => {
-  return store.matchState.teamState![props.team].timeoutsLeft! <= 0
+  return !model.value && store.matchState.teamState![props.team].timeoutsLeft! <= 0
 })
 
 const onChange = (newValue: boolean) => {
