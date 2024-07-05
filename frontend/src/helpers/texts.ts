@@ -176,6 +176,8 @@ export function continueActionLabel(type: ContinueAction_Type, nextCommand?: Com
       return 'End match'
     case ContinueAction_Type.ACCEPT_GOAL:
       return 'Accept Goal'
+    case ContinueAction_Type.REJECT_GOAL:
+      return 'Reject Goal'
     case ContinueAction_Type.NORMAL_START:
       return 'Normal Start'
     case ContinueAction_Type.CHALLENGE_ACCEPT:

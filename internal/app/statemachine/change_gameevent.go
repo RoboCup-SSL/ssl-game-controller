@@ -349,7 +349,6 @@ func (s *StateMachine) nextCommandForEvent(newState *state.State, gameEvent *sta
 		state.GameEvent_BOT_DRIBBLED_BALL_TOO_FAR,
 		state.GameEvent_ATTACKER_DOUBLE_TOUCHED_BALL,
 		state.GameEvent_PENALTY_KICK_FAILED,
-		state.GameEvent_POSSIBLE_GOAL,
 		state.GameEvent_INVALID_GOAL:
 		return lastCommandOnUnknownTeam(
 			newState.NextCommand,
@@ -392,6 +391,9 @@ func (s *StateMachine) nextCommandForEvent(newState *state.State, gameEvent *sta
 			newState.NextCommand,
 			state.NewCommand(state.Command_DIRECT, gameEvent.ByTeam().Opposite()),
 		)
+	case state.GameEvent_POSSIBLE_GOAL:
+		// explicitly no next command. GCO has to accept or reject the goal.
+		return nil
 	default:
 		return newState.NextCommand
 	}

@@ -72,6 +72,23 @@ func (e *Engine) performContinueAction(action *ContinueAction) {
 		} else {
 			log.Println("No possible goal event present to accept")
 		}
+	case ContinueAction_REJECT_GOAL:
+		possibleGoals := e.currentState.FindGameEventsByTeam(state.GameEvent_POSSIBLE_GOAL, *action.ForTeam)
+		if len(possibleGoals) == 1 {
+			possibleGoal := possibleGoals[0]
+			goal := state.GameEvent_Goal{}
+			proto.Merge(&goal, possibleGoal.GetPossibleGoal())
+			goal.Message = new(string)
+			*goal.Message = "Rejected by GC operator"
+			goalEvent := &state.GameEvent{
+				Event: &state.GameEvent_InvalidGoal{
+					InvalidGoal: &goal,
+				},
+			}
+			e.Enqueue(createGameEventChange(state.GameEvent_INVALID_GOAL, goalEvent))
+		} else {
+			log.Println("No possible goal event present to reject")
+		}
 	case ContinueAction_NORMAL_START:
 		e.Enqueue(createCommandChange(state.NewCommandNeutral(state.Command_NORMAL_START)))
 	case ContinueAction_CHALLENGE_ACCEPT:

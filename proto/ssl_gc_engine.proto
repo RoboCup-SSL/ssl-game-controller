@@ -130,6 +130,7 @@ message ContinueAction {
         NEXT_STAGE = 8;
         END_GAME = 16;
         ACCEPT_GOAL = 12;
+        REJECT_GOAL = 20;
         NORMAL_START = 13;
         CHALLENGE_ACCEPT = 18;
         CHALLENGE_REJECT = 19;

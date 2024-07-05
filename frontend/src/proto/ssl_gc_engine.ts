@@ -153,6 +153,7 @@ export enum ContinueAction_Type {
   NEXT_STAGE = "NEXT_STAGE",
   END_GAME = "END_GAME",
   ACCEPT_GOAL = "ACCEPT_GOAL",
+  REJECT_GOAL = "REJECT_GOAL",
   NORMAL_START = "NORMAL_START",
   CHALLENGE_ACCEPT = "CHALLENGE_ACCEPT",
   CHALLENGE_REJECT = "CHALLENGE_REJECT",
@@ -212,6 +213,9 @@ export function continueAction_TypeFromJSON(object: any): ContinueAction_Type {
     case 12:
     case "ACCEPT_GOAL":
       return ContinueAction_Type.ACCEPT_GOAL;
+    case 20:
+    case "REJECT_GOAL":
+      return ContinueAction_Type.REJECT_GOAL;
     case 13:
     case "NORMAL_START":
       return ContinueAction_Type.NORMAL_START;
@@ -264,6 +268,8 @@ export function continueAction_TypeToJSON(object: ContinueAction_Type): string {
       return "END_GAME";
     case ContinueAction_Type.ACCEPT_GOAL:
       return "ACCEPT_GOAL";
+    case ContinueAction_Type.REJECT_GOAL:
+      return "REJECT_GOAL";
     case ContinueAction_Type.NORMAL_START:
       return "NORMAL_START";
     case ContinueAction_Type.CHALLENGE_ACCEPT:
