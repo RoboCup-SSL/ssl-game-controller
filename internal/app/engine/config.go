@@ -62,6 +62,11 @@ func DefaultConfig() (x Config) {
 	for _, event := range state.GameEventsForBehaviorConfig() {
 		x.GameEventBehavior[event.String()] = Config_BEHAVIOR_ACCEPT_MAJORITY
 	}
+	// Set common defaults that are usually set at a competition
+	x.GameEventBehavior[state.GameEvent_POSSIBLE_GOAL.String()] = Config_BEHAVIOR_ACCEPT
+	x.GameEventBehavior[state.GameEvent_BALL_LEFT_FIELD_GOAL_LINE.String()] = Config_BEHAVIOR_ACCEPT
+	x.GameEventBehavior[state.GameEvent_BALL_LEFT_FIELD_TOUCH_LINE.String()] = Config_BEHAVIOR_ACCEPT
+
 	x.Teams = defaultTeams
 	x.AutoContinue = new(bool)
 	*x.AutoContinue = true
