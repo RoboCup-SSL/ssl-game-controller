@@ -45,7 +45,7 @@ fi
 set -x
 
 # Generate Go code
-protoc -I"./proto" -I"$GOPATH/src" --go_out=. --go_opt=module=github.com/RoboCup-SSL/ssl-game-controller proto/*.proto
+protoc -I"./proto" --go_out=. --go_opt=module=github.com/RoboCup-SSL/ssl-game-controller proto/*.proto
 
 # Generate typescript code for frontend
 target_dir="./frontend/src/proto"
