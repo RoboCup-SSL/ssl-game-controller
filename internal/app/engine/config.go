@@ -15,6 +15,7 @@ var defaultTeams = []string{
 	"AMC",
 	"A-Team",
 	"CMμs",
+	"Delft Mercurians",
 	"ER-Force",
 	"GreenTea",
 	"Immortals",
@@ -54,7 +55,6 @@ var defaultTeams = []string{
 	"URoboRus",
 	"Warthog Robotics",
 	"ZJUNlict",
-	"DelftMercurians",
 }
 
 func DefaultConfig() (x Config) {
