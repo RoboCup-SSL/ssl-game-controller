@@ -47,6 +47,7 @@ var defaultTeams = []string{
 	"Test Team",
 	"TIGERs Mannheim",
 	"Tritons RCSC",
+	"TurtleRabbit",
 	"UBC Thunderbots",
 	"ULtron",
 	"UMass Minutebots",
