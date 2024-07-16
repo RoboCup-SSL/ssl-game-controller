@@ -1,10 +1,12 @@
 package publish
 
 import (
-	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
-	"google.golang.org/protobuf/proto"
 	"log"
 	"net"
+
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
+	"golang.org/x/net/ipv4"
+	"google.golang.org/protobuf/proto"
 )
 
 const maxDatagramSize = 8192
@@ -50,6 +52,11 @@ func (p *Publisher) connect() bool {
 		if err != nil {
 			log.Printf("Could not connect to '%v': %v", addr, err)
 			continue
+		}
+		conn2 := ipv4.NewPacketConn(conn)
+		err = conn2.SetMulticastTTL(32)
+		if err != nil {
+			log.Printf("Could not set TTL to 32: %v", err)
 		}
 
 		if err := conn.SetWriteBuffer(maxDatagramSize); err != nil {
