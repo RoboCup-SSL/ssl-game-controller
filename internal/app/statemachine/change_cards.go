@@ -47,19 +47,14 @@ func activeYellowCards(cards []*state.YellowCard) (count int32) {
 
 // multipleYellowCardsChange creates a multiple cards event change
 func (s *StateMachine) multipleYellowCardsChange(byTeam state.Team) *Change {
-	eventType := state.GameEvent_MULTIPLE_CARDS
-	return &Change{
-		Change: &Change_AddGameEventChange{
-			AddGameEventChange: &Change_AddGameEvent{
-				GameEvent: &state.GameEvent{
-					Type: &eventType,
-					Event: &state.GameEvent_MultipleCards_{
-						MultipleCards: &state.GameEvent_MultipleCards{
-							ByTeam: &byTeam,
-						},
-					},
+	return createGameEventChange(
+		state.GameEvent_MULTIPLE_CARDS,
+		&state.GameEvent{
+			Event: &state.GameEvent_MultipleCards_{
+				MultipleCards: &state.GameEvent_MultipleCards{
+					ByTeam: &byTeam,
 				},
 			},
 		},
-	}
+	)
 }
