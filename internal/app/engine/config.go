@@ -45,6 +45,7 @@ var defaultTeams = []string{
 	"SSH",
 	"STOx’s",
 	"Sysmic Robotics",
+	"TauraBOTS",
 	"Test Team",
 	"TIGERs Mannheim",
 	"Tritons RCSC",
