@@ -53,6 +53,7 @@ var defaultTeams = []string{
 	"UBC Thunderbots",
 	"ULtron",
 	"UMass Minutebots",
+	"UnBall",
 	"Unknown",
 	"URoboRus",
 	"Warthog Robotics",
