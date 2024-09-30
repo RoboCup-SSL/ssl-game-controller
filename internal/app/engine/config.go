@@ -16,6 +16,7 @@ var defaultTeams = []string{
 	"A-Team",
 	"CMμs",
 	"Delft Mercurians",
+	"Eagles",
 	"ER-Force",
 	"GreenTea",
 	"Immortals",
