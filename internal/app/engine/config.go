@@ -41,6 +41,7 @@ var defaultTeams = []string{
 	"RoboIME",
 	"RoboJackets",
 	"RoboTeam Twente",
+	"SPbUnited",
 	"SRC",
 	"SSH",
 	"STOx’s",
