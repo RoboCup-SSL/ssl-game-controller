@@ -85,8 +85,12 @@ jobs:
       - checkout
       - setup_remote_docker
       - run: |
+          docker buildx create \
+            --name container-builder \
+            --driver docker-container \
+            --bootstrap --use
           for cmd in << pipeline.parameters.cmds >>; do
-            docker build --build-arg cmd=${cmd} -f ./cmd/${cmd}/Dockerfile -t robocupssl/${cmd}:latest .
+            docker buildx build --platform linux/amd64,linux/arm64 --build-arg cmd=${cmd} -f ./cmd/${cmd}/Dockerfile -t robocupssl/${cmd}:latest .
           done
 
   publish_docker:
@@ -101,7 +105,7 @@ jobs:
           TAG=${CIRCLE_TAG:1}
           TAG=${TAG:-latest}
           for cmd in << pipeline.parameters.cmds >>; do
-            docker build --build-arg cmd=${cmd} -f ./cmd/${cmd}/Dockerfile -t robocupssl/${cmd}:${TAG} .
+            docker buildx build --platform linux/amd64,linux/arm64 --build-arg cmd=${cmd} -f ./cmd/${cmd}/Dockerfile -t robocupssl/${cmd}:${TAG} .
             docker login -u "${DOCKER_HUB_USERNAME}" -p "${DOCKER_HUB_PASSWORD}"
             docker push robocupssl/${cmd}:${TAG}
           done
