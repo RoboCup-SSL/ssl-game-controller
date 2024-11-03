@@ -101,6 +101,11 @@ jobs:
       - checkout
       - setup_remote_docker
       - run: |
+          docker buildx create \
+            --name container-builder \
+            --driver docker-container \
+            --bootstrap --use
+          
           # Parse version from tag (removing 'v' prefix)
           TAG=${CIRCLE_TAG:1}
           TAG=${TAG:-latest}
