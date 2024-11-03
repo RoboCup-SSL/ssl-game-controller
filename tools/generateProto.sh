@@ -15,13 +15,33 @@ mkdir -p "${LOCAL_DIR}"
 
 # install a specific version of protoc
 export PATH="${LOCAL_DIR}/bin:$PATH"
-if ! protoc --version | grep "${PB_VERSION}" >/dev/null; then
+if ! protoc --version | grep "${PB_VERSION}" &>/dev/null; then
   if [[ -d "${LOCAL_DIR}" ]]; then
     rm -rf "${LOCAL_DIR}"
   fi
-  curl -sLO "https://github.com/protocolbuffers/protobuf/releases/download/v${PB_VERSION}/protoc-${PB_VERSION}-linux-x86_64.zip"
-  unzip "protoc-${PB_VERSION}-linux-x86_64.zip" -d "${LOCAL_DIR}"
-  rm "protoc-${PB_VERSION}-linux-x86_64.zip"
+
+  if [[ "${OSTYPE}" == "win"* ]] ||  [[ "${OSTYPE}" == "msys" ]]; then
+    readonly qualifier="win64"
+  elif [[ "${OSTYPE}" == "linux-gnu"* ]]; then
+    if [[ "$(arch)" == "arm64" ]] || [[ "$(arch)" == "aarch64" ]]; then
+      readonly qualifier="linux-aarch_64"
+    else
+      readonly qualifier="linux-x86_64"
+    fi
+  elif [[ "${OSTYPE}" == "darwin"* ]]; then
+    if [[ "$(arch)" == "arm64" ]] || [[ "$(arch)" == "aarch64" ]]; then
+      readonly qualifier="osx-aarch_64"
+    else
+      readonly qualifier="osx-x86_64"
+    fi
+  else
+    echo "Unknown OS ${OSTYPE}" >&2
+    exit 1
+  fi
+
+  curl -sLO "https://github.com/protocolbuffers/protobuf/releases/download/v${PB_VERSION}/protoc-${PB_VERSION}-${qualifier}.zip"
+  unzip "protoc-${PB_VERSION}-${qualifier}.zip" -d "${LOCAL_DIR}"
+  rm "protoc-${PB_VERSION}-${qualifier}.zip"
 fi
 
 # install a specific version of protoc-gen-go
