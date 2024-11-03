@@ -3,6 +3,7 @@ package sslnet
 import (
 	"log"
 	"net"
+	"net/netip"
 	"sync"
 	"time"
 )
@@ -40,11 +41,20 @@ func (r *MulticastServer) Stop() {
 
 func (r *MulticastServer) receive(multicastAddress string) {
 	var currentIfiIdx = 0
+	var badIfis []string
 	for r.isRunning() {
-		ifis := r.interfaces()
+		ifis := r.interfaces(badIfis)
+		if len(ifis) == 0 {
+			log.Println("No valid interfaces found to listen on")
+			return
+		}
 		currentIfiIdx = currentIfiIdx % len(ifis)
 		ifi := ifis[currentIfiIdx]
-		r.receiveOnInterface(multicastAddress, ifi)
+		badIfi := r.receiveOnInterface(multicastAddress, ifi)
+		if badIfi {
+			badIfis = append(badIfis, ifi.Name)
+		}
+
 		currentIfiIdx++
 		if currentIfiIdx >= len(ifis) {
 			// cycled though all interfaces once, make a short break to avoid producing endless log messages
@@ -59,7 +69,7 @@ func (r *MulticastServer) isRunning() bool {
 	return r.running
 }
 
-func (r *MulticastServer) interfaces() (interfaces []net.Interface) {
+func (r *MulticastServer) interfaces(ignoreIfis []string) (interfaces []net.Interface) {
 	interfaces = []net.Interface{}
 	ifis, err := net.Interfaces()
 	if err != nil {
@@ -67,7 +77,11 @@ func (r *MulticastServer) interfaces() (interfaces []net.Interface) {
 	}
 	for _, ifi := range ifis {
 		if ifi.Flags&net.FlagMulticast == 0 || // No multicast support
-			r.skipInterface(ifi.Name) {
+			ifi.Flags&net.FlagUp == 0 || // Not up
+			ifi.Flags&net.FlagRunning == 0 || // Not running
+			r.skipInterface(r.SkipInterfaces, ifi.Name) ||
+			r.skipInterface(ignoreIfis, ifi.Name) ||
+			isInvalidInterface(&ifi) {
 			continue
 		}
 		interfaces = append(interfaces, ifi)
@@ -75,8 +89,24 @@ func (r *MulticastServer) interfaces() (interfaces []net.Interface) {
 	return
 }
 
-func (r *MulticastServer) skipInterface(ifiName string) bool {
-	for _, skipIfi := range r.SkipInterfaces {
+func isInvalidInterface(ifi *net.Interface) bool {
+	addrs, err := ifi.Addrs()
+	if err != nil {
+		log.Printf("Could not get addresses of interface %v: %v", ifi, err)
+		return false
+	}
+	for _, addr := range addrs {
+		ipNet := addr.(*net.IPNet)
+		ip := netip.MustParseAddr(ipNet.IP.String())
+		if ip.Is4() {
+			return false
+		}
+	}
+	return true
+}
+
+func (r *MulticastServer) skipInterface(ifis []string, ifiName string) bool {
+	for _, skipIfi := range ifis {
 		if skipIfi == ifiName {
 			return true
 		}
@@ -84,16 +114,20 @@ func (r *MulticastServer) skipInterface(ifiName string) bool {
 	return false
 }
 
-func (r *MulticastServer) receiveOnInterface(multicastAddress string, ifi net.Interface) {
+func (r *MulticastServer) receiveOnInterface(multicastAddress string, ifi net.Interface) (badIfi bool) {
+	badIfi = false
+
 	addr, err := net.ResolveUDPAddr("udp", multicastAddress)
 	if err != nil {
 		log.Printf("Could resolve multicast address %v: %v", multicastAddress, err)
+		badIfi = true
 		return
 	}
 
 	r.connection, err = net.ListenMulticastUDP("udp", &ifi, addr)
 	if err != nil {
-		log.Printf("Could not listen at %v: %v", multicastAddress, err)
+		log.Printf("Could not listen at %v (%v): %v", multicastAddress, ifi.Name, err)
+		badIfi = true
 		return
 	}
 
@@ -109,6 +143,7 @@ func (r *MulticastServer) receiveOnInterface(multicastAddress string, ifi net.In
 	data := make([]byte, maxDatagramSize)
 	for {
 		if err := r.connection.SetDeadline(time.Now().Add(300 * time.Millisecond)); err != nil {
+			badIfi = true
 			log.Println("Could not set deadline on connection: ", err)
 		}
 		n, _, err := r.connection.ReadFromUDP(data)
@@ -132,6 +167,7 @@ func (r *MulticastServer) receiveOnInterface(multicastAddress string, ifi net.In
 	}
 
 	if err := r.connection.Close(); err != nil {
+		badIfi = true
 		log.Println("Could not close listener: ", err)
 	}
 	return
