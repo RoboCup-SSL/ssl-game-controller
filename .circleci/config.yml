@@ -110,9 +110,8 @@ jobs:
           TAG=${CIRCLE_TAG:1}
           TAG=${TAG:-latest}
           for cmd in << pipeline.parameters.cmds >>; do
-            docker buildx build --platform linux/amd64,linux/arm64 --build-arg cmd=${cmd} -f ./cmd/${cmd}/Dockerfile -t robocupssl/${cmd}:${TAG} .
             docker login -u "${DOCKER_HUB_USERNAME}" -p "${DOCKER_HUB_PASSWORD}"
-            docker push robocupssl/${cmd}:${TAG}
+            docker buildx build --platform linux/amd64,linux/arm64 --build-arg cmd=${cmd} -f ./cmd/${cmd}/Dockerfile -t robocupssl/${cmd}:${TAG} --push .
           done
 
 workflows:
