@@ -58,6 +58,7 @@ jobs:
             GOOS=darwin GOARCH=amd64 go build -o ./release/${cmd}_${version}_darwin_amd64 ./cmd/${cmd}
             GOOS=darwin GOARCH=arm64 go build -o ./release/${cmd}_${version}_darwin_arm64 ./cmd/${cmd}
             GOOS=windows GOARCH=amd64 go build -o ./release/${cmd}_${version}_windows_amd64.exe ./cmd/${cmd}
+            GOOS=windows GOARCH=arm64 go build -o ./release/${cmd}_${version}_windows_arm64.exe ./cmd/${cmd}
           done
       - persist_to_workspace:
           root: .
