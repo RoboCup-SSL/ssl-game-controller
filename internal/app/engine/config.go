@@ -60,6 +60,7 @@ var defaultTeams = []string{
 	"UnBall",
 	"Unknown",
 	"URoboRus",
+	"UTBots",
 	"Warthog Robotics",
 	"ZJUNlict",
 }
