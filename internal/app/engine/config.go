@@ -13,6 +13,7 @@ import (
 var defaultTeams = []string{
 	"AIS",
 	"AMC",
+	"Ararabots",
 	"A-Team",
 	"Carrossel Caipira",
 	"Cerberus",
