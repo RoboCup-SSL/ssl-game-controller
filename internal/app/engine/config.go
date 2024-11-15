@@ -33,6 +33,7 @@ var defaultTeams = []string{
 	"MRL",
 	"NAELIC",
 	"NAMeC",
+	"Neon"
 	"NEUIslanders",
 	"OMID",
 	"OP-AmP",
