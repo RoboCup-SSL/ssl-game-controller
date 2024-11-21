@@ -127,7 +127,8 @@ func (e *Engine) actionsToContinueFromStop() (actions []*ContinueAction, hints [
 		}
 
 		if e.currentState.HasGameEventByTeam(state.GameEvent_POSSIBLE_GOAL, team) &&
-			!e.currentState.HasGameEventByTeam(state.GameEvent_INVALID_GOAL, team) {
+			!e.currentState.HasGameEventByTeam(state.GameEvent_INVALID_GOAL, team) &&
+			!e.gameConfig.AutoApproveGoals {
 			continueActionRejectGoal := createContinueAction(
 				ContinueAction_REJECT_GOAL,
 				team,
