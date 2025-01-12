@@ -26,6 +26,9 @@ test: frontend
 run: frontend
 	go run ./cmd/$(word 1,$(CMDS))
 
+dev:
+	cd frontend && npm run dev
+
 proto:
 	tools/generateProto.sh
 
