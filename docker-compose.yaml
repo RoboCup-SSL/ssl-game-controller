@@ -130,7 +130,7 @@ services:
     network_mode: "${NETWORK_MODE}"
 
   ssl-log-player:
-    image: "robocupssl/ssl-log-player:1.5.2"
+    image: "robocupssl/ssl-log-player:1.8.0@sha256:9537fd8350e8a0b4b06a584c7feb2d0b08ba089e9d5b7538466c29f1e25e32b7"
     command:
       - "-file"
       - "/data/BOT_KICKED_BALL_TOO_FAST/linear-kick.log"
