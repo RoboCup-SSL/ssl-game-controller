@@ -33,7 +33,7 @@ autoref-tests:
 	git clone "https://gitlab.com/robocup-small-size/autoref-tests.git" autoref-tests
 
 update-backend:
-	go get -u ./...
+	go get -v -u all
 
 update-frontend:
 	cd frontend && \
