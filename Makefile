@@ -31,3 +31,12 @@ proto:
 
 autoref-tests:
 	git clone "https://gitlab.com/robocup-small-size/autoref-tests.git" autoref-tests
+
+update-backend:
+	go get -u ./...
+
+update-frontend:
+	cd frontend && \
+	npm update --save
+
+update: update-backend update-frontend proto
