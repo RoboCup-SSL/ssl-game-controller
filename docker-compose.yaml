@@ -119,7 +119,7 @@ services:
     network_mode: "${NETWORK_MODE}"
 
   autoref-erforce:
-    image: "roboticserlangen/autoref:commit-6f15f574ea80"
+    image: "roboticserlangen/autoref:commit-6f15f574ea80@sha256:3d7c5933c12eb193a1fefcfd6aba86fba42875c588cc883dc20d0bfcb66b11cb"
     command:
       - "--vision-port"
       - "10020"
@@ -147,7 +147,7 @@ services:
       - autoref-tests
 
   simulator:
-    image: "roboticserlangen/simulatorcli:commit-6a4e1c06533b"
+    image: "roboticserlangen/simulatorcli:commit-6a4e1c06533b@sha256:19d0df91697c82ebfd1f86eca5ccf6b8be2f0d64b22078725257c3a5856b5ddc"
     environment:
       GEOMETRY: "2020"
       REALISM: "RC2021"
@@ -160,7 +160,7 @@ services:
       - sim
 
   ssl-simulation-controller:
-    image: "robocupssl/ssl-simulation-controller:0.12.1"
+    image: "robocupssl/ssl-simulation-controller:0.12.1@sha256:7765761a838da09289e0039d54d21fc3ca37bcf124dd15749ee416f440c92067"
     command:
       - "-refereeAddress"
       - "224.5.23.1:11003"
