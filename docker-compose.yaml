@@ -48,7 +48,7 @@ services:
       - "8083:8083/tcp"
 
   ssl-remote-control-yellow:
-    image: "robocupssl/ssl-remote-control:1.1.3"
+    image: "robocupssl/ssl-remote-control:1.3.2@sha256:e23e823d006b9790d6856173d2278ce268d41f64f6d99896bbf67a39ee7d93e1"
     command:
       - "-address"
       - ":8084"
@@ -61,7 +61,7 @@ services:
       - "8084:8084/tcp"
 
   ssl-remote-control-blue:
-    image: "robocupssl/ssl-remote-control:1.1.3"
+    image: "robocupssl/ssl-remote-control:1.3.2@sha256:e23e823d006b9790d6856173d2278ce268d41f64f6d99896bbf67a39ee7d93e1"
     command:
       - "-address"
       - ":8085"
