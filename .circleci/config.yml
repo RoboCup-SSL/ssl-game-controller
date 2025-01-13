@@ -8,7 +8,7 @@ jobs:
   build_node:
     resource_class: medium
     docker:
-      - image: cimg/node:lts
+      - image: cimg/node:lts@sha256:c2ea6166daf4ed37d0abdaf9186798e0c73e75a9f1f3858b69bb770755a59cca
     steps:
       - checkout
       - run:
@@ -27,7 +27,7 @@ jobs:
   test_go:
     resource_class: medium
     docker:
-      - image: cimg/go:1.23.4
+      - image: cimg/go:1.23.4@sha256:d89753cdb9f31e48c3a91aee6e73afcb23ad7e44abf7088491d8a9f002a71b67
     steps:
       - checkout
       - attach_workspace:
@@ -42,7 +42,7 @@ jobs:
   build_go:
     resource_class: large
     docker:
-      - image: cimg/go:1.23.4
+      - image: cimg/go:1.23.4@sha256:d89753cdb9f31e48c3a91aee6e73afcb23ad7e44abf7088491d8a9f002a71b67
     steps:
       - checkout
       - attach_workspace:
@@ -68,7 +68,7 @@ jobs:
   publish_gh:
     resource_class: small
     docker:
-      - image: cimg/go:1.23.4
+      - image: cimg/go:1.23.4@sha256:d89753cdb9f31e48c3a91aee6e73afcb23ad7e44abf7088491d8a9f002a71b67
     steps:
       - attach_workspace:
           at: .
@@ -80,7 +80,7 @@ jobs:
   build_docker:
     resource_class: small
     docker:
-      - image: cimg/base:2024.12
+      - image: cimg/base:2024.12@sha256:03c91d4730297b5af3718e1e81d43e210eae02be271ed7d370ccb3b994dad2bd
     steps:
       - checkout
       - setup_remote_docker
@@ -96,7 +96,7 @@ jobs:
   publish_docker:
     resource_class: small
     docker:
-      - image: cimg/base:2024.12
+      - image: cimg/base:2024.12@sha256:03c91d4730297b5af3718e1e81d43e210eae02be271ed7d370ccb3b994dad2bd
     steps:
       - checkout
       - setup_remote_docker
