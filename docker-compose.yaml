@@ -24,7 +24,7 @@ services:
       - full
 
   ssl-vision-client:
-    image: "robocupssl/ssl-vision-client:1.7.3"
+    image: "robocupssl/ssl-vision-client:1.8.0@sha256:1143bb8ce7e8fbc767c70ffba3fac05da50f4210989c2ed3fe0568a62791a172"
     command:
       - "-address"
       - ":8082"
