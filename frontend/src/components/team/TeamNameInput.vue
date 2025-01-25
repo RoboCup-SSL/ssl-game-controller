@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import {computed, inject} from "vue";
 import {useMatchStateStore} from "@/store/matchState";
-import type {Team} from "@/proto/ssl_gc_common";
+import type {TeamJson} from "@/proto/state/ssl_gc_common_pb";
 import type {ControlApi} from "@/providers/controlApi";
 import SelectInput from "@/components/common/SelectInput.vue";
 import {useGcStateStore} from "@/store/gcState";
 
 const props = defineProps<{
-  team: Team,
+  team: TeamJson,
 }>()
 
 const store = useMatchStateStore()

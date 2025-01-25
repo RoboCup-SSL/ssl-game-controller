@@ -1,5 +1,3 @@
-import {Command_Type} from "@/proto/ssl_gc_state";
-import {Team} from "@/proto/ssl_gc_common";
 import type {ManualActions} from "@/providers/manualActions";
 
 
@@ -23,7 +21,7 @@ export class Shortcuts {
   public keyListenerCommands(e: KeyboardEvent) {
     // Always allow escape
     if (e.code === 'Escape') {
-      this.manualActions.getCommandAction(Command_Type.HALT).send()
+      this.manualActions.getCommandAction('HALT').send()
     }
 
     if (!this.enabled) {
@@ -33,34 +31,34 @@ export class Shortcuts {
 
     switch (e.code) {
       case "Numpad0":
-        this.manualActions.getCommandAction(Command_Type.STOP).send()
+        this.manualActions.getCommandAction('STOP').send()
         break
       case "NumpadDecimal":
-        this.manualActions.getCommandAction(Command_Type.HALT).send()
+        this.manualActions.getCommandAction('HALT').send()
         break
       case "Numpad5":
-        this.manualActions.getCommandAction(Command_Type.FORCE_START).send()
+        this.manualActions.getCommandAction('FORCE_START').send()
         break
       case "Numpad2":
-        this.manualActions.getCommandAction(Command_Type.NORMAL_START).send()
+        this.manualActions.getCommandAction('NORMAL_START').send()
         break
       case "Numpad1":
-        this.manualActions.getCommandAction(Command_Type.DIRECT, Team.YELLOW).send()
+        this.manualActions.getCommandAction('DIRECT', 'YELLOW').send()
         break
       case "Numpad3":
-        this.manualActions.getCommandAction(Command_Type.DIRECT, Team.BLUE).send()
+        this.manualActions.getCommandAction('DIRECT', 'BLUE').send()
         break
       case "Numpad4":
-        this.manualActions.getCommandAction(Command_Type.KICKOFF, Team.YELLOW).send()
+        this.manualActions.getCommandAction('KICKOFF', 'YELLOW').send()
         break
       case "Numpad6":
-        this.manualActions.getCommandAction(Command_Type.KICKOFF, Team.BLUE).send()
+        this.manualActions.getCommandAction('KICKOFF', 'BLUE').send()
         break
       case "Numpad7":
-        this.manualActions.getCommandAction(Command_Type.TIMEOUT, Team.YELLOW).send()
+        this.manualActions.getCommandAction('TIMEOUT', 'YELLOW').send()
         break
       case "Numpad9":
-        this.manualActions.getCommandAction(Command_Type.TIMEOUT, Team.BLUE).send()
+        this.manualActions.getCommandAction('TIMEOUT', 'BLUE').send()
         break
       case "NumpadEnter":
         this.manualActions.getContinueAction().send()

@@ -2,13 +2,13 @@
 import TeamBadge from "@/components/common/TeamBadge.vue";
 import type {ManualActions} from "@/providers/manualActions";
 import {computed, inject} from "vue";
-import type {Command_Type} from "@/proto/ssl_gc_state";
-import type {Team} from "@/proto/ssl_gc_common";
+import type {Command_TypeJson} from "@/proto/state/ssl_gc_state_pb";
+import type {TeamJson} from "@/proto/state/ssl_gc_common_pb";
 import {useUiStateStore} from "@/store/uiState";
 
 const props = defineProps<{
-  type: Command_Type,
-  team?: Team,
+  type: Command_TypeJson,
+  team?: TeamJson,
 }>()
 
 const manualActions = inject<ManualActions>('command-actions')!

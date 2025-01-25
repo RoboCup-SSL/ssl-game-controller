@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import TeamBadge from "@/components/common/TeamBadge.vue";
-import type {Team} from "@/proto/ssl_gc_common";
+import type {TeamJson} from "@/proto/state/ssl_gc_common_pb";
 
 defineProps<{
   label: string,
   action: () => any,
   disable?: boolean,
-  team?: Team,
+  team?: TeamJson,
 }>()
 
 </script>

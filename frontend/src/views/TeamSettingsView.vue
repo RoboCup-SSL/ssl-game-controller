@@ -9,31 +9,31 @@ import ChallengeFlagsInput from "@/components/team/ChallengeFlagsInput.vue";
 import {useMatchStateStore} from "@/store/matchState";
 import {useGcStateStore} from "@/store/gcState";
 import {teams} from "@/helpers";
-import type {Team} from "@/proto/ssl_gc_common";
+import type {TeamJson} from "@/proto/state/ssl_gc_common_pb";
 import BotSubstitutionsInput from "@/components/team/BotSubstitutionsInput.vue";
 
 const store = useMatchStateStore()
 const gcStore = useGcStateStore()
 
-const teamName = (team: Team) => {
+const teamName = (team: TeamJson) => {
   return store.matchState.teamState?.[team].name!
 }
-const remoteConnected = (team: Team) => {
+const remoteConnected = (team: TeamJson) => {
   return gcStore.gcState.teamState![team].remoteControlConnected!
 }
-const teamConnected = (team: Team) => {
+const teamConnected = (team: TeamJson) => {
   return gcStore.gcState.teamState![team].connected!
 }
-const advantageChoice = (team: Team) => {
+const advantageChoice = (team: TeamJson) => {
   return gcStore.gcState.teamState![team].advantageChoice?.choice!
 }
-const fouls = (team: Team) => {
+const fouls = (team: TeamJson) => {
   return store.matchState.teamState![team].fouls?.length
 }
-const yellowCards = (team: Team) => {
+const yellowCards = (team: TeamJson) => {
   return store.matchState.teamState![team].yellowCards?.length
 }
-const redCards = (team: Team) => {
+const redCards = (team: TeamJson) => {
   return store.matchState.teamState![team].redCards?.length
 }
 </script>

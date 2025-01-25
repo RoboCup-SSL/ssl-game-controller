@@ -6,9 +6,7 @@ defineProps<{
   label?: string,
 }>()
 
-const emit = defineEmits<{
-  (event: 'update:modelValue', payload: boolean | undefined): void;
-}>();
+const emit = defineEmits<(event: 'update:modelValue', payload: boolean | undefined) => void>();
 
 const updateValue = (v: boolean | undefined) => {
   emit('update:modelValue', v)

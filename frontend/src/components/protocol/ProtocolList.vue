@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import ProtocolItem from "@/components/protocol/ProtocolItem.vue";
-import type {ProtocolEntry} from "@/proto/ssl_gc_api";
+import type {ProtocolEntryJson} from "@/proto/api/ssl_gc_api_pb";
 
 defineProps<{
   dense?: boolean,
-  protocolEntries: ProtocolEntry[],
+  protocolEntries: ProtocolEntryJson[],
 }>()
 
 </script>

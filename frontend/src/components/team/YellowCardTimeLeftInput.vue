@@ -1,19 +1,20 @@
 <script setup lang="ts">
 import {computed, inject} from "vue";
 import NumberInput from "@/components/common/NumberInput.vue";
-import type {Team} from "@/proto/ssl_gc_common";
+import type {TeamJson} from "@/proto/state/ssl_gc_common_pb";
 import type {ControlApi} from "@/providers/controlApi";
-import type {YellowCard} from "@/proto/ssl_gc_state";
+import type {YellowCardJson} from "@/proto/state/ssl_gc_state_pb";
+import {durationSeconds} from "@/helpers";
 
 const props = defineProps<{
-  team: Team,
-  card: YellowCard,
+  team: TeamJson,
+  card: YellowCardJson,
 }>()
 
 const control = inject<ControlApi>('control-api')
 
 const model = computed(() => {
-  return props.card.timeRemaining!.seconds
+  return durationSeconds(props.card.timeRemaining!)
 })
 
 const updateValue = (value: number | undefined) => {
@@ -22,9 +23,7 @@ const updateValue = (value: number | undefined) => {
       forTeam: props.team,
       yellowCard: {
         id: props.card.id,
-        timeRemaining: {
-          seconds: value,
-        }
+        timeRemaining: `${value}s`,
       },
     })
   }

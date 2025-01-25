@@ -2,13 +2,11 @@
 import NumberInput from "@/components/common/NumberInput.vue";
 
 defineProps<{
-  modelValue?: number,
+  modelValue?: number | bigint | "NaN" | "Infinity" | "-Infinity",
   label?: string,
 }>()
 
-const emit = defineEmits<{
-  (event: 'update:modelValue', payload: number | undefined): void;
-}>();
+const emit = defineEmits<(event: 'update:modelValue', payload: number | undefined) => void>();
 
 const updateValue = (v: number | undefined) => {
   emit('update:modelValue', v)

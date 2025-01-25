@@ -3,39 +3,33 @@ import {ref} from "vue";
 import TeamItem from "@/components/game-events/common/TeamItem.vue";
 import ButtonItem from "@/components/game-events/common/ButtonItem.vue";
 import TextItem from "@/components/game-events/common/TextItem.vue";
-import {GameEvent, GameEvent_Type} from "@/proto/ssl_gc_game_event";
-import {Team} from "@/proto/ssl_gc_common";
+import type {GameEvent_TypeJson, GameEventJson} from "@/proto/state/ssl_gc_game_event_pb";
+import type {TeamJson} from "@/proto/state/ssl_gc_common_pb";
 
-const gameEventType = ref<GameEvent_Type>(GameEvent_Type.UNSPORTING_BEHAVIOR_MINOR)
-const byTeam = ref<Team>(Team.YELLOW)
+const gameEventType = ref<GameEvent_TypeJson>('UNSPORTING_BEHAVIOR_MINOR')
+const byTeam = ref<TeamJson>('YELLOW')
 const reason = ref<string>("")
 
 const gameEventTypeOptions = [
-  {label: 'minor', value: GameEvent_Type.UNSPORTING_BEHAVIOR_MINOR},
-  {label: 'major', value: GameEvent_Type.UNSPORTING_BEHAVIOR_MAJOR},
+  {label: 'minor', value: 'UNSPORTING_BEHAVIOR_MINOR'},
+  {label: 'major', value: 'UNSPORTING_BEHAVIOR_MAJOR'},
 ]
 
-const constructGameEvent = (): GameEvent | undefined => {
-  if (gameEventType.value === GameEvent_Type.UNSPORTING_BEHAVIOR_MINOR) {
+const constructGameEvent = (): GameEventJson | undefined => {
+  if (gameEventType.value === 'UNSPORTING_BEHAVIOR_MINOR') {
     return {
       type: gameEventType.value,
-      event: {
-        $case: 'unsportingBehaviorMinor',
-        unsportingBehaviorMinor: {
-          byTeam: byTeam.value,
-          reason: reason.value,
-        }
+      unsportingBehaviorMinor: {
+        byTeam: byTeam.value,
+        reason: reason.value,
       }
     }
-  } else if (gameEventType.value === GameEvent_Type.UNSPORTING_BEHAVIOR_MAJOR) {
+  } else if (gameEventType.value === 'UNSPORTING_BEHAVIOR_MAJOR') {
     return {
       type: gameEventType.value,
-      event: {
-        $case: 'unsportingBehaviorMajor',
-        unsportingBehaviorMajor: {
-          byTeam: byTeam.value,
-          reason: reason.value,
-        }
+      unsportingBehaviorMajor: {
+        byTeam: byTeam.value,
+        reason: reason.value,
       }
     }
   }

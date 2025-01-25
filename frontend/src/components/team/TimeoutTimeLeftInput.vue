@@ -2,18 +2,19 @@
 import {computed, inject} from "vue";
 import NumberInput from "@/components/common/NumberInput.vue";
 import {useMatchStateStore} from "@/store/matchState";
-import type {Team} from "@/proto/ssl_gc_common";
+import type {TeamJson} from "@/proto/state/ssl_gc_common_pb";
 import type {ControlApi} from "@/providers/controlApi";
+import {durationSeconds} from "@/helpers";
 
 const props = defineProps<{
-  team: Team,
+  team: TeamJson,
 }>()
 
 const store = useMatchStateStore()
 const control = inject<ControlApi>('control-api')
 
 const model = computed(() => {
-  return Math.round(store.matchState.teamState![props.team].timeoutTimeLeft?.seconds!)
+  return Math.round(durationSeconds(store.matchState.teamState![props.team].timeoutTimeLeft!))
 })
 
 const updateValue = (value: number | undefined) => {

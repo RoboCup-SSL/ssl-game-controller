@@ -3,7 +3,7 @@ import {computed, inject} from "vue";
 import SelectInput from "@/components/common/SelectInput.vue";
 import {useMatchStateStore} from "@/store/matchState";
 import {matchTypeName} from "@/helpers/texts";
-import {MatchType} from "@/proto/ssl_gc_referee_message";
+import {MatchType, type MatchTypeJson} from "@/proto/state/ssl_gc_referee_message_pb";
 import type {ControlApi} from "@/providers/controlApi";
 
 const store = useMatchStateStore()
@@ -13,10 +13,10 @@ const model = computed(() => {
   return store.matchState.matchType
 })
 
-const options = Object.values(MatchType).filter((matchType => matchType !== MatchType.UNRECOGNIZED))
-const optionsLabel = (v: MatchType) => matchTypeName(v) || "-"
+const options = Object.values(MatchType).map((v) => v as MatchTypeJson)
+const optionsLabel = (v: MatchTypeJson) => matchTypeName(v) || "-"
 
-const onChange = (newValue: MatchType) => {
+const onChange = (newValue: MatchTypeJson) => {
   control?.UpdateMatchConfig({matchType: newValue})
 }
 </script>

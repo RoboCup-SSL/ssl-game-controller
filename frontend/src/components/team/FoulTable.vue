@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import {computed, inject} from "vue";
 import {useMatchStateStore} from "@/store/matchState";
-import {gameEventNames} from "@/helpers/texts";
-import dayjs from "dayjs";
-import type {Team} from "@/proto/ssl_gc_common";
+import {gameEventName} from "@/helpers/texts";
+import type {TeamJson} from "@/proto/state/ssl_gc_common_pb";
 import type {ControlApi} from "@/providers/controlApi";
-import type {GameEvent} from "@/proto/ssl_gc_game_event";
+import type {GameEventJson} from "@/proto/state/ssl_gc_game_event_pb";
+import {formatTimestamp} from "@/helpers";
 
 const props = defineProps<{
-  team: Team,
+  team: TeamJson,
 }>()
 
 const store = useMatchStateStore()
@@ -21,14 +21,11 @@ const hasData = computed(() => {
   return fouls.value?.length! > 0
 })
 
-const causeText = (cause?: GameEvent) => {
+const causeText = (cause?: GameEventJson) => {
   if (cause) {
-    return gameEventNames.get(cause.type!)
+    return gameEventName(cause.type!)
   }
   return "-"
-}
-const formatTime = (timestamp?: Date) => {
-  return dayjs(timestamp).format("MMM, DD YYYY HH:mm:ss,SSS")
 }
 
 const removeFoul = (foulId?: number) => {
@@ -51,7 +48,7 @@ const removeFoul = (foulId?: number) => {
     <tbody>
     <tr v-for="foul in fouls" :key="foul.id">
       <td class="text-left">{{ causeText(foul.causedByGameEvent) }}</td>
-      <td class="text-left">{{ formatTime(foul.timestamp) }}</td>
+      <td class="text-left">{{ formatTimestamp(foul.timestamp!) }}</td>
       <td class="text-right">
         <q-btn round @click="() => removeFoul(foul.id)" icon="delete"></q-btn>
       </td>

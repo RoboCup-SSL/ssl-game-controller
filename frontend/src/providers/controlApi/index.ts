@@ -1,100 +1,88 @@
-import {Input, Output} from "@/proto/ssl_gc_api";
-import type {Change, Change_UpdateConfig, Change_UpdateTeamState} from "@/proto/ssl_gc_change";
-import type {Command, Command_Type, Proposal} from "@/proto/ssl_gc_state";
-import type {GameEvent} from "@/proto/ssl_gc_game_event";
-import {type ContinueAction, ContinueAction_State} from "@/proto/ssl_gc_engine";
-import type {Config} from "@/proto/ssl_gc_engine_config";
-import {Team} from "@/proto/ssl_gc_common";
+import type {InputJson, OutputJson} from "@/proto/api/ssl_gc_api_pb";
+import {OutputSchema} from "@/proto/api/ssl_gc_api_pb";
+import type {
+  Change_UpdateConfigJson,
+  Change_UpdateTeamStateJson,
+  ChangeJson
+} from "@/proto/statemachine/ssl_gc_change_pb";
+import type {Command_TypeJson, CommandJson, ProposalJson} from "@/proto/state/ssl_gc_state_pb";
+import {type GameEventJson} from "@/proto/state/ssl_gc_game_event_pb";
+import {type ContinueActionJson} from "@/proto/engine/ssl_gc_engine_pb";
+import type {ConfigJson} from "@/proto/engine/ssl_gc_engine_config_pb";
+import {fromJsonString, toJson} from "@bufbuild/protobuf";
+import {type TeamJson} from "@/proto/state/ssl_gc_common_pb";
 
 export class ControlApi {
   private readonly apiPath = '/api/control'
   private ws ?: WebSocket
-  private consumer: ((message: Output) => any)[] = []
-  private latestOutput ?: Output
+  private readonly consumer: ((message: OutputJson) => any)[] = []
+  private latestOutput ?: OutputJson
 
   constructor() {
     this.connect()
   }
 
 
-  public NewCommandNeutral(type: Command_Type) {
-    this.newCommand({type, forTeam: Team.UNKNOWN})
+  public NewCommandNeutral(type: Command_TypeJson) {
+    this.newCommand({type, forTeam: 'UNKNOWN'})
   }
 
-  public NewCommandForTeam(type: Command_Type, forTeam: Team) {
+  public NewCommandForTeam(type: Command_TypeJson, forTeam: TeamJson) {
     this.newCommand({type, forTeam})
   }
 
-  private newCommand(command: Command) {
+  private newCommand(command: CommandJson) {
     this.SubmitChange({
-      change: {
-        $case: 'newCommandChange',
-        newCommandChange: {
-          command
-        }
+      newCommandChange: {
+        command
       }
     })
   }
 
-  public AddGameEvent(gameEvent: GameEvent) {
+  public AddGameEvent(gameEvent: GameEventJson) {
     if (gameEvent.origin?.length === 0) {
       gameEvent.origin = ["UI"]
     }
     this.SubmitChange({
-      change: {
-        $case: 'addGameEventChange',
-        addGameEventChange: {
-          gameEvent
-        }
+      addGameEventChange: {
+        gameEvent
       }
     })
   }
 
-  public ProposeGameEvent(proposal: Proposal) {
+  public ProposeGameEvent(proposal: ProposalJson) {
     if (proposal.gameEvent?.origin?.length === 0) {
       proposal.gameEvent.origin = ["UI"]
     }
     this.SubmitChange({
-      change: {
-        $case: 'addProposalChange',
-        addProposalChange: {
-          proposal
-        }
+      addProposalChange: {
+        proposal
       }
     })
   }
 
-  public UpdateMatchConfig(updateConfigChange: Change_UpdateConfig) {
+  public UpdateMatchConfig(updateConfigChange: Change_UpdateConfigJson) {
     this.SubmitChange({
-      change: {
-        $case: 'updateConfigChange',
-        updateConfigChange
-      }
+      updateConfigChange
     })
   }
 
-  public UpdateTeamState(updateTeamStateChange: Change_UpdateTeamState) {
+  public UpdateTeamState(updateTeamStateChange: Change_UpdateTeamStateJson) {
     this.SubmitChange({
-      change: {
-        $case: 'updateTeamStateChange',
-        updateTeamStateChange
-      }
+      updateTeamStateChange
     })
   }
 
   public AcceptProposalGroup(groupId: string) {
     this.SubmitChange({
-      change: {
-        $case: 'acceptProposalGroupChange',
-        acceptProposalGroupChange: {
-          groupId,
-          acceptedBy: "UI"
-        }
+      acceptProposalGroupChange: {
+        groupId,
+        acceptedBy: "UI"
       }
     })
   }
 
-  public ChangeConfig(configDelta: Config) {
+  public ChangeConfig(configDelta: ConfigJson) {
     this.Send({
       configDelta
     })
@@ -108,27 +96,24 @@ export class ControlApi {
 
   public Revert(id: number) {
     this.SubmitChange({
-      change: {
-        $case: "revertChange",
-        revertChange: {
-          changeId: id,
-        }
+      revertChange: {
+        changeId: id,
       }
     })
   }
 
-  public Continue(continueAction: ContinueAction) {
-    if (continueAction.state === ContinueAction_State.READY_AUTO
-      || continueAction.state === ContinueAction_State.READY_MANUAL
-      || continueAction.state === ContinueAction_State.WAITING
-      || continueAction.state === ContinueAction_State.BLOCKED) {
+  public Continue(continueAction: ContinueActionJson) {
+    if (continueAction.state === 'READY_AUTO'
+      || continueAction.state === 'READY_MANUAL'
+      || continueAction.state === 'WAITING'
+      || continueAction.state === 'BLOCKED') {
       this.Send({
         continueAction
       })
     }
   }
 
-  public SubmitChange(change: Change) {
+  public SubmitChange(change: ChangeJson) {
     if (!change.origin) {
       change.origin = "UI"
     }
@@ -137,17 +122,17 @@ export class ControlApi {
     })
   }
 
-  public Send(request: Input) {
+  public Send(request: InputJson) {
     const ws = this.ws
     if (ws) {
-      const json = JSON.stringify(Input.toJSON(request))
+      const json = JSON.stringify(request)
       ws.send(json)
     } else {
       console.warn("No WebSocket connection. Dropping ", request)
     }
   }
 
-  public RegisterConsumer(cb: ((output: Output) => any)) {
+  public RegisterConsumer(cb: ((output: OutputJson) => any)) {
     this.consumer.push(cb)
     if (this.latestOutput) {
       cb(this.latestOutput)
@@ -163,7 +148,7 @@ export class ControlApi {
     const ws = new WebSocket(this.determineWebSocketAddress());
 
     ws.onmessage = (e) => {
-      this.latestOutput = Output.fromJSON(JSON.parse(e.data))
+      this.latestOutput = toJson(OutputSchema, fromJsonString(OutputSchema, e.data))
       for (const callback of this.consumer) {
         callback(this.latestOutput)
       }

@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import {computed, inject} from "vue";
 import TeamBadge from "@/components/common/TeamBadge.vue";
-import type {ContinueAction} from "@/proto/ssl_gc_engine";
-import {ContinueAction_State} from "@/proto/ssl_gc_engine";
+import type {ContinueActionJson} from "@/proto/engine/ssl_gc_engine_pb";
 import {useMatchStateStore} from "@/store/matchState";
 import {continueActionLabel} from "@/helpers/texts";
 import type {ControlApi} from "@/providers/controlApi";
 
 const props = defineProps<{
-  action: ContinueAction,
+  action: ContinueActionJson,
   id: number,
 }>()
 
@@ -21,15 +20,15 @@ const team = computed(() => {
 
 const color = computed(() => {
   switch (props.action.state) {
-    case ContinueAction_State.READY_AUTO:
+    case 'READY_AUTO':
       return 'positive'
-    case ContinueAction_State.READY_MANUAL:
+    case 'READY_MANUAL':
       return 'primary'
-    case ContinueAction_State.BLOCKED:
+    case 'BLOCKED':
       return 'negative'
-    case ContinueAction_State.WAITING:
+    case 'WAITING':
       return 'warning'
-    case ContinueAction_State.DISABLED:
+    case 'DISABLED':
       return 'negative'
     default:
       return 'secondary'
@@ -52,7 +51,7 @@ const submitAction = () => {
 <template>
   <q-btn class="q-mx-md q-my-xs"
          :color="color"
-         :disable="props.action.state === ContinueAction_State.DISABLED"
+         :disable="props.action.state === 'DISABLED'"
          @click="submitAction">
     <TeamBadge :team="team"/>
     {{ label }}

@@ -2,10 +2,10 @@
 import {inject} from "vue";
 import ControlButton from "@/components/control/ControlButton.vue";
 import type {ControlApi} from "@/providers/controlApi";
-import type {Team} from "@/proto/ssl_gc_common";
+import type {TeamJson} from "@/proto/state/ssl_gc_common_pb";
 
 const props = defineProps<{
-  team: Team,
+  team: TeamJson,
 }>()
 
 const control = inject<ControlApi>('control-api')
@@ -14,12 +14,9 @@ const submit = () => {
   control?.SubmitChange({
     origin: "UI",
     revertible: true,
-    change: {
-      $case: "addYellowCardChange",
-      addYellowCardChange: {
-        forTeam: props.team,
-        causedByGameEvent: undefined,
-      }
+    addYellowCardChange: {
+      forTeam: props.team,
+      causedByGameEvent: undefined,
     }
   })
 }

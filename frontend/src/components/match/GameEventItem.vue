@@ -1,18 +1,17 @@
 <script setup lang="ts">
 import {computed} from "vue";
 import TeamBadge from "@/components/common/TeamBadge.vue";
-import {gameEventNames} from "@/helpers/texts";
-import type {GameEvent} from "@/proto/ssl_gc_game_event";
-import {gameEventForTeam} from "@/helpers";
-import dayjs from "dayjs";
+import {gameEventName} from "@/helpers/texts";
+import type {GameEventJson} from "@/proto/state/ssl_gc_game_event_pb";
+import {formatTimestamp, gameEventForTeam} from "@/helpers";
 import OriginIcon from "@/components/common/OriginIcon.vue";
 
 const props = defineProps<{
-  gameEvent: GameEvent,
+  gameEvent: GameEventJson,
 }>()
 
 const label = computed(() => {
-  return gameEventNames.get(props.gameEvent.type!)
+  return gameEventName(props.gameEvent.type!)
 })
 
 const team = computed(() => {
@@ -25,7 +24,7 @@ const origins = computed(() => {
 
 const time = computed(() => {
   if (props.gameEvent.createdTimestamp) {
-    return dayjs(props.gameEvent.createdTimestamp / 1e3).format("MMM, DD YYYY HH:mm:ss,SSS")
+    return formatTimestamp(props.gameEvent.createdTimestamp)
   }
   return undefined
 })

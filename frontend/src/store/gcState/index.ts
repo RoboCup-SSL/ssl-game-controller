@@ -1,6 +1,6 @@
 import {defineStore} from "pinia";
-import type {GcState} from "@/proto/ssl_gc_engine";
-import type {Config} from "@/proto/ssl_gc_engine_config";
+import type {GcStateJson} from "@/proto/engine/ssl_gc_engine_pb";
+import type {ConfigJson} from "@/proto/engine/ssl_gc_engine_config_pb";
 import {emptyConfig, emptyGcState, mockedConfig, mockedGcState} from "@/store/gcState/defaultStates";
 
 export const useGcStateStore = defineStore('gcState', {
@@ -14,11 +14,11 @@ export const useGcStateStore = defineStore('gcState', {
   },
   getters: {},
   actions: {
-    updateGcState(gcState: GcState) {
+    updateGcState(gcState: GcStateJson) {
       this.gcState = gcState
       this.gcStateUpdateCount++
     },
-    updateConfig(config: Config) {
+    updateConfig(config: ConfigJson) {
       this.config = config
       this.configUpdateCount++
     },

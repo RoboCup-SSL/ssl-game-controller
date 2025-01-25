@@ -2,7 +2,7 @@
 import {computed, inject} from "vue";
 import ButtonToggleInput from "@/components/common/ButtonToggleInput.vue";
 import {useMatchStateStore} from "@/store/matchState";
-import {Division} from "@/proto/ssl_gc_common";
+import {type DivisionJson} from "@/proto/state/ssl_gc_common_pb";
 import type {ControlApi} from "@/providers/controlApi";
 
 const store = useMatchStateStore()
@@ -12,11 +12,11 @@ const model = computed(() => {
   return store.matchState.division
 })
 const options = [
-  {label: 'Division A', value: Division.DIV_A},
-  {label: 'Division B', value: Division.DIV_B}
+  {label: 'Division A', value: 'DIV_A'},
+  {label: 'Division B', value: 'DIV_B'}
 ]
 
-const onChange = (newValue: Division) => {
+const onChange = (newValue: DivisionJson) => {
   control?.UpdateMatchConfig({division: newValue})
 }
 </script>

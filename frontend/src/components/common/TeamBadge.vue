@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import {computed} from "vue";
-import {Team} from "@/proto/ssl_gc_common";
+import {type TeamJson} from "@/proto/state/ssl_gc_common_pb";
 
 const props = defineProps<{
-  team?: Team,
+  team?: TeamJson,
   floating?: boolean,
 }>()
 
 const color = computed(() => {
   switch (props.team) {
-    case Team.YELLOW:
+    case 'YELLOW':
       return "team-yellow"
-    case Team.BLUE:
+    case 'BLUE':
       return "team-blue"
     default:
       return ""
@@ -19,16 +19,16 @@ const color = computed(() => {
 })
 const label = computed(() => {
   switch (props.team) {
-    case Team.YELLOW:
+    case 'YELLOW':
       return "Yellow"
-    case Team.BLUE:
+    case 'BLUE':
       return "Blue"
     default:
       return ""
   }
 })
 const shown = computed(() => {
-  return props.team === Team.YELLOW || props.team === Team.BLUE
+  return props.team === 'YELLOW' || props.team === 'BLUE'
 })
 </script>
 

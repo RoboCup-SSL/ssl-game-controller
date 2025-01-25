@@ -7,10 +7,7 @@ const control = inject<ControlApi>('control-api')
 const update = () => {
   if (Math.random() < 0.5) {
     control?.SubmitChange({
-      change: {
-        $case: "switchColorsChange",
-        switchColorsChange: {}
-      }
+      switchColorsChange: {}
     })
   }
 }

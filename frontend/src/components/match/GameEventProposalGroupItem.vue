@@ -1,25 +1,24 @@
 <script setup lang="ts">
 import {computed} from "vue";
-import {gameEventNames} from "@/helpers/texts";
-import type {ProposalGroup} from "@/proto/ssl_gc_state";
-import type {GameEvent} from "@/proto/ssl_gc_game_event";
+import {gameEventName} from "@/helpers/texts";
+import type {ProposalGroupJson} from "@/proto/state/ssl_gc_state_pb";
+import type {GameEventJson} from "@/proto/state/ssl_gc_game_event_pb";
 import TeamBadge from "@/components/common/TeamBadge.vue";
-import {gameEventForTeam} from "@/helpers";
+import {formatTimestamp, gameEventForTeam} from "@/helpers";
 import OriginIcon from "@/components/common/OriginIcon.vue";
-import dayjs from "dayjs";
 
 const props = defineProps<{
-  proposalGroup: ProposalGroup,
+  proposalGroup: ProposalGroupJson,
   groupId: string,
-  acceptedGameEvent?: GameEvent,
+  acceptedGameEvent?: GameEventJson,
 }>()
 
 const proposals = computed(() => {
   return props.proposalGroup.proposals
 })
 
-const gameEventLabel = (gameEvent: GameEvent) => {
-  return gameEventNames.get(gameEvent?.type!)
+const gameEventLabel = (gameEvent: GameEventJson) => {
+  return gameEventName(gameEvent?.type!)
 }
 
 const label = computed(() => {
@@ -52,7 +51,7 @@ const createdTimestamp = computed(() => {
 
 const time = computed(() => {
   if (createdTimestamp.value) {
-    return dayjs(createdTimestamp.value / 1e3).format("MMM, DD YYYY HH:mm:ss,SSS")
+    return formatTimestamp(createdTimestamp.value)
   }
   return undefined
 })

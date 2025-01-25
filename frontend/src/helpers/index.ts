@@ -1,42 +1,52 @@
-import {Referee_Stage} from "@/proto/ssl_gc_referee_message";
-import {Team} from "@/proto/ssl_gc_common";
-import type {GameEvent} from "@/proto/ssl_gc_game_event";
+import {type Referee_StageJson} from "@/proto/state/ssl_gc_referee_message_pb";
+import {type TeamJson} from "@/proto/state/ssl_gc_common_pb";
+import {type GameEventJson} from "@/proto/state/ssl_gc_game_event_pb";
+import {fromJson} from "@bufbuild/protobuf";
+import {
+  type DurationJson,
+  DurationSchema,
+  type TimestampJson,
+  timestampMs,
+  TimestampSchema
+} from "@bufbuild/protobuf/wkt";
+import formatDuration from "format-duration";
+import dayjs from "dayjs";
 
-export const teams = [Team.YELLOW, Team.BLUE]
+export const teams: TeamJson[] = ['YELLOW', 'BLUE']
 
-export const opponent = (team: Team) => {
+export const opponent = (team: TeamJson) => {
   switch (team) {
-    case Team.BLUE:
-      return Team.YELLOW
-    case Team.YELLOW:
-      return Team.BLUE
+    case 'BLUE':
+      return 'YELLOW'
+    case 'YELLOW':
+      return 'BLUE'
     default:
       return team
   }
 }
 
 export const teamOptions = [
-  {label: 'Yellow', value: Team.YELLOW},
-  {label: 'Blue', value: Team.BLUE}
+  {label: 'Yellow', value: 'YELLOW'},
+  {label: 'Blue', value: 'BLUE'}
 ]
 
-export function gameEventForTeam(gameEvent: GameEvent): Team {
-  const details = gameEventDetails(gameEvent)
-  if (Object.prototype.hasOwnProperty.call(details, "byTeam")) {
-    return details["byTeam"] as Team
+export function gameEventForTeam(gameEvent: GameEventJson): TeamJson {
+  for (const value of Object.values(gameEvent)) {
+    if (typeof value === 'object') {
+      const attr = value as { [key: string]: any }
+      for (const key of Object.keys(attr)) {
+        if (key === 'byTeam') {
+          return attr['byTeam'] as TeamJson
+        }
+      }
+    }
   }
-  return Team.UNKNOWN
+  return 'UNKNOWN' as TeamJson
 }
 
-export function gameEventDetails(gameEvent: GameEvent) {
-  const event = gameEvent.event! as { [key: string]: any }
-  const generalDetails: { [key: string]: any } = {
-    "id": gameEvent.id,
-    "createdTimestamp": gameEvent.createdTimestamp,
-    "origins": gameEvent.origin,
-  }
-  const details = event[event.$case] as { [key: string]: any }
-  return {...generalDetails, ...details}
+export function gameEventDetails(gameEventJson: GameEventJson) {
+
+  return gameEventJson as { [key: string]: any }
 }
 
 export const originIcon = (origin: string) => {
@@ -65,47 +75,67 @@ export const originIcon = (origin: string) => {
   }
 }
 
-const stages: Referee_Stage[] = [
-  Referee_Stage.NORMAL_FIRST_HALF_PRE,
-  Referee_Stage.NORMAL_FIRST_HALF,
-  Referee_Stage.NORMAL_HALF_TIME,
-  Referee_Stage.NORMAL_SECOND_HALF_PRE,
-  Referee_Stage.NORMAL_SECOND_HALF,
-  Referee_Stage.EXTRA_TIME_BREAK,
-  Referee_Stage.EXTRA_FIRST_HALF_PRE,
-  Referee_Stage.EXTRA_FIRST_HALF,
-  Referee_Stage.EXTRA_HALF_TIME,
-  Referee_Stage.EXTRA_SECOND_HALF_PRE,
-  Referee_Stage.EXTRA_SECOND_HALF,
-  Referee_Stage.PENALTY_SHOOTOUT_BREAK,
-  Referee_Stage.PENALTY_SHOOTOUT,
-  Referee_Stage.POST_GAME,
+const stages: Referee_StageJson[] = [
+  'NORMAL_FIRST_HALF_PRE',
+  'NORMAL_FIRST_HALF',
+  'NORMAL_HALF_TIME',
+  'NORMAL_SECOND_HALF_PRE',
+  'NORMAL_SECOND_HALF',
+  'EXTRA_TIME_BREAK',
+  'EXTRA_FIRST_HALF_PRE',
+  'EXTRA_FIRST_HALF',
+  'EXTRA_HALF_TIME',
+  'EXTRA_SECOND_HALF_PRE',
+  'EXTRA_SECOND_HALF',
+  'PENALTY_SHOOTOUT_BREAK',
+  'PENALTY_SHOOTOUT',
+  'POST_GAME',
 ]
 
-export const isPausedStage = function (stage: Referee_Stage): boolean {
-  return stage.toString() === Referee_Stage[Referee_Stage.NORMAL_HALF_TIME]
-    || stage.toString() === Referee_Stage[Referee_Stage.EXTRA_TIME_BREAK]
-    || stage.toString() === Referee_Stage[Referee_Stage.EXTRA_HALF_TIME]
-    || stage.toString() === Referee_Stage[Referee_Stage.PENALTY_SHOOTOUT_BREAK]
-    || stage.toString() === Referee_Stage[Referee_Stage.POST_GAME]
+export const isPausedStage = function (stage: Referee_StageJson): boolean {
+  return stage === 'NORMAL_HALF_TIME'
+    || stage === 'EXTRA_TIME_BREAK'
+    || stage === 'EXTRA_HALF_TIME'
+    || stage === 'PENALTY_SHOOTOUT_BREAK'
+    || stage === 'POST_GAME'
 }
 
-export const isRunningStage = function (stage: Referee_Stage): boolean {
-  return stage.toString() === Referee_Stage[Referee_Stage.NORMAL_FIRST_HALF]
-    || stage.toString() === Referee_Stage[Referee_Stage.NORMAL_SECOND_HALF]
-    || stage.toString() === Referee_Stage[Referee_Stage.EXTRA_FIRST_HALF]
-    || stage.toString() === Referee_Stage[Referee_Stage.EXTRA_SECOND_HALF]
-    || stage.toString() === Referee_Stage[Referee_Stage.PENALTY_SHOOTOUT]
+export const isRunningStage = function (stage: Referee_StageJson): boolean {
+  return stage === 'NORMAL_FIRST_HALF'
+    || stage === 'NORMAL_SECOND_HALF'
+    || stage === 'EXTRA_FIRST_HALF'
+    || stage === 'EXTRA_SECOND_HALF'
+    || stage === 'PENALTY_SHOOTOUT'
 };
 
-export const isPreStage = function (stage: Referee_Stage): boolean {
-  return stage.toString() === Referee_Stage[Referee_Stage.NORMAL_FIRST_HALF_PRE]
-    || stage.toString() === Referee_Stage[Referee_Stage.NORMAL_SECOND_HALF_PRE]
-    || stage.toString() === Referee_Stage[Referee_Stage.EXTRA_FIRST_HALF_PRE]
-    || stage.toString() === Referee_Stage[Referee_Stage.EXTRA_SECOND_HALF_PRE]
+export const isPreStage = function (stage: Referee_StageJson): boolean {
+  return stage === 'NORMAL_FIRST_HALF_PRE'
+    || stage === 'NORMAL_SECOND_HALF_PRE'
+    || stage === 'EXTRA_FIRST_HALF_PRE'
+    || stage === 'EXTRA_SECOND_HALF_PRE'
 };
 
-export const getRemainingStages = function (fromStage: Referee_Stage): Referee_Stage[] {
+export const getRemainingStages = function (fromStage: Referee_StageJson): Referee_StageJson[] {
   const idx = stages.indexOf(fromStage)
   return stages.slice(idx)
+}
+
+export const formatDurationJson = function (duration: DurationJson): string {
+  const dur = fromJson(DurationSchema, duration)
+  const milliseconds = Number(dur.seconds) * 1000 + dur.nanos / 1000000
+  return formatDuration(milliseconds)
+}
+
+export const durationSeconds = function (duration: DurationJson): number {
+  const dur = fromJson(DurationSchema, duration)
+  return Number(dur.seconds) + dur.nanos / 1000000000.0
+}
+
+export const timestampJsonMs = function (timestamp: TimestampJson): number {
+  const ts = fromJson(TimestampSchema, timestamp)
+  return timestampMs(ts)
+}
+
+export const formatTimestamp = function (timestamp: TimestampJson): string {
+  return dayjs(timestamp).format("MMM, DD YYYY HH:mm:ss,SSS")
 }

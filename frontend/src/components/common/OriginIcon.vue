@@ -15,7 +15,7 @@ const props = defineProps<{
     :name="originIcon(origin)"
     :alt="origin"
   >
-    <q-tooltip v-if="props.tooltip === true">
+    <q-tooltip v-if="props.tooltip">
       {{ origin }}
     </q-tooltip>
   </q-icon>

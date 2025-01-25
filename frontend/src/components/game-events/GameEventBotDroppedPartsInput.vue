@@ -4,20 +4,16 @@ import TeamItem from "@/components/game-events/common/TeamItem.vue";
 import LocationItem from "@/components/game-events/common/LocationItem.vue";
 import NumberItem from "@/components/game-events/common/NumberItem.vue";
 import ButtonItem from "@/components/game-events/common/ButtonItem.vue";
-import {type GameEvent_BotDroppedParts, GameEvent_Type} from "@/proto/ssl_gc_game_event";
-import {gameEventNames} from "@/helpers/texts";
-import {Team} from "@/proto/ssl_gc_common";
+import {type GameEvent_BotDroppedPartsJson, type GameEventJson} from "@/proto/state/ssl_gc_game_event_pb";
+import {gameEventName} from "@/helpers/texts";
 
-const gameEvent = ref({
-  type: GameEvent_Type.BOT_DROPPED_PARTS,
-  event: {
-    $case: 'botDroppedParts',
-    botDroppedParts: {
-      byTeam: Team.YELLOW,
-    }
+const gameEvent = ref<GameEventJson>({
+  type: 'BOT_DROPPED_PARTS',
+  botDroppedParts: {
+    byTeam: 'YELLOW',
   }
 })
-const details = ref<GameEvent_BotDroppedParts>(gameEvent.value.event.botDroppedParts)
+const details = ref<GameEvent_BotDroppedPartsJson>(gameEvent.value.botDroppedParts!)
 
 const emit = defineEmits(['create-game-event'])
 const createGameEvent = () => {
@@ -28,7 +24,7 @@ const createGameEvent = () => {
 <template>
   <q-list bordered>
     <q-item-label header>
-      {{ gameEventNames.get(gameEvent.type) }}
+      {{ gameEventName(gameEvent.type) }}
     </q-item-label>
 
     <TeamItem v-model="details.byTeam" label="by team"/>

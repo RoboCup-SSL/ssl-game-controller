@@ -1,18 +1,17 @@
-import {Command_Type} from "@/proto/ssl_gc_state";
-import {Team} from "@/proto/ssl_gc_common";
+import {type Command_TypeJson} from "@/proto/state/ssl_gc_state_pb";
+import {type TeamJson} from "@/proto/state/ssl_gc_common_pb";
 import {isPausedStage} from "@/helpers";
 import type {ControlApi} from "@/providers/controlApi";
 import {useMatchStateStore} from "@/store/matchState";
 import {commandName} from "@/helpers/texts";
 import {useGcStateStore} from "@/store/gcState";
-import {ContinueAction_State} from "@/proto/ssl_gc_engine";
 
 export interface ManualAction {
   send: () => void,
   enabled: boolean,
   label: string,
   shortcutLabel?: string,
-  team: Team | undefined,
+  team?: TeamJson,
 }
 
 export class ManualActions {
@@ -26,9 +25,9 @@ export class ManualActions {
 
   public getContinueAction(): ManualAction {
     const continueAction = this.gcStateStore.gcState.continueActions?.[0]
-    const enabled = continueAction?.state === ContinueAction_State.READY_AUTO
-      || continueAction?.state === ContinueAction_State.READY_MANUAL
-      || continueAction?.state === ContinueAction_State.WAITING
+    const enabled = continueAction?.state === 'READY_AUTO'
+      || continueAction?.state === 'READY_MANUAL'
+      || continueAction?.state === 'WAITING'
     return {
       send: () => continueAction && this.controlApi.Continue(continueAction),
       enabled: enabled,
@@ -38,7 +37,7 @@ export class ManualActions {
     }
   }
 
-  public getCommandAction(commandType: Command_Type, forTeam?: Team): ManualAction {
+  public getCommandAction(commandType: Command_TypeJson, forTeam?: TeamJson): ManualAction {
     return {
       send: () => this.sendCommand(commandType, forTeam),
       enabled: this.isCommandEnabled(commandType),
@@ -48,22 +47,22 @@ export class ManualActions {
     }
   }
 
-  private getCommandLabel(commandType: Command_Type, forTeam?: Team): string {
+  private getCommandLabel(commandType: Command_TypeJson, forTeam?: TeamJson): string {
     const timeoutRunning = this.matchStateStore.isTimeout
       && this.matchStateStore.matchState.gameState?.forTeam === forTeam
-    if (commandType === Command_Type.TIMEOUT) {
+    if (commandType === 'TIMEOUT') {
       return timeoutRunning ? "Stop Timeout" : "Start Timeout"
     }
     return commandName(commandType)
   }
 
-  private sendCommand(commandType: Command_Type, forTeam?: Team) {
+  private sendCommand(commandType: Command_TypeJson, forTeam?: TeamJson) {
     if (!this.isCommandEnabled(commandType)) {
       return
     }
 
     if (this.matchStateStore.isTimeout) {
-      this.controlApi.NewCommandNeutral(Command_Type.STOP)
+      this.controlApi.NewCommandNeutral('STOP')
       return
     }
 
@@ -74,65 +73,65 @@ export class ManualActions {
     }
   }
 
-  private isCommandEnabled(commandType: Command_Type): boolean {
+  private isCommandEnabled(commandType: Command_TypeJson): boolean {
     switch (commandType) {
-      case Command_Type.HALT:
-        return this.matchStateStore.matchState.command!.type !== Command_Type.HALT
-          && this.matchStateStore.matchState.command!.type !== Command_Type.TIMEOUT
-      case Command_Type.STOP:
+      case 'HALT':
+        return this.matchStateStore.matchState.command!.type !== 'HALT'
+          && this.matchStateStore.matchState.command!.type !== 'TIMEOUT'
+      case 'STOP':
         return !this.matchStateStore.isStop
           && !isPausedStage(this.matchStateStore.matchState.stage!)
-      case Command_Type.NORMAL_START:
-        return this.matchStateStore.matchState.command!.type !== Command_Type.NORMAL_START
+      case 'NORMAL_START':
+        return this.matchStateStore.matchState.command!.type !== 'NORMAL_START'
           && (this.matchStateStore.isKickoff || this.matchStateStore.isPenalty)
-      case Command_Type.FORCE_START:
+      case 'FORCE_START':
         return this.matchStateStore.isStop
-      case Command_Type.DIRECT:
+      case 'DIRECT':
         return this.matchStateStore.isStop
-      case Command_Type.KICKOFF:
+      case 'KICKOFF':
         return this.matchStateStore.isStop
-      case Command_Type.PENALTY:
+      case 'PENALTY':
         return this.matchStateStore.isStop
-      case Command_Type.TIMEOUT:
+      case 'TIMEOUT':
         return (this.matchStateStore.isStop || this.matchStateStore.isHalt || this.matchStateStore.isTimeout)
           && !isPausedStage(this.matchStateStore.matchState.stage!)
     }
     return false
   }
 
-  private shortcutLabel(commandType: Command_Type, team?: Team): string | undefined {
+  private shortcutLabel(commandType: Command_TypeJson, team?: TeamJson): string | undefined {
     switch (commandType) {
-      case Command_Type.HALT:
+      case 'HALT':
         return "NumpadDecimal"
-      case Command_Type.STOP:
+      case 'STOP':
         return "Numpad0"
-      case Command_Type.NORMAL_START:
+      case 'NORMAL_START':
         return "Numpad2"
-      case Command_Type.FORCE_START:
+      case 'FORCE_START':
         return "Numpad5"
-      case Command_Type.DIRECT:
+      case 'DIRECT':
         switch (team) {
-          case Team.YELLOW:
+          case 'YELLOW':
             return "Numpad1"
-          case Team.BLUE:
+          case 'BLUE':
             return "Numpad3"
         }
         return undefined
-      case Command_Type.KICKOFF:
+      case 'KICKOFF':
         switch (team) {
-          case Team.YELLOW:
+          case 'YELLOW':
             return "Numpad4"
-          case Team.BLUE:
+          case 'BLUE':
             return "Numpad6"
         }
         return undefined
-      case Command_Type.PENALTY:
+      case 'PENALTY':
         return undefined
-      case Command_Type.TIMEOUT:
+      case 'TIMEOUT':
         switch (team) {
-          case Team.YELLOW:
+          case 'YELLOW':
             return "Numpad7"
-          case Team.BLUE:
+          case 'BLUE':
             return "Numpad9"
         }
         return undefined

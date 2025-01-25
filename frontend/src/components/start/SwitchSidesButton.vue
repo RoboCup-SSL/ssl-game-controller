@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import {inject} from "vue";
-import {Team} from "@/proto/ssl_gc_common";
 import type {ControlApi} from "@/providers/controlApi";
 import {useMatchStateStore} from "@/store/matchState";
 
@@ -8,9 +7,9 @@ const store = useMatchStateStore()
 const control = inject<ControlApi>('control-api')
 
 const update = () => {
-  const value = !store.matchState.teamState![Team.YELLOW].onPositiveHalf
+  const value = !store.matchState.teamState!['YELLOW'].onPositiveHalf
   control?.UpdateTeamState({
-    forTeam: Team.YELLOW,
+    forTeam: 'YELLOW',
     onPositiveHalf: value,
   })
 }

@@ -1,30 +1,21 @@
-import {
-  ContinueAction_State,
-  ContinueAction_Type,
-  GcState,
-  TeamAdvantageChoice_AdvantageChoice
-} from "@/proto/ssl_gc_engine";
-import type {Config} from "@/proto/ssl_gc_engine_config";
+import type {GcStateJson} from "@/proto/engine/ssl_gc_engine_pb";
+import type {ConfigJson} from "@/proto/engine/ssl_gc_engine_config_pb";
 
-export const emptyGcState: GcState = {
+export const emptyGcState: GcStateJson = {
   teamState: {
     YELLOW: {
       connected: false,
       connectionVerified: false,
       remoteControlConnected: false,
       remoteControlConnectionVerified: false,
-      advantageChoice: {
-        choice: TeamAdvantageChoice_AdvantageChoice.UNRECOGNIZED,
-      },
+      advantageChoice: {},
     },
     BLUE: {
       connected: false,
       connectionVerified: false,
       remoteControlConnected: false,
       remoteControlConnectionVerified: false,
-      advantageChoice: {
-        choice: TeamAdvantageChoice_AdvantageChoice.UNRECOGNIZED,
-      },
+      advantageChoice: {},
     },
   },
   autoRefState: {},
@@ -32,56 +23,52 @@ export const emptyGcState: GcState = {
   continueActions: [],
 }
 
-export const mockedGcState: GcState = {
+export const mockedGcState: GcStateJson = {
   teamState: {
     YELLOW: {
       connected: false,
       connectionVerified: false,
       remoteControlConnected: false,
       remoteControlConnectionVerified: false,
-      advantageChoice: {
-        choice: TeamAdvantageChoice_AdvantageChoice.UNRECOGNIZED,
-      },
+      advantageChoice: {},
     },
     BLUE: {
       connected: false,
       connectionVerified: false,
       remoteControlConnected: false,
       remoteControlConnectionVerified: false,
-      advantageChoice: {
-        choice: TeamAdvantageChoice_AdvantageChoice.UNRECOGNIZED,
-      },
+      advantageChoice: {},
     },
   },
   autoRefState: {},
   trackers: {},
   continueActions: [
     {
-      type: ContinueAction_Type.RESUME_FROM_HALT,
-      state: ContinueAction_State.READY_AUTO,
+      type: 'RESUME_FROM_HALT',
+      state: 'READY_AUTO',
     },
     {
-      type: ContinueAction_Type.STOP_GAME,
-      state: ContinueAction_State.BLOCKED,
+      type: 'STOP_GAME',
+      state: 'BLOCKED',
       continuationIssues: [
         "Issue 1",
         "Issue 2"
       ]
     },
     {
-      type: ContinueAction_Type.HALT,
-      state: ContinueAction_State.READY_MANUAL,
+      type: 'HALT',
+      state: 'READY_MANUAL',
     }
   ],
 }
 
-export const emptyConfig = {
+export const emptyConfig: ConfigJson = {
   autoContinue: false,
   teams: [],
   activeTrackerSource: undefined,
-} as Config
+}
 
-export const mockedConfig = {
+export const mockedConfig: ConfigJson = {
   autoContinue: false,
   teams: [
     "Team1", "Team2"
@@ -89,4 +76,4 @@ export const mockedConfig = {
   activeTrackerSource: "Foo",
   gameEventBehavior: {},
   autoRefConfigs: {},
-} as Config
+}

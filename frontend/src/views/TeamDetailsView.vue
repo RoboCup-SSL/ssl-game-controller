@@ -3,14 +3,13 @@ import {useRoute} from "vue-router";
 import RedCardsInput from "@/components/team/RedCardsInput.vue";
 import YellowCardsInput from "@/components/team/YellowCardsInput.vue";
 import FoulTable from "@/components/team/FoulTable.vue";
-import type {Team} from "@/proto/ssl_gc_common";
-import {teamFromJSON} from "@/proto/ssl_gc_common";
+import {type TeamJson} from "@/proto/state/ssl_gc_common_pb";
 import TeamBadge from "@/components/common/TeamBadge.vue";
 import {useUiStateStore} from "@/store/uiState";
 
 const route = useRoute()
 const uiState = useUiStateStore()
-const team: Team = teamFromJSON(route.params.team.toString().toUpperCase())
+const team: TeamJson = route.params.team.toString().toUpperCase() as TeamJson
 
 </script>
 

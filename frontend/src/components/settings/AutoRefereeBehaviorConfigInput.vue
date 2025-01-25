@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import {AutoRefConfig_Behavior} from "@/proto/ssl_gc_engine_config";
+import {type AutoRefConfig_BehaviorJson} from "@/proto/engine/ssl_gc_engine_config_pb";
 
 defineProps<{
-  modelValue: AutoRefConfig_Behavior
+  modelValue: AutoRefConfig_BehaviorJson
 }>()
 const emit = defineEmits(['update:model-value'])
 
 const options = [
-  {value: AutoRefConfig_Behavior.BEHAVIOR_ACCEPT, label: "Accept"},
-  {value: AutoRefConfig_Behavior.BEHAVIOR_LOG, label: "Log"},
-  {value: AutoRefConfig_Behavior.BEHAVIOR_IGNORE, label: "Ignore"},
+  {value: 'BEHAVIOR_ACCEPT', label: "Accept"},
+  {value: 'BEHAVIOR_LOG', label: "Log"},
+  {value: 'BEHAVIOR_IGNORE', label: "Ignore"},
 ]
 
 const updateValue = (value: any) => {

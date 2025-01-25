@@ -3,26 +3,28 @@ import {computed, inject} from "vue";
 import GameEventItem from "@/components/match/GameEventItem.vue";
 import GameEventProposalGroupItem from "@/components/match/GameEventProposalGroupItem.vue";
 import {useMatchStateStore} from "@/store/matchState";
-import type {ProposalGroup} from "@/proto/ssl_gc_state";
-import type {GameEvent} from "@/proto/ssl_gc_game_event";
+import type {ProposalGroupJson} from "@/proto/state/ssl_gc_state_pb";
+import type {GameEventJson} from "@/proto/state/ssl_gc_game_event_pb";
 import GameEventDetailsTree from "@/components/match/GameEventDetailsTree.vue";
 import type {ControlApi} from "@/providers/controlApi";
+import type {TimestampJson} from "@bufbuild/protobuf/wkt";
+import {timestampJsonMs} from "@/helpers";
 
 const store = useMatchStateStore()
 const control = inject<ControlApi>('control-api')
 
 type GameEventWrappedItem = {
   id: string
-  timestamp: number
-  proposalGroup?: ProposalGroup
-  gameEvent?: GameEvent
+  timestamp: TimestampJson
+  proposalGroup?: ProposalGroupJson
+  gameEvent?: GameEventJson
 }
 
 interface GameEventTreeNode {
   id: string
   header: string
-  proposalGroup?: ProposalGroup
-  gameEvent?: GameEvent
+  proposalGroup?: ProposalGroupJson
+  gameEvent?: GameEventJson
   children?: GameEventTreeNode[]
 }
 
@@ -31,13 +33,13 @@ interface Prop {
 }
 
 const gameEventItems = computed(() => {
-  const gameEvents = store.matchState.gameEvents!
-  const proposalGroups = store.matchState.proposalGroups!
+  const gameEvents = store.matchState.gameEvents ?? []
+  const proposalGroups = store.matchState.proposalGroups ?? []
   const items: GameEventWrappedItem[] = []
   for (const proposalGroup of proposalGroups) {
     const item: GameEventWrappedItem = {
       id: proposalGroup.id!,
-      timestamp: proposalGroup.proposals![0].timestamp!.getTime(),
+      timestamp: proposalGroup.proposals![0].timestamp!,
       proposalGroup: proposalGroup,
     }
     items.push(item)
@@ -49,7 +51,7 @@ const gameEventItems = computed(() => {
     } else {
       const item: GameEventWrappedItem = {
         id: gameEvent.id!,
-        timestamp: gameEvent.createdTimestamp! / 1000,
+        timestamp: gameEvent.createdTimestamp!,
         gameEvent: gameEvent,
       }
       items.push(item)
@@ -57,11 +59,11 @@ const gameEventItems = computed(() => {
   }
   // Sort descending by timestamp: most recent first
   // This fits the order of the protocol list and helps when many items are present
-  items.sort((a, b) => b.timestamp - a.timestamp)
+  items.sort((a, b) => timestampJsonMs(b.timestamp) - timestampJsonMs(a.timestamp))
   return items
 })
 
-function gameEventNode(gameEvent: GameEvent): GameEventTreeNode {
+function gameEventNode(gameEvent: GameEventJson): GameEventTreeNode {
   return {
     id: gameEvent.id || '',
     header: 'game-event',

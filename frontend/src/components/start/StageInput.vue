@@ -4,7 +4,7 @@ import SelectInput from "@/components/common/SelectInput.vue";
 import {useMatchStateStore} from "@/store/matchState";
 import {stageName} from "@/helpers/texts";
 import {getRemainingStages} from "@/helpers";
-import type {Referee_Stage} from "@/proto/ssl_gc_referee_message";
+import type {Referee_StageJson} from "@/proto/state/ssl_gc_referee_message_pb";
 import type {ControlApi} from "@/providers/controlApi";
 
 const store = useMatchStateStore()
@@ -15,15 +15,12 @@ const model = computed(() => {
 })
 
 const options = computed(() => getRemainingStages(store.matchState.stage!))
-const optionsLabel = (v: Referee_Stage) => stageName(v) || "-"
+const optionsLabel = (v: Referee_StageJson) => stageName(v) || "-"
 
-const onChange = (newStage: Referee_Stage) => {
+const onChange = (newStage: Referee_StageJson) => {
   control?.SubmitChange({
-    change: {
-      $case: 'changeStageChange',
-      changeStageChange: {
+    changeStageChange: {
         newStage
-      }
     }
   })
 }

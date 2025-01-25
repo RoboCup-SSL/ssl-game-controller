@@ -1,36 +1,32 @@
 <script setup lang="ts">
-import {ref} from "vue";
+import {computed, ref} from "vue";
 import TeamItem from "@/components/game-events/common/TeamItem.vue";
 import LocationItem from "@/components/game-events/common/LocationItem.vue";
 import NumberItem from "@/components/game-events/common/NumberItem.vue";
 import ToggleItem from "@/components/game-events/common/ToggleItem.vue";
 import TextItem from "@/components/game-events/common/TextItem.vue";
 import ButtonItem from "@/components/game-events/common/ButtonItem.vue";
-import {GameEvent, GameEvent_Goal, GameEvent_Type} from "@/proto/ssl_gc_game_event";
-import {Team} from "@/proto/ssl_gc_common";
+import {type GameEvent_GoalJson, type GameEventJson} from "@/proto/state/ssl_gc_game_event_pb";
 
 const possibleGoal = ref(true)
-const goal = ref<GameEvent_Goal>({
-  byTeam: Team.YELLOW,
+const goal = ref<GameEvent_GoalJson>({
+  byTeam: 'YELLOW',
+})
+const lastTouchByTeam = computed(() => {
+  return Number(goal.value.lastTouchByTeam)
 })
 
-const constructGameEvent = (): GameEvent => {
-  const gameEventType = possibleGoal.value ? GameEvent_Type.POSSIBLE_GOAL : GameEvent_Type.GOAL
+const constructGameEvent = (): GameEventJson => {
+  const gameEventType = possibleGoal.value ? 'POSSIBLE_GOAL' : 'GOAL'
   if (possibleGoal.value) {
     return {
       type: gameEventType,
-      event: {
-        $case: 'possibleGoal',
-        possibleGoal: goal.value
-      }
+      possibleGoal: goal.value
     }
   } else {
     return {
       type: gameEventType,
-      event: {
-        $case: 'goal',
-        goal: goal.value
-      }
+      goal: goal.value
     }
   }
 }
@@ -55,7 +51,7 @@ const createGameEvent = () => {
     <LocationItem v-model="goal.kickLocation" label="kick location"/>
     <NumberItem v-model="goal.maxBallHeight" label="max ball height (m)"/>
     <NumberItem v-model="goal.numRobotsByTeam" label="num robots by team"/>
-    <NumberItem v-model="goal.lastTouchByTeam" label="last touch by team (μs)"/>
+    <NumberItem v-model="lastTouchByTeam" label="last touch by team (μs)"/>
     <TextItem v-model="goal.message" label="message"/>
 
     <ToggleItem label="possible goal" v-model="possibleGoal"/>

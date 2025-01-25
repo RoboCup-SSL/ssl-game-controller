@@ -5,9 +5,9 @@ import GameEventGoalInput from "@/components/game-events/GameEventGoalInput.vue"
 import TextInput from "@/components/common/TextInput.vue";
 import ToggleInput from "@/components/common/ToggleInput.vue";
 import FoulsPanel from "@/components/game-events/FoulsPanel.vue";
-import type {GameEvent} from "@/proto/ssl_gc_game_event";
+import type {GameEventJson} from "@/proto/state/ssl_gc_game_event_pb";
 import type {ControlApi} from "@/providers/controlApi";
-import type {Proposal} from "@/proto/ssl_gc_state";
+import type {ProposalJson} from "@/proto/state/ssl_gc_state_pb";
 import GameEventUnsportingBehaviorInput from "@/components/game-events/GameEventUnsportingBehaviorInput.vue";
 import GameEventNoProgressInput from "@/components/game-events/GameEventNoProgressInput.vue";
 import GameEventDoubleTouchInput from "@/components/game-events/GameEventDoubleTouchInput.vue";
@@ -18,14 +18,14 @@ const origin = ref<string | undefined>(undefined)
 
 const control = inject<ControlApi>('control-api')
 
-const createGameEvent = (gameEvent: GameEvent) => {
+const createGameEvent = (gameEvent: GameEventJson) => {
   if (origin.value) {
     gameEvent.origin = [origin.value]
   }
   if (propose.value) {
-    const proposal: Proposal = {
+    const proposal: ProposalJson = {
       gameEvent,
-      timestamp: new Date(),
+      timestamp: new Date().toISOString(),
     }
     control?.ProposeGameEvent(proposal)
   } else {

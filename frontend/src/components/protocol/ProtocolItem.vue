@@ -1,22 +1,22 @@
-<script setup lang="ts" xmlns:slot="http://www.w3.org/1999/html">
+<script setup lang="ts">
 import {computed, inject} from "vue";
 import TeamBadge from "@/components/common/TeamBadge.vue";
-import type {ProtocolEntry} from "@/proto/ssl_gc_api";
-import formatDuration from "format-duration";
+import type {ProtocolEntryJson} from "@/proto/api/ssl_gc_api_pb";
 import {changeDetails} from "@/helpers/ChangeDetails";
 import type {ControlApi} from "@/providers/controlApi";
 import OriginIcon from "@/components/common/OriginIcon.vue";
 import GameEventDetailsTree from "@/components/match/GameEventDetailsTree.vue";
+import {formatDurationJson} from "@/helpers";
 
 const props = defineProps<{
-  protocolEntry: ProtocolEntry,
+  protocolEntry: ProtocolEntryJson,
   dense?: boolean,
 }>()
 
 const control = inject<ControlApi>('control-api')
 
 const matchTime = computed(() => {
-  return formatDuration((props.protocolEntry.matchTimeElapsed?.seconds || 0) * 1000)
+  return formatDurationJson(props.protocolEntry.matchTimeElapsed!)
 })
 
 const origin = computed(() => {

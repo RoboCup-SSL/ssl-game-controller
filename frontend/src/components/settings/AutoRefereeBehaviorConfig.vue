@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import AutoRefereeConfigBehaviorInput from "@/components/settings/AutoRefereeBehaviorConfigInput.vue";
 import {computed, inject} from "vue";
-import {AutoRefConfig, AutoRefConfig_Behavior} from "@/proto/ssl_gc_engine_config";
-import {gameEvent_TypeFromJSON} from "@/proto/ssl_gc_game_event";
-import {gameEventNames} from "@/helpers/texts";
+import {type AutoRefConfig_BehaviorJson, type AutoRefConfigJson} from "@/proto/engine/ssl_gc_engine_config_pb";
+import {gameEventName} from "@/helpers/texts";
 import type {ControlApi} from "@/providers/controlApi";
+import {type GameEvent_TypeJson} from "@/proto/state/ssl_gc_game_event_pb";
 
 const props = defineProps<{
   autoRefId: string,
-  autoRefConfig: AutoRefConfig,
+  autoRefConfig: AutoRefConfigJson,
 }>()
 
 const control = inject<ControlApi>('control-api')
@@ -20,18 +20,18 @@ const commonBehaviorValue = computed(() => {
   const first = behaviors.value[gameEventTypes.value[0]]
   for (const behaviorKey of gameEventTypes.value) {
     if (behaviors.value[behaviorKey] !== first) {
-      return AutoRefConfig_Behavior.BEHAVIOR_UNKNOWN
+      return 'UNKNOWN' as AutoRefConfig_BehaviorJson
     }
   }
   return first
 })
 
 function behaviorName(key: string) {
-  const gameEventType = gameEvent_TypeFromJSON(key);
-  return gameEventNames.get(gameEventType)
+  const gameEventType = key as GameEvent_TypeJson;
+  return gameEventName(gameEventType)
 }
 
-function update(key: string, behavior: AutoRefConfig_Behavior) {
+function update(key: string, behavior: AutoRefConfig_BehaviorJson) {
   control?.ChangeConfig({
     autoRefConfigs: {
       [props.autoRefId]: {
@@ -43,8 +43,8 @@ function update(key: string, behavior: AutoRefConfig_Behavior) {
   })
 }
 
-function changeAll(behavior: AutoRefConfig_Behavior) {
-  const gameEventBehavior: { [key: string]: AutoRefConfig_Behavior } = {}
+function changeAll(behavior: AutoRefConfig_BehaviorJson) {
+  const gameEventBehavior: { [key: string]: AutoRefConfig_BehaviorJson } = {}
   for (const key of gameEventTypes.value) {
     gameEventBehavior[key] = behavior
   }

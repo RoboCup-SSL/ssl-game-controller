@@ -5,20 +5,16 @@ import LocationItem from "@/components/game-events/common/LocationItem.vue";
 import NumberItem from "@/components/game-events/common/NumberItem.vue";
 import ButtonItem from "@/components/game-events/common/ButtonItem.vue";
 import ToggleItem from "@/components/game-events/common/ToggleItem.vue";
-import {GameEvent_BotKickedBallTooFast, GameEvent_Type} from "@/proto/ssl_gc_game_event";
-import {gameEventNames} from "@/helpers/texts";
-import {Team} from "@/proto/ssl_gc_common";
+import {type GameEvent_BotKickedBallTooFastJson, type GameEventJson} from "@/proto/state/ssl_gc_game_event_pb";
+import {gameEventName} from "@/helpers/texts";
 
-const gameEvent = ref({
-  type: GameEvent_Type.BOT_KICKED_BALL_TOO_FAST,
-  event: {
-    $case: 'botKickedBallTooFast',
-    botKickedBallTooFast: {
-      byTeam: Team.YELLOW,
-    }
+const gameEvent = ref<GameEventJson>({
+  type: 'BOT_KICKED_BALL_TOO_FAST',
+  botKickedBallTooFast: {
+    byTeam: 'YELLOW',
   }
 })
-const details = ref<GameEvent_BotKickedBallTooFast>(gameEvent.value.event.botKickedBallTooFast)
+const details = ref<GameEvent_BotKickedBallTooFastJson>(gameEvent.value.botKickedBallTooFast!)
 
 const emit = defineEmits(['create-game-event'])
 const createGameEvent = () => {
@@ -29,7 +25,7 @@ const createGameEvent = () => {
 <template>
   <q-list bordered>
     <q-item-label header>
-      {{ gameEventNames.get(gameEvent.type) }}
+      {{ gameEventName(gameEvent.type) }}
     </q-item-label>
 
     <TeamItem v-model="details.byTeam" label="by team"/>

@@ -1,16 +1,14 @@
 <script setup lang="ts">
-import type {Vector2} from "@/proto/ssl_gc_geometry";
+import type {Vector2Json} from "@/proto/geom/ssl_gc_geometry_pb";
 
 const props = defineProps<{
-  modelValue?: Vector2,
+  modelValue?: Vector2Json,
   label?: string,
 }>()
 
-const emit = defineEmits<{
-  (event: 'update:modelValue', payload: Vector2 | undefined): void;
-}>();
+const emit = defineEmits<(event: 'update:modelValue', payload: Vector2Json | undefined) => void>();
 
-const updateValue = (v: Vector2 | undefined) => {
+const updateValue = (v: Vector2Json | undefined) => {
   emit('update:modelValue', v)
 }
 const updateX = (x: string | number | null) => {

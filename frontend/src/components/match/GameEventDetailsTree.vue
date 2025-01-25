@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import {computed} from "vue";
-import type {GameEvent} from "@/proto/ssl_gc_game_event";
+import type {GameEventJson} from "@/proto/state/ssl_gc_game_event_pb";
 import {gameEventDetails} from "@/helpers";
 
 const props = defineProps<{
-  gameEvent: GameEvent,
+  gameEvent: GameEventJson,
 }>()
 
 const details = computed(() => {

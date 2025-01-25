@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import {computed, inject} from "vue";
 import {useMatchStateStore} from "@/store/matchState";
-import {gameEventNames} from "@/helpers/texts";
-import type {Team} from "@/proto/ssl_gc_common";
+import {gameEventName} from "@/helpers/texts";
+import type {TeamJson} from "@/proto/state/ssl_gc_common_pb";
 import type {ControlApi} from "@/providers/controlApi";
-import type {GameEvent} from "@/proto/ssl_gc_game_event";
+import type {GameEventJson} from "@/proto/state/ssl_gc_game_event_pb";
 
 const props = defineProps<{
-  team: Team,
+  team: TeamJson,
 }>()
 
 const store = useMatchStateStore()
@@ -20,9 +20,9 @@ const hasData = computed(() => {
   return cards.value?.length! > 0
 })
 
-const causeText = (cause?: GameEvent) => {
+const causeText = (cause?: GameEventJson) => {
   if (cause) {
-    return gameEventNames.get(cause.type!)
+    return gameEventName(cause.type!)
   }
   return "-"
 }

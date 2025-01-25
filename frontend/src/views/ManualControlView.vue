@@ -3,7 +3,6 @@ import YellowCardButton from "@/components/control/YellowCardButton.vue";
 import RedCardButton from "@/components/control/RedCardButton.vue";
 import GoalButton from "@/components/control/GoalButton.vue";
 import {teams} from "@/helpers";
-import {Command_Type} from "@/proto/ssl_gc_state";
 import CommandButton from "@/components/control/CommandButton.vue";
 </script>
 
@@ -12,12 +11,12 @@ import CommandButton from "@/components/control/CommandButton.vue";
 
   <div class="row">
     <div class="col-grow column">
-      <CommandButton :type="Command_Type.HALT"/>
-      <CommandButton :type="Command_Type.FORCE_START"/>
+      <CommandButton :type="'HALT'"/>
+      <CommandButton :type="'FORCE_START'"/>
     </div>
     <div class="col-grow column">
-      <CommandButton :type="Command_Type.NORMAL_START"/>
-      <CommandButton :type="Command_Type.STOP"/>
+      <CommandButton :type="'NORMAL_START'"/>
+      <CommandButton :type="'STOP'"/>
     </div>
   </div>
 
@@ -25,14 +24,14 @@ import CommandButton from "@/components/control/CommandButton.vue";
 
   <div class="row">
     <div class="col-grow column" v-for="team in teams" :key="team">
-      <CommandButton :type="Command_Type.DIRECT" :team="team"/>
-      <CommandButton :type="Command_Type.KICKOFF" :team="team"/>
-      <CommandButton :type="Command_Type.PENALTY" :team="team"/>
+      <CommandButton :type="'DIRECT'" :team="team"/>
+      <CommandButton :type="'KICKOFF'" :team="team"/>
+      <CommandButton :type="'PENALTY'" :team="team"/>
       <q-separator spaced/>
       <YellowCardButton :team="team"/>
       <RedCardButton :team="team"/>
       <GoalButton :team="team"/>
-      <CommandButton :type="Command_Type.TIMEOUT" :team="team"/>
+      <CommandButton :type="'TIMEOUT'" :team="team"/>
 
       <q-separator spaced/>
     </div>

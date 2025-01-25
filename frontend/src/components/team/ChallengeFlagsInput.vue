@@ -2,11 +2,11 @@
 import {computed, inject} from "vue";
 import NumberInput from "@/components/common/NumberInput.vue";
 import {useMatchStateStore} from "@/store/matchState";
-import type {Team} from "@/proto/ssl_gc_common";
+import type {TeamJson} from "@/proto/state/ssl_gc_common_pb";
 import type {ControlApi} from "@/providers/controlApi";
 
 const props = defineProps<{
-  team: Team,
+  team: TeamJson,
 }>()
 
 const store = useMatchStateStore()

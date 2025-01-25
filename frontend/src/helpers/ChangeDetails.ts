@@ -1,139 +1,141 @@
-import {commandName, gameEventNames, gameStateName, stageName} from "@/helpers/texts";
-import {gameEventForTeam} from "@/helpers/index";
-import formatDuration from "format-duration";
-import type {Change, Change_UpdateConfig, Change_UpdateTeamState} from "@/proto/ssl_gc_change";
-import type {GameEvent} from "@/proto/ssl_gc_game_event";
-import type {Team} from "@/proto/ssl_gc_common";
+import {commandName, gameEventName, gameStateName, stageName} from "@/helpers/texts";
+import {formatDurationJson, gameEventForTeam} from "@/helpers/index";
+import {
+  type Change_UpdateConfigJson,
+  type Change_UpdateTeamStateJson,
+  type ChangeJson
+} from "@/proto/statemachine/ssl_gc_change_pb";
+import type {GameEventJson} from "@/proto/state/ssl_gc_game_event_pb";
+import {type TeamJson} from "@/proto/state/ssl_gc_common_pb";
 
 export interface ChangeDetails {
   typeName: string,
   title: string,
-  gameEvent?: GameEvent,
-  forTeam?: Team,
+  gameEvent?: GameEventJson,
+  forTeam?: TeamJson,
   icon: string,
 }
 
-export function changeDetails(change: Change): ChangeDetails {
-  const changeDetails = change.change!;
-  if (changeDetails.$case === "newCommandChange") {
+export function changeDetails(change: ChangeJson): ChangeDetails {
+  if (change.newCommandChange) {
     return {
       typeName: "Command",
-      title: commandName(changeDetails.newCommandChange.command?.type!),
-      forTeam: changeDetails.newCommandChange.command?.forTeam,
+      title: commandName(change.newCommandChange.command?.type!),
+      forTeam: change.newCommandChange.command?.forTeam,
       icon: "terminal",
     }
-  } else if (changeDetails.$case === "changeStageChange") {
+  } else if (change.changeStageChange) {
     return {
       typeName: "Stage",
-      title: stageName(changeDetails.changeStageChange.newStage!),
+      title: stageName(change.changeStageChange.newStage!),
       icon: "gavel",
     }
-  } else if (changeDetails.$case === "setBallPlacementPosChange") {
+  } else if (change.setBallPlacementPosChange) {
     return {
       typeName: "Ball Placement Pos",
-      title: "Position: " + JSON.stringify(changeDetails.setBallPlacementPosChange.pos!),
+      title: "Position: " + JSON.stringify(change.setBallPlacementPosChange.pos!),
       icon: "sports_soccer",
     }
-  } else if (changeDetails.$case === "addYellowCardChange") {
-    const details = changeDetails.addYellowCardChange;
+  } else if (change.addYellowCardChange) {
+    const details = change.addYellowCardChange;
     const cause = details.causedByGameEvent
     return {
       typeName: "Yellow Card",
-      title: cause ? "Yellow card for " + gameEventNames.get(cause.type!)! : "Yellow card",
+      title: cause ? "Yellow card for " + gameEventName(cause.type) : "Yellow card",
       forTeam: details.forTeam,
       icon: "sim_card",
     }
-  } else if (changeDetails.$case === "addRedCardChange") {
-    const details = changeDetails.addRedCardChange;
+  } else if (change.addRedCardChange) {
+    const details = change.addRedCardChange;
     const gameEvent = details.causedByGameEvent
     return {
       typeName: "Red Card",
-      title: gameEvent ? "Red card for " + gameEventNames.get(gameEvent.type!)! : "Red card",
+      title: gameEvent ? "Red card for " + gameEventName(gameEvent.type) : "Red card",
       forTeam: details.forTeam,
       gameEvent,
       icon: "sim_card",
     }
-  } else if (changeDetails.$case === "yellowCardOverChange") {
-    const details = changeDetails.yellowCardOverChange
+  } else if (change.yellowCardOverChange) {
+    const details = change.yellowCardOverChange
     return {
       typeName: "Yellow Card Over",
       title: "Yellow Card Over",
       forTeam: details.forTeam,
       icon: "alarm",
     }
-  } else if (changeDetails.$case === "addGameEventChange") {
-    const details = changeDetails.addGameEventChange;
+  } else if (change.addGameEventChange) {
+    const details = change.addGameEventChange;
     const gameEvent = details.gameEvent!;
     return {
       typeName: "Game Event",
-      title: gameEventNames.get(gameEvent.type!)!,
+      title: gameEventName(gameEvent.type),
       forTeam: gameEventForTeam(gameEvent),
       icon: "warning",
       gameEvent,
     }
-  } else if (changeDetails.$case === "addPassiveGameEventChange") {
-    const details = changeDetails.addPassiveGameEventChange;
+  } else if (change.addPassiveGameEventChange) {
+    const details = change.addPassiveGameEventChange;
     const gameEvent = details.gameEvent!;
     return {
       typeName: "Game Event (passive)",
-      title: "Passive: " + gameEventNames.get(gameEvent.type!)!,
+      title: "Passive: " + gameEventName(gameEvent.type),
       forTeam: gameEventForTeam(gameEvent),
       icon: "recycling",
       gameEvent,
     }
-  } else if (changeDetails.$case === "addProposalChange") {
-    const details = changeDetails.addProposalChange;
+  } else if (change.addProposalChange) {
+    const details = change.addProposalChange;
     const gameEvent = details.proposal!.gameEvent!;
     return {
       typeName: "Game Event Proposal",
-      title: "Propose: " + gameEventNames.get(gameEvent.type!)!,
+      title: "Propose: " + gameEventName(gameEvent.type),
       forTeam: gameEventForTeam(gameEvent),
       icon: "front_hand",
       gameEvent,
     }
-  } else if (changeDetails.$case === "updateConfigChange") {
+  } else if (change.updateConfigChange) {
     return {
       typeName: "Config",
-      title: configChangeTitle(changeDetails.updateConfigChange),
+      title: configChangeTitle(change.updateConfigChange),
       icon: "edit",
     }
-  } else if (changeDetails.$case === "updateTeamStateChange") {
-    const details = changeDetails.updateTeamStateChange
+  } else if (change.updateTeamStateChange) {
+    const details = change.updateTeamStateChange
     return {
       typeName: "Team State",
       title: teamStateChangeTitle(details),
       forTeam: details.forTeam,
       icon: "edit",
     }
-  } else if (changeDetails.$case === "switchColorsChange") {
+  } else if (change.switchColorsChange) {
     return {
       typeName: "Switch Colors",
       title: "Switch Colors",
       icon: "edit",
     }
-  } else if (changeDetails.$case === "revertChange") {
+  } else if (change.revertChange) {
     return {
       typeName: "Revert",
-      title: `Revert to ${changeDetails.revertChange.changeId}`,
+      title: `Revert to ${change.revertChange.changeId}`,
       icon: "undo",
     }
-  } else if (changeDetails.$case === "newGameStateChange") {
-    const details = changeDetails.newGameStateChange;
+  } else if (change.newGameStateChange) {
+    const details = change.newGameStateChange;
     return {
       typeName: "Game State",
       title: gameStateName(details.gameState?.type!),
       forTeam: details.gameState?.forTeam,
       icon: "gavel",
     }
-  } else if (changeDetails.$case === "acceptProposalGroupChange") {
-    const details = changeDetails.acceptProposalGroupChange;
+  } else if (change.acceptProposalGroupChange) {
+    const details = change.acceptProposalGroupChange;
     return {
       typeName: "Proposals accepted",
-      title: `Proposal accepted by ${details.acceptedBy}: '${details.groupId!}'`,
+      title: `Proposal accepted by ${details.acceptedBy}: '${details.groupId}'`,
       icon: "check_circle_outline",
     }
-  } else if (changeDetails.$case === "setStatusMessageChange") {
-    const details = changeDetails.setStatusMessageChange;
+  } else if (change.setStatusMessageChange) {
+    const details = change.setStatusMessageChange;
     let title
     if (details.statusMessage) {
       title = `Status Message: ${details.statusMessage}`
@@ -145,15 +147,16 @@ export function changeDetails(change: Change): ChangeDetails {
       title: title,
       icon: "message",
     }
-  }
-  return {
-    typeName: "-",
-    title: "-",
-    icon: "help_outline",
+  } else {
+    return {
+      typeName: "-",
+      title: "-",
+      icon: "help_outline",
+    }
   }
 }
 
-function configChangeTitle(config: Change_UpdateConfig): string {
+function configChangeTitle(config: Change_UpdateConfigJson): string {
   if (config.firstKickoffTeam !== undefined && config.firstKickoffTeam !== 'UNKNOWN') {
     return `First kick-off team: ${config.firstKickoffTeam}`
   } else if (config.division !== undefined && config.division !== 'DIV_UNKNOWN') {
@@ -166,7 +169,7 @@ function configChangeTitle(config: Change_UpdateConfig): string {
   return "Unknown config change"
 }
 
-function teamStateChangeTitle(change: Change_UpdateTeamState): string {
+function teamStateChangeTitle(change: Change_UpdateTeamStateJson): string {
   if (change.teamName !== undefined) {
     return `Team name: ${change.teamName}`
   } else if (change.goals !== undefined) {
@@ -209,7 +212,7 @@ function teamStateChangeTitle(change: Change_UpdateTeamState): string {
     }
     return "Revoke emergency stop request"
   } else if (change.yellowCard !== undefined) {
-    const timeRemaining = formatDuration(change.yellowCard.timeRemaining?.seconds! * 1000)
+    const timeRemaining = formatDurationJson(change.yellowCard.timeRemaining!)
     return `Change yellow card ${change.yellowCard.id} (${timeRemaining} s left)`
   } else if (change.redCard !== undefined) {
     return `Change red card ${change.redCard.id}`

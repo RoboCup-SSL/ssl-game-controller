@@ -1,16 +1,14 @@
 <script setup lang="ts">
 import {teamOptions} from "@/helpers";
-import type {Team} from "@/proto/ssl_gc_common";
+import type {TeamJson} from "@/proto/state/ssl_gc_common_pb";
 
 defineProps<{
-  modelValue?: Team,
+  modelValue?: TeamJson,
 }>()
 
-const emit = defineEmits<{
-  (event: 'update:modelValue', payload: Team): void;
-}>();
+const emit = defineEmits<(event: 'update:modelValue', payload: TeamJson) => void>();
 
-const updateValue = (v: Team) => {
+const updateValue = (v: TeamJson) => {
   emit('update:modelValue', v)
 }
 

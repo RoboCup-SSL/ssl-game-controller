@@ -3,10 +3,9 @@ import {computed, inject, ref, toRaw} from "vue";
 import ControlButton from "@/components/control/ControlButton.vue";
 import {useMatchStateStore} from "@/store/matchState";
 import {isPausedStage} from "@/helpers";
-import {Command_Type} from "@/proto/ssl_gc_state";
-import {Team} from "@/proto/ssl_gc_common";
+import type {TeamJson} from "@/proto/state/ssl_gc_common_pb";
 import type {ControlApi} from "@/providers/controlApi";
-import type {Vector2} from "@/proto/ssl_gc_geometry";
+import type {Vector2} from "@/proto/geom/ssl_gc_geometry_pb";
 
 const store = useMatchStateStore()
 const control = inject<ControlApi>('control-api')
@@ -27,27 +26,24 @@ const resetBallPos = function () {
   newBallPos.value = structuredClone(toRaw(curBallPos.value))
 }
 
-const placeBall = (team: Team) => {
+const placeBall = (team: TeamJson) => {
   control?.SubmitChange({
     origin: "UI",
     revertible: true,
-    change: {
-      $case: "setBallPlacementPosChange",
-      setBallPlacementPosChange: {
-        pos: {
-          x: newBallPos.value.x,
-          y: newBallPos.value.y,
-        }
+    setBallPlacementPosChange: {
+      pos: {
+        x: newBallPos.value.x,
+        y: newBallPos.value.y,
       }
     }
   })
-  control?.NewCommandForTeam(Command_Type.BALL_PLACEMENT, team)
+  control?.NewCommandForTeam('BALL_PLACEMENT', team)
 }
 
 const disable = computed(() => {
-  return store.matchState.command?.type !== Command_Type.STOP
-      || !store.matchState.stage
-      || isPausedStage(store.matchState.stage)
+  return store.matchState.command?.type !== 'STOP'
+    || !store.matchState.stage
+    || isPausedStage(store.matchState.stage)
 })
 </script>
 
@@ -60,18 +56,18 @@ const disable = computed(() => {
 
   <div class="row justify-evenly q-mt-md">
     <q-input
-        input-class="text-center"
-        dense
-        label="X-Coordinate"
-        type="number"
-        v-model="newBallPos.x"
+      input-class="text-center"
+      dense
+      label="X-Coordinate"
+      type="number"
+      v-model="newBallPos.x"
     />
     <q-input
-        input-class="text-center"
-        dense
-        label="Y-Coordinate"
-        type="number"
-        v-model="newBallPos.y"
+      input-class="text-center"
+      dense
+      label="Y-Coordinate"
+      type="number"
+      v-model="newBallPos.y"
     />
   </div>
 
@@ -83,14 +79,14 @@ const disable = computed(() => {
         </q-item-section>
         <q-item-section>
           <q-slider
-              v-model="newBallPos.x"
-              :min="-minMaxX"
-              :max="minMaxX"
-              :step="0.1"
-              selection-color="transparent"
-              label
-              :label-value="newBallPos.x + ' m'"
-              label-always
+            v-model="newBallPos.x"
+            :min="-minMaxX"
+            :max="minMaxX"
+            :step="0.1"
+            selection-color="transparent"
+            label
+            :label-value="newBallPos.x + ' m'"
+            label-always
           />
           <q-slider class="slider-current"
 
@@ -114,24 +110,24 @@ const disable = computed(() => {
         </q-item-section>
         <q-item-section>
           <q-slider
-              v-model="curBallPos.y"
-              :min="-minMaxY"
-              :max="minMaxY"
-              :step="0.1"
-              selection-color="transparent"
-              color="info"
-              disable
+            v-model="curBallPos.y"
+            :min="-minMaxY"
+            :max="minMaxY"
+            :step="0.1"
+            selection-color="transparent"
+            color="info"
+            disable
           />
           <q-slider
-              v-model="newBallPos.y"
-              :min="-minMaxY"
-              :max="minMaxY"
-              :step="0.1"
-              selection-color="transparent"
-              label
-              :label-value="newBallPos.y + ' m'"
-              label-always
-              switch-label-side
+            v-model="newBallPos.y"
+            :min="-minMaxY"
+            :max="minMaxY"
+            :step="0.1"
+            selection-color="transparent"
+            label
+            :label-value="newBallPos.y + ' m'"
+            label-always
+            switch-label-side
           />
         </q-item-section>
         <q-item-section avatar/>
@@ -141,7 +137,7 @@ const disable = computed(() => {
 
   <div class="row justify-evenly q-mt-md">
     <ControlButton class="col-grow" label="Place ball"
-                   v-for="team in [Team.YELLOW, Team.BLUE]"
+                   v-for="team in (['YELLOW', 'BLUE']) as TeamJson[]"
                    :key="team"
                    :disable="disable"
                    :action="() => placeBall(team)"

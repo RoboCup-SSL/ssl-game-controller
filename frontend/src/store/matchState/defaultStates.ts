@@ -1,46 +1,34 @@
-import type {State} from "@/proto/ssl_gc_state";
-import {Command_Type, GameState_Type} from "@/proto/ssl_gc_state";
-import {MatchType, Referee_Stage} from "@/proto/ssl_gc_referee_message";
-import {Division, Team} from "@/proto/ssl_gc_common";
-import {GameEvent_Type} from "@/proto/ssl_gc_game_event";
+import type {StateJson} from "@/proto/state/ssl_gc_state_pb";
 
-export const emptyState: State = {
-  stage: Referee_Stage.POST_GAME,
+export const emptyState: StateJson = {
+  stage: 'POST_GAME',
   command: {
-    type: Command_Type.HALT,
-    forTeam: Team.UNKNOWN,
+    type: 'HALT',
+    forTeam: 'UNKNOWN',
   },
   gameState: {
-    type: GameState_Type.HALT,
-    forTeam: Team.UNKNOWN,
+    type: 'HALT',
+    forTeam: 'UNKNOWN',
   },
-  stageTimeElapsed: {
-    seconds: 0,
-  },
-  stageTimeLeft: {
-    seconds: 0,
-  },
-  matchTimeStart: new Date(),
-  currentActionTimeRemaining: {
-    seconds: 0,
-  },
+  stageTimeElapsed: '0s',
+  stageTimeLeft: '0s',
+  matchTimeStart: new Date().toISOString(),
+  currentActionTimeRemaining: '0s',
   gameEvents: [],
   proposalGroups: [],
-  division: Division.DIV_A,
-  firstKickoffTeam: Team.YELLOW,
-  matchType: MatchType.UNKNOWN_MATCH,
-  readyContinueTime: new Date(),
+  division: 'DIV_A',
+  firstKickoffTeam: 'YELLOW',
+  matchType: 'UNKNOWN_MATCH',
+  readyContinueTime: new Date().toISOString(),
   teamState: {
-    [Team.YELLOW]: {
+    ['YELLOW']: {
       name: "Unknown",
       goals: 0,
       goalkeeper: 0,
       yellowCards: [],
       redCards: [],
       timeoutsLeft: 0,
-      timeoutTimeLeft: {
-        seconds: 0,
-      },
+      timeoutTimeLeft: '0s',
       onPositiveHalf: true,
       fouls: [],
       ballPlacementFailures: 0,
@@ -49,16 +37,14 @@ export const emptyState: State = {
       maxAllowedBots: 0,
       challengeFlags: 0,
     },
-    [Team.BLUE]: {
+    ['BLUE']: {
       name: "Unknown",
       goals: 0,
       goalkeeper: 0,
       yellowCards: [],
       redCards: [],
       timeoutsLeft: 0,
-      timeoutTimeLeft: {
-        seconds: 0,
-      },
+      timeoutTimeLeft: '0s',
       onPositiveHalf: false,
       fouls: [],
       ballPlacementFailures: 0,
@@ -70,55 +56,43 @@ export const emptyState: State = {
   }
 }
 
-export const defaultStates: State = {
-  stage: Referee_Stage.POST_GAME,
+export const defaultStates: StateJson = {
+  stage: 'POST_GAME',
   command: {
-    type: Command_Type.HALT,
-    forTeam: Team.UNKNOWN,
+    type: 'HALT',
+    forTeam: 'UNKNOWN',
   },
   gameState: {
-    type: GameState_Type.HALT,
-    forTeam: Team.UNKNOWN,
+    type: 'HALT',
+    forTeam: 'UNKNOWN',
   },
-  stageTimeElapsed: {
-    seconds: 0,
-  },
-  stageTimeLeft: {
-    seconds: 0,
-  },
-  matchTimeStart: new Date(),
-  currentActionTimeRemaining: {
-    seconds: -5,
-  },
+  stageTimeElapsed: '',
+  stageTimeLeft: '0s',
+  matchTimeStart: new Date().toISOString(),
+  currentActionTimeRemaining: '-5s',
   gameEvents: [
     {
-      type: GameEvent_Type.NO_PROGRESS_IN_GAME,
+      type: 'NO_PROGRESS_IN_GAME',
       origin: [
         "TIGERs AutoRef"
       ],
-      event: {
-        $case: "noProgressInGame",
-        noProgressInGame: {
-          time: 4,
-        }
+      noProgressInGame: {
+        time: 4,
       }
     },
     {
-      type: GameEvent_Type.DEFENDER_TOO_CLOSE_TO_KICK_POINT,
+      type: 'DEFENDER_TOO_CLOSE_TO_KICK_POINT',
       origin: [
         "TIGERs AutoRef"
       ],
-      event: {
-        $case: "defenderTooCloseToKickPoint",
-        defenderTooCloseToKickPoint: {
-          byBot: 15,
-          byTeam: Team.BLUE,
-          location: {
-            x: -2,
-            y: 5,
-          },
-          distance: 2.3,
-        }
+      defenderTooCloseToKickPoint: {
+        byBot: 15,
+        byTeam: 'BLUE',
+        location: {
+          x: -2,
+          y: 5,
+        },
+        distance: 2.3,
       }
     },
   ],
@@ -127,43 +101,37 @@ export const defaultStates: State = {
       accepted: true,
       proposals: [
         {
-          timestamp: new Date(),
+          timestamp: new Date().toISOString(),
           gameEvent: {
-            type: GameEvent_Type.ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA,
+            type: 'ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA',
             origin: [
               "TIGERs AutoRef"
             ],
-            event: {
-              $case: "attackerTouchedBallInDefenseArea",
-              attackerTouchedBallInDefenseArea: {
-                byBot: 15,
-                byTeam: Team.YELLOW,
-                distance: 2.3,
-                location: {
-                  x: 3,
-                  y: -2.3,
-                }
+            attackerTouchedBallInDefenseArea: {
+              byBot: 15,
+              byTeam: 'YELLOW',
+              distance: 2.3,
+              location: {
+                x: 3,
+                y: -2.3,
               }
             }
           }
         },
         {
-          timestamp: new Date(),
+          timestamp: new Date().toISOString(),
           gameEvent: {
-            type: GameEvent_Type.ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA,
+            type: 'ATTACKER_TOUCHED_BALL_IN_DEFENSE_AREA',
             origin: [
               "ER-Force"
             ],
-            event: {
-              $case: "attackerTouchedBallInDefenseArea",
-              attackerTouchedBallInDefenseArea: {
-                byBot: 15,
-                byTeam: Team.YELLOW,
-                distance: 2.3,
-                location: {
-                  x: 3,
-                  y: -2.3,
-                }
+            attackerTouchedBallInDefenseArea: {
+              byBot: 15,
+              byTeam: 'YELLOW',
+              distance: 2.3,
+              location: {
+                x: 3,
+                y: -2.3,
               }
             }
           }
@@ -174,41 +142,35 @@ export const defaultStates: State = {
       accepted: false,
       proposals: [
         {
-          timestamp: new Date(),
+          timestamp: new Date().toISOString(),
           gameEvent: {
-            type: GameEvent_Type.BALL_LEFT_FIELD_TOUCH_LINE,
+            type: 'BALL_LEFT_FIELD_TOUCH_LINE',
             origin: [
               "ER-Force", "GC"
             ],
-            event: {
-              $case: "ballLeftFieldTouchLine",
-              ballLeftFieldTouchLine: {
-                byBot: 4,
-                byTeam: Team.BLUE,
-                location: {
-                  x: 1,
-                  y: 2,
-                }
+            ballLeftFieldTouchLine: {
+              byBot: 4,
+              byTeam: 'BLUE',
+              location: {
+                x: 1,
+                y: 2,
               }
             }
           }
         },
         {
-          timestamp: new Date(),
+          timestamp: new Date().toISOString(),
           gameEvent: {
-            type: GameEvent_Type.BALL_LEFT_FIELD_GOAL_LINE,
+            type: 'BALL_LEFT_FIELD_GOAL_LINE',
             origin: [
               "TIGERs AutoRef", "Unknown"
             ],
-            event: {
-              $case: "ballLeftFieldGoalLine",
-              ballLeftFieldGoalLine: {
-                byBot: 4,
-                byTeam: Team.YELLOW,
-                location: {
-                  x: 1,
-                  y: 2,
-                }
+            ballLeftFieldGoalLine: {
+              byBot: 4,
+              byTeam: 'YELLOW',
+              location: {
+                x: 1,
+                y: 2,
               }
             }
           }
@@ -216,21 +178,19 @@ export const defaultStates: State = {
       ]
     }
   ],
-  division: Division.DIV_A,
-  firstKickoffTeam: Team.YELLOW,
-  matchType: MatchType.UNKNOWN_MATCH,
-  readyContinueTime: new Date(),
+  division: 'DIV_A',
+  firstKickoffTeam: 'YELLOW',
+  matchType: 'UNKNOWN_MATCH',
+  readyContinueTime: new Date().toISOString(),
   teamState: {
-    [Team.YELLOW]: {
+    ['YELLOW']: {
       name: "Unknown",
       goals: 0,
       goalkeeper: 5,
       yellowCards: [],
       redCards: [],
       timeoutsLeft: 4,
-      timeoutTimeLeft: {
-        seconds: 61,
-      },
+      timeoutTimeLeft: '61s',
       onPositiveHalf: true,
       fouls: [],
       ballPlacementFailures: 0,
@@ -239,16 +199,14 @@ export const defaultStates: State = {
       maxAllowedBots: 5,
       challengeFlags: 3,
     },
-    [Team.BLUE]: {
+    ['BLUE']: {
       name: "Unknown",
       goals: 2,
       goalkeeper: 15,
       yellowCards: [],
       redCards: [],
       timeoutsLeft: 4,
-      timeoutTimeLeft: {
-        seconds: 61,
-      },
+      timeoutTimeLeft: '61s',
       onPositiveHalf: false,
       fouls: [],
       ballPlacementFailures: 0,

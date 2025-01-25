@@ -12,6 +12,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@bufbuild/protobuf": "^2.2.3",
     "@quasar/extras": "^1.16.15",
     "dayjs": "^1.11.13",
     "format-duration": "^3.0.2",

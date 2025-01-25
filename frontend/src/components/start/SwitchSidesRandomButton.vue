@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {inject, ref} from "vue";
-import {Team} from "@/proto/ssl_gc_common";
+import type {TeamJson} from "@/proto/state/ssl_gc_common_pb";
 import type {ControlApi} from "@/providers/controlApi";
 import TeamInput from "@/components/common/TeamInput.vue";
 import FieldHalfInput from "@/components/team/FieldHalfInput.vue";
@@ -11,13 +11,13 @@ const control = inject<ControlApi>('control-api')
 const matchStore = useMatchStateStore()
 
 const showDialog = ref(false)
-const team = ref(Team.YELLOW)
+const team = ref<TeamJson>('YELLOW')
 
 const randomize = (counter: number) => {
   if (Math.random() < 0.5) {
-    team.value = Team.YELLOW
+    team.value = 'YELLOW'
   } else {
-    team.value = Team.BLUE
+    team.value = 'BLUE'
   }
   if (counter > 0) {
     setTimeout(() => randomize(counter - 1), 100)

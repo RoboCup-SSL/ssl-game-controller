@@ -4,56 +4,47 @@ import TeamItem from "@/components/game-events/common/TeamItem.vue";
 import LocationItem from "@/components/game-events/common/LocationItem.vue";
 import NumberItem from "@/components/game-events/common/NumberItem.vue";
 import ButtonItem from "@/components/game-events/common/ButtonItem.vue";
-import {GameEvent, GameEvent_Type} from "@/proto/ssl_gc_game_event";
-import {Team} from "@/proto/ssl_gc_common";
-import type {Vector2} from "@/proto/ssl_gc_geometry";
+import type {GameEvent_TypeJson, GameEventJson} from "@/proto/state/ssl_gc_game_event_pb";
+import type {TeamJson} from "@/proto/state/ssl_gc_common_pb";
+import type {Vector2Json} from "@/proto/geom/ssl_gc_geometry_pb";
 
-const gameEventType = ref<GameEvent_Type>(GameEvent_Type.BALL_LEFT_FIELD_TOUCH_LINE)
-const byTeam = ref<Team>(Team.YELLOW)
+const gameEventType = ref<GameEvent_TypeJson>('BALL_LEFT_FIELD_TOUCH_LINE')
+const byTeam = ref<TeamJson>('YELLOW')
 const byBot = ref<number | undefined>()
-const location = ref<Vector2>()
+const location = ref<Vector2Json>()
 
 const gameEventTypeOptions = [
-  {label: 'touch line', value: GameEvent_Type.BALL_LEFT_FIELD_TOUCH_LINE},
-  {label: 'goal line', value: GameEvent_Type.BALL_LEFT_FIELD_GOAL_LINE},
-  {label: 'aimless kick', value: GameEvent_Type.AIMLESS_KICK},
+  {label: 'touch line', value: 'BALL_LEFT_FIELD_TOUCH_LINE'},
+  {label: 'goal line', value: 'BALL_LEFT_FIELD_GOAL_LINE'},
+  {label: 'aimless kick', value: 'AIMLESS_KICK'},
 ]
 
-const constructGameEvent = (): GameEvent | undefined => {
-  if (gameEventType.value === GameEvent_Type.BALL_LEFT_FIELD_TOUCH_LINE) {
+const constructGameEvent = (): GameEventJson | undefined => {
+  if (gameEventType.value === 'BALL_LEFT_FIELD_TOUCH_LINE') {
     return {
       type: gameEventType.value,
-      event: {
-        $case: 'ballLeftFieldTouchLine',
-        ballLeftFieldTouchLine: {
-          byTeam: byTeam.value,
-          byBot: byBot.value,
-          location: location.value,
-        }
+      ballLeftFieldTouchLine: {
+        byTeam: byTeam.value,
+        byBot: byBot.value,
+        location: location.value,
       }
     }
-  } else if (gameEventType.value === GameEvent_Type.BALL_LEFT_FIELD_GOAL_LINE) {
+  } else if (gameEventType.value === 'BALL_LEFT_FIELD_GOAL_LINE') {
     return {
       type: gameEventType.value,
-      event: {
-        $case: 'ballLeftFieldGoalLine',
-        ballLeftFieldGoalLine: {
-          byTeam: byTeam.value,
-          byBot: byBot.value,
-          location: location.value,
-        }
+      ballLeftFieldGoalLine: {
+        byTeam: byTeam.value,
+        byBot: byBot.value,
+        location: location.value,
       }
     }
-  } else if (gameEventType.value === GameEvent_Type.AIMLESS_KICK) {
+  } else if (gameEventType.value === 'AIMLESS_KICK') {
     return {
       type: gameEventType.value,
-      event: {
-        $case: 'aimlessKick',
-        aimlessKick: {
-          byTeam: byTeam.value,
-          byBot: byBot.value,
-          location: location.value,
-        }
+      aimlessKick: {
+        byTeam: byTeam.value,
+        byBot: byBot.value,
+        location: location.value,
       }
     }
   }

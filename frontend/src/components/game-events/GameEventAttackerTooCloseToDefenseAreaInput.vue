@@ -4,20 +4,16 @@ import TeamItem from "@/components/game-events/common/TeamItem.vue";
 import LocationItem from "@/components/game-events/common/LocationItem.vue";
 import NumberItem from "@/components/game-events/common/NumberItem.vue";
 import ButtonItem from "@/components/game-events/common/ButtonItem.vue";
-import {GameEvent_AttackerTooCloseToDefenseArea, GameEvent_Type} from "@/proto/ssl_gc_game_event";
-import {gameEventNames} from "@/helpers/texts";
-import {Team} from "@/proto/ssl_gc_common";
+import {type GameEvent_AttackerTooCloseToDefenseAreaJson, type GameEventJson} from "@/proto/state/ssl_gc_game_event_pb";
+import {gameEventName} from "@/helpers/texts";
 
-const gameEvent = ref({
-  type: GameEvent_Type.ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA,
-  event: {
-    $case: 'attackerTooCloseToDefenseArea',
-    attackerTooCloseToDefenseArea: {
-      byTeam: Team.YELLOW,
-    }
+const gameEvent = ref<GameEventJson>({
+  type: 'ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA',
+  attackerTooCloseToDefenseArea: {
+    byTeam: 'YELLOW',
   }
 })
-const details = ref<GameEvent_AttackerTooCloseToDefenseArea>(gameEvent.value.event.attackerTooCloseToDefenseArea)
+const details = ref<GameEvent_AttackerTooCloseToDefenseAreaJson>(gameEvent.value.attackerTooCloseToDefenseArea!)
 
 const emit = defineEmits(['create-game-event'])
 const createGameEvent = () => {
@@ -28,7 +24,7 @@ const createGameEvent = () => {
 <template>
   <q-list bordered>
     <q-item-label header>
-      {{ gameEventNames.get(gameEvent.type) }}
+      {{ gameEventName(gameEvent.type) }}
     </q-item-label>
 
     <TeamItem v-model="details.byTeam" label="by team"/>

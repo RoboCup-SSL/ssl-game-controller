@@ -22,11 +22,8 @@ const sendStatusMessage = (value: string) => {
   control.SubmitChange({
     origin: "UI",
     revertible: true,
-    change: {
-      $case: "setStatusMessageChange",
-      setStatusMessageChange: {
-        statusMessage: value,
-      }
+    setStatusMessageChange: {
+      statusMessage: value,
     }
   })
 }
@@ -39,11 +36,8 @@ const clearStatusMessage = () => {
   control.SubmitChange({
     origin: "UI",
     revertible: true,
-    change: {
-      $case: "setStatusMessageChange",
-      setStatusMessageChange: {
-        statusMessage: undefined,
-      }
+    setStatusMessageChange: {
+      statusMessage: undefined,
     }
   })
 }
@@ -102,9 +96,9 @@ const onCustomStatusMessageSelected = () => {
                 :key="suggestedMessage">
           <q-item-section avatar>
             <q-radio
-                :model-value="statusMessageType"
-                @update:model-value="sendStatusMessage(suggestedMessage)"
-                :val="suggestedMessage"
+              :model-value="statusMessageType"
+              @update:model-value="sendStatusMessage(suggestedMessage)"
+              :val="suggestedMessage"
             />
           </q-item-section>
           <q-item-section>
@@ -115,9 +109,9 @@ const onCustomStatusMessageSelected = () => {
         <q-item tag="label" v-ripple>
           <q-item-section avatar>
             <q-radio
-                :model-value="statusMessageType"
-                @update:model-value="onCustomStatusMessageSelected"
-                val="Custom"
+              :model-value="statusMessageType"
+              @update:model-value="onCustomStatusMessageSelected"
+              val="Custom"
             />
           </q-item-section>
           <q-item-section>
@@ -128,10 +122,10 @@ const onCustomStatusMessageSelected = () => {
         <q-item>
           <q-item-section avatar>
             <TextInput
-                label="Custom Status Message"
-                v-model="customStatusMessage"
-                @focusout="onCustomStatusMessageUpdated"
-                :clearable="false"
+              label="Custom Status Message"
+              v-model="customStatusMessage"
+              @focusout="onCustomStatusMessageUpdated"
+              :clearable="false"
             />
           </q-item-section>
         </q-item>
@@ -139,14 +133,14 @@ const onCustomStatusMessageSelected = () => {
 
       <q-card-actions>
         <q-btn
-            v-close-popup
-            label="Close"
-            color="primary"
+          v-close-popup
+          label="Close"
+          color="primary"
         />
         <q-btn
-            label="Clear"
-            color="primary"
-            @click="clearStatusMessage"
+          label="Clear"
+          color="primary"
+          @click="clearStatusMessage"
         />
       </q-card-actions>
     </q-card>

@@ -5,9 +5,15 @@ import {useGcStateStore} from "@/store/gcState";
 const store = useGcStateStore()
 
 const numTrackerSource = computed(() => {
+  if (store.gcState.trackers === undefined) {
+    return 0
+  }
   return Object.keys(store.gcState.trackers!).length
 })
 const numAutoRefs = computed(() => {
+  if (store.gcState.autoRefState === undefined) {
+    return 0
+  }
   return Object.keys(store.gcState.autoRefState!).length
 })
 const warn = computed(() => {

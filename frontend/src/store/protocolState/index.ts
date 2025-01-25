@@ -1,14 +1,14 @@
 import {defineStore} from "pinia";
-import type {Protocol, ProtocolEntry} from "@/proto/ssl_gc_api";
+import type {ProtocolEntryJson, ProtocolJson} from "@/proto/api/ssl_gc_api_pb";
 
 export const useProtocolStore = defineStore('protocol', {
   state: () => {
     return {
-      protocolEntries: new Array<ProtocolEntry>(),
+      protocolEntries: new Array<ProtocolEntryJson>(),
     }
   },
   actions: {
-    updateProtocol(protocol: Protocol) {
+    updateProtocol(protocol: ProtocolJson) {
       const entries = protocol.entry!
       if (protocol.delta) {
         entries.reverse()
@@ -16,7 +16,7 @@ export const useProtocolStore = defineStore('protocol', {
           this.protocolEntries.unshift(entry)
         }
       } else {
-        this.protocolEntries = Array.from<ProtocolEntry>(entries)
+        this.protocolEntries = Array.from<ProtocolEntryJson>(entries)
       }
     },
   },

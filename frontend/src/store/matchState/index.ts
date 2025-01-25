@@ -1,7 +1,6 @@
 import {defineStore} from "pinia";
-import type {State} from "@/proto/ssl_gc_state";
-import {GameState_Type} from "@/proto/ssl_gc_state";
-import {emptyState, defaultStates} from "@/store/matchState/defaultStates";
+import type {StateJson} from "@/proto/state/ssl_gc_state_pb";
+import {defaultStates, emptyState} from "@/store/matchState/defaultStates";
 
 export const useMatchStateStore = defineStore('matchState', {
   state: () => {
@@ -12,23 +11,23 @@ export const useMatchStateStore = defineStore('matchState', {
   },
   getters: {
     isKickoff: (state) => {
-      return state.matchState.gameState?.type === GameState_Type.KICKOFF
+      return state.matchState.gameState?.type === 'KICKOFF'
     },
     isPenalty: (state) => {
-      return state.matchState.gameState?.type === GameState_Type.PENALTY
+      return state.matchState.gameState?.type === 'PENALTY'
     },
     isStop: (state) => {
-      return state.matchState.gameState?.type === GameState_Type.STOP
+      return state.matchState.gameState?.type === 'STOP'
     },
     isHalt: (state) => {
-      return state.matchState.gameState?.type === GameState_Type.HALT
+      return state.matchState.gameState?.type === 'HALT'
     },
     isTimeout: (state) => {
-      return state.matchState.gameState?.type === GameState_Type.TIMEOUT
+      return state.matchState.gameState?.type === 'TIMEOUT'
     },
   },
   actions: {
-    updateGcState(newState: State) {
+    updateGcState(newState: StateJson) {
       this.matchState = newState
       this.matchStateUpdateCount++
     },

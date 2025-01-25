@@ -9,9 +9,7 @@ defineProps<{
   clearable?: boolean,
 }>()
 
-const emit = defineEmits<{
-  (event: 'update:modelValue', payload: string | undefined): void;
-}>();
+const emit = defineEmits<(event: 'update:modelValue', payload: string | undefined) => void>();
 
 const shortcuts = inject<Shortcuts>('shortcuts')!
 const onFocusin = () => shortcuts.disable()

@@ -1,6 +1,6 @@
 import {ControlApi} from "@/providers/controlApi";
 import {useMatchStateStore} from "@/store/matchState";
-import type {Output} from "@/proto/ssl_gc_api";
+import type {OutputJson} from "@/proto/api/ssl_gc_api_pb";
 import {useGcStateStore} from "@/store/gcState";
 import type {App} from "vue";
 import {useProtocolStore} from "@/store/protocolState";
@@ -17,14 +17,14 @@ export const control = {
     app.provide('shortcuts', shortcuts)
 
     const matchStateStore = useMatchStateStore()
-    controlApi.RegisterConsumer((output: Output) => {
+    controlApi.RegisterConsumer((output: OutputJson) => {
       if (output.matchState) {
         matchStateStore.updateGcState(output.matchState)
       }
     })
 
     const gcStateStore = useGcStateStore()
-    controlApi.RegisterConsumer((output: Output) => {
+    controlApi.RegisterConsumer((output: OutputJson) => {
       if (output.gcState) {
         gcStateStore.updateGcState(output.gcState)
       }
@@ -34,7 +34,7 @@ export const control = {
     })
 
     const protocolStore = useProtocolStore()
-    controlApi.RegisterConsumer((output: Output) => {
+    controlApi.RegisterConsumer((output: OutputJson) => {
       if (output.protocol) {
         protocolStore.updateProtocol(output.protocol)
       }

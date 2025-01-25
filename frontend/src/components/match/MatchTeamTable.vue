@@ -5,37 +5,36 @@ import SubstitutionRequestInput from "@/components/team/SubstitutionRequestInput
 import EmergencyRequestInput from "@/components/team/EmergencyRequestInput.vue";
 import {useMatchStateStore} from "@/store/matchState";
 import formatDuration from "format-duration";
-import {teams} from "@/helpers";
-import type {Team} from "@/proto/ssl_gc_common";
-import {Referee_Stage} from "@/proto/ssl_gc_referee_message";
+import {durationSeconds, teams} from "@/helpers";
+import type {TeamJson} from "@/proto/state/ssl_gc_common_pb";
 import {computed} from "vue";
 
 const store = useMatchStateStore()
 
-const teamName = (team: Team) => {
+const teamName = (team: TeamJson) => {
   return store.matchState.teamState?.[team].name!
 }
-const activeCards = (team: Team) => {
-  const numYellow = store.matchState.teamState?.[team].yellowCards?.filter(c => c.timeRemaining && c.timeRemaining.seconds > 0).length || 0
+const activeCards = (team: TeamJson) => {
+  const numYellow = store.matchState.teamState?.[team].yellowCards?.filter(c => c.timeRemaining && durationSeconds(c.timeRemaining) > 0).length || 0
   const numRed = store.matchState.teamState?.[team].redCards?.length || 0
   return numYellow + numRed
 }
-const maxBots = (team: Team) => {
+const maxBots = (team: TeamJson) => {
   return store.matchState.teamState?.[team].maxAllowedBots || 0
 }
-const nextYellowCardDue = (team: Team) => {
+const nextYellowCardDue = (team: TeamJson) => {
   const activeYellowCards = store.matchState.teamState?.[team].yellowCards
-    ?.filter(c => c.timeRemaining && c.timeRemaining.seconds > 0)
-    ?.sort((a, b) => a.timeRemaining?.seconds! - b.timeRemaining?.seconds!)
+    ?.filter(c => c.timeRemaining && durationSeconds(c.timeRemaining) > 0)
+    ?.sort((a, b) => durationSeconds(a.timeRemaining!) - durationSeconds(b.timeRemaining!))
   if ((activeYellowCards?.length || 0) > 0) {
-    return activeYellowCards![0].timeRemaining?.seconds!
+    return durationSeconds(activeYellowCards![0].timeRemaining!)
   }
   return 0
 }
 const isShootout = computed(() => {
-  return store.matchState.stage === Referee_Stage.PENALTY_SHOOTOUT
+  return store.matchState.stage === 'PENALTY_SHOOTOUT'
 })
-const penaltyAttempts = (team: Team) => {
+const penaltyAttempts = (team: TeamJson) => {
   return store.matchState.shootoutState?.numberOfAttempts?.[team] || 0
 }
 </script>

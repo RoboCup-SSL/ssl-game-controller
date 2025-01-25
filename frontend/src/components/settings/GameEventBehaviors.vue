@@ -2,10 +2,10 @@
 import {computed, inject} from "vue";
 import GameEventBehaviorInput from "@/components/settings/GameEventBehaviorInput.vue";
 import {useGcStateStore} from "@/store/gcState";
-import {Config_Behavior} from "@/proto/ssl_gc_engine_config";
-import {gameEvent_TypeFromJSON} from "@/proto/ssl_gc_game_event";
-import {gameEventNames} from "@/helpers/texts";
+import {type Config_BehaviorJson} from "@/proto/engine/ssl_gc_engine_config_pb";
+import {gameEventName} from "@/helpers/texts";
 import type {ControlApi} from "@/providers/controlApi";
+import {type GameEvent_TypeJson} from "@/proto/state/ssl_gc_game_event_pb";
 
 const store = useGcStateStore()
 const control = inject<ControlApi>('control-api')
@@ -17,18 +17,18 @@ const commonBehaviorValue = computed(() => {
   const first = behaviors.value[gameEventTypes.value[0]]
   for (const behaviorKey of gameEventTypes.value) {
     if (behaviors.value[behaviorKey] !== first) {
-      return Config_Behavior.BEHAVIOR_UNKNOWN
+      return 'UNKNOWN' as Config_BehaviorJson
     }
   }
   return first
 })
 
 function behaviorName(key: string) {
-  const gameEventType = gameEvent_TypeFromJSON(key);
-  return gameEventNames.get(gameEventType)
+  const gameEventType = key as GameEvent_TypeJson;
+  return gameEventName(gameEventType)
 }
 
-function update(key: string, behavior: Config_Behavior) {
+function update(key: string, behavior: Config_BehaviorJson) {
   control?.ChangeConfig({
     gameEventBehavior: {
       [key]: behavior,
@@ -36,8 +36,8 @@ function update(key: string, behavior: Config_Behavior) {
   })
 }
 
-function changeAll(behavior: Config_Behavior) {
-  const gameEventBehavior: { [key: string]: Config_Behavior } = {}
+function changeAll(behavior: Config_BehaviorJson) {
+  const gameEventBehavior: { [key: string]: Config_BehaviorJson } = {}
   for (const key of gameEventTypes.value) {
     gameEventBehavior[key] = behavior
   }

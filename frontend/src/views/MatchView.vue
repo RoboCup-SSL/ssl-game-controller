@@ -8,10 +8,8 @@ import {useGcStateStore} from "@/store/gcState";
 import {useUiStateStore} from "@/store/uiState";
 import SwitchColorButton from "@/components/start/SwitchColorButton.vue";
 import {useMatchStateStore} from "@/store/matchState";
-import {Referee_Stage} from "@/proto/ssl_gc_referee_message";
 import SwitchSidesButton from "@/components/start/SwitchSidesButton.vue";
 import GameEvents from "@/components/match/GameEvents.vue";
-import {Command_Type} from "@/proto/ssl_gc_state";
 import CommandButton from "@/components/control/CommandButton.vue";
 
 const store = useMatchStateStore()
@@ -34,8 +32,8 @@ const toggleAutoContinue = () => {
 }
 
 const halftime = computed(() => {
-  return store.matchState.stage === Referee_Stage.NORMAL_HALF_TIME ||
-      store.matchState.stage === Referee_Stage.EXTRA_HALF_TIME
+  return store.matchState.stage === 'NORMAL_HALF_TIME' ||
+    store.matchState.stage === 'EXTRA_HALF_TIME'
 })
 
 const keyListenerContinue = function (e: KeyboardEvent) {
@@ -111,7 +109,7 @@ onUnmounted(() => {
         </div>
       </template>
       <div class="column">
-        <CommandButton class="col" :type="Command_Type.HALT"/>
+        <CommandButton class="col" :type="'HALT'"/>
       </div>
       <ContinueActionButtonList/>
     </div>

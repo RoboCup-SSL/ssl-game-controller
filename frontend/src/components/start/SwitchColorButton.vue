@@ -6,10 +6,7 @@ const control = inject<ControlApi>('control-api')
 
 const update = () => {
   control?.SubmitChange({
-    change: {
-      $case: "switchColorsChange",
-      switchColorsChange: {}
-    }
+    switchColorsChange: {}
   })
 }
 </script>
