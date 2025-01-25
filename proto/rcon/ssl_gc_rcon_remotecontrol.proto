@@ -1,0 +1,115 @@
+syntax = "proto2";
+
+import "state/ssl_gc_common.proto";
+import "rcon/ssl_gc_rcon.proto";
+
+// a registration that must be send by the remote control to the controller as the very first message
+message RemoteControlRegistration {
+    // the team to be controlled
+    required Team team = 1;
+    // signature can optionally be specified to enable secure communication
+    optional Signature signature = 2;
+}
+
+// wrapper for all messages from the remote control to the controller
+message RemoteControlToController {
+    // signature can optionally be specified to enable secure communication
+    optional Signature signature = 1;
+
+    oneof msg {
+        // send a ping to the GC to test if the connection is still open.
+        // the value is ignored and a reply is sent back
+        Request request = 2;
+
+        // request a new desired keeper id
+        int32 desired_keeper = 3;
+
+        // true: request to substitute a robot at the next possibility
+        // false: cancel request
+        bool request_robot_substitution = 4;
+
+        // true: request a timeout with the next stoppage
+        // false: cancel the request
+        bool request_timeout = 5;
+
+        // true: initiate an emergency stop
+        // false: cancel the request
+        bool request_emergency_stop = 6;
+    }
+
+    enum Request {
+        UNKNOWN = 0;
+        // Ping the GC to test the connection. The GC will respond with OK and the current team state
+        PING = 1;
+        // Raise a challenge flag (this is not revocable)
+        CHALLENGE_FLAG = 2;
+        // Stop an ongoing timeout
+        STOP_TIMEOUT = 3;
+    }
+}
+
+// wrapper for all messages from controller to a team's computer
+message ControllerToRemoteControl {
+    // a reply from the controller
+    optional ControllerReply controller_reply = 1;
+
+    // current team state
+    optional RemoteControlTeamState state = 2;
+}
+
+// Current team state from Controller for remote control
+message RemoteControlTeamState {
+    // the team that is controlled
+    optional Team team = 12;
+
+    // list of all currently available request types that can be made
+    repeated RemoteControlRequestType available_requests = 1;
+
+    // list of all currently active request types that are pending
+    repeated RemoteControlRequestType active_requests = 2;
+
+    // currently set keeper id
+    optional int32 keeper_id = 3;
+
+    // number of seconds till emergency stop is executed
+    // zero, if no emergency stop requested
+    optional float emergency_stop_in = 4;
+
+    // number of timeouts left for the team
+    optional int32 timeouts_left = 5;
+
+    // number of seconds left for timeout for the team
+    optional float timeout_time_left = 10;
+
+    // number of challenge flags left for the team
+    optional int32 challenge_flags_left = 6;
+
+    // max number of robots currently allowed
+    optional int32 max_robots = 7;
+
+    // current number of robots visible on field
+    optional int32 robots_on_field = 9;
+
+    // list of due times for each active yellow card (in seconds)
+    repeated float yellow_cards_due = 8;
+
+    // if true, team is allowed to substitute robots
+    optional bool can_substitute_robot = 11;
+
+    // number of bot substitutions left by the team in this halftime
+    optional uint32 bot_substitutions_left = 13;
+
+    // number of seconds left for current bot substitution
+    optional float bot_substitution_time_left = 14;
+}
+
+// All possible request types that the remote control can make
+enum RemoteControlRequestType {
+    UNKNOWN_REQUEST_TYPE = 0;
+    EMERGENCY_STOP = 1;
+    ROBOT_SUBSTITUTION = 2;
+    TIMEOUT = 3;
+    CHALLENGE_FLAG = 4;
+    CHANGE_KEEPER_ID = 5;
+    STOP_TIMEOUT = 6;
+}
