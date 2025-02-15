@@ -1,0 +1,102 @@
+services:
+  ssl-game-controller:
+    build:
+      context: ..
+      dockerfile: ./cmd/ssl-game-controller/Dockerfile
+    command:
+      - "-visionAddress"
+      - "224.5.23.2:10020"
+      - "-trackerAddress"
+      - "224.5.23.2:11010"
+      - "-publishAddress"
+      - "224.5.23.1:11003"
+      - "-address"
+      - ":8081"
+    ports:
+      - "8081:8081/tcp"
+
+  ssl-remote-control-yellow:
+    image: "robocupssl/ssl-remote-control:1.3.2@sha256:e23e823d006b9790d6856173d2278ce268d41f64f6d99896bbf67a39ee7d93e1"
+    command:
+      - "-address"
+      - ":8084"
+      - "-refereeAddress"
+      - "224.5.23.1:11003"
+      - "-team"
+      - "YELLOW"
+    ports:
+      - "8084:8084/tcp"
+
+  ssl-remote-control-blue:
+    image: "robocupssl/ssl-remote-control:1.3.2@sha256:e23e823d006b9790d6856173d2278ce268d41f64f6d99896bbf67a39ee7d93e1"
+    command:
+      - "-address"
+      - ":8085"
+      - "-refereeAddress"
+      - "224.5.23.1:11003"
+      - "-team"
+      - "BLUE"
+    ports:
+      - "8085:8085/tcp"
+
+  ssl-team-client-yellow:
+    image: "ssl-team-client"
+    build:
+      context: "."
+      dockerfile: cmd/ssl-team-client/Dockerfile
+    command:
+      - "-teamColor"
+      - "YELLOW"
+      - "-teamName"
+      - "Unknown"
+      - "-udpAddress"
+      - "224.5.23.1:11003"
+
+  ssl-team-client-blue:
+    image: "ssl-team-client"
+    build:
+      context: "."
+      dockerfile: cmd/ssl-team-client/Dockerfile
+    command:
+      - "-teamColor"
+      - "BLUE"
+      - "-teamName"
+      - "Unknown"
+      - "-udpAddress"
+      - "224.5.23.1:11003"
+
+  autoref-tigers:
+    image: "tigersmannheim/auto-referee:1.5.0@sha256:968d85e87a86c9e793b731370cb4506daa494ab94305f3d11b002e9ea632d206"
+    command:
+      - "-a" # active mode (connect to GC)
+      - "-hl" # headless
+      - "--visionAddress"
+      - "224.5.23.2:10020"
+      - "--refereeAddress"
+      - "224.5.23.1:11003"
+      - "--trackerAddress"
+      - "224.5.23.2:11010"
+
+  autoref-erforce:
+    image: "roboticserlangen/autoref:commit-6f15f574ea80@sha256:3d7c5933c12eb193a1fefcfd6aba86fba42875c588cc883dc20d0bfcb66b11cb"
+    command:
+      - "--vision-port"
+      - "10020"
+      - "--tracker-port"
+      - "11010"
+      - "--gc-port"
+      - "11003"
+
+  ssl-log-player:
+    image: "robocupssl/ssl-log-player:1.8.0@sha256:9537fd8350e8a0b4b06a584c7feb2d0b08ba089e9d5b7538466c29f1e25e32b7"
+    command:
+      - "-file"
+      - "/data/BOT_KICKED_BALL_TOO_FAST/linear-kick.log"
+      - "-vision-address"
+      - "224.5.23.2:10020"
+      - "-referee-enabled"
+      - "false"
+      - "-vision-tracker-enabled"
+      - "false"
+    volumes:
+      - "./autoref-tests/:/data"

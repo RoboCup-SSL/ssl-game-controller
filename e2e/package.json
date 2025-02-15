@@ -1,0 +1,8 @@
+{
+  "name": "e2e-test",
+  "version": "1.0.0",
+  "devDependencies": {
+    "@playwright/test": "^1.50.0",
+    "@types/node": "^22.12.0"
+  }
+}
