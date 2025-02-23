@@ -5,11 +5,12 @@ import (
 	"flag"
 	"fmt"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
-	"github.com/RoboCup-SSL/ssl-game-controller/pkg/sslnet"
+	"github.com/RoboCup-SSL/ssl-go-tools/pkg/sslnet"
 	"google.golang.org/protobuf/encoding/prototext"
 	"google.golang.org/protobuf/proto"
 	"log"
 	"math"
+	"net"
 	"os"
 	"os/signal"
 	"syscall"
@@ -24,9 +25,10 @@ var history []state.Referee_Command
 func main() {
 	flag.Parse()
 
-	server := sslnet.NewMulticastServer(consume)
+	server := sslnet.NewMulticastServer(*refereeAddress)
 	server.Verbose = *verbose
-	server.Start(*refereeAddress)
+	server.Consumer = consume
+	server.Start()
 
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM)
@@ -34,7 +36,7 @@ func main() {
 	server.Stop()
 }
 
-func consume(b []byte) {
+func consume(b []byte, _ *net.UDPAddr) {
 	refMsg := state.Referee{}
 	if err := proto.Unmarshal(b, &refMsg); err != nil {
 		log.Println("Could not unmarshal referee message")

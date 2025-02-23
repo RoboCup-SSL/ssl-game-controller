@@ -1,14 +1,14 @@
 package tracker
 
 import (
-	"github.com/RoboCup-SSL/ssl-game-controller/pkg/sslnet"
+	"github.com/RoboCup-SSL/ssl-go-tools/pkg/sslnet"
 	"google.golang.org/protobuf/proto"
 	"log"
+	"net"
 	"sync"
 )
 
 type Receiver struct {
-	address         string
 	Callback        func(*TrackerWrapperPacket)
 	mutex           sync.Mutex
 	MulticastServer *sslnet.MulticastServer
@@ -17,15 +17,17 @@ type Receiver struct {
 // NewReceiver creates a new receiver
 func NewReceiver(address string) (v *Receiver) {
 	v = new(Receiver)
-	v.address = address
-	v.Callback = func(*TrackerWrapperPacket) {}
-	v.MulticastServer = sslnet.NewMulticastServer(v.consumeData)
+	v.Callback = func(*TrackerWrapperPacket) {
+		// noop by default
+	}
+	v.MulticastServer = sslnet.NewMulticastServer(address)
+	v.MulticastServer.Consumer = v.consumeData
 	return
 }
 
 // Start starts the receiver
 func (v *Receiver) Start() {
-	v.MulticastServer.Start(v.address)
+	v.MulticastServer.Start()
 }
 
 // Stop stops the receiver
@@ -33,7 +35,7 @@ func (v *Receiver) Stop() {
 	v.MulticastServer.Stop()
 }
 
-func (v *Receiver) consumeData(data []byte) {
+func (v *Receiver) consumeData(data []byte, _ *net.UDPAddr) {
 	v.mutex.Lock()
 	defer v.mutex.Unlock()
 
