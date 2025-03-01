@@ -25,6 +25,7 @@ func Test_BallPlacementPos(t *testing.T) {
 
 	placementPosDeterminer := BallPlacementPosDeterminer{
 		Event:               nil,
+		State:               state.NewState(),
 		Geometry:            geometry,
 		CurrentPlacementPos: nil,
 		OnPositiveHalf: map[state.Team]bool{
