@@ -17,8 +17,7 @@ message RemoteControlToController {
     optional Signature signature = 1;
 
     oneof msg {
-        // send a ping to the GC to test if the connection is still open.
-        // the value is ignored and a reply is sent back
+        // send a request to the GC
         Request request = 2;
 
         // request a new desired keeper id
@@ -45,6 +44,8 @@ message RemoteControlToController {
         CHALLENGE_FLAG = 2;
         // Stop an ongoing timeout
         STOP_TIMEOUT = 3;
+        // Fail a ball placement
+        FAIL_BALLPLACEMENT = 4;
     }
 }
 
@@ -112,4 +113,5 @@ enum RemoteControlRequestType {
     CHALLENGE_FLAG = 4;
     CHANGE_KEEPER_ID = 5;
     STOP_TIMEOUT = 6;
+    FAIL_BALLPLACEMENT = 7;
 }

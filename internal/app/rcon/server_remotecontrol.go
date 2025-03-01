@@ -247,6 +247,9 @@ func (c *RemoteControlClient) findAvailableRequestTypes() []RemoteControlRequest
 	if c.checkChangeKeeper() == nil {
 		availableRequests = append(availableRequests, RemoteControlRequestType_CHANGE_KEEPER_ID)
 	}
+	if c.checkFailBallPlacement() == nil {
+		availableRequests = append(availableRequests, RemoteControlRequestType_FAIL_BALLPLACEMENT)
+	}
 	return availableRequests
 }
 
@@ -275,6 +278,14 @@ func (c *RemoteControlClient) checkStopTimeout() error {
 		return nil
 	}
 	return errors.New("Timeout not active for team")
+}
+
+func (c *RemoteControlClient) checkFailBallPlacement() error {
+	gameState := c.gcEngine.CurrentState().GameState
+	if *gameState.Type == state.GameState_BALL_PLACEMENT && *gameState.ForTeam == *c.team {
+		return nil
+	}
+	return errors.New("Ball placement not active for team")
 }
 
 func (c *RemoteControlClient) checkRequestRobotSubstitution() error {
@@ -370,6 +381,23 @@ func (c *RemoteControlClient) processRequest(request *RemoteControlToController)
 			Change: &statemachine.Change_NewCommandChange{
 				NewCommandChange: &statemachine.Change_NewCommand{
 					Command: state.NewCommandNeutral(state.Command_HALT),
+				},
+			},
+		})
+		return nil
+	}
+
+	if request.GetRequest() == RemoteControlToController_FAIL_BALLPLACEMENT {
+		if err := c.checkFailBallPlacement(); err != nil {
+			return errors.Wrap(err, "Can not fail ballplacement")
+		}
+		eventType := state.GameEvent_PLACEMENT_FAILED
+		c.gcEngine.EnqueueGameEvent(&state.GameEvent{
+			Type:   &eventType,
+			Origin: []string{*c.origin()},
+			Event: &state.GameEvent_PlacementFailed_{
+				PlacementFailed: &state.GameEvent_PlacementFailed{
+					ByTeam: c.team,
 				},
 			},
 		})

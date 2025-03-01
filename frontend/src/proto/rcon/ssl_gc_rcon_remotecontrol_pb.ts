@@ -14,7 +14,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file rcon/ssl_gc_rcon_remotecontrol.proto.
  */
 export const file_rcon_ssl_gc_rcon_remotecontrol: GenFile = /*@__PURE__*/
-  fileDesc("CiRyY29uL3NzbF9nY19yY29uX3JlbW90ZWNvbnRyb2wucHJvdG8iTwoZUmVtb3RlQ29udHJvbFJlZ2lzdHJhdGlvbhITCgR0ZWFtGAEgAigOMgUuVGVhbRIdCglzaWduYXR1cmUYAiABKAsyCi5TaWduYXR1cmUivQIKGVJlbW90ZUNvbnRyb2xUb0NvbnRyb2xsZXISHQoJc2lnbmF0dXJlGAEgASgLMgouU2lnbmF0dXJlEjUKB3JlcXVlc3QYAiABKA4yIi5SZW1vdGVDb250cm9sVG9Db250cm9sbGVyLlJlcXVlc3RIABIYCg5kZXNpcmVkX2tlZXBlchgDIAEoBUgAEiQKGnJlcXVlc3Rfcm9ib3Rfc3Vic3RpdHV0aW9uGAQgASgISAASGQoPcmVxdWVzdF90aW1lb3V0GAUgASgISAASIAoWcmVxdWVzdF9lbWVyZ2VuY3lfc3RvcBgGIAEoCEgAIkYKB1JlcXVlc3QSCwoHVU5LTk9XThAAEggKBFBJTkcQARISCg5DSEFMTEVOR0VfRkxBRxACEhAKDFNUT1BfVElNRU9VVBADQgUKA21zZyJvChlDb250cm9sbGVyVG9SZW1vdGVDb250cm9sEioKEGNvbnRyb2xsZXJfcmVwbHkYASABKAsyEC5Db250cm9sbGVyUmVwbHkSJgoFc3RhdGUYAiABKAsyFy5SZW1vdGVDb250cm9sVGVhbVN0YXRlIr8DChZSZW1vdGVDb250cm9sVGVhbVN0YXRlEhMKBHRlYW0YDCABKA4yBS5UZWFtEjUKEmF2YWlsYWJsZV9yZXF1ZXN0cxgBIAMoDjIZLlJlbW90ZUNvbnRyb2xSZXF1ZXN0VHlwZRIyCg9hY3RpdmVfcmVxdWVzdHMYAiADKA4yGS5SZW1vdGVDb250cm9sUmVxdWVzdFR5cGUSEQoJa2VlcGVyX2lkGAMgASgFEhkKEWVtZXJnZW5jeV9zdG9wX2luGAQgASgCEhUKDXRpbWVvdXRzX2xlZnQYBSABKAUSGQoRdGltZW91dF90aW1lX2xlZnQYCiABKAISHAoUY2hhbGxlbmdlX2ZsYWdzX2xlZnQYBiABKAUSEgoKbWF4X3JvYm90cxgHIAEoBRIXCg9yb2JvdHNfb25fZmllbGQYCSABKAUSGAoQeWVsbG93X2NhcmRzX2R1ZRgIIAMoAhIcChRjYW5fc3Vic3RpdHV0ZV9yb2JvdBgLIAEoCBIeChZib3Rfc3Vic3RpdHV0aW9uc19sZWZ0GA0gASgNEiIKGmJvdF9zdWJzdGl0dXRpb25fdGltZV9sZWZ0GA4gASgCKqkBChhSZW1vdGVDb250cm9sUmVxdWVzdFR5cGUSGAoUVU5LTk9XTl9SRVFVRVNUX1RZUEUQABISCg5FTUVSR0VOQ1lfU1RPUBABEhYKElJPQk9UX1NVQlNUSVRVVElPThACEgsKB1RJTUVPVVQQAxISCg5DSEFMTEVOR0VfRkxBRxAEEhQKEENIQU5HRV9LRUVQRVJfSUQQBRIQCgxTVE9QX1RJTUVPVVQQBkJdQhtTc2xHY1Jjb25SZW1vdGVjb250cm9sUHJvdG9QAVo8Z2l0aHViLmNvbS9Sb2JvQ3VwLVNTTC9zc2wtZ2FtZS1jb250cm9sbGVyL2ludGVybmFsL2FwcC9yY29u", [file_state_ssl_gc_common, file_rcon_ssl_gc_rcon]);
+  fileDesc("CiRyY29uL3NzbF9nY19yY29uX3JlbW90ZWNvbnRyb2wucHJvdG8iTwoZUmVtb3RlQ29udHJvbFJlZ2lzdHJhdGlvbhITCgR0ZWFtGAEgAigOMgUuVGVhbRIdCglzaWduYXR1cmUYAiABKAsyCi5TaWduYXR1cmUi1QIKGVJlbW90ZUNvbnRyb2xUb0NvbnRyb2xsZXISHQoJc2lnbmF0dXJlGAEgASgLMgouU2lnbmF0dXJlEjUKB3JlcXVlc3QYAiABKA4yIi5SZW1vdGVDb250cm9sVG9Db250cm9sbGVyLlJlcXVlc3RIABIYCg5kZXNpcmVkX2tlZXBlchgDIAEoBUgAEiQKGnJlcXVlc3Rfcm9ib3Rfc3Vic3RpdHV0aW9uGAQgASgISAASGQoPcmVxdWVzdF90aW1lb3V0GAUgASgISAASIAoWcmVxdWVzdF9lbWVyZ2VuY3lfc3RvcBgGIAEoCEgAIl4KB1JlcXVlc3QSCwoHVU5LTk9XThAAEggKBFBJTkcQARISCg5DSEFMTEVOR0VfRkxBRxACEhAKDFNUT1BfVElNRU9VVBADEhYKEkZBSUxfQkFMTFBMQUNFTUVOVBAEQgUKA21zZyJvChlDb250cm9sbGVyVG9SZW1vdGVDb250cm9sEioKEGNvbnRyb2xsZXJfcmVwbHkYASABKAsyEC5Db250cm9sbGVyUmVwbHkSJgoFc3RhdGUYAiABKAsyFy5SZW1vdGVDb250cm9sVGVhbVN0YXRlIr8DChZSZW1vdGVDb250cm9sVGVhbVN0YXRlEhMKBHRlYW0YDCABKA4yBS5UZWFtEjUKEmF2YWlsYWJsZV9yZXF1ZXN0cxgBIAMoDjIZLlJlbW90ZUNvbnRyb2xSZXF1ZXN0VHlwZRIyCg9hY3RpdmVfcmVxdWVzdHMYAiADKA4yGS5SZW1vdGVDb250cm9sUmVxdWVzdFR5cGUSEQoJa2VlcGVyX2lkGAMgASgFEhkKEWVtZXJnZW5jeV9zdG9wX2luGAQgASgCEhUKDXRpbWVvdXRzX2xlZnQYBSABKAUSGQoRdGltZW91dF90aW1lX2xlZnQYCiABKAISHAoUY2hhbGxlbmdlX2ZsYWdzX2xlZnQYBiABKAUSEgoKbWF4X3JvYm90cxgHIAEoBRIXCg9yb2JvdHNfb25fZmllbGQYCSABKAUSGAoQeWVsbG93X2NhcmRzX2R1ZRgIIAMoAhIcChRjYW5fc3Vic3RpdHV0ZV9yb2JvdBgLIAEoCBIeChZib3Rfc3Vic3RpdHV0aW9uc19sZWZ0GA0gASgNEiIKGmJvdF9zdWJzdGl0dXRpb25fdGltZV9sZWZ0GA4gASgCKsEBChhSZW1vdGVDb250cm9sUmVxdWVzdFR5cGUSGAoUVU5LTk9XTl9SRVFVRVNUX1RZUEUQABISCg5FTUVSR0VOQ1lfU1RPUBABEhYKElJPQk9UX1NVQlNUSVRVVElPThACEgsKB1RJTUVPVVQQAxISCg5DSEFMTEVOR0VfRkxBRxAEEhQKEENIQU5HRV9LRUVQRVJfSUQQBRIQCgxTVE9QX1RJTUVPVVQQBhIWChJGQUlMX0JBTExQTEFDRU1FTlQQB0JdQhtTc2xHY1Jjb25SZW1vdGVjb250cm9sUHJvdG9QAVo8Z2l0aHViLmNvbS9Sb2JvQ3VwLVNTTC9zc2wtZ2FtZS1jb250cm9sbGVyL2ludGVybmFsL2FwcC9yY29u", [file_state_ssl_gc_common, file_rcon_ssl_gc_rcon]);
 
 /**
  * a registration that must be send by the remote control to the controller as the very first message
@@ -83,8 +83,7 @@ export type RemoteControlToController = Message<"RemoteControlToController"> & {
    */
   msg: {
     /**
-     * send a ping to the GC to test if the connection is still open.
-     * the value is ignored and a reply is sent back
+     * send a request to the GC
      *
      * @generated from field: RemoteControlToController.Request request = 2;
      */
@@ -142,8 +141,7 @@ export type RemoteControlToControllerJson = {
   signature?: SignatureJson;
 
   /**
-   * send a ping to the GC to test if the connection is still open.
-   * the value is ignored and a reply is sent back
+   * send a request to the GC
    *
    * @generated from field: RemoteControlToController.Request request = 2;
    */
@@ -217,12 +215,19 @@ export enum RemoteControlToController_Request {
    * @generated from enum value: STOP_TIMEOUT = 3;
    */
   STOP_TIMEOUT = 3,
+
+  /**
+   * Fail a ball placement
+   *
+   * @generated from enum value: FAIL_BALLPLACEMENT = 4;
+   */
+  FAIL_BALLPLACEMENT = 4,
 }
 
 /**
  * @generated from enum RemoteControlToController.Request
  */
-export type RemoteControlToController_RequestJson = "UNKNOWN" | "PING" | "CHALLENGE_FLAG" | "STOP_TIMEOUT";
+export type RemoteControlToController_RequestJson = "UNKNOWN" | "PING" | "CHALLENGE_FLAG" | "STOP_TIMEOUT" | "FAIL_BALLPLACEMENT";
 
 /**
  * Describes the enum RemoteControlToController.Request.
@@ -538,6 +543,11 @@ export enum RemoteControlRequestType {
    * @generated from enum value: STOP_TIMEOUT = 6;
    */
   STOP_TIMEOUT = 6,
+
+  /**
+   * @generated from enum value: FAIL_BALLPLACEMENT = 7;
+   */
+  FAIL_BALLPLACEMENT = 7,
 }
 
 /**
@@ -545,7 +555,7 @@ export enum RemoteControlRequestType {
  *
  * @generated from enum RemoteControlRequestType
  */
-export type RemoteControlRequestTypeJson = "UNKNOWN_REQUEST_TYPE" | "EMERGENCY_STOP" | "ROBOT_SUBSTITUTION" | "TIMEOUT" | "CHALLENGE_FLAG" | "CHANGE_KEEPER_ID" | "STOP_TIMEOUT";
+export type RemoteControlRequestTypeJson = "UNKNOWN_REQUEST_TYPE" | "EMERGENCY_STOP" | "ROBOT_SUBSTITUTION" | "TIMEOUT" | "CHALLENGE_FLAG" | "CHANGE_KEEPER_ID" | "STOP_TIMEOUT" | "FAIL_BALLPLACEMENT";
 
 /**
  * Describes the enum RemoteControlRequestType.
