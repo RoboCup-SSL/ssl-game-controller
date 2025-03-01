@@ -18,6 +18,12 @@ type BallPlacementPosDeterminer struct {
 
 // Location determines the ball placement position based on the game event type
 func (s *BallPlacementPosDeterminer) Location() *geom.Vector2 {
+	if *s.State.Stage == state.Referee_PENALTY_SHOOTOUT &&
+		s.State.NextCommand != nil && s.State.NextCommand.ForTeam.Known() {
+		teamInFavor := *s.State.NextCommand.ForTeam
+		return s.penaltyKick(teamInFavor)
+	}
+
 	switch *s.Event.Type {
 	// Ball out of field events (stopping)
 	case state.GameEvent_BALL_LEFT_FIELD_TOUCH_LINE:
