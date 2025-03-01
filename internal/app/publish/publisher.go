@@ -101,7 +101,7 @@ func (p *Publisher) SendMessage(refereeMsg *state.Referee) {
 	for _, conn := range p.conns {
 		_, err = conn.Write(bytes)
 		if err != nil {
-			log.Printf("Could not write referee message on %v: %v", conn, err)
+			log.Printf("Could not write referee message on %v: %v", conn.LocalAddr(), err)
 			p.disconnectConn(conn)
 		}
 	}
