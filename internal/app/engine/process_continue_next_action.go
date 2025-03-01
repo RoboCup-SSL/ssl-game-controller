@@ -101,6 +101,11 @@ func (e *Engine) nextActions() (actions []*ContinueAction, hints []*ContinueHint
 			continueFromHalt.ContinuationIssues = append(continueFromHalt.ContinuationIssues,
 				"Robot substitution in progress")
 		}
+
+		if e.currentState.MatchType == nil || *e.currentState.MatchType == state.MatchType_UNKNOWN_MATCH {
+			continueFromHalt.ContinuationIssues = append(continueFromHalt.ContinuationIssues, "Match type is not set")
+		}
+
 		actions = append([]*ContinueAction{continueFromHalt}, actions...)
 	}
 
