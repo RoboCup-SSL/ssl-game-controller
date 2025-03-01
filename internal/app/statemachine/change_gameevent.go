@@ -46,6 +46,14 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 		}
 	}
 
+	// Halt the game after the second attacker too close to defense area foul by the same team
+	if *gameEvent.Type == state.GameEvent_ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA {
+		numFouls := len(newState.FindGameEventsByTeam(state.GameEvent_ATTACKER_TOO_CLOSE_TO_DEFENSE_AREA, byTeam))
+		if numFouls >= 2 {
+			changes = append(changes, createCommandChange(state.NewCommandNeutral(state.Command_HALT)))
+		}
+	}
+
 	// Add yellow card
 	if addsYellowCard(*gameEvent.Type) && byTeam.Known() {
 		log.Printf("Team %v got a yellow card", byTeam)
