@@ -9,7 +9,10 @@ export const useProtocolStore = defineStore('protocol', {
   },
   actions: {
     updateProtocol(protocol: ProtocolJson) {
-      const entries = protocol.entry!
+      const entries = protocol.entry
+      if (!entries) {
+        return
+      }
       if (protocol.delta) {
         entries.reverse()
         for (const entry of entries) {
