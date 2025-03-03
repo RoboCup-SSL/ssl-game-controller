@@ -173,6 +173,8 @@ message Change {
         optional google.protobuf.UInt32Value remove_red_card = 15;
         // Remove the foul with this id
         optional google.protobuf.UInt32Value remove_foul = 16;
+        // The color of the hull
+        optional HullColor hull_color = 23;
     }
 
     // Switch the team colors

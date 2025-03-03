@@ -140,6 +140,7 @@ func updateTeam(teamInfo *state.Referee_TeamInfo, teamState *state.TeamInfo) {
 	*teamInfo.BotSubstitutionAllowed = *teamState.BotSubstitutionAllowed
 	*teamInfo.BotSubstitutionsLeft = unsigned32(*teamState.BotSubstitutionsLeft)
 	*teamInfo.BotSubstitutionTimeLeft = mapTime(teamState.BotSubstitutionTimeLeft.AsDuration())
+	*teamInfo.HullColor = *teamState.HullColor
 }
 
 func newRefereeMessage() (m *state.Referee) {
@@ -177,6 +178,7 @@ func newTeamInfo() (t *state.Referee_TeamInfo) {
 	t.BotSubstitutionAllowed = new(bool)
 	t.BotSubstitutionsLeft = new(uint32)
 	t.BotSubstitutionTimeLeft = new(uint32)
+	t.HullColor = new(state.HullColor)
 	return
 }
 

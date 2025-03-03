@@ -15,6 +15,7 @@ import FieldHalfInput from "@/components/team/FieldHalfInput.vue";
 import StageInput from "@/components/start/StageInput.vue";
 import {teams} from "@/helpers";
 import MaxRobotsPerTeamInput from "@/components/start/MaxRobotsPerTeamInput.vue";
+import HullColorInput from "@/components/team/HullColorInput.vue";
 </script>
 
 <template>
@@ -64,6 +65,14 @@ import MaxRobotsPerTeamInput from "@/components/start/MaxRobotsPerTeamInput.vue"
         <q-item v-ripple>
           <q-item-section>
             <FieldHalfInput :team="team"/>
+          </q-item-section>
+        </q-item>
+
+        <q-item v-ripple>
+          <q-item-section>
+            <div class="row justify-evenly">
+              <HullColorInput :team="team"/>
+            </div>
           </q-item-section>
         </q-item>
       </q-list>
