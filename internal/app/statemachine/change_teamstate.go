@@ -138,6 +138,10 @@ func (s *StateMachine) processChangeUpdateTeamState(newState *state.State, chang
 	if change.BotSubstitutionsLeft != nil {
 		*teamState.BotSubstitutionsLeft = change.BotSubstitutionsLeft.Value
 	}
+	if change.HullColor != nil {
+		*newState.TeamInfo(change.ForTeam.Opposite()).HullColor = *newState.TeamInfo(*change.ForTeam).HullColor
+		*teamState.HullColor = *change.HullColor
+	}
 
 	s.updateMaxBots(newState)
 

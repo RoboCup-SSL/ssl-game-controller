@@ -226,6 +226,8 @@ function teamStateChangeTitle(change: Change_UpdateTeamStateJson): string {
     return `Remove foul ${change.removeFoul}`
   } else if (change.botSubstitutionsLeft !== undefined) {
     return `Bot substitutions left: ${change.botSubstitutionsLeft}`
+  } else if (change.hullColor !== undefined) {
+    return `Change hull color: ${change.hullColor}`
   }
   return "Unknown team state change: " + JSON.stringify(change)
 }

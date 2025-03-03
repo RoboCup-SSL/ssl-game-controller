@@ -162,6 +162,8 @@ message Referee {
         optional uint32 bot_substitutions_left = 17;
         // The number of microseconds left for current bot substitution
         optional uint32 bot_substitution_time_left = 18;
+        // The color of the hull of the robots of this team
+        optional HullColor hull_color = 19;
     }
 
     // Information about the two teams.
@@ -233,4 +235,14 @@ enum MatchType {
     ELIMINATION_PHASE = 2;
     // a friendly match, not part of a tournament
     FRIENDLY = 3;
+}
+
+// HullColor is the color of the hull of the robots of a team
+enum HullColor {
+    // not set
+    HULL_COLOR_UNKNOWN = 0;
+    // dark hull color
+    HULL_COLOR_DARK = 1;
+    // light hull color
+    HULL_COLOR_LIGHT = 2;
 }

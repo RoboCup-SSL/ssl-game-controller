@@ -99,6 +99,7 @@ message TeamInfo {
     optional bool bot_substitution_allowed = 18;
     optional int32 bot_substitutions_left = 19;
     optional google.protobuf.Duration bot_substitution_time_left = 20;
+    optional HullColor hull_color = 21;
 }
 
 message State {

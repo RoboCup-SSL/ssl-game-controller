@@ -29,6 +29,8 @@ func NewState() (s *State) {
 	s.TeamState[Team_YELLOW.String()] = newTeamInfo()
 	s.TeamState[Team_BLUE.String()] = newTeamInfo()
 	*s.TeamState[Team_YELLOW.String()].OnPositiveHalf = !*s.TeamState[Team_BLUE.String()].OnPositiveHalf
+	*s.TeamState[Team_BLUE.String()].HullColor = HullColor_HULL_COLOR_DARK
+	*s.TeamState[Team_YELLOW.String()].HullColor = HullColor_HULL_COLOR_LIGHT
 
 	*s.Division = Division_DIV_A
 	*s.FirstKickoffTeam = Team_YELLOW
