@@ -30,7 +30,7 @@ dev:
 	cd frontend && npm run dev
 
 proto:
-	tools/generateProto.sh
+	buf generate
 
 autoref-tests:
 	git clone "https://gitlab.com/robocup-small-size/autoref-tests.git" autoref-tests
