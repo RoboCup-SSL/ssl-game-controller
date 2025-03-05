@@ -70,7 +70,7 @@ const statusMessage = computed(() => {
         <TeamBadge :team="'BLUE'"/>
       </div>
       <div class="col-grow">
-        Matching duration: <strong>{{ matchDuration }}</strong>
+        Match duration: <strong>{{ matchDuration }}</strong>
       </div>
     </div>
   </q-toolbar>
