@@ -4,7 +4,7 @@ import {gameEventName} from "@/helpers/texts";
 import type {ProposalGroupJson} from "@/proto/state/ssl_gc_state_pb";
 import type {GameEventJson} from "@/proto/state/ssl_gc_game_event_pb";
 import TeamBadge from "@/components/common/TeamBadge.vue";
-import {formatTimestamp, gameEventForTeam} from "@/helpers";
+import {formatTimestamp, gameEventForTeam, usToTimestampJson} from "@/helpers";
 import OriginIcon from "@/components/common/OriginIcon.vue";
 
 const props = defineProps<{
@@ -44,9 +44,9 @@ const origins = computed(() => {
 
 const createdTimestamp = computed(() => {
   if (props.acceptedGameEvent) {
-    return props.acceptedGameEvent.createdTimestamp
+    return usToTimestampJson(props.acceptedGameEvent.createdTimestamp!)
   }
-  return proposals.value?.flatMap(p => p.gameEvent?.createdTimestamp).sort()[0]
+  return proposals.value?.flatMap(p => usToTimestampJson(p.gameEvent?.createdTimestamp || 0)).sort()[0]
 })
 
 const time = computed(() => {

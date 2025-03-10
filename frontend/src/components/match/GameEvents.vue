@@ -8,7 +8,7 @@ import type {GameEventJson} from "@/proto/state/ssl_gc_game_event_pb";
 import GameEventDetailsTree from "@/components/match/GameEventDetailsTree.vue";
 import type {ControlApi} from "@/providers/controlApi";
 import type {TimestampJson} from "@bufbuild/protobuf/wkt";
-import {timestampJsonMs} from "@/helpers";
+import {timestampJsonMs, usToTimestampJson} from "@/helpers";
 
 const store = useMatchStateStore()
 const control = inject<ControlApi>('control-api')
@@ -51,7 +51,7 @@ const gameEventItems = computed(() => {
     } else {
       const item: GameEventWrappedItem = {
         id: gameEvent.id!,
-        timestamp: gameEvent.createdTimestamp!,
+        timestamp: usToTimestampJson(gameEvent.createdTimestamp!),
         gameEvent: gameEvent,
       }
       items.push(item)
@@ -116,11 +116,11 @@ const acceptGroup = (groupId: string) => {
 
 <template>
   <q-tree
-      v-if="gameEventItems.length > 0"
-      :nodes="nodes"
-      node-key="id"
-      dense
-      class="full-width"
+    v-if="gameEventItems.length > 0"
+    :nodes="nodes"
+    node-key="id"
+    dense
+    class="full-width"
   >
     <!--suppress VueUnrecognizedSlot -->
     <template #header-accept="prop: Prop">
@@ -130,11 +130,11 @@ const acceptGroup = (groupId: string) => {
         </q-item-section>
         <q-item-section>
           <q-btn
-              dense
-              color="primary"
-              label="Accept"
-              @click="() => acceptGroup(prop.node.proposalGroup?.id!)"
-              v-if="!prop.node.proposalGroup?.accepted"/>
+            dense
+            color="primary"
+            label="Accept"
+            @click="() => acceptGroup(prop.node.proposalGroup?.id!)"
+            v-if="!prop.node.proposalGroup?.accepted"/>
         </q-item-section>
       </q-item>
     </template>
@@ -142,26 +142,26 @@ const acceptGroup = (groupId: string) => {
     <!--suppress VueUnrecognizedSlot -->
     <template #header-proposal="prop: Prop">
       <GameEventProposalGroupItem
-          class="full-width"
-          :proposal-group="prop.node.proposalGroup!"
-          :group-id="prop.node.id"
-          :accepted-game-event="prop.node.gameEvent!"
+        class="full-width"
+        :proposal-group="prop.node.proposalGroup!"
+        :group-id="prop.node.id"
+        :accepted-game-event="prop.node.gameEvent!"
       />
     </template>
 
     <!--suppress VueUnrecognizedSlot -->
     <template #header-game-event="prop: Prop">
       <GameEventItem
-          class="full-width"
-          :game-event="prop.node.gameEvent!"
+        class="full-width"
+        :game-event="prop.node.gameEvent!"
       />
     </template>
 
     <!--suppress VueUnrecognizedSlot -->
     <template v-slot:header-game-event-details="prop: Prop">
       <GameEventDetailsTree
-          class="full-width"
-          :game-event="prop.node.gameEvent!"
+        class="full-width"
+        :game-event="prop.node.gameEvent!"
       />
     </template>
   </q-tree>

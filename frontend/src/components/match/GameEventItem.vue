@@ -3,7 +3,7 @@ import {computed} from "vue";
 import TeamBadge from "@/components/common/TeamBadge.vue";
 import {gameEventName} from "@/helpers/texts";
 import type {GameEventJson} from "@/proto/state/ssl_gc_game_event_pb";
-import {formatTimestamp, gameEventForTeam} from "@/helpers";
+import {formatTimestamp, gameEventForTeam, usToTimestampJson} from "@/helpers";
 import OriginIcon from "@/components/common/OriginIcon.vue";
 
 const props = defineProps<{
@@ -24,7 +24,7 @@ const origins = computed(() => {
 
 const time = computed(() => {
   if (props.gameEvent.createdTimestamp) {
-    return formatTimestamp(props.gameEvent.createdTimestamp)
+    return formatTimestamp(usToTimestampJson(props.gameEvent.createdTimestamp))
   }
   return undefined
 })

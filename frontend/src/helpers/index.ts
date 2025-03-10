@@ -139,3 +139,10 @@ export const timestampJsonMs = function (timestamp: TimestampJson): number {
 export const formatTimestamp = function (timestamp: TimestampJson): string {
   return dayjs(timestamp).format("MMM, DD YYYY HH:mm:ss,SSS")
 }
+
+export const usToTimestampJson = function (timestampUs: number | string): TimestampJson {
+  if (typeof timestampUs === 'string') {
+    return new Date(Number(BigInt(timestampUs) / BigInt(1000))).toISOString()
+  }
+  return new Date(timestampUs / 1000).toISOString()
+}
