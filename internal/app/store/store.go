@@ -91,6 +91,12 @@ func (s *Store) Load() error {
 		if err := protojson.Unmarshal(b, entry); err != nil {
 			return errors.Errorf("Could not unmarshal entry: %v %v", b, err)
 		}
+		// Compatibility: Add hull colors to older states
+		for _, team := range state.BothTeams() {
+			if entry.State.TeamInfo(team).HullColor == nil {
+				entry.State.TeamInfo(team).HullColor = new(state.HullColor)
+			}
+		}
 		s.entries = append(s.entries, entry)
 	}
 
