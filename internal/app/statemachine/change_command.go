@@ -70,6 +70,16 @@ func (s *StateMachine) processChangeNewCommand(newState *state.State, newCommand
 		} else if *newState.GameState.Type == state.GameState_STOP {
 			forTeam := *newState.ShootoutState.NextTeam
 			newState.NextCommand = state.NewCommand(state.Command_PENALTY, forTeam)
+			determiner := BallPlacementPosDeterminer{
+				State:    newState,
+				Event:    nil,
+				Geometry: s.Geometry,
+				OnPositiveHalf: map[state.Team]bool{
+					state.Team_BLUE:   *newState.TeamInfo(state.Team_BLUE).OnPositiveHalf,
+					state.Team_YELLOW: *newState.TeamInfo(state.Team_YELLOW).OnPositiveHalf,
+				},
+			}
+			newState.PlacementPos = determiner.Location()
 		}
 	}
 
