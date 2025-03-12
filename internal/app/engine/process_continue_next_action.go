@@ -104,6 +104,7 @@ func (e *Engine) nextActions() (actions []*ContinueAction, hints []*ContinueHint
 
 		if e.currentState.MatchType == nil || *e.currentState.MatchType == state.MatchType_UNKNOWN_MATCH {
 			continueFromHalt.ContinuationIssues = append(continueFromHalt.ContinuationIssues, "Match type is not set")
+			*continueFromHalt.State = ContinueAction_DISABLED
 		}
 
 		actions = append([]*ContinueAction{continueFromHalt}, actions...)
