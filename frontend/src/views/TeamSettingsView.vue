@@ -28,13 +28,13 @@ const advantageChoice = (team: TeamJson) => {
   return gcStore.gcState.teamState![team].advantageChoice?.choice!
 }
 const fouls = (team: TeamJson) => {
-  return store.matchState.teamState![team].fouls?.length
+  return store.matchState.teamState![team].fouls?.length || 0
 }
 const yellowCards = (team: TeamJson) => {
-  return store.matchState.teamState![team].yellowCards?.length
+  return store.matchState.teamState![team].yellowCards?.length || 0
 }
 const redCards = (team: TeamJson) => {
-  return store.matchState.teamState![team].redCards?.length
+  return store.matchState.teamState![team].redCards?.length || 0
 }
 </script>
 
