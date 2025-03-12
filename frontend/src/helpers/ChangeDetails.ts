@@ -116,7 +116,7 @@ export function changeDetails(change: ChangeJson): ChangeDetails {
   } else if (change.revertChange) {
     return {
       typeName: "Revert",
-      title: `Revert to ${change.revertChange.changeId}`,
+      title: `Revert change ${change.revertChange.changeId}`,
       icon: "undo",
     }
   } else if (change.newGameStateChange) {
