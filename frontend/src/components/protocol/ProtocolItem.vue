@@ -16,7 +16,10 @@ const props = defineProps<{
 const control = inject<ControlApi>('control-api')
 
 const matchTime = computed(() => {
-  return formatDurationJson(props.protocolEntry.matchTimeElapsed!)
+  return formatDurationJson(props.protocolEntry.matchTimeElapsed!, {ms: true})
+})
+const stageTime = computed(() => {
+  return formatDurationJson(props.protocolEntry.stageTimeElapsed!, {ms: true})
 })
 
 const origin = computed(() => {
@@ -73,7 +76,7 @@ function revert() {
               <span v-if="hasGameEventOrigins">)</span>
             </q-item-label>
             <q-item-label caption lines="1">
-              {{ matchTime }}
+              {{ stageTime }} ({{ matchTime }})
             </q-item-label>
           </q-item-section>
         </template>

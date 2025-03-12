@@ -120,10 +120,10 @@ export const getRemainingStages = function (fromStage: Referee_StageJson): Refer
   return stages.slice(idx)
 }
 
-export const formatDurationJson = function (duration: DurationJson): string {
+export const formatDurationJson = function (duration: DurationJson, options: { ms: boolean } = {ms: false}): string {
   const dur = fromJson(DurationSchema, duration)
   const milliseconds = Number(dur.seconds) * 1000 + dur.nanos / 1000000
-  return formatDuration(milliseconds)
+  return formatDuration(milliseconds, options)
 }
 
 export const durationSeconds = function (duration: DurationJson): number {
