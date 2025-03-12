@@ -431,8 +431,6 @@ func (e *Engine) processChange(change *statemachine.Change) (newChanges []*state
 
 	e.currentState = entry.State.Clone()
 
-	e.postProcessChange(entry)
-
 	if err := e.stateStore.Add(entry); err != nil {
 		log.Println("Could not add new state to store: ", err)
 	}
@@ -473,16 +471,8 @@ func (e *Engine) createInitialState() (s *state.State) {
 	s.NextCommand = state.NewCommand(state.Command_KICKOFF, *s.FirstKickoffTeam)
 	s.PlacementPos = geom.NewVector2(0.0, 0.0)
 	s.StageTimeLeft = durationpb.New(e.gameConfig.Normal.HalfTimeDuration)
+	s.MatchTimeStart = timestamppb.New(e.timeProvider())
 	return
-}
-
-// postProcessChange performs synchronous post processing steps
-func (e *Engine) postProcessChange(entry *statemachine.StateChange) {
-	change := entry.Change
-	if change.GetChangeStageChange() != nil &&
-		*change.GetChangeStageChange().NewStage == state.Referee_NORMAL_FIRST_HALF {
-		e.currentState.MatchTimeStart = timestamppb.New(e.timeProvider())
-	}
 }
 
 // GetConfig returns a deep copy of the current config
