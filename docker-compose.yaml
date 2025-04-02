@@ -106,7 +106,7 @@ services:
       - team-client
 
   autoref-tigers:
-    image: "tigersmannheim/auto-referee:1.5.0@sha256:968d85e87a86c9e793b731370cb4506daa494ab94305f3d11b002e9ea632d206"
+    image: "tigersmannheim/auto-referee:1.5.5@sha256:320c2b928dc4640b134f98527b8de4125eafdc429b414608a9a5b26ef6406a7f"
     command:
       - "-a" # active mode (connect to GC)
       - "-hl" # headless
