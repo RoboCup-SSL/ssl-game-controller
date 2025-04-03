@@ -14,6 +14,8 @@ import (
 )
 
 var address = flag.String("address", "localhost:8081", "The address on which the UI and API is served")
+var autorefAddress = flag.String("autorefAddress", "", "The address on which the Autoref -> GC connection is served")
+var teamAddress = flag.String("teamAddress", "", "The address on which the Team -> GC connection is served")
 var ciAddress = flag.String("ciAddress", "", "The address on which the CI connection is served")
 var visionAddress = flag.String("visionAddress", "", "The address (ip+port) from which vision packages are received")
 var trackerAddress = flag.String("trackerAddress", "", "The address (ip+port) from which tracker packages are received")
@@ -67,6 +69,12 @@ func setupGameController() {
 	}
 	if ciAddress != nil && *ciAddress != "" {
 		cfg.Server.Ci.Address = *ciAddress
+	}
+	if autorefAddress != nil && *autorefAddress != "" {
+		cfg.Server.AutoRef.Address = *autorefAddress
+	}
+	if teamAddress != nil && *teamAddress != "" {
+		cfg.Server.Team.Address = *teamAddress
 	}
 
 	gameController := gc.NewGameController(cfg)
