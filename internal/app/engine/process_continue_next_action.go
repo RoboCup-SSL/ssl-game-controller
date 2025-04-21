@@ -130,17 +130,16 @@ func (e *Engine) actionsToContinueFromStop() (actions []*ContinueAction, hints [
 					"The goal was probably invalid")
 			}
 			actions = append(actions, continueActionAcceptGoal)
-		}
 
-		if e.currentState.HasGameEventByTeam(state.GameEvent_POSSIBLE_GOAL, team) &&
-			!e.currentState.HasGameEventByTeam(state.GameEvent_INVALID_GOAL, team) &&
-			!e.gameConfig.AutoApproveGoals {
-			continueActionRejectGoal := createContinueAction(
-				ContinueAction_REJECT_GOAL,
-				team,
-				ContinueAction_READY_MANUAL,
-			)
-			actions = append(actions, continueActionRejectGoal)
+			if !e.currentState.HasGameEventByTeam(state.GameEvent_INVALID_GOAL, team) &&
+				!e.gameConfig.AutoApproveGoals {
+				continueActionRejectGoal := createContinueAction(
+					ContinueAction_REJECT_GOAL,
+					team,
+					ContinueAction_READY_MANUAL,
+				)
+				actions = append(actions, continueActionRejectGoal)
+			}
 		}
 
 		challengeFlagsRaised := len(e.currentState.FindGameEventsByTeam(state.GameEvent_CHALLENGE_FLAG, team))
