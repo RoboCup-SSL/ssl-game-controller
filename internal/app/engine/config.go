@@ -25,6 +25,7 @@ var defaultTeams = []string{
 	"ibis",
 	"Immortals",
 	"ITAndroids",
+	"Junior SuperTeam",
 	"KgpKubs",
 	"KIKS",
 	"luhbots",
