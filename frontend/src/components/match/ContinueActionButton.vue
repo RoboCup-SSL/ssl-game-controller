@@ -23,6 +23,9 @@ const color = computed(() => {
     case 'READY_AUTO':
       return 'positive'
     case 'READY_MANUAL':
+      if (issues.value && issues.value.length > 0) {
+        return 'warning'
+      }
       return 'primary'
     case 'BLOCKED':
       return 'negative'
