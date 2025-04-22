@@ -71,6 +71,31 @@ func (e *Engine) nextActions() (actions []*ContinueAction, hints []*ContinueHint
 	}
 
 	if *e.currentState.Command.Type == state.Command_STOP || *e.currentState.Command.Type == state.Command_HALT {
+		newActions, newHints := e.actionsDuringHaltAndStop()
+		actions = append(actions, newActions...)
+		hints = append(hints, newHints...)
+	}
+
+	if *e.currentState.Command.Type == state.Command_HALT {
+		continueFromHalt := createContinueAction(
+			ContinueAction_RESUME_FROM_HALT,
+			state.Team_UNKNOWN,
+			ContinueAction_READY_MANUAL,
+		)
+		if e.teamDoingBotSubstitution() {
+			continueFromHalt.ContinuationIssues = append(continueFromHalt.ContinuationIssues,
+				"Robot substitution in progress")
+		}
+
+		if e.currentState.MatchType == nil || *e.currentState.MatchType == state.MatchType_UNKNOWN_MATCH {
+			continueFromHalt.ContinuationIssues = append(continueFromHalt.ContinuationIssues, "Match type is not set")
+			*continueFromHalt.State = ContinueAction_DISABLED
+		}
+
+		actions = append(actions, continueFromHalt)
+	}
+
+	if *e.currentState.Command.Type == state.Command_STOP || *e.currentState.Command.Type == state.Command_HALT {
 		newActions, newHints := e.actionsToContinueFromStop()
 		actions = append(actions, newActions...)
 		hints = append(hints, newHints...)
@@ -91,29 +116,12 @@ func (e *Engine) nextActions() (actions []*ContinueAction, hints []*ContinueHint
 				*action.State = ContinueAction_DISABLED
 			}
 		}
-
-		continueFromHalt := createContinueAction(
-			ContinueAction_RESUME_FROM_HALT,
-			state.Team_UNKNOWN,
-			ContinueAction_READY_MANUAL,
-		)
-		if e.teamDoingBotSubstitution() {
-			continueFromHalt.ContinuationIssues = append(continueFromHalt.ContinuationIssues,
-				"Robot substitution in progress")
-		}
-
-		if e.currentState.MatchType == nil || *e.currentState.MatchType == state.MatchType_UNKNOWN_MATCH {
-			continueFromHalt.ContinuationIssues = append(continueFromHalt.ContinuationIssues, "Match type is not set")
-			*continueFromHalt.State = ContinueAction_DISABLED
-		}
-
-		actions = append([]*ContinueAction{continueFromHalt}, actions...)
 	}
 
 	return
 }
 
-func (e *Engine) actionsToContinueFromStop() (actions []*ContinueAction, hints []*ContinueHint) {
+func (e *Engine) actionsDuringHaltAndStop() (actions []*ContinueAction, hints []*ContinueHint) {
 	for _, team := range state.BothTeams() {
 		if e.currentState.GameState.IsHalted() &&
 			e.currentState.HasGameEventByTeam(state.GameEvent_POSSIBLE_GOAL, team) &&
@@ -191,7 +199,10 @@ func (e *Engine) actionsToContinueFromStop() (actions []*ContinueAction, hints [
 			ContinueAction_READY_MANUAL,
 		))
 	}
+	return actions, hints
+}
 
+func (e *Engine) actionsToContinueFromStop() (actions []*ContinueAction, hints []*ContinueHint) {
 	if e.ballPlacementRequired() {
 		placingTeam := e.ballPlacementTeam()
 		if placingTeam.Known() {
