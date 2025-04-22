@@ -51,6 +51,12 @@ const createGameEvent = () => {
       Unsporting Behavior
     </q-item-label>
 
+    <div class="q-mx-md q-mb-md">
+      Minor unsporting behavior results in a yellow card, major unsporting behavior results in a red card.
+      For details see the <a href="https://robocup-ssl.github.io/ssl-rules/sslrules.html#_unsporting_behavior"
+                             target="_blank">SSL Rules</a>.
+    </div>
+
     <q-item>
       <q-item-section>
         <q-btn-toggle
