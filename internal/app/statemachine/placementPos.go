@@ -102,11 +102,18 @@ func (s *BallPlacementPosDeterminer) Location() *geom.Vector2 {
 	case state.GameEvent_PLACEMENT_SUCCEEDED:
 		return s.keepCurrentPlacementPos()
 	case state.GameEvent_PENALTY_KICK_FAILED:
-		if s.Event.GetPenaltyKickFailed().Location != nil {
-			location := s.Event.GetPenaltyKickFailed().Location
-			return s.ballPlacementLocationGoalLine(location)
+		forTeam := s.Event.GetPenaltyKickFailed().ByTeam.Opposite()
+		sign := 1.0
+		if !s.State.TeamInfo(forTeam).GetOnPositiveHalf() {
+			sign = -1.0
 		}
-		return s.keepCurrentPlacementPos()
+		y := 0.0
+		if s.Event.GetPenaltyKickFailed().Location != nil {
+			y = s.Event.GetPenaltyKickFailed().Location.GetY64()
+		}
+		// the location is not trustworthy, because when a timeout occurs, the ball may be on the other field half
+		location := geom.NewVector2(sign*s.Geometry.FieldLength/2, y)
+		return s.ballPlacementLocationGoalLine(location)
 	case state.GameEvent_NO_PROGRESS_IN_GAME:
 		return s.validateLocation(s.Event.GetNoProgressInGame().Location)
 	case state.GameEvent_PLACEMENT_FAILED,
