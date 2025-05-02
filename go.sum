@@ -2,6 +2,8 @@ github.com/RoboCup-SSL/ssl-go-tools v1.8.1 h1:6EAIeJdgr2BO1lfQNrt1vNFFKiKScqjd1H
 github.com/RoboCup-SSL/ssl-go-tools v1.8.1/go.mod h1:FuTw472klW5wAMg09gxQqPCzu6ygxOdMA8D22fDOUfM=
 github.com/RoboCup-SSL/ssl-go-tools v1.8.3 h1:XpYf54zsgqSX2Izg1/mNljzCQxS0lcP3oi5Igi4sQQQ=
 github.com/RoboCup-SSL/ssl-go-tools v1.8.3/go.mod h1:FuTw472klW5wAMg09gxQqPCzu6ygxOdMA8D22fDOUfM=
+github.com/RoboCup-SSL/ssl-go-tools v1.8.4 h1:elTwW3bnQkG18cbdlbZvPA1/mFFcAvHTyE3HWHU0Jw8=
+github.com/RoboCup-SSL/ssl-go-tools v1.8.4/go.mod h1:6o2pvRBsIaz548hvpClat6hwwoXRpJBRel1kUM6YCB4=
 github.com/go-test/deep v1.1.1 h1:0r/53hagsehfO4bzD2Pgr/+RgHqhmf+k1Bpse2cTu1U=
 github.com/go-test/deep v1.1.1/go.mod h1:5C2ZWiW0ErCdrYzpqxLbTX7MG14M9iiw8DgHncVwcsE=
 github.com/google/go-cmp v0.5.5 h1:Khx7svrCpmxxtHBq5j2mp/xVjsi8hQMfNLvJFAlrGgU=
@@ -16,6 +18,8 @@ golang.org/x/net v0.34.0 h1:Mb7Mrk043xzHgnRM88suvJFwzVrRfHEHJEl5/71CKw0=
 golang.org/x/net v0.34.0/go.mod h1:di0qlW3YNM5oh6GqDGQr92MyTozJPmybPK4Ev/Gm31k=
 golang.org/x/net v0.37.0 h1:1zLorHbz+LYj7MQlSf1+2tPIIgibq2eL5xkrGk6f+2c=
 golang.org/x/net v0.37.0/go.mod h1:ivrbrMbzFq5J41QOQh0siUuly180yBYtLp+CKbEaFx8=
+golang.org/x/net v0.38.0 h1:vRMAPTMaeGqVhG5QyLJHqNDwecKTomGeqbnfZyKlBI8=
+golang.org/x/net v0.38.0/go.mod h1:ivrbrMbzFq5J41QOQh0siUuly180yBYtLp+CKbEaFx8=
 golang.org/x/sys v0.29.0 h1:TPYlXGxvx1MGTn2GiZDhnjPA9wZzZeGKHHmKhHYvgaU=
 golang.org/x/sys v0.29.0/go.mod h1:/VUhepiaJMQUp4+oa/7Zr1D23ma6VTLIYjOOTFZPUcA=
 golang.org/x/sys v0.31.0 h1:ioabZlmFYtWhL+TRYpcnNlLwhyxaM9kWTDEmfnprqik=
