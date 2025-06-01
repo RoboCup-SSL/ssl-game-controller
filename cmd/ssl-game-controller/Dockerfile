@@ -1,4 +1,4 @@
-FROM node:20-alpine@sha256:c628bdc7ebc7f95b1b23249a445eb415ce68ae9def8b68364b35ee15e3065b0f AS build_node
+FROM node:20-alpine@sha256:d3507a213936fe4ef54760a186e113db5188472d9efdf491686bd94580a1c1e8 AS build_node
 COPY frontend frontend
 WORKDIR frontend
 RUN npm install
