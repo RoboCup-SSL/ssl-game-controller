@@ -12,7 +12,7 @@ COPY --from=build_node frontend/dist frontend/dist
 RUN go install ./cmd/${cmd}
 
 # Start fresh from a smaller image
-FROM alpine:3@sha256:a8560b36e8b8210634f77d9f7f9efd7ffa463e380b75e2e74aff4511df3ef88c
+FROM alpine:3@sha256:8a1f59ffb675680d47db6337b49d22281a139e9d709335b492be023728e11715
 ARG cmd=ssl-game-controller
 COPY --from=build_go /go/bin/${cmd} /app
 RUN mkdir -p /config && chown -R 1000: /config
