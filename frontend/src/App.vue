@@ -35,18 +35,30 @@ const toggleShortcuts = () => {
   uiStore.showShortcuts = !uiStore.showShortcuts
 }
 
+interface TouchPanEvent {
+  isFirst?: boolean
+  offset?: {
+    x?: number
+    y?: number
+  }
+}
+
 let initialDrawerWidth = 0
-const resizeRightDrawer = (ev: any) => {
+const resizeRightDrawer = (ev: TouchPanEvent) => {
   if (ev.isFirst === true) {
     initialDrawerWidth = uiStore.rightDrawerWidth
   }
-  uiStore.rightDrawerWidth = initialDrawerWidth - ev.offset.x
+  if (ev.offset?.x !== undefined) {
+    uiStore.rightDrawerWidth = initialDrawerWidth - ev.offset.x
+  }
 }
-const resizeLeftDrawer = (ev: any) => {
+const resizeLeftDrawer = (ev: TouchPanEvent) => {
   if (ev.isFirst === true) {
     initialDrawerWidth = uiStore.leftDrawerWidth
   }
-  uiStore.leftDrawerWidth = initialDrawerWidth + ev.offset.x
+  if (ev.offset?.x !== undefined) {
+    uiStore.leftDrawerWidth = initialDrawerWidth + ev.offset.x
+  }
 }
 
 const dev = computed(() => {

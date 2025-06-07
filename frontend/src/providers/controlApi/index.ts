@@ -15,7 +15,7 @@ import {type TeamJson} from "@/proto/state/ssl_gc_common_pb";
 export class ControlApi {
   private readonly apiPath = '/api/control'
   private ws ?: WebSocket
-  private readonly consumer: ((message: OutputJson) => any)[] = []
+  private readonly consumer: ((message: OutputJson) => void)[] = []
   private latestOutput ?: OutputJson
 
   constructor() {
@@ -132,7 +132,7 @@ export class ControlApi {
     }
   }
 
-  public RegisterConsumer(cb: ((output: OutputJson) => any)) {
+  public RegisterConsumer(cb: ((output: OutputJson) => void)) {
     this.consumer.push(cb)
     if (this.latestOutput) {
       cb(this.latestOutput)

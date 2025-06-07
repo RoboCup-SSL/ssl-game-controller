@@ -1,15 +1,15 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="T">
 
 defineProps<{
-  modelValue?: any,
+  modelValue?: T,
   options: {
     label?: string;
-    value: any;
+    value: T;
   }[]
 }>()
 const emit = defineEmits(['update:model-value'])
 
-const updateValue = (value: string) => {
+const updateValue = (value: T) => {
   emit('update:model-value', value)
 }
 </script>

@@ -13,7 +13,7 @@ const store = useMatchStateStore()
 const control = inject<ControlApi>('control-api')
 
 const currentKeeperId = computed(() => {
-  return store.matchState.teamState?.[props.team].goalkeeper!
+  return store.matchState.teamState?.[props.team]?.goalkeeper || 0
 })
 
 const updateValue = (value: number | undefined) => {

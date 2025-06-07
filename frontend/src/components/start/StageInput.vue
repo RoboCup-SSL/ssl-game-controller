@@ -11,10 +11,10 @@ const store = useMatchStateStore()
 const control = inject<ControlApi>('control-api')
 
 const model = computed(() => {
-  return store.matchState.stage
+  return store.matchState.stage || 'NORMAL_FIRST_HALF_PRE'
 })
 
-const options = computed(() => getRemainingStages(store.matchState.stage!))
+const options = computed(() => getRemainingStages(store.matchState.stage || 'NORMAL_FIRST_HALF_PRE'))
 const optionsLabel = (v: Referee_StageJson) => stageName(v) || "-"
 
 const onChange = (newStage: Referee_StageJson) => {

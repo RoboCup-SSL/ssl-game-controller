@@ -16,16 +16,16 @@ const store = useMatchStateStore()
 const gcStore = useGcStateStore()
 
 const teamName = (team: TeamJson) => {
-  return store.matchState.teamState?.[team].name!
+  return store.matchState.teamState?.[team]?.name || 'Unknown Team'
 }
 const remoteConnected = (team: TeamJson) => {
-  return gcStore.gcState.teamState![team].remoteControlConnected!
+  return gcStore.gcState.teamState?.[team]?.remoteControlConnected || false
 }
 const teamConnected = (team: TeamJson) => {
-  return gcStore.gcState.teamState![team].connected!
+  return gcStore.gcState.teamState?.[team]?.connected || false
 }
 const advantageChoice = (team: TeamJson) => {
-  return gcStore.gcState.teamState![team].advantageChoice?.choice!
+  return gcStore.gcState.teamState?.[team]?.advantageChoice?.choice || 'UNKNOWN'
 }
 const fouls = (team: TeamJson) => {
   return store.matchState.teamState![team].fouls?.length || 0

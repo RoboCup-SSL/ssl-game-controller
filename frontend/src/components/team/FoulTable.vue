@@ -18,7 +18,7 @@ const fouls = computed(() => {
   return store.matchState.teamState![props.team].fouls
 })
 const hasData = computed(() => {
-  return fouls.value?.length! > 0
+  return (fouls.value?.length || 0) > 0
 })
 
 const causeText = (cause?: GameEventJson) => {

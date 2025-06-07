@@ -12,7 +12,7 @@ import {computed} from "vue";
 const store = useMatchStateStore()
 
 const teamName = (team: TeamJson) => {
-  return store.matchState.teamState?.[team].name!
+  return store.matchState.teamState?.[team]?.name || 'Unknown Team'
 }
 const activeCards = (team: TeamJson) => {
   const numYellow = store.matchState.teamState?.[team].yellowCards?.filter(c => c.timeRemaining && durationSeconds(c.timeRemaining) > 0).length || 0

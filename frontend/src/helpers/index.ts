@@ -33,7 +33,7 @@ export const teamOptions = [
 export function gameEventForTeam(gameEvent: GameEventJson): TeamJson {
   for (const value of Object.values(gameEvent)) {
     if (typeof value === 'object') {
-      const attr = value as { [key: string]: any }
+      const attr = value as Record<string, unknown>
       for (const key of Object.keys(attr)) {
         if (key === 'byTeam') {
           return attr['byTeam'] as TeamJson
@@ -44,9 +44,8 @@ export function gameEventForTeam(gameEvent: GameEventJson): TeamJson {
   return 'UNKNOWN' as TeamJson
 }
 
-export function gameEventDetails(gameEventJson: GameEventJson) {
-
-  return gameEventJson as { [key: string]: any }
+export function gameEventDetails(gameEventJson: GameEventJson): Record<string, unknown> {
+  return gameEventJson as Record<string, unknown>
 }
 
 export const originIcon = (origin: string) => {

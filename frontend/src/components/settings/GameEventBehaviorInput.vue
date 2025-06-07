@@ -14,7 +14,7 @@ const options = [
   {value: 'BEHAVIOR_IGNORE', label: "Ignore"},
 ]
 
-const updateValue = (value: any) => {
+const updateValue = (value: Config_BehaviorJson) => {
   emit('update:model-value', value)
 }
 </script>

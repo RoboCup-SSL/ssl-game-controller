@@ -18,7 +18,7 @@ const cards = computed(() => {
   return store.matchState.teamState![props.team].yellowCards
 })
 const hasData = computed(() => {
-  return cards.value?.length! > 0
+  return (cards.value?.length || 0) > 0
 })
 
 const causeText = (cause?: GameEventJson) => {

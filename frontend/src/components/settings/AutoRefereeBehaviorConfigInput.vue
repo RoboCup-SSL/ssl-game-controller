@@ -12,7 +12,7 @@ const options = [
   {value: 'BEHAVIOR_IGNORE', label: "Ignore"},
 ]
 
-const updateValue = (value: any) => {
+const updateValue = (value: AutoRefConfig_BehaviorJson) => {
   emit('update:model-value', value)
 }
 </script>

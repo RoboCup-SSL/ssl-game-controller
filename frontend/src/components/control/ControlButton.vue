@@ -4,7 +4,7 @@ import type {TeamJson} from "@/proto/state/ssl_gc_common_pb";
 
 defineProps<{
   label: string,
-  action: () => any,
+  action: () => void,
   disable?: boolean,
   team?: TeamJson,
 }>()

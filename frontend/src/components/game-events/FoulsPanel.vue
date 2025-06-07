@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref} from "vue";
+import {type Component, ref} from "vue";
 import type {GameEvent_TypeJson, GameEventJson} from "@/proto/state/ssl_gc_game_event_pb";
 import {gameEventName} from "@/helpers/texts";
 import GameEventBotPushedBotInput from "@/components/game-events/GameEventBotPushedBotInput.vue";
@@ -20,7 +20,7 @@ import GameEventDefenderTooCloseToKickPointInput
 import GameEventBotInterferedPlacementInput from "@/components/game-events/GameEventBotInterferedPlacementInput.vue";
 import GameEventBotDroppedPartsInput from "@/components/game-events/GameEventBotDroppedPartsInput.vue";
 
-const components = new Map<GameEvent_TypeJson, any>([
+const components = new Map<GameEvent_TypeJson, Component>([
   ['BOT_PUSHED_BOT', GameEventBotPushedBotInput],
   ['BOT_TIPPED_OVER', GameEventBotTippedOverInput],
   ['BOT_DROPPED_PARTS', GameEventBotDroppedPartsInput],

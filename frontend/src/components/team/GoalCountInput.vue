@@ -13,7 +13,7 @@ const store = useMatchStateStore()
 const control = inject<ControlApi>('control-api')
 
 const model = computed(() => {
-  return store.matchState.teamState?.[props.team].goals!
+  return store.matchState.teamState?.[props.team]?.goals || 0
 })
 
 const updateValue = (value: number | undefined) => {

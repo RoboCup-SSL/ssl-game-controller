@@ -14,7 +14,7 @@ const store = useMatchStateStore()
 const control = inject<ControlApi>('control-api')
 
 const model = computed(() => {
-  return store.matchState.teamState?.[props.team].hullColor!
+  return store.matchState.teamState?.[props.team]?.hullColor || 'HULL_COLOR_DARK'
 })
 const options: { label: string, value: HullColorJson }[] = [
   {label: 'Dark', value: 'HULL_COLOR_DARK'},

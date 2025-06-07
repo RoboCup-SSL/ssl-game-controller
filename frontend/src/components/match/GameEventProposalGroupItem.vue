@@ -18,7 +18,7 @@ const proposals = computed(() => {
 })
 
 const gameEventLabel = (gameEvent: GameEventJson) => {
-  return gameEventName(gameEvent?.type!)
+  return gameEventName(gameEvent.type!)
 }
 
 const label = computed(() => {

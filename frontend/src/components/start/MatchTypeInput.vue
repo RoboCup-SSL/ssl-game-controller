@@ -10,7 +10,7 @@ const store = useMatchStateStore()
 const control = inject<ControlApi>('control-api')
 
 const model = computed(() => {
-  return store.matchState.matchType
+  return store.matchState.matchType || 'UNKNOWN_MATCH'
 })
 
 const options = Object.values(MatchTypeSchema.values).map((v) => v.name as MatchTypeJson)

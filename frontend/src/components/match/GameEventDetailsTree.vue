@@ -16,16 +16,16 @@ interface QTreeNode {
   children?: QTreeNode[]
 }
 
-function treeChildren(object: { [key: string]: any }): QTreeNode[] {
+function treeChildren(object: Record<string, unknown>): QTreeNode[] {
   const nodes = []
   const keys = Object.keys(object)
   for (const key of keys) {
     const detail = object[key];
     if (detail !== undefined) {
-      if (typeof detail === 'object') {
+      if (typeof detail === 'object' && detail !== null) {
         nodes.push({
           label: key,
-          children: treeChildren(detail)
+          children: treeChildren(detail as Record<string, unknown>)
         })
       } else {
         nodes.push({

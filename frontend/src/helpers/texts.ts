@@ -154,7 +154,7 @@ export function continueActionLabel(type: ContinueAction_TypeJson, nextCommand?:
     case 'FREE_KICK':
       return 'Free Kick (no next command)'
     case 'NEXT_COMMAND':
-      return commandName(nextCommand?.type!)
+      return commandName(nextCommand?.type || 'UNKNOWN')
     case 'BALL_PLACEMENT_START':
       return 'Start Ball Placement'
     case 'BALL_PLACEMENT_CANCEL':

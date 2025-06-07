@@ -45,7 +45,7 @@ const gameEventItems = computed(() => {
     items.push(item)
   }
   for (const gameEvent of gameEvents) {
-    let gameEventItem = items.find(item => item.id === gameEvent.id);
+    const gameEventItem = items.find(item => item.id === gameEvent.id);
     if (gameEventItem) {
       gameEventItem.gameEvent = gameEvent
     } else {
@@ -83,7 +83,7 @@ const nodes = computed(() => {
 
   for (const gameEventItem of gameEventItems.value) {
     if (gameEventItem.proposalGroup) {
-      let children = gameEventItem.proposalGroup.proposals!.map(proposal => {
+      const children = gameEventItem.proposalGroup.proposals!.map(proposal => {
         return gameEventNode(proposal.gameEvent!)
       });
       if (!gameEventItem.proposalGroup.accepted) {

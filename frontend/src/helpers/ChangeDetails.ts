@@ -20,7 +20,7 @@ export function changeDetails(change: ChangeJson): ChangeDetails {
   if (change.newCommandChange) {
     return {
       typeName: "Command",
-      title: commandName(change.newCommandChange.command?.type!),
+      title: commandName(change.newCommandChange.command?.type || 'UNKNOWN'),
       forTeam: change.newCommandChange.command?.forTeam,
       icon: "terminal",
     }
@@ -123,7 +123,7 @@ export function changeDetails(change: ChangeJson): ChangeDetails {
     const details = change.newGameStateChange;
     return {
       typeName: "Game State",
-      title: gameStateName(details.gameState?.type!),
+      title: gameStateName(details.gameState?.type || 'UNKNOWN'),
       forTeam: details.gameState?.forTeam,
       icon: "gavel",
     }
