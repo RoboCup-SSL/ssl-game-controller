@@ -6,6 +6,7 @@ import {isPausedStage} from "@/helpers";
 import type {TeamJson} from "@/proto/state/ssl_gc_common_pb";
 import type {ControlApi} from "@/providers/controlApi";
 import type {Vector2} from "@/proto/geom/ssl_gc_geometry_pb";
+import NumberInput from "@/components/common/NumberInput.vue";
 
 const store = useMatchStateStore()
 const control = inject<ControlApi>('control-api')
@@ -55,18 +56,12 @@ const disable = computed(() => {
   </div>
 
   <div class="row justify-evenly q-mt-md">
-    <q-input
-      input-class="text-center"
-      dense
+    <NumberInput
       label="X-Coordinate"
-      type="number"
       v-model="newBallPos.x"
     />
-    <q-input
-      input-class="text-center"
-      dense
+    <NumberInput
       label="Y-Coordinate"
-      type="number"
       v-model="newBallPos.y"
     />
   </div>

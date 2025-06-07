@@ -4,7 +4,6 @@ import {isPausedStage} from "@/helpers";
 import type {ControlApi} from "@/providers/controlApi";
 import {useMatchStateStore} from "@/store/matchState";
 import {commandName} from "@/helpers/texts";
-import {useGcStateStore} from "@/store/gcState";
 
 export interface ManualAction {
   send: () => void,
@@ -16,25 +15,10 @@ export interface ManualAction {
 
 export class ManualActions {
   private readonly matchStateStore = useMatchStateStore()
-  private readonly gcStateStore = useGcStateStore()
   private readonly controlApi: ControlApi
 
   constructor(controlApi: ControlApi) {
     this.controlApi = controlApi;
-  }
-
-  public getContinueAction(): ManualAction {
-    const continueAction = this.gcStateStore.gcState.continueActions?.[0]
-    const enabled = continueAction?.state === 'READY_AUTO'
-      || continueAction?.state === 'READY_MANUAL'
-      || continueAction?.state === 'WAITING'
-    return {
-      send: () => continueAction && this.controlApi.Continue(continueAction),
-      enabled: enabled,
-      label: "Continue",
-      shortcutLabel: "NumpadEnter",
-      team: undefined,
-    }
   }
 
   public getCommandAction(commandType: Command_TypeJson, forTeam?: TeamJson): ManualAction {

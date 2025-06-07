@@ -101,6 +101,10 @@ revert functionality.
 - `team/`: Team-specific settings and information
 - `game-events/`: Game event input forms and displays
 
+**Keyboard Shortcuts**: Centralized in `frontend/src/providers/shortcuts/` with global event listeners registered in the
+control plugin. All shortcuts (numpad commands, Ctrl+Space for auto-continue, Ctrl+1-9 for continue actions) are handled
+in one place with automatic disabling during text input.
+
 ### Adding New Teams
 
 For new teams, add the team name to `defaultTeams` in `internal/app/engine/config.go` and submit a pull request.

@@ -11,7 +11,7 @@ export const control = {
   install(app: App) {
     const controlApi = new ControlApi()
     const manualActions = new ManualActions(controlApi)
-    const shortcuts = new Shortcuts(manualActions)
+    const shortcuts = new Shortcuts(manualActions, controlApi)
     app.provide('control-api', controlApi)
     app.provide('command-actions', manualActions)
     app.provide('shortcuts', shortcuts)

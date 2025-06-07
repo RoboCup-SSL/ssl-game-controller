@@ -1,12 +1,17 @@
 import type {ManualActions} from "@/providers/manualActions";
+import type {ControlApi} from "@/providers/controlApi";
+import {useGcStateStore} from "@/store/gcState";
 
 
 export class Shortcuts {
   private readonly manualActions: ManualActions
+  private readonly controlApi: ControlApi
+  private readonly gcStateStore = useGcStateStore()
   private enabled: boolean = true
 
-  constructor(manualActions: ManualActions) {
+  constructor(manualActions: ManualActions, controlApi: ControlApi) {
     this.manualActions = manualActions
+    this.controlApi = controlApi
     this.enabled = true
   }
 
@@ -26,6 +31,17 @@ export class Shortcuts {
 
     if (!this.enabled) {
       // Shortcuts are disabled
+      return
+    }
+
+    if (e.key === " ") {
+      this.toggleAutoContinue()
+      e.preventDefault()
+      return
+    } else if (e.code.startsWith('Digit') && !isNaN(Number(e.key))) {
+      const id = Number(e.key)
+      this.continueWithAction(id - 1)
+      e.preventDefault()
       return
     }
 
@@ -61,11 +77,21 @@ export class Shortcuts {
         this.manualActions.getCommandAction('TIMEOUT', 'BLUE').send()
         break
       case "NumpadEnter":
-        this.manualActions.getContinueAction().send()
+        this.continueWithAction(0)
         break
       default:
         return
     }
     e.preventDefault()
+  }
+
+  private continueWithAction(id: number) {
+    if (this.gcStateStore.gcState.continueActions!.length > id) {
+      this.controlApi.Continue(this.gcStateStore.gcState.continueActions![id])
+    }
+  }
+
+  private toggleAutoContinue() {
+    this.controlApi.ChangeConfig({autoContinue: !this.gcStateStore.config.autoContinue})
   }
 }
