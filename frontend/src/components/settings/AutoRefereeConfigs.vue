@@ -7,7 +7,7 @@ const tab = ref("")
 const store = useGcStateStore()
 
 const autoRefConfigs = computed(() => {
-  return store.config.autoRefConfigs!
+  return store.config.autoRefConfigs || {}
 })
 const autoRefConfigKeys = computed(() => {
   return Object.keys(autoRefConfigs.value)
@@ -22,7 +22,7 @@ function connectionVerified(autoRef: string) {
 }
 
 onMounted(() => {
-  const connectedAutoRefs = Object.keys(store.gcState.autoRefState!)
+  const connectedAutoRefs = Object.keys(store.gcState.autoRefState || {})
   if (connectedAutoRefs.length > 0) {
     tab.value = connectedAutoRefs[0]
   }

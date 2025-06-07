@@ -6,7 +6,7 @@ import type {ControlApi} from "@/providers/controlApi";
 const store = useGcStateStore()
 const control = inject<ControlApi>('control-api')
 
-const trackerSources = computed(() => store.gcState.trackers!)
+const trackerSources = computed(() => store.gcState.trackers || {})
 const trackerSourceKeys = computed(() => Object.keys(trackerSources.value))
 const trackerSourceActive = computed(() => store.config.activeTrackerSource)
 
