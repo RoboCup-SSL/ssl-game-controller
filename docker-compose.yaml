@@ -160,7 +160,7 @@ services:
       - sim
 
   ssl-simulation-controller:
-    image: "robocupssl/ssl-simulation-controller:0.12.1@sha256:7765761a838da09289e0039d54d21fc3ca37bcf124dd15749ee416f440c92067"
+    image: "robocupssl/ssl-simulation-controller:0.13.0@sha256:dc1f58705e5b62aa4063673ee2e105f3d544e21b20b7d163b334e1862d303182"
     command:
       - "-refereeAddress"
       - "224.5.23.1:11003"
