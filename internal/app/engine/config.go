@@ -59,6 +59,7 @@ var defaultTeams = []string{
 	"Sysmic Robotics",
 	"TauraBOTS",
 	"Test Team",
+	"The Bots",
 	"TIGERs Mannheim",
 	"Titans",
 	"TRAPS",
