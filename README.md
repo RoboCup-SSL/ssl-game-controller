@@ -182,7 +182,7 @@ You can find all published releases on the Releases page
 
 1. Navigate to Releases at https://github.com/RoboCup-SSL/ssl-game-controller/releases.
 
-2. Find the version you want and download the asset labelled something like ssl-game-controller_<version>_<os-arch>
+2. Find the version you want and download the asset labelled something like ssl-game-controller_`<version>`_`<os-arch>`
 
 3. On Linux/MacOS/Windows, open a terminal and run the binary 
 You might need to mark it executable on Linux/Mac: 
