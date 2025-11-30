@@ -1,9 +1,9 @@
 package engine
 
 import (
-	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/vision"
-	"log"
 	"math"
+
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/vision"
 )
 
 func (e *Engine) ProcessGeometry(data *vision.SSL_GeometryData) {
@@ -59,9 +59,5 @@ func (e *Engine) ProcessGeometry(data *vision.SSL_GeometryData) {
 		newGeometry.PlacementOffsetGoalLine = defaultPlacementOffsetGoalLine + newGeometry.DefenseAreaDepth
 	}
 
-	e.stateMachine.Geometry = newGeometry
-
-	if currentGeometry != newGeometry {
-		log.Printf("Geometry changed from \n%+v to \n%+v", currentGeometry, newGeometry)
-	}
+	e.stateMachine.UpdateGeometry(newGeometry, e.timeProvider())
 }

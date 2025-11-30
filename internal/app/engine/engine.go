@@ -1,6 +1,12 @@
 package engine
 
 import (
+	"log"
+	"math/rand"
+	"slices"
+	"sync"
+	"time"
+
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/geom"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
@@ -12,11 +18,6 @@ import (
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/durationpb"
 	"google.golang.org/protobuf/types/known/timestamppb"
-	"log"
-	"math/rand"
-	"slices"
-	"sync"
-	"time"
 )
 
 var changeOriginEngine = "Engine"
@@ -244,8 +245,7 @@ func (e *Engine) Start() error {
 		e.currentState.MaxBotsPerTeam = new(int32)
 	}
 
-	e.stateMachine.Geometry = e.gameConfig.DefaultGeometry[e.currentState.Division.Div()]
-	log.Printf("Loaded default geometry for DivA: %+v", e.stateMachine.Geometry)
+	e.stateMachine.UpdateGeometry(e.gameConfig.DefaultGeometry[e.currentState.Division.Div()], time.Time{})
 	go e.processChanges()
 	return nil
 }

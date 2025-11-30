@@ -2,15 +2,16 @@ package ci
 
 import (
 	"bufio"
+	"log"
+	"net"
+	"sync"
+	"time"
+
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/engine"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/sslconn"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/tracker"
 	"google.golang.org/protobuf/proto"
-	"log"
-	"net"
-	"sync"
-	"time"
 )
 
 type Handler func(time.Time, *tracker.TrackerWrapperPacket) *state.Referee
@@ -107,23 +108,26 @@ func (s *Server) serve(conn net.Conn) {
 			}
 		}
 
-		if input.Geometry != nil {
-			s.gcEngine.ProcessGeometry(input.Geometry)
-		}
-
 		if input.Timestamp != nil {
 			sec := *input.Timestamp / 1e9
 			nSec := *input.Timestamp - sec*1e9
 			s.mutex.Lock()
 			s.latestTime = time.Unix(sec, nSec)
 			s.mutex.Unlock()
+		} else {
+			log.Println("CiInput without timestamp!")
+		}
+
+		if input.Geometry != nil {
+			s.gcEngine.ProcessGeometry(input.Geometry)
+		}
+
+		if input.Timestamp != nil {
 			select {
 			case s.tickChan <- s.latestTime:
 			case <-time.After(1 * time.Second):
 				log.Printf("tickChan unresponsive! Failed to sent %v", s.latestTime)
 			}
-		} else {
-			log.Println("CiInput without timestamp!")
 		}
 	}
 }

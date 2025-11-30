@@ -1,8 +1,10 @@
 package statemachine
 
 import (
-	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"log"
+	"time"
+
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 )
 
 func (s *StateMachine) processChangeUpdateConfig(newState *state.State, change *Change_UpdateConfig) (changes []*Change) {
@@ -11,8 +13,11 @@ func (s *StateMachine) processChangeUpdateConfig(newState *state.State, change *
 		newState.Division = change.Division
 		*newState.MaxBotsPerTeam = s.gameConfig.MaxBots[change.Division.Div()]
 		s.updateMaxBots(newState)
-		s.Geometry = s.gameConfig.DefaultGeometry[change.Division.Div()]
-		log.Printf("Updated geometry to %+v", s.Geometry)
+
+		if s.timeProvider().Sub(s.GeometryUpdated) > time.Minute*5 {
+			log.Printf("Set geometry to default for division %v", change.Division.Div())
+			s.UpdateGeometry(s.gameConfig.DefaultGeometry[change.Division.Div()], time.Time{})
+		}
 		if *change.Division == state.Division_DIV_A {
 			// in division A, both teams must be able to place ball
 			for _, team := range state.BothTeams() {
