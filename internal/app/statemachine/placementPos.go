@@ -1,11 +1,12 @@
 package statemachine
 
 import (
+	"log"
+	"math"
+
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/config"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/geom"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
-	"log"
-	"math"
 )
 
 type BallPlacementPosDeterminer struct {
@@ -228,8 +229,12 @@ func (s *BallPlacementPosDeterminer) validateLocation(location *geom.Vector2) *g
 		return s.CurrentPlacementPos
 	}
 
+	// first move the location into the field, then out of defense area and again into the field
+	// movePositionOutOfDefenseArea assumes the ball is inside the field.
+	// But for very small fields, the ball may be outside the field after applying the placement offsets.
 	s.movePositionInsideField(location)
 	s.movePositionOutOfDefenseArea(location)
+	s.movePositionInsideField(location)
 
 	return location
 }
