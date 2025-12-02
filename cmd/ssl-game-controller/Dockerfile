@@ -4,7 +4,7 @@ WORKDIR frontend
 RUN npm install
 RUN npm run build
 
-FROM golang:1.24-alpine@sha256:12c199a889439928e36df7b4c5031c18bfdad0d33cdeae5dd35b2de369b5fbf5 AS build_go
+FROM golang:1.25-alpine@sha256:d3f0cf7723f3429e3f9ed846243970b20a2de7bae6a5b66fc5914e228d831bbb AS build_go
 ARG cmd=ssl-game-controller
 WORKDIR work
 COPY . .
