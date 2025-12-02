@@ -80,7 +80,7 @@ jobs:
   build_docker:
     resource_class: small
     docker:
-      - image: cimg/base:2025.10@sha256:914f8f3896bc4033634a446552a8c256f19fdb56aa4e999cf493961d0681bc48
+      - image: cimg/base:2025.12@sha256:32bf8767cd669b9a236863accc928a35517ebfb8438565bd3103bdddf085c481
     steps:
       - checkout
       - setup_remote_docker
@@ -96,7 +96,7 @@ jobs:
   publish_docker:
     resource_class: small
     docker:
-      - image: cimg/base:2025.10@sha256:914f8f3896bc4033634a446552a8c256f19fdb56aa4e999cf493961d0681bc48
+      - image: cimg/base:2025.12@sha256:32bf8767cd669b9a236863accc928a35517ebfb8438565bd3103bdddf085c481
     steps:
       - checkout
       - setup_remote_docker
