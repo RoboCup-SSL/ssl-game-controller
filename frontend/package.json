@@ -24,7 +24,7 @@
   "devDependencies": {
     "@quasar/vite-plugin": "^1.8.1",
     "@rushstack/eslint-patch": "^1.10.5",
-    "@tsconfig/node20": "^20.1.4",
+    "@tsconfig/node22": "^22.0.0",
     "@types/google-protobuf": "^3.15.12",
     "@types/node": "^22.15.30",
     "@vitejs/plugin-vue": "^5.2.1",
