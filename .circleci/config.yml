@@ -90,7 +90,7 @@ jobs:
             --driver docker-container \
             --bootstrap --use
           for cmd in << pipeline.parameters.cmds >>; do
-            docker buildx build --platform linux/amd64,linux/arm64 --build-arg cmd=${cmd} -f ./cmd/${cmd}/Dockerfile -t robocupssl/${cmd}:latest .
+            docker buildx build --platform linux/amd64,linux/arm64 --build-arg BINARY_NAME=${cmd} -f ./cmd/${cmd}/Dockerfile -t robocupssl/${cmd}:latest .
           done
 
   publish_docker:
@@ -111,7 +111,7 @@ jobs:
           TAG=${TAG:-latest}
           for cmd in << pipeline.parameters.cmds >>; do
             docker login -u "${DOCKER_HUB_USERNAME}" -p "${DOCKER_HUB_PASSWORD}"
-            docker buildx build --platform linux/amd64,linux/arm64 --build-arg cmd=${cmd} -f ./cmd/${cmd}/Dockerfile -t robocupssl/${cmd}:${TAG} --push .
+            docker buildx build --platform linux/amd64,linux/arm64 --build-arg BINARY_NAME=${cmd} -f ./cmd/${cmd}/Dockerfile -t robocupssl/${cmd}:${TAG} --push .
           done
 
 workflows:
