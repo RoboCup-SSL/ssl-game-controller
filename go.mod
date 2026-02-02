@@ -9,7 +9,7 @@ require (
 	github.com/gorilla/websocket v1.5.3
 	github.com/pkg/errors v0.9.1
 	golang.org/x/net v0.46.0
-	google.golang.org/protobuf v1.36.10
+	google.golang.org/protobuf v1.36.11
 	gopkg.in/yaml.v3 v3.0.1
 )
 
