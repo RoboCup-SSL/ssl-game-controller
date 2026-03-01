@@ -8,7 +8,7 @@ jobs:
   build_node:
     resource_class: medium
     docker:
-      - image: cimg/node:lts@sha256:cbb47569bbc5bb4664382ddc58f794c983d286c6ca5d51069dd1dc3e78dd446c
+      - image: cimg/node:lts@sha256:714b33be00a0fb8aba79cf93f497f093f0394436a7ec68a7c757a11c7c10b63c
     steps:
       - checkout
       - run:
