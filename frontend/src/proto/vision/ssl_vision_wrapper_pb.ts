@@ -2,8 +2,8 @@
 // @generated from file vision/ssl_vision_wrapper.proto (syntax proto2)
 /* eslint-disable */
 
-import type { GenFile, GenMessage } from "@bufbuild/protobuf/codegenv1";
-import { fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv1";
+import type { GenEnum, GenFile, GenMessage } from "@bufbuild/protobuf/codegenv1";
+import { enumDesc, fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv1";
 import type { SSL_DetectionFrame, SSL_DetectionFrameJson } from "./ssl_vision_detection_pb";
 import { file_vision_ssl_vision_detection } from "./ssl_vision_detection_pb";
 import type { SSL_GeometryData, SSL_GeometryDataJson } from "./ssl_vision_geometry_pb";
@@ -14,7 +14,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file vision/ssl_vision_wrapper.proto.
  */
 export const file_vision_ssl_vision_wrapper: GenFile = /*@__PURE__*/
-  fileDesc("Ch92aXNpb24vc3NsX3Zpc2lvbl93cmFwcGVyLnByb3RvImAKEVNTTF9XcmFwcGVyUGFja2V0EiYKCWRldGVjdGlvbhgBIAEoCzITLlNTTF9EZXRlY3Rpb25GcmFtZRIjCghnZW9tZXRyeRgCIAEoCzIRLlNTTF9HZW9tZXRyeURhdGFCWUIVU3NsVmlzaW9uV3JhcHBlclByb3RvUAFaPmdpdGh1Yi5jb20vUm9ib0N1cC1TU0wvc3NsLWdhbWUtY29udHJvbGxlci9pbnRlcm5hbC9hcHAvdmlzaW9u", [file_vision_ssl_vision_detection, file_vision_ssl_vision_geometry]);
+  fileDesc("Ch92aXNpb24vc3NsX3Zpc2lvbl93cmFwcGVyLnByb3RvIn0KEVNTTF9XcmFwcGVyUGFja2V0EiYKCWRldGVjdGlvbhgBIAEoCzITLlNTTF9EZXRlY3Rpb25GcmFtZRIjCghnZW9tZXRyeRgCIAEoCzIRLlNTTF9HZW9tZXRyeURhdGESGwoGc291cmNlGAMgASgOMgsuU1NMX1NvdXJjZSqoAQoKU1NMX1NvdXJjZRIWChJTU0xfU09VUkNFX1VOS05PV04QABIUChBTU0xfU09VUkNFX09USEVSEAESGQoVU1NMX1NPVVJDRV9TU0xfVklTSU9OEAISHwobU1NMX1NPVVJDRV9WSVNJT05fUFJPQ0VTU09SEAMSFAoQU1NMX1NPVVJDRV9HUlNJTRAEEhoKFlNTTF9TT1VSQ0VfRVJGT1JDRV9TSU0QBUJZQhVTc2xWaXNpb25XcmFwcGVyUHJvdG9QAVo+Z2l0aHViLmNvbS9Sb2JvQ3VwLVNTTC9zc2wtZ2FtZS1jb250cm9sbGVyL2ludGVybmFsL2FwcC92aXNpb24", [file_vision_ssl_vision_detection, file_vision_ssl_vision_geometry]);
 
 /**
  * @generated from message SSL_WrapperPacket
@@ -29,6 +29,11 @@ export type SSL_WrapperPacket = Message<"SSL_WrapperPacket"> & {
    * @generated from field: optional SSL_GeometryData geometry = 2;
    */
   geometry?: SSL_GeometryData;
+
+  /**
+   * @generated from field: optional SSL_Source source = 3;
+   */
+  source: SSL_Source;
 };
 
 /**
@@ -44,6 +49,11 @@ export type SSL_WrapperPacketJson = {
    * @generated from field: optional SSL_GeometryData geometry = 2;
    */
   geometry?: SSL_GeometryDataJson;
+
+  /**
+   * @generated from field: optional SSL_Source source = 3;
+   */
+  source?: SSL_SourceJson;
 };
 
 /**
@@ -52,4 +62,50 @@ export type SSL_WrapperPacketJson = {
  */
 export const SSL_WrapperPacketSchema: GenMessage<SSL_WrapperPacket, SSL_WrapperPacketJson> = /*@__PURE__*/
   messageDesc(file_vision_ssl_vision_wrapper, 0);
+
+/**
+ * @generated from enum SSL_Source
+ */
+export enum SSL_Source {
+  /**
+   * @generated from enum value: SSL_SOURCE_UNKNOWN = 0;
+   */
+  SSL_SOURCE_UNKNOWN = 0,
+
+  /**
+   * @generated from enum value: SSL_SOURCE_OTHER = 1;
+   */
+  SSL_SOURCE_OTHER = 1,
+
+  /**
+   * @generated from enum value: SSL_SOURCE_SSL_VISION = 2;
+   */
+  SSL_SOURCE_SSL_VISION = 2,
+
+  /**
+   * @generated from enum value: SSL_SOURCE_VISION_PROCESSOR = 3;
+   */
+  SSL_SOURCE_VISION_PROCESSOR = 3,
+
+  /**
+   * @generated from enum value: SSL_SOURCE_GRSIM = 4;
+   */
+  SSL_SOURCE_GRSIM = 4,
+
+  /**
+   * @generated from enum value: SSL_SOURCE_ERFORCE_SIM = 5;
+   */
+  SSL_SOURCE_ERFORCE_SIM = 5,
+}
+
+/**
+ * @generated from enum SSL_Source
+ */
+export type SSL_SourceJson = "SSL_SOURCE_UNKNOWN" | "SSL_SOURCE_OTHER" | "SSL_SOURCE_SSL_VISION" | "SSL_SOURCE_VISION_PROCESSOR" | "SSL_SOURCE_GRSIM" | "SSL_SOURCE_ERFORCE_SIM";
+
+/**
+ * Describes the enum SSL_Source.
+ */
+export const SSL_SourceSchema: GenEnum<SSL_Source, SSL_SourceJson> = /*@__PURE__*/
+  enumDesc(file_vision_ssl_vision_wrapper, 0);
 

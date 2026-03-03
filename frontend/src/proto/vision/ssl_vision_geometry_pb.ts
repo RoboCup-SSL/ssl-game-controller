@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file vision/ssl_vision_geometry.proto.
  */
 export const file_vision_ssl_vision_geometry: GenFile = /*@__PURE__*/
-  fileDesc("CiB2aXNpb24vc3NsX3Zpc2lvbl9nZW9tZXRyeS5wcm90byIgCghWZWN0b3IyZhIJCgF4GAEgAigCEgkKAXkYAiACKAIiiAEKFFNTTF9GaWVsZExpbmVTZWdtZW50EgwKBG5hbWUYASACKAkSFQoCcDEYAiACKAsyCS5WZWN0b3IyZhIVCgJwMhgDIAIoCzIJLlZlY3RvcjJmEhEKCXRoaWNrbmVzcxgEIAIoAhIhCgR0eXBlGAUgASgOMhMuU1NMX0ZpZWxkU2hhcGVUeXBlIp0BChRTU0xfRmllbGRDaXJjdWxhckFyYxIMCgRuYW1lGAEgAigJEhkKBmNlbnRlchgCIAIoCzIJLlZlY3RvcjJmEg4KBnJhZGl1cxgDIAIoAhIKCgJhMRgEIAIoAhIKCgJhMhgFIAIoAhIRCgl0aGlja25lc3MYBiACKAISIQoEdHlwZRgHIAEoDjITLlNTTF9GaWVsZFNoYXBlVHlwZSKwAwoVU1NMX0dlb21ldHJ5RmllbGRTaXplEhQKDGZpZWxkX2xlbmd0aBgBIAIoBRITCgtmaWVsZF93aWR0aBgCIAIoBRISCgpnb2FsX3dpZHRoGAMgAigFEhIKCmdvYWxfZGVwdGgYBCACKAUSFgoOYm91bmRhcnlfd2lkdGgYBSACKAUSKgoLZmllbGRfbGluZXMYBiADKAsyFS5TU0xfRmllbGRMaW5lU2VnbWVudBIpCgpmaWVsZF9hcmNzGAcgAygLMhUuU1NMX0ZpZWxkQ2lyY3VsYXJBcmMSGgoScGVuYWx0eV9hcmVhX2RlcHRoGAggASgFEhoKEnBlbmFsdHlfYXJlYV93aWR0aBgJIAEoBRIcChRjZW50ZXJfY2lyY2xlX3JhZGl1cxgKIAEoBRIWCg5saW5lX3RoaWNrbmVzcxgLIAEoBRIjChtnb2FsX2NlbnRlcl90b19wZW5hbHR5X21hcmsYDCABKAUSEwoLZ29hbF9oZWlnaHQYDSABKAUSEwoLYmFsbF9yYWRpdXMYDiABKAISGAoQbWF4X3JvYm90X3JhZGl1cxgPIAEoAiKAAwodU1NMX0dlb21ldHJ5Q2FtZXJhQ2FsaWJyYXRpb24SEQoJY2FtZXJhX2lkGAEgAigNEhQKDGZvY2FsX2xlbmd0aBgCIAIoAhIZChFwcmluY2lwYWxfcG9pbnRfeBgDIAIoAhIZChFwcmluY2lwYWxfcG9pbnRfeRgEIAIoAhISCgpkaXN0b3J0aW9uGAUgAigCEgoKAnEwGAYgAigCEgoKAnExGAcgAigCEgoKAnEyGAggAigCEgoKAnEzGAkgAigCEgoKAnR4GAogAigCEgoKAnR5GAsgAigCEgoKAnR6GAwgAigCEh8KF2Rlcml2ZWRfY2FtZXJhX3dvcmxkX3R4GA0gASgCEh8KF2Rlcml2ZWRfY2FtZXJhX3dvcmxkX3R5GA4gASgCEh8KF2Rlcml2ZWRfY2FtZXJhX3dvcmxkX3R6GA8gASgCEhkKEXBpeGVsX2ltYWdlX3dpZHRoGBAgASgNEhoKEnBpeGVsX2ltYWdlX2hlaWdodBgRIAEoDSJWCh1TU0xfQmFsbE1vZGVsU3RyYWlnaHRUd29QaGFzZRIRCglhY2Nfc2xpZGUYASACKAESEAoIYWNjX3JvbGwYAiACKAESEAoIa19zd2l0Y2gYAyACKAEibAoaU1NMX0JhbGxNb2RlbENoaXBGaXhlZExvc3MSHAoUZGFtcGluZ194eV9maXJzdF9ob3AYASACKAESHQoVZGFtcGluZ194eV9vdGhlcl9ob3BzGAIgAigBEhEKCWRhbXBpbmdfehgDIAIoASKGAQoSU1NMX0dlb21ldHJ5TW9kZWxzEjoKEnN0cmFpZ2h0X3R3b19waGFzZRgBIAEoCzIeLlNTTF9CYWxsTW9kZWxTdHJhaWdodFR3b1BoYXNlEjQKD2NoaXBfZml4ZWRfbG9zcxgCIAEoCzIbLlNTTF9CYWxsTW9kZWxDaGlwRml4ZWRMb3NzIo0BChBTU0xfR2VvbWV0cnlEYXRhEiUKBWZpZWxkGAEgAigLMhYuU1NMX0dlb21ldHJ5RmllbGRTaXplEi0KBWNhbGliGAIgAygLMh4uU1NMX0dlb21ldHJ5Q2FtZXJhQ2FsaWJyYXRpb24SIwoGbW9kZWxzGAMgASgLMhMuU1NMX0dlb21ldHJ5TW9kZWxzKtsCChJTU0xfRmllbGRTaGFwZVR5cGUSDQoJVW5kZWZpbmVkEAASEAoMQ2VudGVyQ2lyY2xlEAESEAoMVG9wVG91Y2hMaW5lEAISEwoPQm90dG9tVG91Y2hMaW5lEAMSEAoMTGVmdEdvYWxMaW5lEAQSEQoNUmlnaHRHb2FsTGluZRAFEg8KC0hhbGZ3YXlMaW5lEAYSDgoKQ2VudGVyTGluZRAHEhYKEkxlZnRQZW5hbHR5U3RyZXRjaBAIEhcKE1JpZ2h0UGVuYWx0eVN0cmV0Y2gQCRIfChtMZWZ0RmllbGRMZWZ0UGVuYWx0eVN0cmV0Y2gQChIgChxMZWZ0RmllbGRSaWdodFBlbmFsdHlTdHJldGNoEAsSIAocUmlnaHRGaWVsZExlZnRQZW5hbHR5U3RyZXRjaBAMEiEKHVJpZ2h0RmllbGRSaWdodFBlbmFsdHlTdHJldGNoEA1CWkIWU3NsVmlzaW9uR2VvbWV0cnlQcm90b1ABWj5naXRodWIuY29tL1JvYm9DdXAtU1NML3NzbC1nYW1lLWNvbnRyb2xsZXIvaW50ZXJuYWwvYXBwL3Zpc2lvbg");
+  fileDesc("CiB2aXNpb24vc3NsX3Zpc2lvbl9nZW9tZXRyeS5wcm90byIgCghWZWN0b3IyZhIJCgF4GAEgAigCEgkKAXkYAiACKAIiiAEKFFNTTF9GaWVsZExpbmVTZWdtZW50EgwKBG5hbWUYASACKAkSFQoCcDEYAiACKAsyCS5WZWN0b3IyZhIVCgJwMhgDIAIoCzIJLlZlY3RvcjJmEhEKCXRoaWNrbmVzcxgEIAIoAhIhCgR0eXBlGAUgASgOMhMuU1NMX0ZpZWxkU2hhcGVUeXBlIp0BChRTU0xfRmllbGRDaXJjdWxhckFyYxIMCgRuYW1lGAEgAigJEhkKBmNlbnRlchgCIAIoCzIJLlZlY3RvcjJmEg4KBnJhZGl1cxgDIAIoAhIKCgJhMRgEIAIoAhIKCgJhMhgFIAIoAhIRCgl0aGlja25lc3MYBiACKAISIQoEdHlwZRgHIAEoDjITLlNTTF9GaWVsZFNoYXBlVHlwZSL4AwoVU1NMX0dlb21ldHJ5RmllbGRTaXplEhQKDGZpZWxkX2xlbmd0aBgBIAIoBRITCgtmaWVsZF93aWR0aBgCIAIoBRISCgpnb2FsX3dpZHRoGAMgAigFEhIKCmdvYWxfZGVwdGgYBCACKAUSFgoOYm91bmRhcnlfd2lkdGgYBSACKAUSIAoYYm91bmRhcnlfd2lkdGhfZ29hbF9saW5lGBAgASgFEioKC2ZpZWxkX2xpbmVzGAYgAygLMhUuU1NMX0ZpZWxkTGluZVNlZ21lbnQSKQoKZmllbGRfYXJjcxgHIAMoCzIVLlNTTF9GaWVsZENpcmN1bGFyQXJjEhoKEnBlbmFsdHlfYXJlYV9kZXB0aBgIIAEoBRIaChJwZW5hbHR5X2FyZWFfd2lkdGgYCSABKAUSHAoUY2VudGVyX2NpcmNsZV9yYWRpdXMYCiABKAUSFgoObGluZV90aGlja25lc3MYCyABKAUSIwobZ29hbF9jZW50ZXJfdG9fcGVuYWx0eV9tYXJrGAwgASgFEhMKC2dvYWxfaGVpZ2h0GA0gASgFEhMKC2JhbGxfcmFkaXVzGA4gASgCEhgKEG1heF9yb2JvdF9yYWRpdXMYDyABKAISJAocZ29hbF9zdWJzdGl0dXRpb25fYXJlYV93aWR0aBgRIAEoBSKAAwodU1NMX0dlb21ldHJ5Q2FtZXJhQ2FsaWJyYXRpb24SEQoJY2FtZXJhX2lkGAEgAigNEhQKDGZvY2FsX2xlbmd0aBgCIAIoAhIZChFwcmluY2lwYWxfcG9pbnRfeBgDIAIoAhIZChFwcmluY2lwYWxfcG9pbnRfeRgEIAIoAhISCgpkaXN0b3J0aW9uGAUgAigCEgoKAnEwGAYgAigCEgoKAnExGAcgAigCEgoKAnEyGAggAigCEgoKAnEzGAkgAigCEgoKAnR4GAogAigCEgoKAnR5GAsgAigCEgoKAnR6GAwgAigCEh8KF2Rlcml2ZWRfY2FtZXJhX3dvcmxkX3R4GA0gASgCEh8KF2Rlcml2ZWRfY2FtZXJhX3dvcmxkX3R5GA4gASgCEh8KF2Rlcml2ZWRfY2FtZXJhX3dvcmxkX3R6GA8gASgCEhkKEXBpeGVsX2ltYWdlX3dpZHRoGBAgASgNEhoKEnBpeGVsX2ltYWdlX2hlaWdodBgRIAEoDSJWCh1TU0xfQmFsbE1vZGVsU3RyYWlnaHRUd29QaGFzZRIRCglhY2Nfc2xpZGUYASACKAESEAoIYWNjX3JvbGwYAiACKAESEAoIa19zd2l0Y2gYAyACKAEibAoaU1NMX0JhbGxNb2RlbENoaXBGaXhlZExvc3MSHAoUZGFtcGluZ194eV9maXJzdF9ob3AYASACKAESHQoVZGFtcGluZ194eV9vdGhlcl9ob3BzGAIgAigBEhEKCWRhbXBpbmdfehgDIAIoASKGAQoSU1NMX0dlb21ldHJ5TW9kZWxzEjoKEnN0cmFpZ2h0X3R3b19waGFzZRgBIAEoCzIeLlNTTF9CYWxsTW9kZWxTdHJhaWdodFR3b1BoYXNlEjQKD2NoaXBfZml4ZWRfbG9zcxgCIAEoCzIbLlNTTF9CYWxsTW9kZWxDaGlwRml4ZWRMb3NzIo0BChBTU0xfR2VvbWV0cnlEYXRhEiUKBWZpZWxkGAEgAigLMhYuU1NMX0dlb21ldHJ5RmllbGRTaXplEi0KBWNhbGliGAIgAygLMh4uU1NMX0dlb21ldHJ5Q2FtZXJhQ2FsaWJyYXRpb24SIwoGbW9kZWxzGAMgASgLMhMuU1NMX0dlb21ldHJ5TW9kZWxzKtsCChJTU0xfRmllbGRTaGFwZVR5cGUSDQoJVW5kZWZpbmVkEAASEAoMQ2VudGVyQ2lyY2xlEAESEAoMVG9wVG91Y2hMaW5lEAISEwoPQm90dG9tVG91Y2hMaW5lEAMSEAoMTGVmdEdvYWxMaW5lEAQSEQoNUmlnaHRHb2FsTGluZRAFEg8KC0hhbGZ3YXlMaW5lEAYSDgoKQ2VudGVyTGluZRAHEhYKEkxlZnRQZW5hbHR5U3RyZXRjaBAIEhcKE1JpZ2h0UGVuYWx0eVN0cmV0Y2gQCRIfChtMZWZ0RmllbGRMZWZ0UGVuYWx0eVN0cmV0Y2gQChIgChxMZWZ0RmllbGRSaWdodFBlbmFsdHlTdHJldGNoEAsSIAocUmlnaHRGaWVsZExlZnRQZW5hbHR5U3RyZXRjaBAMEiEKHVJpZ2h0RmllbGRSaWdodFBlbmFsdHlTdHJldGNoEA1CWkIWU3NsVmlzaW9uR2VvbWV0cnlQcm90b1ABWj5naXRodWIuY29tL1JvYm9DdXAtU1NML3NzbC1nYW1lLWNvbnRyb2xsZXIvaW50ZXJuYWwvYXBwL3Zpc2lvbg");
 
 /**
  * A 2D float vector.
@@ -19,11 +19,15 @@ export const file_vision_ssl_vision_geometry: GenFile = /*@__PURE__*/
  */
 export type Vector2f = Message<"Vector2f"> & {
   /**
+   * X-coordinate in mm
+   *
    * @generated from field: required float x = 1;
    */
   x: number;
 
   /**
+   * Y-coordinate in mm
+   *
    * @generated from field: required float y = 2;
    */
   y: number;
@@ -36,11 +40,15 @@ export type Vector2f = Message<"Vector2f"> & {
  */
 export type Vector2fJson = {
   /**
+   * X-coordinate in mm
+   *
    * @generated from field: required float x = 1;
    */
   x?: number | "NaN" | "Infinity" | "-Infinity";
 
   /**
+   * Y-coordinate in mm
+   *
    * @generated from field: required float y = 2;
    */
   y?: number | "NaN" | "Infinity" | "-Infinity";
@@ -276,79 +284,123 @@ export const SSL_FieldCircularArcSchema: GenMessage<SSL_FieldCircularArc, SSL_Fi
  */
 export type SSL_GeometryFieldSize = Message<"SSL_GeometryFieldSize"> & {
   /**
+   * Field length (distance between goal lines) in mm
+   *
    * @generated from field: required int32 field_length = 1;
    */
   fieldLength: number;
 
   /**
+   * Field width (distance between touch lines) in mm
+   *
    * @generated from field: required int32 field_width = 2;
    */
   fieldWidth: number;
 
   /**
+   * Goal width (distance between inner edges of goal posts) in mm
+   *
    * @generated from field: required int32 goal_width = 3;
    */
   goalWidth: number;
 
   /**
+   * Goal depth (distance from outer goal line edge to inner goal back) in mm
+   *
    * @generated from field: required int32 goal_depth = 4;
    */
   goalDepth: number;
 
   /**
+   * Boundary width (distance from touch line centers to boundary walls) in mm
+   *
    * @generated from field: required int32 boundary_width = 5;
    */
   boundaryWidth: number;
 
   /**
+   * Boundary width at the goal lines (distance from goal line centers to boundary walls) in mm
+   *
+   * @generated from field: optional int32 boundary_width_goal_line = 16;
+   */
+  boundaryWidthGoalLine: number;
+
+  /**
+   * Generated line segments based on the other parameters
+   *
    * @generated from field: repeated SSL_FieldLineSegment field_lines = 6;
    */
   fieldLines: SSL_FieldLineSegment[];
 
   /**
+   * Generated circular arcs based on the other parameters
+   *
    * @generated from field: repeated SSL_FieldCircularArc field_arcs = 7;
    */
   fieldArcs: SSL_FieldCircularArc[];
 
   /**
+   * Depth of the penalty/defense area (measured between line centers) in mm
+   *
    * @generated from field: optional int32 penalty_area_depth = 8;
    */
   penaltyAreaDepth: number;
 
   /**
+   * Width of the penalty/defense area (measured between line centers) in mm
+   *
    * @generated from field: optional int32 penalty_area_width = 9;
    */
   penaltyAreaWidth: number;
 
   /**
+   * Radius of the center circle (measured between line centers) in mm
+   *
    * @generated from field: optional int32 center_circle_radius = 10;
    */
   centerCircleRadius: number;
 
   /**
+   * Thickness/width of the lines on the field in mm
+   *
    * @generated from field: optional int32 line_thickness = 11;
    */
   lineThickness: number;
 
   /**
+   * Distance between the goal center and the center of the penalty mark in mm
+   *
    * @generated from field: optional int32 goal_center_to_penalty_mark = 12;
    */
   goalCenterToPenaltyMark: number;
 
   /**
+   * Goal height in mm
+   *
    * @generated from field: optional int32 goal_height = 13;
    */
   goalHeight: number;
 
   /**
+   * Ball radius in mm (note that this is a float type to represent sub-mm precision)
+   *
    * @generated from field: optional float ball_radius = 14;
    */
   ballRadius: number;
 
   /**
+   * Max allowed robot radius in mm (note that this is a float type to represent sub-mm precision)
+   *
    * @generated from field: optional float max_robot_radius = 15;
    */
   maxRobotRadius: number;
+
+  /**
+   * Width of the goal substitution area (distance from goal line center plus boundary width to boundary walls) in mm
+   *
+   * @generated from field: optional int32 goal_substitution_area_width = 17;
+   */
+  goalSubstitutionAreaWidth: number;
 };
 
 /**
@@ -356,79 +408,123 @@ export type SSL_GeometryFieldSize = Message<"SSL_GeometryFieldSize"> & {
  */
 export type SSL_GeometryFieldSizeJson = {
   /**
+   * Field length (distance between goal lines) in mm
+   *
    * @generated from field: required int32 field_length = 1;
    */
   fieldLength?: number;
 
   /**
+   * Field width (distance between touch lines) in mm
+   *
    * @generated from field: required int32 field_width = 2;
    */
   fieldWidth?: number;
 
   /**
+   * Goal width (distance between inner edges of goal posts) in mm
+   *
    * @generated from field: required int32 goal_width = 3;
    */
   goalWidth?: number;
 
   /**
+   * Goal depth (distance from outer goal line edge to inner goal back) in mm
+   *
    * @generated from field: required int32 goal_depth = 4;
    */
   goalDepth?: number;
 
   /**
+   * Boundary width (distance from touch line centers to boundary walls) in mm
+   *
    * @generated from field: required int32 boundary_width = 5;
    */
   boundaryWidth?: number;
 
   /**
+   * Boundary width at the goal lines (distance from goal line centers to boundary walls) in mm
+   *
+   * @generated from field: optional int32 boundary_width_goal_line = 16;
+   */
+  boundaryWidthGoalLine?: number;
+
+  /**
+   * Generated line segments based on the other parameters
+   *
    * @generated from field: repeated SSL_FieldLineSegment field_lines = 6;
    */
   fieldLines?: SSL_FieldLineSegmentJson[];
 
   /**
+   * Generated circular arcs based on the other parameters
+   *
    * @generated from field: repeated SSL_FieldCircularArc field_arcs = 7;
    */
   fieldArcs?: SSL_FieldCircularArcJson[];
 
   /**
+   * Depth of the penalty/defense area (measured between line centers) in mm
+   *
    * @generated from field: optional int32 penalty_area_depth = 8;
    */
   penaltyAreaDepth?: number;
 
   /**
+   * Width of the penalty/defense area (measured between line centers) in mm
+   *
    * @generated from field: optional int32 penalty_area_width = 9;
    */
   penaltyAreaWidth?: number;
 
   /**
+   * Radius of the center circle (measured between line centers) in mm
+   *
    * @generated from field: optional int32 center_circle_radius = 10;
    */
   centerCircleRadius?: number;
 
   /**
+   * Thickness/width of the lines on the field in mm
+   *
    * @generated from field: optional int32 line_thickness = 11;
    */
   lineThickness?: number;
 
   /**
+   * Distance between the goal center and the center of the penalty mark in mm
+   *
    * @generated from field: optional int32 goal_center_to_penalty_mark = 12;
    */
   goalCenterToPenaltyMark?: number;
 
   /**
+   * Goal height in mm
+   *
    * @generated from field: optional int32 goal_height = 13;
    */
   goalHeight?: number;
 
   /**
+   * Ball radius in mm (note that this is a float type to represent sub-mm precision)
+   *
    * @generated from field: optional float ball_radius = 14;
    */
   ballRadius?: number | "NaN" | "Infinity" | "-Infinity";
 
   /**
+   * Max allowed robot radius in mm (note that this is a float type to represent sub-mm precision)
+   *
    * @generated from field: optional float max_robot_radius = 15;
    */
   maxRobotRadius?: number | "NaN" | "Infinity" | "-Infinity";
+
+  /**
+   * Width of the goal substitution area (distance from goal line center plus boundary width to boundary walls) in mm
+   *
+   * @generated from field: optional int32 goal_substitution_area_width = 17;
+   */
+  goalSubstitutionAreaWidth?: number;
 };
 
 /**
