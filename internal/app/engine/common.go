@@ -1,12 +1,13 @@
 package engine
 
 import (
+	"time"
+
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/geom"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
 	"google.golang.org/protobuf/types/known/durationpb"
 	"google.golang.org/protobuf/types/known/timestamppb"
-	"time"
 )
 
 const ballSteadyThreshold = 0.2
@@ -133,23 +134,44 @@ func (x *GcStateTracker) NumTeamRobots(team state.Team) (count int32) {
 }
 
 func (e *Engine) NumTeamRobotsExcludingSubstitutionZone(team state.Team) (count int32) {
-	boundaryWidth := e.getGeometry().BoundaryWidth
+	bWidthTouchLine := e.getGeometry().BoundaryWidthTouchLine
+	bWidthGoalLine := e.getGeometry().BoundaryWidthGoalLine
+	fieldMaxX := e.getGeometry().FieldLength / 2
 	fieldMaxY := e.getGeometry().FieldWidth / 2
+	goalSubstitutionDepth := e.getGeometry().GoalSubstitutionAreaWidth
 	rects := []*geom.Rectangle{
+		// Touch line substitution zones (positive and negative Y)
 		geom.NewRectangleFromPoints(
 			geom.NewVector2(-(botSubstitutionMaxX+robotRadius), fieldMaxY-robotRadius),
-			geom.NewVector2(botSubstitutionMaxX+robotRadius, fieldMaxY+boundaryWidth),
+			geom.NewVector2(botSubstitutionMaxX+robotRadius, fieldMaxY+bWidthTouchLine),
 		),
 		geom.NewRectangleFromPoints(
 			geom.NewVector2(-(botSubstitutionMaxX+robotRadius), -(fieldMaxY-robotRadius)),
-			geom.NewVector2(botSubstitutionMaxX+robotRadius, -(fieldMaxY+boundaryWidth)),
+			geom.NewVector2(botSubstitutionMaxX+robotRadius, -(fieldMaxY+bWidthTouchLine)),
+		),
+		// Goal substitution areas (behind each goal line, 30cm from walls towards field)
+		geom.NewRectangleFromPoints(
+			geom.NewVector2(fieldMaxX+bWidthGoalLine-goalSubstitutionDepth+robotRadius, -(fieldMaxY+bWidthTouchLine)),
+			geom.NewVector2(fieldMaxX+bWidthGoalLine, fieldMaxY+bWidthTouchLine),
+		),
+		geom.NewRectangleFromPoints(
+			geom.NewVector2(-(fieldMaxX+bWidthGoalLine), -(fieldMaxY+bWidthTouchLine)),
+			geom.NewVector2(-(fieldMaxX+bWidthGoalLine-goalSubstitutionDepth+robotRadius), fieldMaxY+bWidthTouchLine),
 		),
 	}
 
 	for _, robot := range e.trackerStateGc.Robots {
-		if !rects[0].IsPointInside(robot.Pos) &&
-			!rects[1].IsPointInside(robot.Pos) &&
-			*robot.Id.Team == team {
+		if *robot.Id.Team != team {
+			continue
+		}
+		inSubstitutionZone := false
+		for _, rect := range rects {
+			if rect.IsPointInside(robot.Pos) {
+				inSubstitutionZone = true
+				break
+			}
+		}
+		if !inSubstitutionZone {
 			count++
 		}
 	}

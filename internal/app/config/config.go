@@ -1,13 +1,14 @@
 package config
 
 import (
-	"github.com/pkg/errors"
-	"gopkg.in/yaml.v3"
 	"io"
 	"log"
 	"os"
 	"path/filepath"
 	"time"
+
+	"github.com/pkg/errors"
+	"gopkg.in/yaml.v3"
 )
 
 // Special holds configs that are different between normal and overtime halves
@@ -23,7 +24,8 @@ type Special struct {
 type Geometry struct {
 	FieldLength                     float64 `yaml:"field-length"`
 	FieldWidth                      float64 `yaml:"field-width"`
-	BoundaryWidth                   float64 `yaml:"boundary-width"`
+	BoundaryWidthTouchLine          float64 `yaml:"boundary-width"`
+	BoundaryWidthGoalLine           float64 `yaml:"boundary-width-goal-line"`
 	DefenseAreaDepth                float64 `yaml:"defense-area-depth"`
 	DefenseAreaWidth                float64 `yaml:"defense-area-width"`
 	PenaltyKickDistToGoal           float64 `yaml:"penalty-kick-dist-to-goal"`
@@ -33,6 +35,7 @@ type Geometry struct {
 	PlacementOffsetGoalLine         float64 `yaml:"placement-offset-goal-line"`
 	PlacementOffsetGoalLineGoalKick float64 `yaml:"placement-offset-goal-line-goal-kick"`
 	PlacementOffsetDefenseArea      float64 `yaml:"placement-offset-defense-area"`
+	GoalSubstitutionAreaWidth       float64 `yaml:"goal-substitution-area-width"`
 }
 
 // Game holds configs that are valid for the whole game
@@ -232,7 +235,8 @@ func DefaultControllerConfig() (c Controller) {
 	c.Game.DefaultGeometry[DivA] = Geometry{
 		FieldLength:                     12,
 		FieldWidth:                      9,
-		BoundaryWidth:                   0.3,
+		BoundaryWidthTouchLine:          0.3,
+		BoundaryWidthGoalLine:           0.3,
 		DefenseAreaDepth:                1.8,
 		DefenseAreaWidth:                3.6,
 		PenaltyKickDistToGoal:           8.0,
@@ -242,11 +246,13 @@ func DefaultControllerConfig() (c Controller) {
 		PlacementOffsetGoalLine:         0.2,
 		PlacementOffsetGoalLineGoalKick: 1.0,
 		PlacementOffsetDefenseArea:      1.0,
+		GoalSubstitutionAreaWidth:       0.3,
 	}
 	c.Game.DefaultGeometry[DivB] = Geometry{
 		FieldLength:                     9,
 		FieldWidth:                      6,
-		BoundaryWidth:                   0.3,
+		BoundaryWidthTouchLine:          0.3,
+		BoundaryWidthGoalLine:           0.3,
 		DefenseAreaDepth:                1,
 		DefenseAreaWidth:                2,
 		PenaltyKickDistToGoal:           6.0,
@@ -256,6 +262,7 @@ func DefaultControllerConfig() (c Controller) {
 		PlacementOffsetGoalLine:         0.2,
 		PlacementOffsetGoalLineGoalKick: 1.0,
 		PlacementOffsetDefenseArea:      1.0,
+		GoalSubstitutionAreaWidth:       0.3,
 	}
 
 	c.Game.MaxBots = map[Division]int32{DivA: 11, DivB: 6}

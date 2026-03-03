@@ -15,7 +15,7 @@ func (e *Engine) ProcessGeometry(data *vision.SSL_GeometryData) {
 
 	newGeometry.FieldWidth = float64(*data.Field.FieldWidth) / 1000.0
 	newGeometry.FieldLength = float64(*data.Field.FieldLength) / 1000.0
-	newGeometry.BoundaryWidth = float64(*data.Field.BoundaryWidth) / 1000.0
+	newGeometry.BoundaryWidthTouchLine = float64(*data.Field.BoundaryWidth) / 1000.0
 	newGeometry.GoalWidth = float64(*data.Field.GoalWidth) / 1000.0
 
 	if data.Field.PenaltyAreaWidth != nil {
@@ -48,6 +48,16 @@ func (e *Engine) ProcessGeometry(data *vision.SSL_GeometryData) {
 
 	if data.Field.CenterCircleRadius != nil {
 		newGeometry.CenterCircleRadius = float64(*data.Field.CenterCircleRadius) / 1000.0
+	}
+
+	if data.Field.GoalSubstitutionAreaWidth != nil {
+		newGeometry.GoalSubstitutionAreaWidth = float64(*data.Field.GoalSubstitutionAreaWidth) / 1000.0
+	}
+
+	if data.Field.BoundaryWidthGoalLine != nil {
+		newGeometry.BoundaryWidthGoalLine = float64(*data.Field.BoundaryWidthGoalLine) / 1000.0
+	} else {
+		newGeometry.BoundaryWidthGoalLine = newGeometry.BoundaryWidthTouchLine
 	}
 
 	if newGeometry.FieldWidth/2-
