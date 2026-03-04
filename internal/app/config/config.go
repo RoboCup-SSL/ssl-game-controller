@@ -236,7 +236,7 @@ func DefaultControllerConfig() (c Controller) {
 		FieldLength:                     12,
 		FieldWidth:                      9,
 		BoundaryWidthTouchLine:          0.3,
-		BoundaryWidthGoalLine:           0.3,
+		BoundaryWidthGoalLine:           0.6,
 		DefenseAreaDepth:                1.8,
 		DefenseAreaWidth:                3.6,
 		PenaltyKickDistToGoal:           8.0,

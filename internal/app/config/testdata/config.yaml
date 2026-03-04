@@ -72,7 +72,7 @@ game:
       field-length: 12.0
       field-width: 9.0
       boundary-width: 0.3
-      boundary-width-goal-line: 0.3
+      boundary-width-goal-line: 0.6
       defense-area-depth: 1.8
       defense-area-width: 3.6
       penalty-kick-dist-to-goal: 8.0
