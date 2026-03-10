@@ -37,7 +37,7 @@ var defaultTeams = []string{
 	"NAMeC",
 	"Neon",
 	"NEUIslanders",
-	"N-R-G",
+	"N.R.G",
 	"OMID",
 	"OP-AmP",
 	"OrcaBOT",
