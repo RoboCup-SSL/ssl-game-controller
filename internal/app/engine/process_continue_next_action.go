@@ -2,11 +2,12 @@ package engine
 
 import (
 	"fmt"
-	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/geom"
-	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"log"
 	"math"
 	"time"
+
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/geom"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 )
 
 func (e *Engine) nextActions() (actions []*ContinueAction, hints []*ContinueHint) {
@@ -227,12 +228,46 @@ func (e *Engine) actionsToContinueFromStop() (actions []*ContinueAction, hints [
 			forTeam = state.Team_UNKNOWN
 		}
 		actions = append(actions, e.createNextCommandContinueAction(ContinueAction_NEXT_COMMAND, forTeam))
+
+		if correctionAction := e.ballLeftFieldCorrectionAction(); correctionAction != nil {
+			actions = append(actions, correctionAction)
+		}
 	} else {
 		actions = append(actions, e.createNextCommandContinueAction(ContinueAction_FORCE_START, state.Team_UNKNOWN))
 		actions = append(actions, e.createNextCommandContinueAction(ContinueAction_FREE_KICK, state.Team_YELLOW))
 		actions = append(actions, e.createNextCommandContinueAction(ContinueAction_FREE_KICK, state.Team_BLUE))
 	}
 	return actions, hints
+}
+
+func (e *Engine) ballLeftFieldCorrectionAction() *ContinueAction {
+	ballLeftFieldEvents := e.findBallLeftFieldEvents()
+	// Show correction only if there is exactly one ball left field event (no correction yet)
+	if len(ballLeftFieldEvents) != 1 {
+		return nil
+	}
+	originalEvent := ballLeftFieldEvents[0]
+	byTeam := originalEvent.ByTeam()
+	if byTeam == state.Team_UNKNOWN {
+		return nil
+	}
+	return createContinueAction(
+		ContinueAction_CORRECT_BALL_LEFT_FIELD_TEAM,
+		byTeam.Opposite(),
+		ContinueAction_READY_MANUAL,
+	)
+}
+
+func (e *Engine) findBallLeftFieldEvents() []*state.GameEvent {
+	var events []*state.GameEvent
+	for _, event := range e.currentState.GameEvents {
+		switch *event.Type {
+		case state.GameEvent_BALL_LEFT_FIELD_TOUCH_LINE,
+			state.GameEvent_BALL_LEFT_FIELD_GOAL_LINE:
+			events = append(events, event)
+		}
+	}
+	return events
 }
 
 func (e *Engine) teamRequestingBotSubstitution() *state.Team {

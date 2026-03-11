@@ -183,6 +183,8 @@ export function continueActionLabel(type: ContinueAction_TypeJson, nextCommand?:
       return 'Accept Challenge'
     case 'CHALLENGE_REJECT':
       return 'Reject Challenge'
+    case 'CORRECT_BALL_LEFT_FIELD_TEAM':
+      return 'Ball left field (Correction)'
     case 'TYPE_UNKNOWN':
       return 'Unknown'
   }

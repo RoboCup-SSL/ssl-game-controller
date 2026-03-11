@@ -1,9 +1,11 @@
 package engine
 
 import (
-	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
-	"google.golang.org/protobuf/proto"
 	"log"
+
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
+	"google.golang.org/protobuf/proto"
 )
 
 func (e *Engine) performContinueAction(action *ContinueAction) {
@@ -95,6 +97,26 @@ func (e *Engine) performContinueAction(action *ContinueAction) {
 		e.Enqueue(createChallengeFlagHandledEventChange(*action.ForTeam, true))
 	case ContinueAction_CHALLENGE_REJECT:
 		e.Enqueue(createChallengeFlagHandledEventChange(*action.ForTeam, false))
+	case ContinueAction_CORRECT_BALL_LEFT_FIELD_TEAM:
+		ballLeftFieldEvents := e.findBallLeftFieldEvents()
+		if len(ballLeftFieldEvents) == 1 {
+			originalEvent := ballLeftFieldEvents[0]
+			correctedEvent := &state.GameEvent{}
+			proto.Merge(correctedEvent, originalEvent)
+			correctedEvent.Id = nil
+			correctedEvent.SetByTeam(*action.ForTeam)
+			correctedEvent.Origin = []string{changeOriginEngine}
+			e.Enqueue(&statemachine.Change{
+				Origin: &changeOriginEngine,
+				Change: &statemachine.Change_AddGameEventChange{
+					AddGameEventChange: &statemachine.Change_AddGameEvent{
+						GameEvent: correctedEvent,
+					},
+				},
+			})
+		} else {
+			log.Println("No single ball left field event to correct")
+		}
 	default:
 		log.Println("Unknown continue action: ", *action.Type)
 	}

@@ -132,6 +132,7 @@ message ContinueAction {
         NORMAL_START = 13;
         CHALLENGE_ACCEPT = 18;
         CHALLENGE_REJECT = 19;
+        CORRECT_BALL_LEFT_FIELD_TEAM = 21;
     }
 
     enum State {
