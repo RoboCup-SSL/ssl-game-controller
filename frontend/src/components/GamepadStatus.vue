@@ -43,15 +43,14 @@ const buttonMap = Object.entries(GAMEPAD_BUTTON_LABELS)
     dense flat round
     :icon="connected ? 'sports_esports' : 'videogame_asset_off'"
     :color="connected ? 'white' : 'grey-5'"
-    :title="connected ? `Connected: ${gamepadId}` : 'No gamepad connected'"
   >
     <!-- Active button flash badge -->
     <q-badge v-if="activeButton !== null" floating color="amber" text-color="black">
       {{ activeButtonLabel }}
     </q-badge>
 
-    <!-- Tooltip with full button map -->
-    <q-tooltip anchor="bottom right" self="top right" :offset="[0, 8]" max-width="360px">
+    <!-- Clickable menu with full button map (stays open until click outside) -->
+    <q-menu anchor="bottom right" self="top right" :offset="[0, 8]" max-width="360px" class="bg-dark text-white q-pa-sm">
       <div class="text-subtitle2 q-mb-xs">
         <q-icon name="sports_esports" class="q-mr-xs"/>
         Gamepad Controls
@@ -85,7 +84,7 @@ const buttonMap = Object.entries(GAMEPAD_BUTTON_LABELS)
           </tbody>
         </q-markup-table>
       </template>
-    </q-tooltip>
+    </q-menu>
   </q-btn>
 
   <!-- Live action indicator when a button is pressed -->
