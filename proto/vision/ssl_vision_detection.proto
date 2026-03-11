@@ -2,38 +2,38 @@ syntax = "proto2";
 
 message SSL_DetectionBall {
     // Confidence in [0-1] of the detection
-  required float  confidence = 1;
-  optional uint32 area       = 2;
+    required float  confidence = 1;
+    optional uint32 area = 2;
     // X-coordinate in [mm] in global ssl-vision coordinate system
-  required float  x          = 3;
+    required float  x = 3;
     // Y-coordinate in [mm] in global ssl-vision coordinate system
-  required float  y          = 4;
+    required float  y = 4;
     // Z-coordinate in [mm] in global ssl-vision coordinate system
     // Not supported by ssl-vision, but might be set by simulators
-  optional float  z          = 5;
+    optional float  z = 5;
     // X-coordinate in [pixel] in the image
-  required float  pixel_x    = 6;
+    required float  pixel_x = 6;
     // Y-coordinate in [pixel] in the image
-  required float  pixel_y    = 7;
+    required float  pixel_y = 7;
 }
 
 message SSL_DetectionRobot {
     // Confidence in [0-1] of the detection
-  required float  confidence  =  1;
+    required float  confidence = 1;
     // Id of the robot
-  optional uint32 robot_id    =  2;
+    optional uint32 robot_id = 2;
     // X-coordinate in [mm] in global ssl-vision coordinate system
-  required float  x           =  3;
+    required float  x = 3;
     // Y-coordinate in [mm] in global ssl-vision coordinate system
-  required float  y           =  4;
+    required float  y = 4;
     // Orientation in [rad]
-  optional float  orientation =  5;
+    optional float  orientation = 5;
     // X-coordinate in [pixel] in the image
-  required float  pixel_x     =  6;
+    required float  pixel_x = 6;
     // Y-coordinate in [pixel] in the image
-  required float  pixel_y     =  7;
+    required float  pixel_y = 7;
     // Height, as configured in ssl-vision for the respective team
-  optional float  height      =  8;
+    optional float  height = 8;
 }
 
 message SSL_DetectionFrame {
