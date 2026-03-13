@@ -2,6 +2,10 @@ package rcon
 
 import (
 	"bufio"
+	"io"
+	"log"
+	"net"
+
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/engine"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/sslconn"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
@@ -9,9 +13,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
 	"google.golang.org/protobuf/types/known/wrapperspb"
-	"io"
-	"log"
-	"net"
 )
 
 type RemoteControlServer struct {
@@ -151,7 +152,7 @@ func (c *RemoteControlClient) replyWithState(reply *ControllerReply) {
 	yellowCardsDue := c.findYellowCardDueTimes()
 	availableRequests := c.findAvailableRequestTypes()
 	activeRequests := c.findActiveRequestTypes()
-	robotsOnField := c.gcEngine.TrackerState().NumTeamRobots(*c.team)
+	robotsOnField := c.gcEngine.NumTeamRobotsExcludingSubstitutionZone(*c.team)
 	timeoutTimeLeft := float32(teamState.TimeoutTimeLeft.AsDuration().Seconds())
 	canSubstituteRobot := c.canSubstituteRobot()
 	botSubstitutionsLeft := uint32(*teamState.BotSubstitutionsLeft)
