@@ -1,9 +1,10 @@
 package engine
 
 import (
+	"time"
+
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/geom"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
-	"time"
 )
 
 type BotNumberProcessor struct {
@@ -39,7 +40,7 @@ func (e *Engine) processBotNumberPerTeam(team state.Team) {
 
 	teamInfo := e.currentState.TeamState[team.String()]
 	removalTime := e.gameConfig.YellowCardBotRemovalTime
-	if *e.currentState.GameState.Type != state.GameState_RUNNING {
+	if !e.currentState.GameState.IsRunning() {
 		removalTime = 0
 	}
 	newCards := newActiveYellowCards(
