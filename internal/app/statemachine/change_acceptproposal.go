@@ -1,9 +1,10 @@
 package statemachine
 
 import (
+	"log"
+
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"google.golang.org/protobuf/proto"
-	"log"
 )
 
 func (s *StateMachine) processChangeAcceptProposals(newState *state.State, change *Change_AcceptProposalGroup) (changes []*Change) {
@@ -75,17 +76,17 @@ func (s *StateMachine) createMergedGameEvent(group *state.ProposalGroup, accepte
 func mergeGameEventData(event *state.GameEvent, events []*state.GameEvent) {
 	switch *event.Type {
 	case state.GameEvent_GOAL:
-		var maxBallHeight []*float32
+		var goals []*state.GameEvent_Goal
 		for _, e := range events {
-			maxBallHeight = append(maxBallHeight, e.GetGoal().MaxBallHeight)
+			goals = append(goals, e.GetGoal())
 		}
-		event.GetGoal().MaxBallHeight = averageFloat(maxBallHeight)
+		mergeGoal(event.GetGoal(), goals)
 	case state.GameEvent_POSSIBLE_GOAL:
-		var maxBallHeight []*float32
+		var goals []*state.GameEvent_Goal
 		for _, e := range events {
-			maxBallHeight = append(maxBallHeight, e.GetPossibleGoal().MaxBallHeight)
+			goals = append(goals, e.GetPossibleGoal())
 		}
-		event.GetPossibleGoal().MaxBallHeight = averageFloat(maxBallHeight)
+		mergeGoal(event.GetPossibleGoal(), goals)
 	case state.GameEvent_BOT_TOO_FAST_IN_STOP:
 		var speed []*float32
 		for _, e := range events {
@@ -162,6 +163,33 @@ func mergeGameEventData(event *state.GameEvent, events []*state.GameEvent) {
 		}
 		event.GetPlacementFailed().RemainingDistance = averageFloat(distance)
 	}
+}
+
+func mergeGoal(target *state.GameEvent_Goal, goals []*state.GameEvent_Goal) {
+	var maxBallHeight []*float32
+	var numRobotsByTeam []*uint32
+	for _, g := range goals {
+		maxBallHeight = append(maxBallHeight, g.MaxBallHeight)
+		numRobotsByTeam = append(numRobotsByTeam, g.NumRobotsByTeam)
+	}
+	target.MaxBallHeight = averageFloat(maxBallHeight)
+	target.NumRobotsByTeam = averageUint32(numRobotsByTeam)
+}
+
+func averageUint32(values []*uint32) (value *uint32) {
+	sum := uint32(0)
+	count := uint32(0)
+	for _, v := range values {
+		if v != nil {
+			sum += *v
+			count++
+		}
+	}
+	if count > 0 {
+		value = new(uint32)
+		*value = sum / count
+	}
+	return
 }
 
 func averageFloat(values []*float32) (value *float32) {
