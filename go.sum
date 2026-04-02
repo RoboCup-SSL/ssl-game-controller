@@ -2,6 +2,8 @@ github.com/RoboCup-SSL/ssl-go-tools v1.9.2 h1:aQFGyfUVDdkej57sJAUehFNMJiQytBucv6
 github.com/RoboCup-SSL/ssl-go-tools v1.9.2/go.mod h1:Wj5h8r8Yd4pAUWb3BUcm2JlUpMhDXmCSAvz47gWWaPA=
 github.com/RoboCup-SSL/ssl-go-tools v1.9.3 h1:ljPS+TlGUmHT0z6HA8ZTaRCvKvPkWhYEKLcztedf3fw=
 github.com/RoboCup-SSL/ssl-go-tools v1.9.3/go.mod h1:PeH1NQIHK4jDX5SN6y8dgK3BrpJzZt+Whqf+J4+8h78=
+github.com/RoboCup-SSL/ssl-go-tools v1.11.0 h1:W3bFAJXI6asW8wSmRWA9zIhQtqWnkHh5Jhe7jXiXECw=
+github.com/RoboCup-SSL/ssl-go-tools v1.11.0/go.mod h1:vYI1F2rB1bQRy9sgkXl0cj7hFT+k16/dhqv756am91U=
 github.com/go-test/deep v1.1.1 h1:0r/53hagsehfO4bzD2Pgr/+RgHqhmf+k1Bpse2cTu1U=
 github.com/go-test/deep v1.1.1/go.mod h1:5C2ZWiW0ErCdrYzpqxLbTX7MG14M9iiw8DgHncVwcsE=
 github.com/google/go-cmp v0.7.0 h1:wk8382ETsv4JYUZwIsn6YpYiWiBsYLSJiTsyBybVuN8=

@@ -3,7 +3,7 @@ module github.com/RoboCup-SSL/ssl-game-controller
 go 1.25.0
 
 require (
-	github.com/RoboCup-SSL/ssl-go-tools v1.9.3
+	github.com/RoboCup-SSL/ssl-go-tools v1.11.0
 	github.com/go-test/deep v1.1.1
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.3
