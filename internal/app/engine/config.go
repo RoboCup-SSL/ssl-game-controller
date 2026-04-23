@@ -75,6 +75,7 @@ var defaultTeams = []string{
 	"UTBots",
 	"Warthog Robotics",
 	"ZJUNlict",
+	"ZUNOH Robotics",
 }
 
 func DefaultConfig() (x Config) {
