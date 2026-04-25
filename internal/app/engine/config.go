@@ -47,6 +47,7 @@ var defaultTeams = []string{
 	"RFC Cambridge",
 	"Ri-one",
 	"RobôCin",
+	"Robocup Junior SSL Team",
 	"RoboDragons",
 	"RoboFEI",
 	"RoboIME",
