@@ -37,7 +37,7 @@ services:
       - "8082:8082/tcp"
 
   ssl-status-board:
-    image: "robocupssl/ssl-status-board:2.17.2@sha256:6190475a48dd64058b3df790971b791f7424dc32c465723f4aa0f568b8549d94"
+    image: "robocupssl/ssl-status-board:2.18.0@sha256:8994ff7dea015ab052662516eff23c8aea8394521deece9190343829f51f9357"
     command:
       - "-address"
       - ":8083"
