@@ -48,7 +48,7 @@ function revert() {
 </script>
 
 <template>
-  <q-item dense class="q-mr-xs">
+  <q-item dense class="protocol-item q-mr-xs">
     <q-item-section avatar top v-if="!dense">
       <q-icon :name="change.icon" color="primary" size="34px"/>
     </q-item-section>
@@ -61,11 +61,11 @@ function revert() {
       <q-expansion-item hide-expand-icon header-class="q-pl-none">
         <template v-slot:header>
           <q-item-section>
-            <q-item-label lines="1">
+            <q-item-label class="protocol-item__title row items-center no-wrap">
               <q-icon :name="change.icon" color="primary" size="15px" v-if="dense" class="q-mr-xs"/>
               <TeamBadge :team="change.forTeam"/>
-              <span class="text-weight-medium">{{ change.title }}</span>
-              <span class="text-secondary"> - {{ origin }}</span>
+              <span class="text-weight-medium protocol-item__title-text">{{ change.title }}</span>
+              <span class="text-secondary q-ml-xs">- {{ origin }}</span>
               <OriginIcon :origin="origin"/>
               <span v-if="hasGameEventOrigins">(</span>
               <OriginIcon
@@ -103,5 +103,32 @@ function revert() {
   position: absolute;
   top: 18px;
   right: 0;
+}
+
+/* Allow flex children up the tree to shrink below their content's min-content,
+   so the title text can ellipsis-truncate instead of overflowing past the badge. */
+.protocol-item,
+.protocol-item .q-expansion-item,
+.protocol-item .q-expansion-item__container,
+.protocol-item .q-item,
+.protocol-item .q-item__section {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.protocol-item__title {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.protocol-item__title > * {
+  flex-shrink: 0;
+}
+
+.protocol-item__title-text {
+  flex-shrink: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>
