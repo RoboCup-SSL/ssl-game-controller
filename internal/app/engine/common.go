@@ -13,7 +13,6 @@ import (
 const ballSteadyThreshold = 0.2
 const robotRadius = 0.09
 const distanceThreshold = 0.05
-const botSubstitutionMaxX = 1.0
 
 func createGameEventChange(eventType state.GameEvent_Type, event *state.GameEvent) *statemachine.Change {
 	event.Type = &eventType
@@ -139,39 +138,27 @@ func (e *Engine) NumTeamRobotsExcludingSubstitutionZone(team state.Team) (count 
 	fieldMaxX := e.getGeometry().FieldLength / 2
 	fieldMaxY := e.getGeometry().FieldWidth / 2
 	goalSubstitutionDepth := e.getGeometry().GoalSubstitutionAreaWidth
-	rects := []*geom.Rectangle{
-		// Touch line substitution zones (positive and negative Y)
-		geom.NewRectangleFromPoints(
-			geom.NewVector2(-(botSubstitutionMaxX+robotRadius), fieldMaxY-robotRadius),
-			geom.NewVector2(botSubstitutionMaxX+robotRadius, fieldMaxY+bWidthTouchLine),
-		),
-		geom.NewRectangleFromPoints(
-			geom.NewVector2(-(botSubstitutionMaxX+robotRadius), -(fieldMaxY-robotRadius)),
-			geom.NewVector2(botSubstitutionMaxX+robotRadius, -(fieldMaxY+bWidthTouchLine)),
-		),
-		// Goal substitution areas (behind each goal line, 30cm from walls towards field)
-		geom.NewRectangleFromPoints(
+
+	// The substitution area is only checked behind the team's own goal.
+	// A team's own goal is on the positive X side when it is on the positive half.
+	var substitutionZone *geom.Rectangle
+	if *e.currentState.TeamState[team.String()].OnPositiveHalf {
+		substitutionZone = geom.NewRectangleFromPoints(
 			geom.NewVector2(fieldMaxX+bWidthGoalLine-goalSubstitutionDepth+robotRadius, -(fieldMaxY+bWidthTouchLine)),
 			geom.NewVector2(fieldMaxX+bWidthGoalLine, fieldMaxY+bWidthTouchLine),
-		),
-		geom.NewRectangleFromPoints(
+		)
+	} else {
+		substitutionZone = geom.NewRectangleFromPoints(
 			geom.NewVector2(-(fieldMaxX+bWidthGoalLine), -(fieldMaxY+bWidthTouchLine)),
 			geom.NewVector2(-(fieldMaxX+bWidthGoalLine-goalSubstitutionDepth+robotRadius), fieldMaxY+bWidthTouchLine),
-		),
+		)
 	}
 
 	for _, robot := range e.trackerStateGc.Robots {
 		if *robot.Id.Team != team {
 			continue
 		}
-		inSubstitutionZone := false
-		for _, rect := range rects {
-			if rect.IsPointInside(robot.Pos) {
-				inSubstitutionZone = true
-				break
-			}
-		}
-		if !inSubstitutionZone {
+		if !substitutionZone.IsPointInside(robot.Pos) {
 			count++
 		}
 	}
