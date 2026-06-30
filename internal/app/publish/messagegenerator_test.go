@@ -1,10 +1,11 @@
 package publish
 
 import (
+	"testing"
+
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/engine"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/statemachine"
-	"testing"
 )
 
 func Test_generateMessages(t *testing.T) {
@@ -52,4 +53,63 @@ func Test_generateMessages(t *testing.T) {
 	if r.Blue == nil {
 		t.Errorf("Missing Blue")
 	}
+}
+
+func Test_nextCommand(t *testing.T) {
+	tests := []struct {
+		name                string
+		command             *state.Command
+		nextCommand         *state.Command
+		expectedNextCommand *state.Referee_Command
+	}{
+		{
+			name:                "stop with next kickoff",
+			command:             state.NewCommandNeutral(state.Command_STOP),
+			nextCommand:         state.NewCommand(state.Command_KICKOFF, state.Team_BLUE),
+			expectedNextCommand: refereeCommand(state.Referee_PREPARE_KICKOFF_BLUE),
+		},
+		{
+			name:                "prepare kickoff",
+			command:             state.NewCommand(state.Command_KICKOFF, state.Team_BLUE),
+			nextCommand:         state.NewCommand(state.Command_KICKOFF, state.Team_BLUE),
+			expectedNextCommand: refereeCommand(state.Referee_NORMAL_START),
+		},
+		{
+			name:                "prepare penalty",
+			command:             state.NewCommand(state.Command_PENALTY, state.Team_YELLOW),
+			nextCommand:         state.NewCommand(state.Command_PENALTY, state.Team_YELLOW),
+			expectedNextCommand: refereeCommand(state.Referee_NORMAL_START),
+		},
+		{
+			name:                "running without next command",
+			command:             state.NewCommandNeutral(state.Command_NORMAL_START),
+			nextCommand:         nil,
+			expectedNextCommand: nil,
+		},
+	}
+
+	g := NewMessageGenerator()
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := state.NewState()
+			s.Command = tt.command
+			s.NextCommand = tt.nextCommand
+
+			r := g.StateToRefereeMessage(s)
+
+			if tt.expectedNextCommand == nil {
+				if r.NextCommand != nil {
+					t.Errorf("Expected no next command, got: %v", *r.NextCommand)
+				}
+			} else if r.NextCommand == nil {
+				t.Errorf("Expected next command %v, got none", *tt.expectedNextCommand)
+			} else if *r.NextCommand != *tt.expectedNextCommand {
+				t.Errorf("Expected next command %v, got: %v", *tt.expectedNextCommand, *r.NextCommand)
+			}
+		})
+	}
+}
+
+func refereeCommand(c state.Referee_Command) *state.Referee_Command {
+	return &c
 }

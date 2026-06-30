@@ -1,12 +1,13 @@
 package publish
 
 import (
+	"log"
+	"time"
+
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/engine"
 	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
 	"github.com/google/uuid"
 	"google.golang.org/protobuf/types/known/durationpb"
-	"log"
-	"time"
 )
 
 type MessageGenerator struct {
@@ -112,7 +113,13 @@ func (g *MessageGenerator) StateToRefereeMessage(matchState *state.State) (r *st
 	*r.Stage = *matchState.Stage
 	*r.StageTimeLeft = microseconds(matchState.StageTimeLeft)
 	*r.BlueTeamOnPositiveHalf = *matchState.TeamInfo(state.Team_BLUE).OnPositiveHalf
-	r.NextCommand = mapCommand(matchState.NextCommand)
+	if matchState.Command.IsPrepare() {
+		// During the preparation phase, the game continues with NORMAL_START.
+		// The internal NextCommand keeps the prepare command so that it can be issued again if the preparation is aborted.
+		r.NextCommand = mapCommand(state.NewCommandNeutral(state.Command_NORMAL_START))
+	} else {
+		r.NextCommand = mapCommand(matchState.NextCommand)
+	}
 	*r.CurrentActionTimeRemaining = microseconds(matchState.CurrentActionTimeRemaining)
 	r.MatchType = matchState.MatchType
 	r.StatusMessage = matchState.StatusMessage
