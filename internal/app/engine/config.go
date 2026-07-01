@@ -67,7 +67,7 @@ var defaultTeams = []string{
 	"TIGERs Mannheim",
 	"Titans",
 	"TRAPS",
-	"Tritons RCSC",
+	"TritonBots",
 	"TurtleRabbit",
 	"UBC Thunderbots",
 	"ULtron",
