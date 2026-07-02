@@ -4,16 +4,18 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
-	"github.com/RoboCup-SSL/ssl-go-tools/pkg/sslnet"
-	"google.golang.org/protobuf/encoding/prototext"
-	"google.golang.org/protobuf/proto"
 	"log"
 	"math"
 	"net"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
+
+	"github.com/RoboCup-SSL/ssl-game-controller/internal/app/state"
+	"github.com/RoboCup-SSL/ssl-go-tools/pkg/sslnet"
+	"google.golang.org/protobuf/encoding/prototext"
+	"google.golang.org/protobuf/proto"
 )
 
 var refereeAddress = flag.String("address", "224.5.23.1:10003", "The multicast address of ssl-game-controller")
@@ -25,15 +27,26 @@ var history []state.Referee_Command
 func main() {
 	flag.Parse()
 
-	server := sslnet.NewMulticastServer(*refereeAddress)
-	server.Verbose = *verbose
-	server.Consumer = consume
-	server.Start()
+	isMulticast := strings.HasPrefix(*refereeAddress, "224")
+	var stop func()
+	if isMulticast {
+		server := sslnet.NewMulticastServer(*refereeAddress)
+		server.Verbose = *verbose
+		server.Consumer = consume
+		server.Start()
+		stop = server.Stop
+	} else {
+		server := sslnet.NewBroadcastServer(*refereeAddress)
+		server.Verbose = *verbose
+		server.Consumer = consume
+		server.Start()
+		stop = server.Stop
+	}
 
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM)
 	<-signals
-	server.Stop()
+	stop()
 }
 
 func consume(b []byte, _ *net.UDPAddr) {

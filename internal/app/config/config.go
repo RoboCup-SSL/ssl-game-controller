@@ -77,11 +77,12 @@ type Game struct {
 
 // Network holds configs for network communication
 type Network struct {
-	PublishAddress string   `yaml:"publish-address"`
-	PublishNif     string   `yaml:"publish-nif"`
-	VisionAddress  string   `yaml:"vision-address"`
-	TrackerAddress string   `yaml:"tracker-address"`
-	SkipInterfaces []string `yaml:"skip-interfaces"`
+	PublishAddress   string   `yaml:"publish-address"`
+	PublishNif       string   `yaml:"publish-nif"`
+	BcPublishAddress string   `yaml:"bc-publish-address"`
+	VisionAddress    string   `yaml:"vision-address"`
+	TrackerAddress   string   `yaml:"tracker-address"`
+	SkipInterfaces   []string `yaml:"skip-interfaces"`
 }
 
 // Server holds configs for the available server services
@@ -177,6 +178,7 @@ func (c *Controller) WriteTo(fileName string) (err error) {
 func DefaultControllerConfig() (c Controller) {
 	c.Network.PublishAddress = "224.5.23.1:10003"
 	c.Network.PublishNif = ""
+	c.Network.BcPublishAddress = ""
 	c.Network.VisionAddress = "224.5.23.2:10006"
 	c.Network.TrackerAddress = "224.5.23.2:10010"
 	c.Network.SkipInterfaces = []string{}

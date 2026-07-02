@@ -2,6 +2,7 @@ time-acquisition-mode: system
 network:
   publish-address: 224.5.23.1:10003
   publish-nif:
+  bc-publish-address:
   vision-address: 224.5.23.2:10006
   tracker-address: 224.5.23.2:10010
   skip-interfaces: []

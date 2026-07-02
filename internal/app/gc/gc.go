@@ -16,6 +16,7 @@ type GameController struct {
 	config              config.Controller
 	gcEngine            *engine.Engine
 	publisher           *publish.Publisher
+	bcPublisher         *publish.Publisher
 	messageGenerator    *publish.MessageGenerator
 	apiServer           *api.Server
 	autoRefServer       *rcon.AutoRefServer
@@ -33,6 +34,7 @@ func NewGameController(cfg config.Controller) (c *GameController) {
 	c.gcEngine = engine.NewEngine(cfg.Game, cfg.Engine)
 	c.messageGenerator = publish.NewMessageGenerator()
 	c.publisher = publish.NewPublisher(c.config.Network.PublishAddress, c.config.Network.PublishNif)
+	c.bcPublisher = publish.NewPublisher(c.config.Network.BcPublishAddress, "")
 	c.apiServer = api.NewServer(c.gcEngine)
 
 	c.autoRefServer = rcon.NewAutoRefServer(cfg.Server.AutoRef.Address, c.gcEngine)
@@ -67,6 +69,9 @@ func (c *GameController) Start() {
 
 	if len(c.config.Network.PublishAddress) > 0 {
 		c.messageGenerator.MessageConsumers = append(c.messageGenerator.MessageConsumers, c.publisher.SendMessage)
+	}
+	if len(c.config.Network.BcPublishAddress) > 0 {
+		c.messageGenerator.MessageConsumers = append(c.messageGenerator.MessageConsumers, c.bcPublisher.SendMessage)
 	}
 
 	switch c.config.TimeAcquisitionMode {
