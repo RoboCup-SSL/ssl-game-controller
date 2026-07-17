@@ -217,6 +217,7 @@ func (e *Engine) readyToContinueFromStop() (issues []string) {
 		issues = append(issues, "Blue team has too many robots")
 	}
 	radius := e.gameConfig.DistanceToBallInStop + robotRadius - distanceThreshold
+	ballPos := e.trackerStateGc.Ball.Pos.ToVector2()
 
 	var robots []*Robot
 	if e.currentState.NextCommand != nil && *e.currentState.NextCommand.Type == state.Command_DIRECT {
@@ -227,7 +228,7 @@ func (e *Engine) readyToContinueFromStop() (issues []string) {
 	} else {
 		robots = e.trackerStateGc.Robots
 	}
-	robotsNearBall := e.findRobotInsideRadius(robots, e.trackerStateGc.Ball.Pos.ToVector2(), radius)
+	robotsNearBall := e.findRobotInsideRadius(robots, ballPos, radius)
 	if len(robotsNearBall) > 0 {
 		var robotsStr []string
 		for _, robot := range robotsNearBall {
@@ -236,14 +237,17 @@ func (e *Engine) readyToContinueFromStop() (issues []string) {
 		issues = append(issues, fmt.Sprintf("Robots too close to ball: %s", strings.Join(robotsStr, ", ")))
 	}
 	if e.currentState.PlacementPos != nil {
-		ballToPlacementPosDist := e.currentState.PlacementPos.DistanceTo(e.trackerStateGc.Ball.Pos.ToVector2())
+		ballToPlacementPosDist := e.currentState.PlacementPos.DistanceTo(ballPos)
 		if ballToPlacementPosDist > e.gameConfig.BallPlacementRequiredDistance {
 			issues = append(issues, fmt.Sprintf("Ball is %.2f m (>%.2f m) away from placement pos",
 				ballToPlacementPosDist, e.gameConfig.BallPlacementRequiredDistance))
 		}
 	}
 
-	ballPos := e.trackerStateGc.Ball.Pos.ToVector2()
+	if e.ballTooCloseToDefenseArea(ballPos) {
+		issues = append(issues, "Ball is too close to a defense area")
+	}
+
 	if math.Abs(ballPos.GetX64()) > e.getGeometry().FieldLength/2 ||
 		math.Abs(ballPos.GetY64()) > e.getGeometry().FieldWidth/2 {
 		issues = append(issues, fmt.Sprintf("Ball is outside of field: x: %.2f m, y: %.2f m",

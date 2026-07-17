@@ -174,3 +174,18 @@ func (e *Engine) isBallInAnyDefenseArea() (bool, state.Team) {
 	}
 	return false, state.Team_UNKNOWN
 }
+
+// ballTooCloseToDefenseArea returns true if the ball is within BallPlacementMinDistanceToDefenseArea of either
+// defense area. This is the single source of truth for the placement keep-out check and must be used by both
+// the check that decides whether placement is required and the check that gates auto-continue readiness,
+// otherwise the two can silently drift apart.
+func (e *Engine) ballTooCloseToDefenseArea(ballPos *geom.Vector2) bool {
+	for _, sign := range []float64{1, -1} {
+		defenseArea := geom.NewDefenseAreaBySign(e.getGeometry(), sign)
+		forbiddenArea := defenseArea.WithMargin(e.gameConfig.BallPlacementMinDistanceToDefenseArea)
+		if forbiddenArea.IsPointInside(ballPos) {
+			return true
+		}
+	}
+	return false
+}
