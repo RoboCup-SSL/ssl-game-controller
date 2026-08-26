@@ -9,6 +9,7 @@ import ProtocolList from "@/components/protocol/ProtocolList.vue";
 import {useQuasar} from "quasar";
 import {useUiStateStore} from "@/store/uiState";
 import {useProtocolStore} from "@/store/protocolState";
+import GamepadStatus from "@/components/GamepadStatus.vue";
 
 const uiStore = useUiStateStore()
 const protocolStore = useProtocolStore()
@@ -89,6 +90,7 @@ const dev = computed(() => {
         <q-toggle dense flat round class="q-mx-sm" @click="toggleShortcuts" :model-value="showShortcuts" color="black">
           Show Shortcuts
         </q-toggle>
+        <GamepadStatus class="q-mx-xs"/>
         <StatusMessageButton/>
         <q-btn dense flat round icon="menu" @click="toggleRightDrawer"/>
       </q-toolbar>
