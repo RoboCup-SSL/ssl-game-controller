@@ -277,6 +277,13 @@ func (s *StateMachine) processChangeAddGameEvent(newState *state.State, change *
 func (s *StateMachine) isGoalValid(newState *state.State, gameEvent *state.GameEvent) (valid bool, message string) {
 	byTeam := gameEvent.ByTeam()
 
+	// The restrictions for scoring goals do not apply to penalty kicks.
+	// Rule violations by the attacking team are handled separately and result in a failed penalty kick.
+	if *newState.GameState.Type == state.GameState_PENALTY {
+		valid = true
+		return
+	}
+
 	// 1. The team did not exceed the allowed number of robots when the ball entered the goal.
 	if gameEvent.GetPossibleGoal().NumRobotsByTeam != nil &&
 		int32(*gameEvent.GetPossibleGoal().NumRobotsByTeam) > *newState.TeamInfo(byTeam).MaxAllowedBots {
