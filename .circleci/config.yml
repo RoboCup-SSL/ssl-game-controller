@@ -27,7 +27,7 @@ jobs:
   test_go:
     resource_class: medium
     docker:
-      - image: cimg/go:1.27.1@sha256:2dbe147c238a8bea7bd9f03548012ef9a73c89fe6e049e2f99620580447e5e5d
+      - image: cimg/go:1.27.4@sha256:2d2d629e6e5a8f18924e1b6cd9d44312a9d3bc1a6cdb71dfec6927b6bb5db0fb
     steps:
       - checkout
       - attach_workspace:
@@ -42,7 +42,7 @@ jobs:
   build_go:
     resource_class: large
     docker:
-      - image: cimg/go:1.27.1@sha256:2dbe147c238a8bea7bd9f03548012ef9a73c89fe6e049e2f99620580447e5e5d
+      - image: cimg/go:1.27.4@sha256:2d2d629e6e5a8f18924e1b6cd9d44312a9d3bc1a6cdb71dfec6927b6bb5db0fb
     steps:
       - checkout
       - attach_workspace:
@@ -68,7 +68,7 @@ jobs:
   publish_gh:
     resource_class: small
     docker:
-      - image: cimg/go:1.27.1@sha256:2dbe147c238a8bea7bd9f03548012ef9a73c89fe6e049e2f99620580447e5e5d
+      - image: cimg/go:1.27.4@sha256:2d2d629e6e5a8f18924e1b6cd9d44312a9d3bc1a6cdb71dfec6927b6bb5db0fb
     steps:
       - attach_workspace:
           at: .
