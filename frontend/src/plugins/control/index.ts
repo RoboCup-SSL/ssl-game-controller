@@ -6,15 +6,18 @@ import type {App} from "vue";
 import {useProtocolStore} from "@/store/protocolState";
 import {ManualActions} from "@/providers/manualActions";
 import {Shortcuts} from "@/providers/shortcuts";
+import {GamepadController} from "@/providers/gamepadController";
 
 export const control = {
   install(app: App) {
     const controlApi = new ControlApi()
     const manualActions = new ManualActions(controlApi)
     const shortcuts = new Shortcuts(manualActions, controlApi)
+    const gamepadController = new GamepadController(manualActions, controlApi)
     app.provide('control-api', controlApi)
     app.provide('command-actions', manualActions)
     app.provide('shortcuts', shortcuts)
+    app.provide('gamepad-controller', gamepadController)
 
     const matchStateStore = useMatchStateStore()
     controlApi.RegisterConsumer((output: OutputJson) => {
